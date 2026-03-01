@@ -50,7 +50,59 @@ const mockAnime: Anime[] = [
     description: "The quest for the Philosopher’s Stone.",
     image:
       "https://m.media-amazon.com/images/M/MV5BNDczZWMyMjEtZDI0ZS00YThjLWE2MjEtNTIxNmVmZDhkNDg5XkEyXkFqcGc@._V1_.jpg",
-  },
+  },  {
+    id: 3,
+    rank: 3,
+    title: "Fullmetal Alchemist: Brotherhood",
+    genres: ["Adventure", "Drama"],
+    status: "Finished Airing",
+    format: "TV Series",
+    rating: 9.3,
+    studio: "Bones",
+    episodes: 64,
+    description: "The quest for the Philosopher’s Stone.",
+    image:
+      "https://m.media-amazon.com/images/M/MV5BNDczZWMyMjEtZDI0ZS00YThjLWE2MjEtNTIxNmVmZDhkNDg5XkEyXkFqcGc@._V1_.jpg",
+  },  {
+    id: 4,
+    rank: 4,
+    title: "Fullmetal Alchemist: Brotherhood",
+    genres: ["Adventure", "Drama"],
+    status: "Finished Airing",
+    format: "TV Series",
+    rating: 9.3,
+    studio: "Bones",
+    episodes: 64,
+    description: "The quest for the Philosopher’s Stone.",
+    image:
+      "https://m.media-amazon.com/images/M/MV5BNDczZWMyMjEtZDI0ZS00YThjLWE2MjEtNTIxNmVmZDhkNDg5XkEyXkFqcGc@._V1_.jpg",
+  },  {
+    id: 5,
+    rank: 5,
+    title: "Fullmetal Alchemist: Brotherhood",
+    genres: ["Adventure", "Drama"],
+    status: "Finished Airing",
+    format: "TV Series",
+    rating: 9.3,
+    studio: "Bones",
+    episodes: 64,
+    description: "The quest for the Philosopher’s Stone.",
+    image:
+      "https://m.media-amazon.com/images/M/MV5BNDczZWMyMjEtZDI0ZS00YThjLWE2MjEtNTIxNmVmZDhkNDg5XkEyXkFqcGc@._V1_.jpg",
+  },  {
+    id: 6,
+    rank: 6,
+    title: "Fullmetal Alchemist: Brotherhood",
+    genres: ["Adventure", "Drama"],
+    status: "Finished Airing",
+    format: "TV Series",
+    rating: 9.3,
+    studio: "Bones",
+    episodes: 64,
+    description: "The quest for the Philosopher’s Stone.",
+    image:
+      "https://m.media-amazon.com/images/M/MV5BNDczZWMyMjEtZDI0ZS00YThjLWE2MjEtNTIxNmVmZDhkNDg5XkEyXkFqcGc@._V1_.jpg",
+  }
 ]
 
 export default function BestAnimeListPage() {
@@ -93,7 +145,7 @@ export default function BestAnimeListPage() {
   const clearFilters = () => setSelectedFilters({})
 
   return (
-    <div className="min-h-screen bg-black text-white">
+    <div className="min-h-screen bg-black text-white relative  bg-[url(https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/hero/bg-gradient-3.svg)] bg-center bg-cover">
       <LeaderboardHeader />
 
       <div className="mx-auto max-w-7xl px-4 pb-24">
@@ -105,7 +157,7 @@ export default function BestAnimeListPage() {
             transition={{ duration: 0.3 }}
             className="hidden md:block shrink-0"
           >
-            <div className="sticky top-24 h-[calc(100vh-6rem)]">
+            <div className="sticky top-[300px] ">
 
               {/* Collapse Toggle */}
               <div className="flex justify-end mb-4">
@@ -173,9 +225,9 @@ export default function BestAnimeListPage() {
           </AnimatePresence>
 
           {/* RIGHT CONTENT */}
-          <main className="flex-1 space-y-8">
+          <main className=" flex-1 space-y-8">
 
-            <div className="flex items-center justify-between border-b border-white/10 pb-4">
+            <div className=" flex items-center justify-between border-b border-white/10 pb-4">
               <p className="text-sm text-white/60">
                 Showing {filteredAnime.length} results
               </p>

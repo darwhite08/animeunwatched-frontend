@@ -21,7 +21,7 @@ export default function FilterDrawer({
     useState(false)
 
   return (
-    <div className="sticky">
+    <div className="relative ">
 
       {/* 🧑‍🌾 Character Sitting On Drawer */}
       <div className="absolute -top-[254px] right-20 z-20 hidden md:block pointer-events-none select-none">

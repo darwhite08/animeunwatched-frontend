@@ -5,16 +5,6 @@ import { motion } from "framer-motion"
 export default function LeaderboardHeader() {
   return (
     <section className="relative flex h-[420px] items-center justify-center overflow-hidden">
-
-      <div className="absolute inset-0">
-        <img
-          src="/images/bg-anime.jpg"
-          alt=""
-          className="h-full w-full object-cover opacity-30"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/70 to-black" />
-      </div>
-
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}

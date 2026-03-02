@@ -5,24 +5,7 @@ import { useSearchParams } from "next/navigation"
 import CreatorDashboard from "@/components/creator/creator/CreatorDashboard"
 
 export default function BlogPage() {
-  const searchParams = useSearchParams()
-  const folderId = searchParams.get("folder")
 
-  const content = [
-    { id: "1", title: "Gojo vs Sukuna Breakdown", type: "Feed", folderId: "1" },
-    { id: "2", title: "Why Luffy Never Gives Up", type: "Feed", folderId: "2" },
-    { id: "3", title: "Eren's Real Plan Explained", type: "Feed", folderId: "1" },
-
-    { id: "4", title: "Attack on Titan Ending Deep Dive", type: "Blog", folderId: "3" },
-    { id: "5", title: "Top 10 Most Underrated Anime", type: "Blog", folderId: "4" },
-
-    { id: "6", title: "Best New Gen MC?", type: "Poll", folderId: "5" },
-    { id: "7", title: "Strongest Hashira?", type: "Poll", folderId: "5" },
-  ]
-
-  const filteredContent = folderId
-    ? content.filter(item => item.folderId === folderId)
-    : content
   return (
     <main className="min-h-screen bg-black text-white flex">
       <div className="flex gap-8 w-full mx-auto">
@@ -34,28 +17,6 @@ export default function BlogPage() {
 
           {/* ORIGINAL DASHBOARD (UNCHANGED) */}
           <CreatorDashboard />
-
-          {/* ===== FILTERED CONTENT ===== */}
-          <SectionHeader
-            title={folderId ? "Filtered Content" : "All Content"}
-            href="/creators"
-          />
-
-          <div className="grid md:grid-cols-3 gap-6">
-            {filteredContent.length > 0 ? (
-              filteredContent.map(item => (
-                <ContentCard
-                  key={item.id}
-                  title={item.title}
-                  type={item.type as "Feed" | "Blog" | "Poll"}
-                />
-              ))
-            ) : (
-              <div className="text-white/40 col-span-3">
-                No content in this folder.
-              </div>
-            )}
-          </div>
 
           {/* ===== POLL SECTION ===== */}
           <SectionHeader

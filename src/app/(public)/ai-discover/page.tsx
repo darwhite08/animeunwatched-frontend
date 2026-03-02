@@ -4,12 +4,13 @@ import AIResultsGrid from "@/components/ai-discover/AIResultsGrid"
 
 export default function AIDiscoverPage() {
   return (
-    <main className="min-h-screen bg-black text-white">
+    <main className="min-h-screen flex flex-col bg-black text-white w-full">
+      <div className="w-full">
       <AIDiscoverHero />
-      <section className="max-w-5xl mx-auto px-4 -mt-10 relative z-10">
-        <AIPromptInput />
-      </section>
+      </div>
+      <div className="w-full">
       <AIResultsGrid />
+      </div>
     </main>
   )
 }

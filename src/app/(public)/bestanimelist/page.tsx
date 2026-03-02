@@ -6,6 +6,7 @@ import { SlidersHorizontal, X } from "lucide-react"
 import AnimeCard from "@/components/bestanimelist/AnimeCard"
 import LeaderboardHeader from "@/components/bestanimelist/BestAnimeListHeader"
 import FilterDrawer from "@/components/bestanimelist/FilterDrawer"
+import AnimeModal from "@/components/bestanimelist/AnimeModal"
 
 type Anime = {
   id: number
@@ -50,7 +51,8 @@ const mockAnime: Anime[] = [
     description: "The quest for the Philosopher’s Stone.",
     image:
       "https://m.media-amazon.com/images/M/MV5BNDczZWMyMjEtZDI0ZS00YThjLWE2MjEtNTIxNmVmZDhkNDg5XkEyXkFqcGc@._V1_.jpg",
-  },  {
+  },
+  {
     id: 3,
     rank: 3,
     title: "Fullmetal Alchemist: Brotherhood",
@@ -63,7 +65,8 @@ const mockAnime: Anime[] = [
     description: "The quest for the Philosopher’s Stone.",
     image:
       "https://m.media-amazon.com/images/M/MV5BNDczZWMyMjEtZDI0ZS00YThjLWE2MjEtNTIxNmVmZDhkNDg5XkEyXkFqcGc@._V1_.jpg",
-  },  {
+  },
+  {
     id: 4,
     rank: 4,
     title: "Fullmetal Alchemist: Brotherhood",
@@ -76,7 +79,8 @@ const mockAnime: Anime[] = [
     description: "The quest for the Philosopher’s Stone.",
     image:
       "https://m.media-amazon.com/images/M/MV5BNDczZWMyMjEtZDI0ZS00YThjLWE2MjEtNTIxNmVmZDhkNDg5XkEyXkFqcGc@._V1_.jpg",
-  },  {
+  },
+  {
     id: 5,
     rank: 5,
     title: "Fullmetal Alchemist: Brotherhood",
@@ -89,7 +93,8 @@ const mockAnime: Anime[] = [
     description: "The quest for the Philosopher’s Stone.",
     image:
       "https://m.media-amazon.com/images/M/MV5BNDczZWMyMjEtZDI0ZS00YThjLWE2MjEtNTIxNmVmZDhkNDg5XkEyXkFqcGc@._V1_.jpg",
-  },  {
+  },
+  {
     id: 6,
     rank: 6,
     title: "Fullmetal Alchemist: Brotherhood",
@@ -102,7 +107,7 @@ const mockAnime: Anime[] = [
     description: "The quest for the Philosopher’s Stone.",
     image:
       "https://m.media-amazon.com/images/M/MV5BNDczZWMyMjEtZDI0ZS00YThjLWE2MjEtNTIxNmVmZDhkNDg5XkEyXkFqcGc@._V1_.jpg",
-  }
+  },
 ]
 
 export default function BestAnimeListPage() {
@@ -110,6 +115,10 @@ export default function BestAnimeListPage() {
     useState<Record<string, string[]>>({})
   const [isCollapsed, setIsCollapsed] = useState(false)
   const [isMobileOpen, setIsMobileOpen] = useState(false)
+
+  // ✅ NEW STATE FOR MODAL
+  const [selectedAnime, setSelectedAnime] =
+    useState<Anime | null>(null)
 
   const filteredAnime = useMemo(() => {
     return mockAnime.filter((anime) => {
@@ -145,7 +154,7 @@ export default function BestAnimeListPage() {
   const clearFilters = () => setSelectedFilters({})
 
   return (
-    <div className="min-h-screen bg-black text-white relative  bg-[url(https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/hero/bg-gradient-3.svg)] bg-center bg-cover">
+    <div className="min-h-screen bg-black text-white relative bg-[url(https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/hero/bg-gradient-3.svg)] bg-center bg-cover">
       <LeaderboardHeader />
 
       <div className="mx-auto max-w-7xl px-4 pb-24">
@@ -157,9 +166,7 @@ export default function BestAnimeListPage() {
             transition={{ duration: 0.3 }}
             className="hidden md:block shrink-0"
           >
-            <div className="sticky top-[300px] ">
-
-              {/* Collapse Toggle */}
+            <div className="sticky top-[300px]">
               <div className="flex justify-end mb-4">
                 <button
                   onClick={() =>
@@ -184,50 +191,10 @@ export default function BestAnimeListPage() {
             </div>
           </motion.aside>
 
-          {/* Mobile Filter Button */}
-          <div className="md:hidden fixed bottom-6 right-6 z-40">
-            <button
-              onClick={() => setIsMobileOpen(true)}
-              className="rounded-full bg-indigo-600 p-4 shadow-lg hover:bg-indigo-500 transition"
-            >
-              <SlidersHorizontal />
-            </button>
-          </div>
-
-          {/* Mobile Drawer */}
-          <AnimatePresence>
-            {isMobileOpen && (
-              <>
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 0.5 }}
-                  exit={{ opacity: 0 }}
-                  onClick={() =>
-                    setIsMobileOpen(false)
-                  }
-                  className="fixed inset-0 bg-black z-40"
-                />
-
-                <motion.div
-                  initial={{ x: "-100%" }}
-                  animate={{ x: 0 }}
-                  exit={{ x: "-100%" }}
-                  transition={{ duration: 0.3 }}
-                  className="fixed left-0 top-0 h-full w-80 bg-black z-50 p-6"
-                >
-                  <FilterDrawer
-                    selectedFilters={selectedFilters}
-                    setSelectedFilters={setSelectedFilters}
-                  />
-                </motion.div>
-              </>
-            )}
-          </AnimatePresence>
-
           {/* RIGHT CONTENT */}
-          <main className=" flex-1 space-y-8">
+          <main className="flex-1 space-y-8">
 
-            <div className=" flex items-center justify-between border-b border-white/10 pb-4">
+            <div className="flex items-center justify-between border-b border-white/10 pb-4">
               <p className="text-sm text-white/60">
                 Showing {filteredAnime.length} results
               </p>
@@ -242,8 +209,15 @@ export default function BestAnimeListPage() {
               )}
             </div>
 
+            {/* ✅ UPDATED MAP */}
             {filteredAnime.map((anime) => (
-              <AnimeCard key={anime.id} anime={anime} />
+              <AnimeCard
+                key={anime.id}
+                anime={anime}
+                onMoreInfo={() =>
+                  setSelectedAnime(anime)
+                }
+              />
             ))}
 
             {filteredAnime.length === 0 && (
@@ -252,8 +226,15 @@ export default function BestAnimeListPage() {
               </div>
             )}
           </main>
+
         </div>
       </div>
+
+      {/* ✅ MODAL OUTSIDE LAYOUT FOR PROPER Z-INDEX */}
+      <AnimeModal
+        anime={selectedAnime}
+        onClose={() => setSelectedAnime(null)}
+      />
     </div>
   )
 }

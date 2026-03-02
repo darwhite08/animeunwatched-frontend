@@ -2,17 +2,21 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { Menu, X, Search, User, Bookmark, LogOut } from "lucide-react";
+import { Menu, X, Search, User, Bookmark, LogOut, Sparkles } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import NotificationBell from "@/components/notifications/NotificationBell"
+import { div } from "framer-motion/client";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [moreOpen, setMoreOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
   const profileRef = useRef<HTMLDivElement>(null);
+  const moreRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -20,6 +24,7 @@ export default function Navbar() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") setSearchOpen(false);
@@ -31,22 +36,17 @@ export default function Navbar() {
 
     return () => document.removeEventListener("keydown", handleKeyDown);
   }, [searchOpen]);
-  // Close on outside click
+
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
-      if (
-        profileRef.current &&
-        !profileRef.current.contains(e.target as Node)
-      ) {
+      if (profileRef.current && !profileRef.current.contains(e.target as Node))
         setProfileOpen(false);
-      }
 
-      if (
-        searchRef.current &&
-        !searchRef.current.contains(e.target as Node)
-      ) {
+      if (moreRef.current && !moreRef.current.contains(e.target as Node))
+        setMoreOpen(false);
+
+      if (searchRef.current && !searchRef.current.contains(e.target as Node))
         setSearchOpen(false);
-      }
     };
 
     document.addEventListener("mousedown", handleClickOutside);
@@ -55,11 +55,16 @@ export default function Navbar() {
 
   const navLinks = [
     { name: "Home", href: "/" },
+    { name: "Discover", href: "/ai-discover" },
     { name: "Best Anime List", href: "/bestanimelist" },
     { name: "Leaderboard", href: "/leaderboard" },
-    { name: "Discover", href: "/discover" },
-    { name: "Polls", href: "/polls" },
+    { name: "Polls", href: "/poll" },
     { name: "Rate", href: "/rate" },
+    { name: "Feed", href: "/rate" },
+    { name: "blog", href: "/creators" },
+    { name: "store", href: "/rate" },
+    { name: "stream", href: "/rate" },
+    { name: "Community", href: "/rate" },
   ];
 
   const user = { name: "Priyanshu" };
@@ -69,8 +74,8 @@ export default function Navbar() {
       <nav
         className={`relative flex w-full max-w-6xl items-center justify-between rounded-full px-8 py-4 text-sm backdrop-blur-xl transition-all duration-300
         ${scrolled
-            ? "bg-black/90 border border-white/10 shadow-[0_8px_40px_rgba(0,0,0,0.6)]"
-            : "bg-black/60 border border-white/5"
+            ? "bg-black/85 border border-white/10 shadow-[0_8px_40px_rgba(0,0,0,0.6)]"
+            : "bg-black/50 border border-white/10"
           }`}
       >
         {/* Logo */}
@@ -83,40 +88,99 @@ export default function Navbar() {
           </span>
         </Link>
 
-        {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-8">
-          {navLinks.map((item) => (
-            <Link
-              key={item.name}
-              href={item.href}
-              className="relative group text-white/70 hover:text-white transition"
+        {/* Desktop Navigation */}
+        <div className="hidden md:flex items-center gap-5">
+          {/* Primary Links */}
+          {navLinks
+            .filter(
+              (item) =>
+                !["store", "blog", "stream", "feed", "community"].includes(item.name.toLowerCase())
+            )
+            .map((item) => (
+              <Link
+                key={item.name}
+                href={item.href}
+                className="relative group flex items-center gap-2 text-white/60 hover:text-white transition"
+              >
+                {item.name === "Discover" && (
+                  <Sparkles size={14} className="text-indigo-400 drop-shadow-[0_0_6px_rgba(99,102,241,0.6)]" />
+                )}
+
+                {item.name}
+                <span className="absolute -bottom-1 left-0 h-[2px] w-0 bg-indigo-500 transition-all duration-300 group-hover:w-full" />
+              </Link>
+            ))}
+
+          {/* More Dropdown */}
+          <div className="relative" ref={moreRef}>
+            <button
+              onClick={() => setMoreOpen((prev) => !prev)}
+              className="flex items-center gap-1 text-white/60 hover:text-white transition"
             >
-              {item.name}
-              <span className="absolute -bottom-1 left-0 h-[2px] w-0 bg-indigo-500 transition-all duration-300 group-hover:w-full" />
-            </Link>
-          ))}
+              Explore
+              <svg
+                className="w-3 h-3 mt-[2px]"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+              >
+                <path
+                  fillRule="evenodd"
+                  d="M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.937a.75.75 0 111.08 1.04l-4.24 4.5a.75.75 0 01-1.08 0l-4.24-4.5a.75.75 0 01.02-1.06z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </button>
+
+            <AnimatePresence>
+              {moreOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 6 }}
+                  transition={{ duration: 0.2 }}
+                  className="absolute left-0 mt-4 w-48 rounded-xl bg-zinc-900 border border-white/10 shadow-xl p-2"
+                >
+                  {navLinks
+                    .filter((item) =>
+                      ["store", "blog", "stream", "feed", "community"].includes(item.name.toLowerCase())
+                    )
+                    .map((item) => (
+                      <Link
+                        key={item.name}
+                        href={item.href}
+                        onClick={() => setMoreOpen(false)}
+                        className="block rounded-lg px-3 py-2 text-sm text-white/70 hover:bg-zinc-800 hover:text-white transition"
+                      >
+                        {item.name}
+                      </Link>
+                    ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
         </div>
 
-        {/* Right Side */}
+        {/* Right Section */}
         <div className="hidden md:flex items-center gap-6">
+
           {/* Search */}
           <div className="relative" ref={searchRef}>
             <button
               onClick={() => setSearchOpen(!searchOpen)}
-              className="text-white/70 hover:text-white transition"
+              className="text-white/60 hover:text-white transition"
             >
               <Search size={20} />
             </button>
-
-            <div className="relative" ref={searchRef}>
-
-            </div>
           </div>
+          {/* Notification */}
+          {isLoggedIn && <div>
+            <NotificationBell />
+          </div> }
 
           {/* Watchlist */}
           <Link
             href="/watchlist"
-            className="flex items-center gap-2 text-white/70 hover:text-white transition"
+            className="flex items-center gap-2 text-white/60 hover:text-white transition"
           >
             <Bookmark size={18} />
             Watchlist
@@ -187,7 +251,7 @@ export default function Navbar() {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 10 }}
-              className="absolute left-0 top-full mt-4 w-full rounded-2xl border border-white/10 bg-black p-6 shadow-2xl md:hidden"
+              className="absolute left-0 top-full mt-4 w-full rounded-2xl border border-white/10 bg-black/95 p-6 shadow-2xl md:hidden"
             >
               <div className="flex flex-col gap-6 text-base">
                 {navLinks.map((item) => (
@@ -195,7 +259,11 @@ export default function Navbar() {
                     key={item.name}
                     href={item.href}
                     onClick={() => setIsOpen(false)}
+                    className="flex items-center gap-2"
                   >
+                    {item.name === "Discover" && (
+                      <Sparkles size={14} className="text-indigo-400" />
+                    )}
                     {item.name}
                   </Link>
                 ))}
@@ -216,10 +284,7 @@ export default function Navbar() {
                   </button>
                 ) : (
                   <>
-                    <Link
-                      href="/profile"
-                      onClick={() => setIsOpen(false)}
-                    >
+                    <Link href="/profile" onClick={() => setIsOpen(false)}>
                       Profile
                     </Link>
                     <button
@@ -230,6 +295,7 @@ export default function Navbar() {
                     >
                       Logout
                     </button>
+
                   </>
                 )}
               </div>
@@ -237,61 +303,49 @@ export default function Navbar() {
           )}
         </AnimatePresence>
       </nav>
-  <AnimatePresence>
-  {searchOpen && (
-    <>
-      {/* Background Overlay */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.25 }}
-        className="fixed inset-0 z-40 bg-black/60 backdrop-blur-md"
-        onClick={() => setSearchOpen(false)}
-      />
 
-      {/* Glass Search Modal */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0.94, y: -20 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.94, y: -20 }}
-        transition={{ duration: 0.25, ease: "easeOut" }}
-        className="fixed inset-0 z-50 flex items-start justify-center pt-[15vh] px-4"
-      >
-        <div
-          onClick={(e) => e.stopPropagation()}
-          className="
-            w-full max-w-2xl
-            rounded-3xl
-            border border-white/10
-            bg-gradient-to-br from-white/10 to-white/5
-            backdrop-blur-2xl
-            shadow-[0_20px_80px_rgba(0,0,0,0.6)]
-            p-8
-          "
-        >
-          {/* Top Search Row */}
-          <div className="flex items-center gap-4 border-b border-white/10 pb-5">
-            <Search className="text-white/50" size={22} />
-            <input
-              autoFocus
-              type="text"
-              placeholder="Search anime, genres, characters..."
-              className="w-full bg-transparent text-xl font-medium outline-none placeholder:text-white/40"
+      {/* Search Modal */}
+      <AnimatePresence>
+        {searchOpen && (
+          <>
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-40 bg-black/70 backdrop-blur-md"
+              onClick={() => setSearchOpen(false)}
             />
-          </div>
 
-          {/* Suggestions Area */}
-          <div className="mt-6 space-y-3 text-sm text-white/50">
-            <p>Trending: Attack on Titan</p>
-            <p>Trending: Demon Slayer</p>
-            <p>Trending: One Piece</p>
-          </div>
-        </div>
-      </motion.div>
-    </>
-  )}
-</AnimatePresence>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.96 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.96 }}
+              className="fixed inset-0 z-50 flex items-start justify-center pt-[15vh] px-4"
+            >
+              <div
+                onClick={(e) => e.stopPropagation()}
+                className="w-full max-w-2xl rounded-3xl border border-white/10 bg-zinc-900/95 p-8 shadow-2xl"
+              >
+                <div className="flex items-center gap-4 border-b border-white/10 pb-5">
+                  <Search className="text-white/50" size={22} />
+                  <input
+                    autoFocus
+                    type="text"
+                    placeholder="Search anime, genres, characters..."
+                    className="w-full bg-transparent text-xl font-medium outline-none placeholder:text-white/40"
+                  />
+                </div>
+
+                <div className="mt-6 space-y-3 text-sm text-white/50">
+                  <p>Trending: Attack on Titan</p>
+                  <p>Trending: Demon Slayer</p>
+                  <p>Trending: One Piece</p>
+                </div>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
     </header>
   );
 }

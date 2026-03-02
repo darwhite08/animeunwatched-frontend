@@ -2,7 +2,6 @@
 
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
-import CreatorSidebar from "@/components/creator/creator/CreatorSidebar"
 import CreatorDashboard from "@/components/creator/creator/CreatorDashboard"
 
 export default function BlogPage() {
@@ -29,7 +28,6 @@ export default function BlogPage() {
       <div className="flex gap-8 w-full mx-auto">
 
         {/* Sidebar */}
-        <CreatorSidebar />
 
         {/* Main Content */}
         <div className="flex-1 space-y-12 py-10">
@@ -40,7 +38,7 @@ export default function BlogPage() {
           {/* ===== FILTERED CONTENT ===== */}
           <SectionHeader
             title={folderId ? "Filtered Content" : "All Content"}
-            href="/creator"
+            href="/creators"
           />
 
           <div className="grid md:grid-cols-3 gap-6">

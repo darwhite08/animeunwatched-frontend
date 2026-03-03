@@ -5,19 +5,21 @@ import Link from "next/link";
 import { Menu, X, Search, User, Bookmark, LogOut, Sparkles } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import NotificationBell from "@/components/notifications/NotificationBell"
-import { div } from "framer-motion/client";
+import { getMockUser, mockLogout } from "@/lib/mockAuth"
+import { usePathname } from "next/navigation"
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [moreOpen, setMoreOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-
+  const [user, setUser] = useState<any>(null);
   const profileRef = useRef<HTMLDivElement>(null);
   const moreRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLDivElement>(null);
+  const [isHydrated, setIsHydrated] = useState(false)
+  const pathname = usePathname()
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -52,6 +54,12 @@ export default function Navbar() {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+  // mock user check
+  useEffect(() => {
+    const storedUser = getMockUser()
+    setUser(storedUser)
+    setIsHydrated(true)
+  }, [pathname])
 
   const navLinks = [
     { name: "Home", href: "/" },
@@ -67,7 +75,6 @@ export default function Navbar() {
     { name: "Community", href: "/rate" },
   ];
 
-  const user = { name: "Priyanshu" };
 
   return (
     <header className="fixed top-6 left-0 right-0 z-50 flex justify-center px-4">
@@ -173,9 +180,9 @@ export default function Navbar() {
             </button>
           </div>
           {/* Notification */}
-          {isLoggedIn && <div>
+          {user && <div>
             <NotificationBell />
-          </div> }
+          </div>}
 
           {/* Watchlist */}
           <Link
@@ -187,13 +194,13 @@ export default function Navbar() {
           </Link>
 
           {/* Auth */}
-          {!isLoggedIn ? (
-            <button
-              onClick={() => setIsLoggedIn(true)}
+          {!isHydrated ? null : !user ? (
+            <Link
+              href="/login"
               className="rounded-full bg-indigo-600 px-5 py-2 font-medium text-white transition hover:bg-indigo-700"
             >
               Login
-            </button>
+            </Link>
           ) : (
             <div className="relative" ref={profileRef}>
               <button
@@ -221,8 +228,9 @@ export default function Navbar() {
 
                     <button
                       onClick={() => {
-                        setIsLoggedIn(false);
-                        setProfileOpen(false);
+                        mockLogout()
+                        setUser(null)
+                        setProfileOpen(false)
                       }}
                       className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm hover:bg-zinc-800"
                     >
@@ -272,16 +280,14 @@ export default function Navbar() {
                   Watchlist
                 </Link>
 
-                {!isLoggedIn ? (
-                  <button
-                    onClick={() => {
-                      setIsLoggedIn(true);
-                      setIsOpen(false);
-                    }}
-                    className="rounded-full bg-indigo-600 py-3 font-medium"
+                {!isHydrated ? null : !user ? (
+                  <Link
+                    href="/login"
+                    onClick={() => setIsOpen(false)}
+                    className="rounded-full bg-indigo-600 py-3 font-medium text-center"
                   >
                     Login
-                  </button>
+                  </Link>
                 ) : (
                   <>
                     <Link href="/profile" onClick={() => setIsOpen(false)}>
@@ -289,7 +295,9 @@ export default function Navbar() {
                     </Link>
                     <button
                       onClick={() => {
-                        setIsLoggedIn(false);
+                        mockLogout()
+                        setUser(null)
+                        setProfileOpen(false)
                         setIsOpen(false);
                       }}
                     >

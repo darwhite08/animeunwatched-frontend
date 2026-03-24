@@ -1,71 +1,59 @@
 "use client"
 
-import { motion } from "framer-motion"
-import { TopThree } from "@/components/leaderboard/TopThree"
-import { RankingTable } from "@/components/leaderboard/RankingTable"
-import { Trophy, Zap, Globe, Crown, Star } from "lucide-react"
+import { motion } from "framer-motion";
+import { TopThree } from "@/components/leaderboard/TopThree";
+import { RankingTable } from "@/components/leaderboard/RankingTable";
+import { Trophy, Globe, Zap, Crown } from "lucide-react";
 
-export default function PremiumLeaderboard() {
+export default function LeaderboardPage() {
   return (
-    <div className="max-w-[1400px] mx-auto px-6 py-12 space-y-20 pb-32">
-      
-      {/* 1. CINEMATIC HEADER */}
-      <header className="relative py-10 overflow-hidden">
-        {/* Ambient background glow */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-indigo-600/10 blur-[120px] rounded-full pointer-events-none" />
+    <div className="min-h-screen bg-mesh pb-20 px-6">
+      <div className="max-w-7xl mx-auto pt-16 space-y-16">
         
-        <div className="relative z-10 text-center space-y-6">
+        {/* HEADER SECTION */}
+        <header className="text-center space-y-4">
           <motion.div 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 backdrop-blur-md"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-[10px] font-black uppercase tracking-widest"
           >
-            <Star size={14} className="text-yellow-500 fill-yellow-500" />
-            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/60">Season 04 • Global Rankings</span>
+            <Crown size={12} /> Global Hall of Fame
           </motion.div>
-          
-          <h1 className="text-7xl md:text-8xl font-black tracking-tighter text-white drop-shadow-2xl">
-            The <span className="bg-gradient-to-b from-white to-neutral-500 bg-clip-text text-transparent italic">Pantheon</span>
+          <h1 className="text-6xl md:text-8xl font-black tracking-tighter text-white">
+            The <span className="text-indigo-500 text-glow-indigo">Pantheon</span>
           </h1>
+        </header>
+
+        {/* TOP 3 PODIUM */}
+        <TopThree />
+
+        {/* BENTO STATS */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <StatCard icon={Globe} label="Global Users" value="12,402" color="text-blue-400" />
+          <StatCard icon={Zap} label="Daily Active" value="1,120" color="text-yellow-400" />
+          <StatCard icon={Trophy} label="Your Standing" value="#812" color="text-indigo-400" isUser />
         </div>
-      </header>
 
-      {/* 2. THE PODIUM (Visual centerpiece) */}
-      <TopThree />
-
-      {/* 3. ANALYTICS BENTO GRID */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <LeaderboardMetric icon={Globe} label="Total Contenders" value="12.4k" trend="+12%" color="text-blue-400" />
-        <LeaderboardMetric icon={Zap} label="Peak Velocity" value="840 XP/h" trend="Stable" color="text-yellow-400" />
-        <LeaderboardMetric icon={Crown} label="Elite Threshold" value="18.2k" trend="+2.4k" color="text-purple-400" />
-        <LeaderboardMetric icon={Trophy} label="Personal Standing" value="#812" trend="Top 4%" color="text-indigo-400" highlight />
+        {/* RANKING TABLE */}
+        <section className="space-y-8">
+          <h2 className="text-3xl font-black italic tracking-tighter">Live Rankings</h2>
+          <RankingTable />
+        </section>
       </div>
-
-      {/* 4. THE RANKING LIST */}
-      <section className="space-y-10">
-        <div className="flex items-center justify-between px-4">
-          <h2 className="text-3xl font-black tracking-tighter italic">World Rankings</h2>
-          <div className="h-px flex-1 mx-8 bg-gradient-to-r from-white/10 to-transparent" />
-        </div>
-        <RankingTable />
-      </section>
     </div>
-  )
+  );
 }
 
-function LeaderboardMetric({ icon: Icon, label, value, trend, color, highlight = false }: any) {
+function StatCard({ icon: Icon, label, value, color, isUser }: any) {
   return (
-    <div className={`group p-8 rounded-[2.5rem] border transition-all duration-500 ${
-      highlight ? 'border-indigo-500/40 bg-indigo-500/5' : 'border-white/5 bg-[#0a0a0a]'
-    }`}>
-      <div className="flex justify-between items-start mb-6">
-        <div className={`p-3 rounded-2xl bg-black border border-white/10 ${color}`}>
-          <Icon size={20} />
-        </div>
-        <span className="text-[10px] font-bold text-white/20 uppercase tracking-widest">{trend}</span>
+    <div className={`p-8 rounded-[2.5rem] border ${isUser ? 'border-indigo-500/50 bg-indigo-500/5' : 'border-white/5 bg-black/40'} glass-card flex items-center gap-6 group hover:-translate-y-1 transition-all duration-500`}>
+      <div className={`p-4 rounded-2xl bg-black border border-white/5 ${color} group-hover:scale-110 transition-transform`}>
+        <Icon size={24} />
       </div>
-      <p className="text-4xl font-black text-white tracking-tighter mb-1">{value}</p>
-      <p className="text-[10px] font-black text-white/30 uppercase tracking-[0.2em]">{label}</p>
+      <div>
+        <p className="text-[10px] font-black text-white/30 uppercase tracking-[0.2em]">{label}</p>
+        <p className="text-4xl font-black text-white tracking-tighter">{value}</p>
+      </div>
     </div>
-  )
+  );
 }

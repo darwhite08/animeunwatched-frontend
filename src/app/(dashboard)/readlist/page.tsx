@@ -1,139 +1,77 @@
 "use client"
 
-import { useMemo, useState } from "react"
-import ReadCard from "@/components/readlist/ReadCard"
-import clsx from "clsx"
-import { Search } from "lucide-react"
+import { useState, useMemo } from "react"
+import { motion, AnimatePresence } from "framer-motion"
+import { Search, Filter, BookOpen, Clock, CheckCircle2 } from "lucide-react"
+import { ReadCard } from "@/components/readlist/ReadCard"
 
-type Status = "Reading" | "Planning" | "Completed"
-
-type Manga = {
-  id: number
-  title: string
-  image: string
-  status: Status
-  totalChapters: number
-  readChapters?: number
-  progress?: number
-  genres: string[]
-}
-
-const mangaData: Manga[] = [
-  {
-    id: 1,
-    title: "Berserk",
-    image: "/assets/png/goku.png",
-    status: "Reading",
-    totalChapters: 374,
-    readChapters: 210,
-    progress: 56,
-    genres: ["Dark Fantasy", "Action"],
-  },
-  {
-    id: 2,
-    title: "One Punch Man",
-    image: "/assets/png/luffy.png",
-    status: "Planning",
-    totalChapters: 180,
-    genres: ["Action", "Comedy"],
-  },
-  {
-    id: 3,
-    title: "Tokyo Ghoul",
-    image: "/assets/png/naruto.png",
-    status: "Completed",
-    totalChapters: 143,
-    readChapters: 143,
-    progress: 100,
-    genres: ["Horror", "Drama"],
-  },
+// Mock Data - In a real app, this would come from your DB
+const INITIAL_READLIST = [
+  { id: 1, title: "Berserk", author: "Kentaro Miura", status: "Reading", progress: 85, image: "/assets/png/berserk-cover.png", category: "Seinen" },
+  { id: 2, title: "Vagabond", author: "Takehiko Inoue", status: "Completed", progress: 100, image: "/assets/png/vagabond-cover.png", category: "Seinen" },
+  { id: 3, title: "Monster", author: "Naoki Urasawa", status: "Plan to Read", progress: 0, image: "/assets/png/monster-cover.png", category: "Psychological" },
 ]
 
-const tabs = ["All", "Reading", "Planning", "Completed"]
-
 export default function ReadlistPage() {
+  const [searchQuery, setSearchQuery] = useState("")
   const [activeTab, setActiveTab] = useState("All")
-  const [search, setSearch] = useState("")
 
-  const filtered = useMemo(() => {
-    return mangaData.filter((manga) => {
-      const matchesTab =
-        activeTab === "All" ||
-        manga.status === activeTab
-
-      const matchesSearch = manga.title
-        .toLowerCase()
-        .includes(search.toLowerCase())
-
-      return matchesTab && matchesSearch
+  const filteredList = useMemo(() => {
+    return INITIAL_READLIST.filter((item) => {
+      const matchesSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase())
+      const matchesTab = activeTab === "All" || item.status === activeTab
+      return matchesSearch && matchesTab
     })
-  }, [activeTab, search])
+  }, [searchQuery, activeTab])
 
   return (
-    <div className="space-y-10">
-
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-semibold">
-            My Readlist
+    <div className="max-w-7xl mx-auto px-6 py-12 space-y-10 pb-32">
+      {/* HEADER & SEARCH BAR */}
+      <header className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8">
+        <div className="space-y-2">
+          <h1 className="text-6xl font-black tracking-tighter text-white">
+            Library<span className="text-indigo-500">.</span>
           </h1>
-          <p className="text-white/50 mt-2">
-            Track your manga and light novels.
-          </p>
+          <p className="text-white/40 text-lg font-medium tracking-wide italic">Your sanctuary for legendary stories.</p>
         </div>
 
-        {/* Search */}
-        <div className="relative w-72">
-          <Search
-            size={16}
-            className="absolute left-3 top-3 text-white/40"
-          />
-          <input
-            value={search}
-            onChange={(e) =>
-              setSearch(e.target.value)
-            }
-            placeholder="Search manga..."
-            className="w-full bg-neutral-900 border border-white/10 rounded-xl pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-600"
+        <div className="relative w-full md:w-96 group">
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-indigo-400 transition-colors" size={20} />
+          <input 
+            type="text"
+            placeholder="Search your archives..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full pl-12 pr-6 py-4 rounded-2xl bg-white/[0.03] border border-white/10 text-white placeholder:text-white/20 focus:outline-none focus:border-indigo-500/50 focus:bg-white/[0.05] transition-all"
           />
         </div>
-      </div>
+      </header>
 
-      {/* Tabs */}
-      <div className="flex gap-6 border-b border-white/10 pb-4">
-        {tabs.map((tab) => (
+      {/* TABS / FILTERS */}
+      <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
+        {["All", "Reading", "Completed", "Plan to Read"].map((tab) => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
-            className={clsx(
-              "relative pb-2 text-sm transition",
-              activeTab === tab
-                ? "text-white"
-                : "text-white/40 hover:text-white"
-            )}
+            className={`px-6 py-2 rounded-xl text-xs font-black uppercase tracking-widest whitespace-nowrap transition-all ${
+              activeTab === tab 
+              ? "bg-indigo-600 text-white shadow-[0_0_20px_rgba(79,70,229,0.3)]" 
+              : "bg-white/5 text-white/40 hover:bg-white/10"
+            }`}
           >
             {tab}
-
-            {activeTab === tab && (
-              <span className="absolute bottom-0 left-0 h-[2px] w-full bg-indigo-600 rounded-full" />
-            )}
           </button>
         ))}
       </div>
 
-      {/* Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-        {filtered.length > 0 ? (
-          filtered.map((manga) => (
+      {/* THE GRID */}
+      <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <AnimatePresence mode="popLayout">
+          {filteredList.map((manga) => (
             <ReadCard key={manga.id} manga={manga} />
-          ))
-        ) : (
-          <div className="col-span-full text-center text-white/50 py-20">
-            No manga found.
-          </div>
-        )}
-      </div>
+          ))}
+        </AnimatePresence>
+      </motion.div>
     </div>
   )
 }

@@ -5,6 +5,8 @@ import { motion } from "framer-motion"
 import { FaGoogle, FaApple } from "react-icons/fa"
 import { useRouter } from "next/navigation"
 import { mockLogin } from "@/lib/mockAuth"
+import Link from "next/link"
+import Image from "next/image"
 
 export default function LoginPage() {
   const router = useRouter()
@@ -22,7 +24,7 @@ export default function LoginPage() {
 
   return (
     <main className="relative min-h-screen bg-black text-white flex items-center justify-center px-6">
-      
+
       {/* Background Glow */}
       <div className="absolute inset-0 -z-10">
         <div className="absolute top-[-200px] left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-indigo-600/20 blur-[140px] rounded-full" />
@@ -35,7 +37,7 @@ export default function LoginPage() {
         className="w-full max-w-md"
       >
         <div className="border border-white/10 bg-white/5 backdrop-blur-xl rounded-2xl p-10 shadow-[0_0_40px_rgba(99,102,241,0.15)]">
-          
+
           {/* Header */}
           <div className="text-center space-y-3">
             <h1 className="text-3xl md:text-4xl font-semibold bg-gradient-to-r from-white to-[#748298] bg-clip-text text-transparent">
@@ -48,7 +50,7 @@ export default function LoginPage() {
 
           {/* Buttons */}
           <div className="mt-10 space-y-4">
-            
+
             {/* Google */}
             <motion.button
               onClick={() => handleLogin("google")}
@@ -57,7 +59,14 @@ export default function LoginPage() {
               whileTap={{ scale: 0.98 }}
               className="w-full h-12 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition flex items-center justify-center gap-3 font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:opacity-60 disabled:cursor-not-allowed"
             >
-              <FaGoogle className="text-lg" />
+                <Image
+                src="/assets/icons/google.png"
+                alt="AnimeUnwatched Logo"
+                width={28}
+                height={40}
+                priority
+                className="object-contain"
+              />
               {loading === "google" ? "Signing in..." : "Continue with Google"}
             </motion.button>
 
@@ -69,7 +78,14 @@ export default function LoginPage() {
               whileTap={{ scale: 0.98 }}
               className="w-full h-12 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition flex items-center justify-center gap-3 font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:opacity-60 disabled:cursor-not-allowed"
             >
-              <FaApple className="text-lg" />
+              <Image
+                src="/assets/icons/apple.png"
+                alt="AnimeUnwatched Logo"
+                width={30}
+                height={40}
+                priority
+                className="object-contain"
+              />
               {loading === "apple" ? "Signing in..." : "Continue with Apple"}
             </motion.button>
 
@@ -86,8 +102,17 @@ export default function LoginPage() {
               Privacy Policy
             </span>
           </p>
-
+          <p className="mt-6 text-sm text-center text-white/50">
+            Don’t have an account?{" "}
+            <Link
+              href="/login"
+              className="text-indigo-400 hover:text-indigo-300 transition"
+            >
+              Sign in
+            </Link>
+          </p>
         </div>
+
       </motion.section>
     </main>
   )

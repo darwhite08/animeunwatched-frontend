@@ -61,19 +61,19 @@ export default function Navbar() {
     setIsHydrated(true)
   }, [pathname])
 
-  const navLinks = [
-    { name: "Home", href: "/" },
-    { name: "Discover", href: "/ai-discover" },
-    { name: "Best Anime List", href: "/bestanimelist" },
-    { name: "Leaderboard", href: "/leaderboard" },
-    { name: "Polls", href: "/poll" },
-    { name: "Rate", href: "/rate" },
-    { name: "Feed", href: "/rate" },
-    { name: "blog", href: "/creators" },
-    { name: "store", href: "/rate" },
-    { name: "stream", href: "/rate" },
-    { name: "Community", href: "/rate" },
-  ];
+const navLinks = [
+  { name: "Home", href: "/", enabled: true },
+  { name: "Discover", href: "/ai-discover", enabled: true },
+  { name: "Best Anime List", href: "/bestanimelist", enabled: true },
+  { name: "Leaderboard", href: "/leaderboard", enabled: false },
+  { name: "Polls", href: "/poll", enabled: false },
+  { name: "Rate", href: "/rate", enabled: false },
+  { name: "Feed", href: "/rate", enabled: false },
+  { name: "Blog", href: "/creators", enabled: false },
+  { name: "Store", href: "/rate", enabled: false },
+  { name: "Stream", href: "/rate", enabled: false },
+  { name: "Community", href: "/rate", enabled: false },
+];
 
 
   return (
@@ -99,6 +99,7 @@ export default function Navbar() {
         <div className="hidden md:flex items-center gap-5">
           {/* Primary Links */}
           {navLinks
+           .filter((item) => item.enabled)
             .filter(
               (item) =>
                 !["store", "blog", "stream", "feed", "community"].includes(item.name.toLowerCase())
@@ -119,7 +120,7 @@ export default function Navbar() {
             ))}
 
           {/* More Dropdown */}
-          <div className="relative" ref={moreRef}>
+          {/* <div className="relative" ref={moreRef}>
             <button
               onClick={() => setMoreOpen((prev) => !prev)}
               className="flex items-center gap-1 text-white/60 hover:text-white transition"
@@ -164,7 +165,7 @@ export default function Navbar() {
                 </motion.div>
               )}
             </AnimatePresence>
-          </div>
+          </div> */}
         </div>
 
         {/* Right Section */}
@@ -262,7 +263,9 @@ export default function Navbar() {
               className="absolute left-0 top-full mt-4 w-full rounded-2xl border border-white/10 bg-black/95 p-6 shadow-2xl md:hidden"
             >
               <div className="flex flex-col gap-6 text-base">
-                {navLinks.map((item) => (
+                {navLinks
+                .filter((item) => item.enabled)
+                .map((item) => (
                   <Link
                     key={item.name}
                     href={item.href}

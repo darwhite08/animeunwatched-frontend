@@ -2,7 +2,8 @@
 
 import { motion } from "framer-motion"
 import { Vote, Users, Clock, Flame } from "lucide-react"
-import { PollCard } from "@/components/poll/PollCard"
+import { PollCard  } from "@/components/poll/PollCard"
+
 
 const ACTIVE_POLLS = [
   {

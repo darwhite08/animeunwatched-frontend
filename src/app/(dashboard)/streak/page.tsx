@@ -1,38 +1,51 @@
 "use client"
 
-import StreakStats from "@/components/streak/StreakStats"
-import StreakCalendar from "@/components/streak/StreakCalendar"
-import StreakChart from "@/components/streak/StreakChart"
+import { StreakHeader } from "@/components/streak/StreakHeader"
+import { MainStreakCard } from "@/components/streak/MainStreakCard"
+import { StreakHeatmap } from "@/components/streak/StreakHeatmap"
+import { AchievementGrid } from "@/components/streak/AchievementGrid"
+import { StreakInsights } from "@/components/streak/StreakInsights"
+
+// NEW IMPORTS
+import { RoutineCard } from "@/components/streak/RoutineCard"
+import { ProgressCard } from "@/components/streak/ProgressCard"
+import { SocialCard } from "@/components/streak/SocialCard"
 
 export default function StreakPage() {
   return (
-    <div className="space-y-10">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-semibold">
-            Watching Streaks
-          </h1>
-          <p className="text-white/50 mt-2">
-            Track your daily anime watching consistency.
-          </p>
+    <div className="max-w-7xl mx-auto px-6 py-10 space-y-10 pb-24">
+      <StreakHeader />
+      
+      {/* SECTION 1: THE HERO DATA */}
+      <MainStreakCard currentStreak={22} bestStreak={45} />
+
+      {/* SECTION 2: THE BENTO ANALYTICS GRID */}
+      <div className="grid lg:grid-cols-12 gap-8">
+        
+        {/* LEFT: Consistency & Routine */}
+        <div className="lg:col-span-8 space-y-8">
+          <div className="p-10 rounded-[3rem] border border-white/5 bg-[#0a0a0a] shadow-2xl relative overflow-hidden">
+             {/* Decorative Background Text */}
+             <span className="absolute -bottom-10 -right-5 text-[120px] font-black text-white/[0.02] pointer-events-none uppercase italic">History</span>
+             
+             <h3 className="text-2xl font-black tracking-tighter mb-8 italic relative z-10">Consistency Map</h3>
+             <StreakHeatmap />
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-8">
+            <RoutineCard />
+            <SocialCard />
+          </div>
         </div>
 
-        <button className="px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 transition">
-          + Log Episode
-        </button>
+        {/* RIGHT: Progress & Milestones */}
+        <div className="lg:col-span-4 space-y-8">
+          <ProgressCard />
+          <StreakInsights />
+          <AchievementGrid />
+        </div>
+
       </div>
-
-     <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-  <div className="xl:col-span-1">
-    <StreakStats />
-  </div>
-
-  <div className="xl:col-span-2">
-    <StreakCalendar />
-  </div>
-</div>
-
-      <StreakChart />
     </div>
   )
 }

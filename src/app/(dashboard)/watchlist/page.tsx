@@ -2,7 +2,8 @@
 
 import { useState, useMemo } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Search, MonitorPlay, Plus, Filter, Sparkles } from "lucide-react"
+import { Search, MonitorPlay, Plus } from "lucide-react"
+// Fixed import path based on your file structure
 import { WatchCard } from "@/components/watchlist/WatchCard"
 
 const WATCHLIST_DATA = [
@@ -37,7 +38,7 @@ export default function WorldClassWatchlist() {
             <MonitorPlay size={14} /> Neural Transmission • Active
           </motion.div>
           <h1 className="text-7xl md:text-8xl font-black tracking-tighter text-white leading-none">
-            Archives<span className="text-indigo-500 text-glow-indigo">.</span>
+            Archives<span className="text-indigo-500 shadow-indigo-500/50" style={{ textShadow: '0 0 20px rgba(99, 102, 241, 0.5)' }}>.</span>
           </h1>
         </div>
 
@@ -48,6 +49,7 @@ export default function WorldClassWatchlist() {
               type="text"
               placeholder="Query database..."
               className="w-full pl-12 pr-6 py-4 rounded-2xl bg-white/[0.03] border border-white/10 text-white placeholder:text-white/20 focus:outline-none focus:border-indigo-500/50 focus:bg-white/[0.05] transition-all"
+              value={query}
               onChange={(e) => setQuery(e.target.value)}
             />
           </div>
@@ -82,6 +84,17 @@ export default function WorldClassWatchlist() {
           ))}
         </AnimatePresence>
       </motion.div>
+
+      {/* EMPTY STATE */}
+      {filtered.length === 0 && (
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="py-20 text-center border border-dashed border-white/10 rounded-[3rem]"
+        >
+          <p className="text-white/20 font-black uppercase tracking-widest text-xs">No records found in current frequency</p>
+        </motion.div>
+      )}
     </div>
   )
 }

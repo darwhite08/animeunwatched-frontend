@@ -2,14 +2,14 @@
 
 import { useState, useMemo } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Search, Filter, BookOpen, Clock, CheckCircle2 } from "lucide-react"
+import { Search } from "lucide-react"
 import { ReadCard } from "@/components/readlist/ReadCard"
 
-// Mock Data - In a real app, this would come from your DB
+// Enhanced Mock Data with your actual asset paths
 const INITIAL_READLIST = [
-  { id: 1, title: "Berserk", author: "Kentaro Miura", status: "Reading", progress: 85, image: "/assets/png/berserk-cover.png", category: "Seinen" },
-  { id: 2, title: "Vagabond", author: "Takehiko Inoue", status: "Completed", progress: 100, image: "/assets/png/vagabond-cover.png", category: "Seinen" },
-  { id: 3, title: "Monster", author: "Naoki Urasawa", status: "Plan to Read", progress: 0, image: "/assets/png/monster-cover.png", category: "Psychological" },
+  { id: 1, title: "Berserk", author: "Kentaro Miura", status: "Reading", progress: 85, image: "/assets/png/zoro_on_ponoglif.png", category: "Seinen" },
+  { id: 2, title: "Vagabond", author: "Takehiko Inoue", status: "Completed", progress: 100, image: "/assets/png/luffy_sitting.png", category: "Seinen" },
+  { id: 3, title: "Monster", author: "Naoki Urasawa", status: "Plan to Read", progress: 0, image: "/assets/png/rengoku_with_sword.png", category: "Psychological" },
 ]
 
 export default function ReadlistPage() {
@@ -18,28 +18,35 @@ export default function ReadlistPage() {
 
   const filteredList = useMemo(() => {
     return INITIAL_READLIST.filter((item) => {
-      const matchesSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase())
+      const matchesSearch = item.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                           item.author.toLowerCase().includes(searchQuery.toLowerCase())
       const matchesTab = activeTab === "All" || item.status === activeTab
       return matchesSearch && matchesTab
     })
   }, [searchQuery, activeTab])
 
   return (
-    <div className="max-w-7xl mx-auto px-6 py-12 space-y-10 pb-32">
+    <div className="max-w-[1440px] mx-auto px-8 py-16 space-y-16 pb-40">
       {/* HEADER & SEARCH BAR */}
-      <header className="flex flex-col md:flex-row justify-between items-start md:items-end gap-8">
-        <div className="space-y-2">
-          <h1 className="text-6xl font-black tracking-tighter text-white">
-            Library<span className="text-indigo-500">.</span>
+      <header className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-12">
+        <div className="space-y-4">
+          <motion.div 
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="text-indigo-400 font-black uppercase tracking-[0.4em] text-[10px]"
+          >
+            Archives Repository • Sync Active
+          </motion.div>
+          <h1 className="text-7xl md:text-8xl font-black tracking-tighter text-white leading-none">
+            Library<span className="text-indigo-500" style={{ textShadow: '0 0 25px rgba(99, 102, 241, 0.8)' }}>.</span>
           </h1>
-          <p className="text-white/40 text-lg font-medium tracking-wide italic">Your sanctuary for legendary stories.</p>
         </div>
 
-        <div className="relative w-full md:w-96 group">
+        <div className="relative w-full lg:w-96 group">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-indigo-400 transition-colors" size={20} />
           <input 
             type="text"
-            placeholder="Search your archives..."
+            placeholder="Search your chronicles..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full pl-12 pr-6 py-4 rounded-2xl bg-white/[0.03] border border-white/10 text-white placeholder:text-white/20 focus:outline-none focus:border-indigo-500/50 focus:bg-white/[0.05] transition-all"
@@ -48,15 +55,15 @@ export default function ReadlistPage() {
       </header>
 
       {/* TABS / FILTERS */}
-      <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-hide">
+      <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide border-b border-white/5">
         {["All", "Reading", "Completed", "Plan to Read"].map((tab) => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
-            className={`px-6 py-2 rounded-xl text-xs font-black uppercase tracking-widest whitespace-nowrap transition-all ${
+            className={`px-8 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest whitespace-nowrap transition-all ${
               activeTab === tab 
-              ? "bg-indigo-600 text-white shadow-[0_0_20px_rgba(79,70,229,0.3)]" 
-              : "bg-white/5 text-white/40 hover:bg-white/10"
+              ? "bg-indigo-600 text-white shadow-[0_0_30px_rgba(79,70,229,0.4)]" 
+              : "bg-white/5 text-white/40 hover:bg-white/10 border border-white/5"
             }`}
           >
             {tab}
@@ -65,13 +72,26 @@ export default function ReadlistPage() {
       </div>
 
       {/* THE GRID */}
-      <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+      <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
         <AnimatePresence mode="popLayout">
           {filteredList.map((manga) => (
             <ReadCard key={manga.id} manga={manga} />
           ))}
         </AnimatePresence>
       </motion.div>
+
+      {/* EMPTY STATE */}
+      {filteredList.length === 0 && (
+        <motion.div 
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="py-32 text-center border border-dashed border-white/5 rounded-[3rem] bg-white/[0.01]"
+        >
+          <p className="text-white/20 font-black uppercase tracking-[0.3em] text-xs italic">
+            No entries matching your query found in library.
+          </p>
+        </motion.div>
+      )}
     </div>
   )
 }

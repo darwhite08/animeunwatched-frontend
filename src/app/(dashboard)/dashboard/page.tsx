@@ -1,13 +1,104 @@
 "use client"
 
-import DashboardHeader from "@/components/dashboard/DashboardHeader"
-import DashboardGrid from "@/components/dashboard/DashboardGrid"
+import { motion } from "framer-motion"
+import { Zap, Crown, Flame, TrendingUp, Bell, Search, Plus } from "lucide-react"
+import { WatchStatsCard } from "@/components/dashboard/cards/WatchStatsCard"
+import { GenreCard } from "@/components/dashboard/cards/GenreCard"
+import { ActivityCard } from "@/components/dashboard/cards/ActivityCard"
 
-export default function DashboardPage() {
+export default function WorldClassDashboard() {
   return (
-    <div className="space-y-8">
-      <DashboardHeader />
-      <DashboardGrid />
+    <div className="max-w-[1440px] mx-auto px-8 py-12 space-y-10 pb-32">
+      
+      {/* 1. CINEMATIC HEADER SECTION */}
+      <header className="relative overflow-hidden rounded-[3rem] bg-[#050505] border border-white/5 p-12 shadow-2xl group">
+        {/* Ambient Mesh Glow */}
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-600/10 blur-[120px] rounded-full pointer-events-none group-hover:bg-indigo-500/20 transition-all duration-1000" />
+        
+        <div className="relative z-10 flex flex-col lg:flex-row justify-between items-end gap-10">
+          <div className="space-y-4">
+            <motion.div 
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="flex items-center gap-2 text-indigo-400 font-black uppercase tracking-[0.4em] text-[10px]"
+            >
+              <Crown size={14} className="animate-pulse" /> Neural Link Active • Grade II
+            </motion.div>
+            <h1 className="text-7xl font-black tracking-tighter text-white leading-none">
+              Welcome, <span className="bg-gradient-to-b from-white to-neutral-500 bg-clip-text text-transparent italic">Priyanshu</span>
+            </h1>
+          </div>
+
+          <div className="flex items-center gap-8 border-l border-white/10 pl-10">
+            <HeaderMetric label="Daily XP" value="+1,240" icon={Zap} color="text-yellow-400" />
+            <HeaderMetric label="Global Rank" value="#812" icon={TrendingUp} color="text-indigo-400" />
+            <button className="p-4 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all">
+                <Bell size={20} className="text-white/60" />
+            </button>
+          </div>
+        </div>
+      </header>
+
+      {/* 2. THE BENTO GRID SYSTEM */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        
+        {/* LEFT & CENTER: CORE METRICS (8 Cols) */}
+        <div className="lg:col-span-8 space-y-8">
+          <WatchStatsCard />
+          
+          <div className="grid md:grid-cols-2 gap-8">
+            {/* STREAK BENTO */}
+            <motion.div 
+                whileHover={{ y: -5 }}
+                className="p-10 rounded-[2.5rem] bg-white/[0.02] border border-white/5 hover:border-orange-500/30 transition-all duration-500 group relative overflow-hidden"
+            >
+                <div className="absolute -right-6 -top-6 text-orange-500/5 rotate-12 group-hover:rotate-0 transition-transform duration-700">
+                    <Flame size={180} />
+                </div>
+                <div className="flex justify-between items-center mb-12 relative z-10">
+                    <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/30">Current Momentum</h4>
+                    <div className="p-2 rounded-lg bg-orange-500/10 text-orange-500"><Flame size={20} /></div>
+                </div>
+                <p className="text-8xl font-black tracking-tighter relative z-10 text-white">22<span className="text-xl text-white/20 ml-2 italic font-medium">Days</span></p>
+                <div className="mt-8 h-2 w-full bg-white/5 rounded-full overflow-hidden relative z-10">
+                    <motion.div initial={{ width: 0 }} animate={{ width: "70%" }} className="h-full bg-gradient-to-r from-orange-600 to-orange-400 shadow-[0_0_20px_rgba(249,115,22,0.4)]" />
+                </div>
+            </motion.div>
+
+            <GenreCard />
+          </div>
+        </div>
+
+        {/* RIGHT: INSIGHTS & UTILITY (4 Cols) */}
+        <div className="lg:col-span-4 space-y-8 flex flex-col">
+           {/* PREMIUM CTA CARD */}
+           <div className="p-10 rounded-[3rem] bg-indigo-600 text-white shadow-2xl shadow-indigo-600/20 relative overflow-hidden group flex-1">
+              <div className="absolute -right-10 -top-10 w-48 h-48 bg-white/20 blur-3xl rounded-full group-hover:scale-150 transition-transform duration-1000" />
+              <div className="relative z-10 h-full flex flex-col justify-between">
+                <div>
+                    <div className="h-12 w-12 rounded-2xl bg-white/20 flex items-center justify-center mb-8">
+                        <Crown size={24} />
+                    </div>
+                    <h4 className="text-4xl font-black tracking-tighter leading-[0.9] italic">Ascend to<br />Prime Grade</h4>
+                    <p className="mt-6 text-indigo-100/70 text-sm font-medium leading-relaxed">Access the neural archives, verified chronicles, and legendary status badges.</p>
+                </div>
+                <button className="mt-10 w-full py-5 rounded-2xl bg-white text-indigo-600 font-black uppercase tracking-widest text-[11px] hover:shadow-2xl transition-all active:scale-95">Upgrade Identity</button>
+              </div>
+           </div>
+           
+           <ActivityCard />
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function HeaderMetric({ label, value, icon: Icon, color }: any) {
+  return (
+    <div className="text-right flex flex-col items-end">
+      <div className={`p-2 rounded-xl bg-white/5 mb-2 ${color}`}><Icon size={18} /></div>
+      <p className="text-3xl font-black text-white leading-none tracking-tighter">{value}</p>
+      <p className="text-[10px] font-bold text-white/20 uppercase tracking-widest mt-1">{label}</p>
     </div>
   )
 }

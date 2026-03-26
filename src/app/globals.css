@@ -37,3 +37,8 @@
   -webkit-mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
   mask-image: linear-gradient(to bottom, black 50%, transparent 100%);
 }
+/* Force backdrop blur if the utility is being finicky in v4 */
+.backdrop-blur-2xl {
+  backdrop-filter: blur(40px) !important;
+  -webkit-backdrop-filter: blur(40px) !important;
+}

@@ -1,60 +1,21 @@
-"use client"
+"use client";
 
-import { useState } from "react"
+import { useState } from "react";
 
-export type Notification = {
-  id: string
-  title: string
-  description: string
-  time: string
-  read: boolean
-}
+export const useNotifications = () => {
+  const [notifications, setNotifications] = useState([
+    { id: 1, type: 'achievement', message: "Neural Link: 7-Day Streak Achieved", time: "2m ago", read: false, node: "NODE_01" },
+    { id: 2, type: 'comment', message: "User 'Zoro' commented on your review", time: "15m ago", read: false, node: "NODE_04" },
+    { id: 3, type: 'update', message: "Solo Leveling S2: New Trailer Synced", time: "1h ago", read: true, node: "NODE_02" },
+  ]);
 
-export function useNotifications() {
-  const [notifications, setNotifications] = useState<Notification[]>([
-    {
-      id: "1",
-      title: "New Follower",
-      description: "Someone followed your anime list.",
-      time: "2m ago",
-      read: false,
-    },
-    {
-      id: "2",
-      title: "Poll Update",
-      description: "Attack on Titan is trending in polls.",
-      time: "1h ago",
-      read: false,
-    },
-    {
-      id: "3",
-      title: "Leaderboard Change",
-      description: "One Piece moved to #1.",
-      time: "3h ago",
-      read: true,
-    },
-  ])
-
-  const unreadCount = notifications.filter(n => !n.read).length
+  const unreadCount = notifications.filter(n => !n.read).length;
 
   const markAllAsRead = () => {
-    setNotifications(prev =>
-      prev.map(n => ({ ...n, read: true }))
-    )
-  }
+    setNotifications(prev => prev.map(n => ({ ...n, read: true })));
+  };
 
-  const markAsRead = (id: string) => {
-    setNotifications(prev =>
-      prev.map(n =>
-        n.id === id ? { ...n, read: true } : n
-      )
-    )
-  }
+  const clearAll = () => setNotifications([]);
 
-  return {
-    notifications,
-    unreadCount,
-    markAllAsRead,
-    markAsRead,
-  }
-}
+  return { notifications, unreadCount, markAllAsRead, clearAll };
+};

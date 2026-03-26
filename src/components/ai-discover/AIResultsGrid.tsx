@@ -1,55 +1,60 @@
 "use client"
 
 import { motion } from "framer-motion"
-
-const dummyResults = Array.from({ length: 12 }).map((_, i) => ({
-  id: i,
-  title: `Recommended Anime ${i + 1}`,
-  image: "https://source.unsplash.com/400x600/?anime",
-  score: (8 + Math.random()).toFixed(1)
-}))
+import { Star, Zap } from "lucide-react"
 
 export default function AIResultsGrid() {
+  const cards = [1, 2, 3, 4, 5, 6]
+
   return (
-    <section className="max-w-7xl mx-auto px-4 py-16">
-      <h2 className="text-xl font-semibold mb-8">
-        AI Recommendations
-      </h2>
+    <section className="py-24 bg-[#030303] px-6">
+      <div className="max-w-7xl mx-auto">
+        <div className="flex items-end justify-between mb-16">
+          <h2 className="text-4xl font-black text-white italic uppercase tracking-tighter">
+            Neural Matches<span className="text-indigo-600">.</span>
+          </h2>
+          <div className="h-px flex-1 mx-8 bg-white/10 hidden md:block" />
+          <p className="text-[10px] font-black text-white/40 uppercase tracking-widest">
+            Results Processed: 0.0042s
+          </p>
+        </div>
 
-      <motion.div
-        initial="hidden"
-        animate="visible"
-        variants={{
-          visible: { transition: { staggerChildren: 0.05 } }
-        }}
-        className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6"
-      >
-        {dummyResults.map((anime) => (
-          <motion.div
-            key={anime.id}
-            variants={{
-              hidden: { opacity: 0, y: 20 },
-              visible: { opacity: 1, y: 0 }
-            }}
-            className="group cursor-pointer"
-          >
-            <div className="relative overflow-hidden rounded-2xl border border-white/10 bg-white/5">
-              <img
-                src={anime.image}
-                alt={anime.title}
-                className="w-full h-72 object-cover group-hover:scale-105 transition duration-500"
-              />
-              <div className="absolute top-2 right-2 bg-black/80 text-xs px-2 py-1 rounded-full border border-white/10">
-                ⭐ {anime.score}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
+          {cards.map((i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              whileHover={{ y: -10 }}
+              className="group relative aspect-[16/10] bg-white/5 rounded-[2rem] border border-white/5 overflow-hidden p-1"
+            >
+              {/* Internal Glow on Hover */}
+              <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+              
+              <div className="relative h-full w-full rounded-[1.8rem] overflow-hidden flex flex-col justify-end p-6">
+                <img 
+                  src="https://images.unsplash.com/photo-1578632292335-df3abbb0d586?q=80&w=1000&auto=format&fit=crop" 
+                  className="absolute inset-0 w-full h-full object-cover scale-105 group-hover:scale-100 transition-transform duration-700 brightness-50 group-hover:brightness-75"
+                />
+                
+                {/* Scanner Line Animation */}
+                <div className="absolute top-0 left-0 w-full h-[2px] bg-indigo-500/40 shadow-[0_0_15px_rgba(99,102,241,0.5)] animate-[scanner_4s_ease-in-out_infinite]" />
+
+                <div className="relative z-10 flex items-center justify-between">
+                  <div>
+                    <h3 className="text-xl font-black text-white uppercase italic leading-none">Cyberpunk Edgerunners</h3>
+                    <p className="text-[10px] font-bold text-indigo-400 mt-2 tracking-widest uppercase">98% Synch Rate</p>
+                  </div>
+                  <div className="flex flex-col items-center gap-1 bg-black/40 backdrop-blur-md p-2 rounded-xl border border-white/10">
+                    <Star size={14} fill="#6366f1" className="text-indigo-500" />
+                    <span className="text-[10px] font-black text-white">8.6</span>
+                  </div>
+                </div>
               </div>
-            </div>
-
-            <h3 className="mt-3 text-sm font-medium truncate">
-              {anime.title}
-            </h3>
-          </motion.div>
-        ))}
-      </motion.div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
     </section>
   )
 }

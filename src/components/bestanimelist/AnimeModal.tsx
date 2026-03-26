@@ -1,134 +1,104 @@
 "use client"
 
 import { motion, AnimatePresence } from "framer-motion"
-import { X } from "lucide-react"
+import { X, Play, Plus, Share2, Star, Clock, Monitor } from "lucide-react"
 import Image from "next/image"
-import { useEffect } from "react"
 
-type Anime = {
-  id: number
-  rank: number
-  title: string
-  genres: string[]
-  status: string
-  format: string
-  rating: number
-  studio: string
-  episodes: number
-  description: string
-  image: string
+interface AnimeModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  anime: any;
 }
 
-type Props = {
-  anime: Anime | null
-  onClose: () => void
-}
-
-export default function AnimeModal({ anime, onClose }: Props) {
-  useEffect(() => {
-    const handleEsc = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose()
-    }
-    window.addEventListener("keydown", handleEsc)
-    return () => window.removeEventListener("keydown", handleEsc)
-  }, [onClose])
+export default function AnimeModal({ isOpen, onClose, anime }: AnimeModalProps) {
+  if (!anime) return null;
 
   return (
     <AnimatePresence>
-      {anime && (
-        <>
+      {isOpen && (
+        <div className="fixed inset-0 z-[150] flex items-center justify-center p-4 md:p-8">
           {/* Backdrop */}
           <motion.div
             initial={{ opacity: 0 }}
-            animate={{ opacity: 0.6 }}
+            animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-black backdrop-blur-md z-50"
+            className="absolute inset-0 bg-black/90 backdrop-blur-xl"
           />
 
-          {/* Modal */}
+          {/* Modal Content */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: 30 }}
+            initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 30 }}
-            transition={{ duration: 0.25 }}
-            className="fixed inset-0 z-50 flex items-center justify-center p-4"
+            exit={{ opacity: 0, scale: 0.9, y: 20 }}
+            className="relative w-full max-w-5xl bg-[#0a0a0a] rounded-[2.5rem] border border-white/10 overflow-hidden shadow-[0_0_100px_rgba(79,70,229,0.2)]"
           >
-            <div
-              onClick={(e) => e.stopPropagation()}
-              className="relative w-full max-w-5xl rounded-3xl border border-white/10 bg-neutral-900/80 backdrop-blur-xl shadow-2xl overflow-hidden"
-            >
-              {/* Close */}
-              <button
-                onClick={onClose}
-                className="absolute right-6 top-6 z-10 rounded-lg bg-white/10 p-2 hover:bg-white/20 transition"
-              >
-                <X size={18} />
-              </button>
+            <div className="grid lg:grid-cols-2">
+              {/* Left: Visuals */}
+              <div className="relative h-[300px] lg:h-[600px]">
+                <Image
+                  src={anime.image || "https://images.unsplash.com/photo-1578632292335-df3abbb0d586?q=80&w=1000"}
+                  alt={anime.title}
+                  fill
+                  className="object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-[#0a0a0a]" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-transparent" />
+              </div>
 
-              <div className="grid md:grid-cols-2 gap-8 p-8">
-                {/* Poster */}
-                <div className="relative w-full aspect-[3/4] rounded-2xl overflow-hidden">
-                  <Image
-                    src={anime.image}
-                    alt={anime.title}
-                    fill
-                    className="object-cover"
-                  />
-                </div>
+              {/* Right: Info */}
+              <div className="p-8 lg:p-12 flex flex-col justify-center">
+                <button 
+                  onClick={onClose}
+                  className="absolute top-8 right-8 p-2 rounded-full bg-white/5 border border-white/10 text-white/40 hover:text-white transition-colors"
+                >
+                  <X size={20} />
+                </button>
 
-                {/* Content */}
-                <div className="flex flex-col gap-6 text-white">
-                  <div>
-                    <span className="text-sm text-indigo-400 font-medium">
-                      Rank #{anime.rank}
+                <div className="space-y-6">
+                  <div className="flex items-center gap-3">
+                    <span className="px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 text-[10px] font-black uppercase tracking-widest">
+                      Neural Ranked #1
                     </span>
-                    <h2 className="text-3xl font-bold mt-2">
-                      {anime.title}
-                    </h2>
-                  </div>
-
-                  <div className="flex flex-wrap gap-2">
-                    {anime.genres.map((genre) => (
-                      <span
-                        key={genre}
-                        className="rounded-full bg-white/10 px-3 py-1 text-xs"
-                      >
-                        {genre}
-                      </span>
-                    ))}
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-4 text-sm text-white/70">
-                    <div>
-                      <p className="text-white/40">Studio</p>
-                      <p>{anime.studio}</p>
-                    </div>
-                    <div>
-                      <p className="text-white/40">Episodes</p>
-                      <p>{anime.episodes}</p>
-                    </div>
-                    <div>
-                      <p className="text-white/40">Status</p>
-                      <p>{anime.status}</p>
-                    </div>
-                    <div>
-                      <p className="text-white/40">Rating</p>
-                      <p>{anime.rating}</p>
+                    <div className="flex items-center gap-1 text-amber-400">
+                      <Star size={14} fill="currentColor" />
+                      <span className="text-sm font-black">{anime.rating}</span>
                     </div>
                   </div>
 
-                  <div>
-                    <p className="text-white/40 mb-2">Synopsis</p>
-                    <p className="text-white/70 leading-relaxed">
-                      {anime.description}
-                    </p>
+                  <h2 className="text-5xl lg:text-6xl font-black text-white uppercase italic tracking-tighter leading-none">
+                    {anime.title}
+                  </h2>
+
+                  <div className="flex flex-wrap gap-4 text-[10px] font-black text-white/40 uppercase tracking-widest">
+                    <span className="flex items-center gap-2"><Clock size={12}/> 24 Episodes</span>
+                    <span className="flex items-center gap-2"><Monitor size={12}/> TV Series</span>
+                    <span className="text-indigo-500">Seinen</span>
+                    <span>Studio MAPPA</span>
+                  </div>
+
+                  <p className="text-white/60 text-lg leading-relaxed font-medium line-clamp-4">
+                    The world as we know it has collapsed. Amidst the ruins of Tokyo, 
+                    humanity struggles against a new threat that defies the laws of physics. 
+                    A cinematic masterpiece of psychological depth and visceral action.
+                  </p>
+
+                  <div className="flex flex-wrap gap-4 pt-8">
+                    <button className="flex-1 min-w-[200px] py-4 bg-white text-black rounded-2xl font-black uppercase tracking-widest text-xs flex items-center justify-center gap-3 hover:bg-indigo-500 hover:text-white transition-all">
+                      <Play size={18} fill="currentColor" /> Initialize Stream
+                    </button>
+                    <button className="p-4 bg-white/5 border border-white/10 rounded-2xl text-white hover:bg-white/10 transition-all">
+                      <Plus size={20} />
+                    </button>
+                    <button className="p-4 bg-white/5 border border-white/10 rounded-2xl text-white hover:bg-white/10 transition-all">
+                      <Share2 size={20} />
+                    </button>
                   </div>
                 </div>
               </div>
             </div>
           </motion.div>
-        </>
+        </div>
       )}
     </AnimatePresence>
   )

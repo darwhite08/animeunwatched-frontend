@@ -1,74 +1,37 @@
-export const FILTER_CONFIG = {
-  basic: {
-    Genre: [
-      "Action",
-      "Adventure",
-      "Comedy",
-      "Drama",
-      "Fantasy",
-      "Horror",
-      "Romance",
-      "Sci-Fi",
-      "Slice of Life",
-      "Sports",
-      "Supernatural",
-      "Thriller",
-    ],
-    Format: ["TV Series", "Movie", "OVA", "ONA", "Special"],
-    Status: [
-      "Currently Airing",
-      "Finished Airing",
-      "Upcoming",
-    ],
-    Rating: ["9.0+", "8.5+", "8.0+", "7.5+"],
-  },
+export const categories = [
+  { id: "all", label: "All Archives", icon: "Database" },
+  { id: "trending", label: "Trending Now", icon: "Zap" },
+  { id: "top-rated", label: "Highest Rated", icon: "Star" },
+  { id: "new", label: "Newly Synced", icon: "Clock" },
+];
 
-  advanced: {
-    Theme: [
-      "Isekai",
-      "Reincarnation",
-      "Time Travel",
-      "Superpowers",
-      "Military",
-      "Cyberpunk",
-      "School Romance",
-      "Mind Games",
-      "Battle Royale",
-    ],
-
-    Demographic: [
-      "Shounen",
-      "Shoujo",
-      "Seinen",
-      "Josei",
-      "Kids",
-    ],
-
-    Season: ["Winter", "Spring", "Summer", "Fall"],
-
-    Popularity: [
-      "Trending Now",
-      "Most Watched",
-      "Top Rated",
-      "Hidden Gems",
-      "Fastest Growing",
-    ],
-
-    Studio: [
-      "MAPPA",
-      "Ufotable",
-      "Madhouse",
-      "Bones",
-      "Kyoto Animation",
-      "A-1 Pictures",
-    ],
-
-    Tags: [
-      "Dark",
-      "Wholesome",
-      "Emotional",
-      "Violence Heavy",
-      "Feel Good",
+export const filterSections = [
+  {
+    id: "format",
+    title: "Format",
+    options: [
+      { id: "tv", label: "TV Series" },
+      { id: "movie", label: "Movie" },
+      { id: "ova", label: "OVA" },
     ],
   },
-}
+  {
+    id: "status",
+    title: "Air Status",
+    options: [
+      { id: "finished", label: "Completed" },
+      { id: "airing", label: "Currently Airing" },
+    ],
+  },
+  {
+    id: "genres",
+    title: "Neural Tags",
+    options: [
+      { id: "action", label: "Action" },
+      { id: "psychological", label: "Psychological" },
+      { id: "seinen", label: "Seinen" },
+      { id: "shonen", label: "Shonen" },
+      { id: "thriller", label: "Thriller" },
+    ],
+  },
+];

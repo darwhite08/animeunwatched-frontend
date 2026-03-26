@@ -1,41 +1,34 @@
 "use client"
 
-type Category = {
-  id: string
-  label: string
-}
+import { useState } from "react"
+import { motion } from "framer-motion"
+import { categories } from "./filterData"
 
-interface Props {
-  categories: Category[]
-  active: string
-  onChange: (id: string) => void
-}
+export default function CategoryTabs() {
+  const [active, setActive] = useState("all")
 
-export default function CategoryTabs({
-  categories,
-  active,
-  onChange,
-}: Props) {
   return (
-    <div className="flex overflow-x-auto pb-2 scrollbar-hide">
-      <div className="flex gap-3">
-        {categories.map((cat) => {
-          const isActive = active === cat.id
-          return (
-            <button
-              key={cat.id}
-              onClick={() => onChange(cat.id)}
-              className={`rounded-full px-5 py-2 text-sm font-medium transition ${
-                isActive
-                  ? "bg-indigo-600 text-white"
-                  : "bg-white/5 text-white/70 hover:bg-white/10"
-              }`}
-            >
-              {cat.label}
-            </button>
-          )
-        })}
-      </div>
+    <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-2">
+      {categories.map((cat) => (
+        <button
+          key={cat.id}
+          onClick={() => setActive(cat.id)}
+          className="relative px-6 py-2 group outline-none"
+        >
+          <span className={`relative z-10 text-[11px] font-black uppercase tracking-widest transition-colors duration-300 ${
+            active === cat.id ? "text-white" : "text-white/40 group-hover:text-white/70"
+          }`}>
+            {cat.label}
+          </span>
+          {active === cat.id && (
+            <motion.div 
+              layoutId="tab-bg"
+              className="absolute inset-0 bg-indigo-600 rounded-full shadow-[0_0_20px_rgba(79,70,229,0.4)]"
+              transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+            />
+          )}
+        </button>
+      ))}
     </div>
   )
 }

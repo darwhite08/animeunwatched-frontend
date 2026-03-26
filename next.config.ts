@@ -1,20 +1,21 @@
 import type { NextConfig } from "next";
 
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: "https",
-        hostname: "encrypted-tbn0.gstatic.com",
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+        pathname: '**',
       },
+      // If you are using external images for anime covers from other sources, add them here too:
       {
-        protocol: "https",
-        hostname: "m.media-amazon.com",
+        protocol: 'https',
+        hostname: 'encrypted-tbn0.gstatic.com',
+        pathname: '**',
       },
     ],
   },
-}
+};
 
-module.exports = nextConfig
 export default nextConfig;

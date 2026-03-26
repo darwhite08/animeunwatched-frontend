@@ -1,130 +1,49 @@
 "use client"
 
-import { useState } from "react"
-import FilterSection from "./FilterSection"
-import FilterCheckboxGroup from "./FilterCheckboxGroup"
-import { FILTER_CONFIG } from "./filterData"
-import Image from "next/image"
+import { motion, AnimatePresence } from "framer-motion"
+import { X, RotateCcw } from "lucide-react"
+import { filterSections } from "./filterData"
+import { FilterCheckboxGroup } from "./FilterCheckboxGroup"
 
-interface Props {
-  selectedFilters: Record<string, string[]>
-  setSelectedFilters: React.Dispatch<
-    React.SetStateAction<Record<string, string[]>>
-  >
-}
-
-export default function FilterDrawer({
-  selectedFilters,
-  setSelectedFilters,
-}: Props) {
-  const [showAdvanced, setShowAdvanced] =
-    useState(false)
-
+export default function FilterDrawer({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   return (
-    <div className="relative ">
-
-      {/* 🧑‍🌾 Character Sitting On Drawer */}
-      <div className="absolute -top-[254px] right-20 z-20 hidden md:block pointer-events-none select-none">
-        <Image
-          src="/assets/png/luffy_sitting.png" // make sure file exists in /public/images
-          alt="Anime Character"
-          width={220}
-          height={220}
-          priority
-          className="
-            drop-shadow-[0_25px_50px_rgba(0,0,0,0.85)]
-            transition-transform duration-500
-            hover:scale-105
-          "
-        />
-      </div>
-
-      {/* Drawer Card */}
-      <div className="relative z-10 rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur-xl shadow-[0_20px_60px_rgba(0,0,0,0.6)]">
-
-        {/* Header */}
-        <div className="flex items-center justify-between border-b border-white/10 pb-4 mb-6">
-          <h3 className="text-lg font-semibold tracking-wide">
-            Filters
-          </h3>
-
-          <button
-            onClick={() => setSelectedFilters({})}
-            className="text-xs text-indigo-400 hover:text-indigo-300 transition"
+    <AnimatePresence>
+      {isOpen && (
+        <>
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={onClose}
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100]"
+          />
+          <motion.div 
+            initial={{ x: "100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "100%" }}
+            transition={{ type: "spring", damping: 25, stiffness: 200 }}
+            className="fixed right-0 top-0 bottom-0 w-full max-w-xs bg-[#0a0a0a] border-l border-white/10 z-[101] p-8"
           >
-            Reset
-          </button>
-        </div>
+            <div className="flex items-center justify-between mb-10">
+              <h2 className="text-xl font-black text-white uppercase italic italic">Filters</h2>
+              <button onClick={onClose} className="p-2 hover:bg-white/5 rounded-full text-white/40 hover:text-white">
+                <X size={20} />
+              </button>
+            </div>
 
-        {/* BASIC FILTERS */}
-        <div>
-          <h4 className="mb-6 text-xs uppercase tracking-wider text-white/40">
-            Basic Filters
-          </h4>
+            <div className="overflow-y-auto h-[calc(100vh-200px)] no-scrollbar">
+              {filterSections.map((section) => (
+                <FilterCheckboxGroup key={section.id} title={section.title} options={section.options} />
+              ))}
+            </div>
 
-          {Object.entries(FILTER_CONFIG.basic).map(
-            ([title, options]) => (
-              <FilterSection
-                key={title}
-                title={title}
-                 defaultOpen={false}
-              >
-                <FilterCheckboxGroup
-                  title={title}
-                  options={options}
-                  selectedFilters={selectedFilters}
-                  setSelectedFilters={setSelectedFilters}
-                />
-              </FilterSection>
-            )
-          )}
-        </div>
-
-        {/* ADVANCED TOGGLE */}
-        <button
-          onClick={() =>
-            setShowAdvanced(!showAdvanced)
-          }
-          className="
-            mt-6 w-full rounded-lg
-            border border-white/10
-            bg-white/5
-            py-2 text-sm
-            hover:bg-white/10
-            transition
-          "
-        >
-          {showAdvanced
-            ? "Hide Advanced Filters"
-            : "Show Advanced Filters"}
-        </button>
-
-        {/* ADVANCED FILTERS */}
-        {showAdvanced && (
-          <div className="mt-8 border-t border-white/10 pt-8">
-            <h4 className="mb-6 text-xs uppercase tracking-wider text-white/40">
-              Advanced Filters
-            </h4>
-
-            {Object.entries(
-              FILTER_CONFIG.advanced
-            ).map(([title, options]) => (
-              <FilterSection
-                key={title}
-                title={title}
-                defaultOpen={false}
-              >
-                <FilterCheckboxGroup
-                  title={title}
-                  options={options}
-                  selectedFilters={selectedFilters}
-                  setSelectedFilters={setSelectedFilters}
-                />
-              </FilterSection>
-            ))}
-          </div>
-        )}
-      </div>
-    </div>
+            <div className="absolute bottom-8 left-8 right-8 flex gap-4">
+              <button className="flex-1 py-4 bg-indigo-600 rounded-xl text-[10px] font-black text-white uppercase tracking-widest">Apply</button>
+              <button className="p-4 bg-white/5 rounded-xl text-white hover:bg-white/10"><RotateCcw size={16} /></button>
+            </div>
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
   )
 }

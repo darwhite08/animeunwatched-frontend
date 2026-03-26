@@ -1,240 +1,54 @@
 "use client"
 
-import { useMemo, useState } from "react"
-import { motion, AnimatePresence } from "framer-motion"
-import { SlidersHorizontal, X } from "lucide-react"
+import { useState } from "react"
+import BestAnimeListHeader from "@/components/bestanimelist/BestAnimeListHeader"
 import AnimeCard from "@/components/bestanimelist/AnimeCard"
-import LeaderboardHeader from "@/components/bestanimelist/BestAnimeListHeader"
+import CategoryTabs from "@/components/bestanimelist/CategoryTabs"
 import FilterDrawer from "@/components/bestanimelist/FilterDrawer"
-import AnimeModal from "@/components/bestanimelist/AnimeModal"
+import { ListFilter } from "lucide-react"
 
-type Anime = {
-  id: number
-  rank: number
-  title: string
-  genres: string[]
-  status: string
-  format: string
-  rating: number
-  studio: string
-  episodes: number
-  description: string
-  image: string
-}
-
-const mockAnime: Anime[] = [
-  {
-    id: 1,
-    rank: 1,
-    title: "Attack on Titan",
-    genres: ["Action", "Fantasy"],
-    status: "Finished Airing",
-    format: "TV Series",
-    rating: 9.5,
-    studio: "MAPPA",
-    episodes: 75,
-    description:
-      "Humanity’s struggle for survival against giant Titans.",
-    image:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS575pFj2cDSr8mJ1PQAFS6DhqioRWR2CJnkw&s",
-  },
-  {
-    id: 2,
-    rank: 2,
-    title: "Fullmetal Alchemist: Brotherhood",
-    genres: ["Adventure", "Drama"],
-    status: "Finished Airing",
-    format: "TV Series",
-    rating: 9.3,
-    studio: "Bones",
-    episodes: 64,
-    description: "The quest for the Philosopher’s Stone.",
-    image:
-      "https://m.media-amazon.com/images/M/MV5BNDczZWMyMjEtZDI0ZS00YThjLWE2MjEtNTIxNmVmZDhkNDg5XkEyXkFqcGc@._V1_.jpg",
-  },
-  {
-    id: 3,
-    rank: 3,
-    title: "Fullmetal Alchemist: Brotherhood",
-    genres: ["Adventure", "Drama"],
-    status: "Finished Airing",
-    format: "TV Series",
-    rating: 9.3,
-    studio: "Bones",
-    episodes: 64,
-    description: "The quest for the Philosopher’s Stone.",
-    image:
-      "https://m.media-amazon.com/images/M/MV5BNDczZWMyMjEtZDI0ZS00YThjLWE2MjEtNTIxNmVmZDhkNDg5XkEyXkFqcGc@._V1_.jpg",
-  },
-  {
-    id: 4,
-    rank: 4,
-    title: "Fullmetal Alchemist: Brotherhood",
-    genres: ["Adventure", "Drama"],
-    status: "Finished Airing",
-    format: "TV Series",
-    rating: 9.3,
-    studio: "Bones",
-    episodes: 64,
-    description: "The quest for the Philosopher’s Stone.",
-    image:
-      "https://m.media-amazon.com/images/M/MV5BNDczZWMyMjEtZDI0ZS00YThjLWE2MjEtNTIxNmVmZDhkNDg5XkEyXkFqcGc@._V1_.jpg",
-  },
-  {
-    id: 5,
-    rank: 5,
-    title: "Fullmetal Alchemist: Brotherhood",
-    genres: ["Adventure", "Drama"],
-    status: "Finished Airing",
-    format: "TV Series",
-    rating: 9.3,
-    studio: "Bones",
-    episodes: 64,
-    description: "The quest for the Philosopher’s Stone.",
-    image:
-      "https://m.media-amazon.com/images/M/MV5BNDczZWMyMjEtZDI0ZS00YThjLWE2MjEtNTIxNmVmZDhkNDg5XkEyXkFqcGc@._V1_.jpg",
-  },
-  {
-    id: 6,
-    rank: 6,
-    title: "Fullmetal Alchemist: Brotherhood",
-    genres: ["Adventure", "Drama"],
-    status: "Finished Airing",
-    format: "TV Series",
-    rating: 9.3,
-    studio: "Bones",
-    episodes: 64,
-    description: "The quest for the Philosopher’s Stone.",
-    image:
-      "https://m.media-amazon.com/images/M/MV5BNDczZWMyMjEtZDI0ZS00YThjLWE2MjEtNTIxNmVmZDhkNDg5XkEyXkFqcGc@._V1_.jpg",
-  },
+const mockData = [
+  { title: "Vinland Saga", rating: "8.9", year: "2019" },
+  { title: "Monster", rating: "9.0", year: "2004" },
+  { title: "Steins;Gate", rating: "9.1", year: "2011" },
+  { title: "Cowboy Bebop", rating: "8.8", year: "1998" },
+  { title: "Berserk", rating: "9.3", year: "1997" },
+  { title: "Neon Genesis Evangelion", rating: "8.6", year: "1995" },
 ]
 
 export default function BestAnimeListPage() {
-  const [selectedFilters, setSelectedFilters] =
-    useState<Record<string, string[]>>({})
-  const [isCollapsed, setIsCollapsed] = useState(false)
-  const [isMobileOpen, setIsMobileOpen] = useState(false)
-
-  // ✅ NEW STATE FOR MODAL
-  const [selectedAnime, setSelectedAnime] =
-    useState<Anime | null>(null)
-
-  const filteredAnime = useMemo(() => {
-    return mockAnime.filter((anime) => {
-      return Object.entries(selectedFilters).every(
-        ([category, values]) => {
-          if (!values || values.length === 0) return true
-
-          switch (category) {
-            case "Genre":
-              return values.some((v) =>
-                anime.genres.includes(v)
-              )
-            case "Status":
-              return values.includes(anime.status)
-            case "Format":
-              return values.includes(anime.format)
-            case "Rating":
-              return values.some(
-                (v) =>
-                  anime.rating >=
-                  parseFloat(v.replace("+", ""))
-              )
-            case "Studio":
-              return values.includes(anime.studio)
-            default:
-              return true
-          }
-        }
-      )
-    })
-  }, [selectedFilters])
-
-  const clearFilters = () => setSelectedFilters({})
+  const [filterOpen, setFilterOpen] = useState(false)
 
   return (
-    <div className="min-h-screen bg-black text-white relative bg-[url(https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/hero/bg-gradient-3.svg)] bg-center bg-cover">
-      <LeaderboardHeader />
+    <div className="min-h-screen bg-[#020202] pb-40">
+      <BestAnimeListHeader />
 
-      <div className="mx-auto max-w-7xl px-4 pb-24">
-        <div className="mt-12 flex gap-10">
-
-          {/* Desktop Sidebar */}
-          <motion.aside
-            animate={{ width: isCollapsed ? 80 : 320 }}
-            transition={{ duration: 0.3 }}
-            className="hidden md:block shrink-0"
+      <div className="max-w-7xl mx-auto px-6">
+        {/* Navigation Bar */}
+        <div className="flex items-center justify-between gap-8 mb-16 py-4 border-b border-white/5">
+          <CategoryTabs />
+          <button 
+            onClick={() => setFilterOpen(true)}
+            className="flex items-center gap-3 px-6 py-2 bg-white/5 border border-white/10 rounded-full text-[10px] font-black text-white uppercase tracking-widest hover:bg-white/10 transition-all"
           >
-            <div className="sticky top-[300px]">
-              <div className="flex justify-end mb-4">
-                <button
-                  onClick={() =>
-                    setIsCollapsed(!isCollapsed)
-                  }
-                  className="rounded-lg border border-white/10 bg-white/5 p-2 hover:bg-white/10 transition"
-                >
-                  {isCollapsed ? (
-                    <SlidersHorizontal size={18} />
-                  ) : (
-                    <X size={18} />
-                  )}
-                </button>
-              </div>
+            <ListFilter size={14} className="text-indigo-500" />
+            Refine
+          </button>
+        </div>
 
-              {!isCollapsed && (
-                <FilterDrawer
-                  selectedFilters={selectedFilters}
-                  setSelectedFilters={setSelectedFilters}
-                />
-              )}
-            </div>
-          </motion.aside>
-
-          {/* RIGHT CONTENT */}
-          <main className="flex-1 space-y-8">
-
-            <div className="flex items-center justify-between border-b border-white/10 pb-4">
-              <p className="text-sm text-white/60">
-                Showing {filteredAnime.length} results
-              </p>
-
-              {Object.keys(selectedFilters).length > 0 && (
-                <button
-                  onClick={clearFilters}
-                  className="text-sm text-indigo-400 hover:text-indigo-300 transition"
-                >
-                  Clear Filters
-                </button>
-              )}
-            </div>
-
-            {/* ✅ UPDATED MAP */}
-            {filteredAnime.map((anime) => (
-              <AnimeCard
-                key={anime.id}
-                anime={anime}
-                onMoreInfo={() =>
-                  setSelectedAnime(anime)
-                }
-              />
-            ))}
-
-            {filteredAnime.length === 0 && (
-              <div className="rounded-2xl border border-white/10 bg-white/5 p-10 text-center text-white/50 backdrop-blur">
-                No anime found matching your filters.
-              </div>
-            )}
-          </main>
-
+        {/* Cinematic Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-8">
+          {mockData.map((anime, i) => (
+            <AnimeCard key={i} anime={anime} index={i} />
+          ))}
+          {/* Repeat for visual filler if needed */}
+          {mockData.map((anime, i) => (
+            <AnimeCard key={`filler-${i}`} anime={anime} index={i + 6} />
+          ))}
         </div>
       </div>
 
-      {/* ✅ MODAL OUTSIDE LAYOUT FOR PROPER Z-INDEX */}
-      <AnimeModal
-        anime={selectedAnime}
-        onClose={() => setSelectedAnime(null)}
-      />
+      <FilterDrawer isOpen={filterOpen} onClose={() => setFilterOpen(false)} />
     </div>
   )
 }

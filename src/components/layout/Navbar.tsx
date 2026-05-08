@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 import { Search, Sparkles, Menu, X, Bookmark } from "lucide-react";
+import { useWatchlist } from "@/stores/watchlist.store";
 
 import { getMockUser, mockLogout } from "@/lib/mockAuth";
 import NotificationBell from "@/components/notifications/NotificationBell";
@@ -91,12 +92,7 @@ export default function Navbar() {
           {isHydrated && user && <NotificationBell />}
           
           {/* Watchlist Icon Shortcut added back to Navbar.tsx */}
-          {isHydrated && user && <Link
-            href="/watchlist"
-            className="hidden sm:flex p-2.5 rounded-full bg-white/5 border border-white/5 text-white/40 hover:text-white hover:bg-white/10 transition-all"
-          >
-            <Bookmark size={18} />
-          </Link>}
+          {isHydrated && user && <WatchlistLink />}
           {isHydrated && !user ? (
             <Link href="/login" className="px-6 py-2.5 rounded-full bg-indigo-600 text-[10px] font-black text-white uppercase tracking-widest">
               Sync Account
@@ -119,5 +115,22 @@ export default function Navbar() {
 
       <SearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
     </header>
+  );
+}
+
+function WatchlistLink() {
+  const count = useWatchlist(s => s.count);
+  return (
+    <Link
+      href="/watchlist"
+      className="relative hidden sm:flex p-2.5 rounded-full bg-white/5 border border-white/5 text-white/40 hover:text-white hover:bg-white/10 transition-all"
+    >
+      <Bookmark size={18} />
+      {count > 0 && (
+        <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-indigo-600 text-[8px] font-black text-white flex items-center justify-center">
+          {count > 9 ? "9+" : count}
+        </span>
+      )}
+    </Link>
   );
 }

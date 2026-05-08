@@ -115,6 +115,56 @@ export default function Navbar() {
       </motion.nav>
 
       <SearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
+
+      {/* Mobile menu */}
+      {mobileMenuOpen && (
+        <motion.div
+          initial={{ opacity: 0, y: -8 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -8 }}
+          className="fixed inset-x-4 top-24 z-[90] md:hidden bg-[#0c0c0c]/95 backdrop-blur-2xl rounded-3xl border border-white/10 shadow-2xl overflow-hidden"
+        >
+          <div className="p-5 space-y-1">
+            {[
+              { name: "Home",        href: "/"              },
+              { name: "Discover",    href: "/ai-discover"   },
+              { name: "Best Anime",  href: "/bestanimelist" },
+              { name: "Community",   href: "/community"     },
+              { name: "Leaderboard", href: "/leaderboard"   },
+              { name: "Polls",       href: "/poll"          },
+            ].map(link => (
+              <Link
+                key={link.name}
+                href={link.href}
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center px-4 py-3 rounded-xl text-sm font-bold text-white/60 hover:text-white hover:bg-white/5 transition-all"
+              >
+                {link.name}
+              </Link>
+            ))}
+            <div className="border-t border-white/5 pt-3 mt-3 space-y-1">
+              {isHydrated && !user ? (
+                <Link
+                  href="/login"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center justify-center px-4 py-3 rounded-xl text-sm font-black text-white bg-indigo-600 hover:bg-indigo-500 transition-all uppercase tracking-widest"
+                >
+                  Sync Account
+                </Link>
+              ) : user && (
+                <>
+                  <Link href="/dashboard" onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center px-4 py-3 rounded-xl text-sm font-bold text-white/60 hover:text-white hover:bg-white/5 transition-all"
+                  >Dashboard</Link>
+                  <Link href="/settings" onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center px-4 py-3 rounded-xl text-sm font-bold text-white/60 hover:text-white hover:bg-white/5 transition-all"
+                  >Settings</Link>
+                </>
+              )}
+            </div>
+          </div>
+        </motion.div>
+      )}
     </header>
   );
 }

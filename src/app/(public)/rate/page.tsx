@@ -1,204 +1,370 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useMemo } from "react"
 import { motion, AnimatePresence } from "framer-motion"
+import Image from "next/image"
+import { ANIME_DB, type Anime } from "@/lib/data/anime"
+import { useToast } from "@/stores/toast.store"
+import {
+  Star, Search, ShieldCheck, CheckCircle2,
+  ChevronRight, RotateCcw, Trophy, Sparkles,
+} from "lucide-react"
 
-type Question = {
-  id: string
-  question: string
-  options: string[]
-  correct: string
+/* ── Per-anime verification questions ── */
+type Q = { id: string; q: string; opts: string[]; correct: string }
+
+const ANIME_QUESTIONS: Record<string, Q[]> = {
+  "attack-on-titan": [
+    { id:"a1", q:"Which titan breaks Wall Maria in episode 1?",     opts:["Colossal","Armored","Beast","Female"],      correct:"Colossal" },
+    { id:"a2", q:"What is in the basement Eren's father mentions?",  opts:["Titans","History","Weapons","Key secrets"], correct:"History"  },
+  ],
+  "fullmetal-alchemist-brotherhood": [
+    { id:"b1", q:"What did Edward and Alphonse try to bring back?",  opts:["Their father","Their mother","A dog","A friend"], correct:"Their mother" },
+    { id:"b2", q:"What does the Gate take as Edward's payment?",     opts:["His arm","His leg","His eye","His sight"],       correct:"His arm" },
+  ],
+  "death-note": [
+    { id:"c1", q:"What rule kills anyone whose name is written?",   opts:["Manga","Death Note","Black Book","God's List"], correct:"Death Note" },
+    { id:"c2", q:"What is L's favourite food?",                      opts:["Sushi","Ramen","Sweets","Rice"],               correct:"Sweets" },
+  ],
+  "steins-gate": [
+    { id:"d1", q:"What device does Okabe use as a time machine?",   opts:["Phone","Microwave","TV","Laptop"],   correct:"Microwave" },
+    { id:"d2", q:"What is the divergence needed for the Steins Gate worldline?", opts:["1.048596","0.999999","1.0","0.571024"], correct:"1.048596" },
+  ],
 }
 
+const GENERIC_Q = (anime: Anime): Q[] => [
+  {
+    id:"g1",
+    q:`Which studio produced ${anime.title}?`,
+    opts: [anime.studio, "Madhouse", "MAPPA", "Bones"].sort(() => Math.random()-0.5),
+    correct: anime.studio,
+  },
+  {
+    id:"g2",
+    q:`In what year did ${anime.title} premiere?`,
+    opts: [String(anime.year), String(anime.year-1), String(anime.year+1), String(anime.year-2)].sort(() => Math.random()-0.5),
+    correct: String(anime.year),
+  },
+]
+
+type Step = "select" | "rate" | "verify" | "result"
+
+/* ── Score label ── */
+const credLabel = (n: number) =>
+  n === 100 ? "Verified Watcher 🏆" :
+  n >= 50   ? "Plausible Fan 👍"  :
+  "Questionable 🤔"
+
 export default function RatePage() {
-  const [rating, setRating] = useState<number | null>(null)
-  const [step, setStep] = useState(1)
+  const { push } = useToast()
+  const [step,    setStep]    = useState<Step>("select")
+  const [anime,   setAnime]   = useState<Anime | null>(null)
+  const [query,   setQuery]   = useState("")
+  const [rating,  setRating]  = useState<number | null>(null)
   const [answers, setAnswers] = useState<Record<string, string>>({})
-  const [submitted, setSubmitted] = useState(false)
+  const [cred,    setCred]    = useState(0)
 
-  const animeTitle = "Attack on Titan"
+  const filtered = useMemo(() =>
+    ANIME_DB.filter(a => a.title.toLowerCase().includes(query.toLowerCase())).slice(0, 8),
+  [query])
 
-  const questions: Question[] = [
-    {
-      id: "q1",
-      question: "Who was the first Titan revealed in episode 1?",
-      options: ["Armored Titan", "Colossal Titan", "Beast Titan", "Female Titan"],
-      correct: "Colossal Titan",
-    },
-    {
-      id: "q2",
-      question: "What is Eren's main motivation in early seasons?",
-      options: [
-        "Become king",
-        "Destroy all Titans",
-        "Join the military police",
-        "Find the basement"
-      ],
-      correct: "Destroy all Titans",
-    },
-  ]
+  const questions = useMemo((): Q[] => {
+    if (!anime) return []
+    return ANIME_QUESTIONS[anime.id] ?? GENERIC_Q(anime)
+  }, [anime])
 
-  const handleSubmit = () => {
-    setSubmitted(true)
+  const selectAnime = (a: Anime) => { setAnime(a); setStep("rate"); setQuery("") }
+
+  const submitRating = () => {
+    if (!rating) return
+    setStep("verify")
   }
 
-  const credibilityScore =
-    (Object.values(answers).filter(
-      (ans, index) => ans === questions[index].correct
-    ).length /
-      questions.length) *
-    100
+  const submitVerify = () => {
+    const score = (Object.entries(answers).filter(([id, ans]) => {
+      const q = questions.find(q => q.id === id)
+      return q?.correct === ans
+    }).length / questions.length) * 100
+    setCred(score)
+    setStep("result")
+    push(`Rating submitted! Credibility: ${score.toFixed(0)}%`, score >= 50 ? "success" : "info")
+  }
+
+  const reset = () => {
+    setStep("select"); setAnime(null); setRating(null); setAnswers({}); setCred(0)
+  }
 
   return (
-    <main className="min-h-screen bg-black text-white pt-32 px-4">
-      <div className="max-w-4xl mx-auto space-y-12">
+    <main className="min-h-screen bg-[#020202] text-white pb-32">
+      {/* Anime hero background */}
+      <AnimatePresence>
+        {anime && (
+          <motion.div
+            key={anime.id}
+            initial={{ opacity:0 }}
+            animate={{ opacity:1 }}
+            exit={{ opacity:0 }}
+            className="fixed inset-0 -z-10"
+          >
+            <Image src={anime.image} alt="" fill className="object-cover brightness-[0.12] blur-sm" />
+            <div className="absolute inset-0 bg-gradient-to-b from-[#020202]/80 via-[#020202]/90 to-[#020202]" />
+          </motion.div>
+        )}
+      </AnimatePresence>
 
+      <div className="max-w-2xl mx-auto px-6 pt-32 space-y-10">
         {/* Header */}
-        <div className="text-center">
-          <h1 className="text-4xl font-semibold bg-gradient-to-r from-white to-[#748298] bg-clip-text text-transparent">
-            Rate {animeTitle}
+        <div className="text-center space-y-3">
+          <motion.div
+            initial={{ opacity:0, y:-12 }}
+            animate={{ opacity:1, y:0 }}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-[10px] font-black uppercase tracking-[0.3em] text-indigo-400"
+          >
+            <ShieldCheck size={12} /> Verified Rating System
+          </motion.div>
+          <h1 className="text-4xl md:text-5xl font-black tracking-tighter uppercase italic text-white">
+            Rate & Verify<span className="text-indigo-500">.</span>
           </h1>
-          <p className="text-white/50 mt-3">
-            Your rating matters. We verify authenticity.
+          <p className="text-white/40 text-sm max-w-md mx-auto">
+            Your rating is weighted by credibility. Prove you've actually watched it to increase its impact.
           </p>
         </div>
 
-        {/* Card */}
-        <div className="bg-zinc-900 border border-white/10 rounded-3xl p-10 shadow-2xl">
+        {/* Progress steps */}
+        <div className="flex items-center justify-center gap-2">
+          {(["select","rate","verify","result"] as Step[]).map((s, i, arr) => (
+            <div key={s} className="flex items-center gap-2">
+              <div className={`w-7 h-7 rounded-full flex items-center justify-center text-[10px] font-black border transition-all ${
+                s === step                             ? "bg-indigo-600 border-indigo-500 text-white" :
+                arr.indexOf(step) > i                  ? "bg-emerald-600/20 border-emerald-500/30 text-emerald-400" :
+                                                         "bg-white/5 border-white/10 text-white/20"
+              }`}>
+                {arr.indexOf(step) > i ? <CheckCircle2 size={13} /> : i + 1}
+              </div>
+              {i < arr.length - 1 && (
+                <div className={`w-8 h-px ${arr.indexOf(step) > i ? "bg-emerald-500/40" : "bg-white/10"}`} />
+              )}
+            </div>
+          ))}
+        </div>
 
-          <AnimatePresence mode="wait">
+        {/* Step content */}
+        <AnimatePresence mode="wait">
 
-            {/* STEP 1 — Rating */}
-            {step === 1 && (
-              <motion.div
-                key="rating"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                className="space-y-8"
-              >
-                <h2 className="text-xl font-semibold">Give your rating</h2>
+          {/* STEP 1 — Select anime */}
+          {step === "select" && (
+            <motion.div key="select" initial={{ opacity:0, y:16 }} animate={{ opacity:1, y:0 }} exit={{ opacity:0, y:-16 }}
+              className="space-y-5"
+            >
+              <div className="relative">
+                <Search size={15} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30" />
+                <input
+                  value={query}
+                  onChange={e => setQuery(e.target.value)}
+                  placeholder="Search anime to rate…"
+                  autoFocus
+                  className="w-full pl-11 pr-4 py-4 bg-white/5 border border-white/10 rounded-2xl text-white placeholder:text-white/25 outline-none focus:border-indigo-500/50 text-sm"
+                />
+              </div>
 
-                <div className="grid grid-cols-5 md:grid-cols-10 gap-3">
-                  {[...Array(10)].map((_, i) => (
-                    <button
-                      key={i}
-                      onClick={() => setRating(i + 1)}
-                      className={`py-3 rounded-xl border transition ${
-                        rating === i + 1
-                          ? "bg-indigo-600 border-indigo-500"
-                          : "border-white/10 hover:bg-white/5"
+              <div className="grid grid-cols-2 gap-3">
+                {(query ? filtered : ANIME_DB.filter(a => a.rating >= 8.7).slice(0, 8)).map(a => (
+                  <motion.button
+                    key={a.id}
+                    whileHover={{ scale:1.02 }}
+                    whileTap={{ scale:0.97 }}
+                    onClick={() => selectAnime(a)}
+                    className="flex items-center gap-3 p-3 rounded-2xl bg-white/[0.03] border border-white/8 hover:border-indigo-500/30 hover:bg-indigo-500/8 transition-all text-left group"
+                  >
+                    <div className="relative h-12 w-9 rounded-lg overflow-hidden shrink-0">
+                      <Image src={a.image} alt={a.title} fill className="object-cover" sizes="36px" />
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-xs font-black text-white/70 group-hover:text-white transition-colors truncate">{a.title}</p>
+                      <div className="flex items-center gap-1 mt-0.5">
+                        <Star size={9} fill="#f59e0b" className="text-amber-400" />
+                        <span className="text-[9px] text-white/30">{a.rating.toFixed(1)}</span>
+                      </div>
+                    </div>
+                  </motion.button>
+                ))}
+              </div>
+            </motion.div>
+          )}
+
+          {/* STEP 2 — Rate */}
+          {step === "rate" && anime && (
+            <motion.div key="rate" initial={{ opacity:0, y:16 }} animate={{ opacity:1, y:0 }} exit={{ opacity:0, y:-16 }}
+              className="space-y-6"
+            >
+              <div className="flex items-center gap-4 p-5 rounded-2xl bg-white/[0.03] border border-white/8">
+                <div className="relative h-16 w-12 rounded-xl overflow-hidden shrink-0">
+                  <Image src={anime.image} alt={anime.title} fill className="object-cover" sizes="48px" />
+                </div>
+                <div>
+                  <p className="font-black text-white text-lg leading-tight">{anime.title}</p>
+                  <p className="text-xs text-white/35 mt-0.5">{anime.studio} · {anime.year}</p>
+                </div>
+              </div>
+
+              <div>
+                <p className="text-center text-sm font-bold text-white/50 mb-5">Select your rating</p>
+                <div className="grid grid-cols-5 md:grid-cols-10 gap-2">
+                  {[1,2,3,4,5,6,7,8,9,10].map(n => (
+                    <motion.button
+                      key={n}
+                      whileHover={{ scale:1.1 }}
+                      whileTap={{ scale:0.9 }}
+                      onClick={() => setRating(n)}
+                      className={`aspect-square rounded-xl border font-black text-sm transition-all ${
+                        rating === n
+                          ? "bg-indigo-600 border-indigo-500 text-white shadow-[0_0_20px_rgba(99,102,241,0.4)]"
+                          : rating && n <= rating
+                          ? "bg-indigo-600/20 border-indigo-500/30 text-indigo-400"
+                          : "bg-white/5 border-white/8 text-white/30 hover:border-indigo-500/30 hover:text-white"
                       }`}
                     >
-                      {i + 1}
-                    </button>
+                      {n}
+                    </motion.button>
                   ))}
                 </div>
 
-                <button
-                  onClick={() => setStep(2)}
-                  disabled={!rating}
-                  className="mt-6 w-full py-3 rounded-full bg-indigo-600 hover:bg-indigo-700 disabled:opacity-40 transition"
-                >
-                  Continue
-                </button>
-              </motion.div>
-            )}
-
-            {/* STEP 2 — Proof Questions */}
-            {step === 2 && (
-              <motion.div
-                key="questions"
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                className="space-y-8"
-              >
-                <h2 className="text-xl font-semibold">
-                  Prove you've watched it
-                </h2>
-
-                {questions.map((q, index) => (
-                  <div key={q.id} className="space-y-3">
-                    <p className="text-white/80">{q.question}</p>
-
-                    <div className="grid gap-2">
-                      {q.options.map(option => (
-                        <button
-                          key={option}
-                          onClick={() =>
-                            setAnswers(prev => ({
-                              ...prev,
-                              [q.id]: option,
-                            }))
-                          }
-                          className={`text-left px-4 py-3 rounded-xl border transition ${
-                            answers[q.id] === option
-                              ? "bg-indigo-600/20 border-indigo-500"
-                              : "border-white/10 hover:bg-white/5"
-                          }`}
-                        >
-                          {option}
-                        </button>
+                {rating && (
+                  <motion.div initial={{ opacity:0 }} animate={{ opacity:1 }} className="text-center mt-4">
+                    <p className="text-3xl font-black text-white">{rating}<span className="text-white/30 text-lg">/10</span></p>
+                    <div className="flex items-center justify-center gap-1 mt-1">
+                      {[...Array(Math.round(rating/2))].map((_,i) => (
+                        <Star key={i} size={14} fill="#f59e0b" className="text-amber-400" />
                       ))}
                     </div>
-                  </div>
-                ))}
+                  </motion.div>
+                )}
+              </div>
 
-                <button
-                  onClick={handleSubmit}
-                  disabled={Object.keys(answers).length !== questions.length}
-                  className="w-full py-3 rounded-full bg-indigo-600 hover:bg-indigo-700 disabled:opacity-40 transition"
-                >
-                  Submit Rating
-                </button>
-              </motion.div>
-            )}
-
-            {/* STEP 3 — Result */}
-            {submitted && (
-              <motion.div
-                key="result"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                className="text-center space-y-6"
+              <button
+                onClick={submitRating}
+                disabled={!rating}
+                className="w-full py-4 rounded-2xl bg-indigo-600 hover:bg-indigo-500 disabled:opacity-40 disabled:cursor-not-allowed font-black text-xs uppercase tracking-widest transition-all flex items-center justify-center gap-2"
               >
-                <h2 className="text-2xl font-semibold">
-                  Rating Submitted 🎉
-                </h2>
+                Next: Verify Your Watch <ChevronRight size={14} />
+              </button>
+            </motion.div>
+          )}
 
-                <p className="text-white/60">
-                  Your Rating: {rating}/10
-                </p>
+          {/* STEP 3 — Verify */}
+          {step === "verify" && anime && (
+            <motion.div key="verify" initial={{ opacity:0, y:16 }} animate={{ opacity:1, y:0 }} exit={{ opacity:0, y:-16 }}
+              className="space-y-6"
+            >
+              <div className="text-center">
+                <p className="text-sm font-bold text-white/50">Prove you've watched <span className="text-white">{anime.title}</span></p>
+                <p className="text-xs text-white/25 mt-1">Your credibility score boosts your rating's weight on the platform</p>
+              </div>
 
-                <div className="space-y-2">
-                  <p className="text-white/70">
-                    Credibility Score:
-                  </p>
-
-                  <div className="w-full bg-white/10 h-4 rounded-full overflow-hidden">
-                    <motion.div
-                      initial={{ width: 0 }}
-                      animate={{ width: `${credibilityScore}%` }}
-                      transition={{ duration: 0.8 }}
-                      className="h-full bg-indigo-600"
-                    />
+              {questions.map((q, qi) => (
+                <motion.div
+                  key={q.id}
+                  initial={{ opacity:0, y:8 }}
+                  animate={{ opacity:1, y:0 }}
+                  transition={{ delay: qi * 0.08 }}
+                  className="space-y-3"
+                >
+                  <p className="text-sm font-bold text-white/80">{q.q}</p>
+                  <div className="grid grid-cols-2 gap-2">
+                    {q.opts.map(opt => (
+                      <button
+                        key={opt}
+                        onClick={() => setAnswers(prev => ({ ...prev, [q.id]: opt }))}
+                        className={`px-4 py-3 rounded-xl border text-sm text-left transition-all ${
+                          answers[q.id] === opt
+                            ? "bg-indigo-600/20 border-indigo-500 text-white"
+                            : "border-white/10 bg-white/[0.02] text-white/50 hover:border-indigo-500/30 hover:text-white"
+                        }`}
+                      >
+                        {opt}
+                      </button>
+                    ))}
                   </div>
+                </motion.div>
+              ))}
 
-                  <p className="text-sm text-white/50">
-                    {credibilityScore.toFixed(0)}% verified
-                  </p>
+              <button
+                onClick={submitVerify}
+                disabled={Object.keys(answers).length < questions.length}
+                className="w-full py-4 rounded-2xl bg-indigo-600 hover:bg-indigo-500 disabled:opacity-40 disabled:cursor-not-allowed font-black text-xs uppercase tracking-widest transition-all"
+              >
+                Submit Rating
+              </button>
+            </motion.div>
+          )}
+
+          {/* STEP 4 — Result */}
+          {step === "result" && anime && (
+            <motion.div key="result" initial={{ opacity:0, scale:0.95 }} animate={{ opacity:1, scale:1 }} exit={{ opacity:0 }}
+              className="space-y-8 text-center"
+            >
+              <div className="space-y-3">
+                <motion.div
+                  initial={{ scale:0 }}
+                  animate={{ scale:1 }}
+                  transition={{ type:"spring", stiffness:200, damping:15, delay:0.1 }}
+                  className={`w-20 h-20 mx-auto rounded-[2rem] flex items-center justify-center text-3xl ${
+                    cred === 100 ? "bg-amber-500/20 text-amber-400" :
+                    cred >= 50  ? "bg-emerald-500/20 text-emerald-400" :
+                                   "bg-white/10 text-white/50"
+                  }`}
+                >
+                  {cred === 100 ? <Trophy size={36} /> : cred >= 50 ? <CheckCircle2 size={36} /> : <Sparkles size={36} />}
+                </motion.div>
+
+                <p className="text-2xl font-black text-white">{credLabel(cred)}</p>
+                <p className="text-white/40 text-sm">Your rating for <span className="text-white font-bold">{anime.title}</span></p>
+
+                <div className="flex items-center justify-center gap-2 mt-4">
+                  {[...Array(Math.round((rating ?? 0)/2))].map((_,i) => (
+                    <Star key={i} size={20} fill="#f59e0b" className="text-amber-400" />
+                  ))}
+                  <span className="text-2xl font-black text-white ml-2">{rating}/10</span>
                 </div>
+              </div>
 
-                <p className="text-sm text-white/40">
-                  High credibility ratings influence leaderboard more.
+              {/* Credibility bar */}
+              <div className="space-y-3">
+                <div className="flex justify-between text-xs font-black uppercase tracking-widest text-white/30">
+                  <span>Credibility Score</span><span>{cred.toFixed(0)}%</span>
+                </div>
+                <div className="h-3 w-full bg-white/5 rounded-full overflow-hidden">
+                  <motion.div
+                    initial={{ width:0 }}
+                    animate={{ width:`${cred}%` }}
+                    transition={{ duration:0.8, ease:"easeOut", delay:0.3 }}
+                    className={`h-full rounded-full ${
+                      cred === 100 ? "bg-gradient-to-r from-amber-500 to-yellow-400" :
+                      cred >= 50   ? "bg-gradient-to-r from-emerald-500 to-teal-400" :
+                                     "bg-gradient-to-r from-indigo-500 to-indigo-400"
+                    }`}
+                  />
+                </div>
+                <p className="text-xs text-white/25">
+                  {cred === 100
+                    ? "Perfect score! Your rating carries maximum weight."
+                    : cred >= 50
+                    ? "Good score. Your rating carries increased weight."
+                    : "Low score. Answer correctly to boost your rating's impact."}
                 </p>
-              </motion.div>
-            )}
+              </div>
 
-          </AnimatePresence>
-
-        </div>
+              <div className="flex gap-3">
+                <button
+                  onClick={reset}
+                  className="flex-1 py-3.5 rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 text-xs font-black uppercase tracking-widest text-white/60 hover:text-white transition-all flex items-center justify-center gap-2"
+                >
+                  <RotateCcw size={13} /> Rate Another
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </main>
   )

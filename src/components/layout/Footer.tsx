@@ -1,64 +1,162 @@
 "use client"
 
+import Link from "next/link"
 import { motion } from "framer-motion"
-import { Github, Twitter, Disc as Discord, Zap, ShieldCheck } from "lucide-react"
+import {
+  Github, Twitter, Zap, ShieldCheck, ArrowUpRight,
+  BookOpen, Users, Sparkles, Trophy, Vote, PenSquare, BarChart3,
+} from "lucide-react"
+
+const NAV_COLS = [
+  {
+    title: "Platform",
+    links: [
+      { label: "Home",          href: "/" },
+      { label: "AI Discover",   href: "/ai-discover" },
+      { label: "Best Anime",    href: "/bestanimelist" },
+      { label: "Community",     href: "/community" },
+      { label: "Leaderboard",   href: "/leaderboard" },
+      { label: "Polls",         href: "/poll" },
+    ],
+  },
+  {
+    title: "My Space",
+    links: [
+      { label: "Dashboard",     href: "/dashboard" },
+      { label: "Watchlist",     href: "/watchlist" },
+      { label: "Library",       href: "/readlist" },
+      { label: "Streak Hub",    href: "/streak" },
+      { label: "Profile",       href: "/profile" },
+      { label: "Settings",      href: "/settings" },
+    ],
+  },
+  {
+    title: "Creator Studio",
+    links: [
+      { label: "Studio Hub",    href: "/creators" },
+      { label: "Write a Blog",  href: "/creators/create/blog" },
+      { label: "Create a Poll", href: "/creators/create/polls" },
+      { label: "Feed Post",     href: "/creators/create/feed" },
+      { label: "Analytics",     href: "/creators/analytics" },
+    ],
+  },
+]
+
+const STATS = [
+  { value: "12.4k", label: "Active Shinobi" },
+  { value: "1.2M+", label: "Archives Logged" },
+  { value: "98.4%", label: "Oracle Accuracy" },
+  { value: "24",    label: "Anime in Index"  },
+]
 
 export default function Footer() {
-  const currentYear = new Date().getFullYear()
+  const year = new Date().getFullYear()
 
   return (
-    <footer className="mt-auto border-t border-white/5 bg-[#050505] py-12 px-10 relative overflow-hidden">
-      {/* Decorative background glow */}
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[500px] h-[200px] bg-indigo-600/5 blur-[100px] pointer-events-none" />
+    <footer className="relative mt-auto border-t border-white/5 bg-[#050505] overflow-hidden">
+      {/* Background glow */}
+      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-indigo-600/6 blur-[120px] rounded-full pointer-events-none" />
 
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8 relative z-10">
-        
-        {/* BRAND & STATUS */}
-        <div className="space-y-4 text-center md:text-left">
-          <div className="flex items-center justify-center md:justify-start gap-3">
-            <div className="h-8 w-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center">
-              <Zap size={16} className="text-indigo-500" fill="currentColor" />
+      {/* Stats strip */}
+      <div className="border-b border-white/5">
+        <div className="max-w-7xl mx-auto px-6 py-5 grid grid-cols-2 md:grid-cols-4 gap-6">
+          {STATS.map(({ value, label }) => (
+            <div key={label} className="text-center">
+              <p className="text-xl md:text-2xl font-black tracking-tighter text-white">{value}</p>
+              <p className="text-[9px] font-black uppercase tracking-[0.3em] text-white/20 mt-0.5">{label}</p>
             </div>
-            <span className="text-sm font-black tracking-[0.3em] text-white uppercase">
-              Unwatched<span className="text-indigo-500">.</span>
-            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* Main footer */}
+      <div className="max-w-7xl mx-auto px-6 py-16 relative z-10">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-10 lg:gap-16">
+
+          {/* Brand column */}
+          <div className="col-span-2 md:col-span-2 space-y-6">
+            <Link href="/" className="flex items-center gap-2.5 group w-fit">
+              <div className="h-9 w-9 rounded-xl bg-indigo-600 flex items-center justify-center shadow-[0_0_18px_rgba(79,70,229,0.4)] group-hover:scale-110 transition-transform">
+                <Zap size={17} className="text-white" fill="white" />
+              </div>
+              <span className="text-lg font-black tracking-tighter text-white uppercase">
+                UNWATCHED<span className="text-indigo-500">.</span>
+              </span>
+            </Link>
+
+            <p className="text-sm text-white/35 leading-relaxed max-w-xs">
+              The neural anime tracking platform built for true enthusiasts. Track, rate, and discover anime that deserves more hype.
+            </p>
+
+            <div className="flex items-center gap-3">
+              {[
+                { Icon: Github,  href: "https://github.com/darwhite08", label: "GitHub"  },
+                { Icon: Twitter, href: "https://twitter.com",           label: "Twitter" },
+              ].map(({ Icon, href, label }) => (
+                <motion.a
+                  key={label}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  whileHover={{ y: -2, scale: 1.05 }}
+                  className="p-2.5 rounded-xl border border-white/8 bg-white/[0.02] text-white/35 hover:text-white hover:border-indigo-500/30 transition-all"
+                  title={label}
+                >
+                  <Icon size={16} />
+                </motion.a>
+              ))}
+            </div>
+
+            {/* System status */}
+            <div className="flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.2em] text-white/20">
+              <div className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              <ShieldCheck size={11} className="text-emerald-500/50" />
+              All systems operational • v4.0.0
+            </div>
           </div>
-          <p className="text-[10px] font-bold text-white/20 uppercase tracking-[0.2em] flex items-center gap-2 justify-center md:justify-start">
-            <ShieldCheck size={12} className="text-emerald-500/50" /> System Integrity: Optimal • v2.4.0
-          </p>
-        </div>
 
-        {/* SOCIAL LINKS */}
-        <div className="flex items-center gap-4">
-          <SocialIcon icon={Github} href="https://github.com" />
-          <SocialIcon icon={Discord} href="https://discord.com" />
-          <SocialIcon icon={Twitter} href="https://twitter.com" />
+          {/* Nav columns */}
+          {NAV_COLS.map(col => (
+            <div key={col.title}>
+              <h4 className="text-[9px] font-black uppercase tracking-[0.4em] text-white/25 mb-5">
+                {col.title}
+              </h4>
+              <ul className="space-y-3">
+                {col.links.map(({ label, href }) => (
+                  <li key={label}>
+                    <Link
+                      href={href}
+                      className="text-sm text-white/40 hover:text-white transition-colors duration-200 flex items-center gap-1 group"
+                    >
+                      {label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
+      </div>
 
-        {/* COPYRIGHT & LEGAL */}
-        <div className="text-center md:text-right space-y-2">
-          <p className="text-[10px] font-black text-white/20 uppercase tracking-widest">
-            © {currentYear} Shinobi Archives • All Rights Reserved
+      {/* Bottom bar */}
+      <div className="border-t border-white/5">
+        <div className="max-w-7xl mx-auto px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <p className="text-[10px] font-black text-white/15 uppercase tracking-widest">
+            © {year} AnimeUnwatched • Neural Archive Protocol
           </p>
-          <div className="flex gap-6 justify-center md:justify-end text-[9px] font-bold text-white/10 uppercase tracking-tighter">
-            <a href="#" className="hover:text-indigo-400 transition-colors">Privacy Protocol</a>
-            <a href="#" className="hover:text-indigo-400 transition-colors">Terms of Service</a>
+          <div className="flex items-center gap-6">
+            {["Privacy Policy", "Terms of Service", "Cookie Policy"].map(label => (
+              <a
+                key={label}
+                href="#"
+                className="text-[9px] font-bold text-white/15 uppercase tracking-wider hover:text-indigo-400 transition-colors"
+              >
+                {label}
+              </a>
+            ))}
           </div>
         </div>
       </div>
     </footer>
-  )
-}
-
-function SocialIcon({ icon: Icon, href }: { icon: any; href: string }) {
-  return (
-    <motion.a
-      href={href}
-      target="_blank"
-      whileHover={{ y: -3, backgroundColor: "rgba(255,255,255,0.05)" }}
-      className="p-3 rounded-xl border border-white/5 bg-white/[0.02] text-white/40 hover:text-white hover:border-indigo-500/30 transition-all"
-    >
-      <Icon size={18} />
-    </motion.a>
   )
 }

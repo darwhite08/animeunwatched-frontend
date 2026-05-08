@@ -1,0 +1,503 @@
+"use client"
+
+import { use, useState } from "react"
+import { motion } from "framer-motion"
+import {
+  Heart, Share2, Bookmark, ChevronLeft, Clock, User, Eye,
+  MessageSquare,
+} from "lucide-react"
+import Link from "next/link"
+import { useToast } from "@/stores/toast.store"
+
+/* ── Types ── */
+type BlogMeta = {
+  slug: string
+  title: string
+  author: string
+  authorAvatar: string
+  publishedAt: string
+  readTime: number
+  coverGradient: string
+  category: string
+  likes: number
+  views: number
+  excerpt: string
+}
+
+type Comment = {
+  id: number
+  author: string
+  avatar: string
+  time: string
+  body: string
+  likes: number
+}
+
+type RelatedPost = {
+  slug: string
+  title: string
+  category: string
+  readTime: number
+  coverGradient: string
+}
+
+/* ── Mock DB ── */
+const BLOG_META: Record<string, BlogMeta> = {
+  "why-frieren-is-most-honest-fantasy": {
+    slug: "why-frieren-is-most-honest-fantasy",
+    title: "Why Frieren is the Most Honest Fantasy in Years",
+    author: "Otaku_Arch",
+    authorAvatar: "O",
+    publishedAt: "May 3, 2026",
+    readTime: 8,
+    coverGradient: "from-indigo-900 via-violet-900 to-purple-900",
+    category: "Deep Dive",
+    likes: 842,
+    views: 14300,
+    excerpt:
+      "Most isekai asks you to imagine power. Frieren asks you to feel loss. It's the rare fantasy that earns every emotional beat through restraint, not spectacle.",
+  },
+  "ranking-every-mappa-production": {
+    slug: "ranking-every-mappa-production",
+    title: "Ranking Every MAPPA Production by Animation Quality",
+    author: "AnimationNerd",
+    authorAvatar: "A",
+    publishedAt: "Apr 28, 2026",
+    readTime: 12,
+    coverGradient: "from-rose-900 via-pink-900 to-fuchsia-900",
+    category: "List",
+    likes: 1203,
+    views: 29800,
+    excerpt:
+      "From Yuri on Ice to Chainsaw Man, MAPPA has become one of the most divisive studios in the industry.",
+  },
+  "physics-behind-jujutsu-kaisen-cursed-energy": {
+    slug: "physics-behind-jujutsu-kaisen-cursed-energy",
+    title: "The Physics Behind Jujutsu Kaisen's Cursed Energy",
+    author: "NeuralBot_X",
+    authorAvatar: "N",
+    publishedAt: "Apr 20, 2026",
+    readTime: 10,
+    coverGradient: "from-blue-900 via-cyan-900 to-teal-900",
+    category: "Theory",
+    likes: 976,
+    views: 21500,
+    excerpt:
+      "What if cursed energy actually followed thermodynamic laws?",
+  },
+  "20-underrated-anime-everyone-should-watch": {
+    slug: "20-underrated-anime-everyone-should-watch",
+    title: "20 Underrated Anime Everyone Should Watch",
+    author: "VoidSeeker",
+    authorAvatar: "V",
+    publishedAt: "Apr 15, 2026",
+    readTime: 15,
+    coverGradient: "from-amber-900 via-orange-900 to-red-900",
+    category: "List",
+    likes: 2104,
+    views: 48200,
+    excerpt:
+      "Beyond Naruto and Attack on Titan lives a vast catalog of hidden masterpieces.",
+  },
+  "monster-perfect-slow-burn": {
+    slug: "monster-perfect-slow-burn",
+    title: "Monster: A Perfect Slow Burn That Demands Your Patience",
+    author: "Cipher_Ronin",
+    authorAvatar: "C",
+    publishedAt: "Apr 10, 2026",
+    readTime: 11,
+    coverGradient: "from-slate-900 via-zinc-800 to-gray-900",
+    category: "Review",
+    likes: 1560,
+    views: 33700,
+    excerpt:
+      "74 episodes. No filler. No power-ups. Just a surgeon, a sociopath, and one of the most meticulously constructed narratives in anime history.",
+  },
+}
+
+const FALLBACK_META: BlogMeta = {
+  slug: "unknown",
+  title: "Article",
+  author: "Unknown",
+  authorAvatar: "?",
+  publishedAt: "2026",
+  readTime: 5,
+  coverGradient: "from-zinc-900 to-slate-900",
+  category: "Opinion",
+  likes: 0,
+  views: 0,
+  excerpt: "",
+}
+
+const MOCK_COMMENTS: Comment[] = [
+  {
+    id: 1,
+    author: "ShadowWatcher",
+    avatar: "S",
+    time: "2 days ago",
+    body: "This is exactly the kind of analysis I've been waiting for someone to write. The point about restraint being the real power of the series resonates deeply — every flashback hits harder because we know how the story ends.",
+    likes: 34,
+  },
+  {
+    id: 2,
+    author: "NeuralBot_X",
+    avatar: "N",
+    time: "3 days ago",
+    body: "Counterpoint: the pacing in the second cour slows too much for new viewers. But I do agree that for those who stick with it, the payoff is unmatched in recent memory.",
+    likes: 18,
+  },
+  {
+    id: 3,
+    author: "VoidSeeker",
+    avatar: "V",
+    time: "5 days ago",
+    body: "I wept during the Himmel retrospective. The writing understands mortality better than most live-action dramas ever will. Incredible piece — sharing with everyone I know.",
+    likes: 61,
+  },
+]
+
+const RELATED_POSTS: RelatedPost[] = [
+  {
+    slug: "monster-perfect-slow-burn",
+    title: "Monster: A Perfect Slow Burn That Demands Your Patience",
+    category: "Review",
+    readTime: 11,
+    coverGradient: "from-slate-900 via-zinc-800 to-gray-900",
+  },
+  {
+    slug: "20-underrated-anime-everyone-should-watch",
+    title: "20 Underrated Anime Everyone Should Watch",
+    category: "List",
+    readTime: 15,
+    coverGradient: "from-amber-900 via-orange-900 to-red-900",
+  },
+]
+
+/* ── Article body ── */
+function ArticleBody() {
+  return (
+    <div className="space-y-6 text-white/70 text-base leading-relaxed">
+      <p>
+        Anime has always been comfortable with death. From the early days of Osamu Tezuka to the
+        present era of industry-defining franchises, loss is a genre staple. Yet very few series
+        understand that grief is not a single event — it is an accumulation. <em>Frieren: Beyond
+        Journey&apos;s End</em> is, at its core, a meditation on what it means to outlive the people
+        you love, and how meaning is constructed in their absence.
+      </p>
+
+      <h2 className="text-xl font-black uppercase italic tracking-tight text-white pt-4">
+        The Fantasy That Starts After the Hero&apos;s Journey Ends
+      </h2>
+
+      <p>
+        Most fantasy narratives open with a call to adventure. Frieren&apos;s first episode takes
+        place immediately after the conclusion of one — the defeat of the Demon King. The fellowship
+        celebrates, disperses, and then we jump forward in time. Fifty years pass. The human heroes
+        have aged, married, built families, and eventually died. Frieren, an elf mage, has barely
+        changed.
+      </p>
+
+      <p>
+        This structural choice is radical in its simplicity. By showing us what came <em>after</em>,
+        the series inverts the standard power fantasy. Victory is not the destination. It is the
+        starting line of a longer, quieter journey toward understanding what those years meant.
+      </p>
+
+      <blockquote className="border-l-4 border-indigo-500 pl-5 py-1 italic text-white/50 text-sm">
+        &ldquo;I didn&apos;t know much about Himmel. I want to understand, even if it takes me a
+        hundred years.&rdquo; — Frieren
+      </blockquote>
+
+      <h2 className="text-xl font-black uppercase italic tracking-tight text-white pt-4">
+        Restraint as a Narrative Superpower
+      </h2>
+
+      <p>
+        The series never explains its emotional mechanics with dialogue. A character&apos;s grief is not
+        delivered through monologue — it is shown through the way they pause, what they cannot look
+        at, what they reflexively reach for. This is graduate-level screenwriting, and it&apos;s
+        happening in a weekly TV anime.
+      </p>
+
+      <p>
+        The magic system, too, reflects this philosophy. In a genre obsessed with power scaling and
+        technique reveals, Frieren&apos;s magic is about subtlety: concealing your mana signature,
+        understanding what spells meant to the person who invented them, collecting minor spells
+        that serve no combat purpose because they were beautiful. The plot&apos;s stakes never derive
+        purely from strength — they derive from meaning.
+      </p>
+
+      <h2 className="text-xl font-black uppercase italic tracking-tight text-white pt-4">
+        Sollen vs. Sein: The Ethical Weight of Living Long
+      </h2>
+
+      <p>
+        Frieren&apos;s longevity creates a peculiar moral dimension. She watched human civilization
+        rise and fall across centuries. She knew people who are now legends — and she barely paid
+        attention. The series is honest about this: Frieren was not cruel, she was simply not
+        present in the way humans needed her to be.
+      </p>
+
+      <p>
+        Her journey is not a hero&apos;s quest for power — it is a form of penance and
+        reconstruction. She walks the same roads, speaks to descendants of people she once knew, and
+        slowly learns the art of being present. This transforms what could have been a nostalgic
+        fantasy into something closer to philosophy.
+      </p>
+
+      <h2 className="text-xl font-black uppercase italic tracking-tight text-white pt-4">
+        Why It Works Where Others Have Failed
+      </h2>
+
+      <p>
+        The critical difference between Frieren and other introspective anime is precision. Every
+        flashback is calibrated to land at a specific emotional frequency. The pacing never feels
+        indulgent because each quiet moment is doing invisible work — shifting our understanding of
+        a character, establishing a moral question, or planting a detail that will devastate us three
+        episodes later.
+      </p>
+
+      <p>
+        This is, ultimately, what honest fantasy looks like. It does not ask us to imagine
+        ourselves as powerful. It asks us to sit with the reality that time passes, people leave,
+        and what we choose to remember defines who we become.
+      </p>
+
+      <p>
+        Frieren earns every tear. That is more than most can say.
+      </p>
+    </div>
+  )
+}
+
+/* ── Page ── */
+export default function BlogReaderPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = use(params)
+  const { push } = useToast()
+  const meta = BLOG_META[slug] ?? { ...FALLBACK_META, slug, title: slug.replace(/-/g, " ") }
+
+  const [liked, setLiked]       = useState(false)
+  const [likeCount, setLikeCount] = useState(meta.likes)
+  const [bookmarked, setBookmarked] = useState(false)
+  const [commentLikes, setCommentLikes] = useState<Record<number, boolean>>({})
+
+  const toggleLike = () => {
+    setLiked(l => !l)
+    setLikeCount(c => liked ? c - 1 : c + 1)
+  }
+
+  const toggleCommentLike = (id: number) => {
+    setCommentLikes(prev => ({ ...prev, [id]: !prev[id] }))
+  }
+
+  const share = async () => {
+    try {
+      await navigator.clipboard.writeText(window.location.href)
+      push("Link copied to clipboard!", "success")
+    } catch {
+      push("Could not copy link", "error")
+    }
+  }
+
+  return (
+    <div className="min-h-screen bg-[#020202] text-white pb-32">
+
+      {/* Hero banner */}
+      <div className={`relative h-[45vh] min-h-[320px] w-full bg-gradient-to-br ${meta.coverGradient} overflow-hidden`}>
+        <div className="absolute inset-0 bg-black/50" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#020202] via-[#020202]/40 to-transparent" />
+
+        {/* Back */}
+        <Link
+          href="/blog"
+          className="absolute top-6 left-6 flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-white/40 hover:text-white transition-colors"
+        >
+          <ChevronLeft size={13} /> The Chronicle
+        </Link>
+
+        {/* Category */}
+        <div className="absolute top-6 right-6">
+          <span className="px-3 py-1 rounded-full bg-black/50 backdrop-blur-md border border-white/10 text-[10px] font-black uppercase tracking-widest text-indigo-400">
+            {meta.category}
+          </span>
+        </div>
+
+        {/* Title overlay */}
+        <div className="absolute bottom-8 left-6 right-6 max-w-4xl mx-auto">
+          <motion.h1
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-3xl md:text-5xl font-black uppercase italic tracking-tighter text-white leading-none"
+          >
+            {meta.title}
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.1 }}
+            className="mt-2 text-white/40 text-sm max-w-2xl"
+          >
+            {meta.excerpt}
+          </motion.p>
+        </div>
+      </div>
+
+      {/* Content area */}
+      <div className="max-w-4xl mx-auto px-6 pt-8 space-y-10">
+
+        {/* Author bar */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.15 }}
+          className="flex items-center gap-4 flex-wrap"
+        >
+          <div className="flex items-center gap-3">
+            <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center font-black text-sm shrink-0">
+              {meta.authorAvatar}
+            </div>
+            <div>
+              <p className="text-sm font-black text-white">{meta.author}</p>
+              <p className="text-[10px] text-white/30">{meta.publishedAt}</p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 text-[10px] text-white/25 ml-2">
+            <Clock size={10} />
+            <span>{meta.readTime} min read</span>
+          </div>
+
+          <div className="flex items-center gap-2 text-[10px] text-white/25">
+            <Eye size={10} />
+            <span>{meta.views.toLocaleString()} views</span>
+          </div>
+
+          {/* Share */}
+          <button
+            onClick={share}
+            className="ml-auto flex items-center gap-2 px-4 py-2 rounded-xl border border-white/10 bg-white/[0.04] text-[10px] font-black uppercase tracking-widest text-white/40 hover:text-white hover:bg-white/[0.08] transition-all"
+          >
+            <Share2 size={12} /> Share
+          </button>
+        </motion.div>
+
+        {/* Article body */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+        >
+          <ArticleBody />
+        </motion.div>
+
+        {/* Like / Share / Bookmark bar */}
+        <div className="flex items-center gap-4 py-5 border-t border-b border-white/5">
+          <button
+            onClick={toggleLike}
+            className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${
+              liked
+                ? "bg-rose-500/15 border border-rose-500/25 text-rose-400"
+                : "bg-white/[0.04] border border-white/10 text-white/40 hover:text-rose-400 hover:border-rose-500/20"
+            }`}
+          >
+            <Heart size={14} fill={liked ? "currentColor" : "none"} />
+            {likeCount.toLocaleString()}
+          </button>
+
+          <button
+            onClick={share}
+            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/[0.04] border border-white/10 text-xs font-black uppercase tracking-widest text-white/40 hover:text-white hover:bg-white/[0.08] transition-all"
+          >
+            <Share2 size={14} /> Share
+          </button>
+
+          <button
+            onClick={() => { setBookmarked(b => !b); push(bookmarked ? "Removed bookmark" : "Bookmarked!", "success") }}
+            className={`ml-auto flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all border ${
+              bookmarked
+                ? "bg-indigo-500/15 border-indigo-500/25 text-indigo-400"
+                : "bg-white/[0.04] border-white/10 text-white/40 hover:text-indigo-400"
+            }`}
+          >
+            <Bookmark size={14} fill={bookmarked ? "currentColor" : "none"} />
+            {bookmarked ? "Saved" : "Save"}
+          </button>
+        </div>
+
+        {/* More from this author */}
+        <div className="space-y-5">
+          <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/30">
+            More from {meta.author}
+          </h3>
+          <div className="grid sm:grid-cols-2 gap-5">
+            {RELATED_POSTS.map(rp => (
+              <Link
+                key={rp.slug}
+                href={`/blog/${rp.slug}`}
+                className="group block rounded-2xl overflow-hidden bg-zinc-900/60 border border-white/8 hover:border-indigo-500/30 transition-all"
+              >
+                <div className={`h-28 bg-gradient-to-br ${rp.coverGradient} relative`}>
+                  <div className="absolute inset-0 bg-black/30" />
+                  <span className="absolute top-2 left-2 px-2 py-0.5 rounded-md bg-black/50 text-[9px] font-black uppercase tracking-widest text-white/50">
+                    {rp.category}
+                  </span>
+                </div>
+                <div className="p-4">
+                  <p className="text-sm font-black uppercase italic tracking-tight text-white group-hover:text-indigo-300 transition-colors line-clamp-2 leading-snug">
+                    {rp.title}
+                  </p>
+                  <p className="mt-1 text-[10px] text-white/30 flex items-center gap-1">
+                    <Clock size={9} /> {rp.readTime} min read
+                  </p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+
+        {/* Comments */}
+        <div className="space-y-5">
+          <div className="flex items-center justify-between">
+            <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/30">
+              Comments ({MOCK_COMMENTS.length})
+            </h3>
+            <MessageSquare size={13} className="text-white/20" />
+          </div>
+
+          <div className="space-y-4">
+            {MOCK_COMMENTS.map((comment, i) => (
+              <motion.div
+                key={comment.id}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 + i * 0.06 }}
+                className="p-5 rounded-2xl bg-white/[0.02] border border-white/8 space-y-3"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-xs font-black shrink-0">
+                    {comment.avatar}
+                  </div>
+                  <div>
+                    <p className="text-xs font-black text-white">{comment.author}</p>
+                    <p className="text-[9px] text-white/25">{comment.time}</p>
+                  </div>
+                </div>
+                <p className="text-sm text-white/55 leading-relaxed">{comment.body}</p>
+                <button
+                  onClick={() => toggleCommentLike(comment.id)}
+                  className={`flex items-center gap-1.5 text-[10px] font-bold transition-colors ${
+                    commentLikes[comment.id] ? "text-rose-400" : "text-white/25 hover:text-rose-400"
+                  }`}
+                >
+                  <Heart size={10} fill={commentLikes[comment.id] ? "currentColor" : "none"} />
+                  {comment.likes + (commentLikes[comment.id] ? 1 : 0)} helpful
+                </button>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+
+      </div>
+    </div>
+  )
+}

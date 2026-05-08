@@ -54,6 +54,7 @@ export default function Navbar() {
     { name: "Discover",    href: "/ai-discover"   },
     { name: "Best Anime",  href: "/bestanimelist" },
     { name: "Community",   href: "/community"     },
+    { name: "Blog",        href: "/blog"          },
     { name: "Leaderboard", href: "/leaderboard"  },
   ];
 
@@ -130,6 +131,7 @@ export default function Navbar() {
               { name: "Discover",    href: "/ai-discover"   },
               { name: "Best Anime",  href: "/bestanimelist" },
               { name: "Community",   href: "/community"     },
+              { name: "Blog",        href: "/blog"          },
               { name: "Leaderboard", href: "/leaderboard"   },
               { name: "Polls",       href: "/poll"          },
             ].map(link => (

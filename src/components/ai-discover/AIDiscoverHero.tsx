@@ -1,7 +1,6 @@
 "use client"
 
 import { motion } from "framer-motion"
-import AIPromptInput from "@/components/ai-discover/AIPromptInput"
 import Image from "next/image"
 
 export default function AIDiscoverHero() {
@@ -45,39 +44,34 @@ export default function AIDiscoverHero() {
           Our AI analyzes your emotional profile to bridge the gap between "what's next" and "must watch."
         </motion.p>
 
-        {/* Floating Assets for Cool Factor */}
-        <div className="relative mt-16 max-w-4xl mx-auto">
-          {/* Character 1: Luffy Sleeping */}
+        {/* Floating characters */}
+        <div className="relative mt-12 max-w-4xl mx-auto h-32">
           <motion.div
-            animate={{ y: [0, -15, 0] }}
+            animate={{ y: [0, -12, 0] }}
             transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
-            className="absolute -top-40 -right-24 hidden lg:block"
+            className="absolute -top-36 -right-20 hidden lg:block"
           >
-            <Image 
-              src="/assets/png/luffy_sleeping_on_bench.png" 
-              alt="Luffy" 
-              width={280} 
-              height={280} 
+            <Image
+              src="/assets/png/luffy_sleeping_on_bench.png"
+              alt="Luffy"
+              width={220}
+              height={220}
               className="rotate-12 drop-shadow-[0_20px_50px_rgba(99,102,241,0.2)] opacity-60 hover:opacity-100 transition-opacity"
             />
           </motion.div>
-
-          {/* Character 2: Zoro */}
           <motion.div
-            animate={{ y: [0, 15, 0] }}
+            animate={{ y: [0, 12, 0] }}
             transition={{ repeat: Infinity, duration: 5, ease: "easeInOut" }}
-            className="absolute -top-20 -left-32 hidden lg:block"
+            className="absolute -top-24 -left-28 hidden lg:block"
           >
-            <Image 
-              src="/assets/png/zoro_on_ponoglif.png" 
-              alt="Zoro" 
-              width={320} 
-              height={320} 
+            <Image
+              src="/assets/png/zoro_on_ponoglif.png"
+              alt="Zoro"
+              width={260}
+              height={260}
               className="-rotate-6 drop-shadow-[0_20px_50px_rgba(34,197,94,0.15)] opacity-40 hover:opacity-100 transition-opacity"
             />
           </motion.div>
-
-          <AIPromptInput />
         </div>
       </div>
     </section>

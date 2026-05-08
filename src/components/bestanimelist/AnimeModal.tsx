@@ -1,8 +1,9 @@
 "use client"
 
 import { motion, AnimatePresence } from "framer-motion"
-import { X, Play, Share2, Star, Clock, Monitor, Check, Plus, BookOpen } from "lucide-react"
+import { X, Share2, Star, Clock, Monitor, Check, Plus, ArrowUpRight } from "lucide-react"
 import Image from "next/image"
+import Link from "next/link"
 import type { Anime } from "@/lib/data/anime"
 import { useWatchlist } from "@/stores/watchlist.store"
 import { useToast } from "@/stores/toast.store"
@@ -154,18 +155,25 @@ export default function AnimeModal({ isOpen, onClose, anime }: AnimeModalProps) 
                 <div className="flex flex-wrap gap-3 pt-6 border-t border-white/5 mt-6">
                   <button
                     onClick={handleToggleList}
-                    className={`flex-1 min-w-[160px] py-4 rounded-2xl font-black uppercase tracking-widest text-xs flex items-center justify-center gap-2.5 transition-all ${
+                    className={`flex-1 min-w-[140px] py-3.5 rounded-2xl font-black uppercase tracking-widest text-xs flex items-center justify-center gap-2.5 transition-all ${
                       inList
                         ? "bg-emerald-600 text-white hover:bg-emerald-700"
                         : "bg-white text-black hover:bg-indigo-500 hover:text-white"
                     }`}
                   >
-                    {inList ? <><Check size={16} /> In Watchlist</> : <><Plus size={16} /> Add to List</>}
+                    {inList ? <><Check size={15} /> In Watchlist</> : <><Plus size={15} /> Add to List</>}
                   </button>
+
+                  <Link
+                    href={`/anime/${anime.id}`}
+                    className="flex items-center gap-2 px-4 py-3.5 rounded-2xl border border-white/10 bg-white/5 text-white/50 hover:bg-white/10 hover:text-white transition-all text-xs font-black uppercase tracking-widest"
+                  >
+                    <ArrowUpRight size={14} /> Full Page
+                  </Link>
 
                   <button
                     onClick={handleShare}
-                    className="p-4 bg-white/5 border border-white/10 rounded-2xl text-white/50 hover:bg-white/10 hover:text-white transition-all"
+                    className="p-3.5 bg-white/5 border border-white/10 rounded-2xl text-white/50 hover:bg-white/10 hover:text-white transition-all"
                     title="Copy to clipboard"
                   >
                     <Share2 size={18} />

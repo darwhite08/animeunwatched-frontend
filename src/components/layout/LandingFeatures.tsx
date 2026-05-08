@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Sparkles, Flame, ShieldCheck, Target, Terminal, Fingerprint, Activity } from "lucide-react";
+import { TiltCard } from "@/components/ui/TiltCard";
 
 const FEATURES = [
   {
@@ -106,13 +107,13 @@ export default function LandingFeatures() {
         {/* 3. BENTO GRID */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
           {FEATURES.map((f, i) => (
+            <TiltCard key={f.id} intensity={5} glare className={f.span}>
             <motion.div
-              key={f.id}
               initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-              className={`group relative p-8 md:p-12 rounded-[2.5rem] bg-[#0a0a0a] border border-white/5 overflow-hidden transition-all duration-700 ${f.span} ${f.border} ${f.glow}`}
+              className={`group relative p-8 md:p-12 rounded-[2.5rem] bg-[#0a0a0a] border border-white/5 overflow-hidden transition-all duration-700 w-full ${f.border} ${f.glow}`}
             >
               {/* Internal Holographic Glow */}
               <div className={`absolute inset-0 bg-gradient-to-br ${f.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none`} />
@@ -162,6 +163,7 @@ export default function LandingFeatures() {
                   <Fingerprint size={180} strokeWidth={1} />
               </div>
             </motion.div>
+            </TiltCard>
           ))}
         </div>
 

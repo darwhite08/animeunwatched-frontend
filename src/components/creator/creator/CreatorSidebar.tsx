@@ -110,11 +110,11 @@ export default function CreatorSidebar() {
 
         {/* NAVIGATION */}
         <nav className="space-y-2 mt-6">
-          <NavItem href="/creator" label="Overview" icon={LayoutDashboard} active={isActive("/creator")} />
-          <NavItem href="/creator/feed" label="Feed Content" icon={Rss} active={isActive("/creator/feed")} />
-          <NavItem href="/creator/blog" label="Blog Articles" icon={FileText} active={isActive("/creator/blog")} />
-          <NavItem href="/creator/polls" label="Polls" icon={Vote} active={isActive("/creator/polls")} />
-          <NavItem href="/creator/analytics" label="Analytics" icon={BarChart3} active={isActive("/creator/analytics")} />
+          <NavItem href="/creators" label="Overview" icon={LayoutDashboard} active={pathname === "/creators"} />
+          <NavItem href="/creators/feed" label="Feed Content" icon={Rss} active={isActive("/creators/feed")} />
+          <NavItem href="/creators/blog" label="Blog Articles" icon={FileText} active={isActive("/creators/blog")} />
+          <NavItem href="/creators/polls" label="Polls" icon={Vote} active={isActive("/creators/polls")} />
+          <NavItem href="/creators/analytics" label="Analytics" icon={BarChart3} active={isActive("/creators/analytics")} />
         </nav>
 
         {/* FOLDERS */}
@@ -221,7 +221,7 @@ export default function CreatorSidebar() {
         {/* BOTTOM */}
         <div className="border-t border-white/10 pt-4">
           <Link
-            href="/creator/create"
+            href="/creators/create"
             className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 transition"
           >
             <Plus size={16} />

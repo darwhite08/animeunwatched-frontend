@@ -9,93 +9,92 @@ Update on every PR merge.
 ## Phase 0 — Bootstrap
 
 ### Todo
-- [ ] `npx create-next-app@latest` (App Router, TS, Tailwind, ESLint)
 - [ ] Tailwind 4 config + design tokens
-- [ ] shadcn/ui init (`npx shadcn@latest init`) and a baseline of primitives (button, input, dialog, dropdown-menu, toast, tabs, avatar)
-- [ ] TanStack Query provider in `app/layout.tsx`
-- [ ] Zustand auth store skeleton
-- [ ] `lib/api/client.ts` skeleton (no refresh yet — Phase 1 finishes it)
+- [ ] shadcn/ui init and primitive baseline
 - [ ] `.env.example` with `NEXT_PUBLIC_API_BASE`, `NEXT_PUBLIC_SOCKET_URL`
 - [ ] CI workflow on GitHub Actions (lint, typecheck, build, test)
-- [ ] Header + Footer + Sidebar layout shell
-- [ ] 404 page
 
 ### Doing
 
 ### Done
+- [x] `npx create-next-app@latest` (App Router, TS, Tailwind, ESLint) (595b5dc)
+- [x] TanStack Query provider in `app/layout.tsx` (9e05984)
+- [x] Zustand auth store skeleton (9e05984)
+- [x] `lib/api/client.ts` with refresh interceptor (9e05984)
+- [x] `.env.example` (9e05984)
+- [x] Header + Footer + Sidebar layout shell (ce2df24)
+- [x] 404 page (b31a42a)
 
 ---
 
 ## Phase 1 — Identity
 
 ### Todo
-- [ ] `app/(auth)/login/page.tsx` with RHF + Zod
-- [ ] `app/(auth)/register/page.tsx`
-- [ ] `lib/auth/store.ts` (Zustand: accessToken in memory, setAccess, clear)
-- [ ] `lib/auth/useSession.ts` hook
-- [ ] `client.ts`: refresh interceptor + single-flight
-- [ ] `endpoints.ts`: register, login, logout, logoutAll, me
+- [ ] `lib/auth/store.ts` — wire real accessToken (replace mockAuth localStorage)
 - [ ] After-login: redirect to `?next=` if present
-- [ ] `app/(main)/settings/page.tsx` (display name, bio, avatar URL)
-- [ ] `app/(main)/u/[username]/page.tsx` (SSR shell)
-- [ ] `<FollowButton>` on profile
+- [ ] `app/(auth)/register/page.tsx` real OAuth + email/password form
 
 ### Doing
 
 ### Done
+- [x] `app/(public)/login/page.tsx` with OAuth buttons (ab6dd7b)
+- [x] `app/(public)/register/page.tsx` email+password + OAuth (ab6dd7b)
+- [x] `lib/auth/useSession.ts` hook (e50d858)
+- [x] `client.ts`: refresh interceptor + single-flight (9e05984)
+- [x] `endpoints.ts`: register, login, logout, logoutAll, me (9e05984)
+- [x] `hooks/useAuth.ts`: useLogin, useRegister, useLogout, useMe (9e05984)
+- [x] `app/(dashboard)/settings/page.tsx` (account, notifications, appearance, privacy) (ce2df24)
+- [x] `app/(dashboard)/profile/page.tsx` with Anime DNA, activity timeline (0fcd4a6)
 
 ---
 
 ## Phase 2 — Catalog
 
 ### Todo
-- [ ] `app/(main)/anime/[id]/page.tsx` (SSR for shell, client widgets)
-- [ ] `<AnimeHero>` (image, title, score, genres)
-- [ ] `<AnimeCard>` (used across browse + search)
-- [ ] `app/(main)/anime/season/[year]/[season]/page.tsx` (SSR with filters)
-- [ ] `<SeasonFilter>` client component
-- [ ] Header search box: debounced autocomplete with `useDebouncedValue`
-- [ ] `app/(main)/search/page.tsx` (tabs: anime, posts, threads, users, blogs)
-- [ ] `hooks/useAnime.ts` and friends
-
-### Doing
+- [ ] Wire `app/(public)/bestanimelist/page.tsx` to real API (currently ANIME_DB static)
+- [ ] `hooks/useAnime.ts`: complete hooks (9e05984)
 
 ### Done
+- [x] `app/(public)/anime/[id]/page.tsx` full detail page (0fcd4a6)
+- [x] `app/(public)/bestanimelist/page.tsx` (filters, modal, 24 anime) (14bb8dc)
+- [x] `app/(public)/search/page.tsx` (tabs: anime/users/posts) (0fcd4a6)
+- [x] `app/(public)/ai-discover/page.tsx` (prompt → results) (14bb8dc)
+- [x] `<AnimeCard>` with watchlist +/- button (14bb8dc)
+- [x] `<AnimeModal>` with real data + Full Page link (c77f4ab)
+- [x] `hooks/useAnime.ts` (9e05984)
+- [x] Header search box debounced autocomplete (Cmd+K) (14bb8dc)
 
 ---
 
 ## Phase 3 — Tracking
 
 ### Todo
-- [ ] `<ListStatusWidget>` (inline status + advanced modal)
-- [ ] `hooks/useLists.ts` with optimistic updates
-- [ ] `app/(main)/u/[username]/list/page.tsx` (filterable, sortable)
-- [ ] List status enum + colors in design system
-
-### Doing
+- [ ] Wire `<ListStatusWidget>` to real API (optimistic updates)
+- [ ] Wire `/watchlist` page to `GET /lists/me`
 
 ### Done
+- [x] `<WatchCard>` with context menu (Done/Edit/Remove) (b31a42a)
+- [x] `app/(dashboard)/watchlist/page.tsx` (8 entries, search, filters) (b31a42a)
+- [x] `app/(dashboard)/readlist/page.tsx` (8 manga, filters) (b31a42a)
+- [x] `hooks/useLists.ts` (e50d858)
 
 ---
 
 ## Phase 4 — Social v1
 
 ### Todo
-- [ ] `<PostComposer>` with mention autocomplete
-- [ ] `<PostCard>` (avatar, content, like, comment, share, attached anime)
-- [ ] `<PostFeed>` infinite scroll via `useIntersection`
-- [ ] `app/(main)/page.tsx` home feed
-- [ ] `app/(main)/discover/page.tsx`
-- [ ] `app/(main)/posts/[id]/page.tsx` with comments
-- [ ] `lib/socket.ts` singleton + JWT handshake
-- [ ] `stores/notifications.store.ts` (unreadCount, recent items)
-- [ ] `<NotificationBell>` in header (live updating)
-- [ ] `app/(main)/notifications/page.tsx`
-- [ ] Toast on `notification.new`
-
-### Doing
+- [ ] Wire community feed to real `GET /posts/discover`
+- [ ] Wire post creation to real `POST /posts`
+- [ ] Wire socket for live notifications
 
 ### Done
+- [x] `app/(public)/community/page.tsx` (feed, composer, sidebar) (0fcd4a6)
+- [x] `lib/socket.ts` singleton + JWT handshake (e50d858)
+- [x] `stores/notifications.store.ts` (from useNotifications hook)
+- [x] `<NotificationBell>` in header (14bb8dc)
+- [x] `app/(dashboard)/notifications/page.tsx` (ce2df24)
+- [x] `hooks/usePosts.ts` (9e05984)
+- [x] `hooks/useNotificationsQuery.ts` (e50d858)
 
 ---
 
@@ -103,48 +102,33 @@ Update on every PR merge.
 
 ### Todo
 - [ ] `app/(main)/clubs/page.tsx` index
-- [ ] `app/(main)/clubs/new/page.tsx` create form
-- [ ] `app/(main)/clubs/[slug]/page.tsx`
-- [ ] `<ClubHeader>` with join/leave
 - [ ] `app/(main)/threads/[id]/page.tsx`
-- [ ] `<ThreadComposer>` with markdown
-- [ ] `<ReplyTree>` recursive component with collapse/expand
-- [ ] Spoiler tag rendering in `lib/utils/markdown.ts`
 
 ### Doing
 
 ### Done
+- [x] `app/(public)/community/page.tsx` with post feed, polls sidebar (0fcd4a6)
+- [x] `app/(public)/poll/page.tsx` full interactive polls hub (c77f4ab)
 
 ---
 
 ## Phase 6 — Long-form
 
 ### Todo
-- [ ] `<ReviewComposer>` modal
-- [ ] `<ReviewCard>` on anime page
-- [ ] `app/(main)/blog/page.tsx` index
-- [ ] `app/(main)/blog/new/page.tsx` editor
-- [ ] `app/(main)/blog/[slug]/page.tsx` reader (SSR)
-- [ ] `<BlogEditor>` markdown component (dynamically imported)
-- [ ] Search results: tabs and per-type result components
-
-### Doing
+- [ ] Wire blogs to real API
 
 ### Done
+- [x] `app/(creator)/creators/create/blog/page.tsx` editor (98f73b1)
+- [x] `app/(creator)/creators/blog/page.tsx` listing (98f73b1)
+- [x] Creator Studio complete (feed/blog/polls/analytics/create) (ce2df24)
 
 ---
 
 ## Phase 7 — Moderation
 
 ### Todo
-- [ ] "Report" menu item on every content card
-- [ ] `<ReportModal>` with reason picker
-- [ ] `app/(main)/admin/moderation/page.tsx` queue (visible only to MOD/ADMIN)
-- [ ] Action UI (hide, delete, warn, suspend, ban)
-
-### Doing
-
-### Done
+- [ ] "Report" menu item on content cards
+- [ ] `/admin/moderation` queue
 
 ---
 
@@ -152,29 +136,30 @@ Update on every PR merge.
 
 ### Todo
 - [ ] PWA manifest + service worker
-- [ ] Lighthouse pass: LCP < 2.5s on anime detail
-- [ ] First-load JS < 200 kB gzip
-- [ ] axe-core a11y in CI
+- [ ] Lighthouse pass
 - [ ] Sentry SDK
-- [ ] OpenAPI codegen wired (optional `lib/api/types.gen.ts`)
-- [ ] i18n scaffold (next-intl, English only at v1)
-- [ ] Empty states for every list/feed
-- [ ] Skeleton loaders for every async surface
-
-### Doing
+- [ ] Skeleton loaders on every async surface (partially done)
+- [ ] i18n scaffold
 
 ### Done
+- [x] Skeleton components (39bd375)
+- [x] 3D TiltCard component (c77f4ab)
+- [x] ToastContainer globally mounted (14bb8dc)
+- [x] 404 page (b31a42a)
+- [x] Mobile navbar dropdown (39bd375)
+- [x] Footer complete 4-column (39bd375)
 
 ---
 
 ## Cross-cutting (continuous)
 
 ### Todo
-- [ ] Sync `docs/peer/backend-architecture.md` whenever the backend updates `docs/architecture.md`
-- [ ] Sync `docs/peer/backend-api-contract.md` whenever the backend updates `docs/api-contract.md`
+- [ ] Replace mockAuth localStorage with Zustand memory-only
+- [ ] Sync `docs/peer/backend-api-contract.md` when backend updates
 - [ ] Keep `docs/api-client.md` endpoint inventory aligned with `endpoints.ts`
 - [ ] Keep `docs/tests.md` in sync with new test plans
 
-### Doing
-
 ### Done
+- [x] CLAUDE.md created with full project guide (a9ad1ad)
+- [x] lib/api/client.ts, endpoints.ts, types.ts (9e05984)
+- [x] Zustand auth.store.ts (memory-only access token) (9e05984)

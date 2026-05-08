@@ -7,9 +7,14 @@ import { ReadCard } from "@/components/readlist/ReadCard"
 
 // Enhanced Mock Data with your actual asset paths
 const INITIAL_READLIST = [
-  { id: 1, title: "Berserk", author: "Kentaro Miura", status: "Reading", progress: 85, image: "/assets/png/zoro_on_ponoglif.png", category: "Seinen" },
-  { id: 2, title: "Vagabond", author: "Takehiko Inoue", status: "Completed", progress: 100, image: "/assets/png/luffy_sitting.png", category: "Seinen" },
-  { id: 3, title: "Monster", author: "Naoki Urasawa", status: "Plan to Read", progress: 0, image: "/assets/png/rengoku_with_sword.png", category: "Psychological" },
+  { id: 1, title: "Berserk",                 author: "Kentaro Miura",      status: "Reading",       progress: 85,  image: "/assets/png/zoro_on_ponoglif.png",   category: "Seinen"        },
+  { id: 2, title: "Vagabond",                author: "Takehiko Inoue",     status: "Completed",     progress: 100, image: "/assets/png/luffy_sitting.png",      category: "Seinen"        },
+  { id: 3, title: "Monster",                 author: "Naoki Urasawa",      status: "Plan to Read",  progress: 0,   image: "/assets/png/zoro.png",               category: "Psychological" },
+  { id: 4, title: "Attack on Titan",         author: "Hajime Isayama",     status: "Completed",     progress: 100, image: "/assets/png/tanjiro.png",            category: "Shonen"        },
+  { id: 5, title: "Fullmetal Alchemist",     author: "Hiromu Arakawa",     status: "Reading",       progress: 62,  image: "/assets/png/goku.png",               category: "Shonen"        },
+  { id: 6, title: "Chainsaw Man",            author: "Tatsuki Fujimoto",   status: "Reading",       progress: 48,  image: "/assets/png/naruto.png",             category: "Seinen"        },
+  { id: 7, title: "Vinland Saga",            author: "Makoto Yukimura",    status: "Plan to Read",  progress: 0,   image: "/assets/png/luffy.png",              category: "Historical"    },
+  { id: 8, title: "20th Century Boys",       author: "Naoki Urasawa",      status: "Plan to Read",  progress: 0,   image: "/assets/png/rengoku_with_sword.png", category: "Thriller"      },
 ]
 
 export default function ReadlistPage() {

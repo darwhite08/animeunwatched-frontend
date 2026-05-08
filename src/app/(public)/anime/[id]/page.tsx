@@ -1,6 +1,6 @@
 "use client"
 
-import { use } from "react"
+import { use, useState } from "react"
 import { notFound } from "next/navigation"
 import { ANIME_DB, type Anime } from "@/lib/data/anime"
 import { useWatchlist } from "@/stores/watchlist.store"
@@ -10,8 +10,10 @@ import Image from "next/image"
 import Link from "next/link"
 import {
   Star, Clock, Monitor, Plus, Check, Share2, ChevronLeft,
-  MessageSquare, Heart, BookOpen, Play, Sparkles,
+  MessageSquare, Heart, Sparkles, PenSquare, Flag, BookOpen,
 } from "lucide-react"
+import ReviewComposer from "@/components/review/ReviewComposer"
+import ReportModal from "@/components/moderation/ReportModal"
 
 /* ── mock reviews ── */
 const MOCK_REVIEWS = [
@@ -32,6 +34,8 @@ function AnimeDetail({ anime }: { anime: Anime }) {
   const { add, remove, has } = useWatchlist()
   const { push } = useToast()
   const inList = has(anime.id)
+  const [reviewOpen, setReviewOpen] = useState(false)
+  const [reportOpen, setReportOpen] = useState(false)
 
   const toggle = () => {
     if (inList) { remove(anime.id); push(`Removed "${anime.title}"`, "info") }
@@ -156,10 +160,25 @@ function AnimeDetail({ anime }: { anime: Anime }) {
             </motion.button>
 
             <button
+              onClick={() => setReviewOpen(true)}
+              className="flex items-center gap-2 px-4 py-3 rounded-2xl border border-white/10 bg-white/[0.04] text-white/50 hover:text-white hover:bg-white/[0.08] transition-all text-xs font-black uppercase tracking-widest"
+            >
+              <PenSquare size={14} /> Review
+            </button>
+
+            <button
               onClick={share}
               className="p-3 rounded-2xl border border-white/10 bg-white/[0.04] text-white/40 hover:text-white hover:bg-white/[0.08] transition-all"
             >
               <Share2 size={16} />
+            </button>
+
+            <button
+              onClick={() => setReportOpen(true)}
+              className="p-3 rounded-2xl border border-white/10 bg-white/[0.04] text-white/30 hover:text-red-400 hover:bg-red-500/5 hover:border-red-500/20 transition-all"
+              title="Report this anime"
+            >
+              <Flag size={14} />
             </button>
           </div>
         </motion.div>
@@ -201,8 +220,11 @@ function AnimeDetail({ anime }: { anime: Anime }) {
             <div>
               <div className="flex items-center justify-between mb-5">
                 <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/30">Community Reviews</h2>
-                <button className="text-[10px] font-black uppercase tracking-widest text-indigo-400 hover:text-indigo-300 transition-colors">
-                  Write a Review
+                <button
+                  onClick={() => setReviewOpen(true)}
+                  className="text-[10px] font-black uppercase tracking-widest text-indigo-400 hover:text-indigo-300 transition-colors flex items-center gap-1.5"
+                >
+                  <PenSquare size={11} /> Write a Review
                 </button>
               </div>
 
@@ -307,6 +329,20 @@ function AnimeDetail({ anime }: { anime: Anime }) {
           </div>
         </div>
       </div>
+
+      {/* Modals */}
+      <ReviewComposer
+        isOpen={reviewOpen}
+        onClose={() => setReviewOpen(false)}
+        animeTitle={anime.title}
+        animeId={anime.id}
+      />
+      <ReportModal
+        isOpen={reportOpen}
+        onClose={() => setReportOpen(false)}
+        contentType="post"
+        contentId={anime.id}
+      />
     </div>
   )
 }

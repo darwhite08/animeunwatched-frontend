@@ -1,45 +1,100 @@
 "use client"
 
 import { motion, AnimatePresence } from "framer-motion"
-import { X, RotateCcw } from "lucide-react"
+import { X, RotateCcw, SlidersHorizontal } from "lucide-react"
 import { filterSections } from "./filterData"
 import { FilterCheckboxGroup } from "./FilterCheckboxGroup"
 
-export default function FilterDrawer({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
+interface FilterDrawerProps {
+  isOpen: boolean
+  onClose: () => void
+  selectedGenres: string[]
+  onGenreToggle: (id: string) => void
+  selectedType: string
+  onTypeToggle: (id: string) => void
+  onReset: () => void
+  resultCount: number
+}
+
+export default function FilterDrawer({
+  isOpen, onClose,
+  selectedGenres, onGenreToggle,
+  selectedType, onTypeToggle,
+  onReset, resultCount,
+}: FilterDrawerProps) {
+  const genreSection = filterSections.find(s => s.id === "genres")!
+  const formatSection = filterSections.find(s => s.id === "format")!
+  const statusSection = filterSections.find(s => s.id === "status")!
+
+  const totalActive = selectedGenres.length + (selectedType ? 1 : 0)
+
   return (
     <AnimatePresence>
       {isOpen && (
         <>
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
             className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100]"
           />
-          <motion.div 
+          <motion.div
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", damping: 25, stiffness: 200 }}
-            className="fixed right-0 top-0 bottom-0 w-full max-w-xs bg-[#0a0a0a] border-l border-white/10 z-[101] p-8"
+            className="fixed right-0 top-0 bottom-0 w-full max-w-xs bg-[#0a0a0a] border-l border-white/10 z-[101] flex flex-col"
           >
-            <div className="flex items-center justify-between mb-10">
-              <h2 className="text-xl font-black text-white uppercase italic italic">Filters</h2>
-              <button onClick={onClose} className="p-2 hover:bg-white/5 rounded-full text-white/40 hover:text-white">
-                <X size={20} />
+            {/* Header */}
+            <div className="flex items-center justify-between p-8 border-b border-white/5">
+              <div className="flex items-center gap-3">
+                <SlidersHorizontal size={16} className="text-indigo-400" />
+                <h2 className="text-base font-black text-white uppercase italic tracking-tighter">
+                  Refine Results
+                </h2>
+                {totalActive > 0 && (
+                  <span className="px-2 py-0.5 rounded-full bg-indigo-600 text-[9px] font-black text-white">
+                    {totalActive}
+                  </span>
+                )}
+              </div>
+              <button onClick={onClose} className="p-2 hover:bg-white/5 rounded-full text-white/40 hover:text-white transition-colors">
+                <X size={18} />
               </button>
             </div>
 
-            <div className="overflow-y-auto h-[calc(100vh-200px)] no-scrollbar">
-              {filterSections.map((section) => (
-                <FilterCheckboxGroup key={section.id} title={section.title} options={section.options} />
-              ))}
+            {/* Filters */}
+            <div className="flex-1 overflow-y-auto px-8 no-scrollbar">
+              <FilterCheckboxGroup
+                title={genreSection.title}
+                options={genreSection.options}
+                selected={selectedGenres}
+                onChange={onGenreToggle}
+              />
+              <FilterCheckboxGroup
+                title={formatSection.title}
+                options={formatSection.options}
+                selected={selectedType ? [selectedType] : []}
+                onChange={onTypeToggle}
+              />
             </div>
 
-            <div className="absolute bottom-8 left-8 right-8 flex gap-4">
-              <button className="flex-1 py-4 bg-indigo-600 rounded-xl text-[10px] font-black text-white uppercase tracking-widest">Apply</button>
-              <button className="p-4 bg-white/5 rounded-xl text-white hover:bg-white/10"><RotateCcw size={16} /></button>
+            {/* Footer */}
+            <div className="p-8 border-t border-white/5 flex gap-3">
+              <button
+                onClick={() => { onClose() }}
+                className="flex-1 py-3.5 bg-indigo-600 hover:bg-indigo-700 rounded-xl text-[10px] font-black text-white uppercase tracking-widest transition-colors"
+              >
+                Show {resultCount} Results
+              </button>
+              <button
+                onClick={() => { onReset(); onClose() }}
+                className="p-3.5 bg-white/5 hover:bg-white/10 rounded-xl text-white/50 hover:text-white transition-colors"
+                title="Reset filters"
+              >
+                <RotateCcw size={15} />
+              </button>
             </div>
           </motion.div>
         </>

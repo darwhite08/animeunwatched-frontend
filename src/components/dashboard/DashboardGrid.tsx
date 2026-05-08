@@ -1,8 +1,8 @@
 "use client"
 
-import WatchStatsCard from "./cards/WatchStatsCard"
-import ActivityCard from "./cards/ActivityCard"
-import GenreCard from "./cards/GenreCard"
+import { WatchStatsCard } from "./cards/WatchStatsCard"
+import { ActivityCard } from "./cards/ActivityCard"
+import { GenreCard } from "./cards/GenreCard"
 import RecommendationCard from "./cards/RecommendationCard"
 
 export default function DashboardGrid() {

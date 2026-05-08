@@ -5,6 +5,7 @@ import { Search, Command, Zap, Star, ArrowRight, X, Clock } from "lucide-react"
 import { useEffect, useRef, useState, useCallback } from "react"
 import { searchAnime, type Anime } from "@/lib/data/anime"
 import AnimeModal from "@/components/bestanimelist/AnimeModal"
+import { useRouter } from "next/navigation"
 
 interface SearchModalProps {
   isOpen: boolean
@@ -25,6 +26,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
   const [cursor, setCursor] = useState(-1)
   const [selectedAnime, setSelectedAnime] = useState<Anime | null>(null)
   const inputRef = useRef<HTMLInputElement>(null)
+  const router = useRouter()
 
   // Real-time search
   useEffect(() => {
@@ -48,9 +50,9 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
     if (e.key === "ArrowDown") { e.preventDefault(); setCursor(c => Math.min(c + 1, listLen - 1)) }
     else if (e.key === "ArrowUp") { e.preventDefault(); setCursor(c => Math.max(c - 1, -1)) }
     else if (e.key === "Escape") onClose()
-    else if (e.key === "Enter" && cursor >= 0) {
-      if (results.length > 0) setSelectedAnime(results[cursor])
-      else setQuery(RECENT[cursor] ?? "")
+    else if (e.key === "Enter") {
+      if (cursor >= 0 && results.length > 0) setSelectedAnime(results[cursor])
+      else if (query.trim()) { onClose(); router.push(`/search?q=${encodeURIComponent(query)}`) }
     }
   }, [results, cursor, onClose])
 

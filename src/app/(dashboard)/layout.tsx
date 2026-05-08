@@ -4,7 +4,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   return (
     <div className="flex min-h-screen bg-black text-white">
       <Sidebar />
-      <main className="flex-1 ml-72 min-h-screen relative">
+      <main className="flex-1 ml-64 min-h-screen relative">
         {/* Adds a background ambient glow for the whole dashboard */}
         <div className="fixed inset-0 bg-noise pointer-events-none" />
         {children}

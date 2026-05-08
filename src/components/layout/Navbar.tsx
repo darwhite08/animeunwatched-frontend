@@ -50,10 +50,11 @@ export default function Navbar() {
   };
 
   const navLinks = [
-    { name: "Home", href: "/" },
-    { name: "Discover", href: "/ai-discover" },
-    { name: "Best Anime", href: "/bestanimelist" },
-    { name: "Leaderboard", href: "/leaderboard" },
+    { name: "Home",        href: "/"              },
+    { name: "Discover",    href: "/ai-discover"   },
+    { name: "Best Anime",  href: "/bestanimelist" },
+    { name: "Community",   href: "/community"     },
+    { name: "Leaderboard", href: "/leaderboard"  },
   ];
 
   return (

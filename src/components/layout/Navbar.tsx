@@ -62,6 +62,7 @@ export default function Navbar() {
 
   const navLinks = [
     { name: "Home",        href: "/"              },
+    { name: "Browse",      href: "/discover"      },
     { name: "Discover",    href: "/ai-discover"   },
     { name: "Best Anime",  href: "/bestanimelist" },
     { name: "Calendar",    href: "/calendar"      },

@@ -20,19 +20,38 @@ const QUICK_ACTIONS = [
 
 const RECENT = ["Frieren", "Chainsaw Man", "Solo Leveling", "Monster"]
 
+type UserSuggestion = { username: string; displayName: string }
+
 export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
   const [query, setQuery] = useState("")
   const [results, setResults] = useState<Anime[]>([])
+  const [userSuggestions, setUserSuggestions] = useState<UserSuggestion[]>([])
   const [cursor, setCursor] = useState(-1)
   const [selectedAnime, setSelectedAnime] = useState<Anime | null>(null)
   const inputRef = useRef<HTMLInputElement>(null)
   const router = useRouter()
+  const suggestTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
-  // Real-time search
+  // Real-time local search
   useEffect(() => {
-    if (!query.trim()) { setResults([]); setCursor(-1); return }
-    setResults(searchAnime(query).slice(0, 8))
+    if (!query.trim()) { setResults([]); setUserSuggestions([]); setCursor(-1); return }
+    setResults(searchAnime(query).slice(0, 6))
     setCursor(-1)
+
+    // Debounced backend suggestions for users
+    if (suggestTimerRef.current) clearTimeout(suggestTimerRef.current)
+    suggestTimerRef.current = setTimeout(async () => {
+      try {
+        const base = process.env.NEXT_PUBLIC_API_BASE ?? "http://localhost:4000"
+        const res = await fetch(`${base}/api/v1/search/suggestions?q=${encodeURIComponent(query)}`)
+        if (res.ok) {
+          const data = await res.json() as { anime: unknown[]; users: UserSuggestion[] }
+          setUserSuggestions(data.users?.slice(0, 2) ?? [])
+        }
+      } catch { /* backend may not be running in dev — silently ignore */ }
+    }, 350)
+
+    return () => { if (suggestTimerRef.current) clearTimeout(suggestTimerRef.current) }
   }, [query])
 
   // Focus input on open
@@ -140,35 +159,60 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                       ))}
                     </div>
                   </>
-                ) : results.length > 0 ? (
+                ) : results.length > 0 || userSuggestions.length > 0 ? (
                   <>
-                    <p className="px-4 py-2 text-[9px] font-black text-white/20 uppercase tracking-[0.2em]">
-                      {results.length} Archive{results.length !== 1 ? "s" : ""} Found
-                    </p>
-                    <div className="space-y-0.5">
-                      {results.map((anime, i) => (
-                        <button
-                          key={anime.id}
-                          onClick={() => setSelectedAnime(anime)}
-                          className={`group w-full flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-white/5 transition-all text-left ${cursor === i ? "bg-white/5" : ""}`}
-                        >
-                          <div className="relative h-10 w-8 shrink-0 rounded-lg overflow-hidden">
-                            <img src={anime.image} alt={anime.title} className="w-full h-full object-cover" />
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <p className="text-sm font-black text-white/80 group-hover:text-white truncate uppercase tracking-tight">
-                              {anime.title}
-                            </p>
-                            <p className="text-[9px] text-white/30 uppercase tracking-wider">
-                              {anime.year} · {anime.type} · ★ {anime.rating}
-                            </p>
-                          </div>
-                          <span className="text-[9px] font-black text-indigo-500 italic opacity-0 group-hover:opacity-100 shrink-0">
-                            Open
-                          </span>
-                        </button>
-                      ))}
-                    </div>
+                    {results.length > 0 && (
+                      <>
+                        <p className="px-4 py-2 text-[9px] font-black text-white/20 uppercase tracking-[0.2em]">
+                          {results.length} Archive{results.length !== 1 ? "s" : ""} Found
+                        </p>
+                        <div className="space-y-0.5">
+                          {results.map((anime, i) => (
+                            <button
+                              key={anime.id}
+                              onClick={() => setSelectedAnime(anime)}
+                              className={`group w-full flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-white/5 transition-all text-left ${cursor === i ? "bg-white/5" : ""}`}
+                            >
+                              <div className="relative h-10 w-8 shrink-0 rounded-lg overflow-hidden">
+                                <img src={anime.image} alt={anime.title} className="w-full h-full object-cover" />
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <p className="text-sm font-black text-white/80 group-hover:text-white truncate uppercase tracking-tight">
+                                  {anime.title}
+                                </p>
+                                <p className="text-[9px] text-white/30 uppercase tracking-wider">
+                                  {anime.year} · {anime.type} · ★ {anime.rating}
+                                </p>
+                              </div>
+                              <span className="text-[9px] font-black text-indigo-500 italic opacity-0 group-hover:opacity-100 shrink-0">Open</span>
+                            </button>
+                          ))}
+                        </div>
+                      </>
+                    )}
+                    {userSuggestions.length > 0 && (
+                      <>
+                        <p className="px-4 py-2 mt-2 text-[9px] font-black text-white/20 uppercase tracking-[0.2em]">Users</p>
+                        <div className="space-y-0.5">
+                          {userSuggestions.map(u => (
+                            <a
+                              key={u.username}
+                              href={`/u/${u.username}`}
+                              onClick={onClose}
+                              className="group w-full flex items-center gap-3 px-4 py-2.5 rounded-xl hover:bg-white/5 transition-all"
+                            >
+                              <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-xs font-black shrink-0">
+                                {u.displayName[0]}
+                              </div>
+                              <div>
+                                <p className="text-sm font-black text-white/70 group-hover:text-white">{u.displayName}</p>
+                                <p className="text-[9px] text-white/30">@{u.username}</p>
+                              </div>
+                            </a>
+                          ))}
+                        </div>
+                      </>
+                    )}
                   </>
                 ) : (
                   <div className="py-10 text-center">

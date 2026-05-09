@@ -10,9 +10,11 @@ import Image from "next/image"
 import Link from "next/link"
 import {
   Star, Clock, Monitor, Plus, Check, Share2, ChevronLeft,
-  MessageSquare, Heart, Sparkles, PenSquare, Flag, BookOpen,
+  MessageSquare, Heart, Sparkles, PenSquare, Flag, BookOpen, Calendar,
 } from "lucide-react"
 import EpisodeTracker from "@/components/anime/EpisodeTracker"
+import { AnimeThreadsSection } from "@/components/anime/AnimeThreadsSection"
+import { AnimeStatsCard } from "@/components/anime/AnimeStatsCard"
 import ReviewComposer from "@/components/review/ReviewComposer"
 import ReportModal from "@/components/moderation/ReportModal"
 import FloatingActions from "@/components/ui/FloatingActions"
@@ -245,6 +247,9 @@ function AnimeDetail({ anime }: { anime: Anime }) {
               <EpisodeTracker totalEpisodes={anime.episodes} animeId={anime.id} />
             </div>
 
+            {/* Community Stats */}
+            <AnimeStatsCard anime={anime} />
+
             {/* Reviews */}
             <div>
               <div className="flex items-center justify-between mb-5">
@@ -290,6 +295,8 @@ function AnimeDetail({ anime }: { anime: Anime }) {
                 ))}
               </div>
             </div>
+            {/* Discussion Threads */}
+            <AnimeThreadsSection animeId={anime.id} animeTitle={anime.title} />
           </div>
 
           {/* RIGHT — sidebar */}
@@ -342,6 +349,18 @@ function AnimeDetail({ anime }: { anime: Anime }) {
                 }
               </div>
             </div>
+
+            {/* Season link */}
+            <Link
+              href={`/anime/season/${anime.year}/${(anime as Record<string, unknown>)["season"] ?? "fall"}`}
+              className="flex items-center gap-3 p-4 rounded-2xl bg-white/[0.02] border border-white/8 hover:border-white/15 transition-colors group"
+            >
+              <Calendar size={14} className="text-white/30 shrink-0" />
+              <div>
+                <p className="text-sm font-bold text-white/60 group-hover:text-white">View {anime.year} Season</p>
+                <p className="text-[10px] text-white/25 mt-0.5">Browse {String((anime as Record<string, unknown>)["season"] ?? "fall")} {anime.year} anime</p>
+              </div>
+            </Link>
 
             {/* AI Discover CTA */}
             <Link

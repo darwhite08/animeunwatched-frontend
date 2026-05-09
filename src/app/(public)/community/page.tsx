@@ -10,6 +10,8 @@ import {
 import Link from "next/link"
 import { useToast } from "@/stores/toast.store"
 import ShareCard from "@/components/ui/ShareCard"
+import TrendingWidget from "@/components/social/TrendingWidget"
+import WatchlistPreviewWidget from "@/components/social/WatchlistPreviewWidget"
 
 /* ── Types ── */
 type Post = {
@@ -306,6 +308,12 @@ export default function CommunityPage() {
               View All Polls →
             </Link>
           </div>
+
+          {/* Now Airing widget */}
+          <WatchlistPreviewWidget />
+
+          {/* Trending tags enhanced */}
+          <TrendingWidget />
 
           {/* Community stats */}
           <div className="p-5 rounded-2xl bg-white/[0.02] border border-white/8 space-y-3">

@@ -199,3 +199,63 @@ curl -fsSL https://raw.githubusercontent.com/darwhite08/animeunwatched-backendne
 - No `dangerouslySetInnerHTML` outside `lib/utils/markdown.ts`.
 - Every async surface: skeleton loader (not spinner on first paint) + empty state with CTA + error state with retry.
 - Performance budgets: TTFB on anime detail < 400ms, LCP on 4G < 2.5s, first-load JS gzip < 200kB.
+
+---
+
+## Strategy & Research Docs
+
+These live at `../animeunwatched-docs/docs/` (sibling directory, not in this repo).
+Read them before making product, UX, gamification, or growth decisions.
+
+| Doc | Path | When to read |
+|---|---|---|
+| **Master Strategy** | `strategy/animeunwatched-master-strategy.md` | Start here. One-line vision: "social identity layer for anime — Discord + Letterboxd + Spotify + TikTok." Shapes every product decision. |
+| **Competitor Analysis** | `research/anime-platform-competitor-analysis.md` | Before building any feature — know what MAL, AniList, Kitsu do badly and how we exploit the gap. |
+| **Fan Psychology** | `psychology/viral-anime-fan-psychology.md` | Before any UX copy, onboarding, or community feature. Users are identity-invested, not casual. |
+| **Viral Growth Engine** | `growth/anime-viral-growth-engine.md` | Before building sharing, referral, or social mechanics. No paid acquisition — viral or nothing. |
+| **Retention Engine** | `growth/anime-retention-engine.md` | Before building streaks, notifications, or re-engagement flows. Ties into seasonal anime rhythm. |
+| **Social Platform Systems** | `social/anime-social-platform-systems.md` | Before building clubs, threads, or community feeds. Maps what to copy from Letterboxd/Discord/Spotify. |
+| **Gen Z UX Research** | `ux/genz-anime-ux-research.md` | Before any UI/UX decision. Audience is the most visually literate on the internet — reject mediocrity. |
+| **Gamification Systems** | `gamification/anime-gamification-systems.md` | Before adding XP, badges, streaks, or leaderboards. Celebrate users, don't exploit them. |
+| **SEO Growth Strategy** | `seo/anime-seo-growth-strategy.md` | Before building public-facing anime/season pages. Programmatic SEO to beat MAL in 24 months. |
+| **Platform Architecture** | `architecture/future-proof-platform-architecture.md` | Before any infrastructure decision. Web-first, mobile-eventual, no rewrites. |
+| **Mobile Evolution** | `mobile-future/anime-mobile-evolution-strategy.md` | Before any mobile-specific feature. Web is the bridge; native app is the destination. |
+
+### One-para summary of each
+
+**Master Strategy** — We are NOT another tracker/database/forum. We are the social identity layer for anime. Revenue model: freemium (free tier generous, Pro tier unlocks Creator Studio + AI Oracle + themes). Target: 100k DAU in 12 months, profitable at 5% Pro conversion.
+
+**Competitor Analysis** — MAL has data but ugly UX. AniList has good UX but no social. Crunchyroll has content but no community. Kitsu died from identity crisis. Our wedge: AI-first discovery + Letterboxd-quality design + Discord-quality community, all in one.
+
+**Fan Psychology** — Anime fans use their list as a *personality statement*. Design for public pride, not private utility. Social proof beats feature lists. Spoiler safety is non-negotiable trust signal. Mobile-first mindset even on web.
+
+**Viral Growth Engine** — K-factor must be > 1. Primary loops: List sharing → profile pages → SEO → new signups. Secondary: poll embeds, review cards, season wrap-ups. No paid ads budget; every feature must have a sharing affordance.
+
+**Retention Engine** — Day-1: onboarding flow that captures 10+ anime immediately. Day-7: streak mechanic tied to weekly episode schedule. Day-30: social graph lock-in (following 5+ users). Seasonal calendar as built-in re-engagement.
+
+**Social Systems** — Posts (Twitter-style), Threads (Reddit-style in Clubs), Reviews (Letterboxd-style), Blogs (Medium-style). Each has its own feed. Cross-pollination: post a review → it appears in anime detail + profile + feed.
+
+**Gen Z UX** — Dark mode default. Motion as personality, not decoration. No lorem ipsum placeholders ever. Every empty state has a clear CTA. Typography: large, bold, italic for impact. Micro-interactions on every like/add/rate action.
+
+**Gamification** — XP from watching, rating, reviewing, streaks, social. Levels 1-100 with visible titles. Badges for milestones (100 anime, 30-day streak, first review). Leaderboard is public. Creator levels separate from watcher levels.
+
+**SEO Strategy** — Auto-generate pages for every anime (malId-based), every season/year combination, every genre. Structured data (JSON-LD). Target: 50k indexed pages in 6 months. Community-generated reviews = fresh content signal.
+
+**Platform Architecture** — Single Express + Prisma backend serves web, future iOS, future Android. JWT auth with refresh rotation. Socket.io for real-time. CatalogProvider abstraction means Jikan swap is one env var. No vendor lock-in.
+
+**Mobile Evolution** — Phase 1 (now): PWA with offline shell. Phase 2 (6mo): React Native with shared API. Phase 3 (12mo): native push notifications, widget, watch-party. Same backend throughout.
+
+---
+
+### Quick reference for common decisions
+
+| Decision | Read |
+|---|---|
+| Adding a new UI component | `ux/genz-anime-ux-research.md` → Motion & interaction section |
+| Adding a sharing feature | `growth/anime-viral-growth-engine.md` → Sharing loops |
+| Adding XP/badge/level | `gamification/anime-gamification-systems.md` → Mechanic constraints |
+| Adding a new page route | `seo/anime-seo-growth-strategy.md` → URL structure |
+| Building onboarding | `psychology/viral-anime-fan-psychology.md` → Identity investment section |
+| Notification design | `growth/anime-retention-engine.md` → Re-engagement triggers |
+| Club/thread feature | `social/anime-social-platform-systems.md` → Community systems |
+| Any infra change | `architecture/future-proof-platform-architecture.md` |

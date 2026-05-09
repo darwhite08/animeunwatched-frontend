@@ -6,6 +6,8 @@ import Link from "next/link"
 import Image from "next/image"
 import { ArrowRight, Zap, Star, Users, Flame, Trophy, Play, ChevronDown, Sparkles, Command } from "lucide-react"
 import { ANIME_DB } from "@/lib/data/anime"
+import HeroParticles from "@/components/home/HeroParticles"
+import { AnimatedCounterText } from "@/components/ui/AnimatedCounter"
 
 /* ─── SECTION 1: HERO ─── */
 function HeroSection() {
@@ -34,25 +36,7 @@ function HeroSection() {
   return (
     <section ref={ref} className="relative min-h-screen flex items-center overflow-hidden bg-[#020202]">
       {/* Particle field */}
-      <div className="absolute inset-0 pointer-events-none">
-        {[...Array(20)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute w-px h-px bg-indigo-400/60 rounded-full"
-            style={{
-              left: `${(i * 17 + 5) % 100}%`,
-              top: `${(i * 23 + 10) % 100}%`,
-              boxShadow: "0 0 6px 2px rgba(99,102,241,0.4)",
-            }}
-            animate={{
-              y: [0, -(20 + i * 3), 0],
-              opacity: [0.2, 0.8, 0.2],
-              scale: [1, 1.5, 1],
-            }}
-            transition={{ duration: 3 + i * 0.4, repeat: Infinity, delay: i * 0.15 }}
-          />
-        ))}
-      </div>
+      <HeroParticles count={35} />
 
       {/* Dynamic glow that tracks mouse */}
       <motion.div
@@ -159,10 +143,14 @@ function HeroSection() {
             transition={{ delay: 0.9 }}
             className="flex items-center gap-8 pt-4 border-t border-white/[0.06]"
           >
-            {[["12.4k", "Shinobi"], ["1.2M+", "Archives"], ["98.4%", "Accuracy"]].map(([v, l]) => (
-              <div key={l}>
-                <p className="text-xl font-black tracking-tighter text-white">{v}</p>
-                <p className="text-[9px] font-black uppercase tracking-[0.3em] text-white/20 mt-0.5">{l}</p>
+            {[
+                { value: 12402, suffix: "", label: "Shinobi"  },
+                { value: 1200000, suffix: "+", label: "Archives" },
+                { value: 984, suffix: "‰", label: "Accuracy"  },
+              ].map(({ value, suffix, label }) => (
+              <div key={label}>
+                <AnimatedCounterText value={value} suffix={suffix} className="text-xl font-black tracking-tighter text-white" />
+                <p className="text-[9px] font-black uppercase tracking-[0.3em] text-white/20 mt-0.5">{label}</p>
               </div>
             ))}
           </motion.div>

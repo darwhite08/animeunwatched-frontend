@@ -1,5 +1,10 @@
 import Sidebar from "@/components/dashboard/Sidebar"
 
+export const metadata = {
+  title: { default: "Dashboard | AnimeUnwatched", template: "%s | AnimeUnwatched" },
+  robots: { index: false }, // dashboard pages are private
+}
+
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-screen bg-black text-white">

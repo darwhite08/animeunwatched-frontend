@@ -55,6 +55,30 @@ function AnimeDetail({ anime }: { anime: Anime }) {
 
   return (
     <div className="min-h-screen bg-[#020202] text-white pb-32">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Movie",
+            "name": anime.title,
+            "alternateName": anime.titleJapanese,
+            "description": anime.synopsis,
+            "dateCreated": String(anime.year),
+            "genre": anime.genres,
+            "productionCompany": { "@type": "Organization", "name": anime.studio },
+            "aggregateRating": {
+              "@type": "AggregateRating",
+              "ratingValue": anime.rating,
+              "bestRating": 10,
+              "worstRating": 1,
+              "ratingCount": 1000
+            },
+            "url": `https://animeunwatched.com/anime/${anime.id}`,
+            "image": anime.image
+          })
+        }}
+      />
 
       {/* ── HERO ── */}
       <div className="relative h-[52vh] min-h-[380px] w-full overflow-hidden">

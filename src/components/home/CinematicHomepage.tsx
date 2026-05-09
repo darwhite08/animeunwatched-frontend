@@ -800,7 +800,9 @@ function FinalCTASection() {
 /* ─── ROOT ─── */
 export default function CinematicHomepage() {
   return (
-    <main className="bg-[#020202] text-white">
+    <main className="bg-[#020202] text-white overflow-x-hidden">
+      {/* Progress indicator — thin line at top showing scroll depth */}
+      <ScrollProgressBar />
       <HeroSection />
       <DiscoverySection />
       <AIOracleSection />
@@ -808,5 +810,57 @@ export default function CinematicHomepage() {
       <ShowcaseSection />
       <FinalCTASection />
     </main>
+  )
+}
+
+const CHAPTERS = ["Hero", "Discovery", "AI Oracle", "Community", "Showcase", "Begin"]
+
+function ScrollProgressBar() {
+  const { scrollYProgress } = useScroll()
+  const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30 })
+  const activeChapter = useTransform(scrollYProgress, [0, 0.15, 0.32, 0.50, 0.68, 0.85, 1], [0, 0, 1, 2, 3, 4, 5])
+  const [chapter, setChapter] = useState(0)
+
+  useEffect(() => {
+    const unsub = activeChapter.on("change", v => setChapter(Math.round(Math.min(5, v))))
+    return unsub
+  }, [activeChapter])
+
+  return (
+    <>
+      {/* Top progress bar */}
+      <motion.div
+        className="fixed top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-indigo-500 via-violet-500 to-purple-500 z-[200] origin-left"
+        style={{ scaleX }}
+      />
+      {/* Chapter dots — right side */}
+      <div className="fixed right-6 top-1/2 -translate-y-1/2 z-[150] hidden lg:flex flex-col gap-3">
+        {CHAPTERS.map((name, i) => (
+          <button
+            key={name}
+            onClick={() => {
+              const pct = [0, 0.18, 0.35, 0.52, 0.68, 0.88][i]
+              window.scrollTo({ top: document.body.scrollHeight * pct, behavior: "smooth" })
+            }}
+            title={name}
+            className="group flex items-center gap-2 justify-end"
+          >
+            <motion.span
+              className="text-[8px] font-black uppercase tracking-widest text-white/0 group-hover:text-white/50 transition-all"
+              animate={{ opacity: chapter === i ? 1 : 0, x: chapter === i ? 0 : 8 }}
+            >
+              {name}
+            </motion.span>
+            <motion.div
+              animate={{
+                width: chapter === i ? 16 : 4,
+                backgroundColor: chapter === i ? "rgb(99,102,241)" : "rgba(255,255,255,0.2)",
+              }}
+              className="h-1 rounded-full transition-colors"
+            />
+          </button>
+        ))}
+      </div>
+    </>
   )
 }

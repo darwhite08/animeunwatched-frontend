@@ -11,6 +11,10 @@ import ContinueWatchingCard from "@/components/dashboard/cards/ContinueWatchingC
 import XPCard from "@/components/dashboard/cards/XPCard"
 import WrappedBanner from "@/components/ui/WrappedBanner"
 import { useAuthStore } from "@/stores/auth.store"
+import NowPlayingCard from "@/components/dashboard/cards/NowPlayingCard"
+import TopAnimeCard from "@/components/dashboard/cards/TopAnimeCard"
+import RecentlyReviewedCard from "@/components/dashboard/cards/RecentlyReviewedCard"
+import QuickActionsCard from "@/components/dashboard/cards/QuickActionsCard"
 
 export default function WorldClassDashboard() {
   const user = useAuthStore(s => s.user)
@@ -96,11 +100,18 @@ export default function WorldClassDashboard() {
 
            <ActivityCard />
            <XPCard xp={84000} reputation={840} />
+           <NowPlayingCard />
         </div>
       </div>
 
       {/* 3. CONTINUE WATCHING */}
       <ContinueWatchingCard />
+
+      {/* 5. PERSONAL STATS */}
+      <div className="grid md:grid-cols-2 gap-8">
+        <TopAnimeCard />
+        <RecentlyReviewedCard />
+      </div>
 
       {/* 4. QUICK ACCESS GRID */}
       <div>
@@ -110,6 +121,9 @@ export default function WorldClassDashboard() {
           <QuickCard href="/profile#reviews" icon={Star} label="My Reviews" color="from-amber-600/20 to-amber-900/5 border-amber-500/20 hover:border-amber-500/50" iconColor="text-amber-400" />
         </div>
       </div>
+
+      {/* 6. QUICK ACTIONS */}
+      <QuickActionsCard />
     </div>
   )
 }

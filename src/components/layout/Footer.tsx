@@ -40,6 +40,18 @@ const NAV_COLS = [
       { label: "Analytics",     href: "/creators/analytics" },
     ],
   },
+  {
+    title: "Company",
+    links: [
+      { label: "About",         href: "/about" },
+      { label: "Changelog",     href: "/changelog" },
+      { label: "Roadmap",       href: "/roadmap" },
+      { label: "Help Center",   href: "/help" },
+      { label: "Contact",       href: "/contact" },
+      { label: "Privacy",       href: "/privacy" },
+      { label: "Terms",         href: "/terms" },
+    ],
+  },
 ]
 
 const STATS = [
@@ -71,10 +83,10 @@ export default function Footer() {
 
       {/* Main footer */}
       <div className="max-w-7xl mx-auto px-6 py-16 relative z-10">
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-10 lg:gap-16">
+        <div className="grid grid-cols-2 md:grid-cols-6 gap-10 lg:gap-12">
 
           {/* Brand column */}
-          <div className="col-span-2 md:col-span-2 space-y-6">
+          <div className="col-span-2 md:col-span-2 space-y-6 lg:col-span-2">
             <Link href="/" className="flex items-center gap-2.5 group w-fit">
               <div className="h-9 w-9 rounded-xl bg-indigo-600 flex items-center justify-center shadow-[0_0_18px_rgba(79,70,229,0.4)] group-hover:scale-110 transition-transform">
                 <Zap size={17} className="text-white" fill="white" />
@@ -145,10 +157,14 @@ export default function Footer() {
             © {year} AnimeUnwatched • Neural Archive Protocol
           </p>
           <div className="flex items-center gap-6">
-            {["Privacy Policy", "Terms of Service", "Cookie Policy"].map(label => (
+            {[
+              { label: "Privacy Policy",  href: "/privacy" },
+              { label: "Terms of Service", href: "/terms"  },
+              { label: "Help Center",     href: "/help"    },
+            ].map(({ label, href }) => (
               <a
                 key={label}
-                href="#"
+                href={href}
                 className="text-[9px] font-bold text-white/15 uppercase tracking-wider hover:text-indigo-400 transition-colors"
               >
                 {label}

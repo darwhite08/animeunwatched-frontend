@@ -8,6 +8,7 @@ import { WatchStatsCard } from "@/components/dashboard/cards/WatchStatsCard"
 import { GenreCard } from "@/components/dashboard/cards/GenreCard"
 import { ActivityCard } from "@/components/dashboard/cards/ActivityCard"
 import ContinueWatchingCard from "@/components/dashboard/cards/ContinueWatchingCard"
+import XPCard from "@/components/dashboard/cards/XPCard"
 import { useAuthStore } from "@/stores/auth.store"
 
 export default function WorldClassDashboard() {
@@ -92,6 +93,7 @@ export default function WorldClassDashboard() {
            </div>
 
            <ActivityCard />
+           <XPCard xp={84000} reputation={840} />
         </div>
       </div>
 

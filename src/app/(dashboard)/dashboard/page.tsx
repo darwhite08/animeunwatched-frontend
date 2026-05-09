@@ -1,12 +1,17 @@
 "use client"
 
+import React from "react"
 import { motion } from "framer-motion"
-import { Zap, Crown, Flame, TrendingUp, Bell, Search, Plus } from "lucide-react"
+import { Zap, Crown, Flame, TrendingUp, Bell, Users, Star } from "lucide-react"
+import Link from "next/link"
 import { WatchStatsCard } from "@/components/dashboard/cards/WatchStatsCard"
 import { GenreCard } from "@/components/dashboard/cards/GenreCard"
 import { ActivityCard } from "@/components/dashboard/cards/ActivityCard"
+import ContinueWatchingCard from "@/components/dashboard/cards/ContinueWatchingCard"
+import { useAuthStore } from "@/stores/auth.store"
 
 export default function WorldClassDashboard() {
+  const user = useAuthStore(s => s.user)
   return (
     <div className="max-w-[1440px] mx-auto px-8 py-12 space-y-10 pb-32">
       
@@ -25,7 +30,7 @@ export default function WorldClassDashboard() {
               <Crown size={14} className="animate-pulse" /> Neural Link Active • Grade II
             </motion.div>
             <h1 className="text-7xl font-black tracking-tighter text-white leading-none">
-              Welcome, <span className="bg-gradient-to-b from-white to-neutral-500 bg-clip-text text-transparent italic">Priyanshu</span>
+              Welcome, <span className="bg-gradient-to-b from-white to-neutral-500 bg-clip-text text-transparent italic">{user?.displayName ?? "Shinobi"}</span>
             </h1>
           </div>
 
@@ -85,20 +90,58 @@ export default function WorldClassDashboard() {
                 <button className="mt-10 w-full py-5 rounded-2xl bg-white text-indigo-600 font-black uppercase tracking-widest text-[11px] hover:shadow-2xl transition-all active:scale-95">Upgrade Identity</button>
               </div>
            </div>
-           
+
            <ActivityCard />
+        </div>
+      </div>
+
+      {/* 3. QUICK ACCESS GRID */}
+      <div>
+        <p className="text-[9px] font-mono font-black uppercase tracking-[0.4em] text-white/20 mb-5">Quick Access</p>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <QuickCard href="/clubs" icon={Users} label="Browse Clubs" color="from-violet-600/20 to-violet-900/5 border-violet-500/20 hover:border-violet-500/50" iconColor="text-violet-400" />
+          <QuickCard href="/profile#reviews" icon={Star} label="My Reviews" color="from-amber-600/20 to-amber-900/5 border-amber-500/20 hover:border-amber-500/50" iconColor="text-amber-400" />
         </div>
       </div>
     </div>
   )
 }
 
-function HeaderMetric({ label, value, icon: Icon, color }: any) {
+function HeaderMetric({
+  label, value, icon: Icon, color,
+}: {
+  label: string
+  value: string
+  icon: React.ElementType
+  color: string
+}) {
   return (
     <div className="text-right flex flex-col items-end">
       <div className={`p-2 rounded-xl bg-white/5 mb-2 ${color}`}><Icon size={18} /></div>
       <p className="text-3xl font-black text-white leading-none tracking-tighter">{value}</p>
       <p className="text-[10px] font-bold text-white/20 uppercase tracking-widest mt-1">{label}</p>
     </div>
+  )
+}
+
+function QuickCard({
+  href, icon: Icon, label, color, iconColor,
+}: {
+  href: string
+  icon: React.ElementType
+  label: string
+  color: string
+  iconColor: string
+}) {
+  return (
+    <Link
+      href={href}
+      className={`group flex flex-col gap-4 p-6 rounded-2xl bg-gradient-to-br border transition-all duration-300 hover:-translate-y-1 ${color}`}
+    >
+      <div className={`w-10 h-10 rounded-xl bg-black/30 flex items-center justify-center ${iconColor}`}>
+        <Icon size={20} />
+      </div>
+      <p className="text-sm font-black text-white/80 group-hover:text-white transition-colors">{label}</p>
+    </Link>
   )
 }

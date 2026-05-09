@@ -12,6 +12,7 @@ import {
   Star, Clock, Monitor, Plus, Check, Share2, ChevronLeft,
   MessageSquare, Heart, Sparkles, PenSquare, Flag, BookOpen,
 } from "lucide-react"
+import EpisodeTracker from "@/components/anime/EpisodeTracker"
 import ReviewComposer from "@/components/review/ReviewComposer"
 import ReportModal from "@/components/moderation/ReportModal"
 import FloatingActions from "@/components/ui/FloatingActions"
@@ -236,6 +237,12 @@ function AnimeDetail({ anime }: { anime: Anime }) {
                   </span>
                 ))}
               </div>
+            </div>
+
+            {/* Episode Tracking */}
+            <div>
+              <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/30 mb-4">Episode Tracking</h2>
+              <EpisodeTracker totalEpisodes={anime.episodes} animeId={anime.id} />
             </div>
 
             {/* Reviews */}

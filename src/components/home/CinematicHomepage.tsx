@@ -157,6 +157,21 @@ function HeroSection() {
               </div>
             ))}
           </motion.div>
+
+          {/* Anime title ticker */}
+          <div className="overflow-hidden relative">
+            <motion.div
+              animate={{ x: [0, -1200] }}
+              transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+              className="flex gap-8 whitespace-nowrap"
+            >
+              {[...ANIME_DB.slice(0,12), ...ANIME_DB.slice(0,12)].map((a, i) => (
+                <span key={i} className="text-[10px] font-black uppercase tracking-widest text-white/10 shrink-0">
+                  {a.title} ·
+                </span>
+              ))}
+            </motion.div>
+          </div>
         </div>
 
         {/* RIGHT — Floating UI preview */}
@@ -310,10 +325,11 @@ function DiscoverySection() {
               viewport={{ once: true }}
               transition={{ delay: i * 0.08 }}
               whileHover={{ y: -8, scale: 1.02 }}
-              className={`group relative p-7 rounded-[2rem] bg-gradient-to-br ${color} border ${border} cursor-pointer overflow-hidden`}
+              className={`group relative p-7 rounded-[2rem] bg-gradient-to-br ${color} border ${border} cursor-pointer overflow-hidden h-48`}
             >
               <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-white/[0.03]" />
-              <p className="text-4xl font-black tracking-tighter text-white mb-1">{count}</p>
+              <AnimatedCounterText value={count} className="text-5xl font-black tracking-tighter text-white mb-1" />
+              <p className="text-[9px] text-white/25 font-mono mb-2">anime</p>
               <p className={`text-[10px] font-black uppercase tracking-[0.3em] ${text}`}>{label}</p>
               <ArrowRight size={16} className={`${text} absolute bottom-5 right-5 opacity-0 group-hover:opacity-100 transition-all group-hover:translate-x-1`} />
             </motion.div>
@@ -489,6 +505,24 @@ function AIOracleSection() {
             </div>
           </div>
         </motion.div>
+
+        {/* Connection visualization */}
+        <div className="relative h-24 overflow-hidden opacity-30">
+          {[...Array(8)].map((_, i) => (
+            <motion.div
+              key={i}
+              className="absolute h-px bg-gradient-to-r from-transparent via-indigo-500 to-transparent"
+              style={{
+                width: `${40 + i * 8}%`,
+                top: `${10 + i * 11}%`,
+                left: i % 2 === 0 ? 0 : "auto",
+                right: i % 2 !== 0 ? 0 : "auto",
+              }}
+              animate={{ opacity: [0.2, 0.8, 0.2], scaleX: [0.8, 1, 0.8] }}
+              transition={{ duration: 2 + i * 0.3, repeat: Infinity, delay: i * 0.2 }}
+            />
+          ))}
+        </div>
 
         {/* Connection nodes visualization */}
         <div className="flex justify-center gap-8 flex-wrap">
@@ -680,6 +714,8 @@ function ShowcaseSection() {
 
   return (
     <section ref={ref} className="relative bg-[#020202]" style={{ height: "300vh" }}>
+      {/* Bottom gradient transition */}
+      <div className="absolute bottom-0 inset-x-0 h-40 bg-gradient-to-t from-[#020202] to-transparent pointer-events-none" />
       <div className="sticky top-0 h-screen flex items-center overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 w-full grid lg:grid-cols-2 gap-16 items-center">
 
@@ -791,6 +827,20 @@ function FinalCTASection() {
           <span>No credit card</span>
           <span>·</span>
           <span>Join in 30 seconds</span>
+        </div>
+
+        {/* Social proof */}
+        <div className="flex items-center justify-center gap-4 mt-8">
+          <div className="flex -space-x-3">
+            {["O", "S", "V", "N", "C"].map((l, i) => (
+              <div key={i} className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 border-2 border-[#020202] flex items-center justify-center text-[10px] font-black text-white">
+                {l}
+              </div>
+            ))}
+          </div>
+          <p className="text-xs text-white/30 font-medium">
+            Joined by <span className="text-white/60 font-bold">12,402 Shinobi</span> and counting
+          </p>
         </div>
       </motion.div>
     </section>

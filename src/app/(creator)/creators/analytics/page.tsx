@@ -1,21 +1,17 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { BarChart3, Eye, Heart, MessageCircle, Users, TrendingUp, TrendingDown, ArrowUpRight } from "lucide-react"
+import { BarChart3, Eye, Heart, MessageCircle, Users, TrendingUp, TrendingDown, ArrowUpRight, RefreshCw } from "lucide-react"
+import { useQueryClient } from "@tanstack/react-query"
+import { useCreatorStats, useCreatorContent } from "@/hooks/useCreator"
+import { useToast } from "@/stores/toast.store"
 
-const METRICS = [
-  { label: "Total Views",    value: "24.8k",  delta: "+18%", up: true,  icon: Eye,           color: "text-indigo-400",  bg: "bg-indigo-500/10" },
-  { label: "Total Likes",    value: "1,843",  delta: "+24%", up: true,  icon: Heart,         color: "text-rose-400",    bg: "bg-rose-500/10"   },
-  { label: "Comments",       value: "312",    delta: "-4%",  up: false, icon: MessageCircle, color: "text-amber-400",   bg: "bg-amber-500/10"  },
-  { label: "New Followers",  value: "128",    delta: "+9%",  up: true,  icon: Users,         color: "text-emerald-400", bg: "bg-emerald-500/10"},
-]
-
-const TOP_CONTENT = [
-  { title: "Why Attack on Titan Changed Anime Forever",  type: "Blog",  views: 12400, likes: 843  },
-  { title: "Gojo vs Sukuna Breakdown",                   type: "Feed",  views: 4200,  likes: 312  },
-  { title: "Best Anime of 2024 — Final Rankings",        type: "Poll",  views: 3800,  likes: 0    },
-  { title: "Gojo Satoru's Infinity: A Physics Breakdown", type: "Blog", views: 2900,  likes: 220  },
-  { title: "Demon Slayer S5 Power Scaling",              type: "Feed",  views: 1100,  likes: 98   },
+const TOP_CONTENT_FALLBACK = [
+  { title: "Why Attack on Titan Changed Anime Forever",   type: "Blog" as const, views: 12400, likes: 843  },
+  { title: "Gojo vs Sukuna Breakdown",                    type: "Blog" as const, views: 4200,  likes: 312  },
+  { title: "Best Anime of 2024 — Final Rankings",         type: "Blog" as const, views: 3800,  likes: 0    },
+  { title: "Gojo Satoru's Infinity: A Physics Breakdown", type: "Blog" as const, views: 2900,  likes: 220  },
+  { title: "Demon Slayer S5 Power Scaling",               type: "Blog" as const, views: 1100,  likes: 98   },
 ]
 
 const TYPE_COLORS: Record<string, string> = {
@@ -37,17 +33,58 @@ const CHART_DATA = [
 const MAX_VIEWS = Math.max(...CHART_DATA.map(d => d.views))
 
 export default function AnalyticsPage() {
+  const queryClient = useQueryClient()
+  const toast = useToast(s => s.push)
+
+  const { data: statsData } = useCreatorStats()
+  const { data: contentData } = useCreatorContent()
+
+  // Live values with graceful fallback to mock
+  const totalViews      = statsData?.totalViews      ?? 24800
+  const publishedBlogs  = statsData?.publishedBlogs  ?? 2
+  const postCount       = statsData?.postCount        ?? 8
+  const reputation      = statsData?.reputation       ?? 840
+
+  const METRICS = [
+    { label: "Total Views",    value: totalViews >= 1000 ? `${(totalViews / 1000).toFixed(1)}k` : String(totalViews), delta: "+18%", up: true,  icon: Eye,           color: "text-indigo-400",  bg: "bg-indigo-500/10"  },
+    { label: "Published",      value: String(publishedBlogs), delta: "+0%",  up: true,  icon: BarChart3,     color: "text-rose-400",    bg: "bg-rose-500/10"    },
+    { label: "Total Posts",    value: String(postCount),      delta: "+5%",  up: true,  icon: MessageCircle, color: "text-amber-400",   bg: "bg-amber-500/10"   },
+    { label: "Reputation",     value: String(reputation),     delta: "+9%",  up: true,  icon: Users,         color: "text-emerald-400", bg: "bg-emerald-500/10" },
+  ]
+
+  const topContent = contentData?.data?.slice(0, 5).map(item => ({
+    title: item.title,
+    type:  "Blog" as const,
+    views: item.mockViews,
+    likes: Math.floor(item.mockViews * 0.07),
+  })) ?? TOP_CONTENT_FALLBACK
+
+  function handleSync() {
+    queryClient.invalidateQueries({ queryKey: ["creator"] })
+    toast("Analytics refreshed from backend", "success")
+  }
+
   return (
     <div className="space-y-8 pb-12">
       {/* Header */}
-      <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-xl bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center">
-          <BarChart3 size={18} className="text-indigo-400" />
+      <div className="flex items-start justify-between">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center">
+            <BarChart3 size={18} className="text-indigo-400" />
+          </div>
+          <div>
+            <h1 className="text-2xl font-semibold">Analytics</h1>
+            <p className="text-sm text-white/40">Last 30 days performance</p>
+          </div>
         </div>
-        <div>
-          <h1 className="text-2xl font-semibold">Analytics</h1>
-          <p className="text-sm text-white/40">Last 30 days performance</p>
-        </div>
+
+        <button
+          onClick={handleSync}
+          className="flex items-center gap-2 text-xs font-semibold text-indigo-400 hover:text-indigo-300 border border-indigo-500/30 hover:border-indigo-500/60 bg-indigo-600/10 hover:bg-indigo-600/20 px-3 py-2 rounded-xl transition-all"
+        >
+          <RefreshCw size={13} />
+          Sync with Backend
+        </button>
       </div>
 
       {/* Metric cards */}
@@ -88,7 +125,7 @@ export default function AnalyticsPage() {
             return (
               <div key={d.day} className="flex-1 flex flex-col items-center gap-2">
                 <span className="text-[9px] text-white/30 font-mono">
-                  {d.views >= 1000 ? `${(d.views/1000).toFixed(1)}k` : d.views}
+                  {d.views >= 1000 ? `${(d.views / 1000).toFixed(1)}k` : d.views}
                 </span>
                 <div className="w-full flex items-end" style={{ height: "80px" }}>
                   <motion.div
@@ -110,7 +147,7 @@ export default function AnalyticsPage() {
         <h2 className="font-semibold text-white">Top Performing Content</h2>
 
         <div className="space-y-2">
-          {TOP_CONTENT.map((item, i) => (
+          {topContent.map((item, i) => (
             <motion.div
               key={item.title}
               initial={{ opacity: 0, x: -8 }}
@@ -128,7 +165,7 @@ export default function AnalyticsPage() {
                 {item.type}
               </span>
               <div className="flex items-center gap-3 text-xs text-white/30 shrink-0">
-                <span className="flex items-center gap-1"><Eye size={11} /> {item.views >= 1000 ? `${(item.views/1000).toFixed(1)}k` : item.views}</span>
+                <span className="flex items-center gap-1"><Eye size={11} /> {item.views >= 1000 ? `${(item.views / 1000).toFixed(1)}k` : item.views}</span>
                 {item.likes > 0 && <span className="flex items-center gap-1"><Heart size={11} /> {item.likes}</span>}
               </div>
               <ArrowUpRight size={14} className="text-white/20 group-hover:text-indigo-400 transition-colors shrink-0" />

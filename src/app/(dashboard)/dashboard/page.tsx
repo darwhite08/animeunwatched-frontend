@@ -95,7 +95,10 @@ export default function WorldClassDashboard() {
         </div>
       </div>
 
-      {/* 3. QUICK ACCESS GRID */}
+      {/* 3. CONTINUE WATCHING */}
+      <ContinueWatchingCard />
+
+      {/* 4. QUICK ACCESS GRID */}
       <div>
         <p className="text-[9px] font-mono font-black uppercase tracking-[0.4em] text-white/20 mb-5">Quick Access</p>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">

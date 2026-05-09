@@ -14,6 +14,7 @@ import {
 } from "lucide-react"
 import ReviewComposer from "@/components/review/ReviewComposer"
 import ReportModal from "@/components/moderation/ReportModal"
+import FloatingActions from "@/components/ui/FloatingActions"
 
 /* ── mock reviews ── */
 const MOCK_REVIEWS = [
@@ -329,6 +330,9 @@ function AnimeDetail({ anime }: { anime: Anime }) {
           </div>
         </div>
       </div>
+
+      {/* Floating sticky actions */}
+      <FloatingActions anime={anime} onReview={() => setReviewOpen(true)} />
 
       {/* Modals */}
       <ReviewComposer

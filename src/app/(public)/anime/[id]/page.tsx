@@ -15,6 +15,7 @@ import {
 import ReviewComposer from "@/components/review/ReviewComposer"
 import ReportModal from "@/components/moderation/ReportModal"
 import FloatingActions from "@/components/ui/FloatingActions"
+import ShareCard from "@/components/ui/ShareCard"
 
 /* ── mock reviews ── */
 const MOCK_REVIEWS = [
@@ -37,18 +38,14 @@ function AnimeDetail({ anime }: { anime: Anime }) {
   const inList = has(anime.id)
   const [reviewOpen, setReviewOpen] = useState(false)
   const [reportOpen, setReportOpen] = useState(false)
+  const [shareOpen,  setShareOpen]  = useState(false)
 
   const toggle = () => {
     if (inList) { remove(anime.id); push(`Removed "${anime.title}"`, "info") }
     else         { add(anime);       push(`Added "${anime.title}" to watchlist!`, "success") }
   }
 
-  const share = async () => {
-    try {
-      await navigator.clipboard.writeText(`${window.location.href}`)
-      push("Link copied!", "success")
-    } catch { push("Could not copy", "error") }
-  }
+  const share = () => setShareOpen(true)
 
   /* score → colour */
   const scoreColor = anime.rating >= 9 ? "text-emerald-400" : anime.rating >= 8 ? "text-amber-400" : "text-white/60"
@@ -359,6 +356,14 @@ function AnimeDetail({ anime }: { anime: Anime }) {
       <FloatingActions anime={anime} onReview={() => setReviewOpen(true)} />
 
       {/* Modals */}
+      <ShareCard
+        isOpen={shareOpen}
+        onClose={() => setShareOpen(false)}
+        title={anime.title}
+        subtitle={`★ ${anime.rating.toFixed(1)} · ${anime.studio} · ${anime.year}`}
+        url={typeof window !== "undefined" ? window.location.href : `https://animeunwatched.com/anime/${anime.id}`}
+        type="anime"
+      />
       <ReviewComposer
         isOpen={reviewOpen}
         onClose={() => setReviewOpen(false)}

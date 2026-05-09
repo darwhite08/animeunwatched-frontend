@@ -7,37 +7,65 @@ import Link from "next/link"
 import Image from "next/image"
 import { Eye, EyeOff, Loader2, Sparkles } from "lucide-react"
 import { mockLogin } from "@/lib/mockAuth"
+import { useRegister } from "@/hooks/useAuth"
+import { ApiError } from "@/lib/api/client"
 
 export default function RegisterPage() {
   const router = useRouter()
+  const register = useRegister()
+
   const [form, setForm] = useState({ username: "", email: "", password: "" })
   const [showPass, setShowPass] = useState(false)
-  const [loading, setLoading] = useState(false)
   const [oauthLoading, setOauthLoading] = useState<"google" | "apple" | null>(null)
   const [error, setError] = useState("")
 
   const set = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement>) =>
     setForm(f => ({ ...f, [k]: e.target.value }))
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     if (!form.username.trim() || !form.email.trim() || !form.password) {
-      setError("All fields are required."); return
+      setError("All fields are required.")
+      return
     }
     if (form.password.length < 8) {
-      setError("Password must be at least 8 characters."); return
+      setError("Password must be at least 8 characters.")
+      return
     }
     setError("")
-    setLoading(true)
-    await new Promise(r => setTimeout(r, 700))
-    mockLogin("google") // use mock for demo
-    router.push("/dashboard")
+    register.mutate(
+      {
+        email: form.email,
+        username: form.username,
+        displayName: form.username,
+        password: form.password,
+      },
+      {
+        onSuccess: () => router.push("/dashboard"),
+        onError: (err) => {
+          if (err instanceof ApiError) {
+            if (err.code === "CONFLICT") {
+              setError("An account with that email or username already exists.")
+            } else if (err.code === "VALIDATION") {
+              setError(err.message ?? "Please check your details and try again.")
+            } else {
+              setError(err.message ?? "Something went wrong. Please try again.")
+            }
+          } else {
+            setError("Unable to create account. Please check your connection.")
+          }
+        },
+      }
+    )
   }
 
   const handleOAuth = (provider: "google" | "apple") => {
     setOauthLoading(provider)
     setTimeout(() => { mockLogin(provider); router.push("/dashboard") }, 600)
   }
+
+  const isSubmitting = register.isPending
+  const isDisabled = oauthLoading !== null || isSubmitting
 
   return (
     <main className="relative min-h-screen bg-[#020202] text-white flex items-center justify-center px-6 py-20">
@@ -79,7 +107,7 @@ export default function RegisterPage() {
                 whileHover={{ scale: 1.015 }}
                 whileTap={{ scale: 0.985 }}
                 onClick={() => handleOAuth(provider)}
-                disabled={oauthLoading !== null || loading}
+                disabled={isDisabled}
                 className="w-full h-12 rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 transition-all flex items-center justify-center gap-3 text-sm font-bold disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <Image
@@ -114,7 +142,8 @@ export default function RegisterPage() {
                 onChange={set("username")}
                 placeholder="shinobi_arch"
                 autoComplete="username"
-                className="w-full h-12 rounded-2xl bg-white/5 border border-white/10 px-4 text-sm text-white placeholder:text-white/20 outline-none focus:border-indigo-500/50 focus:bg-white/[0.07] transition-all"
+                disabled={isDisabled}
+                className="w-full h-12 rounded-2xl bg-white/5 border border-white/10 px-4 text-sm text-white placeholder:text-white/20 outline-none focus:border-indigo-500/50 focus:bg-white/[0.07] transition-all disabled:opacity-50"
               />
             </div>
 
@@ -128,7 +157,8 @@ export default function RegisterPage() {
                 onChange={set("email")}
                 placeholder="you@domain.com"
                 autoComplete="email"
-                className="w-full h-12 rounded-2xl bg-white/5 border border-white/10 px-4 text-sm text-white placeholder:text-white/20 outline-none focus:border-indigo-500/50 focus:bg-white/[0.07] transition-all"
+                disabled={isDisabled}
+                className="w-full h-12 rounded-2xl bg-white/5 border border-white/10 px-4 text-sm text-white placeholder:text-white/20 outline-none focus:border-indigo-500/50 focus:bg-white/[0.07] transition-all disabled:opacity-50"
               />
             </div>
 
@@ -143,7 +173,8 @@ export default function RegisterPage() {
                   onChange={set("password")}
                   placeholder="Min. 8 characters"
                   autoComplete="new-password"
-                  className="w-full h-12 rounded-2xl bg-white/5 border border-white/10 px-4 pr-12 text-sm text-white placeholder:text-white/20 outline-none focus:border-indigo-500/50 focus:bg-white/[0.07] transition-all"
+                  disabled={isDisabled}
+                  className="w-full h-12 rounded-2xl bg-white/5 border border-white/10 px-4 pr-12 text-sm text-white placeholder:text-white/20 outline-none focus:border-indigo-500/50 focus:bg-white/[0.07] transition-all disabled:opacity-50"
                 />
                 <button
                   type="button"
@@ -185,10 +216,12 @@ export default function RegisterPage() {
               whileHover={{ scale: 1.01 }}
               whileTap={{ scale: 0.98 }}
               type="submit"
-              disabled={loading || oauthLoading !== null}
+              disabled={isDisabled}
               className="w-full h-12 rounded-2xl bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all font-black text-[11px] uppercase tracking-widest text-white shadow-[0_0_30px_rgba(99,102,241,0.3)] flex items-center justify-center gap-2"
             >
-              {loading ? <><Loader2 size={15} className="animate-spin" /> Creating Account…</> : "Initialize Account"}
+              {isSubmitting
+                ? <><Loader2 size={15} className="animate-spin" /> Creating Account…</>
+                : "Initialize Account"}
             </motion.button>
           </form>
 

@@ -8,6 +8,7 @@ import { Search, Sparkles, Menu, X, Bookmark } from "lucide-react";
 import { useWatchlist } from "@/stores/watchlist.store";
 
 import { getMockUser, mockLogout } from "@/lib/mockAuth";
+import { useAuthStore } from "@/stores/auth.store";
 import NotificationBell from "@/components/notifications/NotificationBell";
 import SearchModal from "./SearchModal";
 import ProfileMenu from "./ProfileMenu";
@@ -23,14 +24,24 @@ export default function Navbar() {
   const pathname = usePathname();
   const profileRef = useRef<HTMLDivElement>(null);
 
+  // Subscribe to real auth store so navbar re-renders on login/logout
+  const storeUser = useAuthStore(s => s.user);
+
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
-    const storedUser = getMockUser();
-    setUser(storedUser);
+
+    // Prefer real auth store user; fall back to mock localStorage user
+    const authStoreUser = useAuthStore.getState().user;
+    if (authStoreUser) {
+      setUser({ name: authStoreUser.displayName ?? authStoreUser.username });
+    } else {
+      const storedUser = getMockUser();
+      setUser(storedUser);
+    }
     setIsHydrated(true);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [pathname]);
+  }, [pathname, storeUser]);
 
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {

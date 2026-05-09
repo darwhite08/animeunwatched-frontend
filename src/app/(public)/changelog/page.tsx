@@ -1,0 +1,200 @@
+"use client"
+
+import { motion } from "framer-motion"
+import { CheckCircle2, Cpu, Zap } from "lucide-react"
+
+/* ── Types ── */
+type Release = {
+  version: string
+  date: string
+  tag: "Major" | "Minor"
+  title: string
+  features: string[]
+}
+
+/* ── Releases ── */
+const RELEASES: Release[] = [
+  {
+    version: "v4.2.0",
+    date: "2026-05-10",
+    tag: "Major",
+    title: "Cinematic Homepage + Gamification System",
+    features: [
+      "Cinematic hero section with ambient video background and particle overlay",
+      "XP + level system: earn points for watching, rating, reviewing, and streaking",
+      "Shinobi rank titles (levels 1–100) with public leaderboard integration",
+      "About page, Changelog page, and expanded dashboard card suite",
+      "TopAnimeCard and RecentlyReviewedCard added to dashboard grid",
+      "Framer Motion page transitions across all public routes",
+      "Performance budget enforced: first-load JS gzip < 200kB",
+    ],
+  },
+  {
+    version: "v4.1.0",
+    date: "2026-05-03",
+    tag: "Major",
+    title: "Creator Studio + Blog System",
+    features: [
+      "Full Creator Studio dashboard with level card and publish queue",
+      "Rich blog editor with Markdown preview and DOMPurify sanitisation",
+      "Creator-specific XP tier and public reader profile",
+      "Blog feed with cover images, read-time estimation, and like system",
+      "Poll creation tool — single-choice, multi-choice, and ranked-choice modes",
+      "Creator leaderboard with follower and engagement metrics",
+    ],
+  },
+  {
+    version: "v4.0.0",
+    date: "2026-04-26",
+    tag: "Major",
+    title: "AI Oracle Neural Engine",
+    features: [
+      "AI Oracle: natural language anime discovery via Neural Engine",
+      "Taste-profile builder capturing 12 mood/genre/era dimensions on onboarding",
+      "AI result cards with match %, mood tags, and instant-add to watchlist",
+      "\"Why this?\" explainer panel per recommendation",
+      "AI Discover route (/ai-discover) with streaming SSE response rendering",
+      "Oracle integrates with existing catalog — no external API calls exposed to client",
+    ],
+  },
+  {
+    version: "v3.5.0",
+    date: "2026-04-10",
+    tag: "Minor",
+    title: "Community Features + Clubs",
+    features: [
+      "Community feed with Trending / Following / Latest tabs",
+      "Post composer with @mention, #hashtag, and image attachment toolbar",
+      "Clubs: create, join, leave, set member roles",
+      "Club thread system with nested reply tree and spoiler tags",
+      "Active polls widget in community sidebar",
+      "Real-time like and comment counts via Socket.io",
+      "ShareCard modal for posts and reviews with copy-link and native share",
+    ],
+  },
+  {
+    version: "v3.0.0",
+    date: "2026-03-10",
+    tag: "Major",
+    title: "Full Backend Launch",
+    features: [
+      "Express + Prisma backend live on Vercel serverless",
+      "JWT auth with httpOnly refresh cookie and single-flight token rotation",
+      "PostgreSQL catalog mirrored from Jikan API (swappable via CATALOG_PROVIDER env)",
+      "Socket.io real-time server for notifications and live feed updates",
+      "REST API contract: 60+ endpoints across auth, users, anime, lists, posts, clubs, reviews, blogs",
+      "Sentry error tracking and structured logging integrated",
+    ],
+  },
+]
+
+/* ── Helpers ── */
+function formatDate(iso: string) {
+  return new Date(iso).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  })
+}
+
+/* ── Page ── */
+export default function ChangelogPage() {
+  return (
+    <div className="min-h-screen bg-[#020202] text-white pb-32">
+
+      {/* Header */}
+      <div className="border-b border-white/5 bg-black/30 backdrop-blur-md sticky top-[72px] z-30">
+        <div className="max-w-3xl mx-auto px-6 py-6 flex items-center gap-3">
+          <Cpu size={16} className="text-indigo-400" />
+          <div>
+            <h1 className="text-xl font-black tracking-tighter uppercase italic text-white">
+              Changelog<span className="text-indigo-500"> — Neural Archive</span>
+            </h1>
+            <p className="text-[10px] text-white/25 mt-0.5">Every release. Every feature. Full transparency.</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Timeline */}
+      <div className="max-w-3xl mx-auto px-6 pt-12">
+        <div className="relative">
+          {/* Vertical line */}
+          <div className="absolute left-[11px] top-2 bottom-2 w-px bg-white/5" />
+
+          <div className="space-y-12">
+            {RELEASES.map((release, i) => (
+              <motion.div
+                key={release.version}
+                initial={{ opacity: 0, x: -16 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: i * 0.07 }}
+                className="relative pl-9"
+              >
+                {/* Timeline dot */}
+                <div className={`absolute left-0 top-1.5 h-[22px] w-[22px] rounded-full border-2 flex items-center justify-center ${
+                  i === 0
+                    ? "border-indigo-500 bg-indigo-600/30"
+                    : "border-white/15 bg-[#020202]"
+                }`}>
+                  <div className={`h-2 w-2 rounded-full ${i === 0 ? "bg-indigo-400" : "bg-white/20"}`} />
+                </div>
+
+                {/* Card */}
+                <div className={`rounded-[1.75rem] border p-7 space-y-5 ${
+                  i === 0
+                    ? "border-indigo-500/25 bg-indigo-600/5"
+                    : "border-white/8 bg-[#0a0a0a]"
+                }`}>
+                  {/* Top row */}
+                  <div className="flex flex-wrap items-center gap-3">
+                    <span className="px-3 py-1 rounded-lg bg-indigo-600/15 border border-indigo-500/25 text-xs font-black text-indigo-400 font-mono tracking-wider">
+                      {release.version}
+                    </span>
+                    <span className={`px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest ${
+                      release.tag === "Major"
+                        ? "bg-violet-600/10 border border-violet-500/20 text-violet-400"
+                        : "bg-white/5 border border-white/8 text-white/40"
+                    }`}>
+                      {release.tag}
+                    </span>
+                    <span className="ml-auto text-[10px] text-white/25 font-mono">
+                      {formatDate(release.date)}
+                    </span>
+                  </div>
+
+                  {/* Title */}
+                  <div>
+                    <h2 className="text-lg font-black tracking-tight text-white leading-snug">
+                      {release.title}
+                    </h2>
+                  </div>
+
+                  {/* Feature list */}
+                  <ul className="space-y-2.5">
+                    {release.features.map((feat) => (
+                      <li key={feat} className="flex items-start gap-3">
+                        <CheckCircle2 size={13} className="text-indigo-400 shrink-0 mt-0.5" />
+                        <span className="text-sm text-white/55 leading-snug">{feat}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+
+        {/* Footer note */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+          className="mt-16 flex items-center gap-2 text-[10px] text-white/20 font-mono"
+        >
+          <Zap size={10} className="text-indigo-500/50" />
+          Changelog auto-archives every production deploy. All times UTC.
+        </motion.div>
+      </div>
+    </div>
+  )
+}

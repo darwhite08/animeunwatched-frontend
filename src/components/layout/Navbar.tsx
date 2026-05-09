@@ -64,6 +64,7 @@ export default function Navbar() {
     { name: "Home",        href: "/"              },
     { name: "Discover",    href: "/ai-discover"   },
     { name: "Best Anime",  href: "/bestanimelist" },
+    { name: "Calendar",    href: "/calendar"      },
     { name: "Community",   href: "/community"     },
     { name: "Blog",        href: "/blog"          },
     { name: "Leaderboard", href: "/leaderboard"  },

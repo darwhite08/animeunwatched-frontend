@@ -1,10 +1,13 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Search, MonitorPlay, Plus, X } from "lucide-react"
+import { Search, MonitorPlay, Plus, X, Share2 } from "lucide-react"
 import { WatchCard } from "@/components/watchlist/WatchCard"
 import { useToast } from "@/stores/toast.store"
+import ListShareCard from "@/components/social/ListShareCard"
+
+const SHARE_DISMISSED_KEY = "aw_share_dismissed"
 
 type WatchItem = {
   id: number; title: string; ep: string; progress: number
@@ -29,6 +32,18 @@ export default function WatchlistPage() {
   const [items,  setItems]  = useState<WatchItem[]>(INITIAL_WATCHLIST)
   const [query,  setQuery]  = useState("")
   const [tab,    setTab]    = useState("All")
+  const [bannerVisible, setBannerVisible] = useState(false)
+  const [shareModalOpen, setShareModalOpen] = useState(false)
+
+  useEffect(() => {
+    const dismissed = localStorage.getItem(SHARE_DISMISSED_KEY)
+    if (!dismissed) setBannerVisible(true)
+  }, [])
+
+  const dismissBanner = () => {
+    localStorage.setItem(SHARE_DISMISSED_KEY, "1")
+    setBannerVisible(false)
+  }
 
   const filtered = useMemo(() =>
     items.filter(item => {
@@ -88,6 +103,81 @@ export default function WatchlistPage() {
           </button>
         </div>
       </header>
+
+      {/* Share banner */}
+      <AnimatePresence>
+        {bannerVisible && (
+          <motion.div
+            initial={{ opacity: 0, height: 0, marginTop: 0 }}
+            animate={{ opacity: 1, height: "auto", marginTop: 0 }}
+            exit={{ opacity: 0, height: 0 }}
+            className="overflow-hidden"
+          >
+            <div className="flex items-center justify-between gap-4 px-5 py-3.5 rounded-2xl bg-indigo-600/10 border border-indigo-500/25">
+              <div className="flex items-center gap-3 min-w-0">
+                <Share2 size={15} className="text-indigo-400 shrink-0" />
+                <p className="text-sm font-bold text-white/80 truncate">
+                  Share your anime list and grow the community ↗
+                </p>
+              </div>
+              <div className="flex items-center gap-2 shrink-0">
+                <button
+                  onClick={() => setShareModalOpen(true)}
+                  className="px-4 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-[11px] font-black uppercase tracking-widest text-white transition-all"
+                >
+                  Share List
+                </button>
+                <button
+                  onClick={dismissBanner}
+                  className="p-1.5 rounded-lg text-white/30 hover:text-white/70 transition-colors"
+                  aria-label="Dismiss"
+                >
+                  <X size={14} />
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Share list modal */}
+      <AnimatePresence>
+        {shareModalOpen && (
+          <motion.div
+            key="share-list-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setShareModalOpen(false)}
+            className="fixed inset-0 z-50 flex items-center justify-center p-4"
+            style={{ backgroundColor: "rgba(0,0,0,0.80)", backdropFilter: "blur(8px)" }}
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.93, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.93, y: 20 }}
+              transition={{ duration: 0.25, ease: [0.32, 0.72, 0, 1] }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative w-full max-w-md bg-[#0a0a0a] border border-zinc-800 rounded-3xl p-6 shadow-2xl"
+            >
+              {/* Modal close */}
+              <div className="flex items-center justify-between mb-5">
+                <div>
+                  <h2 className="font-black uppercase text-base text-white tracking-tight">Share Your List</h2>
+                  <p className="text-zinc-500 text-xs mt-0.5">Let the world see your taste</p>
+                </div>
+                <button
+                  onClick={() => setShareModalOpen(false)}
+                  className="w-8 h-8 rounded-xl border border-zinc-700 flex items-center justify-center text-zinc-400 hover:text-white hover:border-zinc-500 transition-colors"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+              <ListShareCard />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Tabs */}
       <nav className="flex gap-2 overflow-x-auto pb-2 no-scrollbar border-b border-white/5">

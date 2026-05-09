@@ -1,23 +1,25 @@
 "use client"
 
 import { motion, useScroll, useTransform } from "framer-motion"
-import { 
-  Edit3, 
-  Camera, 
-  Trophy, 
-  Bookmark, 
-  Flame, 
-  Settings, 
+import {
+  Edit3,
+  Camera,
+  Trophy,
+  Bookmark,
+  Flame,
+  Settings,
   Clock,
   ChevronRight,
   ShieldCheck,
   Zap,
   Globe,
   Award,
-  Star
+  Star,
+  Share2,
 } from "lucide-react"
 import Image from "next/image"
-import { useRef } from "react"
+import { useRef, useState } from "react"
+import ShareCard from "@/components/ui/ShareCard"
 
 export default function WorldClassProfile() {
   const containerRef = useRef(null)
@@ -25,6 +27,7 @@ export default function WorldClassProfile() {
     target: containerRef,
     offset: ["start start", "end start"]
   })
+  const [shareOpen, setShareOpen] = useState(false)
 
   const stats = [
     { label: "Archive", value: "124", icon: Bookmark, color: "text-indigo-400", sub: "Anime cataloged" },
@@ -104,6 +107,13 @@ export default function WorldClassProfile() {
           <div className="flex gap-4">
             <button className="h-14 px-10 rounded-2xl bg-indigo-600 text-white font-bold hover:bg-indigo-500 transition-all shadow-[0_10px_40px_rgba(79,70,229,0.3)] hover:-translate-y-1">
               Customize Hub
+            </button>
+            <button
+              onClick={() => setShareOpen(true)}
+              className="h-14 px-6 flex items-center gap-2 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all backdrop-blur-md text-white/70 hover:text-white text-sm font-bold"
+            >
+              <Share2 size={18} />
+              Share Profile
             </button>
             <button className="h-14 w-14 flex items-center justify-center rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all backdrop-blur-md">
               <Settings size={20} className="text-white/60" />
@@ -208,6 +218,15 @@ export default function WorldClassProfile() {
         </div>
 
       </div>
+
+      <ShareCard
+        isOpen={shareOpen}
+        onClose={() => setShareOpen(false)}
+        title="My Anime Profile"
+        subtitle="darwhite08 · Level 20 Shinobi"
+        url="https://animeunwatched.com/u/darwhite08"
+        type="profile"
+      />
     </div>
   )
 }

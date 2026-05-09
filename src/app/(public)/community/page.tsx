@@ -9,6 +9,7 @@ import {
 } from "lucide-react"
 import Link from "next/link"
 import { useToast } from "@/stores/toast.store"
+import ShareCard from "@/components/ui/ShareCard"
 
 /* ── Types ── */
 type Post = {
@@ -74,6 +75,7 @@ export default function CommunityPage() {
   const [feedTab, setFeedTab] = useState<FeedTab>("trending")
   const [composing, setComposing] = useState(false)
   const [draft, setDraft]   = useState("")
+  const [sharingPost, setSharingPost] = useState<Post | null>(null)
 
   const toggleLike = (id: number) => {
     setPosts(ps => ps.map(p =>
@@ -246,7 +248,7 @@ export default function CommunityPage() {
                     {post.comments}
                   </button>
                   <button
-                    onClick={() => push("Copied to clipboard", "success")}
+                    onClick={() => setSharingPost(post)}
                     className="flex items-center gap-1.5 text-xs font-bold text-white/30 hover:text-white/60 transition-colors ml-auto"
                   >
                     <Share2 size={13} />
@@ -340,6 +342,15 @@ export default function CommunityPage() {
           </Link>
         </div>
       </div>
+
+      <ShareCard
+        isOpen={sharingPost !== null}
+        onClose={() => setSharingPost(null)}
+        title={(sharingPost?.content.slice(0, 60) ?? "") + "…"}
+        subtitle={`by @${sharingPost?.author ?? ""}`}
+        url={`https://animeunwatched.com/posts/${sharingPost?.id ?? ""}`}
+        type="post"
+      />
     </div>
   )
 }

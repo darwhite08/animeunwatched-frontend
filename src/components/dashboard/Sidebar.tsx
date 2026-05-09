@@ -4,8 +4,8 @@ import { motion } from "framer-motion"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import {
-  LayoutGrid, Book, MonitorPlay, Activity,
-  User, Bell, Settings, Flame, Zap, ChevronRight,
+  LayoutGrid, Book, MonitorPlay, Activity, BarChart2,
+  User, Bell, Settings, Flame, Zap, ChevronRight, Rss,
 } from "lucide-react"
 import { useWatchlist } from "@/stores/watchlist.store"
 
@@ -14,9 +14,11 @@ const NAV = [
     label: "My Space",
     items: [
       { name: "Dashboard",     href: "/dashboard",      icon: LayoutGrid   },
+      { name: "My Feed",       href: "/feed",           icon: Rss          },
       { name: "Watchlist",     href: "/watchlist",      icon: MonitorPlay  },
       { name: "Library",       href: "/readlist",       icon: Book         },
       { name: "Streak",        href: "/streak",         icon: Activity     },
+      { name: "Watch Stats",   href: "/stats",          icon: BarChart2    },
     ],
   },
   {

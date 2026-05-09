@@ -1,0 +1,66 @@
+"use client"
+
+import { useEffect } from "react"
+import { motion } from "framer-motion"
+import { AlertTriangle, RotateCcw, Home } from "lucide-react"
+import Link from "next/link"
+
+export default function GlobalError({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
+  useEffect(() => { console.error(error) }, [error])
+
+  return (
+    <div className="min-h-screen bg-[#020202] text-white flex items-center justify-center px-6">
+      {/* Glow */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-red-600/8 blur-[150px] rounded-full pointer-events-none" />
+
+      <div className="relative z-10 text-center max-w-md space-y-8">
+        <motion.div
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          className="w-20 h-20 mx-auto rounded-[2rem] bg-red-500/10 border border-red-500/20 flex items-center justify-center"
+        >
+          <AlertTriangle size={36} className="text-red-400" />
+        </motion.div>
+
+        <div className="space-y-3">
+          <motion.h1
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            className="text-3xl font-black tracking-tighter uppercase italic text-white"
+          >
+            System Error<span className="text-red-500">.</span>
+          </motion.h1>
+          <p className="text-white/40 text-sm leading-relaxed">
+            Something went wrong in the neural network. The error has been logged.
+          </p>
+          {error.digest && (
+            <p className="text-[9px] font-mono text-white/20 uppercase tracking-widest">
+              Error ID: {error.digest}
+            </p>
+          )}
+        </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          className="flex flex-wrap items-center justify-center gap-3"
+        >
+          <button
+            onClick={reset}
+            className="flex items-center gap-2 px-6 py-3.5 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-xs font-black uppercase tracking-widest text-white transition-all"
+          >
+            <RotateCcw size={13} /> Try Again
+          </button>
+          <Link
+            href="/"
+            className="flex items-center gap-2 px-6 py-3.5 rounded-2xl border border-white/10 bg-white/[0.04] text-xs font-black uppercase tracking-widest text-white/60 hover:text-white hover:bg-white/[0.08] transition-all"
+          >
+            <Home size={13} /> Go Home
+          </Link>
+        </motion.div>
+      </div>
+    </div>
+  )
+}

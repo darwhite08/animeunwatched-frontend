@@ -9,13 +9,15 @@ import { GenreCard } from "@/components/dashboard/cards/GenreCard"
 import { ActivityCard } from "@/components/dashboard/cards/ActivityCard"
 import ContinueWatchingCard from "@/components/dashboard/cards/ContinueWatchingCard"
 import XPCard from "@/components/dashboard/cards/XPCard"
+import WrappedBanner from "@/components/ui/WrappedBanner"
 import { useAuthStore } from "@/stores/auth.store"
 
 export default function WorldClassDashboard() {
   const user = useAuthStore(s => s.user)
   return (
     <div className="max-w-[1440px] mx-auto px-8 py-12 space-y-10 pb-32">
-      
+      <WrappedBanner />
+
       {/* 1. CINEMATIC HEADER SECTION */}
       <header className="relative overflow-hidden rounded-[3rem] bg-[#050505] border border-white/5 p-12 shadow-2xl group">
         {/* Ambient Mesh Glow */}

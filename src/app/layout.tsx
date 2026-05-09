@@ -2,6 +2,7 @@ import "./globals.css"
 import ToastContainer from "@/components/layout/ToastContainer"
 import BackToTop from "@/components/ui/BackToTop"
 import KeyboardShortcutsOverlay from "@/components/ui/KeyboardShortcutsOverlay"
+import MobileNav from "@/components/layout/MobileNav"
 import { QueryProvider } from "@/providers/QueryProvider"
 import { KeyboardShortcuts } from "@/providers/KeyboardShortcuts"
 
@@ -29,6 +30,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <ToastContainer />
             <BackToTop />
             <KeyboardShortcutsOverlay />
+            <MobileNav />
           </KeyboardShortcuts>
         </QueryProvider>
       </body>

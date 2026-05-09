@@ -20,6 +20,9 @@ function HeroSection() {
   const mouseY = useMotionValue(0)
   const springX = useSpring(mouseX, { stiffness: 60, damping: 20 })
   const springY = useSpring(mouseY, { stiffness: 60, damping: 20 })
+  // Derived transforms — must be at top level (Rules of Hooks)
+  const counterSpringX = useTransform(springX, v => -v * 0.5)
+  const counterSpringY = useTransform(springY, v => -v * 0.5)
 
   useEffect(() => {
     const move = (e: MouseEvent) => {
@@ -53,8 +56,8 @@ function HeroSection() {
       <motion.div
         className="absolute w-[400px] h-[400px] rounded-full pointer-events-none"
         style={{
-          x: useTransform(springX, v => -v * 0.5),
-          y: useTransform(springY, v => -v * 0.5),
+          x: counterSpringX,
+          y: counterSpringY,
           right: "15%",
           top: "30%",
           background: "radial-gradient(circle, rgba(139,92,246,0.12) 0%, transparent 70%)",
@@ -601,12 +604,14 @@ function CommunitySection() {
                 initial={{ opacity: 0, scale: 0.8, y: 40 }}
                 whileInView={{ opacity: 1, scale: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: i * 0.15, type: "spring", stiffness: 80 }}
-                animate={{ y: [0, -8, 0] }}
-                // @ts-expect-error framer-motion transition override
-                transition2={{ duration: 4 + i, repeat: Infinity, ease: "easeInOut" }}
+                transition={{ delay: i * 0.15, duration: 0.7, type: "spring", stiffness: 80 }}
                 style={{ rotate }}
-                className={`absolute ${pos} w-56 p-5 rounded-[1.5rem] bg-[#0c0c0c]/90 border border-white/10 backdrop-blur-xl shadow-2xl`}
+                className={`absolute ${pos}`}
+              >
+              <motion.div
+                animate={{ y: [0, -8, 0] }}
+                transition={{ duration: 4 + i, repeat: Infinity, ease: "easeInOut" }}
+                className="w-56 p-5 rounded-[1.5rem] bg-[#0c0c0c]/90 border border-white/10 backdrop-blur-xl shadow-2xl"
               >
                 <div className="flex items-center gap-3 mb-4">
                   <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center font-black text-lg">
@@ -623,6 +628,7 @@ function CommunitySection() {
                 <div className="h-1 bg-white/5 rounded-full overflow-hidden">
                   <div className="h-full bg-gradient-to-r from-indigo-600 to-violet-500 rounded-full" style={{ width: `${[88, 70, 55][i]}%` }} />
                 </div>
+              </motion.div>
               </motion.div>
             ))}
           </div>

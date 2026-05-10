@@ -13,14 +13,80 @@ import NotificationBell from "@/components/notifications/NotificationBell";
 import SearchModal from "./SearchModal";
 import ProfileMenu from "./ProfileMenu";
 
-// Section themes for the cinematic homepage
+// Section themes for the cinematic homepage — each section has a distinct identity
 const SECTION_THEMES = [
-  { accentColor: "rgba(99,102,241,0.3)",  label: "Hero",       textAccent: "text-indigo-400" },
-  { accentColor: "rgba(99,102,241,0.2)",  label: "Discovery",  textAccent: "text-indigo-400" },
-  { accentColor: "rgba(139,92,246,0.3)",  label: "AI Oracle",  textAccent: "text-violet-400" },
-  { accentColor: "rgba(16,185,129,0.2)",  label: "Community",  textAccent: "text-emerald-400"},
-  { accentColor: "rgba(99,102,241,0.25)", label: "Showcase",   textAccent: "text-indigo-400" },
-  { accentColor: "rgba(99,102,241,0.4)",  label: "Begin",      textAccent: "text-indigo-400" },
+  {
+    // Ch1 Hero — indigo (default identity)
+    label: "Ch.01 — Hero",
+    bg: "rgba(5,5,20,0.88)",
+    border: "rgba(99,102,241,0.45)",
+    glow: "0 0 60px rgba(99,102,241,0.18), 0 2px 0 rgba(99,102,241,0.5)",
+    dot:   "bg-indigo-500",
+    dotColor: "#6366f1",
+    accent: "text-indigo-400",
+    pillBg: "bg-indigo-600/15",
+    pillBorder: "border-indigo-500/30",
+  },
+  {
+    // Ch2 Discovery — amber/warm
+    label: "Ch.02 — Discovery",
+    bg: "rgba(15,10,5,0.88)",
+    border: "rgba(245,158,11,0.45)",
+    glow: "0 0 60px rgba(245,158,11,0.12), 0 2px 0 rgba(245,158,11,0.5)",
+    dot:   "bg-amber-500",
+    dotColor: "#f59e0b",
+    accent: "text-amber-400",
+    pillBg: "bg-amber-600/15",
+    pillBorder: "border-amber-500/30",
+  },
+  {
+    // Ch3 AI Oracle — violet/purple
+    label: "Ch.03 — AI Oracle",
+    bg: "rgba(8,5,20,0.90)",
+    border: "rgba(139,92,246,0.55)",
+    glow: "0 0 80px rgba(139,92,246,0.22), 0 2px 0 rgba(139,92,246,0.6)",
+    dot:   "bg-violet-500",
+    dotColor: "#8b5cf6",
+    accent: "text-violet-400",
+    pillBg: "bg-violet-600/15",
+    pillBorder: "border-violet-500/30",
+  },
+  {
+    // Ch4 Community — emerald
+    label: "Ch.04 — Community",
+    bg: "rgba(2,12,8,0.90)",
+    border: "rgba(16,185,129,0.45)",
+    glow: "0 0 60px rgba(16,185,129,0.15), 0 2px 0 rgba(16,185,129,0.5)",
+    dot:   "bg-emerald-500",
+    dotColor: "#10b981",
+    accent: "text-emerald-400",
+    pillBg: "bg-emerald-600/15",
+    pillBorder: "border-emerald-500/30",
+  },
+  {
+    // Ch5 Showcase — indigo deep
+    label: "Ch.05 — Showcase",
+    bg: "rgba(5,2,18,0.92)",
+    border: "rgba(99,102,241,0.35)",
+    glow: "0 0 50px rgba(99,102,241,0.15), 0 2px 0 rgba(99,102,241,0.4)",
+    dot:   "bg-indigo-600",
+    dotColor: "#4f46e5",
+    accent: "text-indigo-300",
+    pillBg: "bg-indigo-700/20",
+    pillBorder: "border-indigo-400/25",
+  },
+  {
+    // Ch6 Final CTA — bright indigo
+    label: "Ch.06 — Begin",
+    bg: "rgba(2,2,15,0.92)",
+    border: "rgba(99,102,241,0.7)",
+    glow: "0 0 80px rgba(99,102,241,0.30), 0 2px 0 rgba(99,102,241,0.8)",
+    dot:   "bg-indigo-400",
+    dotColor: "#818cf8",
+    accent: "text-indigo-300",
+    pillBg: "bg-indigo-500/20",
+    pillBorder: "border-indigo-400/40",
+  },
 ]
 
 export default function Navbar() {
@@ -100,33 +166,45 @@ export default function Navbar() {
   ];
 
   const theme = isHomePage ? SECTION_THEMES[activeSection] : SECTION_THEMES[0]
+  const TRANSITION = { duration: 0.6, ease: "easeInOut" } as const
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-[100] flex justify-center p-6">
+    <header className="fixed top-0 left-0 right-0 z-[100] flex justify-center p-5">
+      {/* Colored bottom line — the most visible section indicator */}
+      {isHomePage && (
+        <motion.div
+          key={`line-${activeSection}`}
+          layoutId="section-line"
+          animate={{ backgroundColor: theme.dotColor, opacity: scrolled ? 1 : 0.6 }}
+          transition={TRANSITION}
+          className="absolute top-0 left-0 right-0 h-[2px] z-[101]"
+        />
+      )}
+
       <motion.nav
         animate={{
-          backgroundColor: scrolled
-            ? isHomePage ? `rgba(2,2,2,0.85)` : "rgba(0,0,0,0.4)"
-            : "rgba(0,0,0,0.15)",
-          borderColor: scrolled
-            ? isHomePage ? theme.accentColor : "rgba(255,255,255,0.1)"
-            : "rgba(255,255,255,0.05)",
-          boxShadow: isHomePage && scrolled
-            ? `0 0 40px ${theme.accentColor.replace("0.3","0.08")}`
-            : "none",
+          backgroundColor: scrolled ? theme.bg : "rgba(0,0,0,0.1)",
+          borderColor: scrolled ? theme.border : "rgba(255,255,255,0.05)",
+          boxShadow: scrolled ? theme.glow : "none",
         }}
-        transition={{ duration: 0.5 }}
-        className="relative flex w-full max-w-5xl items-center justify-between rounded-[2rem] px-8 py-3 backdrop-blur-2xl border"
+        transition={TRANSITION}
+        className="relative flex w-full max-w-5xl items-center justify-between rounded-[2rem] px-8 backdrop-blur-2xl border"
         style={{ paddingTop: scrolled ? "8px" : "12px", paddingBottom: scrolled ? "8px" : "12px" }}
       >
-        {/* Section label — only on homepage */}
-        {isHomePage && (
+        {/* Section label pill — visible indicator of current chapter */}
+        {isHomePage && scrolled && (
           <motion.div
-            key={activeSection}
-            initial={{ opacity:0, y:-8 }}
-            animate={{ opacity:1, y:0 }}
-            className={`absolute top-1.5 left-1/2 -translate-x-1/2 text-[8px] font-black uppercase tracking-[0.4em] ${theme.textAccent} opacity-60 hidden lg:block`}
+            key={`label-${activeSection}`}
+            initial={{ opacity: 0, scale: 0.8, y: -4 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            transition={{ duration: 0.3 }}
+            className={`absolute -top-7 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full text-[8px] font-black uppercase tracking-[0.4em] ${theme.accent} ${theme.pillBg} border ${theme.pillBorder} hidden lg:flex items-center gap-1.5`}
           >
+            <motion.span
+              animate={{ backgroundColor: theme.dotColor }}
+              className="w-1.5 h-1.5 rounded-full"
+            />
             {theme.label}
           </motion.div>
         )}
@@ -134,27 +212,45 @@ export default function Navbar() {
         {/* Logo */}
         <Link href="/" className="relative group flex items-center gap-2">
           <motion.div
-            animate={{ boxShadow: `0 0 20px ${theme.accentColor}` }}
+            animate={{ boxShadow: `0 0 24px ${theme.dotColor}` }}
+            transition={TRANSITION}
             className="h-8 w-8 rounded-xl bg-indigo-600 flex items-center justify-center transition-transform group-hover:rotate-12"
           >
             <Sparkles size={18} className="text-white" />
           </motion.div>
           <span className="text-lg font-black tracking-tighter text-white uppercase italic hidden sm:block">
-            UNWATCHED<span className={theme.textAccent}>.</span>
+            UNWATCHED
+            <motion.span
+              animate={{ color: theme.dotColor }}
+              transition={TRANSITION}
+            >.</motion.span>
           </span>
         </Link>
 
         {/* Links */}
-        <div className="hidden md:flex items-center gap-1 bg-white/5 p-1 rounded-full border border-white/5">
+        <motion.div
+          animate={{ borderColor: isHomePage && scrolled ? theme.border : "rgba(255,255,255,0.07)" }}
+          transition={TRANSITION}
+          className="hidden md:flex items-center gap-1 bg-white/[0.04] p-1 rounded-full border"
+        >
           {navLinks.map((link) => (
-            <Link key={link.name} href={link.href} className={`relative px-5 py-2 text-[10px] font-black uppercase tracking-widest transition-all ${pathname === link.href ? "text-white" : "text-white/40 hover:text-white"}`}>
+            <Link key={link.name} href={link.href}
+              className={`relative px-4 py-2 text-[10px] font-black uppercase tracking-widest transition-all ${
+                pathname === link.href ? "text-white" : "text-white/35 hover:text-white"
+              }`}
+            >
               {pathname === link.href && (
-                <motion.div layoutId="nav-pill" className="absolute inset-0 bg-white/10 rounded-full border border-white/10" />
+                <motion.div
+                  layoutId="nav-pill"
+                  animate={{ backgroundColor: isHomePage ? (theme.dotColor + "25") : "rgba(255,255,255,0.1)", borderColor: isHomePage ? (theme.dotColor + "50") : "rgba(255,255,255,0.1)" }}
+                  transition={TRANSITION}
+                  className="absolute inset-0 rounded-full border"
+                />
               )}
               <span className="relative z-10">{link.name}</span>
             </Link>
           ))}
-        </div>
+        </motion.div>
 
         {/* Actions */}
         <div className="flex items-center gap-3">

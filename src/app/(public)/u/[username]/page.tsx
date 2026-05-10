@@ -20,6 +20,7 @@ import {
   ChevronRight,
   BookOpen,
   Trophy,
+  Mail,
 } from "lucide-react"
 import { useToast } from "@/stores/toast.store"
 import { ANIME_DB } from "@/lib/data/anime"
@@ -243,11 +244,18 @@ export default function UserProfilePage({
   const [likedPosts, setLikedPosts] = useState<Set<number>>(new Set())
 
   const toggleFollow = () => {
-    setFollowing((f) => !f)
+    const next = !following
+    setFollowing(next)
     push(
-      following ? `Unfollowed @${user.username}` : `Now following @${user.username}!`,
-      following ? "info" : "success",
+      next
+        ? `You're now following @${user.username}! 🎌`
+        : `Unfollowed @${user.username}`,
+      next ? "success" : "info",
     )
+  }
+
+  const handleMessage = () => {
+    push("Direct messages coming soon!", "info")
   }
 
   const toggleLike = (id: number) => {
@@ -258,6 +266,8 @@ export default function UserProfilePage({
       return next
     })
   }
+
+  const displayedFollowers = user.stats.followers + (following ? 1 : 0)
 
   const stats = [
     {
@@ -283,7 +293,7 @@ export default function UserProfilePage({
     },
     {
       label: "Followers",
-      value: user.stats.followers.toLocaleString(),
+      value: displayedFollowers.toLocaleString(),
       icon: Users,
       color: "text-violet-400",
       glow: "group-hover:bg-violet-500/10",
@@ -359,7 +369,7 @@ export default function UserProfilePage({
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3 }}
-                className="flex items-center justify-center md:justify-start gap-4"
+                className="flex items-center justify-center md:justify-start gap-3 flex-wrap"
               >
                 <button
                   onClick={toggleFollow}
@@ -374,6 +384,13 @@ export default function UserProfilePage({
                   ) : (
                     <><UserPlus size={15} /> Follow</>
                   )}
+                </button>
+
+                <button
+                  onClick={handleMessage}
+                  className="flex items-center gap-2 px-5 py-3 rounded-2xl text-sm font-black uppercase tracking-widest bg-white/8 border border-white/15 text-white/70 hover:bg-white/12 hover:text-white transition-all duration-300"
+                >
+                  <Mail size={15} /> Message
                 </button>
 
                 <div className="flex items-center gap-1.5 text-[10px] font-bold text-white/30 uppercase tracking-widest">
@@ -409,6 +426,76 @@ export default function UserProfilePage({
             </motion.div>
           ))}
         </div>
+      </section>
+
+      {/* ── WATCHLIST PREVIEW TAB ── */}
+      <section className="max-w-6xl mx-auto px-6 mt-10">
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="p-7 rounded-[2rem] bg-white/[0.02] border border-white/8 space-y-5"
+        >
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <BookOpen size={16} className="text-indigo-400" />
+              <h2 className="text-lg font-black tracking-tighter uppercase italic text-white">
+                Public Watchlist
+              </h2>
+            </div>
+            <Link
+              href={`/u/${user.username}/list`}
+              className="group flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-indigo-400 hover:text-indigo-300 transition-colors"
+            >
+              See full list <ChevronRight size={11} className="group-hover:translate-x-0.5 transition-transform" />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-4 gap-3">
+            {WATCHLIST_ANIME.map((anime, i) => (
+              <motion.div
+                key={anime.id}
+                initial={{ opacity: 0, scale: 0.95 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.07 }}
+              >
+                <Link href={`/anime/${anime.id}`} className="group block">
+                  <div className="relative aspect-[3/4] rounded-xl overflow-hidden border border-white/8 group-hover:border-indigo-500/30 transition-all">
+                    <Image
+                      src={anime.image}
+                      alt={anime.title}
+                      fill
+                      className="object-cover brightness-75 group-hover:brightness-90 group-hover:scale-105 transition-all duration-500"
+                      sizes="(max-width: 768px) 25vw, 160px"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                    <div className="absolute bottom-2 left-2 right-2">
+                      <p className="text-[10px] font-black text-white leading-tight line-clamp-2">
+                        {anime.title}
+                      </p>
+                    </div>
+                  </div>
+                </Link>
+              </motion.div>
+            ))}
+          </div>
+
+          <Link
+            href={`/u/${user.username}/list`}
+            className="flex items-center justify-between p-4 rounded-xl bg-white/[0.02] border border-white/8 hover:border-indigo-500/20 hover:bg-white/[0.04] transition-all group"
+          >
+            <div className="flex items-center gap-3">
+              <BookOpen size={15} className="text-indigo-400" />
+              <p className="text-sm font-bold text-white/70 group-hover:text-white transition-colors">
+                See full list →
+              </p>
+            </div>
+            <span className="text-[10px] font-black text-white/25 uppercase tracking-widest">
+              {user.stats.archived} titles
+            </span>
+          </Link>
+        </motion.div>
       </section>
 
       {/* ── MAIN CONTENT ── */}

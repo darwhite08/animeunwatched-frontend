@@ -1,0 +1,135 @@
+"use client"
+
+import { useState, useMemo } from "react"
+import { motion, AnimatePresence } from "framer-motion"
+import Link from "next/link"
+import Image from "next/image"
+import { ANIME_DB } from "@/lib/data/anime"
+import { PenSquare, Star, ThumbsUp, Trash2, Edit2, Filter } from "lucide-react"
+import { useToast } from "@/stores/toast.store"
+
+type Sort = "recent" | "highest" | "lowest" | "helpful"
+
+const MY_REVIEWS = ANIME_DB.slice(0, 8).map((anime, i) => ({
+  id: i + 1, anime,
+  score: [10, 9, 10, 9, 8, 9, 9, 8][i],
+  body: [
+    "Perfect in every sense. The pacing, the characters, the ending — nothing feels wasted.",
+    "The slow start is intentional. Episode 12 reframes everything. Worth every minute.",
+    "Johan Liebert is the greatest villain in anime. 74 episodes of sustained tension.",
+    "Season 1 is perfect. What follows is the most ambitious political narrative in anime.",
+    "Jazz, space, loneliness. A love letter to noir cinema. Timeless.",
+    "The pacifism arc is more complex than most war films. An unexpected masterpiece.",
+    "Made me reconsider what makes anime unique as a medium. Quiet and devastating.",
+    "First arc is a perfect thriller. Second half stumbles but still essential.",
+  ][i],
+  helpful: [312, 187, 245, 134, 298, 156, 421, 89][i],
+  date: ["2d", "5d", "1w", "1w", "2w", "2w", "3w", "1m"][i] + " ago",
+}))
+
+export default function MyReviewsPage() {
+  const { push } = useToast()
+  const [reviews, setReviews] = useState(MY_REVIEWS)
+  const [sort, setSort] = useState<Sort>("recent")
+
+  const sorted = useMemo(() => [...reviews].sort((a, b) => {
+    if (sort === "highest") return b.score - a.score
+    if (sort === "lowest")  return a.score - b.score
+    if (sort === "helpful") return b.helpful - a.helpful
+    return 0
+  }), [reviews, sort])
+
+  const deleteReview = (id: number) => {
+    setReviews(rs => rs.filter(r => r.id !== id))
+    push("Review deleted", "info")
+  }
+
+  const totalHelpful = reviews.reduce((s, r) => s + r.helpful, 0)
+  const avgScore = reviews.length ? (reviews.reduce((s, r) => s + r.score, 0) / reviews.length).toFixed(1) : "—"
+
+  return (
+    <div className="max-w-3xl mx-auto px-6 py-12 pb-32 space-y-8">
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-indigo-400/60 mb-2">Your Opinions</p>
+          <h1 className="text-3xl font-black tracking-tighter uppercase italic text-white">
+            My Reviews<span className="text-indigo-500">.</span>
+          </h1>
+        </div>
+        <Link href="/rate" className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-xs font-black uppercase tracking-widest text-white transition-all mt-2">
+          <PenSquare size={13} /> Write Review
+        </Link>
+      </div>
+
+      {/* Stats */}
+      <div className="grid grid-cols-3 gap-4">
+        {[
+          { label: "Reviews", value: String(reviews.length), icon: PenSquare, color: "text-indigo-400" },
+          { label: "Avg Score", value: avgScore + "/10", icon: Star, color: "text-amber-400" },
+          { label: "Helpful", value: totalHelpful.toLocaleString(), icon: ThumbsUp, color: "text-emerald-400" },
+        ].map(s => (
+          <div key={s.label} className="p-4 rounded-2xl bg-white/[0.02] border border-white/8 text-center space-y-1">
+            <s.icon size={16} className={`${s.color} mx-auto`} />
+            <p className="text-xl font-black text-white">{s.value}</p>
+            <p className="text-[9px] font-black uppercase tracking-wider text-white/25">{s.label}</p>
+          </div>
+        ))}
+      </div>
+
+      {/* Sort */}
+      <div className="flex gap-2 items-center flex-wrap">
+        <Filter size={13} className="text-white/30" />
+        {(["recent","highest","lowest","helpful"] as Sort[]).map(s => (
+          <button key={s} onClick={() => setSort(s)}
+            className={`px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-wider transition-all capitalize ${sort===s?"bg-indigo-600 text-white":"bg-white/5 text-white/40 border border-white/5 hover:bg-white/8"}`}
+          >{s}</button>
+        ))}
+      </div>
+
+      {/* Reviews */}
+      <div className="space-y-4">
+        <AnimatePresence>
+          {sorted.map((r, i) => (
+            <motion.div key={r.id} layout initial={{ opacity:0, y:8 }} animate={{ opacity:1, y:0 }} exit={{ opacity:0, height:0 }}
+              transition={{ delay:i*0.04 }}
+              className="p-5 rounded-2xl bg-white/[0.02] border border-white/8 hover:border-white/15 transition-colors space-y-4"
+            >
+              <div className="flex items-center gap-3">
+                <Link href={`/anime/${r.anime.id}`} className="relative h-12 w-9 rounded-lg overflow-hidden shrink-0">
+                  <Image src={r.anime.image} alt={r.anime.title} fill className="object-cover" sizes="36px" />
+                </Link>
+                <div className="flex-1 min-w-0">
+                  <Link href={`/anime/${r.anime.id}`} className="text-sm font-black text-white/80 hover:text-white truncate block">{r.anime.title}</Link>
+                  <div className="flex items-center gap-2 mt-0.5">
+                    <div className="flex gap-0.5">
+                      {[1,2,3,4,5].map(s=>(
+                        <Star key={s} size={9} fill={s<=Math.round(r.score/2)?"#f59e0b":"none"} className={s<=Math.round(r.score/2)?"text-amber-400":"text-white/15"}/>
+                      ))}
+                    </div>
+                    <span className="text-[10px] font-black text-white/50">{r.score}/10</span>
+                    <span className="text-[9px] text-white/25">{r.date}</span>
+                  </div>
+                </div>
+                <div className="flex gap-2 shrink-0">
+                  <button onClick={() => push("Review editing coming soon!", "info")} className="p-2 rounded-lg text-white/25 hover:text-indigo-400 hover:bg-white/5 transition-colors">
+                    <Edit2 size={13} />
+                  </button>
+                  <button onClick={() => deleteReview(r.id)} className="p-2 rounded-lg text-white/25 hover:text-red-400 hover:bg-red-500/5 transition-colors">
+                    <Trash2 size={13} />
+                  </button>
+                </div>
+              </div>
+              <p className="text-sm text-white/60 leading-relaxed line-clamp-3">{r.body}</p>
+              <div className="flex items-center justify-between pt-2 border-t border-white/5 text-[9px] text-white/25">
+                <span>{r.helpful} people found this helpful</span>
+                <Link href={`/anime/${r.anime.id}/reviews`} className="text-indigo-400/60 hover:text-indigo-400 transition-colors font-black uppercase tracking-widest">
+                  View on Anime →
+                </Link>
+              </div>
+            </motion.div>
+          ))}
+        </AnimatePresence>
+      </div>
+    </div>
+  )
+}

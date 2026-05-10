@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation"
 import {
   LayoutGrid, Book, MonitorPlay, Activity, BarChart2,
   User, Users, Bell, Settings, Flame, Zap, ChevronRight, Rss, Trophy,
+  BookOpen, History, Tag, Building2, Sparkles, Layers,
 } from "lucide-react"
 import { useWatchlist } from "@/stores/watchlist.store"
 
@@ -20,6 +21,17 @@ const NAV = [
       { name: "Streak",        href: "/streak",         icon: Activity     },
       { name: "Achievements",  href: "/achievements",   icon: Trophy       },
       { name: "Watch Stats",   href: "/stats",          icon: BarChart2    },
+      { name: "Manga",         href: "/manga",          icon: BookOpen     },
+      { name: "History",       href: "/history",        icon: History      },
+    ],
+  },
+  {
+    label: "Explore",
+    items: [
+      { name: "Genres",          href: "/genres",          icon: Tag       },
+      { name: "Studios",         href: "/studios",         icon: Building2 },
+      { name: "Recommendations", href: "/recommendations", icon: Sparkles  },
+      { name: "Collections",     href: "/collections",     icon: Layers    },
     ],
   },
   {

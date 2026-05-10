@@ -13,6 +13,16 @@ import NotificationBell from "@/components/notifications/NotificationBell";
 import SearchModal from "./SearchModal";
 import ProfileMenu from "./ProfileMenu";
 
+// Section themes for the cinematic homepage
+const SECTION_THEMES = [
+  { accentColor: "rgba(99,102,241,0.3)",  label: "Hero",       textAccent: "text-indigo-400" },
+  { accentColor: "rgba(99,102,241,0.2)",  label: "Discovery",  textAccent: "text-indigo-400" },
+  { accentColor: "rgba(139,92,246,0.3)",  label: "AI Oracle",  textAccent: "text-violet-400" },
+  { accentColor: "rgba(16,185,129,0.2)",  label: "Community",  textAccent: "text-emerald-400"},
+  { accentColor: "rgba(99,102,241,0.25)", label: "Showcase",   textAccent: "text-indigo-400" },
+  { accentColor: "rgba(99,102,241,0.4)",  label: "Begin",      textAccent: "text-indigo-400" },
+]
+
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -20,16 +30,34 @@ export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [user, setUser] = useState<any>(null);
   const [isHydrated, setIsHydrated] = useState(false);
+  const [activeSection, setActiveSection] = useState(0);
 
   const pathname = usePathname();
+  const isHomePage = pathname === "/";
   const profileRef = useRef<HTMLDivElement>(null);
 
   // Subscribe to real auth store so navbar re-renders on login/logout
   const storeUser = useAuthStore(s => s.user);
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", handleScroll);
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+      // Section detection for homepage only
+      if (pathname === "/") {
+        const vh = window.innerHeight
+        const scrollY = window.scrollY
+        const totalH = document.body.scrollHeight
+        // Approximate section boundaries (6 sections)
+        const pct = scrollY / totalH
+        if      (pct < 0.15) setActiveSection(0)
+        else if (pct < 0.32) setActiveSection(1)
+        else if (pct < 0.50) setActiveSection(2)
+        else if (pct < 0.68) setActiveSection(3)
+        else if (pct < 0.85) setActiveSection(4)
+        else                  setActiveSection(5)
+      }
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
 
     // Prefer real auth store user; fall back to mock localStorage user
     const authStoreUser = useAuthStore.getState().user;
@@ -71,19 +99,48 @@ export default function Navbar() {
     { name: "Leaderboard", href: "/leaderboard"  },
   ];
 
+  const theme = isHomePage ? SECTION_THEMES[activeSection] : SECTION_THEMES[0]
+
   return (
     <header className="fixed top-0 left-0 right-0 z-[100] flex justify-center p-6">
       <motion.nav
-        className={`relative flex w-full max-w-5xl items-center justify-between rounded-[2rem] px-8 py-3 transition-all duration-500 ${scrolled ? "bg-black/40 border border-white/10 backdrop-blur-2xl py-2" : "bg-black/20 border border-white/5 backdrop-blur-md"
-          }`}
+        animate={{
+          backgroundColor: scrolled
+            ? isHomePage ? `rgba(2,2,2,0.85)` : "rgba(0,0,0,0.4)"
+            : "rgba(0,0,0,0.15)",
+          borderColor: scrolled
+            ? isHomePage ? theme.accentColor : "rgba(255,255,255,0.1)"
+            : "rgba(255,255,255,0.05)",
+          boxShadow: isHomePage && scrolled
+            ? `0 0 40px ${theme.accentColor.replace("0.3","0.08")}`
+            : "none",
+        }}
+        transition={{ duration: 0.5 }}
+        className="relative flex w-full max-w-5xl items-center justify-between rounded-[2rem] px-8 py-3 backdrop-blur-2xl border"
+        style={{ paddingTop: scrolled ? "8px" : "12px", paddingBottom: scrolled ? "8px" : "12px" }}
       >
+        {/* Section label — only on homepage */}
+        {isHomePage && (
+          <motion.div
+            key={activeSection}
+            initial={{ opacity:0, y:-8 }}
+            animate={{ opacity:1, y:0 }}
+            className={`absolute top-1.5 left-1/2 -translate-x-1/2 text-[8px] font-black uppercase tracking-[0.4em] ${theme.textAccent} opacity-60 hidden lg:block`}
+          >
+            {theme.label}
+          </motion.div>
+        )}
+
         {/* Logo */}
         <Link href="/" className="relative group flex items-center gap-2">
-          <div className="h-8 w-8 rounded-xl bg-indigo-600 flex items-center justify-center shadow-[0_0_20px_rgba(79,70,229,0.4)] transition-transform group-hover:rotate-12">
+          <motion.div
+            animate={{ boxShadow: `0 0 20px ${theme.accentColor}` }}
+            className="h-8 w-8 rounded-xl bg-indigo-600 flex items-center justify-center transition-transform group-hover:rotate-12"
+          >
             <Sparkles size={18} className="text-white" />
-          </div>
+          </motion.div>
           <span className="text-lg font-black tracking-tighter text-white uppercase italic hidden sm:block">
-            UNWATCHED<span className="text-indigo-500">.</span>
+            UNWATCHED<span className={theme.textAccent}>.</span>
           </span>
         </Link>
 

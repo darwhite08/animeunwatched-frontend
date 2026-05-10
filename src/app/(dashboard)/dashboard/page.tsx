@@ -12,6 +12,7 @@ import XPCard from "@/components/dashboard/cards/XPCard"
 import WrappedBanner from "@/components/ui/WrappedBanner"
 import { useAuthStore } from "@/stores/auth.store"
 import NowPlayingCard from "@/components/dashboard/cards/NowPlayingCard"
+import AnimeOfTheDayCard from "@/components/dashboard/cards/AnimeOfTheDayCard"
 import TopAnimeCard from "@/components/dashboard/cards/TopAnimeCard"
 import RecentlyReviewedCard from "@/components/dashboard/cards/RecentlyReviewedCard"
 import QuickActionsCard from "@/components/dashboard/cards/QuickActionsCard"
@@ -102,6 +103,7 @@ export default function WorldClassDashboard() {
            <ActivityCard />
            <XPCard xp={84000} reputation={840} />
            <NowPlayingCard />
+           <AnimeOfTheDayCard />
         </div>
       </div>
 

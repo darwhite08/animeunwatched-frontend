@@ -8,6 +8,7 @@ import { SmoothScroll } from "@/providers/SmoothScroll";
 import { motion, AnimatePresence } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { getMockUser } from "@/lib/mockAuth";
+import AnnouncementBanner from "@/components/ui/AnnouncementBanner";
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -26,6 +27,12 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
 
   return (
     <SmoothScroll>
+      <AnnouncementBanner
+        message="Watch Party feature launching Q3 2026 — get early access"
+        href="/watch-party"
+        linkLabel="Learn more →"
+        type="new"
+      />
       <Navbar />
       <AnimatePresence mode="wait">
         <motion.div

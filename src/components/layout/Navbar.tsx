@@ -154,60 +154,54 @@ export default function Navbar() {
     setProfileOpen(false);
   };
 
+  // 5 core nav links — clean, not cramped
   const navLinks = [
-    { name: "Home",        href: "/"              },
-    { name: "Browse",      href: "/discover"      },
-    { name: "Discover",    href: "/ai-discover"   },
-    { name: "Best Anime",  href: "/bestanimelist" },
-    { name: "Calendar",    href: "/calendar"      },
-    { name: "Community",   href: "/community"     },
-    { name: "Blog",        href: "/blog"          },
-    { name: "Leaderboard", href: "/leaderboard"  },
+    { name: "Home",       href: "/"              },
+    { name: "Discover",   href: "/ai-discover"   },
+    { name: "Anime",      href: "/bestanimelist" },
+    { name: "Community",  href: "/community"     },
+    { name: "Rankings",   href: "/rankings"      },
   ];
 
   const theme = isHomePage ? SECTION_THEMES[activeSection] : SECTION_THEMES[0]
   const TRANSITION = { duration: 0.6, ease: "easeInOut" } as const
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-[100] flex justify-center p-5">
-      {/* Colored bottom line — the most visible section indicator */}
+    <header className="fixed top-0 left-0 right-0 z-[100] flex flex-col items-center pt-3 px-5 pb-0">
+      {/* Colored top line — section indicator */}
       {isHomePage && (
         <motion.div
-          key={`line-${activeSection}`}
-          layoutId="section-line"
-          animate={{ backgroundColor: theme.dotColor, opacity: scrolled ? 1 : 0.6 }}
+          animate={{ backgroundColor: theme.dotColor, opacity: scrolled ? 1 : 0.5 }}
           transition={TRANSITION}
           className="absolute top-0 left-0 right-0 h-[2px] z-[101]"
         />
       )}
 
+      {/* Chapter label — sits ABOVE the nav pill, not inside it */}
+      {isHomePage && scrolled && (
+        <motion.div
+          key={`label-${activeSection}`}
+          initial={{ opacity: 0, y: -6, scale: 0.9 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.25 }}
+          className={`mb-1.5 px-3 py-1 rounded-full text-[8px] font-black uppercase tracking-[0.4em] ${theme.accent} ${theme.pillBg} border ${theme.pillBorder} hidden lg:flex items-center gap-1.5`}
+        >
+          <motion.span animate={{ backgroundColor: theme.dotColor }} className="w-1.5 h-1.5 rounded-full" />
+          {theme.label}
+        </motion.div>
+      )}
+
       <motion.nav
         animate={{
-          backgroundColor: scrolled ? theme.bg : "rgba(0,0,0,0.1)",
-          borderColor: scrolled ? theme.border : "rgba(255,255,255,0.05)",
+          backgroundColor: scrolled ? theme.bg : "rgba(0,0,0,0.08)",
+          borderColor: scrolled ? theme.border : "rgba(255,255,255,0.06)",
           boxShadow: scrolled ? theme.glow : "none",
         }}
         transition={TRANSITION}
-        className="relative flex w-full max-w-5xl items-center justify-between rounded-[2rem] px-8 backdrop-blur-2xl border"
-        style={{ paddingTop: scrolled ? "8px" : "12px", paddingBottom: scrolled ? "8px" : "12px" }}
+        className="relative flex w-full max-w-[900px] items-center justify-between rounded-[2rem] px-7 backdrop-blur-2xl border"
+        style={{ paddingTop: scrolled ? "8px" : "11px", paddingBottom: scrolled ? "8px" : "11px" }}
       >
-        {/* Section label pill — visible indicator of current chapter */}
-        {isHomePage && scrolled && (
-          <motion.div
-            key={`label-${activeSection}`}
-            initial={{ opacity: 0, scale: 0.8, y: -4 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.8 }}
-            transition={{ duration: 0.3 }}
-            className={`absolute -top-7 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full text-[8px] font-black uppercase tracking-[0.4em] ${theme.accent} ${theme.pillBg} border ${theme.pillBorder} hidden lg:flex items-center gap-1.5`}
-          >
-            <motion.span
-              animate={{ backgroundColor: theme.dotColor }}
-              className="w-1.5 h-1.5 rounded-full"
-            />
-            {theme.label}
-          </motion.div>
-        )}
 
         {/* Logo */}
         <Link href="/" className="relative group flex items-center gap-2">
@@ -293,13 +287,15 @@ export default function Navbar() {
         >
           <div className="p-5 space-y-1">
             {[
-              { name: "Home",        href: "/"              },
-              { name: "Discover",    href: "/ai-discover"   },
-              { name: "Best Anime",  href: "/bestanimelist" },
-              { name: "Community",   href: "/community"     },
-              { name: "Blog",        href: "/blog"          },
-              { name: "Leaderboard", href: "/leaderboard"   },
-              { name: "Polls",       href: "/poll"          },
+              { name: "Home",       href: "/"              },
+              { name: "Discover",   href: "/ai-discover"   },
+              { name: "Anime",      href: "/bestanimelist" },
+              { name: "Community",  href: "/community"     },
+              { name: "Rankings",   href: "/rankings"      },
+              { name: "Blog",       href: "/blog"          },
+              { name: "Leaderboard",href: "/leaderboard"   },
+              { name: "Polls",      href: "/poll"          },
+              { name: "Calendar",   href: "/calendar"      },
             ].map(link => (
               <Link
                 key={link.name}

@@ -15,6 +15,7 @@ import NowPlayingCard from "@/components/dashboard/cards/NowPlayingCard"
 import TopAnimeCard from "@/components/dashboard/cards/TopAnimeCard"
 import RecentlyReviewedCard from "@/components/dashboard/cards/RecentlyReviewedCard"
 import QuickActionsCard from "@/components/dashboard/cards/QuickActionsCard"
+import DailyQuestCard from "@/components/dashboard/cards/DailyQuestCard"
 
 export default function WorldClassDashboard() {
   const user = useAuthStore(s => s.user)
@@ -122,8 +123,11 @@ export default function WorldClassDashboard() {
         </div>
       </div>
 
-      {/* 6. QUICK ACTIONS */}
-      <QuickActionsCard />
+      {/* 6. QUICK ACTIONS + DAILY QUESTS */}
+      <div className="grid md:grid-cols-2 gap-8">
+        <QuickActionsCard />
+        <DailyQuestCard />
+      </div>
     </div>
   )
 }

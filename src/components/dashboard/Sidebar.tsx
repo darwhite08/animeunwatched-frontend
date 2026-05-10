@@ -5,7 +5,7 @@ import Link from "next/link"
 import { usePathname } from "next/navigation"
 import {
   LayoutGrid, Book, MonitorPlay, Activity, BarChart2,
-  User, Bell, Settings, Flame, Zap, ChevronRight, Rss, Trophy,
+  User, Users, Bell, Settings, Flame, Zap, ChevronRight, Rss, Trophy,
 } from "lucide-react"
 import { useWatchlist } from "@/stores/watchlist.store"
 
@@ -26,6 +26,7 @@ const NAV = [
     label: "Account",
     items: [
       { name: "Profile",       href: "/profile",        icon: User         },
+      { name: "Following",     href: "/following",      icon: Users        },
       { name: "Notifications", href: "/notifications",  icon: Bell,  badge: true },
       { name: "Settings",      href: "/settings",       icon: Settings     },
     ],

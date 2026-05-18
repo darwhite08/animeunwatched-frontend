@@ -6,6 +6,7 @@ import Link from "next/link"
 import { FileText, Bold, Italic, List, Link as LinkIcon, Eye, EyeOff, Save, Send, Loader2, ArrowLeft } from "lucide-react"
 import { useToast } from "@/stores/toast.store"
 import { useRouter } from "next/navigation"
+import { useCreateBlog } from "@/hooks/useBlogs"
 
 const CATEGORIES = ["Deep Dive", "Review", "Theory", "Opinion", "List", "Analysis"]
 const TOOLBAR = [
@@ -18,6 +19,7 @@ const TOOLBAR = [
 export default function NewBlogPage() {
   const { push } = useToast()
   const router = useRouter()
+  const createBlog = useCreateBlog()
   const [title,    setTitle]    = useState("")
   const [body,     setBody]     = useState("")
   const [category, setCategory] = useState("Deep Dive")
@@ -30,14 +32,21 @@ export default function NewBlogPage() {
   const readTime  = Math.max(1, Math.ceil(wordCount / 200))
   const canSave   = title.trim().length >= 3 && body.trim().length >= 20
 
-  const handleAction = async (action: "draft"|"publish") => {
+  const handleAction = (action: "draft"|"publish") => {
     if (!canSave) return
     setSaving(true)
-    await new Promise(r => setTimeout(r, 900))
-    setSaving(false)
-    setStatus(action === "publish" ? "published" : "saved")
-    push(action === "publish" ? "Article published to The Chronicle!" : "Draft saved.", action==="publish"?"success":"info")
-    if (action === "publish") setTimeout(() => router.push("/blog"), 1500)
+    createBlog.mutate(
+      { title: title.trim(), body: body.trim(), status: action === "publish" ? "PUBLISHED" : "DRAFT" },
+      {
+        onSuccess: () => {
+          setSaving(false)
+          setStatus(action === "publish" ? "published" : "saved")
+          push(action === "publish" ? "Article published to The Chronicle!" : "Draft saved.", action === "publish" ? "success" : "info")
+          if (action === "publish") setTimeout(() => router.push("/blog"), 1500)
+        },
+        onError: () => { setSaving(false); push("Failed to save article", "error") },
+      }
+    )
   }
 
   const insert = (md: string) => setBody(prev => prev + (prev ? "\n" : "") + md)

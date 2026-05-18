@@ -4,11 +4,16 @@ import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import Link from "next/link"
 import Image from "next/image"
-import { ANIME_DB } from "@/lib/data/anime"
+import { useBrowseAnime } from "@/hooks/useAnime"
 import AnimeCard from "@/components/bestanimelist/AnimeCard"
 import AnimeModal from "@/components/bestanimelist/AnimeModal"
 import type { Anime } from "@/lib/data/anime"
+import type { AnimeDTO } from "@/lib/api/types"
 import { Layers, ChevronRight } from "lucide-react"
+
+function mapDTO(a: AnimeDTO, i: number): Anime {
+  return { id: String(a.malId), title: a.title, titleJapanese: a.titleJapanese ?? "", rating: a.score ?? 0, year: a.year ?? 0, episodes: a.episodes, type: (["TV","Movie","OVA"] as const).includes(a.type as any) ? a.type as any : "TV", status: a.status?.toLowerCase().includes("airing") ? "airing" : "finished", studio: a.studios[0] ?? "Unknown", genres: a.genres, synopsis: a.synopsis ?? "", image: a.imageUrl ?? "", tags: a.genres.map(g => g.toLowerCase().replace(/\s/g, "-")), category: "all", rank: i+1 }
+}
 
 type Collection = {
   id: string
@@ -68,9 +73,11 @@ const COLLECTIONS: Collection[] = [
 export default function CollectionsPage() {
   const [active, setActive] = useState<string | null>(null)
   const [selectedAnime, setSelectedAnime] = useState<Anime | null>(null)
+  const { data: browseData } = useBrowseAnime({ limit: 20 })
+  const allAnime = (browseData?.data ?? []).map(mapDTO)
 
   const activeCollection = COLLECTIONS.find(c => c.id === active)
-  const filtered = activeCollection ? ANIME_DB.filter(activeCollection.filter) : []
+  const filtered = activeCollection ? allAnime.filter(activeCollection.filter) : []
 
   return (
     <div className="min-h-screen bg-[#020202] text-white pb-32">
@@ -91,7 +98,7 @@ export default function CollectionsPage() {
       {/* Collection grid */}
       <div className="max-w-7xl mx-auto px-6 space-y-4">
         {COLLECTIONS.map((col, i) => {
-          const items = ANIME_DB.filter(col.filter).slice(0, 4)
+          const items = allAnime.filter(col.filter).slice(0, 4)
           const isActive = active === col.id
 
           return (
@@ -116,7 +123,7 @@ export default function CollectionsPage() {
                       {col.name}
                     </h2>
                     <span className="text-[9px] font-black text-white/25 font-mono">
-                      {ANIME_DB.filter(col.filter).length} anime
+                      {allAnime.filter(col.filter).length} anime
                     </span>
                   </div>
                   <p className="text-sm text-white/40">{col.description}</p>
@@ -146,7 +153,7 @@ export default function CollectionsPage() {
                     className="overflow-hidden"
                   >
                     <div className="pt-4 pb-2 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                      {ANIME_DB.filter(col.filter).map((a, idx) => (
+                      {allAnime.filter(col.filter).map((a, idx) => (
                         <AnimeCard key={a.id} anime={a} index={idx} onClick={setSelectedAnime} />
                       ))}
                     </div>

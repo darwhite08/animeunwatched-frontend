@@ -4,6 +4,7 @@ import { use, useState } from "react"
 import { motion } from "framer-motion"
 import Image from "next/image"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import {
   UserPlus,
   UserCheck,
@@ -23,7 +24,9 @@ import {
   Mail,
 } from "lucide-react"
 import { useToast } from "@/stores/toast.store"
-import { ANIME_DB } from "@/lib/data/anime"
+import { useUserProfile, useFollow } from "@/hooks/useUsers"
+import { useUserList } from "@/hooks/useLists"
+import { useAuthStore } from "@/stores/auth.store"
 
 /* ─────────────────────────────────────────────
    Types
@@ -188,9 +191,7 @@ const WATCHLIST_PREVIEW_IDS = [
   "hunter-x-hunter-2011",
 ]
 
-const WATCHLIST_ANIME = ANIME_DB.filter((a) =>
-  WATCHLIST_PREVIEW_IDS.some((id) => a.id.includes(id)),
-).slice(0, 4)
+// WATCHLIST_ANIME now comes from listData in the component
 
 /* ─────────────────────────────────────────────
    Sub-components
@@ -238,24 +239,66 @@ export default function UserProfilePage({
   params: Promise<{ username: string }>
 }) {
   const { username } = use(params)
-  const user = buildMockUser(username)
   const { push } = useToast()
+  const currentUser = useAuthStore(s => s.user)
+
+  // Try real API first, fall back to mock if not found
+  const { data: profileData } = useUserProfile(username)
+  const { data: listData } = useUserList(username)
+  const followMut = useFollow(username)
+
+  const realUser = profileData?.user
+  const user = realUser
+    ? {
+        ...buildMockUser(username),
+        username: realUser.username,
+        displayName: realUser.displayName,
+        bio: realUser.bio ?? buildMockUser(username).bio,
+        stats: {
+          ...buildMockUser(username).stats,
+          archived: realUser.stats?.listCount ?? buildMockUser(username).stats.archived,
+          followers: realUser.stats?.followers ?? buildMockUser(username).stats.followers,
+        },
+      }
+    : buildMockUser(username)
+
   const [following, setFollowing] = useState(false)
   const [likedPosts, setLikedPosts] = useState<Set<number>>(new Set())
 
+  // Real watchlist preview from API
+  const watchlistAnime = (listData?.data ?? []).slice(0, 4).map(e => ({
+    id: String(e.anime?.malId ?? e.animeId),
+    title: e.anime?.title ?? "Unknown",
+    image: e.anime?.imageUrl ?? "",
+    rating: e.anime?.score ?? 0,
+  }))
+
   const toggleFollow = () => {
+    if (!currentUser) { push("Sign in to follow users", "info"); return }
     const next = !following
-    setFollowing(next)
-    push(
-      next
-        ? `You're now following @${user.username}! 🎌`
-        : `Unfollowed @${user.username}`,
-      next ? "success" : "info",
+    followMut.mutate(
+      { follow: next },
+      {
+        onSuccess: () => {
+          setFollowing(next)
+          push(next ? `Following @${user.username}! 🎌` : `Unfollowed @${user.username}`, next ? "success" : "info")
+        },
+        onError: () => push("Failed to update follow", "error"),
+      }
     )
   }
 
-  const handleMessage = () => {
-    push("Direct messages coming soon!", "info")
+  const router = useRouter()
+  const handleMessage = async () => {
+    if (!currentUser) { push("Sign in to send messages", "info"); return }
+    if (!realUser?.id) { push("User not found", "error"); return }
+    try {
+      const { conversation } = await import("@/lib/api/endpoints")
+        .then(ep => ep.startConversation(realUser.id))
+      router.push(`/chat/${conversation.id}`)
+    } catch {
+      push("Could not start conversation. Please try again.", "error")
+    }
   }
 
   const toggleLike = (id: number) => {
@@ -452,7 +495,7 @@ export default function UserProfilePage({
           </div>
 
           <div className="grid grid-cols-4 gap-3">
-            {WATCHLIST_ANIME.map((anime, i) => (
+            {watchlistAnime.map((anime, i) => (
               <motion.div
                 key={anime.id}
                 initial={{ opacity: 0, scale: 0.95 }}
@@ -644,7 +687,7 @@ export default function UserProfilePage({
             </div>
 
             <div className="grid grid-cols-2 gap-4">
-              {WATCHLIST_ANIME.map((anime, i) => (
+              {watchlistAnime.map((anime, i) => (
                 <motion.div
                   key={anime.id}
                   initial={{ opacity: 0, scale: 0.95 }}

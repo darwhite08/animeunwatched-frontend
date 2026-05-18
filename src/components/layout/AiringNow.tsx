@@ -3,12 +3,25 @@
 import { motion } from "framer-motion"
 import Link from "next/link"
 import Image from "next/image"
-import { ANIME_DB } from "@/lib/data/anime"
+import { useBrowseAnime } from "@/hooks/useAnime"
+import type { AnimeDTO } from "@/lib/api/types"
 import { Flame, Star, ChevronRight, Radio } from "lucide-react"
 
-const AIRING = ANIME_DB.filter(a => a.status === "airing").slice(0, 6)
+function mapDTO(a: AnimeDTO, i: number) {
+  return { id: String(a.malId), title: a.title, rating: a.score ?? 0, studio: a.studios[0] ?? "Unknown", image: a.imageUrl ?? "", status: a.status?.toLowerCase().includes("airing") ? "airing" as const : "finished" as const }
+}
 
 export default function AiringNow() {
+  const { data, isLoading } = useBrowseAnime({ limit: 20 })
+  const AIRING = (data?.data ?? []).map(mapDTO).filter(a => a.status === "airing").slice(0, 6)
+  if (isLoading) {
+    return (
+      <section className="py-24 bg-[#020202] relative overflow-hidden border-y border-white/[0.03] flex items-center justify-center min-h-[200px]">
+        <div className="w-8 h-8 rounded-full border-2 border-emerald-500/30 border-t-emerald-500 animate-spin" />
+      </section>
+    )
+  }
+
   return (
     <section className="py-24 bg-[#020202] relative overflow-hidden border-y border-white/[0.03]">
       {/* Grid */}

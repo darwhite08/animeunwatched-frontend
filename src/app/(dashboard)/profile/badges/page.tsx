@@ -4,16 +4,29 @@ import BadgeShowcase from "@/components/gamification/BadgeShowcase"
 import { motion } from "framer-motion"
 import { Trophy, Star, Flame, Zap, Share2 } from "lucide-react"
 import { useToast } from "@/stores/toast.store"
+import { useAuthStore } from "@/stores/auth.store"
 
-const STATS = [
-  { icon:Trophy, label:"Earned",       value:"5",    color:"text-amber-400",   bg:"bg-amber-500/10"  },
-  { icon:Star,   label:"Total",         value:"12",   color:"text-indigo-400",  bg:"bg-indigo-500/10" },
-  { icon:Flame,  label:"Streak",        value:"22d",  color:"text-orange-400",  bg:"bg-orange-500/10" },
-  { icon:Zap,    label:"Reputation",    value:"840",  color:"text-violet-400",  bg:"bg-violet-500/10" },
-]
+// Total available badges in the system (static catalog count)
+const TOTAL_BADGES = 12
 
 export default function ProfileBadgesPage() {
   const { push } = useToast()
+  const user = useAuthStore(s => s.user)
+
+  const reputation  = user?.reputation ?? 0
+  // XP level: every 500 rep = 1 level, minimum level 1
+  const xpLevel     = Math.floor(reputation / 500) + 1
+  // Earned badge count estimated from reputation tiers (each 200 rep unlocks ~1 badge)
+  const earnedBadges = Math.min(Math.floor(reputation / 200), TOTAL_BADGES)
+  const remaining    = TOTAL_BADGES - earnedBadges
+
+  const STATS = [
+    { icon:Trophy, label:"Earned",    value:String(earnedBadges), color:"text-amber-400",  bg:"bg-amber-500/10"  },
+    { icon:Star,   label:"Total",     value:String(TOTAL_BADGES), color:"text-indigo-400", bg:"bg-indigo-500/10" },
+    { icon:Zap,    label:"XP Level",  value:`Lv. ${xpLevel}`,     color:"text-orange-400", bg:"bg-orange-500/10" },
+    { icon:Flame,  label:"Reputation",value:String(reputation),   color:"text-violet-400", bg:"bg-violet-500/10" },
+  ]
+
   return (
     <div className="max-w-4xl mx-auto px-6 py-12 pb-32 space-y-10">
       <div className="flex items-start justify-between gap-4">
@@ -22,7 +35,7 @@ export default function ProfileBadgesPage() {
           <h1 className="text-4xl font-black tracking-tighter uppercase italic text-white">
             My Badges<span className="text-amber-400">.</span>
           </h1>
-          <p className="text-white/35 text-sm mt-1">5 of 12 earned · 7 remaining</p>
+          <p className="text-white/35 text-sm mt-1">{earnedBadges} of {TOTAL_BADGES} earned · {remaining} remaining</p>
         </div>
         <button onClick={() => push("Share link copied!", "success")}
           className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-white/10 bg-white/5 text-xs font-black uppercase tracking-wider text-white/50 hover:text-white hover:bg-white/8 transition-all mt-2"

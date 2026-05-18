@@ -3,9 +3,29 @@
 import { useState, useMemo } from "react"
 import { motion } from "framer-motion"
 import { Sparkles, CalendarDays, TrendingUp } from "lucide-react"
-import { ANIME_DB, type Anime } from "@/lib/data/anime"
+import type { Anime } from "@/lib/data/anime"
 import AnimeCard from "@/components/bestanimelist/AnimeCard"
 import AnimeModal from "@/components/bestanimelist/AnimeModal"
+import { useBrowseAnime } from "@/hooks/useAnime"
+import type { AnimeDTO } from "@/lib/api/types"
+
+const mapDTO = (a: AnimeDTO, i: number): Anime => ({
+  id: String(a.malId),
+  title: a.title,
+  titleJapanese: a.titleJapanese ?? "",
+  rating: a.score ?? 0,
+  year: a.year ?? 0,
+  episodes: a.episodes,
+  type: (["TV", "Movie", "OVA"] as const).includes(a.type as any) ? a.type as any : "TV",
+  status: a.status?.toLowerCase().includes("airing") ? "airing" : "finished",
+  studio: a.studios[0] ?? "Unknown",
+  genres: a.genres,
+  synopsis: a.synopsis ?? "",
+  image: a.imageUrl ?? "",
+  tags: a.genres.map(g => g.toLowerCase().replace(/\s/g, "-")),
+  category: "all",
+  rank: i + 1,
+})
 
 type Filter = "week" | "month" | "year"
 
@@ -40,13 +60,18 @@ export default function NewAnimePage() {
   const [filter, setFilter] = useState<Filter>("year")
   const [selected, setSelected] = useState<Anime | null>(null)
 
+  const { data: browseData, isLoading } = useBrowseAnime({ limit: 20 })
+  const animeList = useMemo(() => (browseData?.data ?? []).map(mapDTO), [browseData])
+
   const filtered = useMemo(
     () =>
-      [...ANIME_DB]
+      [...animeList]
         .filter(a => a.year >= FILTER_YEAR[filter])
         .sort((a, b) => b.year - a.year || b.rating - a.rating),
-    [filter],
+    [animeList, filter],
   )
+
+  if (isLoading) return null
 
   const stat = STATS[filter]
 

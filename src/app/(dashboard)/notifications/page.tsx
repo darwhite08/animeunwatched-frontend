@@ -4,6 +4,8 @@ import { motion, AnimatePresence } from "framer-motion"
 import { Bell, Flame, BookOpen, Trophy, Zap, Vote, CheckCheck, Trash2 } from "lucide-react"
 import { useState } from "react"
 import { useToast } from "@/stores/toast.store"
+import { useNotificationsQuery, useMarkRead, useMarkAllRead } from "@/hooks/useNotificationsQuery"
+import type { Notification } from "@/lib/api/types"
 
 type NotifType = "achievement" | "comment" | "update" | "follow" | "poll" | "system"
 
@@ -34,28 +36,52 @@ const INITIAL: Notif[] = [
   { id: 5,  type: "follow",      title: "New follower",                  body: "User 'ShadowWatcher' followed your profile.",                            time: "5h ago",   read: true,  node: "NODE_09" },
   { id: 6,  type: "achievement", title: "100 Archives Logged",           body: "You've catalogued 100 anime. Badge: Centurion Watcher unlocked.",        time: "1d ago",   read: true,  node: "NODE_03" },
   { id: 7,  type: "system",      title: "Platform Update v4.2",          body: "AI Oracle precision improved to 98.4%. Neural search now indexes tags.", time: "2d ago",   read: true,  node: "NODE_00" },
-  { id: 8,  type: "comment",     title: "Mentioned in a thread",         body: "@darwhite08 your theory on Eren's plan is trending.",                    time: "3d ago",   read: true,  node: "NODE_05" },
+  { id: 8,  type: "comment",     title: "Mentioned in a thread",         body: "Your theory on Eren's plan is trending in the community.",               time: "3d ago",   read: true,  node: "NODE_05" },
 ]
 
 type Filter = "all" | "unread"
 
+function timeAgo(iso: string) {
+  const d = Date.now() - new Date(iso).getTime()
+  if (d < 60000) return "just now"
+  if (d < 3600000) return `${Math.floor(d/60000)}m ago`
+  if (d < 86400000) return `${Math.floor(d/3600000)}h ago`
+  return `${Math.floor(d/86400000)}d ago`
+}
+
 export default function NotificationsPage() {
   const { push } = useToast()
-  const [notifs, setNotifs] = useState<Notif[]>(INITIAL)
   const [filter, setFilter] = useState<Filter>("all")
 
+  const { data: apiData } = useNotificationsQuery()
+  const markReadMut = useMarkRead()
+  const markAllMut  = useMarkAllRead()
+
+  // Map API notifications to local Notif type, fall back to INITIAL
+  const apiNotifs: Notif[] = (apiData?.data ?? []).map((n: Notification) => ({
+    id: n.id as unknown as number,
+    type: (["achievement","comment","update","follow","poll","system"].includes(n.type) ? n.type : "system") as NotifType,
+    title: (n.payload as Record<string,string>).title ?? n.type,
+    body:  (n.payload as Record<string,string>).description ?? (n.payload as Record<string,string>).message ?? "",
+    time:  timeAgo(n.createdAt),
+    read:  n.read,
+    node:  "NODE_00",
+  }))
+
+  const notifs = apiNotifs.length > 0 ? apiNotifs : INITIAL
   const unreadCount = notifs.filter(n => !n.read).length
 
-  const markAllRead = () => {
-    setNotifs(n => n.map(x => ({ ...x, read: true })))
-    push("All notifications marked as read", "success")
+    const markAllRead = () => {
+    markAllMut.mutate(undefined, {
+      onSuccess: () => push("All notifications marked as read", "success"),
+    })
   }
-  const clearAll = () => {
-    setNotifs([])
-    push("Notifications cleared", "info")
+  const clearAll = () => markAllMut.mutate(undefined, { onSuccess: () => push("All marked as read", "info") })
+  const markRead = (id: number) => {
+    const notif = notifs.find(n => n.id === id)
+    if (notif && !notif.read) markReadMut.mutate(String(id))
   }
-  const markRead = (id: number) => setNotifs(n => n.map(x => x.id === id ? { ...x, read: true } : x))
-  const dismiss  = (id: number) => setNotifs(n => n.filter(x => x.id !== id))
+  const dismiss = (id: number) => markReadMut.mutate(String(id))
 
   const visible = filter === "unread" ? notifs.filter(n => !n.read) : notifs
 

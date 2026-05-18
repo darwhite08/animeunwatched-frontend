@@ -5,14 +5,26 @@ import { motion } from "framer-motion"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
 import Image from "next/image"
+import Script from "next/script"
 import { Eye, EyeOff, Loader2, Sparkles } from "lucide-react"
-import { mockLogin } from "@/lib/mockAuth"
 import { useRegister } from "@/hooks/useAuth"
-import { ApiError } from "@/lib/api/client"
+import { useToast } from "@/stores/toast.store"
+import { useAuthStore } from "@/stores/auth.store"
+import { ApiError, api } from "@/lib/api/client"
+import { connectSocket } from "@/lib/socket"
+import { useQueryClient } from "@tanstack/react-query"
+import type { User } from "@/lib/api/types"
+
+// Window.google type is declared in login/page.tsx (shared via global augmentation)
 
 export default function RegisterPage() {
   const router = useRouter()
   const register = useRegister()
+
+  const { push } = useToast()
+  const qc = useQueryClient()
+  const setAccess = useAuthStore(s => s.setAccess)
+  const setUser   = useAuthStore(s => s.setUser)
 
   const [form, setForm] = useState({ username: "", email: "", password: "" })
   const [showPass, setShowPass] = useState(false)
@@ -21,6 +33,27 @@ export default function RegisterPage() {
 
   const set = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement>) =>
     setForm(f => ({ ...f, [k]: e.target.value }))
+
+  function handleOAuthSuccess(user: User, accessToken: string) {
+    setAccess(accessToken)
+    setUser(user)
+    connectSocket(accessToken)
+    qc.invalidateQueries({ queryKey: ["auth/me"] })
+    router.push("/dashboard")
+  }
+
+  const handleGoogleRegister = () => {
+    if (!process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID) {
+      push("Google OAuth not configured", "error"); return
+    }
+    setOauthLoading("google")
+    window.google?.accounts.id.prompt((n) => {
+      if (n.isNotDisplayed() || n.isSkippedMoment()) {
+        setOauthLoading(null)
+        push("Google sign-up was dismissed. Try again.", "info")
+      }
+    })
+  }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -60,14 +93,38 @@ export default function RegisterPage() {
   }
 
   const handleOAuth = (provider: "google" | "apple") => {
-    setOauthLoading(provider)
-    setTimeout(() => { mockLogin(provider); router.push("/dashboard") }, 600)
+    if (provider === "google") { handleGoogleRegister(); return }
+    push("Apple Sign In requires credentials — use email for now.", "info")
   }
 
   const isSubmitting = register.isPending
   const isDisabled = oauthLoading !== null || isSubmitting
 
   return (
+    <>
+    <Script
+      src="https://accounts.google.com/gsi/client"
+      strategy="afterInteractive"
+      onLoad={() => {
+        window.google?.accounts.id.initialize({
+          client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ?? "",
+          callback: async (response: { credential: string }) => {
+            try {
+              setOauthLoading("google")
+              const data = await api<{ accessToken: string; user: User }>("/auth/google", {
+                method: "POST",
+                body: JSON.stringify({ idToken: response.credential }),
+              })
+              handleOAuthSuccess(data.user, data.accessToken)
+            } catch (err) {
+              push(err instanceof ApiError ? err.message : "Google sign-up failed", "error")
+            } finally {
+              setOauthLoading(null)
+            }
+          },
+        })
+      }}
+    />
     <main className="relative min-h-screen bg-[#020202] text-white flex items-center justify-center px-6 py-20">
       {/* Background glows */}
       <div className="absolute inset-0 -z-10 pointer-events-none">
@@ -241,5 +298,6 @@ export default function RegisterPage() {
         </div>
       </motion.section>
     </main>
+    </>
   )
 }

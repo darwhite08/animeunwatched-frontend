@@ -1,15 +1,20 @@
 "use client"
 
 import { use, useState, useMemo } from "react"
-import { notFound } from "next/navigation"
 import { motion } from "framer-motion"
 import Image from "next/image"
 import Link from "next/link"
 import {
   Check, ChevronRight, Play, Tv,
 } from "lucide-react"
-import { ANIME_DB } from "@/lib/data/anime"
+import { useAnime } from "@/hooks/useAnime"
 import { useToast } from "@/stores/toast.store"
+import type { AnimeDTO } from "@/lib/api/types"
+import type { Anime } from "@/lib/data/anime"
+
+function mapDTO(a: AnimeDTO, i: number): Anime {
+  return { id: String(a.malId), title: a.title, titleJapanese: a.titleJapanese ?? "", rating: a.score ?? 0, year: a.year ?? 0, episodes: a.episodes, type: (["TV","Movie","OVA"] as const).includes(a.type as any) ? a.type as any : "TV", status: a.status?.toLowerCase().includes("airing") ? "airing" : "finished", studio: a.studios[0] ?? "Unknown", genres: a.genres, synopsis: a.synopsis ?? "", image: a.imageUrl ?? "", tags: a.genres.map(g => g.toLowerCase().replace(/\s/g, "-")), category: "all", rank: i+1 }
+}
 
 /* ── Types ── */
 type EpisodeFilter = "all" | "watched" | "unwatched"
@@ -90,12 +95,13 @@ export default function AnimeEpisodesPage({
   params: Promise<{ id: string }>
 }) {
   const { id } = use(params)
-  const anime  = ANIME_DB.find(a => a.id === id)
-  if (!anime) notFound()
+  const malId = Number(id)
+  const { data: animeData, isLoading } = useAnime(malId > 0 ? malId : 0)
+  const anime = animeData?.anime ? mapDTO(animeData.anime, 0) : null
 
   const { push } = useToast()
 
-  const totalCount = anime.episodes ?? 12
+  const totalCount = anime?.episodes ?? 12
   const [episodes, setEpisodes] = useState<Episode[]>(() =>
     buildEpisodes(id, totalCount),
   )
@@ -133,6 +139,8 @@ export default function AnimeEpisodesPage({
     { id: "unwatched", label: "Unwatched" },
   ]
 
+  if (isLoading) return <div className="min-h-screen bg-[#020202] text-white flex items-center justify-center text-white/30">Loading…</div>
+
   return (
     <div className="min-h-screen bg-[#020202] text-white pb-32">
       <div className="max-w-4xl mx-auto px-6 pt-28 pb-10">
@@ -143,8 +151,8 @@ export default function AnimeEpisodesPage({
             Anime Archive
           </Link>
           <ChevronRight size={11} className="text-white/15" />
-          <Link href={`/anime/${anime.id}`} className="hover:text-white/60 transition-colors truncate max-w-[180px]">
-            {anime.title}
+          <Link href={`/anime/${id}`} className="hover:text-white/60 transition-colors truncate max-w-[180px]">
+            {anime?.title ?? id}
           </Link>
           <ChevronRight size={11} className="text-white/15" />
           <span className="text-indigo-400">Episodes</span>
@@ -156,10 +164,10 @@ export default function AnimeEpisodesPage({
           animate={{ opacity: 1, y: 0 }}
           className="flex items-center gap-5 p-5 rounded-2xl bg-white/[0.02] border border-white/8 mb-8"
         >
-          <Link href={`/anime/${anime.id}`} className="relative h-20 w-14 rounded-xl overflow-hidden shrink-0 group">
+          <Link href={`/anime/${id}`} className="relative h-20 w-14 rounded-xl overflow-hidden shrink-0 group">
             <Image
-              src={anime.image}
-              alt={anime.title}
+              src={anime?.image ?? ""}
+              alt={anime?.title ?? ""}
               fill
               className="object-cover group-hover:scale-105 transition-transform duration-300"
               sizes="56px"
@@ -167,24 +175,24 @@ export default function AnimeEpisodesPage({
           </Link>
 
           <div className="flex-1 min-w-0">
-            <Link href={`/anime/${anime.id}`}>
+            <Link href={`/anime/${id}`}>
               <h1 className="text-xl font-black uppercase italic tracking-tighter text-white hover:text-indigo-300 transition-colors leading-tight truncate">
-                {anime.title}
+                {anime?.title ?? ""}
               </h1>
             </Link>
-            <p className="text-[10px] text-white/30 mt-0.5 font-mono">{anime.titleJapanese}</p>
+            <p className="text-[10px] text-white/30 mt-0.5 font-mono">{anime?.titleJapanese}</p>
             <div className="flex items-center gap-3 mt-2">
               <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-[10px] font-black text-indigo-400">
                 <Tv size={11} />
-                {anime.episodes == null ? "Ongoing" : `${anime.episodes} Episodes`}
+                {anime?.episodes == null ? "Ongoing" : `${anime.episodes} Episodes`}
               </div>
-              <span className="text-[10px] text-white/30">{anime.studio} · {anime.year}</span>
+              <span className="text-[10px] text-white/30">{anime?.studio} · {anime?.year}</span>
             </div>
           </div>
         </motion.div>
 
         {/* Ongoing notice */}
-        {anime.episodes === null && (
+        {anime?.episodes === null && (
           <motion.div
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}

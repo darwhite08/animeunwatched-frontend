@@ -15,6 +15,8 @@ import Link from "next/link"
 import TrendingWidget from "@/components/social/TrendingWidget"
 import WatchlistPreviewWidget from "@/components/social/WatchlistPreviewWidget"
 import ShareCard from "@/components/ui/ShareCard"
+import { useDiscover } from "@/hooks/usePosts"
+import type { Post as PostDTO } from "@/lib/api/types"
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -33,114 +35,20 @@ type Post = {
 
 type FeedTab = "trending" | "latest"
 
-// ─── Mock data — 8 posts ──────────────────────────────────────────────────────
-
-const MOCK_POSTS: Post[] = [
-  {
-    id: 1,
-    author: "Otaku_Arch",
-    avatar: "O",
-    time: "2m ago",
-    content:
-      "Frieren's power scaling episode just broke my brain. The concept of mana concealment being the TRUE skill ceiling is one of the most thoughtful magic system reveals I've ever seen. 🤯",
-    anime: "Frieren: Beyond Journey's End",
-    likes: 312,
-    comments: 48,
-    liked: false,
-    tags: ["power-scaling", "frieren", "magic-system"],
-  },
-  {
-    id: 2,
-    author: "ShadowWatcher",
-    avatar: "S",
-    time: "18m ago",
-    content:
-      "Controversial take: Chainsaw Man's anime actually elevated the manga. MAPPA's cinematographic direction in the final arc is something no adaptation has done before. Fight me.",
-    anime: "Chainsaw Man",
-    likes: 184,
-    comments: 93,
-    liked: true,
-    tags: ["chainsaw-man", "hot-take", "animation"],
-  },
-  {
-    id: 3,
-    author: "NeuralBot_X",
-    avatar: "N",
-    time: "1h ago",
-    content:
-      "Just finished Monster for the first time in 2026. Why did nobody tell me this exists?? Absolutely floored. 74 episodes and not a single bad one. Johan is the greatest villain in anime history — no debate.",
-    anime: "Monster",
-    likes: 427,
-    comments: 62,
-    liked: false,
-    tags: ["monster", "underrated", "villain"],
-  },
-  {
-    id: 4,
-    author: "VoidSeeker",
-    avatar: "V",
-    time: "3h ago",
-    content:
-      "The way Your Lie in April uses color theory to signal emotional states is graduate-level filmmaking. I've watched the piano duet scene 11 times and I'm not okay.",
-    anime: "Your Lie in April",
-    likes: 256,
-    comments: 34,
-    liked: false,
-    tags: ["your-lie-in-april", "cinematography", "emotional"],
-  },
-  {
-    id: 5,
-    author: "Cipher_Ronin",
-    avatar: "C",
-    time: "5h ago",
-    content:
-      "Solo Leveling Season 2 trailer just dropped and the power gap between Jinwoo and everyone else looks absolutely insane. Monarch arc is going to go crazy if they animate it right.",
-    anime: "Solo Leveling",
-    likes: 891,
-    comments: 147,
-    liked: true,
-    tags: ["solo-leveling", "hype", "season-2"],
-  },
-  {
-    id: 6,
-    author: "MushiMaster",
-    avatar: "M",
-    time: "7h ago",
-    content:
-      "Mushishi is what happens when anime becomes literature. Every episode is a short story about longing, nature, and the uncanny. If you haven't watched it you're missing one of the medium's finest achievements.",
-    anime: "Mushishi",
-    likes: 318,
-    comments: 29,
-    liked: false,
-    tags: ["mushishi", "atmospheric", "underrated"],
-  },
-  {
-    id: 7,
-    author: "RealmWalker",
-    avatar: "R",
-    time: "10h ago",
-    content:
-      "Delicious in Dungeon might be the most ambitious worldbuilding project in recent anime. The food ecology is literally consistent across 24 episodes. Trigger delivered something special.",
-    anime: "Delicious in Dungeon",
-    likes: 203,
-    comments: 41,
-    liked: false,
-    tags: ["dungeon-meshi", "worldbuilding", "2024"],
-  },
-  {
-    id: 8,
-    author: "SpecterFang",
-    avatar: "P",
-    time: "14h ago",
-    content:
-      "Violet Evergarden episode 10 destroyed me. That letter. That ending. KyoAni put more emotion into 24 minutes than most shows do in their entire run. Mandatory watch.",
-    anime: "Violet Evergarden",
-    likes: 744,
-    comments: 88,
-    liked: true,
-    tags: ["violet-evergarden", "emotional", "kyoani"],
-  },
-]
+function mapPost(p: PostDTO, i: number): Post {
+  return {
+    id: i,
+    author: p.author?.username ?? "Shinobi",
+    avatar: (p.author?.displayName ?? p.author?.username ?? "S")[0].toUpperCase(),
+    time: new Date(p.createdAt).toLocaleDateString(),
+    content: p.content,
+    anime: p.anime?.title ?? undefined,
+    likes: p._count?.likes ?? 0,
+    comments: p._count?.comments ?? 0,
+    liked: p.liked ?? false,
+    tags: [],
+  }
+}
 
 // ─── Post card ────────────────────────────────────────────────────────────────
 
@@ -232,18 +140,17 @@ function PostCard({
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function PublicFeedPage() {
-  const [posts, setPosts] = useState<Post[]>(MOCK_POSTS)
+  const { data: discoverData, isLoading } = useDiscover()
+  const rawPosts: Post[] = (discoverData?.pages.flatMap(p => p.data) ?? []).map(mapPost)
+
+  const [localLikes, setLocalLikes] = useState<Record<number, boolean>>({})
   const [feedTab, setFeedTab] = useState<FeedTab>("trending")
   const [sharingPost, setSharingPost] = useState<Post | null>(null)
 
+  const posts = rawPosts.map(p => ({ ...p, liked: localLikes[p.id] ?? p.liked }))
+
   const toggleLike = (id: number) => {
-    setPosts((ps) =>
-      ps.map((p) =>
-        p.id === id
-          ? { ...p, liked: !p.liked, likes: p.liked ? p.likes - 1 : p.likes + 1 }
-          : p,
-      ),
-    )
+    setLocalLikes(prev => ({ ...prev, [id]: !prev[id] }))
   }
 
   // For "latest" tab, sort by id descending (newest first); trending keeps default order
@@ -338,6 +245,7 @@ export default function PublicFeedPage() {
           </motion.div>
 
           {/* Posts */}
+          {isLoading && <div className="text-white/30 text-sm text-center py-8">Loading posts…</div>}
           <AnimatePresence mode="popLayout">
             {displayPosts.map((post, i) => (
               <motion.div

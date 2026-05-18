@@ -5,6 +5,8 @@ import KeyboardShortcutsOverlay from "@/components/ui/KeyboardShortcutsOverlay"
 import MobileNav from "@/components/layout/MobileNav"
 import { QueryProvider } from "@/providers/QueryProvider"
 import { KeyboardShortcuts } from "@/providers/KeyboardShortcuts"
+import { SessionProvider } from "@/components/layout/SessionProvider"
+import { LenisProvider } from "@/providers/LenisProvider"
 
 export const metadata = {
   title: { default: "AnimeUnwatched — Neural Archive", template: "%s | AnimeUnwatched" },
@@ -17,7 +19,6 @@ export const metadata = {
     description: "Track, rate, and discover anime that deserves more hype.",
   },
   twitter: { card: "summary_large_image", title: "AnimeUnwatched" },
-  themeColor: "#4f46e5",
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -25,13 +26,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en">
       <body className="bg-black text-white antialiased">
         <QueryProvider>
-          <KeyboardShortcuts>
-            {children}
-            <ToastContainer />
-            <BackToTop />
-            <KeyboardShortcutsOverlay />
-            <MobileNav />
-          </KeyboardShortcuts>
+          <SessionProvider>
+            <LenisProvider>
+              <KeyboardShortcuts>
+                {children}
+                <ToastContainer />
+                <BackToTop />
+                <KeyboardShortcutsOverlay />
+                <MobileNav />
+              </KeyboardShortcuts>
+            </LenisProvider>
+          </SessionProvider>
         </QueryProvider>
       </body>
     </html>

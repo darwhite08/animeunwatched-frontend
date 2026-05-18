@@ -6,10 +6,15 @@ import { motion } from "framer-motion"
 import Image from "next/image"
 import Link from "next/link"
 import { ChevronRight, Layers } from "lucide-react"
-import { ANIME_DB } from "@/lib/data/anime"
+import { useBrowseAnime } from "@/hooks/useAnime"
 import AnimeCard from "@/components/bestanimelist/AnimeCard"
 import AnimeModal from "@/components/bestanimelist/AnimeModal"
 import type { Anime } from "@/lib/data/anime"
+import type { AnimeDTO } from "@/lib/api/types"
+
+function mapDTO(a: AnimeDTO, i: number): Anime {
+  return { id: String(a.malId), title: a.title, titleJapanese: a.titleJapanese ?? "", rating: a.score ?? 0, year: a.year ?? 0, episodes: a.episodes, type: (["TV","Movie","OVA"] as const).includes(a.type as any) ? a.type as any : "TV", status: a.status?.toLowerCase().includes("airing") ? "airing" : "finished", studio: a.studios[0] ?? "Unknown", genres: a.genres, synopsis: a.synopsis ?? "", image: a.imageUrl ?? "", tags: a.genres.map(g => g.toLowerCase().replace(/\s/g, "-")), category: "all", rank: i+1 }
+}
 
 /* ── Genre tag chip ── */
 function GenreChip({ genre }: { genre: string }) {
@@ -27,13 +32,16 @@ export default function SimilarAnimePage({
   params: Promise<{ id: string }>
 }) {
   const { id }    = use(params)
-  const anime     = ANIME_DB.find(a => a.id === id)
-  if (!anime) notFound()
-
   const [selected, setSelected] = useState<Anime | null>(null)
+  const { data: browseData, isLoading } = useBrowseAnime({ limit: 10 })
+  const allAnime = (browseData?.data ?? []).map(mapDTO)
+
+  const anime = allAnime.find(a => a.id === id)
+  if (!isLoading && !anime) notFound()
+  if (isLoading || !anime) return <div className="min-h-screen bg-[#020202] flex items-center justify-center text-white/30 text-sm">Loading…</div>
 
   // Find similar: shared genres, different id, rating >= 7.5, sorted by rating desc
-  const similar = ANIME_DB
+  const similar = allAnime
     .filter(a => {
       if (a.id === id) return false
       if (a.rating < 7.5) return false

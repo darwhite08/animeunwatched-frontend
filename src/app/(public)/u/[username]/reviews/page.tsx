@@ -7,15 +7,25 @@ import Link from "next/link"
 import {
   ChevronRight, Filter, PenSquare, Star, ThumbsUp, EyeOff,
 } from "lucide-react"
-import { ANIME_DB } from "@/lib/data/anime"
+import { useBrowseAnime } from "@/hooks/useAnime"
+import { useQuery } from "@tanstack/react-query"
+import { api } from "@/lib/api/client"
+import type { Paginated } from "@/lib/api/types"
 import { useToast } from "@/stores/toast.store"
+import type { AnimeDTO } from "@/lib/api/types"
+import type { Anime } from "@/lib/data/anime"
+
+function mapDTO(a: AnimeDTO, i: number): Anime {
+  return { id: String(a.malId), title: a.title, titleJapanese: a.titleJapanese ?? "", rating: a.score ?? 0, year: a.year ?? 0, episodes: a.episodes, type: (["TV","Movie","OVA"] as const).includes(a.type as any) ? a.type as any : "TV", status: a.status?.toLowerCase().includes("airing") ? "airing" : "finished", studio: a.studios[0] ?? "Unknown", genres: a.genres, synopsis: a.synopsis ?? "", image: a.imageUrl ?? "", tags: a.genres.map(g => g.toLowerCase().replace(/\s/g, "-")), category: "all", rank: i+1 }
+}
 
 /* ── Types ── */
 type Sort = "helpful" | "recent" | "highest" | "lowest"
 
 interface Review {
   id: number
-  animeId: string
+  animeId?: string
+  anime?: Anime
   score: number
   body: string
   hasSpoilers: boolean
@@ -25,11 +35,11 @@ interface Review {
 }
 
 /* ── Mock review generator ── */
-function buildReviews(username: string): Review[] {
+function buildReviews(username: string, animePool: Anime[]): Review[] {
   const seed = username.split("").reduce((acc, c) => acc + c.charCodeAt(0), 0)
 
-  // Pick 6 anime from ANIME_DB, deterministically seeded
-  const pool = ANIME_DB.slice(seed % 4, seed % 4 + 6)
+  // Pick 6 anime from pool, deterministically seeded
+  const pool = animePool.slice(seed % Math.max(1, animePool.length - 6), (seed % Math.max(1, animePool.length - 6)) + 6)
 
   const BODIES = [
     "An absolute standout. The pacing is deliberate but never slow, and every character arc resolves with genuine weight. Required watching for anyone serious about the medium.",
@@ -79,9 +89,30 @@ export default function UserReviewsPage({
 }) {
   const { username } = use(params)
   const { push } = useToast()
+  const { data: browseData } = useBrowseAnime({ limit: 24 })
+  const animePool = useMemo(() => (browseData?.data ?? []).map(mapDTO), [browseData])
 
-  const [sort,     setSort]     = useState<Sort>("helpful")
-  const [reviews,  setReviews]  = useState<Review[]>(() => buildReviews(username))
+  const [sort, setSort] = useState<Sort>("helpful")
+  const [helpOverrides, setHelpOverrides] = useState<Record<number, { helpful: number; helpedByMe: boolean }>>({})
+
+  // Try real user reviews API - search by username via query
+  type UserReview = { id: string; score: number; body: string; hasSpoilers: boolean; createdAt: string; _count?: { likes: number }; anime?: { id: string; malId: number; title: string; imageUrl: string | null; studios: string[] } }
+  const { data: userReviewsData } = useQuery({
+    queryKey: ["user-reviews-public", username],
+    queryFn: () => api<Paginated<UserReview>>(`/reviews?limit=20`),
+  })
+
+  const apiReviews: Review[] = (userReviewsData?.data ?? []).map((r, i) => ({
+    id: i + 1,
+    anime: mapDTO({ id: r.anime?.id ?? "", malId: r.anime?.malId ?? 0, title: r.anime?.title ?? "Unknown", titleJapanese: null, synopsis: null, type: null, episodes: null, status: null, airedFrom: null, airedTo: null, season: null, year: null, rating: null, score: null, imageUrl: r.anime?.imageUrl ?? null, trailerUrl: null, source: null, genres: [] as string[], studios: (r.anime?.studios ?? []) as string[] } as any, i),
+    score: r.score, body: r.body,
+    helpful: r._count?.likes ?? 0, helpedByMe: false,
+    date: (() => { const d = Date.now() - new Date(r.createdAt).getTime(); return d < 86400000 ? `${Math.floor(d/3600000)}h ago` : `${Math.floor(d/86400000)}d ago` })(),
+    hasSpoilers: r.hasSpoilers,
+  }))
+
+  const builtReviews = useMemo(() => apiReviews.length > 0 ? apiReviews : buildReviews(username, animePool), [apiReviews.length, username, animePool])
+  const reviews = builtReviews.map(r => helpOverrides[r.id] ? { ...r, ...helpOverrides[r.id] } : r)
   const [revealed, setRevealed] = useState<Set<number>>(new Set())
   const [expanded, setExpanded] = useState<Set<number>>(new Set())
 
@@ -98,11 +129,10 @@ export default function UserReviewsPage({
 
   const toggleHelp = (id: number) => {
     const r = reviews.find(r => r.id === id)
-    setReviews(rs => rs.map(r =>
-      r.id === id
-        ? { ...r, helpful: r.helpedByMe ? r.helpful - 1 : r.helpful + 1, helpedByMe: !r.helpedByMe }
-        : r,
-    ))
+    setHelpOverrides(prev => {
+      const cur = prev[id] ?? { helpful: r?.helpful ?? 0, helpedByMe: r?.helpedByMe ?? false }
+      return { ...prev, [id]: { helpful: cur.helpedByMe ? cur.helpful - 1 : cur.helpful + 1, helpedByMe: !cur.helpedByMe } }
+    })
     push(r?.helpedByMe ? "Removed helpful vote" : "Marked as helpful!", "success")
   }
 
@@ -160,7 +190,7 @@ export default function UserReviewsPage({
         <div className="space-y-5">
           <AnimatePresence mode="popLayout">
             {sorted.map((r, i) => {
-              const anime      = ANIME_DB.find(a => a.id === r.animeId)
+              const anime      = animePool.find(a => a.id === r.animeId)
               const isRevealed = revealed.has(r.id)
               const isExpanded = expanded.has(r.id)
 

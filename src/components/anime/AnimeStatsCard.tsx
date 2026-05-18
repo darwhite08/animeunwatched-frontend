@@ -4,6 +4,9 @@ import { useMemo } from "react"
 import { Users, Star, BookOpen, Trophy } from "lucide-react"
 import { TiltCard } from "@/components/ui/TiltCard"
 import type { Anime } from "@/lib/data/anime"
+import { useQuery } from "@tanstack/react-query"
+import { api } from "@/lib/api/client"
+import type { Paginated } from "@/lib/api/types"
 
 /* Stable "random" values derived from rank so they don't flicker on re-render */
 function seedInt(rank: number, salt: number, min: number, max: number): number {
@@ -16,11 +19,25 @@ interface AnimeStatsCardProps {
 }
 
 export function AnimeStatsCard({ anime }: AnimeStatsCardProps) {
-  const stats = useMemo(() => ({
+  // Try to get real review count from API
+  const { data: reviewsData } = useQuery({
+    queryKey: ["anime-review-count", anime.id],
+    queryFn: () => api<Paginated<{ id: string }>>(`/anime/${anime.id}/reviews?limit=1`),
+    enabled: !!anime.id,
+  })
+
+  const realReviewCount = reviewsData?.meta?.total
+  const fallbackStats = useMemo(() => ({
     members:    seedInt(anime.rank, 1, 1000, 50000),
     reviews:    seedInt(anime.rank, 2, 50, 500),
     watchlists: seedInt(anime.rank, 3, 200, 12000),
   }), [anime.rank])
+
+  const stats = {
+    members:    fallbackStats.members,
+    reviews:    realReviewCount ?? fallbackStats.reviews,
+    watchlists: fallbackStats.watchlists,
+  }
 
   const fillPct = Math.round((anime.rating / 10) * 100)
 

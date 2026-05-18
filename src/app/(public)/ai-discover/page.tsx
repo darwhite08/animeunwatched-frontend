@@ -1,40 +1,53 @@
 "use client"
 
-import { useState, useCallback } from "react"
+import { useState, useCallback, useMemo } from "react"
 import AIDiscoverHero from "@/components/ai-discover/AIDiscoverHero"
 import AIPromptInput from "@/components/ai-discover/AIPromptInput"
 import AIResultsGrid from "@/components/ai-discover/AIResultsGrid"
-import { searchAnime, type Anime } from "@/lib/data/anime"
+import type { Anime } from "@/lib/data/anime"
+import type { AnimeDTO } from "@/lib/api/types"
+import { useSearchAnimeApi, useBrowseAnime } from "@/hooks/useAnime"
+
+function mapToAnime(a: AnimeDTO, i: number): Anime {
+  return {
+    id: String(a.malId), title: a.title, titleJapanese: a.titleJapanese ?? "",
+    rating: a.score ?? 0, year: a.year ?? 0, episodes: a.episodes,
+    type: (["TV","Movie","OVA"] as const).includes(a.type as "TV"|"Movie"|"OVA") ? (a.type as "TV"|"Movie"|"OVA") : "TV",
+    status: a.status?.toLowerCase().includes("airing") ? "airing" : "finished",
+    studio: a.studios[0] ?? "Unknown", genres: a.genres,
+    synopsis: a.synopsis ?? "", image: a.imageUrl ?? "",
+    tags: a.genres.map(g => g.toLowerCase().replace(/\s/g, "-")), category: "all", rank: i + 1,
+  }
+}
 
 export default function AIDiscoverPage() {
-  const [results, setResults] = useState<Anime[]>([])
   const [hasSearched, setHasSearched] = useState(false)
   const [lastQuery, setLastQuery] = useState("")
 
+  const { data: searchData } = useSearchAnimeApi(lastQuery)
+  const { data: browseData } = useBrowseAnime({ limit: 12 })
+
+  const results: Anime[] = useMemo(() => {
+    if (hasSearched && lastQuery && searchData?.data) return searchData.data.map(mapToAnime)
+    return (browseData?.data ?? []).slice(0, 12).map(mapToAnime)
+  }, [hasSearched, lastQuery, searchData, browseData])
+
   const handleSearch = useCallback((prompt: string) => {
     setLastQuery(prompt)
-    // AI-style search: match tags + genres + synopsis keywords from prompt
-    const results = searchAnime(prompt)
-    // Fallback: if very few matches, show top-rated
-    setResults(results.length >= 2 ? results : searchAnime("").slice(0, 6))
     setHasSearched(true)
-    // Scroll to results
     setTimeout(() => {
       document.getElementById("ai-results")?.scrollIntoView({ behavior: "smooth", block: "start" })
-    }, 100)
+    }, 300)
   }, [])
 
   return (
     <main className="min-h-screen flex flex-col bg-black text-white w-full">
       <AIDiscoverHero />
-
-      {/* Prompt input — lifted out of hero so state can flow */}
       <div className="bg-[#030303] pt-0 pb-16 px-6 -mt-8 relative z-10">
         <div className="max-w-5xl mx-auto">
           <AIPromptInput onSearch={handleSearch} />
         </div>
       </div>
-
       <div id="ai-results">
         <AIResultsGrid results={results} hasSearched={hasSearched} query={lastQuery} />
       </div>

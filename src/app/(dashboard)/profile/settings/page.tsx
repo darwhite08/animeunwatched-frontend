@@ -1,11 +1,15 @@
 "use client"
 
+import { useState } from "react"
 import Link from "next/link"
 import { motion } from "framer-motion"
 import {
   User, Shield, Bell, Palette, CreditCard, Link as LinkIcon,
-  Lock, ChevronRight, Eye, Smartphone
+  Lock, ChevronRight, Eye, Smartphone, Loader2, CheckCircle2
 } from "lucide-react"
+import { useAuthStore } from "@/stores/auth.store"
+import { useUpdateMe } from "@/hooks/useUsers"
+import { useToast } from "@/stores/toast.store"
 
 const SECTIONS = [
   {
@@ -39,6 +43,39 @@ const SECTIONS = [
 ]
 
 export default function ProfileSettingsIndex() {
+  const user      = useAuthStore(s => s.user)
+  const updateMe  = useUpdateMe()
+  const { push }  = useToast()
+
+  const [form, setForm] = useState({
+    displayName: user?.displayName ?? "",
+    bio:         user?.bio         ?? "",
+  })
+  const [saving, setSaving]   = useState(false)
+  const [saved,  setSaved]    = useState(false)
+
+  const setField = (k: keyof typeof form) =>
+    (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+      setForm(f => ({ ...f, [k]: e.target.value }))
+
+  const save = () => {
+    setSaving(true)
+    updateMe.mutate(
+      { displayName: form.displayName || undefined, bio: form.bio || undefined },
+      {
+        onSuccess: () => {
+          setSaving(false); setSaved(true)
+          push("Settings saved!", "success")
+          setTimeout(() => setSaved(false), 3000)
+        },
+        onError: () => {
+          setSaving(false)
+          push("Save failed. Try again.", "error")
+        },
+      },
+    )
+  }
+
   return (
     <div className="max-w-2xl mx-auto px-6 py-12 pb-32 space-y-8">
       <div>
@@ -46,7 +83,55 @@ export default function ProfileSettingsIndex() {
         <h1 className="text-3xl font-black tracking-tighter uppercase italic text-white">
           Settings<span className="text-indigo-500">.</span>
         </h1>
-        <p className="text-white/35 text-sm mt-1">Manage your account, privacy, and preferences</p>
+        <p className="text-white/35 text-sm mt-1">
+          {user ? `Signed in as @${user.username}` : "Manage your account, privacy, and preferences"}
+        </p>
+      </div>
+
+      {/* Quick-edit profile card */}
+      <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/8 space-y-4">
+        <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/35">Quick Edit</p>
+        <div>
+          <label className="block text-[10px] font-black uppercase tracking-[0.2em] text-white/35 mb-1.5">
+            Display Name
+          </label>
+          <input
+            type="text"
+            value={form.displayName}
+            onChange={setField("displayName")}
+            placeholder="Your name"
+            className="w-full rounded-2xl bg-black/30 border border-white/10 px-4 py-3 text-sm text-white placeholder:text-white/20 outline-none focus:border-indigo-500/40 transition-colors"
+          />
+        </div>
+        <div>
+          <label className="block text-[10px] font-black uppercase tracking-[0.2em] text-white/35 mb-1.5">
+            Bio
+          </label>
+          <textarea
+            value={form.bio}
+            onChange={setField("bio")}
+            rows={2}
+            maxLength={200}
+            placeholder="Tell the community about yourself…"
+            className="w-full rounded-2xl bg-black/30 border border-white/10 px-4 py-3 text-sm text-white placeholder:text-white/20 outline-none focus:border-indigo-500/40 resize-none transition-colors"
+          />
+          <p className="text-[9px] text-right text-white/20 mt-1">{form.bio.length}/200</p>
+        </div>
+        <div className="flex justify-end">
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.97 }}
+            onClick={save}
+            disabled={saving}
+            className={`flex items-center gap-2 px-6 py-3 rounded-2xl text-xs font-black uppercase tracking-widest transition-all ${
+              saved ? "bg-emerald-600 text-white" : "bg-indigo-600 hover:bg-indigo-500 text-white"
+            } disabled:opacity-60`}
+          >
+            {saving ? <><Loader2 size={13} className="animate-spin" /> Saving…</>
+            : saved  ? <><CheckCircle2 size={13} /> Saved!</>
+            : "Save Changes"}
+          </motion.button>
+        </div>
       </div>
 
       {SECTIONS.map((section, si) => (

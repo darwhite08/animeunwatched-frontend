@@ -8,7 +8,8 @@ import {
 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
-import { ANIME_DB } from "@/lib/data/anime"
+import { useDiscover } from "@/hooks/usePosts"
+import { useBrowseAnime } from "@/hooks/useAnime"
 
 /* ── Mock data ── */
 
@@ -65,10 +66,12 @@ const PERCENT_CHANGES: Record<string, string> = {
   "spy-x-family":    "+11%",
 }
 
-const TRENDING_ANIME = ANIME_DB.filter(a => a.category === "trending").slice(0, 4)
-
 /* ── Page ── */
 export default function TrendingPage() {
+  const { data: discoverData } = useDiscover()
+  const { data: browseData }   = useBrowseAnime({ limit: 6 })
+  const apiPosts = discoverData?.pages[0]?.data ?? []
+  const apiAnime = browseData?.data?.slice(0, 4) ?? []
   const [votedPolls, setVotedPolls] = useState<Record<number, string>>({})
 
   const vote = (pollId: number, option: string) => {
@@ -101,43 +104,37 @@ export default function TrendingPage() {
           </div>
 
           <div className="grid sm:grid-cols-2 gap-4">
-            {TRENDING_POSTS.map((post, i) => (
-              <motion.article
-                key={post.id}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.05 }}
-                className="p-5 rounded-2xl bg-zinc-900/60 border border-white/8 hover:border-white/15 transition-colors space-y-3 cursor-pointer"
-              >
-                {/* Author */}
+            {(apiPosts.length > 0 ? apiPosts : TRENDING_POSTS).map((post, i) => {
+              const isAPI = "author" in post && typeof post.author === "object"
+              const author  = isAPI ? ((post as any).author?.displayName ?? (post as any).author?.username ?? "?") : (post as any).author
+              const excerpt = (post as any).content?.slice(0, 100) ?? (post as any).excerpt?.slice(0, 100) ?? ""
+              const likes   = isAPI ? ((post as any)._count?.likes ?? 0) : (post as any).likes
+              const comments = isAPI ? ((post as any)._count?.comments ?? 0) : (post as any).comments
+              const time    = isAPI ? (() => { const d = Date.now() - new Date((post as any).createdAt).getTime(); return d < 3600000 ? `${Math.floor(d/60000)}m ago` : `${Math.floor(d/3600000)}h ago` })() : (post as any).time
+              return (
+              <motion.article key={post.id}
+                initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}
+                className="p-5 rounded-2xl bg-zinc-900/60 border border-white/8 hover:border-white/15 transition-colors space-y-3 cursor-pointer">
                 <div className="flex items-center gap-2.5">
                   <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center font-black text-xs shrink-0">
-                    {post.avatar}
+                    {author[0]?.toUpperCase()}
                   </div>
                   <div className="min-w-0">
-                    <p className="text-xs font-black text-white truncate">{post.author}</p>
-                    <p className="text-[9px] text-white/30">{post.time}</p>
+                    <p className="text-xs font-black text-white truncate">{author}</p>
+                    <p className="text-[9px] text-white/30">{time}</p>
                   </div>
                 </div>
-
-                {/* Excerpt */}
-                <p className="text-xs text-white/55 leading-relaxed line-clamp-2">
-                  {post.excerpt.slice(0, 100)}
-                </p>
-
-                {/* Actions */}
+                <p className="text-xs text-white/55 leading-relaxed line-clamp-2">{excerpt}…</p>
                 <div className="flex items-center gap-4 pt-1">
-                  <span className={`flex items-center gap-1 text-xs font-bold ${post.likes > 200 ? "text-orange-400" : "text-white/30"}`}>
-                    {post.likes > 200 ? <Flame size={12} /> : <Heart size={12} />}
-                    {post.likes}
+                  <span className={`flex items-center gap-1 text-xs font-bold ${likes > 200 ? "text-orange-400" : "text-white/30"}`}>
+                    {likes > 200 ? <Flame size={12} /> : <Heart size={12} />}{likes}
                   </span>
                   <span className="flex items-center gap-1 text-xs font-bold text-white/30">
-                    <MessageSquare size={12} />
-                    {post.comments}
+                    <MessageSquare size={12} />{comments}
                   </span>
                 </div>
               </motion.article>
-            ))}
+            )})}
           </div>
         </section>
 
@@ -149,7 +146,7 @@ export default function TrendingPage() {
           </div>
 
           <div className="space-y-4">
-            {TRENDING_ANIME.map((anime, i) => (
+            {apiAnime.map((anime, i) => (
               <motion.div
                 key={anime.id}
                 initial={{ opacity: 0, x: -10 }}
@@ -157,18 +154,18 @@ export default function TrendingPage() {
                 transition={{ delay: i * 0.06 }}
               >
                 <Link
-                  href={`/anime/${anime.id}`}
+                  href={`/anime/${anime.malId}`}
                   className="flex gap-5 p-4 rounded-2xl bg-zinc-900/60 border border-white/8 hover:border-white/15 transition-colors group"
                 >
                   {/* Cover image */}
                   <div className="relative h-24 w-16 rounded-xl overflow-hidden shrink-0">
-                    <Image
-                      src={anime.image}
+                    {anime.imageUrl && <Image
+                      src={anime.imageUrl}
                       alt={anime.title}
                       fill
                       className="object-cover brightness-90 group-hover:brightness-100 transition-all"
                       sizes="64px"
-                    />
+                    />}
                   </div>
 
                   {/* Info */}
@@ -176,10 +173,10 @@ export default function TrendingPage() {
                     <div className="flex items-start justify-between gap-3">
                       <div className="min-w-0">
                         <p className="text-sm font-black text-white group-hover:text-indigo-300 transition-colors truncate">{anime.title}</p>
-                        <p className="text-[10px] text-white/30 mt-0.5">{anime.studio} · {anime.year}</p>
+                        <p className="text-[10px] text-white/30 mt-0.5">{anime.studios[0] ?? "Unknown"} · {anime.year}</p>
                       </div>
                       <span className="shrink-0 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-[10px] font-black text-emerald-400">
-                        {PERCENT_CHANGES[anime.id] ?? "+9%"} this week
+                        {"+9%"} this week
                       </span>
                     </div>
                     <div className="flex flex-wrap gap-1.5">

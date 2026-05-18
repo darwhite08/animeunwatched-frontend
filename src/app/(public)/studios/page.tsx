@@ -6,7 +6,13 @@ import { ChevronDown, Building2, Star } from "lucide-react"
 import Image from "next/image"
 import AnimeCard from "@/components/bestanimelist/AnimeCard"
 import AnimeModal from "@/components/bestanimelist/AnimeModal"
-import { ANIME_DB, type Anime } from "@/lib/data/anime"
+import type { Anime } from "@/lib/data/anime"
+import type { AnimeDTO } from "@/lib/api/types"
+import { useBrowseAnime } from "@/hooks/useAnime"
+
+function mapDTO(a: AnimeDTO, i: number): Anime {
+  return { id: String(a.malId), title: a.title, titleJapanese: a.titleJapanese ?? "", rating: a.score ?? 0, year: a.year ?? 0, episodes: a.episodes, type: (["TV","Movie","OVA"] as const).includes(a.type as any) ? a.type as any : "TV", status: a.status?.toLowerCase().includes("airing") ? "airing" : "finished", studio: a.studios[0] ?? "Unknown", genres: a.genres, synopsis: a.synopsis ?? "", image: a.imageUrl ?? "", tags: a.genres.map(g => g.toLowerCase().replace(/\s/g, "-")), category: "all", rank: i+1 }
+}
 
 // ─── Studio config ────────────────────────────────────────────────────────────
 
@@ -34,14 +40,16 @@ type Studio = (typeof STUDIOS)[number]
 export default function StudiosPage() {
   const [activeStudio, setActiveStudio] = useState<Studio | null>(null)
   const [selectedAnime, setSelectedAnime] = useState<Anime | null>(null)
+  const { data: browseData } = useBrowseAnime({ limit: 50 })
+  const allAnime = (browseData?.data ?? []).map(mapDTO)
 
   const studioMap = useMemo(() => {
     const map: Record<string, Anime[]> = {}
     for (const studio of STUDIOS) {
-      map[studio] = ANIME_DB.filter((a) => a.studio === studio)
+      map[studio] = allAnime.filter((a) => a.studio === studio)
     }
     return map
-  }, [])
+  }, [allAnime])
 
   const handleStudioClick = (studio: Studio) => {
     setActiveStudio((prev) => (prev === studio ? null : studio))
@@ -80,7 +88,7 @@ export default function StudiosPage() {
           transition={{ delay: 0.1 }}
           className="mt-4 text-white/30 text-sm font-medium"
         >
-          {STUDIOS.length} studios · {ANIME_DB.length} titles catalogued
+          {STUDIOS.length} studios · {allAnime.length} titles catalogued
         </motion.p>
       </div>
 

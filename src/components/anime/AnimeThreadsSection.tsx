@@ -4,6 +4,9 @@ import { useState } from "react"
 import Link from "next/link"
 import { Pin, MessageSquare, Eye, ChevronRight } from "lucide-react"
 import { useToast } from "@/stores/toast.store"
+import { useQuery } from "@tanstack/react-query"
+import { api } from "@/lib/api/client"
+import type { Paginated } from "@/lib/api/types"
 
 type Thread = {
   id: string
@@ -77,10 +80,29 @@ interface AnimeThreadsSectionProps {
   animeTitle: string
 }
 
-export function AnimeThreadsSection({ animeTitle }: AnimeThreadsSectionProps) {
+export function AnimeThreadsSection({ animeId, animeTitle }: AnimeThreadsSectionProps) {
   const { push } = useToast()
   const [activeFilter, setActiveFilter] = useState<Filter>("All")
-  const threads = buildThreads(animeTitle)
+
+  // Try real API threads for this anime
+  const { data: apiData } = useQuery({
+    queryKey: ["anime-threads", animeId],
+    queryFn: () => api<Paginated<{ id: string; title: string; content: string; isPinned: boolean; createdAt: string; author: { username: string; displayName: string }; _count?: { replies: number } }>>(`/anime/${animeId}/threads`),
+    enabled: !!animeId,
+  })
+
+  const apiThreads = (apiData?.data ?? []).map(t => ({
+    id: t.id,
+    title: t.title,
+    author: t.author?.displayName ?? t.author?.username ?? "Anonymous",
+    replies: t._count?.replies ?? 0,
+    views: 0,
+    isPinned: t.isPinned,
+    lastActivity: (() => { const d = Date.now() - new Date(t.createdAt).getTime(); return d < 3600000 ? `${Math.floor(d/60000)}m ago` : d < 86400000 ? `${Math.floor(d/3600000)}h ago` : `${Math.floor(d/86400000)}d ago` })(),
+    excerpt: t.content.slice(0, 100) + "…",
+  }))
+
+  const threads = apiThreads.length > 0 ? apiThreads : buildThreads(animeTitle)
 
   const filtered = threads.filter((t) => {
     if (activeFilter === "All") return true

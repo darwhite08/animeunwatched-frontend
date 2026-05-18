@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { useCreateClub } from "@/hooks/useClubs"
 import { motion } from "framer-motion"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
@@ -92,6 +93,7 @@ function Field({
 
 /* ── Page ── */
 export default function NewClubPage() {
+  const createClub = useCreateClub()
   const router = useRouter()
   const { push } = useToast()
 
@@ -134,11 +136,20 @@ export default function NewClubPage() {
     }
     setErrors({})
     setSubmitting(true)
-    setTimeout(() => {
-      setSubmitting(false)
-      push("Club created!", "success")
-      router.push("/clubs")
-    }, 900)
+    createClub.mutate(
+      { name: form.name, slug: form.slug, description: form.description },
+      {
+        onSuccess: () => {
+          setSubmitting(false)
+          push("Club created!", "success")
+          router.push("/clubs")
+        },
+        onError: (e: Error) => {
+          setSubmitting(false)
+          push(e.message?.includes("CONFLICT") ? "That slug is already taken" : "Failed to create club", "error")
+        },
+      }
+    )
   }
 
   const inputClass =

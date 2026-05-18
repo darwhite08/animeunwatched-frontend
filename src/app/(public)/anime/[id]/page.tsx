@@ -2,15 +2,55 @@
 
 import { use, useState } from "react"
 import { notFound } from "next/navigation"
-import { ANIME_DB, type Anime } from "@/lib/data/anime"
+import type { Anime } from "@/lib/data/anime"
+import { useAnime } from "@/hooks/useAnime"
 import { useWatchlist } from "@/stores/watchlist.store"
 import { useToast } from "@/stores/toast.store"
+import type { AnimeDTO } from "@/lib/api/types"
+import { useAnimeReviews } from "@/hooks/useReviews"
+import { useQuery } from "@tanstack/react-query"
+import { api } from "@/lib/api/client"
+
+/* Map API response to local Anime type for existing UI components */
+function mapAPIAnime(a: AnimeDTO, rank = 1): Anime {
+  return {
+    id: String(a.malId),
+    title: a.title,
+    titleJapanese: a.titleJapanese ?? "",
+    rating: a.score ?? 0,
+    year: a.year ?? 0,
+    episodes: a.episodes,
+    type: (["TV","Movie","OVA"] as const).includes(a.type as "TV"|"Movie"|"OVA") ? (a.type as "TV"|"Movie"|"OVA") : "TV",
+    status: a.status?.toLowerCase().includes("airing") ? "airing" : "finished",
+    studio: a.studios[0] ?? "Unknown",
+    genres: a.genres,
+    synopsis: a.synopsis ?? "",
+    image: a.imageUrl ?? "/assets/png/tanjiro.png",
+    tags: a.genres.map(g => g.toLowerCase().replace(/\s/g, "-")),
+    category: "all",
+    rank,
+  }
+}
+
+function AnimeDetailLoader({ malId }: { malId: number }) {
+  const { data, isLoading, isError } = useAnime(malId)
+
+  if (isLoading) return (
+    <div className="min-h-screen bg-[#020202] flex items-center justify-center">
+      <div className="w-8 h-8 border-2 border-indigo-500/30 border-t-indigo-500 rounded-full animate-spin" />
+    </div>
+  )
+
+  if (isError || !data?.anime) return notFound()
+
+  return <AnimeDetail anime={mapAPIAnime(data.anime)} rawAnime={data.anime} />
+}
 import { motion } from "framer-motion"
 import Image from "next/image"
 import Link from "next/link"
 import {
   Star, Clock, Monitor, Plus, Check, Share2, ChevronLeft,
-  MessageSquare, Heart, Sparkles, PenSquare, Flag, BookOpen, Calendar,
+  MessageSquare, Heart, Sparkles, PenSquare, Flag, BookOpen, Calendar, Play,
 } from "lucide-react"
 import EpisodeTracker from "@/components/anime/EpisodeTracker"
 import { AnimeThreadsSection } from "@/components/anime/AnimeThreadsSection"
@@ -29,15 +69,26 @@ const MOCK_REVIEWS = [
 
 export default function AnimeDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params)
-  const anime = ANIME_DB.find(a => a.id === id)
-  if (!anime) notFound()
+  const malId = parseInt(id, 10)
 
-  return <AnimeDetail anime={anime} />
+  // All IDs are now numeric malIds from the API
+  if (!isNaN(malId)) return <AnimeDetailLoader malId={malId} />
+  return notFound()
+
+  return notFound()
 }
 
-function AnimeDetail({ anime }: { anime: Anime }) {
+function AnimeDetail({ anime, rawAnime }: { anime: Anime; rawAnime?: AnimeDTO }) {
   const { add, remove, has } = useWatchlist()
   const { push } = useToast()
+  const { data: reviewsData } = useAnimeReviews(anime.id)
+  const malId = parseInt(anime.id, 10)
+  const { data: similarData } = useQuery({
+    queryKey: ["anime-similar", anime.id],
+    queryFn: () => api<{ data: AnimeDTO[] }>(`/anime/${malId}/similar?limit=4`),
+    enabled: !isNaN(malId),
+  })
+  const relatedAnime = similarData?.data ?? []
   const inList = has(anime.id)
   const [reviewOpen, setReviewOpen] = useState(false)
   const [reportOpen, setReportOpen] = useState(false)
@@ -148,9 +199,13 @@ function AnimeDetail({ anime }: { anime: Anime }) {
 
           {/* Metadata chips */}
           {[
-            { icon: Clock,   label: anime.episodes ? `${anime.episodes} eps` : "Ongoing"        },
-            { icon: Monitor, label: anime.type                                                    },
-            { icon: BookOpen,label: anime.studio                                                  },
+            { icon: Clock,    label: anime.episodes ? `${anime.episodes} eps` : "Ongoing" },
+            { icon: Monitor,  label: anime.type },
+            ...(anime.studio && anime.studio !== "Unknown"
+              ? [{ icon: BookOpen, label: anime.studio }]
+              : rawAnime?.studios && rawAnime.studios.length > 0
+                ? [{ icon: BookOpen, label: rawAnime.studios[0] }]
+                : []),
           ].map(m => (
             <div key={m.label} className="flex items-center gap-2 px-4 py-2.5 bg-white/[0.04] border border-white/8 rounded-xl text-sm font-bold text-white/50">
               <m.icon size={14} className="text-white/30" />
@@ -171,6 +226,17 @@ function AnimeDetail({ anime }: { anime: Anime }) {
 
           {/* Actions */}
           <div className="ml-auto flex items-center gap-3">
+            {rawAnime?.trailerUrl && (
+              <a
+                href={rawAnime.trailerUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 px-4 py-3 rounded-2xl border border-rose-500/30 bg-rose-500/10 text-rose-400 hover:bg-rose-500/20 hover:border-rose-500/50 transition-all text-xs font-black uppercase tracking-widest"
+              >
+                <Play size={14} fill="currentColor" /> Trailer
+              </a>
+            )}
+
             <motion.button
               whileHover={{ scale: 1.04 }}
               whileTap={{ scale: 0.96 }}
@@ -226,7 +292,11 @@ function AnimeDetail({ anime }: { anime: Anime }) {
             {/* Synopsis */}
             <div>
               <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/30 mb-4">Synopsis</h2>
-              <p className="text-white/70 text-base leading-relaxed font-medium">{anime.synopsis}</p>
+              {anime.synopsis ? (
+                <p className="text-white/70 text-base leading-relaxed font-medium">{anime.synopsis}</p>
+              ) : (
+                <p className="text-white/30 text-base leading-relaxed font-medium italic">No synopsis available.</p>
+              )}
             </div>
 
             {/* Tags */}
@@ -263,36 +333,38 @@ function AnimeDetail({ anime }: { anime: Anime }) {
               </div>
 
               <div className="space-y-4">
-                {MOCK_REVIEWS.map((r, i) => (
-                  <motion.div
-                    key={r.id}
-                    initial={{ opacity: 0, y: 8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.2 + i * 0.06 }}
-                    className="p-5 rounded-2xl bg-white/[0.02] border border-white/8 space-y-3"
-                  >
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-xs font-black">
-                          {r.user[0]}
+                {(() => {
+                  const apiRevs = reviewsData?.data ?? []
+                  const reviews = apiRevs.length > 0 ? apiRevs.map(r => ({
+                    id: r.id, user: r.author?.displayName ?? r.author?.username ?? "?",
+                    score: r.score, body: r.body, date: new Date(r.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }), likes: r._count?.likes ?? 0,
+                  })) : MOCK_REVIEWS
+                  return reviews.map((r, i) => (
+                    <motion.div key={r.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 + i * 0.06 }}
+                      className="p-5 rounded-2xl bg-white/[0.02] border border-white/8 space-y-3">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-3">
+                          <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-xs font-black">
+                            {r.user[0]}
+                          </div>
+                          <div>
+                            <p className="text-xs font-black text-white">{r.user}</p>
+                            <p className="text-[9px] text-white/25 mt-0.5">{r.date}</p>
+                          </div>
                         </div>
-                        <div>
-                          <p className="text-xs font-black text-white">{r.user}</p>
-                          <p className="text-[9px] text-white/25 mt-0.5">{r.date}</p>
+                        <div className="flex items-center gap-1.5">
+                          <Star size={12} fill="#f59e0b" className="text-amber-400" />
+                          <span className="text-sm font-black text-white">{r.score}</span>
+                          <span className="text-xs text-white/25">/10</span>
                         </div>
                       </div>
-                      <div className="flex items-center gap-1.5">
-                        <Star size={12} fill="#f59e0b" className="text-amber-400" />
-                        <span className="text-sm font-black text-white">{r.score}</span>
-                        <span className="text-xs text-white/25">/10</span>
-                      </div>
-                    </div>
-                    <p className="text-sm text-white/55 leading-relaxed">{r.body}</p>
-                    <button className="flex items-center gap-1.5 text-[10px] text-white/25 hover:text-white/50 transition-colors">
-                      <Heart size={11} /> {r.likes} helpful
-                    </button>
-                  </motion.div>
-                ))}
+                      <p className="text-sm text-white/55 leading-relaxed">{r.body}</p>
+                      <button className="flex items-center gap-1.5 text-[10px] text-white/25 hover:text-white/50 transition-colors">
+                        <Heart size={11} /> {r.likes} helpful
+                      </button>
+                    </motion.div>
+                  ))
+                })()}
               </div>
             </div>
             {/* Discussion Threads */}
@@ -306,16 +378,19 @@ function AnimeDetail({ anime }: { anime: Anime }) {
             <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/8 space-y-4">
               <h3 className="text-[9px] font-black uppercase tracking-[0.3em] text-white/25">Quick Facts</h3>
               {[
-                { label: "Studio",   value: anime.studio },
-                { label: "Type",     value: anime.type   },
-                { label: "Year",     value: String(anime.year) },
-                { label: "Episodes", value: anime.episodes ? String(anime.episodes) : "Ongoing" },
-                { label: "Status",   value: anime.status === "airing" ? "Currently Airing" : "Finished" },
-                { label: "Rating",   value: `${anime.rating.toFixed(1)} / 10` },
+                { label: "Studio",     value: anime.studio },
+                { label: "Type",       value: anime.type   },
+                { label: "Year",       value: String(anime.year) },
+                { label: "Episodes",   value: anime.episodes ? String(anime.episodes) : "Ongoing" },
+                { label: "Status",     value: anime.status === "airing" ? "Currently Airing" : "Finished" },
+                { label: "Score",      value: `${anime.rating.toFixed(1)} / 10` },
+                ...(rawAnime?.season ? [{ label: "Season", value: `${rawAnime.season.charAt(0).toUpperCase()}${rawAnime.season.slice(1).toLowerCase()} ${anime.year}` }] : []),
+                ...(rawAnime?.rating ? [{ label: "Age Rating", value: rawAnime.rating }] : []),
+                ...(rawAnime?.source ? [{ label: "Source", value: rawAnime.source }] : []),
               ].map(f => (
                 <div key={f.label} className="flex justify-between items-center text-sm">
                   <span className="text-white/35 font-medium">{f.label}</span>
-                  <span className="font-bold text-white/80">{f.value}</span>
+                  <span className="font-bold text-white/80 text-right max-w-[55%]">{f.value}</span>
                 </div>
               ))}
             </div>
@@ -324,41 +399,32 @@ function AnimeDetail({ anime }: { anime: Anime }) {
             <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/8 space-y-4">
               <h3 className="text-[9px] font-black uppercase tracking-[0.3em] text-white/25">More Like This</h3>
               <div className="space-y-3">
-                {ANIME_DB
-                  .filter(a => a.id !== anime.id && a.genres.some(g => anime.genres.includes(g)))
-                  .slice(0, 4)
-                  .map(related => (
-                    <Link
-                      key={related.id}
-                      href={`/anime/${related.id}`}
-                      className="flex items-center gap-3 group"
-                    >
-                      <div className="relative h-12 w-9 rounded-lg overflow-hidden shrink-0">
-                        <Image src={related.image} alt={related.title} fill className="object-cover" sizes="36px" />
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-xs font-bold text-white/70 group-hover:text-white transition-colors truncate">
-                          {related.title}
-                        </p>
-                        <p className="text-[9px] text-white/30 mt-0.5 flex items-center gap-1">
-                          <Star size={9} fill="#f59e0b" className="text-amber-400" /> {related.rating.toFixed(1)}
-                        </p>
-                      </div>
-                    </Link>
-                  ))
-                }
+                {relatedAnime.map(related => (
+                  <Link key={related.malId} href={`/anime/${related.malId}`}
+                    className="flex items-center gap-3 group">
+                    <div className="relative h-12 w-9 rounded-lg overflow-hidden shrink-0 bg-white/5">
+                      {related.imageUrl && <Image src={related.imageUrl} alt={related.title} fill className="object-cover" sizes="36px" />}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs font-bold text-white/70 group-hover:text-white transition-colors truncate">{related.title}</p>
+                      <p className="text-[9px] text-white/30 mt-0.5 flex items-center gap-1">
+                        <Star size={9} fill="#f59e0b" className="text-amber-400" /> {(related.score ?? 0).toFixed(1)}
+                      </p>
+                    </div>
+                  </Link>
+                ))}
               </div>
             </div>
 
             {/* Season link */}
             <Link
-              href={`/anime/season/${anime.year}/${(anime as Record<string, unknown>)["season"] ?? "fall"}`}
+              href={`/anime/season/${anime.year}/${rawAnime?.season ?? "fall"}`}
               className="flex items-center gap-3 p-4 rounded-2xl bg-white/[0.02] border border-white/8 hover:border-white/15 transition-colors group"
             >
               <Calendar size={14} className="text-white/30 shrink-0" />
               <div>
                 <p className="text-sm font-bold text-white/60 group-hover:text-white">View {anime.year} Season</p>
-                <p className="text-[10px] text-white/25 mt-0.5">Browse {String((anime as Record<string, unknown>)["season"] ?? "fall")} {anime.year} anime</p>
+                <p className="text-[10px] text-white/25 mt-0.5">Browse {rawAnime?.season ?? "fall"} {anime.year} anime</p>
               </div>
             </Link>
 

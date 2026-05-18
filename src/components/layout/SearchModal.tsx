@@ -2,10 +2,24 @@
 
 import { motion, AnimatePresence } from "framer-motion"
 import { Search, Command, Zap, Star, ArrowRight, X, Clock } from "lucide-react"
-import { useEffect, useRef, useState, useCallback } from "react"
-import { searchAnime, type Anime } from "@/lib/data/anime"
+import { useEffect, useRef, useState, useCallback, useMemo } from "react"
+import type { Anime } from "@/lib/data/anime"
+import type { AnimeDTO } from "@/lib/api/types"
 import AnimeModal from "@/components/bestanimelist/AnimeModal"
 import { useRouter } from "next/navigation"
+import { useSearchAnimeApi } from "@/hooks/useAnime"
+
+function mapDTO(a: AnimeDTO, i: number): Anime {
+  return {
+    id: String(a.malId), title: a.title, titleJapanese: a.titleJapanese ?? "",
+    rating: a.score ?? 0, year: a.year ?? 0, episodes: a.episodes,
+    type: (["TV","Movie","OVA"] as const).includes(a.type as any) ? a.type as any : "TV",
+    status: a.status?.toLowerCase().includes("airing") ? "airing" : "finished",
+    studio: a.studios[0] ?? "Unknown", genres: a.genres,
+    synopsis: a.synopsis ?? "", image: a.imageUrl ?? "",
+    tags: a.genres.map(g => g.toLowerCase().replace(/\s/g, "-")), category: "all", rank: i + 1,
+  }
+}
 
 interface SearchModalProps {
   isOpen: boolean
@@ -24,7 +38,6 @@ type UserSuggestion = { username: string; displayName: string }
 
 export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
   const [query, setQuery] = useState("")
-  const [results, setResults] = useState<Anime[]>([])
   const [userSuggestions, setUserSuggestions] = useState<UserSuggestion[]>([])
   const [cursor, setCursor] = useState(-1)
   const [selectedAnime, setSelectedAnime] = useState<Anime | null>(null)
@@ -32,10 +45,12 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
   const router = useRouter()
   const suggestTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
-  // Real-time local search
+  const { data: searchData } = useSearchAnimeApi(query.trim())
+  const results = useMemo(() => (searchData?.data ?? []).slice(0, 6).map(mapDTO), [searchData])
+
+  // Debounce cursor reset on query change
   useEffect(() => {
-    if (!query.trim()) { setResults([]); setUserSuggestions([]); setCursor(-1); return }
-    setResults(searchAnime(query).slice(0, 6))
+    if (!query.trim()) { setUserSuggestions([]); setCursor(-1); return }
     setCursor(-1)
 
     // Debounced backend suggestions for users
@@ -173,8 +188,8 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                               onClick={() => setSelectedAnime(anime)}
                               className={`group w-full flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-white/5 transition-all text-left ${cursor === i ? "bg-white/5" : ""}`}
                             >
-                              <div className="relative h-10 w-8 shrink-0 rounded-lg overflow-hidden">
-                                <img src={anime.image} alt={anime.title} className="w-full h-full object-cover" />
+                              <div className="relative h-10 w-8 shrink-0 rounded-lg overflow-hidden bg-white/10">
+                                {anime.image && <img src={anime.image} alt={anime.title} className="w-full h-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = "none" }} />}
                               </div>
                               <div className="flex-1 min-w-0">
                                 <p className="text-sm font-black text-white/80 group-hover:text-white truncate uppercase tracking-tight">

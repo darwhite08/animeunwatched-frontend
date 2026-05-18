@@ -41,14 +41,21 @@ export default function AnimeCard({ anime, index, onClick }: AnimeCardProps) {
       <div className="absolute -inset-1 bg-gradient-to-b from-indigo-500/20 to-purple-500/20 rounded-[2rem] blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
       <div className="relative h-full w-full bg-[#0a0a0a] rounded-[1.8rem] overflow-hidden border border-white/5 hover:border-white/15 transition-colors duration-500">
-        <Image
-          src={anime.image}
-          alt={anime.title}
-          fill
-          className="object-cover transition-all duration-700 scale-105 group-hover:scale-110 brightness-[0.7] group-hover:brightness-50"
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 20vw"
-          priority={index < 5}
-        />
+        {anime.image ? (
+          <Image
+            src={anime.image}
+            alt={anime.title}
+            fill
+            className="object-cover transition-all duration-700 scale-105 group-hover:scale-110 brightness-[0.7] group-hover:brightness-50"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 20vw"
+            priority={index < 5}
+            onError={(e) => { (e.target as HTMLImageElement).style.display = "none" }}
+          />
+        ) : (
+          <div className="absolute inset-0 bg-gradient-to-br from-indigo-900/40 to-purple-900/20 flex items-center justify-center">
+            <span className="text-3xl font-black text-white/10">{anime.title[0]}</span>
+          </div>
+        )}
 
         {/* Rank badge */}
         <div className="absolute top-4 left-4">

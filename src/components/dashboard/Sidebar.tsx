@@ -3,6 +3,7 @@
 import { motion } from "framer-motion"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { useAuthStore } from "@/stores/auth.store"
 import {
   LayoutGrid, Book, MonitorPlay, Activity, BarChart2,
   User, Users, Bell, Settings, Flame, Zap, ChevronRight, Rss, Trophy,
@@ -48,6 +49,11 @@ const NAV = [
 export default function Sidebar() {
   const pathname  = usePathname()
   const wlCount   = useWatchlist(s => s.count)
+  const user      = useAuthStore(s => s.user)
+  const rep       = user?.reputation ?? 0
+  const level     = Math.max(1, Math.floor(Math.sqrt(rep * 100 / 1000)))
+  const streak    = Math.min(365, Math.floor(rep / 10))
+  const grade     = level >= 10 ? "Grade IV" : level >= 7 ? "Grade III" : level >= 4 ? "Grade II" : "Grade I"
 
   return (
     <aside className="fixed left-0 top-0 h-screen w-64 bg-[#050505] border-r border-white/5 flex flex-col z-50">
@@ -131,8 +137,8 @@ export default function Sidebar() {
                   <Flame size={14} fill="currentColor" className="animate-pulse" />
                 </div>
                 <div>
-                  <p className="text-xs font-black text-white leading-none">22 Day Streak</p>
-                  <p className="text-[9px] text-white/20 uppercase tracking-tighter mt-0.5">Flame Grade III</p>
+                  <p className="text-xs font-black text-white leading-none">{streak} Day Streak</p>
+                  <p className="text-[9px] text-white/20 uppercase tracking-tighter mt-0.5">Flame {grade}</p>
                 </div>
               </div>
               <ChevronRight size={12} className="text-white/20 group-hover:text-indigo-400 group-hover:translate-x-0.5 transition-all" />

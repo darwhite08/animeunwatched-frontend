@@ -1,12 +1,18 @@
 "use client"
 
-import { use, useState } from "react"
+import { use, useState, useMemo } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import Link from "next/link"
 import { ArrowLeft } from "lucide-react"
-import { ANIME_DB, type Anime } from "@/lib/data/anime"
+import { type Anime } from "@/lib/data/anime"
 import AnimeCard from "@/components/bestanimelist/AnimeCard"
 import AnimeModal from "@/components/bestanimelist/AnimeModal"
+import { useBrowseAnime } from "@/hooks/useAnime"
+import type { AnimeDTO } from "@/lib/api/types"
+
+function mapDTO(a: AnimeDTO, i: number): Anime {
+  return { id: String(a.malId), title: a.title, titleJapanese: a.titleJapanese ?? "", rating: a.score ?? 0, year: a.year ?? 0, episodes: a.episodes, type: (["TV","Movie","OVA"] as const).includes(a.type as any) ? a.type as any : "TV", status: a.status?.toLowerCase().includes("airing") ? "airing" : "finished", studio: a.studios[0] ?? "Unknown", genres: a.genres, synopsis: a.synopsis ?? "", image: a.imageUrl ?? "", tags: a.genres.map(g => g.toLowerCase().replace(/\s/g, "-")), category: "all", rank: i+1 }
+}
 
 /* ── Category config ── */
 type CategoryMeta = {
@@ -135,19 +141,20 @@ export default function CategoryDiscoverPage({
   const [typeFilter, setTypeFilter]       = useState<TypeFilter>("all")
   const [statusFilter, setStatusFilter]   = useState<StatusFilter>("all")
 
+  const { data: browseData, isLoading } = useBrowseAnime({ limit: 24 })
+  const animeList = useMemo(() => (browseData?.data ?? []).map(mapDTO), [browseData])
+
   const openModal = (anime: Anime) => {
     setModalAnime(anime)
     setModalOpen(true)
   }
 
-  const baseList = ANIME_DB.filter(meta.filter)
-
-  const filtered = baseList.filter((a) => {
+  const filtered = useMemo(() => animeList.filter((a) => {
     const ratingOk = a.rating >= RATING_THRESHOLDS[ratingFilter]
     const typeOk   = typeFilter === "all"   || a.type === typeFilter
     const statusOk = statusFilter === "all" || a.status === statusFilter
     return ratingOk && typeOk && statusOk
-  })
+  }), [animeList, ratingFilter, typeFilter, statusFilter])
 
   const displayTitle = meta.title.charAt(0).toUpperCase() + meta.title.slice(1)
 
@@ -242,7 +249,7 @@ export default function CategoryDiscoverPage({
           transition={{ delay: 0.18 }}
           className="text-[10px] font-black uppercase tracking-[0.2em] text-white/20 mb-6"
         >
-          {filtered.length} title{filtered.length !== 1 ? "s" : ""}
+          {isLoading ? "Loading…" : `${filtered.length} title${filtered.length !== 1 ? "s" : ""}`}
         </motion.p>
 
         {/* Grid */}

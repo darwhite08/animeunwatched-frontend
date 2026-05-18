@@ -24,10 +24,24 @@ export default function AIPromptInput({ onSearch }: AIPromptInputProps) {
   const handleSubmit = async () => {
     if (!prompt.trim() || loading) return
     setLoading(true)
-    // Simulate a brief neural-processing delay, then surface results
-    await new Promise(r => setTimeout(r, 1200))
+    // Extract keyword from natural language prompt
+    const KEYWORD_MAP: [string, string][] = [
+      ["overpowered", "action"], ["psychological", "psychological"], ["thriller", "thriller"],
+      ["romance", "romance"], ["dark fantasy", "fantasy"], ["demon slayer", "demon slayer"],
+      ["hidden gem", "underrated"], ["underrated", "drama"], ["isekai", "isekai"],
+      ["mecha", "mecha"], ["slice of life", "slice of life"], ["comedy", "comedy"],
+      ["horror", "horror"], ["sports", "sports"], ["mystery", "mystery"],
+      ["supernatural", "supernatural"], ["school", "school"], ["sci-fi", "sci-fi"],
+      ["historical", "historical"], ["adventure", "adventure"],
+    ]
+    const lower = prompt.toLowerCase()
+    let searchQuery = prompt.trim()
+    for (const [key, val] of KEYWORD_MAP) {
+      if (lower.includes(key)) { searchQuery = val; break }
+    }
+    await new Promise(r => setTimeout(r, 800))
     setLoading(false)
-    onSearch?.(prompt)
+    onSearch?.(searchQuery)
   }
 
   const handleKey = (e: React.KeyboardEvent) => {

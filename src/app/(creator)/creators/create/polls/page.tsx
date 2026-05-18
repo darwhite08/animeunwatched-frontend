@@ -3,10 +3,25 @@
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Vote, Plus, Trash2, Clock, Send } from "lucide-react"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { api } from "@/lib/api/client"
+import { useToast } from "@/stores/toast.store"
+import { useRouter } from "next/navigation"
 
 const DURATIONS = ["1 day", "3 days", "7 days", "14 days"]
 
+const DURATION_HOURS: Record<string, number> = { "1 day": 24, "3 days": 72, "7 days": 168, "14 days": 336 }
+
 export default function CreatePollPage() {
+  const router = useRouter()
+  const { push } = useToast()
+  const qc = useQueryClient()
+  const createPoll = useMutation({
+    mutationFn: (body: { question: string; options: string[]; expiresIn: number }) =>
+      api("/polls", { method: "POST", body: JSON.stringify(body) }),
+    onSuccess: () => { qc.invalidateQueries({ queryKey: ["polls"] }) },
+  })
+
   const [question, setQuestion] = useState("")
   const [options, setOptions] = useState(["", ""])
   const [duration, setDuration] = useState("7 days")
@@ -29,13 +44,18 @@ export default function CreatePollPage() {
 
   const handleSubmit = () => {
     if (!canSubmit) return
-    setSubmitted(true)
-    setTimeout(() => {
-      setSubmitted(false)
-      setQuestion("")
-      setOptions(["", ""])
-      setDuration("7 days")
-    }, 3000)
+    const validOptions = options.filter(o => o.trim())
+    createPoll.mutate(
+      { question: question.trim(), options: validOptions, expiresIn: DURATION_HOURS[duration] ?? 168 },
+      {
+        onSuccess: () => {
+          setSubmitted(true)
+          push("Poll published!", "success")
+          setTimeout(() => { setSubmitted(false); setQuestion(""); setOptions(["", ""]); setDuration("7 days"); router.push("/poll") }, 2000)
+        },
+        onError: () => push("Failed to create poll", "error"),
+      }
+    )
   }
 
   return (

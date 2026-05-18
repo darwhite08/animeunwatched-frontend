@@ -3,12 +3,14 @@
 import { useState, useMemo } from "react"
 import Link from "next/link"
 import { motion, AnimatePresence } from "framer-motion"
+import { useBlogs } from "@/hooks/useBlogs"
 import { FileText, Plus, Search, Eye, Heart, BarChart2, Clock, Edit2, Trash2, MoreHorizontal } from "lucide-react"
 
 type BlogStatus = "published" | "draft" | "under_review"
 
 type Blog = {
   id: string
+  slug?: string
   title: string
   excerpt: string
   status: BlogStatus
@@ -77,18 +79,31 @@ type Filter = "all" | BlogStatus
 export default function BlogListPage() {
   const [filter, setFilter] = useState<Filter>("all")
   const [query, setQuery] = useState("")
+  const { data: blogsData } = useBlogs()
+
+  const apiBlogs: Blog[] = (blogsData?.data ?? []).map(b => ({
+    id: b.id, slug: b.slug, title: b.title,
+    excerpt: b.body.slice(0, 100) + "…",
+    coverGradient: "from-indigo-900 to-violet-900",
+    status: b.status === "PUBLISHED" ? "published" as const : "draft" as const,
+    views: 0, likes: 0,
+    readTime: Math.max(1, Math.ceil(b.body.split(" ").length / 200)),
+    publishedAt: b.publishedAt ? new Date(b.publishedAt).toLocaleDateString() : "",
+  }))
+
+  const allBlogs = apiBlogs.length > 0 ? apiBlogs : MOCK_BLOGS
 
   const visible = useMemo(() => {
-    return MOCK_BLOGS.filter(b => {
+    return allBlogs.filter(b => {
       const matchesFilter = filter === "all" || b.status === filter
       const matchesQuery = b.title.toLowerCase().includes(query.toLowerCase())
       return matchesFilter && matchesQuery
     })
-  }, [filter, query])
+  }, [allBlogs, filter, query])
 
-  const totalViews = MOCK_BLOGS.reduce((s, b) => s + b.views, 0)
-  const totalLikes = MOCK_BLOGS.reduce((s, b) => s + b.likes, 0)
-  const published = MOCK_BLOGS.filter(b => b.status === "published").length
+  const totalViews = allBlogs.reduce((s, b) => s + b.views, 0)
+  const totalLikes = allBlogs.reduce((s, b) => s + b.likes, 0)
+  const published = allBlogs.filter(b => b.status === "published").length
 
   return (
     <div className="space-y-8">
@@ -100,7 +115,7 @@ export default function BlogListPage() {
           </div>
           <div>
             <h1 className="text-2xl font-semibold">Blog Articles</h1>
-            <p className="text-sm text-white/40">{MOCK_BLOGS.length} articles</p>
+            <p className="text-sm text-white/40">{allBlogs.length} articles</p>
           </div>
         </div>
 

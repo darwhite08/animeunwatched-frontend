@@ -20,7 +20,9 @@ import Link from "next/link"
 import Image from "next/image"
 import { useToast } from "@/stores/toast.store"
 import { useAuthStore } from "@/stores/auth.store"
-import { ANIME_DB } from "@/lib/data/anime"
+import { useFeed, useDiscover, useCreatePost } from "@/hooks/usePosts"
+import type { Post } from "@/lib/api/types"
+import { Loader2 } from "lucide-react"
 
 /* ── Types ── */
 type FeedPost = {
@@ -187,46 +189,56 @@ const SUGGESTIONS: Suggestion[] = [
   },
 ]
 
-const TRENDING_ANIME = ANIME_DB.filter((a) => a.rating >= 8.8).slice(0, 4)
+// TRENDING_ANIME loaded from API in component
 
 /* ── Page ── */
+function timeAgo(iso: string) {
+  const d = Date.now() - new Date(iso).getTime()
+  if (d < 60000) return "just now"
+  if (d < 3600000) return `${Math.floor(d/60000)}m ago`
+  if (d < 86400000) return `${Math.floor(d/3600000)}h ago`
+  return `${Math.floor(d/86400000)}d ago`
+}
+
 export default function FeedPage() {
   const { push } = useToast()
   const { user } = useAuthStore()
-  const [posts, setPosts] = useState<FeedPost[]>(FEED_POSTS)
   const [feedTab, setFeedTab] = useState<FeedTab>("foryou")
   const [draft, setDraft] = useState("")
   const [suggestions, setSuggestions] = useState<Suggestion[]>(SUGGESTIONS)
 
-  const authorInitial = user?.username?.slice(0, 1).toUpperCase() ?? "D"
+  const { data: feedData, isLoading: feedLoading } = useFeed()
+  const { data: discoverData, isLoading: discoverLoading } = useDiscover()
+  const createPostMut = useCreatePost()
 
-  const toggleLike = (id: number) => {
-    setPosts((ps) =>
-      ps.map((p) =>
-        p.id === id
-          ? { ...p, liked: !p.liked, likes: p.liked ? p.likes - 1 : p.likes + 1 }
-          : p,
-      ),
-    )
+  const isLoading = feedTab === "following" ? feedLoading : discoverLoading
+
+  const apiPosts: Post[] = feedTab === "following"
+    ? (feedData?.pages.flatMap(p => p.data) ?? [])
+    : (discoverData?.pages.flatMap(p => p.data) ?? [])
+
+  const [likedIds, setLikedIds] = useState<Set<string>>(new Set())
+
+  const authorInitial = user?.username?.slice(0, 1).toUpperCase() ?? "?"
+
+  const toggleLike = (id: string) => {
+    setLikedIds(prev => {
+      const next = new Set(prev)
+      if (next.has(id)) next.delete(id); else next.add(id)
+      return next
+    })
   }
 
   const submitPost = () => {
     if (!draft.trim()) return
-    const newPost: FeedPost = {
-      id: Date.now(),
-      author: user?.username ?? "darwhite08",
-      avatar: authorInitial,
-      time: "just now",
-      content: draft,
-      likes: 0,
-      comments: 0,
-      liked: false,
-      tags: [],
-      isFollowing: false,
-    }
-    setPosts((ps) => [newPost, ...ps])
-    setDraft("")
-    push("Post published to your feed!", "success")
+    if (!user) { push("Sign in to post", "info"); return }
+    createPostMut.mutate(
+      { content: draft },
+      {
+        onSuccess: () => { setDraft(""); push("Post published!", "success") },
+        onError: () => push("Failed to post", "error"),
+      }
+    )
   }
 
   const toggleSuggestFollow = (username: string) => {
@@ -243,12 +255,7 @@ export default function FeedPage() {
     )
   }
 
-  const visiblePosts =
-    feedTab === "following"
-      ? posts.filter((p) => p.isFollowing)
-      : feedTab === "latest"
-        ? [...posts].sort((a, b) => a.id - b.id)
-        : posts
+  const visiblePosts = apiPosts
 
   const TAB_LABELS: { key: FeedTab; label: string }[] = [
     { key: "foryou", label: "For You" },
@@ -377,7 +384,14 @@ export default function FeedPage() {
                 </Link>
               </motion.div>
             ) : (
-              visiblePosts.map((post, i) => (
+              isLoading ? (
+                <div className="flex justify-center py-16">
+                  <Loader2 size={24} className="animate-spin text-indigo-400" />
+                </div>
+              ) : visiblePosts.map((post, i) => {
+                const authorName = post.author?.displayName ?? post.author?.username ?? "?"
+                const liked = likedIds.has(post.id)
+                return (
                 <motion.article
                   key={post.id}
                   layout
@@ -386,34 +400,19 @@ export default function FeedPage() {
                   transition={{ delay: i * 0.04 }}
                   className="bg-zinc-900/60 border border-white/8 hover:border-white/15 rounded-2xl p-6 space-y-4 transition-colors"
                 >
-                  {/* Author row */}
                   <div className="flex items-start justify-between">
                     <div className="flex items-center gap-3">
-                      <Link href={`/u/${post.author}`}>
+                      <Link href={`/u/${post.author?.username ?? ""}`}>
                         <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center font-black text-sm hover:opacity-80 transition-opacity">
-                          {post.avatar}
+                          {authorName[0]?.toUpperCase()}
                         </div>
                       </Link>
                       <div>
-                        <div className="flex items-center gap-2">
-                          <Link
-                            href={`/u/${post.author}`}
-                            className="text-sm font-black text-white hover:text-indigo-300 transition-colors"
-                          >
-                            {post.author}
-                          </Link>
-                          {post.isFollowing && (
-                            <span className="px-2 py-0.5 rounded-full bg-indigo-500/15 border border-indigo-500/25 text-[8px] font-black uppercase tracking-widest text-indigo-400">
-                              Following
-                            </span>
-                          )}
-                          {post.likes > 300 && (
-                            <span className="px-2 py-0.5 rounded-full bg-amber-500/15 border border-amber-500/25 text-[8px] font-black uppercase tracking-widest text-amber-400">
-                              Trending
-                            </span>
-                          )}
-                        </div>
-                        <p className="text-[10px] text-white/30">{post.time}</p>
+                        <Link href={`/u/${post.author?.username ?? ""}`}
+                          className="text-sm font-black text-white hover:text-indigo-300 transition-colors">
+                          {authorName}
+                        </Link>
+                        <p className="text-[10px] text-white/30">{timeAgo(post.createdAt)}</p>
                       </div>
                     </div>
                     <button className="p-1.5 text-white/20 hover:text-white/50 transition-colors">
@@ -421,47 +420,24 @@ export default function FeedPage() {
                     </button>
                   </div>
 
-                  {/* Anime badge */}
                   {post.anime && (
-                    <Link
-                      href="/bestanimelist"
-                      className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-indigo-500/8 border border-indigo-500/15 text-[10px] font-bold text-indigo-400 hover:bg-indigo-500/15 transition-colors"
-                    >
-                      <Star size={9} /> {post.anime}
+                    <Link href={`/anime/${post.anime.malId}`}
+                      className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-indigo-500/8 border border-indigo-500/15 text-[10px] font-bold text-indigo-400 hover:bg-indigo-500/15 transition-colors">
+                      <Star size={9} /> {post.anime.title}
                     </Link>
                   )}
 
-                  {/* Content */}
                   <p className="text-sm text-white/75 leading-relaxed">{post.content}</p>
 
-                  {/* Tags */}
-                  {post.tags.length > 0 && (
-                    <div className="flex flex-wrap gap-1.5">
-                      {post.tags.map((tag) => (
-                        <span
-                          key={tag}
-                          className="text-[9px] font-bold text-indigo-400/60 hover:text-indigo-400 cursor-pointer transition-colors"
-                        >
-                          #{tag}
-                        </span>
-                      ))}
-                    </div>
-                  )}
-
-                  {/* Actions */}
                   <div className="flex items-center gap-5 pt-1 border-t border-white/5">
-                    <button
-                      onClick={() => toggleLike(post.id)}
-                      className={`flex items-center gap-1.5 text-xs font-bold transition-colors ${
-                        post.liked ? "text-rose-400" : "text-white/30 hover:text-rose-400"
-                      }`}
-                    >
-                      <Heart size={14} fill={post.liked ? "currentColor" : "none"} />
-                      {post.likes}
+                    <button onClick={() => toggleLike(post.id)}
+                      className={`flex items-center gap-1.5 text-xs font-bold transition-colors ${liked ? "text-rose-400" : "text-white/30 hover:text-rose-400"}`}>
+                      <Heart size={14} fill={liked ? "currentColor" : "none"} />
+                      {(post._count?.likes ?? 0) + (liked ? 1 : 0)}
                     </button>
                     <button className="flex items-center gap-1.5 text-xs font-bold text-white/30 hover:text-indigo-400 transition-colors">
                       <MessageSquare size={14} />
-                      {post.comments}
+                      {post._count?.comments ?? 0}
                     </button>
                     <button
                       onClick={() => push("Post link copied to clipboard!", "success")}
@@ -471,7 +447,7 @@ export default function FeedPage() {
                     </button>
                   </div>
                 </motion.article>
-              ))
+              )})
             )}
           </AnimatePresence>
         </div>
@@ -542,36 +518,16 @@ export default function FeedPage() {
               </h3>
             </div>
             <div className="space-y-3">
-              {TRENDING_ANIME.map((anime, i) => (
-                <motion.div
-                  key={anime.id}
-                  initial={{ opacity: 0, x: 8 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.07 }}
-                >
-                  <Link
-                    href={`/anime/${anime.id}`}
-                    className="flex items-center gap-3 group"
-                  >
-                    <div className="relative h-12 w-9 rounded-lg overflow-hidden shrink-0 border border-white/8 group-hover:border-indigo-500/30 transition-all">
-                      <Image
-                        src={anime.image}
-                        alt={anime.title}
-                        fill
-                        className="object-cover brightness-75 group-hover:brightness-90 transition-all"
-                        sizes="36px"
-                      />
+              {(discoverData?.pages[0]?.data.slice(0,4) ?? []).map((post, i) => (
+                <motion.div key={post.id} initial={{ opacity: 0, x: 8 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.07 }}>
+                  <Link href={post.anime ? `/anime/${post.anime.malId}` : "/community"}
+                    className="flex items-center gap-3 group">
+                    <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-indigo-500/30 to-violet-500/30 border border-white/8 flex items-center justify-center shrink-0 text-xs font-black">
+                      {(post.author?.displayName ?? "?")[0]}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-xs font-black text-white/80 group-hover:text-white transition-colors truncate">
-                        {anime.title}
-                      </p>
-                      <div className="flex items-center gap-1 mt-0.5">
-                        <Star size={9} fill="#f59e0b" className="text-amber-400" />
-                        <span className="text-[9px] text-white/40 font-bold">
-                          {anime.rating.toFixed(1)}
-                        </span>
-                      </div>
+                      <p className="text-xs font-black text-white/80 group-hover:text-white transition-colors truncate">{post.content.slice(0,50)}…</p>
+                      {post.anime && <p className="text-[9px] text-indigo-400/60 mt-0.5 truncate">{post.anime.title}</p>}
                     </div>
                   </Link>
                 </motion.div>

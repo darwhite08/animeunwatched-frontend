@@ -3,6 +3,10 @@
 import { motion } from "framer-motion"
 import { PenSquare, Star } from "lucide-react"
 import { useToast } from "@/stores/toast.store"
+import { useAuthStore } from "@/stores/auth.store"
+import { useQuery } from "@tanstack/react-query"
+import { api } from "@/lib/api/client"
+import type { Paginated } from "@/lib/api/types"
 
 /* ── Types ── */
 type Review = {
@@ -67,6 +71,25 @@ function ScoreStars({ score }: { score: number }) {
 /* ── Component ── */
 export default function RecentlyReviewedCard() {
   const { push } = useToast()
+  const user = useAuthStore(s => s.user)
+
+  type ApiReview = { id: string; score: number; body: string; createdAt: string; anime?: { title: string; studios: string[] } }
+  const { data: reviewsData } = useQuery({
+    queryKey: ["my-recent-reviews", user?.id],
+    queryFn: () => api<Paginated<ApiReview>>(`/reviews?limit=3`),
+    enabled: !!user,
+  })
+
+  const apiReviews: Review[] = (reviewsData?.data ?? []).map((r, i) => ({
+    id: i + 1,
+    animeTitle: r.anime?.title ?? "Unknown Anime",
+    studio: r.anime?.studios?.[0] ?? "Unknown Studio",
+    score: r.score,
+    excerpt: r.body.slice(0, 100) + (r.body.length > 100 ? "…" : ""),
+    date: (() => { const d = Date.now() - new Date(r.createdAt).getTime(); return d < 86400000 ? `${Math.floor(d/3600000)}h ago` : `${Math.floor(d/86400000)}d ago` })(),
+  }))
+
+  const reviews = apiReviews.length > 0 ? apiReviews : MOCK_REVIEWS
 
   return (
     <div className="p-8 rounded-[2.5rem] border border-white/5 bg-[#0a0a0a] relative overflow-hidden">
@@ -89,7 +112,7 @@ export default function RecentlyReviewedCard() {
 
       {/* Review rows */}
       <ul className="space-y-4 relative z-10">
-        {MOCK_REVIEWS.map((review, i) => (
+        {reviews.map((review, i) => (
           <motion.li
             key={review.id}
             initial={{ opacity: 0, y: 8 }}

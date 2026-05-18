@@ -1,19 +1,27 @@
 "use client"
 
 import { use, useState } from "react"
-import { ANIME_DB, type Anime } from "@/lib/data/anime"
+import type { Anime } from "@/lib/data/anime"
+import type { AnimeDTO } from "@/lib/api/types"
+import { useBrowseAnime } from "@/hooks/useAnime"
 import AnimeCard from "@/components/bestanimelist/AnimeCard"
 import AnimeModal from "@/components/bestanimelist/AnimeModal"
 import { motion } from "framer-motion"
 import Link from "next/link"
 import { Building2, Star, ChevronLeft } from "lucide-react"
 
+function mapDTO(a: AnimeDTO, i: number): Anime {
+  return { id: String(a.malId), title: a.title, titleJapanese: a.titleJapanese ?? "", rating: a.score ?? 0, year: a.year ?? 0, episodes: a.episodes, type: (["TV","Movie","OVA"] as const).includes(a.type as any) ? a.type as any : "TV", status: a.status?.toLowerCase().includes("airing") ? "airing" : "finished", studio: a.studios[0] ?? "Unknown", genres: a.genres, synopsis: a.synopsis ?? "", image: a.imageUrl ?? "", tags: a.genres.map(g => g.toLowerCase().replace(/\s/g, "-")), category: "all", rank: i+1 }
+}
+
 export default function StudioPage({ params }: { params: Promise<{ name: string }> }) {
   const { name } = use(params)
   const studioName = decodeURIComponent(name)
   const [selected, setSelected] = useState<Anime | null>(null)
+  const { data: browseData } = useBrowseAnime({ limit: 20 })
 
-  const anime = ANIME_DB.filter(a => a.studio.toLowerCase() === studioName.toLowerCase())
+  const anime = (browseData?.data ?? []).map(mapDTO)
+    .filter(a => a.studio.toLowerCase() === studioName.toLowerCase())
     .sort((a, b) => b.rating - a.rating)
 
   const avgRating = anime.length

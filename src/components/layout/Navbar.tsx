@@ -2,274 +2,306 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { motion } from "framer-motion";
-import { Search, Sparkles, Menu, X, Bookmark } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Search, Sparkles, Menu, X, Bookmark, ChevronDown,
+  TrendingUp, Calendar, Star, Bot, BookOpen,
+  Users, Vote, LayoutList, Trophy, Flame, Newspaper,
+  MonitorPlay, BarChart2, BookMarked, MessageSquare,
+} from "lucide-react";
 import { useWatchlist } from "@/stores/watchlist.store";
-
-import { getMockUser, mockLogout } from "@/lib/mockAuth";
 import { useAuthStore } from "@/stores/auth.store";
 import NotificationBell from "@/components/notifications/NotificationBell";
 import SearchModal from "./SearchModal";
 import ProfileMenu from "./ProfileMenu";
 
-// Section themes for the cinematic homepage — each section has a distinct identity
+/* ── Dropdown link data ─────────────────────────────────────── */
+
+const ANIME_LINKS = [
+  { name: "Browse All",   href: "/bestanimelist", icon: LayoutList,  desc: "Full anime archive" },
+  { name: "AI Discover",  href: "/ai-discover",   icon: Bot,          desc: "Neural recommendations" },
+  { name: "Seasonal",     href: "/seasonal",      icon: Calendar,     desc: "Currently airing" },
+  { name: "Top Rated",    href: "/rankings",      icon: Star,         desc: "Community ranked" },
+  { name: "New Releases", href: "/anime/new",     icon: Flame,        desc: "Just dropped" },
+];
+
+const COMMUNITY_LINKS = [
+  { name: "Feed",        href: "/community",   icon: Newspaper,  desc: "Latest posts" },
+  { name: "Clubs",       href: "/clubs",       icon: Users,       desc: "Join a community" },
+  { name: "Blog",        href: "/blog",        icon: BookOpen,    desc: "Long-form articles" },
+  { name: "Polls",       href: "/poll",        icon: Vote,        desc: "Vote & debate" },
+  { name: "Leaderboard", href: "/leaderboard", icon: Trophy,      desc: "Top users" },
+];
+
+const MY_LINKS = [
+  { name: "Watchlist", href: "/watchlist", icon: MonitorPlay, desc: "Anime you're tracking" },
+  { name: "Readlist",  href: "/readlist",  icon: BookMarked,  desc: "Manga you're reading" },
+  { name: "Stats",     href: "/stats",     icon: BarChart2,   desc: "Your anime stats" },
+  { name: "Streak",    href: "/streak",    icon: Flame,       desc: "Daily watching streak" },
+];
+
+/* ── Homepage section themes ────────────────────────────────── */
+
 const SECTION_THEMES = [
-  {
-    // Ch1 Hero — indigo (default identity)
-    label: "Ch.01 — Hero",
-    bg: "rgba(5,5,20,0.88)",
-    border: "rgba(99,102,241,0.45)",
-    glow: "0 0 60px rgba(99,102,241,0.18), 0 2px 0 rgba(99,102,241,0.5)",
-    dot:   "bg-indigo-500",
-    dotColor: "#6366f1",
-    accent: "text-indigo-400",
-    pillBg: "bg-indigo-600/15",
-    pillBorder: "border-indigo-500/30",
-  },
-  {
-    // Ch2 Discovery — amber/warm
-    label: "Ch.02 — Discovery",
-    bg: "rgba(15,10,5,0.88)",
-    border: "rgba(245,158,11,0.45)",
-    glow: "0 0 60px rgba(245,158,11,0.12), 0 2px 0 rgba(245,158,11,0.5)",
-    dot:   "bg-amber-500",
-    dotColor: "#f59e0b",
-    accent: "text-amber-400",
-    pillBg: "bg-amber-600/15",
-    pillBorder: "border-amber-500/30",
-  },
-  {
-    // Ch3 AI Oracle — violet/purple
-    label: "Ch.03 — AI Oracle",
-    bg: "rgba(8,5,20,0.90)",
-    border: "rgba(139,92,246,0.55)",
-    glow: "0 0 80px rgba(139,92,246,0.22), 0 2px 0 rgba(139,92,246,0.6)",
-    dot:   "bg-violet-500",
-    dotColor: "#8b5cf6",
-    accent: "text-violet-400",
-    pillBg: "bg-violet-600/15",
-    pillBorder: "border-violet-500/30",
-  },
-  {
-    // Ch4 Community — emerald
-    label: "Ch.04 — Community",
-    bg: "rgba(2,12,8,0.90)",
-    border: "rgba(16,185,129,0.45)",
-    glow: "0 0 60px rgba(16,185,129,0.15), 0 2px 0 rgba(16,185,129,0.5)",
-    dot:   "bg-emerald-500",
-    dotColor: "#10b981",
-    accent: "text-emerald-400",
-    pillBg: "bg-emerald-600/15",
-    pillBorder: "border-emerald-500/30",
-  },
-  {
-    // Ch5 Showcase — indigo deep
-    label: "Ch.05 — Showcase",
-    bg: "rgba(5,2,18,0.92)",
-    border: "rgba(99,102,241,0.35)",
-    glow: "0 0 50px rgba(99,102,241,0.15), 0 2px 0 rgba(99,102,241,0.4)",
-    dot:   "bg-indigo-600",
-    dotColor: "#4f46e5",
-    accent: "text-indigo-300",
-    pillBg: "bg-indigo-700/20",
-    pillBorder: "border-indigo-400/25",
-  },
-  {
-    // Ch6 Final CTA — bright indigo
-    label: "Ch.06 — Begin",
-    bg: "rgba(2,2,15,0.92)",
-    border: "rgba(99,102,241,0.7)",
-    glow: "0 0 80px rgba(99,102,241,0.30), 0 2px 0 rgba(99,102,241,0.8)",
-    dot:   "bg-indigo-400",
-    dotColor: "#818cf8",
-    accent: "text-indigo-300",
-    pillBg: "bg-indigo-500/20",
-    pillBorder: "border-indigo-400/40",
-  },
-]
+  { bg: "rgba(5,5,20,0.90)",  border: "rgba(99,102,241,0.45)", glow: "0 0 60px rgba(99,102,241,0.18),0 2px 0 rgba(99,102,241,0.5)",  dotColor: "#6366f1", accent: "text-indigo-400",  label: "Ch.01 — Hero" },
+  { bg: "rgba(15,10,5,0.90)", border: "rgba(245,158,11,0.45)", glow: "0 0 60px rgba(245,158,11,0.12),0 2px 0 rgba(245,158,11,0.5)",  dotColor: "#f59e0b", accent: "text-amber-400",   label: "Ch.02 — Discovery" },
+  { bg: "rgba(8,5,20,0.92)",  border: "rgba(139,92,246,0.55)", glow: "0 0 80px rgba(139,92,246,0.22),0 2px 0 rgba(139,92,246,0.6)",  dotColor: "#8b5cf6", accent: "text-violet-400",  label: "Ch.03 — AI Oracle" },
+  { bg: "rgba(2,12,8,0.92)",  border: "rgba(16,185,129,0.45)", glow: "0 0 60px rgba(16,185,129,0.15),0 2px 0 rgba(16,185,129,0.5)",  dotColor: "#10b981", accent: "text-emerald-400", label: "Ch.04 — Community" },
+  { bg: "rgba(5,2,18,0.94)",  border: "rgba(99,102,241,0.35)", glow: "0 0 50px rgba(99,102,241,0.15),0 2px 0 rgba(99,102,241,0.4)",  dotColor: "#4f46e5", accent: "text-indigo-300",  label: "Ch.05 — Showcase" },
+  { bg: "rgba(2,2,15,0.94)",  border: "rgba(99,102,241,0.70)", glow: "0 0 80px rgba(99,102,241,0.30),0 2px 0 rgba(99,102,241,0.8)",  dotColor: "#818cf8", accent: "text-indigo-300",  label: "Ch.06 — Begin" },
+];
+
+/* ── Reusable dropdown panel ─────────────────────────────────── */
+
+type DropItem = { name: string; href: string; icon: React.ElementType; desc: string };
+
+function NavDropdown({ items, onClose }: { items: DropItem[]; onClose: () => void }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 8, scale: 0.96 }}
+      animate={{ opacity: 1, y: 0,  scale: 1    }}
+      exit={{    opacity: 0, y: 6,  scale: 0.97 }}
+      transition={{ duration: 0.18, ease: [0.32, 0.72, 0, 1] }}
+      className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-56 bg-[#0a0a12]/97 border border-white/10 rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.6)] backdrop-blur-2xl overflow-hidden z-50"
+    >
+      {items.map((item) => {
+        const Icon = item.icon;
+        return (
+          <Link key={item.href} href={item.href} onClick={onClose}
+            className="flex items-center gap-3 px-4 py-3 hover:bg-white/5 transition-colors group">
+            <span className="w-7 h-7 rounded-lg bg-white/5 border border-white/8 flex items-center justify-center text-white/40 group-hover:text-indigo-400 group-hover:border-indigo-500/30 group-hover:bg-indigo-500/10 transition-all shrink-0">
+              <Icon size={13} />
+            </span>
+            <div className="min-w-0">
+              <p className="text-[11px] font-black text-white/80 group-hover:text-white uppercase tracking-wider leading-none">{item.name}</p>
+              <p className="text-[9px] text-white/30 mt-0.5 truncate">{item.desc}</p>
+            </div>
+          </Link>
+        );
+      })}
+    </motion.div>
+  );
+}
+
+/* ── Main Navbar ─────────────────────────────────────────────── */
 
 export default function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
-  const [searchOpen, setSearchOpen] = useState(false);
-  const [profileOpen, setProfileOpen] = useState(false);
+  const [scrolled,       setScrolled]       = useState(false);
+  const [searchOpen,     setSearchOpen]     = useState(false);
+  const [profileOpen,    setProfileOpen]    = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [user, setUser] = useState<any>(null);
-  const [isHydrated, setIsHydrated] = useState(false);
-  const [activeSection, setActiveSection] = useState(0);
+  const [activeSection,  setActiveSection]  = useState(0);
+  const [openDropdown,   setOpenDropdown]   = useState<"anime" | "community" | "my" | null>(null);
+  const [isHydrated,     setIsHydrated]     = useState(false);
 
-  const pathname = usePathname();
-  const isHomePage = pathname === "/";
-  const profileRef = useRef<HTMLDivElement>(null);
+  const timerRef    = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const profileRef  = useRef<HTMLDivElement>(null);
+  const pathname    = usePathname();
+  const isHomePage  = pathname === "/";
 
-  // Subscribe to real auth store so navbar re-renders on login/logout
-  const storeUser = useAuthStore(s => s.user);
+  const storeUser       = useAuthStore(s => s.user);
+  const isAuthenticated = useAuthStore(s => s.isAuthenticated);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-      // Section detection for homepage only
-      if (pathname === "/") {
-        const vh = window.innerHeight
-        const scrollY = window.scrollY
-        const totalH = document.body.scrollHeight
-        // Approximate section boundaries (6 sections)
-        const pct = scrollY / totalH
-        if      (pct < 0.15) setActiveSection(0)
-        else if (pct < 0.32) setActiveSection(1)
-        else if (pct < 0.50) setActiveSection(2)
-        else if (pct < 0.68) setActiveSection(3)
-        else if (pct < 0.85) setActiveSection(4)
-        else                  setActiveSection(5)
-      }
-    };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-
-    // Prefer real auth store user; fall back to mock localStorage user
-    const authStoreUser = useAuthStore.getState().user;
-    if (authStoreUser) {
-      setUser({ name: authStoreUser.displayName ?? authStoreUser.username });
-    } else {
-      const storedUser = getMockUser();
-      setUser(storedUser);
-    }
     setIsHydrated(true);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [pathname, storeUser]);
-
-  useEffect(() => {
-    const handleKey = (e: KeyboardEvent) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
-        e.preventDefault();
-        setSearchOpen(o => !o);
+    const onScroll = () => {
+      setScrolled(window.scrollY > 20);
+      if (isHomePage) {
+        const pct = window.scrollY / document.body.scrollHeight;
+        setActiveSection(pct < 0.15 ? 0 : pct < 0.32 ? 1 : pct < 0.50 ? 2 : pct < 0.68 ? 3 : pct < 0.85 ? 4 : 5);
       }
     };
-    window.addEventListener("keydown", handleKey);
-    return () => window.removeEventListener("keydown", handleKey);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [isHomePage]);
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === "k") { e.preventDefault(); setSearchOpen(o => !o); }
+      if (e.key === "Escape") { setOpenDropdown(null); setMobileMenuOpen(false); }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  const handleLogout = () => {
-    mockLogout();
-    setUser(null);
-    setProfileOpen(false);
+  const enterDropdown = (key: "anime" | "community" | "my") => {
+    if (timerRef.current) clearTimeout(timerRef.current);
+    setOpenDropdown(key);
+  };
+  const leaveDropdown = () => {
+    timerRef.current = setTimeout(() => setOpenDropdown(null), 150);
   };
 
-  // 5 core nav links — clean, not cramped
-  const navLinks = [
-    { name: "Home",       href: "/"              },
-    { name: "Discover",   href: "/ai-discover"   },
-    { name: "Anime",      href: "/bestanimelist" },
-    { name: "Community",  href: "/community"     },
-    { name: "Rankings",   href: "/rankings"      },
-  ];
+  const theme = isHomePage ? SECTION_THEMES[activeSection] : SECTION_THEMES[0];
+  const T     = { duration: 0.5, ease: "easeInOut" } as const;
 
-  const theme = isHomePage ? SECTION_THEMES[activeSection] : SECTION_THEMES[0]
-  const TRANSITION = { duration: 0.6, ease: "easeInOut" } as const
+  const isAnimePath     = ["/bestanimelist", "/ai-discover", "/seasonal", "/rankings", "/anime"].some(p => pathname.startsWith(p));
+  const isCommunityPath = ["/community", "/clubs", "/blog", "/poll", "/leaderboard"].some(p => pathname.startsWith(p));
+  const isMyPath        = ["/watchlist", "/readlist", "/stats", "/streak"].some(p => pathname.startsWith(p));
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-[100] flex flex-col items-center pt-3 px-5 pb-0">
-      {/* Colored top line — section indicator */}
+    <header className="w-full flex flex-col items-center pt-3 px-5 pb-0">
+
+      {/* Homepage section colour line */}
       {isHomePage && (
-        <motion.div
-          animate={{ backgroundColor: theme.dotColor, opacity: scrolled ? 1 : 0.5 }}
-          transition={TRANSITION}
-          className="absolute top-0 left-0 right-0 h-[2px] z-[101]"
-        />
+        <motion.div animate={{ backgroundColor: theme.dotColor }} transition={T}
+          className="absolute top-0 left-0 right-0 h-[2px] z-[101]" />
       )}
 
-      {/* Chapter label — sits ABOVE the nav pill, not inside it */}
+      {/* Chapter label above nav on homepage */}
       {isHomePage && scrolled && (
-        <motion.div
-          key={`label-${activeSection}`}
-          initial={{ opacity: 0, y: -6, scale: 0.9 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.25 }}
-          className={`mb-1.5 px-3 py-1 rounded-full text-[8px] font-black uppercase tracking-[0.4em] ${theme.accent} ${theme.pillBg} border ${theme.pillBorder} hidden lg:flex items-center gap-1.5`}
-        >
-          <motion.span animate={{ backgroundColor: theme.dotColor }} className="w-1.5 h-1.5 rounded-full" />
+        <motion.div key={`lbl-${activeSection}`}
+          initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.22 }}
+          className={`mb-1.5 px-3 py-1 rounded-full text-[8px] font-black uppercase tracking-[0.4em] ${theme.accent} border hidden lg:flex items-center gap-1.5`}
+          style={{ backgroundColor: theme.dotColor + "18", borderColor: theme.dotColor + "40" }}>
+          <motion.span animate={{ backgroundColor: theme.dotColor }} className="w-1.5 h-1.5 rounded-full inline-block" />
           {theme.label}
         </motion.div>
       )}
 
+      {/* Nav pill */}
       <motion.nav
         animate={{
-          backgroundColor: scrolled ? theme.bg : "rgba(0,0,0,0.08)",
-          borderColor: scrolled ? theme.border : "rgba(255,255,255,0.06)",
-          boxShadow: scrolled ? theme.glow : "none",
+          backgroundColor: scrolled ? theme.bg  : "rgba(0,0,0,0.08)",
+          borderColor:     scrolled ? theme.border : "rgba(255,255,255,0.06)",
+          boxShadow:       scrolled ? theme.glow  : "none",
         }}
-        transition={TRANSITION}
-        className="relative flex w-full max-w-[900px] items-center justify-between rounded-[2rem] px-7 backdrop-blur-2xl border"
+        transition={T}
+        className="relative flex w-full max-w-[1040px] items-center justify-between rounded-[2rem] px-6 backdrop-blur-2xl border"
         style={{ paddingTop: scrolled ? "8px" : "11px", paddingBottom: scrolled ? "8px" : "11px" }}
       >
-
-        {/* Logo */}
-        <Link href="/" className="relative group flex items-center gap-2">
-          <motion.div
-            animate={{ boxShadow: `0 0 24px ${theme.dotColor}` }}
-            transition={TRANSITION}
-            className="h-8 w-8 rounded-xl bg-indigo-600 flex items-center justify-center transition-transform group-hover:rotate-12"
-          >
+        {/* ── Logo ── */}
+        <Link href="/" className="group flex items-center gap-2 shrink-0">
+          <motion.div animate={{ boxShadow: `0 0 24px ${theme.dotColor}` }} transition={T}
+            className="h-8 w-8 rounded-xl bg-indigo-600 flex items-center justify-center transition-transform group-hover:rotate-12">
             <Sparkles size={18} className="text-white" />
           </motion.div>
           <span className="text-lg font-black tracking-tighter text-white uppercase italic hidden sm:block">
-            UNWATCHED
-            <motion.span
-              animate={{ color: theme.dotColor }}
-              transition={TRANSITION}
-            >.</motion.span>
+            UNWATCHED<motion.span animate={{ color: theme.dotColor }} transition={T}>.</motion.span>
           </span>
         </Link>
 
-        {/* Links */}
-        <motion.div
-          animate={{ borderColor: isHomePage && scrolled ? theme.border : "rgba(255,255,255,0.07)" }}
-          transition={TRANSITION}
-          className="hidden md:flex items-center gap-1 bg-white/[0.04] p-1 rounded-full border"
-        >
-          {navLinks.map((link) => (
-            <Link key={link.name} href={link.href}
-              className={`relative px-4 py-2 text-[10px] font-black uppercase tracking-widest transition-all ${
-                pathname === link.href ? "text-white" : "text-white/35 hover:text-white"
-              }`}
-            >
-              {pathname === link.href && (
-                <motion.div
-                  layoutId="nav-pill"
-                  animate={{ backgroundColor: isHomePage ? (theme.dotColor + "25") : "rgba(255,255,255,0.1)", borderColor: isHomePage ? (theme.dotColor + "50") : "rgba(255,255,255,0.1)" }}
-                  transition={TRANSITION}
-                  className="absolute inset-0 rounded-full border"
-                />
-              )}
-              <span className="relative z-10">{link.name}</span>
-            </Link>
-          ))}
-        </motion.div>
+        {/* ── Desktop nav links ── */}
+        <nav className="hidden lg:flex items-center gap-0.5" aria-label="Main navigation">
 
-        {/* Actions */}
-        <div className="flex items-center gap-3">
-          <button onClick={() => setSearchOpen(true)} className="p-2.5 rounded-full bg-white/5 text-white/40 hover:text-white transition-all">
-            <Search size={18} />
-          </button>
-          {isHydrated && user && <NotificationBell />}
-          
-          {/* Watchlist Icon Shortcut added back to Navbar.tsx */}
-          {isHydrated && user && <WatchlistLink />}
-          {isHydrated && !user ? (
-            <Link href="/login" className="px-6 py-2.5 rounded-full bg-indigo-600 text-[10px] font-black text-white uppercase tracking-widest">
-              Sync Account
-            </Link>
-          ) : user && (
-            <div className="relative" ref={profileRef}>
-              <button onClick={() => setProfileOpen(!profileOpen)} className="flex items-center gap-2 rounded-full border border-white/10 p-1 pr-4 bg-white/5">
-                <div className="h-8 w-8 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center text-[10px] font-bold text-white">{user.name[0]}</div>
-                <span className="text-[10px] font-black text-white/80 hidden lg:block uppercase">{user.name}</span>
+          <Link href="/"
+            className={`px-4 py-2.5 text-[10px] font-black uppercase tracking-widest rounded-full transition-all ${pathname === "/" ? "text-white bg-white/10" : "text-white/40 hover:text-white hover:bg-white/5"}`}>
+            Home
+          </Link>
+
+          {/* Anime dropdown */}
+          <div className="relative" onMouseEnter={() => enterDropdown("anime")} onMouseLeave={leaveDropdown}>
+            <button
+              className={`flex items-center gap-1 px-4 py-2.5 text-[10px] font-black uppercase tracking-widest rounded-full transition-all ${isAnimePath || openDropdown === "anime" ? "text-white bg-white/10" : "text-white/40 hover:text-white hover:bg-white/5"}`}
+              aria-expanded={openDropdown === "anime"} aria-haspopup="menu">
+              Anime
+              <ChevronDown size={11} className={`transition-transform duration-200 ${openDropdown === "anime" ? "rotate-180" : ""}`} />
+            </button>
+            <AnimatePresence>
+              {openDropdown === "anime" && <NavDropdown items={ANIME_LINKS} onClose={() => setOpenDropdown(null)} />}
+            </AnimatePresence>
+          </div>
+
+          {/* Community dropdown */}
+          <div className="relative" onMouseEnter={() => enterDropdown("community")} onMouseLeave={leaveDropdown}>
+            <button
+              className={`flex items-center gap-1 px-4 py-2.5 text-[10px] font-black uppercase tracking-widest rounded-full transition-all ${isCommunityPath || openDropdown === "community" ? "text-white bg-white/10" : "text-white/40 hover:text-white hover:bg-white/5"}`}
+              aria-expanded={openDropdown === "community"} aria-haspopup="menu">
+              Community
+              <ChevronDown size={11} className={`transition-transform duration-200 ${openDropdown === "community" ? "rotate-180" : ""}`} />
+            </button>
+            <AnimatePresence>
+              {openDropdown === "community" && <NavDropdown items={COMMUNITY_LINKS} onClose={() => setOpenDropdown(null)} />}
+            </AnimatePresence>
+          </div>
+
+          {/* My List dropdown — authenticated only */}
+          {isHydrated && isAuthenticated && (
+            <div className="relative" onMouseEnter={() => enterDropdown("my")} onMouseLeave={leaveDropdown}>
+              <button
+                className={`flex items-center gap-1 px-4 py-2.5 text-[10px] font-black uppercase tracking-widest rounded-full transition-all ${isMyPath || openDropdown === "my" ? "text-white bg-white/10" : "text-white/40 hover:text-white hover:bg-white/5"}`}
+                aria-expanded={openDropdown === "my"} aria-haspopup="menu">
+                My List
+                <ChevronDown size={11} className={`transition-transform duration-200 ${openDropdown === "my" ? "rotate-180" : ""}`} />
               </button>
-              <ProfileMenu user={user} isOpen={profileOpen} onClose={() => setProfileOpen(false)} onLogout={handleLogout} />
+              <AnimatePresence>
+                {openDropdown === "my" && <NavDropdown items={MY_LINKS} onClose={() => setOpenDropdown(null)} />}
+              </AnimatePresence>
             </div>
           )}
 
-          <button className="md:hidden text-white" onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+          <Link href="/rankings"
+            className={`flex items-center gap-1.5 px-4 py-2.5 text-[10px] font-black uppercase tracking-widest rounded-full transition-all ${pathname.startsWith("/rankings") ? "text-white bg-white/10" : "text-white/40 hover:text-white hover:bg-white/5"}`}>
+            <TrendingUp size={11} />
+            Rankings
+          </Link>
+        </nav>
+
+        {/* ── Actions ── */}
+        <div className="flex items-center gap-2">
+          {/* Search */}
+          <button onClick={() => setSearchOpen(true)}
+            className="flex items-center gap-2 h-9 px-3 rounded-full bg-white/5 border border-white/8 text-white/40 hover:text-white hover:bg-white/10 hover:border-white/15 transition-all">
+            <Search size={15} />
+            <span className="hidden xl:block text-[10px] font-black text-white/25 tracking-widest">⌘K</span>
+          </button>
+
+          {isHydrated && isAuthenticated && <NotificationBell />}
+          {isHydrated && isAuthenticated && (
+            <Link href="/chat" title="Messages"
+              className="p-2 rounded-full text-white/40 hover:text-white hover:bg-white/10 transition-all">
+              <MessageSquare size={17} />
+            </Link>
+          )}
+          {isHydrated && isAuthenticated && <WatchlistLink />}
+
+          {/* Auth CTA / Profile */}
+          {isHydrated && !isAuthenticated ? (
+            <Link href="/login"
+              className="px-5 py-2 rounded-full bg-indigo-600 hover:bg-indigo-500 text-[10px] font-black text-white uppercase tracking-widest transition-all">
+              Sign In
+            </Link>
+          ) : isHydrated && isAuthenticated && storeUser ? (
+            <div className="relative" ref={profileRef}>
+              <button onClick={() => setProfileOpen(!profileOpen)}
+                className="flex items-center gap-2 rounded-full border border-white/10 p-1 pr-3 bg-white/5 hover:bg-white/10 transition-all">
+                {storeUser.avatarUrl ? (
+                  <Image
+                    src={storeUser.avatarUrl}
+                    alt={storeUser.displayName ?? storeUser.username}
+                    width={28}
+                    height={28}
+                    className="h-7 w-7 rounded-full object-cover"
+                  />
+                ) : (
+                  <div className="h-7 w-7 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center text-[10px] font-bold text-white shrink-0">
+                    {(storeUser.displayName ?? storeUser.username)[0].toUpperCase()}
+                  </div>
+                )}
+                <span className="text-[10px] font-black text-white/80 hidden xl:block uppercase tracking-wide max-w-[80px] truncate">
+                  {storeUser.displayName ?? storeUser.username}
+                </span>
+              </button>
+              <ProfileMenu
+                user={{ name: storeUser.displayName ?? storeUser.username }}
+                isOpen={profileOpen}
+                onClose={() => setProfileOpen(false)}
+                onLogout={() => {
+                  const BASE = process.env.NEXT_PUBLIC_API_BASE ?? "http://localhost:4000"
+                  fetch(`${BASE}/api/v1/auth/logout`, { method: "POST", credentials: "include" }).catch(() => {})
+                  useAuthStore.getState().clear()
+                  setProfileOpen(false)
+                  if (typeof window !== "undefined") window.location.href = "/"
+                }}
+              />
+            </div>
+          ) : null}
+
+          {/* Mobile hamburger */}
+          <button className="lg:hidden text-white/60 hover:text-white transition-colors p-2"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)} aria-label="Open menu">
             {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
         </div>
@@ -277,70 +309,79 @@ export default function Navbar() {
 
       <SearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
 
-      {/* Mobile menu */}
-      {mobileMenuOpen && (
-        <motion.div
-          initial={{ opacity: 0, y: -8 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -8 }}
-          className="fixed inset-x-4 top-24 z-[90] md:hidden bg-[#0c0c0c]/95 backdrop-blur-2xl rounded-3xl border border-white/10 shadow-2xl overflow-hidden"
-        >
-          <div className="p-5 space-y-1">
-            {[
-              { name: "Home",       href: "/"              },
-              { name: "Discover",   href: "/ai-discover"   },
-              { name: "Anime",      href: "/bestanimelist" },
-              { name: "Community",  href: "/community"     },
-              { name: "Rankings",   href: "/rankings"      },
-              { name: "Blog",       href: "/blog"          },
-              { name: "Leaderboard",href: "/leaderboard"   },
-              { name: "Polls",      href: "/poll"          },
-              { name: "Calendar",   href: "/calendar"      },
-            ].map(link => (
-              <Link
-                key={link.name}
-                href={link.href}
-                onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center px-4 py-3 rounded-xl text-sm font-bold text-white/60 hover:text-white hover:bg-white/5 transition-all"
-              >
-                {link.name}
-              </Link>
-            ))}
-            <div className="border-t border-white/5 pt-3 mt-3 space-y-1">
-              {isHydrated && !user ? (
-                <Link
-                  href="/login"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center justify-center px-4 py-3 rounded-xl text-sm font-black text-white bg-indigo-600 hover:bg-indigo-500 transition-all uppercase tracking-widest"
-                >
-                  Sync Account
-                </Link>
-              ) : user && (
-                <>
-                  <Link href="/dashboard" onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center px-4 py-3 rounded-xl text-sm font-bold text-white/60 hover:text-white hover:bg-white/5 transition-all"
-                  >Dashboard</Link>
-                  <Link href="/settings" onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center px-4 py-3 rounded-xl text-sm font-bold text-white/60 hover:text-white hover:bg-white/5 transition-all"
-                  >Settings</Link>
-                </>
+      {/* ── Mobile drawer ── */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0   }}
+            exit={{    opacity: 0, y: -10  }}
+            transition={{ duration: 0.2, ease: [0.32, 0.72, 0, 1] }}
+            className="fixed inset-x-4 top-24 z-[90] lg:hidden bg-[#0a0a12]/97 backdrop-blur-2xl rounded-3xl border border-white/10 shadow-2xl overflow-hidden"
+          >
+            <div className="p-4 max-h-[80vh] overflow-y-auto space-y-4">
+
+              <div>
+                <p className="text-[8px] font-black text-white/20 uppercase tracking-[0.3em] px-3 mb-1">Navigate</p>
+                {[{ name: "Home", href: "/" }, { name: "Rankings", href: "/rankings" }].map(l => (
+                  <Link key={l.href} href={l.href} onClick={() => setMobileMenuOpen(false)}
+                    className={`flex items-center px-3 py-3 rounded-xl text-xs font-bold transition-all ${pathname === l.href ? "text-white bg-white/8" : "text-white/50 hover:text-white hover:bg-white/5"}`}>
+                    {l.name}
+                  </Link>
+                ))}
+              </div>
+
+              <MobileSection title="Anime" links={ANIME_LINKS} accentClass="text-indigo-400" onClose={() => setMobileMenuOpen(false)} />
+              <MobileSection title="Community" links={COMMUNITY_LINKS} accentClass="text-emerald-400" onClose={() => setMobileMenuOpen(false)} />
+              {isAuthenticated && (
+                <MobileSection title="My List" links={MY_LINKS} accentClass="text-amber-400" onClose={() => setMobileMenuOpen(false)} />
               )}
+
+              <div className="border-t border-white/5 pt-3">
+                {!isAuthenticated ? (
+                  <Link href="/login" onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center justify-center px-4 py-3 rounded-xl text-xs font-black text-white bg-indigo-600 hover:bg-indigo-500 transition-all uppercase tracking-widest">
+                    Sign In
+                  </Link>
+                ) : (
+                  <>
+                    <Link href="/dashboard" onClick={() => setMobileMenuOpen(false)} className="flex items-center px-3 py-3 rounded-xl text-xs font-bold text-white/50 hover:text-white hover:bg-white/5 transition-all">Dashboard</Link>
+                    <Link href="/settings"  onClick={() => setMobileMenuOpen(false)} className="flex items-center px-3 py-3 rounded-xl text-xs font-bold text-white/50 hover:text-white hover:bg-white/5 transition-all">Settings</Link>
+                  </>
+                )}
+              </div>
             </div>
-          </div>
-        </motion.div>
-      )}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
+  );
+}
+
+function MobileSection({ title, links, accentClass, onClose }: { title: string; links: DropItem[]; accentClass: string; onClose: () => void }) {
+  return (
+    <div>
+      <p className="text-[8px] font-black text-white/20 uppercase tracking-[0.3em] px-3 mb-1">{title}</p>
+      {links.map(l => {
+        const Icon = l.icon;
+        return (
+          <Link key={l.href} href={l.href} onClick={onClose}
+            className="flex items-center gap-3 px-3 py-3 rounded-xl text-xs font-bold text-white/50 hover:text-white hover:bg-white/5 transition-all">
+            <Icon size={14} className={accentClass} />
+            {l.name}
+          </Link>
+        );
+      })}
+    </div>
   );
 }
 
 function WatchlistLink() {
   const count = useWatchlist(s => s.count);
   return (
-    <Link
-      href="/watchlist"
-      className="relative hidden sm:flex p-2.5 rounded-full bg-white/5 border border-white/5 text-white/40 hover:text-white hover:bg-white/10 transition-all"
-    >
-      <Bookmark size={18} />
+    <Link href="/watchlist"
+      className="relative hidden sm:flex h-9 w-9 items-center justify-center rounded-full bg-white/5 border border-white/8 text-white/40 hover:text-white hover:bg-white/10 hover:border-white/15 transition-all">
+      <Bookmark size={15} />
       {count > 0 && (
         <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-indigo-600 text-[8px] font-black text-white flex items-center justify-center">
           {count > 9 ? "9+" : count}

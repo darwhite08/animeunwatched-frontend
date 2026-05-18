@@ -57,3 +57,41 @@ export function useCreateReply(threadId: string) {
     onSuccess: () => qc.invalidateQueries({ queryKey: repliesKey(threadId) }),
   })
 }
+
+export function useClubThreads(clubSlug: string, page = 1) {
+  return useQuery({
+    queryKey: ["club-threads", clubSlug, page],
+    queryFn:  () => api<Paginated<Thread>>(`/clubs/${clubSlug}/threads?page=${page}&limit=20`),
+    enabled:  !!clubSlug,
+  })
+}
+
+export function useCreateClubThread(clubSlug: string) {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (body: { title: string; content: string }) =>
+      api<{ thread: Thread }>(`/clubs/${clubSlug}/threads`, { method: "POST", body: JSON.stringify(body) }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["club-threads", clubSlug] }),
+  })
+}
+
+export function useCreateAnimeThread(malId: number | string) {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (body: { title: string; content: string }) =>
+      api<{ thread: Thread }>(`/anime/${malId}/threads`, { method: "POST", body: JSON.stringify(body) }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["anime-threads", String(malId)] }),
+  })
+}
+
+export function useDeletePost() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (postId: string) =>
+      api<void>(`/posts/${postId}`, { method: "DELETE" }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["posts/feed"] })
+      qc.invalidateQueries({ queryKey: ["posts/discover"] })
+    },
+  })
+}

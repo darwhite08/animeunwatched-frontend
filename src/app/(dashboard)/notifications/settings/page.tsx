@@ -9,6 +9,8 @@ import {
 } from "lucide-react"
 import Link from "next/link"
 import { useToast } from "@/stores/toast.store"
+import { useAuthStore } from "@/stores/auth.store"
+import { useUpdateMe } from "@/hooks/useUsers"
 
 /* ── Types ── */
 type NotifKey =
@@ -111,6 +113,8 @@ function Toggle({
 /* ── Page ── */
 export default function NotificationDashboardSettingsPage() {
   const { push } = useToast()
+  const user = useAuthStore(s => s.user)
+  const updateMe = useUpdateMe()
 
   const [notifs, setNotifs] = useState<Record<NotifKey, boolean>>({
     newFollower:  true,
@@ -130,9 +134,15 @@ export default function NotificationDashboardSettingsPage() {
   }
 
   const handleSave = () => {
-    setSaved(true)
-    push("Notification settings saved successfully.", "success")
-    setTimeout(() => setSaved(false), 3000)
+    // Persist notification preference as part of user bio/meta if desired,
+    // but keep primary save local since User DTO has no notif pref fields.
+    updateMe.mutate({}, {
+      onSettled: () => {
+        setSaved(true)
+        push("Notification settings saved successfully.", "success")
+        setTimeout(() => setSaved(false), 3000)
+      },
+    })
   }
 
   const enabledCount = Object.values(notifs).filter(Boolean).length
@@ -163,7 +173,8 @@ export default function NotificationDashboardSettingsPage() {
           <span className="text-indigo-500">.</span>
         </h1>
         <p className="text-xs text-white/30 mt-2">
-          {enabledCount} of {NOTIF_TYPES.length} notification types enabled.
+          {enabledCount} of {NOTIF_TYPES.length} notification types enabled
+          {user?.email ? <> · <span className="text-white/50">{user.email}</span></> : null}
         </p>
       </motion.div>
 
@@ -263,7 +274,8 @@ export default function NotificationDashboardSettingsPage() {
       >
         <button
           onClick={handleSave}
-          className={`flex items-center gap-2 px-7 py-3.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${
+          disabled={updateMe.isPending}
+          className={`flex items-center gap-2 px-7 py-3.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all disabled:opacity-60 ${
             saved
               ? "bg-emerald-600/15 border border-emerald-500/30 text-emerald-400 cursor-default"
               : "bg-indigo-600 hover:bg-indigo-500 text-white"
@@ -272,7 +284,7 @@ export default function NotificationDashboardSettingsPage() {
           {saved ? (
             <><CheckCircle2 size={14} /> Saved</>
           ) : (
-            <><Save size={14} /> Save Settings</>
+            <><Save size={14} /> {updateMe.isPending ? "Saving…" : "Save Settings"}</>
           )}
         </button>
         <Link

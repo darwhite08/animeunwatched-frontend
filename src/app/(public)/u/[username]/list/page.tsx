@@ -17,22 +17,27 @@ import {
   BookmarkPlus,
   PauseCircle,
 } from "lucide-react"
-import { ANIME_DB } from "@/lib/data/anime"
+import { useUserList } from "@/hooks/useLists"
 import { useToast } from "@/stores/toast.store"
+import type { ListEntry as ApiListEntry, AnimeDTO } from "@/lib/api/types"
+import type { Anime } from "@/lib/data/anime"
 
 /* ─────────────────────────────────────────────
    Types & constants
 ───────────────────────────────────────────── */
 type WatchStatus = "Watching" | "Completed" | "Plan to Watch" | "On Hold"
+type SortKey = "name" | "rating" | "date"
 
-type ListEntry = {
-  animeId: string
-  status: WatchStatus
-  dateAdded: string
-  episodesWatched: number
+function mapDTO(a: AnimeDTO, i: number): Anime {
+  return { id: String(a.malId), title: a.title, titleJapanese: a.titleJapanese ?? "", rating: a.score ?? 0, year: a.year ?? 0, episodes: a.episodes, type: (["TV","Movie","OVA"] as const).includes(a.type as any) ? a.type as any : "TV", status: a.status?.toLowerCase().includes("airing") ? "airing" : "finished", studio: a.studios[0] ?? "Unknown", genres: a.genres, synopsis: a.synopsis ?? "", image: a.imageUrl ?? "", tags: a.genres.map(g => g.toLowerCase().replace(/\s/g, "-")), category: "all", rank: i+1 }
 }
 
-type SortKey = "name" | "rating" | "date"
+function apiStatusToUI(s: string): WatchStatus {
+  if (s === "WATCHING") return "Watching"
+  if (s === "COMPLETED") return "Completed"
+  if (s === "ON_HOLD") return "On Hold"
+  return "Plan to Watch"
+}
 
 const STATUS_COLORS: Record<WatchStatus, string> = {
   "Watching":       "bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
@@ -48,38 +53,36 @@ const STATUS_ICONS: Record<WatchStatus, typeof PlayCircle> = {
   "On Hold":        PauseCircle,
 }
 
-/* 12 entries: 4 Watching, 4 Completed, 2 Plan to Watch, 2 On Hold */
-const RAW_ENTRIES: ListEntry[] = [
-  { animeId: "attack-on-titan",            status: "Watching",       dateAdded: "2024-10-01", episodesWatched: 62  },
-  { animeId: "jujutsu-kaisen",             status: "Watching",       dateAdded: "2024-09-14", episodesWatched: 30  },
-  { animeId: "chainsaw-man",               status: "Watching",       dateAdded: "2024-08-22", episodesWatched: 9   },
-  { animeId: "demon-slayer",               status: "Watching",       dateAdded: "2024-07-05", episodesWatched: 28  },
-  { animeId: "fullmetal-alchemist-brotherhood", status: "Completed", dateAdded: "2024-06-10", episodesWatched: 64  },
-  { animeId: "steins-gate",                status: "Completed",      dateAdded: "2024-05-02", episodesWatched: 24  },
-  { animeId: "hunter-x-hunter-2011",       status: "Completed",      dateAdded: "2024-04-18", episodesWatched: 148 },
-  { animeId: "vinland-saga",               status: "Completed",      dateAdded: "2024-03-09", episodesWatched: 48  },
-  { animeId: "frieren",                    status: "Plan to Watch",  dateAdded: "2024-11-12", episodesWatched: 0   },
-  { animeId: "monster",                    status: "Plan to Watch",  dateAdded: "2024-11-01", episodesWatched: 0   },
-  { animeId: "berserk-1997",               status: "On Hold",        dateAdded: "2024-02-14", episodesWatched: 12  },
-  { animeId: "neon-genesis-evangelion",    status: "On Hold",        dateAdded: "2024-01-30", episodesWatched: 18  },
-]
-
-/* Join with ANIME_DB */
-const LIST_DATA = RAW_ENTRIES.map((entry) => {
-  const anime = ANIME_DB.find((a) => a.id === entry.animeId)!
-  return { ...entry, anime }
-}).filter((e) => e.anime !== undefined)
-
 const ALL_STATUSES: WatchStatus[] = ["Watching", "Completed", "Plan to Watch", "On Hold"]
+
+type MappedEntry = {
+  animeId: string
+  status: WatchStatus
+  dateAdded: string
+  episodesWatched: number
+  anime: Anime
+}
+
+function buildListData(entries: ApiListEntry[]): MappedEntry[] {
+  return entries
+    .filter(e => e.anime != null)
+    .map((e, i) => ({
+      animeId: e.animeId,
+      status: apiStatusToUI(e.status),
+      dateAdded: e.createdAt,
+      episodesWatched: e.episodesSeen,
+      anime: mapDTO(e.anime!, i),
+    }))
+}
 
 /* ─────────────────────────────────────────────
    Stats helpers
 ───────────────────────────────────────────── */
-function calcHours(entries: typeof LIST_DATA): number {
+function calcHours(entries: MappedEntry[]): number {
   return Math.round(
     entries.reduce((sum, e) => {
       const eps = e.episodesWatched || e.anime.episodes || 0
-      return sum + eps * 23.5 // avg min per ep → convert to hours
+      return sum + eps * 23.5
     }, 0) / 60,
   )
 }
@@ -88,7 +91,7 @@ function calcHours(entries: typeof LIST_DATA): number {
    Card
 ───────────────────────────────────────────── */
 interface ListCardProps {
-  entry: (typeof LIST_DATA)[number]
+  entry: MappedEntry
   index: number
   onAdd: (title: string) => void
 }
@@ -189,6 +192,9 @@ export default function UserListPage({
   const { username } = use(params)
   const { push } = useToast()
 
+  const { data: listData, isLoading } = useUserList(username)
+  const LIST_DATA = useMemo(() => buildListData(listData?.data ?? []), [listData])
+
   const [filterStatus, setFilterStatus] = useState<WatchStatus | "All">("All")
   const [sortKey, setSortKey] = useState<SortKey>("date")
 
@@ -204,7 +210,7 @@ export default function UserListPage({
       if (sortKey === "rating") return b.anime.rating - a.anime.rating
       /* date */                return b.dateAdded.localeCompare(a.dateAdded)
     })
-  }, [filterStatus, sortKey])
+  }, [filterStatus, sortKey, LIST_DATA])
 
   const watchingCount   = LIST_DATA.filter((e) => e.status === "Watching").length
   const completedCount  = LIST_DATA.filter((e) => e.status === "Completed").length
@@ -216,6 +222,8 @@ export default function UserListPage({
     { label: "Completed", value: completedCount,     icon: CheckCircle2, color: "text-violet-400" },
     { label: "Hours",     value: totalHours,         icon: Clock,      color: "text-amber-400" },
   ]
+
+  if (isLoading) return <div className="min-h-screen bg-[#020202] text-white flex items-center justify-center text-white/30">Loading list…</div>
 
   return (
     <div className="min-h-screen bg-[#020202] text-white pb-32">

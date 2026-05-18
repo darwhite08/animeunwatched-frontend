@@ -3,6 +3,8 @@
 import { useState, useMemo } from "react"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
+import { useFeed } from "@/hooks/usePosts"
+import { useAuthStore } from "@/stores/auth.store"
 import { motion, AnimatePresence } from "framer-motion"
 import { Rss, Plus, Eye, Heart, MessageCircle, MoreHorizontal, Search, Trash2, Edit2, Clock } from "lucide-react"
 import { feedContent } from "@/features/creator/data/feedData"
@@ -38,18 +40,34 @@ export default function FeedPage() {
   const folderId = searchParams.get("folder")
   const [query, setQuery] = useState("")
   const [statusFilter, setStatusFilter] = useState<"all" | PostStatus>("all")
+  const user = useAuthStore(s => s.user)
+  const { data: feedData } = useFeed()
+
+  // Build feed posts from real API data (user's own posts)
+  const apiFeedPosts: FeedPost[] = useMemo(() => {
+    const posts = feedData?.pages.flatMap(p => p.data) ?? []
+    return posts.filter(p => p.authorId === user?.id).map((p, i) => ({
+      id: p.id, title: p.content.slice(0, 50) + (p.content.length > 50 ? "…" : ""),
+      folderId: "1", status: "published" as const,
+      views: 0, likes: p._count?.likes ?? 0, comments: p._count?.comments ?? 0,
+      anime: p.anime?.title,
+      createdAt: (() => { const d = Date.now() - new Date(p.createdAt).getTime(); return d < 3600000 ? `${Math.floor(d/60000)}m ago` : d < 86400000 ? `${Math.floor(d/3600000)}h ago` : `${Math.floor(d/86400000)}d ago` })(),
+    }))
+  }, [feedData, user])
+
+  const displayFeed = apiFeedPosts.length > 0 ? apiFeedPosts : ENHANCED_FEED
 
   const visible = useMemo(() => {
-    return ENHANCED_FEED.filter(item => {
+    return displayFeed.filter(item => {
       const matchesFolder = !folderId || item.folderId === folderId
       const matchesQuery = item.title.toLowerCase().includes(query.toLowerCase())
       const matchesStatus = statusFilter === "all" || item.status === statusFilter
       return matchesFolder && matchesQuery && matchesStatus
     })
-  }, [folderId, query, statusFilter])
+  }, [displayFeed, folderId, query, statusFilter])
 
-  const totalViews = ENHANCED_FEED.reduce((s, p) => s + p.views, 0)
-  const totalLikes = ENHANCED_FEED.reduce((s, p) => s + p.likes, 0)
+  const totalViews = displayFeed.reduce((s, p) => s + p.views, 0)
+  const totalLikes = displayFeed.reduce((s, p) => s + p.likes, 0)
 
   return (
     <div className="space-y-8">

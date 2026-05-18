@@ -3,24 +3,24 @@
 import { useState } from "react"
 import Image from "next/image"
 import { Share2, Link2, Download } from "lucide-react"
-import { ANIME_DB } from "@/lib/data/anime"
 import { useToast } from "@/stores/toast.store"
-
-// ─── Mock top-5 from ANIME_DB ─────────────────────────────────────────────────
-
-const TOP_5 = ANIME_DB.slice(0, 5)
-
-const PROFILE = {
-  username: "darwhite08",
-  totalCount: 124,
-  year: new Date().getFullYear(),
-}
+import { useAuthStore } from "@/stores/auth.store"
+import { useUserList } from "@/hooks/useLists"
 
 // ─── Viral share card (non-modal, embeddable) ─────────────────────────────────
 
 export default function ListShareCard() {
   const toast = useToast((s) => s.push)
   const [copied, setCopied] = useState(false)
+  const user = useAuthStore(s => s.user)
+  const { data: listData } = useUserList(user?.username ?? "")
+
+  const TOP_5 = (listData?.data ?? []).slice(0, 5).map(e => ({
+    id: e.id, title: e.anime?.title ?? "Unknown", image: e.anime?.imageUrl ?? "",
+    rating: e.score ?? 0, status: e.status,
+  }))
+
+  const PROFILE = { username: user?.username ?? "shinobi", totalCount: listData?.meta?.total ?? 0, year: new Date().getFullYear() }
 
   const shareUrl = `https://animeunwatched.com/u/${PROFILE.username}`
 

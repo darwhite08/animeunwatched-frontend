@@ -5,8 +5,12 @@ import { motion, AnimatePresence } from "framer-motion"
 import Image from "next/image"
 import Link from "next/link"
 import { Star, Eye, EyeOff, ThumbsUp, PenSquare, Filter } from "lucide-react"
-import { ANIME_DB } from "@/lib/data/anime"
 import { useToast } from "@/stores/toast.store"
+import { useBrowseAnime } from "@/hooks/useAnime"
+import type { AnimeDTO } from "@/lib/api/types"
+import { useQuery } from "@tanstack/react-query"
+import { api } from "@/lib/api/client"
+import type { Paginated } from "@/lib/api/types"
 
 type Review = {
   id: number; animeId: string; author: string; score: number
@@ -29,23 +33,51 @@ type Sort = "helpful" | "recent" | "highest" | "lowest"
 export default function ReviewsPage() {
   const { push } = useToast()
   const [sort, setSort] = useState<Sort>("helpful")
-  const [reviews, setReviews] = useState(MOCK_REVIEWS)
   const [revealed, setRevealed] = useState<Set<number>>(new Set())
   const [expanded, setExpanded] = useState<Set<number>>(new Set())
+
+  const { data: browseData } = useBrowseAnime({ limit: 24 })
+  const animeList = browseData?.data ?? []
+
+  const { data: apiReviewsData } = useQuery({
+    queryKey: ["public-reviews", sort],
+    queryFn: () => api<Paginated<{ id: string; score: number; body: string; hasSpoilers: boolean; createdAt: string; _count?: { likes: number }; author: { username: string; displayName: string }; anime?: { id: string; malId: number; title: string; imageUrl: string | null } }>>(`/reviews?sort=${sort}&limit=24`),
+  })
+
+  const apiReviews = (apiReviewsData?.data ?? []).map((r, i) => ({
+    id: i + 1,
+    animeId: r.anime?.id ?? "",
+    animeMalId: r.anime?.malId ?? 0,
+    animeTitle: r.anime?.title ?? "Unknown Anime",
+    animeImage: r.anime?.imageUrl ?? "",
+    author: r.author?.displayName ?? r.author?.username ?? "Anonymous",
+    score: r.score, body: r.body,
+    helpful: r._count?.likes ?? 0, helpedByMe: false,
+    date: (() => { const d = Date.now() - new Date(r.createdAt).getTime(); return d < 86400000 ? `${Math.floor(d/3600000)}h ago` : `${Math.floor(d/86400000)}d ago` })(),
+    hasSpoilers: r.hasSpoilers,
+    excerpt: r.body.slice(0, 200),
+  }))
+
+  const baseReviews = apiReviews.length > 0 ? apiReviews : MOCK_REVIEWS
+  const [helpOverrides, setHelpOverrides] = useState<Record<number, { helpful: number; helpedByMe: boolean }>>({})
+  const reviews = baseReviews.map(r => helpOverrides[r.id] ? { ...r, ...helpOverrides[r.id] } : r)
 
   const sorted = useMemo(() => {
     return [...reviews].sort((a, b) => {
       if (sort === "helpful") return b.helpful - a.helpful
       if (sort === "highest") return b.score - a.score
       if (sort === "lowest")  return a.score - b.score
-      return 0 // recent — keep original order
+      return 0
     })
   }, [reviews, sort])
 
   const toggleHelp = (id: number) => {
-    setReviews(rs => rs.map(r =>
-      r.id === id ? { ...r, helpful: r.helpedByMe ? r.helpful - 1 : r.helpful + 1, helpedByMe: !r.helpedByMe } : r
-    ))
+    const current = reviews.find(r => r.id === id)
+    if (!current) return
+    setHelpOverrides(prev => ({
+      ...prev,
+      [id]: { helpful: current.helpedByMe ? current.helpful - 1 : current.helpful + 1, helpedByMe: !current.helpedByMe }
+    }))
   }
 
   const SORTS: { id: Sort; label: string }[] = [
@@ -91,7 +123,8 @@ export default function ReviewsPage() {
       <div className="max-w-5xl mx-auto px-6 grid md:grid-cols-2 gap-5">
         <AnimatePresence mode="popLayout">
           {sorted.map((r, i) => {
-            const anime = ANIME_DB.find(a => a.id === r.animeId)
+            const animeDto = animeList.find((a: AnimeDTO) => String(a.malId) === r.animeId)
+            const anime = animeDto ? { id: String(animeDto.malId), title: animeDto.title, image: animeDto.imageUrl ?? "" } : null
             const isRevealed = revealed.has(r.id)
             const isExpanded = expanded.has(r.id)
             const TRUNCATE = 180

@@ -1,308 +1,76 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
+import { useQuery } from "@tanstack/react-query"
 import { motion, useScroll, useTransform, AnimatePresence, useMotionValue, useSpring } from "framer-motion"
 import Link from "next/link"
 import Image from "next/image"
 import { ArrowRight, Zap, Star, Users, Flame, Trophy, Play, ChevronDown, Sparkles, Command } from "lucide-react"
-import { ANIME_DB } from "@/lib/data/anime"
-import HeroParticles from "@/components/home/HeroParticles"
+import { useBrowseAnime } from "@/hooks/useAnime"
+import type { AnimeDTO } from "@/lib/api/types"
 import { AnimatedCounterText } from "@/components/ui/AnimatedCounter"
+import CinematicHero from "@/components/home/CinematicHero"
 
-/* ─── SECTION 1: HERO ─── */
-function HeroSection() {
-  const ref = useRef<HTMLDivElement>(null)
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] })
-  const y = useTransform(scrollYProgress, [0, 1], [0, 200])
-  const opacity = useTransform(scrollYProgress, [0, 0.6], [1, 0])
-
-  const mouseX = useMotionValue(0)
-  const mouseY = useMotionValue(0)
-  const springX = useSpring(mouseX, { stiffness: 60, damping: 20 })
-  const springY = useSpring(mouseY, { stiffness: 60, damping: 20 })
-  // Derived transforms — must be at top level (Rules of Hooks)
-  const counterSpringX = useTransform(springX, v => -v * 0.5)
-  const counterSpringY = useTransform(springY, v => -v * 0.5)
-
-  useEffect(() => {
-    const move = (e: MouseEvent) => {
-      const { innerWidth, innerHeight } = window
-      mouseX.set((e.clientX / innerWidth - 0.5) * 40)
-      mouseY.set((e.clientY / innerHeight - 0.5) * 40)
-    }
-    window.addEventListener("mousemove", move)
-    return () => window.removeEventListener("mousemove", move)
-  }, [mouseX, mouseY])
-
-  const TOP_AIRING = ANIME_DB.filter(a => a.status === "airing").slice(0, 3)
-
-  return (
-    <section ref={ref} className="relative min-h-screen flex items-center overflow-hidden bg-[#020202]">
-      {/* Particle field */}
-      <HeroParticles count={35} />
-
-      {/* Dynamic glow that tracks mouse */}
-      <motion.div
-        className="absolute w-[600px] h-[600px] rounded-full pointer-events-none"
-        style={{
-          x: springX,
-          y: springY,
-          left: "30%",
-          top: "20%",
-          background: "radial-gradient(circle, rgba(99,102,241,0.15) 0%, transparent 70%)",
-          filter: "blur(40px)",
-        }}
-      />
-      <motion.div
-        className="absolute w-[400px] h-[400px] rounded-full pointer-events-none"
-        style={{
-          x: counterSpringX,
-          y: counterSpringY,
-          right: "15%",
-          top: "30%",
-          background: "radial-gradient(circle, rgba(139,92,246,0.12) 0%, transparent 70%)",
-          filter: "blur(60px)",
-        }}
-      />
-
-      {/* Grid */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:80px_80px] pointer-events-none" />
-
-      <motion.div style={{ y, opacity }} className="relative z-10 w-full max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-12 items-center min-h-screen">
-
-        {/* LEFT — Copy */}
-        <div className="space-y-8 pt-28 lg:pt-0">
-          {/* Chapter badge */}
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.2 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-indigo-500/25 bg-indigo-500/8 backdrop-blur-md"
-          >
-            <span className="w-2 h-2 rounded-full bg-indigo-400 animate-pulse" />
-            <span className="text-[10px] font-black uppercase tracking-[0.35em] text-indigo-300/80">
-              Neural Archive Protocol V4.0
-            </span>
-          </motion.div>
-
-          {/* Mega headline */}
-          <div className="space-y-2">
-            {["Your Next", "Favorite Anime", "Exists."].map((line, i) => (
-              <div key={line} className="overflow-hidden">
-                <motion.h1
-                  initial={{ y: "110%" }}
-                  animate={{ y: 0 }}
-                  transition={{ delay: 0.3 + i * 0.1, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                  className={`font-black leading-none uppercase tracking-tighter ${
-                    i === 1
-                      ? "text-[clamp(2.8rem,7vw,6.5rem)] text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-violet-300 to-purple-400 italic"
-                      : "text-[clamp(2.8rem,7vw,6.5rem)] text-white"
-                  }`}
-                >
-                  {line}
-                </motion.h1>
-              </div>
-            ))}
-          </div>
-
-          {/* Sub */}
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.65 }}
-            className="text-white/45 text-lg leading-relaxed max-w-md font-medium"
-          >
-            Stop scrolling through the same lists. Let our{" "}
-            <span className="text-white/80 italic font-bold">Neural Oracle</span> surface the anime that was made for exactly the way you think.
-          </motion.p>
-
-          {/* CTAs */}
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.75 }}
-            className="flex flex-wrap gap-4"
-          >
-            <Link href="/ai-discover"
-              className="group relative flex items-center gap-3 px-8 py-4 rounded-2xl bg-indigo-600 text-sm font-black uppercase tracking-widest text-white overflow-hidden shadow-[0_0_50px_rgba(99,102,241,0.45)] hover:shadow-[0_0_70px_rgba(99,102,241,0.7)] transition-all hover:-translate-y-0.5"
-            >
-              <div className="absolute inset-0 bg-gradient-to-r from-indigo-600 via-violet-600 to-indigo-600 bg-[length:200%] animate-[shimmer_3s_linear_infinite]" />
-              <Sparkles size={14} className="relative z-10" />
-              <span className="relative z-10">Enter Neural Oracle</span>
-              <ArrowRight size={13} className="relative z-10 group-hover:translate-x-1 transition-transform" />
-            </Link>
-
-            <Link href="/bestanimelist"
-              className="flex items-center gap-3 px-8 py-4 rounded-2xl border border-white/12 bg-white/[0.04] text-sm font-black uppercase tracking-widest text-white/60 backdrop-blur-md hover:bg-white/[0.08] hover:text-white hover:border-white/20 hover:-translate-y-0.5 transition-all"
-            >
-              <Play size={13} /> Browse Archive
-            </Link>
-          </motion.div>
-
-          {/* Quick stats */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.9 }}
-            className="flex items-center gap-8 pt-4 border-t border-white/[0.06]"
-          >
-            {[
-                { value: 12402, suffix: "", label: "Shinobi"  },
-                { value: 1200000, suffix: "+", label: "Archives" },
-                { value: 984, suffix: "‰", label: "Accuracy"  },
-              ].map(({ value, suffix, label }) => (
-              <div key={label}>
-                <AnimatedCounterText value={value} suffix={suffix} className="text-xl font-black tracking-tighter text-white" />
-                <p className="text-[9px] font-black uppercase tracking-[0.3em] text-white/20 mt-0.5">{label}</p>
-              </div>
-            ))}
-          </motion.div>
-
-          {/* Anime title ticker */}
-          <div className="overflow-hidden relative">
-            <motion.div
-              animate={{ x: [0, -1200] }}
-              transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-              className="flex gap-8 whitespace-nowrap"
-            >
-              {[...ANIME_DB.slice(0,12), ...ANIME_DB.slice(0,12)].map((a, i) => (
-                <span key={i} className="text-[10px] font-black uppercase tracking-widest text-white/10 shrink-0">
-                  {a.title} ·
-                </span>
-              ))}
-            </motion.div>
-          </div>
-        </div>
-
-        {/* RIGHT — Floating UI preview */}
-        <div className="relative hidden lg:flex items-center justify-center h-[70vh]">
-          {/* Floating anime cards */}
-          {TOP_AIRING.map((anime, i) => (
-            <motion.div
-              key={anime.id}
-              initial={{ opacity: 0, scale: 0.8, y: 60 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              transition={{ delay: 0.5 + i * 0.12, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-              style={{
-                x: springX,
-                y: springY,
-                position: "absolute",
-                top: `${[15, 40, 65][i]}%`,
-                left: `${[10, 40, 20][i]}%`,
-                zIndex: [3, 5, 2][i],
-                rotate: [-6, 0, 5][i],
-              }}
-              whileHover={{ scale: 1.05, rotate: 0, zIndex: 10 }}
-              className="w-40 h-56 rounded-2xl overflow-hidden border border-white/10 shadow-[0_20px_60px_rgba(0,0,0,0.6)] cursor-pointer"
-            >
-              <Image src={anime.image} alt={anime.title} fill className="object-cover" sizes="160px" />
-              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 to-transparent p-3">
-                <p className="text-[9px] font-black text-white uppercase tracking-wider truncate">{anime.title}</p>
-                <div className="flex items-center gap-1 mt-0.5">
-                  <Star size={8} fill="#f59e0b" className="text-amber-400" />
-                  <span className="text-[8px] text-white/70 font-bold">{anime.rating.toFixed(1)}</span>
-                </div>
-              </div>
-              {/* Live badge */}
-              <div className="absolute top-2 right-2 flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-emerald-500/20 border border-emerald-500/30">
-                <span className="w-1 h-1 rounded-full bg-emerald-400 animate-pulse" />
-                <span className="text-[7px] font-black text-emerald-400">LIVE</span>
-              </div>
-            </motion.div>
-          ))}
-
-          {/* Floating XP card */}
-          <motion.div
-            initial={{ opacity: 0, x: 40 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.9 }}
-            style={{ x: useTransform(springX, v => v * 0.3), y: useTransform(springY, v => v * 0.3) }}
-            className="absolute bottom-[15%] right-[5%] w-52 p-4 rounded-2xl bg-[#0c0c0c]/90 border border-indigo-500/25 backdrop-blur-xl shadow-2xl"
-          >
-            <div className="flex items-center gap-2 mb-3">
-              <div className="w-7 h-7 rounded-lg bg-indigo-600/30 flex items-center justify-center">
-                <Zap size={13} className="text-indigo-400" fill="currentColor" />
-              </div>
-              <div>
-                <p className="text-[9px] font-black uppercase tracking-widest text-indigo-400/70">Streak Active</p>
-                <p className="text-xs font-black text-white">22 Day Streak 🔥</p>
-              </div>
-            </div>
-            <div className="h-1.5 bg-white/5 rounded-full overflow-hidden">
-              <motion.div initial={{ width: 0 }} animate={{ width: "78%" }} transition={{ delay: 1.2, duration: 1 }}
-                className="h-full bg-gradient-to-r from-indigo-600 to-violet-500 rounded-full"
-              />
-            </div>
-            <p className="text-[8px] text-white/25 mt-1.5 font-mono">+840 XP this week</p>
-          </motion.div>
-
-          {/* Cmd+K hint */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 1.4 }}
-            className="absolute top-[8%] right-[8%] flex items-center gap-1.5 px-3 py-2 rounded-xl bg-black/50 border border-white/10 backdrop-blur-md"
-          >
-            <Command size={11} className="text-white/30" />
-            <span className="text-[9px] font-black text-white/30 uppercase tracking-widest">K · Search</span>
-          </motion.div>
-        </div>
-      </motion.div>
-
-      {/* Scroll indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.5 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 z-10"
-      >
-        <span className="text-[9px] font-mono uppercase tracking-[0.4em] text-white/20">Scroll</span>
-        <motion.div animate={{ y: [0, 8, 0] }} transition={{ duration: 1.8, repeat: Infinity }}>
-          <ChevronDown size={16} className="text-white/20" />
-        </motion.div>
-      </motion.div>
-    </section>
-  )
+/* ─── Analytics hook ─── */
+function usePlatformUserCount() {
+  return useQuery<number>({
+    queryKey: ["analytics/stats/users"],
+    queryFn: async () => {
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE ?? ""}/api/v1/analytics/stats`,
+        { credentials: "include" },
+      )
+      if (!res.ok) throw new Error("unavailable")
+      const json = await res.json()
+      const stats = json.stats ?? json
+      return (stats.users as number) ?? 12402
+    },
+    placeholderData: 12402,
+    retry: false,
+    staleTime: 60_000,
+  })
 }
 
-/* ─── SECTION 2: DISCOVERY ─── */
+function mapDTO(a: AnimeDTO) {
+  return {
+    id: String(a.malId),
+    title: a.title,
+    rating: a.score ?? 0,
+    image: a.imageUrl ?? "",
+    status: a.status?.toLowerCase().includes("airing") ? "airing" as const : "finished" as const,
+  }
+}
+
+/* ─── SECTION 1: DISCOVERY ─── */
 function DiscoverySection() {
   const CATEGORIES = [
-    { label: "Hidden Gems",     count: 487,  color: "from-amber-600/30 to-amber-900/10",  text: "text-amber-400",   border: "border-amber-500/20" },
-    { label: "Dark Fantasy",    count: 312,  color: "from-violet-600/30 to-violet-900/10",text: "text-violet-400",  border: "border-violet-500/20"},
-    { label: "Psychological",   count: 198,  color: "from-rose-600/30 to-rose-900/10",    text: "text-rose-400",    border: "border-rose-500/20"  },
-    { label: "Underrated",      count: 654,  color: "from-emerald-600/30 to-emerald-900/10",text:"text-emerald-400",border: "border-emerald-500/20"},
+    { label: "Hidden Gems",   count: 487 },
+    { label: "Dark Fantasy",  count: 312 },
+    { label: "Psychological", count: 198 },
+    { label: "Underrated",    count: 654 },
   ]
 
-  const FEATURED = ANIME_DB.filter(a => a.rating >= 8.8).slice(0, 6)
+  const { data: discoveryData } = useBrowseAnime({ limit: 20 })
+  const FEATURED = [...(discoveryData?.data ?? [])]
+    .sort((a, b) => (b.score ?? 0) - (a.score ?? 0))
+    .slice(0, 6)
+    .map(mapDTO)
 
   return (
-    <section className="min-h-screen py-24 bg-[#030303] relative overflow-hidden flex items-center">
-      {/* Subtle grid */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff04_1px,transparent_1px),linear-gradient(to_bottom,#ffffff04_1px,transparent_1px)] bg-[size:60px_60px] pointer-events-none" />
-
+    <section className="min-h-screen py-24 bg-[#08080f] relative z-[1] overflow-hidden flex items-center">
       <div className="max-w-7xl mx-auto px-6 w-full space-y-16">
+
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div>
-            <motion.p
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="text-[9px] font-mono uppercase tracking-[0.4em] text-indigo-400/60 mb-4"
-            >
-              Chapter 02 — Discovery Engine
-            </motion.p>
             <motion.h2
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-[clamp(2.5rem,6vw,5.5rem)] font-black tracking-tighter text-white uppercase italic leading-none"
+              className="text-[clamp(2rem,5vw,4.5rem)] font-bold tracking-tight text-white leading-tight"
             >
               Discover the<br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-violet-400">
-                Undiscovered.
-              </span>
+              <span className="text-indigo-400">undiscovered.</span>
             </motion.h2>
           </div>
           <motion.p
@@ -311,27 +79,26 @@ function DiscoverySection() {
             viewport={{ once: true }}
             className="text-white/35 text-sm max-w-xs leading-relaxed"
           >
-            The algorithm is dead. We match you to anime based on how you actually think — not what everyone else is watching.
+            We match you to anime based on how you actually think — not what everyone else is watching.
           </motion.p>
         </div>
 
-        {/* Category cards */}
+        {/* Category cards — monochrome */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {CATEGORIES.map(({ label, count, color, text, border }, i) => (
+          {CATEGORIES.map(({ label, count }, i) => (
             <motion.div
               key={label}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.08 }}
-              whileHover={{ y: -8, scale: 1.02 }}
-              className={`group relative p-7 rounded-[2rem] bg-gradient-to-br ${color} border ${border} cursor-pointer overflow-hidden h-48`}
+              whileHover={{ y: -6, scale: 1.02 }}
+              className="group relative p-7 rounded-[2rem] bg-white/[0.02] border border-white/[0.06] hover:border-white/[0.12] hover:bg-white/[0.04] cursor-pointer overflow-hidden h-48 transition-all duration-300"
             >
-              <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-white/[0.03]" />
               <AnimatedCounterText value={count} className="text-5xl font-black tracking-tighter text-white mb-1" />
-              <p className="text-[9px] text-white/25 font-mono mb-2">anime</p>
-              <p className={`text-[10px] font-black uppercase tracking-[0.3em] ${text}`}>{label}</p>
-              <ArrowRight size={16} className={`${text} absolute bottom-5 right-5 opacity-0 group-hover:opacity-100 transition-all group-hover:translate-x-1`} />
+              <p className="text-[9px] text-white/20 font-mono mb-2">anime</p>
+              <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40 group-hover:text-white/60 transition-colors">{label}</p>
+              <ArrowRight size={16} className="text-white/20 group-hover:text-white/50 absolute bottom-5 right-5 opacity-0 group-hover:opacity-100 transition-all group-hover:translate-x-1 duration-300" />
             </motion.div>
           ))}
         </div>
@@ -358,8 +125,8 @@ function DiscoverySection() {
               <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black via-black/60 to-transparent p-3 translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
                 <p className="text-[9px] font-black text-white uppercase tracking-tight truncate">{anime.title}</p>
                 <div className="flex items-center gap-1 mt-0.5">
-                  <Star size={8} fill="#f59e0b" className="text-amber-400" />
-                  <span className="text-[8px] text-white/60">{anime.rating.toFixed(1)}</span>
+                  <Star size={8} fill="currentColor" className="text-white/50" />
+                  <span className="text-[8px] text-white/40">{anime.rating.toFixed(1)}</span>
                 </div>
               </div>
             </motion.div>
@@ -373,9 +140,9 @@ function DiscoverySection() {
           className="text-center"
         >
           <Link href="/bestanimelist"
-            className="inline-flex items-center gap-2 px-8 py-4 rounded-2xl border border-white/10 bg-white/[0.04] text-sm font-black uppercase tracking-widest text-white/50 hover:text-white hover:bg-white/[0.08] transition-all"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-white/[0.08] text-sm font-medium text-white/40 hover:text-white/70 hover:border-white/[0.15] hover:bg-white/[0.03] transition-all"
           >
-            View Full Archive <ArrowRight size={13} />
+            View full catalog <ArrowRight size={13} />
           </Link>
         </motion.div>
       </div>
@@ -383,229 +150,309 @@ function DiscoverySection() {
   )
 }
 
-/* ─── SECTION 3: AI ORACLE ─── */
+/* ─── SECTION 2: AI ORACLE ─── */
 function AIOracleSection() {
   const PROMPTS = [
-    "A slow-burn psychological thriller with no happy ending",
-    "Overpowered MC who hides their strength from everyone",
-    "Hidden gems from the 2000s that nobody talks about",
-    "Romance that hits like a truck in the last episode",
+    { short: "Psychological thriller", full: "A slow-burn psychological thriller with no happy ending",  results: [
+      { title: "Monster",                score: 9.1, genre: "Psychological", match: 98, grad: "from-slate-800 to-indigo-950"   },
+      { title: "Paranoia Agent",         score: 8.8, genre: "Thriller",      match: 95, grad: "from-violet-950 to-slate-900"  },
+      { title: "Serial Experiments Lain",score: 8.5, genre: "Sci-Fi",        match: 91, grad: "from-blue-950 to-slate-900"    },
+    ]},
+    { short: "Hidden power MC",        full: "Overpowered MC who hides their strength from everyone",    results: [
+      { title: "One Punch Man",          score: 8.7, genre: "Action",        match: 97, grad: "from-yellow-950 to-slate-900"  },
+      { title: "Mob Psycho 100",         score: 9.0, genre: "Supernatural",  match: 94, grad: "from-indigo-950 to-slate-900"  },
+      { title: "The Irregular at Magic", score: 7.5, genre: "Fantasy",       match: 88, grad: "from-emerald-950 to-slate-900" },
+    ]},
+    { short: "Forgotten 2000s gems",   full: "Hidden gems from the 2000s that nobody talks about",       results: [
+      { title: "Haibane Renmei",         score: 8.1, genre: "Slice of Life", match: 96, grad: "from-amber-950 to-slate-900"   },
+      { title: "Kino's Journey",         score: 8.0, genre: "Adventure",     match: 93, grad: "from-teal-950 to-slate-900"    },
+      { title: "Texhnolyze",             score: 8.1, genre: "Sci-Fi Noir",   match: 89, grad: "from-gray-900 to-slate-950"    },
+    ]},
+    { short: "Romance gut-punch",      full: "Romance that hits like a truck in the last episode",       results: [
+      { title: "Clannad: After Story",   score: 9.0, genre: "Drama",         match: 99, grad: "from-rose-950 to-slate-900"    },
+      { title: "Anohana",                score: 8.7, genre: "Drama",         match: 95, grad: "from-pink-950 to-slate-900"    },
+      { title: "Your Lie in April",      score: 8.7, genre: "Music / Drama", match: 93, grad: "from-orange-950 to-slate-900"  },
+    ]},
   ]
   const [active, setActive] = useState(0)
 
   useEffect(() => {
-    const id = setInterval(() => setActive(i => (i + 1) % PROMPTS.length), 3500)
+    const id = setInterval(() => setActive(i => (i + 1) % PROMPTS.length), 4000)
     return () => clearInterval(id)
   }, [PROMPTS.length])
 
   return (
-    <section className="min-h-screen py-24 relative overflow-hidden bg-[#020202] flex items-center">
-      {/* Animated glow orbs */}
-      <motion.div
-        animate={{ scale: [1, 1.15, 1], opacity: [0.12, 0.25, 0.12] }}
-        transition={{ duration: 8, repeat: Infinity }}
-        className="absolute top-1/2 left-1/3 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-indigo-600 blur-[160px] rounded-full pointer-events-none"
-      />
-      <motion.div
-        animate={{ scale: [1, 1.1, 1], opacity: [0.08, 0.18, 0.08] }}
-        transition={{ duration: 10, repeat: Infinity, delay: 2 }}
-        className="absolute top-1/3 right-1/4 w-[500px] h-[500px] bg-violet-700 blur-[140px] rounded-full pointer-events-none"
-      />
+    <section className="min-h-screen py-24 relative z-[2] overflow-hidden bg-[#06060f] flex items-center">
+      <div className="absolute inset-0 pointer-events-none" style={{
+        background: "radial-gradient(ellipse 50% 60% at 72% 50%, rgba(79,70,229,0.07) 0%, transparent 60%)",
+      }} />
 
-      <div className="max-w-6xl mx-auto px-6 w-full space-y-16">
-        <div className="text-center space-y-6">
-          <motion.p
-            initial={{ opacity: 0, y: -10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-[9px] font-mono uppercase tracking-[0.4em] text-indigo-400/60"
-          >
-            Chapter 03 — Neural Oracle
-          </motion.p>
-          <motion.h2
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-[clamp(2.5rem,7vw,6rem)] font-black tracking-tighter text-white uppercase italic leading-none"
-          >
-            Describe what<br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-violet-300 to-purple-400">
-              you want to feel.
-            </span>
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.2 }}
-            className="text-white/35 text-lg max-w-xl mx-auto"
-          >
-            The first AI that understands anime by emotional fingerprint, not just genre tags.
-          </motion.p>
-        </div>
+      <div className="max-w-7xl mx-auto px-6 w-full">
+        <div className="grid lg:grid-cols-2 gap-16 items-center">
 
-        {/* Interactive prompt UI */}
-        <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.3 }}
-          className="max-w-3xl mx-auto"
-        >
-          <div className="p-1 rounded-[2.5rem] bg-white/[0.02] border border-white/10 shadow-[0_0_80px_rgba(99,102,241,0.15)] backdrop-blur-2xl">
-            {/* Terminal header */}
-            <div className="flex items-center gap-3 px-6 py-4 border-b border-white/5">
-              <div className="flex gap-1.5">
-                <div className="w-3 h-3 rounded-full bg-red-500/40 border border-red-500/60" />
-                <div className="w-3 h-3 rounded-full bg-amber-500/40 border border-amber-500/60" />
-                <div className="w-3 h-3 rounded-full bg-emerald-500/40 border border-emerald-500/60" />
-              </div>
-              <span className="text-[10px] font-mono text-indigo-400/60 uppercase tracking-widest">Neural Query Interface</span>
+          {/* ── LEFT ── */}
+          <div className="space-y-10">
+            <div>
+              <motion.p
+                initial={{ opacity: 0, y: 8 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="text-[11px] font-medium uppercase tracking-[0.25em] text-indigo-400/60 mb-4"
+              >
+                AI Discovery
+              </motion.p>
+              <motion.h2
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="text-[clamp(2rem,4.2vw,3.8rem)] font-bold tracking-tight text-white leading-tight mb-5"
+              >
+                Tell us how you<br />
+                <span className="text-indigo-400">want to feel.</span>
+              </motion.h2>
+              <motion.p
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                className="text-white/35 text-base leading-relaxed max-w-[40ch]"
+              >
+                Forget genre tags. Our AI matches anime to your mood — a vibe, a feeling, a moment you're chasing.
+              </motion.p>
             </div>
 
-            {/* Prompt display */}
-            <div className="px-6 py-8 min-h-[80px]">
-              <AnimatePresence mode="wait">
-                <motion.p
-                  key={active}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
-                  className="text-xl md:text-2xl text-white/80 font-medium leading-relaxed"
-                >
-                  "{PROMPTS[active]}"
-                </motion.p>
-              </AnimatePresence>
-            </div>
-
-            {/* Suggestion pills */}
-            <div className="px-6 pb-4 flex flex-wrap gap-2">
+            {/* Example prompts */}
+            <div className="space-y-2">
+              <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-white/20 mb-3">Try asking for</p>
               {PROMPTS.map((p, i) => (
-                <button
+                <motion.button
                   key={i}
+                  initial={{ opacity: 0, x: -10 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.07 }}
                   onClick={() => setActive(i)}
-                  className={`px-4 py-2 rounded-xl text-[11px] font-bold transition-all ${
+                  className={`w-full text-left px-4 py-3 rounded-xl border transition-all flex items-center gap-3 ${
                     active === i
-                      ? "bg-indigo-600 text-white"
-                      : "bg-white/5 text-white/40 hover:bg-white/8 border border-white/5"
+                      ? "bg-indigo-600/10 border-indigo-500/30 text-white/80"
+                      : "bg-white/[0.02] border-white/[0.06] text-white/35 hover:bg-white/[0.04] hover:border-white/[0.1] hover:text-white/55"
                   }`}
                 >
-                  {p.slice(0, 30)}…
-                </button>
+                  <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${active === i ? "bg-indigo-400" : "bg-white/15"}`} />
+                  <span className="text-[13px] font-medium">&ldquo;{p.full}&rdquo;</span>
+                </motion.button>
               ))}
             </div>
 
-            {/* CTA */}
-            <div className="px-6 pb-6">
-              <Link href="/ai-discover"
-                className="w-full flex items-center justify-center gap-3 py-4 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-sm font-black uppercase tracking-widest text-white transition-all shadow-[0_0_30px_rgba(99,102,241,0.35)]"
-              >
-                <Sparkles size={14} /> Execute Search
-              </Link>
-            </div>
-          </div>
-        </motion.div>
-
-        {/* Connection visualization */}
-        <div className="relative h-24 overflow-hidden opacity-30">
-          {[...Array(8)].map((_, i) => (
-            <motion.div
-              key={i}
-              className="absolute h-px bg-gradient-to-r from-transparent via-indigo-500 to-transparent"
-              style={{
-                width: `${40 + i * 8}%`,
-                top: `${10 + i * 11}%`,
-                left: i % 2 === 0 ? 0 : "auto",
-                right: i % 2 !== 0 ? 0 : "auto",
-              }}
-              animate={{ opacity: [0.2, 0.8, 0.2], scaleX: [0.8, 1, 0.8] }}
-              transition={{ duration: 2 + i * 0.3, repeat: Infinity, delay: i * 0.2 }}
-            />
-          ))}
-        </div>
-
-        {/* Connection nodes visualization */}
-        <div className="flex justify-center gap-8 flex-wrap">
-          {["Action","Psychological","Romance","Fantasy","Seinen","Sci-Fi","Horror","Comedy"].map((tag, i) => (
-            <motion.span
-              key={tag}
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.05 }}
-              whileHover={{ scale: 1.1 }}
-              className="px-5 py-2.5 rounded-full border border-indigo-500/20 bg-indigo-500/8 text-xs font-black uppercase tracking-wider text-indigo-400/80 cursor-pointer hover:border-indigo-500/50 hover:bg-indigo-500/15 transition-all"
+            <Link href="/ai-discover"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-sm font-medium text-white transition-colors"
             >
-              {tag}
-            </motion.span>
-          ))}
+              <Sparkles size={13} /> Try AI discovery
+            </Link>
+          </div>
+
+          {/* ── RIGHT — discovery card ── */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.15 }}
+          >
+            <div className="rounded-2xl bg-white/[0.025] border border-white/[0.08] overflow-hidden" style={{ boxShadow: "0 40px 80px rgba(0,0,0,0.55)" }}>
+
+              {/* Header */}
+              <div className="px-5 py-3.5 border-b border-white/[0.06] flex items-center justify-between bg-white/[0.01]">
+                <div className="flex items-center gap-2">
+                  <Sparkles size={12} className="text-indigo-400" />
+                  <span className="text-[11px] font-semibold text-white/55">Neural Oracle</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <motion.span animate={{ opacity: [0.4, 1, 0.4] }} transition={{ duration: 2, repeat: Infinity }} className="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block" />
+                  <span className="text-[9px] text-emerald-400/70 font-medium">Live</span>
+                </div>
+              </div>
+
+              {/* Active prompt */}
+              <div className="px-5 pt-5 pb-4">
+                <p className="text-[9px] font-medium uppercase tracking-[0.18em] text-white/20 mb-2.5">Searching for</p>
+                <AnimatePresence mode="wait">
+                  <motion.p
+                    key={active}
+                    initial={{ opacity: 0, y: 5 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -5 }}
+                    transition={{ duration: 0.25 }}
+                    className="text-[16px] font-semibold text-white/90 leading-snug"
+                  >
+                    &ldquo;{PROMPTS[active].full}&rdquo;
+                  </motion.p>
+                </AnimatePresence>
+              </div>
+
+              {/* Quick-select pills */}
+              <div className="px-5 pb-5 flex flex-wrap gap-1.5">
+                {PROMPTS.map((p, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setActive(i)}
+                    className={`px-3 py-1.5 rounded-lg text-[11px] font-medium transition-all ${
+                      active === i
+                        ? "bg-indigo-600 text-white"
+                        : "bg-white/[0.03] text-white/30 border border-white/[0.07] hover:bg-white/[0.06] hover:text-white/55"
+                    }`}
+                  >
+                    {p.short}
+                  </button>
+                ))}
+              </div>
+
+              {/* Results */}
+              <div className="border-t border-white/[0.06]">
+                <div className="px-5 py-3 flex items-center justify-between bg-white/[0.01]">
+                  <p className="text-[10px] font-medium uppercase tracking-[0.15em] text-white/20">Top matches</p>
+                  <span className="text-[9px] text-indigo-400/50 font-medium">3 results</span>
+                </div>
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={active}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    {PROMPTS[active].results.map(({ title, score, genre, match, grad }, i) => (
+                      <div
+                        key={title}
+                        className="flex items-center gap-4 px-5 py-3.5 hover:bg-white/[0.02] transition-colors cursor-pointer border-t border-white/[0.04]"
+                      >
+                        {/* Poster thumbnail */}
+                        <div className={`w-9 h-[52px] rounded-lg shrink-0 bg-gradient-to-b ${grad} border border-white/[0.08] overflow-hidden relative`}>
+                          <div className="absolute inset-0 flex items-end justify-start p-1">
+                            <span className="text-[7px] font-bold text-white/30 leading-none">{title.slice(0, 3).toUpperCase()}</span>
+                          </div>
+                        </div>
+
+                        <div className="flex-1 min-w-0">
+                          <p className="text-[13px] font-semibold text-white/80 truncate mb-0.5">{title}</p>
+                          <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-0.5">
+                              <Star size={8} className="fill-amber-400/70 text-amber-400/70" />
+                              <span className="text-[9px] text-white/35 font-medium">{score}</span>
+                            </div>
+                            <span className="text-[7px] text-white/12">·</span>
+                            <span className="text-[9px] text-white/25">{genre}</span>
+                          </div>
+                        </div>
+
+                        <div className="text-right shrink-0">
+                          <p className="text-[13px] font-bold text-indigo-400">{match}%</p>
+                          <p className="text-[8px] text-white/18">match</p>
+                        </div>
+                      </div>
+                    ))}
+                  </motion.div>
+                </AnimatePresence>
+
+                <div className="px-5 py-3.5 border-t border-white/[0.05] bg-white/[0.01]">
+                  <Link href="/ai-discover" className="text-[11px] text-indigo-400/60 hover:text-indigo-400 transition-colors font-medium inline-flex items-center gap-1">
+                    Open AI discovery <ArrowRight size={11} />
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </motion.div>
         </div>
       </div>
     </section>
   )
 }
 
-/* ─── SECTION 4: COMMUNITY ─── */
+/* ─── SECTION 3: COMMUNITY ─── */
 function CommunitySection() {
+  const { data: discoverPosts } = useBrowseAnime({ limit: 1 })
+  const animeTotalApprox = discoverPosts?.meta?.total ?? 310
+
   return (
-    <section className="min-h-screen py-24 bg-[#030303] relative overflow-hidden flex items-center">
-      <div className="max-w-7xl mx-auto px-6 w-full space-y-16">
+    <section className="min-h-screen py-24 bg-[#08080f] relative z-[2] overflow-hidden flex items-center">
+      <div className="absolute inset-0 pointer-events-none" style={{
+        background: "radial-gradient(ellipse 50% 55% at 85% 50%, rgba(79,70,229,0.05) 0%, transparent 60%)",
+      }} />
+
+      <div className="max-w-7xl mx-auto px-6 w-full">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
+
           {/* Left */}
           <div className="space-y-8">
-            <motion.p
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              className="text-[9px] font-mono uppercase tracking-[0.4em] text-emerald-400/60"
-            >
-              Chapter 04 — The Dojo
-            </motion.p>
-            <motion.h2
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="text-[clamp(2.5rem,6vw,5rem)] font-black tracking-tighter text-white uppercase italic leading-none"
-            >
-              Join 12,402<br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-400">
-                Shinobi.
-              </span>
-            </motion.h2>
-            <motion.p
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              className="text-white/35 text-lg leading-relaxed max-w-md"
-            >
-              Track streaks. Earn badges. Climb the Pantheon. Every episode watched builds your legacy in the Neural Archive.
-            </motion.p>
+            <div>
+              <motion.p
+                initial={{ opacity: 0, y: 8 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="text-[11px] font-medium uppercase tracking-[0.25em] text-indigo-400/60 mb-4"
+              >
+                Community
+              </motion.p>
+              <motion.h2
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                className="text-[clamp(2rem,4.5vw,4rem)] font-bold tracking-tight text-white leading-tight mb-5"
+              >
+                Every episode<br />
+                <span className="text-indigo-400">builds your legacy.</span>
+              </motion.h2>
+              <motion.p
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                className="text-white/35 text-base leading-relaxed max-w-md"
+              >
+                Earn XP for every episode you watch. Build streaks, unlock titles, and compete on a global leaderboard that rewards dedication — not just activity.
+              </motion.p>
+            </div>
 
-            <div className="grid grid-cols-2 gap-4">
+            {/* Feature grid */}
+            <div className="grid grid-cols-2 gap-3">
               {[
-                { icon: Flame,  value: "22 Days", label: "Avg Streak",    color: "text-orange-400", bg: "bg-orange-500/10" },
-                { icon: Trophy, value: "#812",    label: "Your Rank",     color: "text-amber-400",  bg: "bg-amber-500/10"  },
-                { icon: Star,   value: "8.4/10",  label: "Avg Score",     color: "text-indigo-400", bg: "bg-indigo-500/10" },
-                { icon: Users,  value: "1,240",   label: "Reads / Week",  color: "text-emerald-400",bg: "bg-emerald-500/10"},
-              ].map(({ icon: Icon, value, label, color, bg }, i) => (
+                { icon: Flame,  label: "Daily Streaks",    desc: "Watch daily to compound XP.",     color: "text-orange-400", bg: "bg-orange-500/[0.12]", border: "border-orange-500/[0.18]" },
+                { icon: Trophy, label: "Leaderboard",      desc: "Rank globally by season.",         color: "text-amber-400",  bg: "bg-amber-500/[0.12]",  border: "border-amber-500/[0.18]"  },
+                { icon: Star,   label: "Badges & Titles",  desc: "100+ achievements to unlock.",     color: "text-violet-400", bg: "bg-violet-500/[0.12]", border: "border-violet-500/[0.18]" },
+                { icon: Users,  label: "Social Feed",      desc: "Follow fans with similar taste.",  color: "text-indigo-400", bg: "bg-indigo-500/[0.12]", border: "border-indigo-500/[0.18]" },
+              ].map(({ icon: Icon, label, desc, color, bg, border }, i) => (
                 <motion.div
                   key={label}
-                  initial={{ opacity: 0, y: 16 }}
+                  initial={{ opacity: 0, y: 12 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ delay: i * 0.08 }}
-                  className="p-5 rounded-2xl bg-white/[0.02] border border-white/8 flex items-center gap-3"
+                  transition={{ delay: i * 0.07 }}
+                  className={`p-4 rounded-xl bg-white/[0.04] border ${border} hover:bg-white/[0.06] transition-all`}
                 >
-                  <div className={`w-9 h-9 rounded-xl ${bg} flex items-center justify-center shrink-0`}>
-                    <Icon size={16} className={color} />
+                  <div className={`w-8 h-8 rounded-lg ${bg} border ${border} flex items-center justify-center mb-3`}>
+                    <Icon size={14} className={color} />
                   </div>
-                  <div>
-                    <p className="text-lg font-black text-white tracking-tighter">{value}</p>
-                    <p className="text-[9px] text-white/25 uppercase tracking-wider">{label}</p>
-                  </div>
+                  <p className="text-[13px] font-semibold text-white/85 mb-1">{label}</p>
+                  <p className="text-[11px] text-white/40 leading-relaxed">{desc}</p>
                 </motion.div>
               ))}
             </div>
+
+            {/* Stats strip */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              className="flex items-center pt-6 border-t border-white/[0.06]"
+            >
+              {[
+                { v: "4.2M",                              l: "Episodes tracked"     },
+                { v: `${animeTotalApprox}+`,               l: "Anime catalogued"     },
+                { v: "8.4",                               l: "Avg community rating"  },
+              ].map(({ v, l }, i) => (
+                <div key={l} className={`${i > 0 ? "pl-5 ml-5 border-l border-white/[0.06]" : ""}`}>
+                  <p className="text-base font-bold text-white tracking-tight">{v}</p>
+                  <p className="text-[11px] text-white/25 mt-0.5">{l}</p>
+                </div>
+              ))}
+            </motion.div>
 
             <motion.div
               initial={{ opacity: 0 }}
@@ -614,233 +461,362 @@ function CommunitySection() {
               className="flex gap-3"
             >
               <Link href="/leaderboard"
-                className="flex items-center gap-2 px-6 py-3.5 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-xs font-black uppercase tracking-widest text-white transition-all shadow-[0_0_24px_rgba(16,185,129,0.3)]"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-sm font-medium text-white transition-colors"
               >
-                <Trophy size={13} /> View Pantheon
+                <Trophy size={13} /> View leaderboard
               </Link>
-              <Link href="/community"
-                className="flex items-center gap-2 px-6 py-3.5 rounded-2xl border border-white/10 bg-white/[0.03] text-xs font-black uppercase tracking-widest text-white/50 hover:text-white hover:bg-white/[0.07] transition-all"
+              <Link href="/register"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-white/[0.1] text-sm font-medium text-white/45 hover:text-white hover:bg-white/[0.05] transition-all"
               >
-                <Users size={13} /> Join Community
+                Join free
               </Link>
             </motion.div>
           </div>
 
-          {/* Right — floating profile cards */}
-          <div className="relative h-[500px]">
-            {[
-              { name: "Otaku_Arch",    title: "Legendary Shinobi", xp: "1.2M", pos: "top-0 left-4",       rotate: -3 },
-              { name: "ShadowWatcher", title: "Arch-Mage",          xp: "840K", pos: "top-16 right-4",     rotate: 3  },
-              { name: "Void_Seeker",   title: "Elite Jonin",         xp: "620K", pos: "bottom-16 left-16",  rotate: -2 },
-            ].map(({ name, title, xp, pos, rotate }, i) => (
-              <motion.div
-                key={name}
-                initial={{ opacity: 0, scale: 0.8, y: 40 }}
-                whileInView={{ opacity: 1, scale: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.15, duration: 0.7, type: "spring", stiffness: 80 }}
-                style={{ rotate }}
-                className={`absolute ${pos}`}
-              >
-              <motion.div
-                animate={{ y: [0, -8, 0] }}
-                transition={{ duration: 4 + i, repeat: Infinity, ease: "easeInOut" }}
-                className="w-56 p-5 rounded-[1.5rem] bg-[#0c0c0c]/90 border border-white/10 backdrop-blur-xl shadow-2xl"
-              >
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center font-black text-lg">
-                    {name[0]}
-                  </div>
-                  <div>
-                    <p className="text-sm font-black text-white">{name}</p>
-                    <p className="text-[9px] text-indigo-400 font-bold">{title}</p>
-                  </div>
+          {/* Right — leaderboard widget */}
+          <motion.div
+            initial={{ opacity: 0, x: 20 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.55 }}
+            className="space-y-3"
+          >
+            {/* Top fan spotlight */}
+            <div className="flex items-center gap-4 p-4 rounded-2xl bg-gradient-to-r from-amber-500/[0.08] to-orange-500/[0.04] border border-amber-500/[0.14]">
+              <div className="relative shrink-0">
+                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-amber-400/25 to-orange-500/15 border border-amber-400/20 flex items-center justify-center text-base font-bold text-amber-300">
+                  O
                 </div>
-                <div className="flex justify-between text-[9px] text-white/30 font-mono mb-2">
-                  <span>XP</span><span>{xp}</span>
+                <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-amber-500 border-2 border-[#08080f] flex items-center justify-center">
+                  <span className="text-[8px] font-black text-white">1</span>
                 </div>
-                <div className="h-1 bg-white/5 rounded-full overflow-hidden">
-                  <div className="h-full bg-gradient-to-r from-indigo-600 to-violet-500 rounded-full" style={{ width: `${[88, 70, 55][i]}%` }} />
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="flex items-center gap-2">
+                  <p className="text-sm font-semibold text-white">Otaku_Arch</p>
+                  <span className="text-[9px] px-1.5 py-0.5 rounded-md bg-amber-500/15 border border-amber-500/20 text-amber-400/80 font-medium">Legendary</span>
                 </div>
-              </motion.div>
-              </motion.div>
-            ))}
-          </div>
+                <p className="text-[11px] text-white/35 mt-0.5">42-day streak · 1.2M XP this season</p>
+              </div>
+              <div className="text-right shrink-0">
+                <p className="text-sm font-bold text-orange-400">🔥 42</p>
+                <p className="text-[9px] text-white/20">day streak</p>
+              </div>
+            </div>
+
+            {/* Leaderboard */}
+            <div className="rounded-2xl bg-white/[0.025] border border-white/[0.08] overflow-hidden" style={{ boxShadow: "0 20px 40px rgba(0,0,0,0.4)" }}>
+              <div className="px-5 py-3.5 border-b border-white/[0.06] flex items-center justify-between bg-white/[0.01]">
+                <span className="text-[11px] font-semibold text-white/50">Top fans this week</span>
+                <Trophy size={12} className="text-amber-400/50" />
+              </div>
+              <div className="divide-y divide-white/[0.04]">
+                {[
+                  { rank: 1, name: "Otaku_Arch",    title: "Legendary",   xp: "1.2M", pct: 88, streak: 42, accent: "bg-amber-500/55"   },
+                  { rank: 2, name: "ShadowWatcher", title: "Arch-Mage",   xp: "840K", pct: 70, streak: 31, accent: "bg-indigo-500/50"  },
+                  { rank: 3, name: "Void_Seeker",   title: "Elite Jonin", xp: "620K", pct: 55, streak: 22, accent: "bg-indigo-500/40"  },
+                  { rank: 4, name: "NightOwl_88",   title: "Jonin",       xp: "410K", pct: 40, streak: 17, accent: "bg-indigo-500/30"  },
+                ].map(({ rank, name, title, xp, pct, streak, accent }, i) => (
+                  <motion.div
+                    key={name}
+                    initial={{ opacity: 0, x: 10 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: i * 0.06 }}
+                    className="flex items-center gap-3.5 px-5 py-3.5 hover:bg-white/[0.02] transition-colors cursor-pointer"
+                  >
+                    <span className={`text-[12px] font-bold w-4 text-center shrink-0 ${
+                      rank === 1 ? "text-amber-400" : rank === 2 ? "text-white/50" : "text-white/25"
+                    }`}>{rank}</span>
+
+                    <div className="w-8 h-8 rounded-xl bg-white/[0.07] border border-white/[0.07] flex items-center justify-center text-[11px] font-bold text-white/60 shrink-0">
+                      {name[0]}
+                    </div>
+
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-1.5">
+                        <p className="text-[12px] font-semibold text-white/80">{name}</p>
+                        <span className="text-[8px] text-white/25 bg-white/[0.06] px-1.5 py-0.5 rounded shrink-0">{title}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className="flex-1 h-1 bg-white/[0.05] rounded-full overflow-hidden">
+                          <div className={`h-full rounded-full ${accent}`} style={{ width: `${pct}%` }} />
+                        </div>
+                        <span className="text-[9px] text-white/20 font-mono shrink-0">{xp}</span>
+                      </div>
+                    </div>
+
+                    <div className="text-right shrink-0 ml-1">
+                      <p className="text-[11px] font-semibold text-orange-400/80">{streak}d</p>
+                      <p className="text-[8px] text-white/15 mt-0.5">streak</p>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+              <div className="px-5 py-3 border-t border-white/[0.05] bg-white/[0.01]">
+                <Link href="/leaderboard" className="text-[11px] text-indigo-400/60 hover:text-indigo-400 font-medium flex items-center gap-1 transition-colors">
+                  View full leaderboard <ArrowRight size={11} />
+                </Link>
+              </div>
+            </div>
+          </motion.div>
         </div>
       </div>
     </section>
   )
 }
 
-/* ─── SECTION 5: FEATURE SHOWCASE (Sticky) ─── */
+/* ─── SECTION 4: FEATURE SHOWCASE ─── */
 function ShowcaseSection() {
-  const ref = useRef<HTMLDivElement>(null)
-  const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end end"] })
-
   const FEATURES = [
     {
-      chapter: "05 — Track",
+      tag: "Track",
       title: "Your archive, perfectly organized.",
-      desc: "Every anime you've watched, rated, and reviewed — one place. Status badges, episode progress, personal scores, and notes.",
-      color: "from-indigo-600/20 to-indigo-900/5",
-      accent: "text-indigo-400",
+      desc: "Every anime you've watched, rated, and reviewed — one place. Status badges, progress, and personal scores.",
       href: "/watchlist",
+      accent: "indigo",
+      preview: (
+        <div className="space-y-2.5">
+          {[
+            { title: "Attack on Titan", ep: "12 / 25", pct: 48,  grad: "from-slate-700 to-gray-900",    status: "Watching"   },
+            { title: "Frieren",          ep: "8 / 28",  pct: 29,  grad: "from-green-900 to-teal-950",    status: "Watching"   },
+            { title: "Steins;Gate",      ep: "24 / 24", pct: 100, grad: "from-indigo-900 to-slate-900",  status: "Completed"  },
+          ].map(({ title, ep, pct, grad, status }) => (
+            <div key={title} className="flex items-center gap-3">
+              <div className={`w-7 h-10 rounded-md bg-gradient-to-b ${grad} shrink-0 border border-white/[0.08] flex items-end justify-start p-0.5`}>
+                <span className="text-[5px] font-bold text-white/30 leading-none">{title.slice(0,3).toUpperCase()}</span>
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="flex justify-between items-baseline mb-1.5">
+                  <span className="text-[10px] font-medium text-white/75 truncate">{title}</span>
+                  <span className="text-[8px] text-white/25 shrink-0 ml-2">{ep}</span>
+                </div>
+                <div className="h-1 bg-white/[0.06] rounded-full">
+                  <div className={`h-full rounded-full ${pct === 100 ? "bg-emerald-500/70" : "bg-indigo-500/70"}`} style={{ width: `${pct}%` }} />
+                </div>
+              </div>
+              <span className={`text-[8px] font-medium shrink-0 ${pct === 100 ? "text-emerald-400/60" : "text-indigo-400/50"}`}>{status}</span>
+            </div>
+          ))}
+        </div>
+      ),
     },
     {
-      chapter: "06 — Compete",
+      tag: "Compete",
       title: "Rise through the Pantheon.",
-      desc: "XP from every episode watched. Streaks that compound. Badges that prove you've actually seen it. Real rankings that mean something.",
-      color: "from-amber-600/20 to-amber-900/5",
-      accent: "text-amber-400",
+      desc: "XP from every episode. Streaks that compound. Real rankings built on what you've actually watched.",
       href: "/leaderboard",
+      accent: "amber",
+      preview: (
+        <div className="space-y-2">
+          {[
+            { rank: 1, name: "Otaku_Arch", xp: "1.2M", delta: null },
+            { rank: 2, name: "ShadowWatch", xp: "840K", delta: null },
+            { rank: 3, name: "You", xp: "320K", delta: "↑2" },
+          ].map(({ rank, name, xp, delta }) => (
+            <div key={name} className={`flex items-center gap-3 px-3 py-2.5 rounded-xl ${name === "You" ? "bg-amber-500/[0.08] border border-amber-500/[0.15]" : "bg-white/[0.03]"}`}>
+              <span className="text-[11px] font-bold text-white/30 w-4 text-right">{rank}</span>
+              <div className="w-6 h-6 rounded-lg bg-white/[0.06] flex items-center justify-center text-[9px] font-bold text-white/50">{name[0]}</div>
+              <span className="flex-1 text-[11px] font-medium text-white/70">{name}</span>
+              {delta && <span className="text-[9px] text-amber-400 font-bold">{delta}</span>}
+              <span className="text-[9px] text-white/25 font-mono">{xp}</span>
+            </div>
+          ))}
+        </div>
+      ),
     },
     {
-      chapter: "07 — Create",
+      tag: "Create",
       title: "Publish. Build an audience.",
       desc: "Write reviews, long-form blogs, host polls. The Creator Studio turns your anime knowledge into influence.",
-      color: "from-violet-600/20 to-violet-900/5",
-      accent: "text-violet-400",
       href: "/creators",
+      accent: "violet",
+      preview: (
+        <div className="space-y-3">
+          <div className="p-3 rounded-xl bg-white/[0.03] border border-white/[0.06]">
+            <p className="text-[10px] font-semibold text-white/70 mb-1">My Frieren Review</p>
+            <p className="text-[9px] text-white/35 leading-relaxed line-clamp-2">"A masterpiece about the passage of time — slow, elegant, and devastating..."</p>
+            <div className="flex items-center gap-3 mt-2">
+              <span className="text-[8px] text-white/20">★★★★★</span>
+              <span className="text-[8px] text-white/20">· 142 likes · 28 comments</span>
+            </div>
+          </div>
+          <div className="flex gap-2">
+            {["Blog", "Poll", "Review"].map(t => (
+              <span key={t} className="px-2.5 py-1 rounded-md bg-white/[0.04] border border-white/[0.06] text-[9px] text-white/35">{t}</span>
+            ))}
+          </div>
+        </div>
+      ),
     },
   ]
 
-  const activeIndex = useTransform(scrollYProgress, [0, 0.33, 0.66, 1], [0, 0, 1, 2])
-  const [idx, setIdx] = useState(0)
-
-  useEffect(() => {
-    const unsub = activeIndex.on("change", v => setIdx(Math.min(2, Math.floor(v))))
-    return unsub
-  }, [activeIndex])
-
   return (
-    <section ref={ref} className="relative bg-[#020202]" style={{ height: "300vh" }}>
-      {/* Bottom gradient transition */}
-      <div className="absolute bottom-0 inset-x-0 h-40 bg-gradient-to-t from-[#020202] to-transparent pointer-events-none" />
-      <div className="sticky top-0 h-screen flex items-center overflow-hidden">
-        <div className="max-w-7xl mx-auto px-6 w-full grid lg:grid-cols-2 gap-16 items-center">
+    <section className="py-28 bg-[#08080f] relative z-[2]">
+      <div className="max-w-7xl mx-auto px-6 w-full">
 
-          {/* Left — sticky content */}
-          <div className="space-y-6">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={idx}
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -30 }}
-                className="space-y-5"
-              >
-                <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-white/30">
-                  Chapter {FEATURES[idx].chapter}
-                </p>
-                <h2 className="text-[clamp(2rem,5vw,4rem)] font-black tracking-tighter text-white leading-none">
-                  {FEATURES[idx].title}
-                </h2>
-                <p className="text-white/45 text-lg leading-relaxed max-w-md">
-                  {FEATURES[idx].desc}
-                </p>
-                <Link href={FEATURES[idx].href}
-                  className={`inline-flex items-center gap-2 text-sm font-black uppercase tracking-widest ${FEATURES[idx].accent} hover:opacity-80 transition-opacity`}
-                >
-                  Explore <ArrowRight size={13} />
-                </Link>
-              </motion.div>
-            </AnimatePresence>
+        <div className="mb-14">
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-[clamp(1.8rem,4vw,3.5rem)] font-bold tracking-tight text-white"
+          >
+            Everything you need,<br />
+            <span className="text-indigo-400">in one place.</span>
+          </motion.h2>
+        </div>
 
-            {/* Progress dots */}
-            <div className="flex gap-2 pt-4">
-              {FEATURES.map((_, i) => (
-                <div key={i} className={`h-1 rounded-full transition-all duration-500 ${i === idx ? "w-8 bg-indigo-500" : "w-2 bg-white/15"}`} />
-              ))}
-            </div>
-          </div>
-
-          {/* Right — animated card */}
-          <AnimatePresence mode="wait">
+        <div className="grid lg:grid-cols-3 gap-4">
+          {FEATURES.map(({ tag, title, desc, href, accent, preview }, i) => (
             <motion.div
-              key={idx}
-              initial={{ opacity: 0, scale: 0.9, rotateY: 15 }}
-              animate={{ opacity: 1, scale: 1, rotateY: 0 }}
-              exit={{ opacity: 0, scale: 0.9, rotateY: -15 }}
-              transition={{ duration: 0.5 }}
-              className={`p-10 rounded-[3rem] bg-gradient-to-br ${FEATURES[idx].color} border border-white/8 h-80 flex flex-col justify-end`}
+              key={tag}
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.1 }}
+              className="group relative p-6 rounded-2xl bg-white/[0.03] border border-white/[0.07] hover:border-white/[0.12] hover:bg-white/[0.045] transition-all duration-300 flex flex-col gap-6"
             >
-              <div className="absolute inset-0 rounded-[3rem] bg-[linear-gradient(to_right,#ffffff03_1px,transparent_1px),linear-gradient(to_bottom,#ffffff03_1px,transparent_1px)] bg-[size:24px_24px]" />
-              <p className={`text-6xl font-black tracking-tighter uppercase italic ${FEATURES[idx].accent} opacity-10 absolute top-6 right-8`}>
-                {["Track", "Climb", "Create"][idx]}
-              </p>
+              <div>
+                <span className={`inline-block text-[10px] font-semibold uppercase tracking-[0.15em] mb-3 px-2.5 py-1 rounded-md ${
+                  accent === "indigo" ? "text-indigo-300/80 bg-indigo-500/10" :
+                  accent === "amber" ? "text-amber-300/80 bg-amber-500/10" : "text-violet-300/80 bg-violet-500/10"
+                }`}>{tag}</span>
+                <h3 className="text-[15px] font-semibold text-white leading-snug mb-2.5">{title}</h3>
+                <p className="text-[13px] text-white/35 leading-relaxed">{desc}</p>
+              </div>
+
+              {/* Mock preview */}
+              <div className="flex-1 p-4 rounded-xl bg-black/20 border border-white/[0.05]">
+                {preview}
+              </div>
+
+              <Link
+                href={href}
+                className={`inline-flex items-center gap-1.5 text-[13px] font-medium transition-all ${
+                  accent === "indigo" ? "text-indigo-400/60 hover:text-indigo-400" :
+                  accent === "amber" ? "text-amber-400/60 hover:text-amber-400" : "text-violet-400/60 hover:text-violet-400"
+                }`}
+              >
+                Explore <ArrowRight size={12} />
+              </Link>
             </motion.div>
-          </AnimatePresence>
+          ))}
         </div>
       </div>
     </section>
   )
 }
 
-/* ─── SECTION 6: FINAL CTA ─── */
+/* ─── SECTION 5: FINAL CTA ─── */
 function FinalCTASection() {
   const ref = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end end"] })
-  const scale = useTransform(scrollYProgress, [0, 1], [0.8, 1])
-  const opacity = useTransform(scrollYProgress, [0, 0.5], [0, 1])
+  const scale = useTransform(scrollYProgress, [0, 1], [0.92, 1])
+  const opacity = useTransform(scrollYProgress, [0, 0.4], [0, 1])
+  const { data: userCount = 12402 } = usePlatformUserCount()
+
+  const FEATURES = [
+    "Track every episode",
+    "AI-powered discovery",
+    "Global leaderboard",
+    "Creator studio",
+    "Daily streaks & XP",
+    "Free forever",
+  ]
 
   return (
-    <section ref={ref} className="min-h-screen flex items-center justify-center bg-[#020202] relative overflow-hidden py-32">
-      {/* Massive glow */}
+    <section ref={ref} className="py-36 flex items-center justify-center bg-[#06060f] relative z-[2] overflow-hidden">
+      {/* Ambient glow */}
       <motion.div
-        animate={{ scale: [1, 1.2, 1], opacity: [0.15, 0.35, 0.15] }}
-        transition={{ duration: 6, repeat: Infinity }}
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-indigo-600 blur-[200px] rounded-full pointer-events-none"
+        animate={{ scale: [1, 1.1, 1], opacity: [0.07, 0.13, 0.07] }}
+        transition={{ duration: 10, repeat: Infinity }}
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-indigo-600 blur-[180px] rounded-full pointer-events-none"
       />
+      {/* Dot grid */}
+      <div className="absolute inset-0 opacity-[0.025] pointer-events-none" style={{ backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.8) 1px, transparent 1px)", backgroundSize: "40px 40px" }} />
 
-      {/* Grain */}
-      <div className="absolute inset-0 opacity-[0.04] pointer-events-none bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMDAiIGhlaWdodD0iMjAwIj48ZmlsdGVyIGlkPSJuIj48ZmVUdXJidWxlbmNlIHR5cGU9ImZyYWN0YWxOb2lzZSIgYmFzZUZyZXF1ZW5jeT0iMC43IiBudW1PY3RhdmVzPSI0IiBzdGl0Y2hUaWxlcz0ic3RpdGNoIi8+PC9maWx0ZXI+PHJlY3Qgd2lkdGg9IjIwMCIgaGVpZ2h0PSIyMDAiIGZpbHRlcj0idXJsKCNuKSIgb3BhY2l0eT0iMSIvPjwvc3ZnPg==')]" />
+      <motion.div style={{ scale, opacity }} className="relative z-10 w-full max-w-3xl mx-auto px-6">
 
-      <motion.div style={{ scale, opacity }} className="relative z-10 text-center max-w-4xl mx-auto px-6 space-y-12">
-        <p className="text-[9px] font-mono uppercase tracking-[0.5em] text-indigo-400/60">Final Chapter — Begin</p>
-
-        <h2 className="text-[clamp(3rem,10vw,9rem)] font-black tracking-tighter uppercase italic leading-none text-white">
-          Your Legend<br />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-violet-300 to-purple-400">
-            Starts Here.
-          </span>
-        </h2>
-
-        <p className="text-white/35 text-xl max-w-lg mx-auto leading-relaxed">
-          Abandon the scattered lists. Join 12,402 Shinobi already archiving their legacy.
-        </p>
-
-        <div className="flex flex-wrap items-center justify-center gap-5">
-          <Link href="/register"
-            className="group relative flex items-center gap-3 px-10 py-5 rounded-2xl text-base font-black uppercase tracking-widest text-white overflow-hidden"
-          >
-            <div className="absolute inset-0 bg-gradient-to-r from-indigo-600 via-violet-600 to-indigo-600 bg-[length:200%] animate-[shimmer_3s_linear_infinite]" />
-            <span className="relative z-10 flex items-center gap-3">
-              <Zap size={18} fill="white" /> Initialize Your Archive
-              <ArrowRight size={15} className="group-hover:translate-x-1 transition-transform" />
-            </span>
-          </Link>
-        </div>
-
-        <div className="flex items-center justify-center gap-4 text-[9px] font-mono text-white/15 uppercase tracking-widest">
-          <span>Free forever</span>
-          <span>·</span>
-          <span>No credit card</span>
-          <span>·</span>
-          <span>Join in 30 seconds</span>
-        </div>
-
-        {/* Social proof */}
-        <div className="flex items-center justify-center gap-4 mt-8">
-          <div className="flex -space-x-3">
-            {["O", "S", "V", "N", "C"].map((l, i) => (
-              <div key={i} className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 border-2 border-[#020202] flex items-center justify-center text-[10px] font-black text-white">
-                {l}
-              </div>
-            ))}
+        {/* Platform badge */}
+        <div className="flex justify-center mb-10">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.04] border border-white/[0.08]">
+            <Sparkles size={11} className="text-indigo-400" />
+            <span className="text-[11px] font-medium text-white/45">AnimeUnwatched · Open Beta</span>
           </div>
-          <p className="text-xs text-white/30 font-medium">
-            Joined by <span className="text-white/60 font-bold">12,402 Shinobi</span> and counting
+        </div>
+
+        {/* Heading */}
+        <div className="text-center mb-8">
+          <h2 className="text-[clamp(2.2rem,6vw,5rem)] font-bold tracking-tight leading-tight text-white mb-4">
+            Your anime archive,<br />
+            <span className="text-indigo-400">starting today.</span>
+          </h2>
+          <p className="text-white/35 text-base max-w-md mx-auto leading-relaxed">
+            The social platform built for serious anime fans. Track, rate, discover, and compete — all in one place.
           </p>
+        </div>
+
+        {/* Feature pills */}
+        <div className="flex flex-wrap justify-center gap-2 mb-10">
+          {FEATURES.map((f) => (
+            <span key={f} className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.07] text-[11px] font-medium text-white/45">
+              <span className="w-1 h-1 rounded-full bg-indigo-400/70 shrink-0" />
+              {f}
+            </span>
+          ))}
+        </div>
+
+        {/* CTA */}
+        <div className="flex flex-col items-center gap-4">
+          <Link href="/register"
+            className="group inline-flex items-center gap-2.5 px-8 py-4 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-base font-semibold text-white transition-all"
+            style={{ boxShadow: "0 0 40px rgba(99,102,241,0.3), 0 4px 16px rgba(99,102,241,0.2)" }}
+          >
+            Create your free account
+            <ArrowRight size={16} className="group-hover:translate-x-0.5 transition-transform" />
+          </Link>
+
+          <div className="flex items-center gap-3 text-[11px] text-white/20">
+            <span>Free forever</span>
+            <span className="text-white/10">·</span>
+            <span>No credit card required</span>
+            <span className="text-white/10">·</span>
+            <span>Join in under 30 seconds</span>
+          </div>
+        </div>
+
+        {/* Social proof + stats */}
+        <div className="mt-14 pt-8 border-t border-white/[0.06]">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-6">
+            {/* Avatars */}
+            <div className="flex items-center gap-3">
+              <div className="flex -space-x-2.5">
+                {["O","S","V","N","C"].map((l, i) => (
+                  <div key={i} className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-600/40 to-violet-600/30 border-2 border-[#06060f] flex items-center justify-center text-[9px] font-bold text-white/60">
+                    {l}
+                  </div>
+                ))}
+              </div>
+              <p className="text-xs text-white/25">
+                Joined by <span className="text-white/50 font-medium">{userCount >= 1000 ? userCount.toLocaleString() : "1,000+"}</span> fans
+              </p>
+            </div>
+
+            {/* Stats */}
+            <div className="flex items-center gap-5 text-center">
+              {[
+                { v: "4.2M", l: "Episodes tracked" },
+                { v: "310+", l: "Anime catalogued"  },
+                { v: "8.4★", l: "Avg rating"        },
+              ].map(({ v, l }, i) => (
+                <div key={l} className={`${i > 0 ? "pl-5 border-l border-white/[0.06]" : ""}`}>
+                  <p className="text-sm font-bold text-white/70">{v}</p>
+                  <p className="text-[10px] text-white/20 mt-0.5">{l}</p>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </motion.div>
     </section>
@@ -850,10 +826,9 @@ function FinalCTASection() {
 /* ─── ROOT ─── */
 export default function CinematicHomepage() {
   return (
-    <main className="bg-[#020202] text-white overflow-x-hidden">
-      {/* Progress indicator — thin line at top showing scroll depth */}
+    <main className="bg-[#06060f] text-white overflow-x-hidden">
       <ScrollProgressBar />
-      <HeroSection />
+      <CinematicHero />
       <DiscoverySection />
       <AIOracleSection />
       <CommunitySection />
@@ -878,12 +853,10 @@ function ScrollProgressBar() {
 
   return (
     <>
-      {/* Top progress bar */}
       <motion.div
-        className="fixed top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-indigo-500 via-violet-500 to-purple-500 z-[200] origin-left"
+        className="fixed top-0 left-0 right-0 h-[2px] bg-indigo-500 z-[200] origin-left opacity-60"
         style={{ scaleX }}
       />
-      {/* Chapter dots — right side */}
       <div className="fixed right-6 top-1/2 -translate-y-1/2 z-[150] hidden lg:flex flex-col gap-3">
         {CHAPTERS.map((name, i) => (
           <button
@@ -896,7 +869,7 @@ function ScrollProgressBar() {
             className="group flex items-center gap-2 justify-end"
           >
             <motion.span
-              className="text-[8px] font-black uppercase tracking-widest text-white/0 group-hover:text-white/50 transition-all"
+              className="text-[8px] font-black uppercase tracking-widest text-white/0 group-hover:text-white/35 transition-all"
               animate={{ opacity: chapter === i ? 1 : 0, x: chapter === i ? 0 : 8 }}
             >
               {name}
@@ -904,9 +877,9 @@ function ScrollProgressBar() {
             <motion.div
               animate={{
                 width: chapter === i ? 16 : 4,
-                backgroundColor: chapter === i ? "rgb(99,102,241)" : "rgba(255,255,255,0.2)",
+                backgroundColor: chapter === i ? "rgba(99,102,241,0.8)" : "rgba(255,255,255,0.12)",
               }}
-              className="h-1 rounded-full transition-colors"
+              className="h-1 rounded-full"
             />
           </button>
         ))}

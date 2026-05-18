@@ -5,32 +5,42 @@ import { motion } from "framer-motion"
 import { Upload, Save, Loader2, CheckCircle2, Globe, Flame, Star, Trophy } from "lucide-react"
 import { useToast } from "@/stores/toast.store"
 import { useWatchlist } from "@/stores/watchlist.store"
+import { useAuthStore } from "@/stores/auth.store"
+import { useUpdateMe } from "@/hooks/useUsers"
 
 export default function ProfileForm() {
   const { push } = useToast()
   const watchlistCount = useWatchlist(s => s.count)
+  const storeUser = useAuthStore(s => s.user)
+  const updateMe = useUpdateMe()
 
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
   const [form, setForm] = useState({
-    displayName: "Priyanshu",
-    username:    "darwhite08",
-    email:       "chandrapriyanshu10@gmail.com",
-    bio:         "Lover of shonen and psychological anime. Chasing hidden gems since 2018.",
-    avatarUrl:   "",
+    displayName: storeUser?.displayName ?? "",
+    username:    storeUser?.username    ?? "",
+    email:       storeUser?.email       ?? "",
+    bio:         storeUser?.bio         ?? "Lover of anime. Chasing hidden gems.",
+    avatarUrl:   storeUser?.avatarUrl   ?? "",
   })
 
   const set = (k: keyof typeof form) => (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => setForm(f => ({ ...f, [k]: e.target.value }))
 
-  const handleSave = async () => {
+  const handleSave = () => {
     setSaving(true)
-    await new Promise(r => setTimeout(r, 900))
-    setSaving(false)
-    setSaved(true)
-    push("Profile updated successfully!", "success")
-    setTimeout(() => setSaved(false), 3000)
+    updateMe.mutate(
+      { displayName: form.displayName, bio: form.bio, avatarUrl: form.avatarUrl || undefined },
+      {
+        onSuccess: () => {
+          setSaving(false); setSaved(true)
+          push("Profile updated successfully!", "success")
+          setTimeout(() => setSaved(false), 3000)
+        },
+        onError: () => { setSaving(false); push("Failed to update profile", "error") },
+      }
+    )
   }
 
   const STATS = [

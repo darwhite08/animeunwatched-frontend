@@ -2,12 +2,17 @@
 
 import { useState } from "react"
 import { motion } from "framer-motion"
-import { ANIME_DB } from "@/lib/data/anime"
+import { useBrowseAnime } from "@/hooks/useAnime"
 import AnimeCard from "@/components/bestanimelist/AnimeCard"
 import AnimeModal from "@/components/bestanimelist/AnimeModal"
 import { Calendar, ChevronLeft, ChevronRight } from "lucide-react"
 import type { Anime } from "@/lib/data/anime"
+import type { AnimeDTO } from "@/lib/api/types"
 import Link from "next/link"
+
+function mapDTO(a: AnimeDTO, i: number): Anime {
+  return { id: String(a.malId), title: a.title, titleJapanese: a.titleJapanese ?? "", rating: a.score ?? 0, year: a.year ?? 0, episodes: a.episodes, type: (["TV","Movie","OVA"] as const).includes(a.type as any) ? a.type as any : "TV", status: a.status?.toLowerCase().includes("airing") ? "airing" : "finished", studio: a.studios[0] ?? "Unknown", genres: a.genres, synopsis: a.synopsis ?? "", image: a.imageUrl ?? "", tags: a.genres.map(g => g.toLowerCase().replace(/\s/g, "-")), category: "all", rank: i+1 }
+}
 
 const SEASONS = ["winter", "spring", "summer", "fall"] as const
 type Season = typeof SEASONS[number]
@@ -20,8 +25,9 @@ export default function CalendarPage() {
   const [year, setYear] = useState(CURRENT_YEAR)
   const [activeSeason, setActiveSeason] = useState<Season>("fall")
   const [selectedAnime, setSelectedAnime] = useState<Anime | null>(null)
+  const { data: browseData } = useBrowseAnime({ limit: 40 })
 
-  const filtered = ANIME_DB
+  const filtered = (browseData?.data ?? []).map(mapDTO)
     .filter(a => a.year === year)
     .sort((a, b) => b.rating - a.rating)
 

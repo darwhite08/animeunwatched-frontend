@@ -3,6 +3,9 @@
 import { StreakHeader } from "@/components/streak/StreakHeader"
 import { MainStreakCard } from "@/components/streak/MainStreakCard"
 import { StreakHeatmap } from "@/components/streak/StreakHeatmap"
+import { useAuthStore } from "@/stores/auth.store"
+import { useUserList } from "@/hooks/useLists"
+import { useMemo } from "react"
 import { AchievementGrid } from "@/components/streak/AchievementGrid"
 import { StreakInsights } from "@/components/streak/StreakInsights"
 
@@ -13,12 +16,27 @@ import { SocialCard } from "@/components/streak/SocialCard"
 import BadgeShowcase from "@/components/gamification/BadgeShowcase"
 
 export default function StreakPage() {
+  const user = useAuthStore(s => s.user)
+  const { data: listData } = useUserList(user?.username ?? "")
+
+  const streakStats = useMemo(() => {
+    const entries = listData?.data ?? []
+    const completed = entries.filter(e => e.status === "COMPLETED").length
+    const watching = entries.filter(e => e.status === "WATCHING").length
+    const totalEps = entries.reduce((sum, e) => sum + e.episodesSeen, 0)
+    // Estimate streak from reputation (10 rep = ~1 day active)
+    const rep = user?.reputation ?? 0
+    const estStreak = Math.min(365, Math.floor(rep / 10))
+    const bestStreak = Math.min(365, Math.floor(rep / 6))
+    return { estStreak, bestStreak, completed, watching, totalEps }
+  }, [listData, user])
+
   return (
     <div className="max-w-7xl mx-auto px-6 py-10 space-y-10 pb-24">
       <StreakHeader />
 
       {/* SECTION 1: THE HERO DATA */}
-      <MainStreakCard currentStreak={22} bestStreak={45} />
+      <MainStreakCard currentStreak={streakStats.estStreak} bestStreak={streakStats.bestStreak} />
 
       {/* SECTION 2: THE BENTO ANALYTICS GRID */}
       <div className="grid lg:grid-cols-12 gap-8">

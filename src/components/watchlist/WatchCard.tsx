@@ -8,7 +8,7 @@ import Link from "next/link"
 import { useToast } from "@/stores/toast.store"
 
 type WatchItem = {
-  id: number
+  id: string | number
   title: string
   ep: string
   progress: number
@@ -25,7 +25,7 @@ const STATUS_CONFIG: Record<string, { color: string; bg: string }> = {
   "Dropped":       { color: "text-red-400",     bg: "bg-red-500/10"     },
 }
 
-export const WatchCard = ({ anime, onRemove }: { anime: WatchItem; onRemove?: (id: number) => void }) => {
+export const WatchCard = ({ anime, onRemove }: { anime: WatchItem; onRemove?: (id: string | number) => void }) => {
   const { push } = useToast()
   const [menuOpen, setMenuOpen] = useState(false)
   const statusStyle = STATUS_CONFIG[anime.status] ?? { color: "text-white/40", bg: "bg-white/5" }

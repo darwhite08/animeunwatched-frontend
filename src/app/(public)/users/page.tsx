@@ -4,6 +4,7 @@ import { useState, useMemo } from "react"
 import { motion } from "framer-motion"
 import Link from "next/link"
 import { Users, Search, Trophy, Flame, Star, TrendingUp } from "lucide-react"
+import { useLeaderboard } from "@/hooks/useLeaderboard"
 
 type User = {
   id: string; username: string; displayName: string
@@ -26,9 +27,18 @@ const USERS: User[] = [
 export default function UsersPage() {
   const [query, setQuery] = useState("")
   const [sort, setSort] = useState<"reputation" | "anime" | "streak">("reputation")
+  const { data: lbData } = useLeaderboard(20)
+
+  const apiUsers: User[] = (lbData?.data ?? []).map(u => ({
+    id: u.username, username: u.username, displayName: u.displayName,
+    reputation: u.reputation, level: u.level,
+    title: u.level >= 10 ? "Legendary" : u.level >= 7 ? "Kage" : u.level >= 5 ? "Elite Jonin" : u.level >= 3 ? "Jonin" : "Shinobi",
+    anime: u.archived, streak: 0, avatar: u.displayName[0]?.toUpperCase() ?? "?",
+  }))
+  const baseUsers = apiUsers.length > 0 ? apiUsers : USERS
 
   const sorted = useMemo(() => {
-    const filtered = USERS.filter(u =>
+    const filtered = baseUsers.filter(u =>
       !query || u.displayName.toLowerCase().includes(query.toLowerCase()) ||
       u.username.toLowerCase().includes(query.toLowerCase())
     )

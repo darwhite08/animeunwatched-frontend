@@ -7,6 +7,8 @@ import {
   TrendingUp, Users, Activity, ChevronUp, ChevronDown, Minus,
 } from "lucide-react"
 import { TiltCard } from "@/components/ui/TiltCard"
+import { useLeaderboard } from "@/hooks/useLeaderboard"
+import { useAuthStore } from "@/stores/auth.store"
 
 type Period = "all-time" | "monthly" | "weekly"
 
@@ -68,6 +70,24 @@ const PERIOD_LABELS: Record<Period, string> = {
 
 export default function PublicLeaderboardPage() {
   const [period, setPeriod] = useState<Period>("all-time")
+  const { data: lbData, isLoading } = useLeaderboard(50, period)
+  const me = useAuthStore(s => s.user)
+
+  // Merge real data with mock, real data takes priority
+  const realUsers: User[] = (lbData?.data ?? []).map((u, i) => ({
+    rank: i + 1,
+    name: u.username,
+    xp: u.xp >= 1_000_000 ? `${(u.xp/1_000_000).toFixed(2)}M` : u.xp >= 1000 ? `${(u.xp/1000).toFixed(0)}K` : String(u.xp),
+    xpNum: u.xp,
+    level: u.level,
+    streak: 0,
+    archived: u.archived,
+    trend: "same" as const,
+    trendVal: 0,
+    isMe: me?.username === u.username,
+  }))
+
+  const displayUsers = realUsers.length > 0 ? realUsers : BASE_USERS
 
   return (
     <div className="min-h-screen bg-[#020202] text-white pb-32">
@@ -101,7 +121,7 @@ export default function PublicLeaderboardPage() {
 
         {/* TOP 3 PODIUM */}
         <div className="grid grid-cols-3 gap-4 items-end">
-          {[TOP_3[1], TOP_3[0], TOP_3[2]].map((user, colIdx) => {
+          {[displayUsers[1], displayUsers[0], displayUsers[2]].filter(Boolean).map((user, colIdx) => {
             const heights = ["h-36","h-48","h-32"]
             const Icon = ICON_MAP[user.rank] ?? Zap
             const grad  = GRADIENT_MAP[user.rank]
@@ -147,7 +167,7 @@ export default function PublicLeaderboardPage() {
             <span className="text-right">XP</span>
           </div>
           <AnimatePresence>
-            {REST.map((user, i) => {
+            {displayUsers.slice(3).map((user, i) => {
               const Icon  = ICON_MAP[Math.min(user.rank, 10)] ?? Zap
               const title = TITLE_MAP[Math.min(user.rank, 10)]
               const isMe  = user.isMe

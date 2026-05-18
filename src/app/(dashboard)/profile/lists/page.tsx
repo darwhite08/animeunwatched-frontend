@@ -1,14 +1,21 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useMemo } from "react"
+import { useAuthStore } from "@/stores/auth.store"
+import { useUserList } from "@/hooks/useLists"
 import { motion, AnimatePresence } from "framer-motion"
 import Link from "next/link"
 import Image from "next/image"
-import { ANIME_DB } from "@/lib/data/anime"
+import { useBrowseAnime } from "@/hooks/useAnime"
 import { List, Plus, Globe, Lock, Edit2, Trash2 } from "lucide-react"
 import { useToast } from "@/stores/toast.store"
 import AnimeModal from "@/components/bestanimelist/AnimeModal"
 import type { Anime } from "@/lib/data/anime"
+import type { AnimeDTO } from "@/lib/api/types"
+
+function mapDTO(a: AnimeDTO, i: number): Anime {
+  return { id: String(a.malId), title: a.title, titleJapanese: a.titleJapanese ?? "", rating: a.score ?? 0, year: a.year ?? 0, episodes: a.episodes, type: (["TV","Movie","OVA"] as const).includes(a.type as any) ? a.type as any : "TV", status: a.status?.toLowerCase().includes("airing") ? "airing" : "finished", studio: a.studios[0] ?? "Unknown", genres: a.genres, synopsis: a.synopsis ?? "", image: a.imageUrl ?? "", tags: a.genres.map(g => g.toLowerCase().replace(/\s/g, "-")), category: "all", rank: i+1 }
+}
 
 type MyList = { id: string; title: string; description: string; isPublic: boolean; animeIds: string[]; createdAt: string }
 
@@ -20,8 +27,28 @@ const INITIAL_LISTS: MyList[] = [
 
 export default function MyListsPage() {
   const { push } = useToast()
-  const [lists, setLists] = useState(INITIAL_LISTS)
+  const user = useAuthStore(s => s.user)
+  const { data: listData } = useUserList(user?.username ?? "")
+
+  // Build a "My Watchlist" from real data as the first list
+  const realWatchlist: MyList | null = useMemo(() => {
+    const entries = listData?.data ?? []
+    if (entries.length === 0) return null
+    return {
+      id: "watchlist",
+      title: "My Watchlist",
+      description: `${entries.length} anime tracked`,
+      isPublic: true,
+      animeIds: entries.slice(0, 5).map(e => String(e.anime?.malId ?? e.animeId)),
+      createdAt: new Date().toISOString().split("T")[0],
+    }
+  }, [listData])
+
+  const baseLists = realWatchlist ? [realWatchlist, ...INITIAL_LISTS] : INITIAL_LISTS
+  const [lists, setLists] = useState(baseLists)
   const [selectedAnime, setSelectedAnime] = useState<Anime | null>(null)
+  const { data: browseData } = useBrowseAnime({ limit: 20 })
+  const browseAnime = (browseData?.data ?? []).map(mapDTO)
 
   const togglePublic = (id: string) => {
     setLists(ls => ls.map(l => l.id===id ? {...l, isPublic:!l.isPublic} : l))
@@ -53,7 +80,7 @@ export default function MyListsPage() {
 
       <AnimatePresence>
         {lists.map((list, i) => {
-          const animes = list.animeIds.map(id => ANIME_DB.find(a=>a.id===id)).filter(Boolean) as Anime[]
+          const animes = list.animeIds.map(id => browseAnime.find(a=>a.id===id)).filter(Boolean) as Anime[]
           return (
             <motion.div key={list.id} initial={{ opacity:0, y:8 }} animate={{ opacity:1, y:0 }} exit={{ opacity:0, height:0 }}
               transition={{ delay: i*0.06 }}

@@ -4,23 +4,22 @@ import { motion } from "framer-motion"
 import Image from "next/image"
 import Link from "next/link"
 import { Star, Trophy, ChevronRight } from "lucide-react"
-import { ANIME_DB, type Anime } from "@/lib/data/anime"
+import { useBrowseAnime } from "@/hooks/useAnime"
+import type { AnimeDTO } from "@/lib/api/types"
+import type { Anime } from "@/lib/data/anime"
+
+function mapDTO(a: AnimeDTO, i: number): Anime {
+  return { id: String(a.malId), title: a.title, titleJapanese: a.titleJapanese ?? "", rating: a.score ?? 0, year: a.year ?? 0, episodes: a.episodes, type: (["TV","Movie","OVA"] as const).includes(a.type as any) ? a.type as any : "TV", status: a.status?.toLowerCase().includes("airing") ? "airing" : "finished", studio: a.studios[0] ?? "Unknown", genres: a.genres, synopsis: a.synopsis ?? "", image: a.imageUrl ?? "", tags: a.genres.map(g => g.toLowerCase().replace(/\s/g, "-")), category: "all", rank: i+1 }
+}
 
 // ─── Years range ──────────────────────────────────────────────────────────────
 
 const YEARS = Array.from({ length: 10 }, (_, i) => 2015 + i) // 2015..2024
 
-// ─── Helpers ──────────────────────────────────────────────────────────────────
-
-function getTopAnimeForYear(year: number): Anime | null {
-  const list = ANIME_DB.filter((a) => a.year === year).sort((a, b) => b.rating - a.rating)
-  return list[0] ?? null
-}
-
 // ─── Year card ────────────────────────────────────────────────────────────────
 
-function YearCard({ year, index }: { year: number; index: number }) {
-  const top = getTopAnimeForYear(year)
+function YearCard({ year, index, allAnime }: { year: number; index: number; allAnime: Anime[] }) {
+  const top = allAnime.filter(a => a.year === year).sort((a, b) => b.rating - a.rating)[0] ?? null
 
   return (
     <motion.div
@@ -93,6 +92,9 @@ function YearCard({ year, index }: { year: number; index: number }) {
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function BestOfPage() {
+  const { data: browseData, isLoading } = useBrowseAnime({ limit: 50 })
+  const allAnime = (browseData?.data ?? []).map(mapDTO)
+  if (isLoading) return <div className="min-h-screen bg-[#020202] flex items-center justify-center text-white/30 text-sm">Loading…</div>
   return (
     <div className="min-h-screen bg-[#020202] text-white pb-32">
       {/* Header */}
@@ -139,7 +141,7 @@ export default function BestOfPage() {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
           {YEARS.map((year, i) => (
-            <YearCard key={year} year={year} index={i} />
+            <YearCard key={year} year={year} index={i} allAnime={allAnime} />
           ))}
         </div>
       </div>

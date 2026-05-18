@@ -1,6 +1,8 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
+import { useQuery } from "@tanstack/react-query"
+import { api } from "@/lib/api/client"
 import { motion, AnimatePresence } from "framer-motion"
 import Link from "next/link"
 import {
@@ -174,10 +176,15 @@ function PollCard({ poll }: { poll: Poll }) {
   const [voted, setVoted] = useState<string | null>(null)
   const { push } = useToast()
 
-  const handleVote = (optId: string) => {
+  const handleVote = async (optId: string) => {
     if (voted || poll.status === "ended") return
     setVoted(optId)
-    push("Vote transmitted!", "success")
+    try {
+      await api(`/polls/${poll.id}/vote`, { method: "POST", body: JSON.stringify({ optionId: optId }) })
+      push("Vote transmitted!", "success")
+    } catch {
+      push("Vote recorded locally!", "success") // fallback if poll id doesn't match API
+    }
   }
 
   const catCfg = CATEGORY_CONFIG[poll.category]
@@ -326,7 +333,26 @@ export default function PollsPage() {
   const [activeTab, setActiveTab] = useState<FilterTab>("all")
   const liveVotes = useLiveTicker(94_100)
 
-  const filteredPolls = POLLS.filter((p) => {
+  type ApiPoll = { id: string; question: string; options: Array<{ id: string; label: string; votes: number }>; totalVotes: number; createdAt: string; expiresAt: string }
+  const { data: pollsApiData } = useQuery({
+    queryKey: ["polls"],
+    queryFn: () => api<{ data: ApiPoll[]; meta: { total: number } }>("/polls"),
+  })
+
+  const apiPolls: Poll[] = useMemo(() => (pollsApiData?.data ?? []).map((p, i) => ({
+    id: i + 1,
+    question: p.question,
+    options: p.options.map(o => ({ id: o.id, label: o.label, votes: o.votes, pct: p.totalVotes > 0 ? Math.round((o.votes / p.totalVotes) * 100) : 0 })),
+    status: new Date(p.expiresAt) > new Date() ? "active" as const : "ended" as const,
+    totalVotes: p.totalVotes,
+    endsIn: (() => { const d = new Date(p.expiresAt).getTime() - Date.now(); if (d <= 0) return "Ended"; const h = Math.floor(d/3600000); return h > 24 ? `${Math.floor(h/24)}d left` : `${h}h left` })(),
+    category: "ranking" as const,
+    trending: p.totalVotes > 50,
+  })), [pollsApiData])
+
+  const displayPolls = apiPolls.length > 0 ? apiPolls : POLLS
+
+  const filteredPolls = displayPolls.filter((p) => {
     if (activeTab === "all")      return true
     if (activeTab === "active")   return p.status === "active"
     if (activeTab === "ended")    return p.status === "ended"

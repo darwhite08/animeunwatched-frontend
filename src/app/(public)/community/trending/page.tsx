@@ -9,7 +9,14 @@ import {
 } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
-import { ANIME_DB } from "@/lib/data/anime"
+import { useBrowseAnime } from "@/hooks/useAnime"
+import { useDiscover } from "@/hooks/usePosts"
+import type { AnimeDTO } from "@/lib/api/types"
+import type { Anime } from "@/lib/data/anime"
+
+function mapDTO(a: AnimeDTO, i: number): Anime {
+  return { id: String(a.malId), title: a.title, titleJapanese: a.titleJapanese ?? "", rating: a.score ?? 0, year: a.year ?? 0, episodes: a.episodes, type: (["TV","Movie","OVA"] as const).includes(a.type as any) ? a.type as any : "TV", status: a.status?.toLowerCase().includes("airing") ? "airing" : "finished", studio: a.studios[0] ?? "Unknown", genres: a.genres, synopsis: a.synopsis ?? "", image: a.imageUrl ?? "", tags: a.genres.map(g => g.toLowerCase().replace(/\s/g, "-")), category: "all", rank: i+1 }
+}
 
 /* ── Mock data ── */
 type TrendingPost = {
@@ -139,17 +146,6 @@ const TRENDING_POLLS: TrendingPoll[] = [
   },
 ]
 
-// Pick 4 anime from ANIME_DB with most trending activity
-const TRENDING_ANIME_IDS = [
-  "frieren",
-  "jujutsu-kaisen",
-  "chainsaw-man",
-  "demon-slayer",
-]
-const TRENDING_ANIME = ANIME_DB.filter((a) => TRENDING_ANIME_IDS.includes(a.id)).slice(0, 4)
-// Fallback: just take first 4 if ids don't match
-const ANIME_DISCUSSION = TRENDING_ANIME.length >= 4 ? TRENDING_ANIME : ANIME_DB.slice(0, 4)
-
 const DISCUSSION_COUNTS = [2841, 1940, 1603, 1287]
 
 /* ── Sub-components ── */
@@ -240,6 +236,8 @@ const POLL_COLORS = ["bg-indigo-500", "bg-violet-500", "bg-blue-500"]
 
 /* ── Page ── */
 export default function CommunityTrendingPage() {
+  const { data: browseData } = useBrowseAnime({ limit: 4 })
+  const ANIME_DISCUSSION = (browseData?.data ?? []).map(mapDTO).slice(0, 4)
   return (
     <div className="min-h-screen bg-[#020202] text-white pb-32">
       <div className="max-w-5xl mx-auto px-6 pt-28">

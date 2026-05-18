@@ -1,31 +1,19 @@
 "use client"
 
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Activity, Play, Star, Bookmark, MessageCircle, Trophy, Heart, Filter } from "lucide-react"
 import Link from "next/link"
+import { useAuthStore } from "@/stores/auth.store"
+import { useFeed } from "@/hooks/usePosts"
+import { useUserProfile } from "@/hooks/useUsers"
 
-type EventType = "watch" | "rate" | "add" | "review" | "badge" | "like" | "follow"
+type EventType = "watch" | "rate" | "add" | "review" | "badge" | "like" | "follow" | "post"
 
 type Event = {
-  id: number; type: EventType; title: string
+  id: string; type: EventType; title: string
   detail: string; time: string; link: string
 }
-
-const EVENTS: Event[] = [
-  { id:1,  type:"watch",  title:"Watched",        detail:"Demon Slayer S4 E03",           time:"2h ago",   link:"/watchlist"      },
-  { id:2,  type:"rate",   title:"Rated 10/10",    detail:"Monster",                       time:"5h ago",   link:"/reviews"        },
-  { id:3,  type:"badge",  title:"Badge Earned",   detail:"Fire Walker — 10-day streak",   time:"1d ago",   link:"/achievements"   },
-  { id:4,  type:"add",    title:"Added to List",  detail:"Frieren: Beyond Journey's End", time:"1d ago",   link:"/watchlist"      },
-  { id:5,  type:"review", title:"Wrote a Review", detail:"Attack on Titan — 9/10",        time:"2d ago",   link:"/reviews"        },
-  { id:6,  type:"like",   title:"Liked a Post",   detail:"Otaku_Arch's theory post",      time:"2d ago",   link:"/community"      },
-  { id:7,  type:"follow", title:"Followed",        detail:"@ShadowWatcher",               time:"3d ago",   link:"/following"      },
-  { id:8,  type:"watch",  title:"Watched",        detail:"Jujutsu Kaisen S2 E14",         time:"3d ago",   link:"/watchlist"      },
-  { id:9,  type:"rate",   title:"Rated 9/10",     detail:"Steins;Gate",                   time:"4d ago",   link:"/reviews"        },
-  { id:10, type:"add",    title:"Added to List",  detail:"Cowboy Bebop",                  time:"5d ago",   link:"/watchlist"      },
-  { id:11, type:"badge",  title:"Badge Earned",   detail:"Centurion — 100 anime archived",time:"1w ago",   link:"/achievements"   },
-  { id:12, type:"review", title:"Wrote a Review", detail:"Fullmetal Alchemist: Brotherhood — 10/10", time:"1w ago", link:"/reviews" },
-]
 
 const TYPE_CONFIG: Record<EventType, { icon: typeof Activity; color: string; bg: string }> = {
   watch:  { icon: Play,          color:"text-emerald-400", bg:"bg-emerald-500/10" },
@@ -35,11 +23,62 @@ const TYPE_CONFIG: Record<EventType, { icon: typeof Activity; color: string; bg:
   badge:  { icon: Trophy,        color:"text-purple-400",  bg:"bg-purple-500/10"  },
   like:   { icon: Heart,         color:"text-rose-400",    bg:"bg-rose-500/10"    },
   follow: { icon: Activity,      color:"text-teal-400",    bg:"bg-teal-500/10"    },
+  post:   { icon: MessageCircle, color:"text-indigo-400",  bg:"bg-indigo-500/10"  },
 }
 
-const ALL_TYPES: EventType[] = ["watch","rate","add","review","badge","like","follow"]
+const ALL_TYPES: EventType[] = ["watch","rate","add","review","badge","like","follow","post"]
+
+function timeAgo(dateStr: string): string {
+  try {
+    const diff = Date.now() - new Date(dateStr).getTime()
+    const mins = Math.floor(diff / 60_000)
+    if (mins < 60)  return `${mins}m ago`
+    const hrs = Math.floor(mins / 60)
+    if (hrs < 24)   return `${hrs}h ago`
+    const days = Math.floor(hrs / 24)
+    if (days < 7)   return `${days}d ago`
+    return `${Math.floor(days / 7)}w ago`
+  } catch {
+    return ""
+  }
+}
 
 export default function ActivityPage() {
+  const user    = useAuthStore(s => s.user)
+  const { data: feedData }    = useFeed()
+  const { data: profileData } = useUserProfile(user?.username ?? "")
+
+  // Build real activity events from feed posts authored by the current user
+  const EVENTS: Event[] = useMemo(() => {
+    const postEvents: Event[] = (feedData?.pages.flatMap(p => p.data) ?? [])
+      .filter(p => p.authorId === user?.id)
+      .map(p => ({
+        id:     p.id,
+        type:   "post" as EventType,
+        title:  "Posted",
+        detail: p.content.slice(0, 80) + (p.content.length > 80 ? "…" : ""),
+        time:   timeAgo(p.createdAt),
+        link:   "/feed",
+      }))
+
+    // Supplement with recent list activity from the user profile if available
+    const listEvents: Event[] = (profileData?.user?.recentPosts ?? [])
+      .filter(p => p.authorId !== user?.id) // avoid duplicating own posts
+      .slice(0, 3)
+      .map(p => ({
+        id:     `profile-${p.id}`,
+        type:   "post" as EventType,
+        title:  "Interacted",
+        detail: p.content.slice(0, 80) + (p.content.length > 80 ? "…" : ""),
+        time:   timeAgo(p.createdAt),
+        link:   "/feed",
+      }))
+
+    return [...postEvents, ...listEvents].sort(
+      (a, b) => 0 // already ordered by creation from the API
+    )
+  }, [feedData, profileData, user?.id])
+
   const [filter, setFilter] = useState<EventType | "all">("all")
   const filtered = filter==="all" ? EVENTS : EVENTS.filter(e => e.type === filter)
 
@@ -50,7 +89,7 @@ export default function ActivityPage() {
         <h1 className="text-3xl font-black tracking-tighter uppercase italic text-white">
           Activity<span className="text-indigo-500">.</span>
         </h1>
-        <p className="text-white/35 text-sm mt-1">{EVENTS.length} events tracked</p>
+        <p className="text-white/35 text-sm mt-1">{EVENTS.length} event{EVENTS.length !== 1 ? "s" : ""} tracked</p>
       </div>
 
       {/* Filters */}

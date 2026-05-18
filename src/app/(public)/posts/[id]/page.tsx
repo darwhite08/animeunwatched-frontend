@@ -1,6 +1,9 @@
 "use client"
 
-import { use, useState } from "react"
+import { use, useState, useMemo } from "react"
+import { usePost, useLikePost, useCreateComment, useComments } from "@/hooks/usePosts"
+import { useAuthStore } from "@/stores/auth.store"
+import { Loader2 } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import {
   Heart, MessageSquare, Share2, ChevronLeft, Star, Send, MoreHorizontal,
@@ -312,27 +315,84 @@ function CommentCard({ comment, index }: { comment: Comment; index: number }) {
 }
 
 /* ── Page ── */
+function timeAgo(iso: string) {
+  const d = Date.now() - new Date(iso).getTime()
+  if (d < 60000) return "just now"
+  if (d < 3600000) return `${Math.floor(d/60000)}m ago`
+  if (d < 86400000) return `${Math.floor(d/3600000)}h ago`
+  return `${Math.floor(d/86400000)}d ago`
+}
+
 export default function PostDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params)
   const { push } = useToast()
-  const post = POSTS[id] ?? FALLBACK_POST
+  const authUser = useAuthStore(s => s.user)
 
-  const [liked, setLiked]         = useState(post.liked)
-  const [likeCount, setLikeCount] = useState(post.likes)
+  const { data: postData, isLoading, isError } = usePost(id)
+  const { data: commentsData } = useComments(id)
+  const likeMut = useLikePost(id)
+  const commentMut = useCreateComment(id)
+
+  const [liked, setLiked] = useState(false)
+  const [likeCount, setLikeCount] = useState(0)
   const [commentText, setCommentText] = useState("")
+
+  // Sync like state from API
+  useMemo(() => {
+    if (postData) {
+      setLiked(postData.liked ?? false)
+      setLikeCount(postData.post._count?.likes ?? 0)
+    }
+  }, [postData])
+
+  // Map API post to local shape
+  const apiPost = postData?.post
+  const post = apiPost ? {
+    ...FALLBACK_POST,
+    id: apiPost.id,
+    author: apiPost.author?.displayName ?? apiPost.author?.username ?? "Anonymous",
+    avatar: (apiPost.author?.displayName ?? apiPost.author?.username ?? "?")[0].toUpperCase(),
+    time: timeAgo(apiPost.createdAt),
+    anime: apiPost.anime?.title,
+    content: apiPost.content,
+    likes: likeCount,
+    comments: apiPost._count?.comments ?? 0,
+    liked,
+  } : POSTS[id] ?? FALLBACK_POST
+
+  const apiComments = (commentsData?.data ?? []).map(c => ({
+    id: c.id as unknown as number,
+    author: c.author?.displayName ?? c.author?.username ?? "Anonymous",
+    avatar: (c.author?.displayName ?? c.author?.username ?? "?")[0].toUpperCase(),
+    avatarColor: "bg-gradient-to-br from-indigo-500 to-violet-600",
+    time: timeAgo(c.createdAt),
+    body: c.content,
+    likes: 0, liked: false, replies: [],
+  }))
+
+  const visibleComments = apiComments.length > 0 ? apiComments : MOCK_COMMENTS
 
   const relatedPosts = RELATED_BY_AUTHOR[id] ?? FALLBACK_RELATED
 
   const toggleLike = () => {
-    setLiked(l => !l)
-    setLikeCount(c => liked ? c - 1 : c + 1)
+    if (!authUser) { push("Sign in to like posts", "info"); return }
+    const next = !liked
+    likeMut.mutate({ like: next }, {
+      onSuccess: () => { setLiked(next); setLikeCount(c => next ? c + 1 : c - 1) },
+    })
   }
 
   const submitComment = () => {
     if (!commentText.trim()) return
-    setCommentText("")
-    push("Comment posted!", "success")
+    if (!authUser) { push("Sign in to comment", "info"); return }
+    commentMut.mutate(commentText, {
+      onSuccess: () => { setCommentText(""); push("Comment posted!", "success") },
+      onError: () => push("Failed to post comment", "error"),
+    })
   }
+
+  if (isLoading) return <div className="min-h-screen bg-[#020202] flex items-center justify-center"><Loader2 size={24} className="animate-spin text-indigo-400" /></div>
+  if (isError && !POSTS[id]) return <div className="min-h-screen bg-[#020202] flex items-center justify-center text-white/30">Post not found</div>
 
   const share = async () => {
     try {
@@ -437,11 +497,11 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
             {/* Comment section */}
             <div className="space-y-4">
               <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/30">
-                Comments ({MOCK_COMMENTS.length})
+                Comments ({visibleComments.length})
               </h2>
 
               <div className="space-y-3">
-                {MOCK_COMMENTS.map((comment, i) => (
+                {visibleComments.map((comment, i) => (
                   <CommentCard key={comment.id} comment={comment} index={i} />
                 ))}
               </div>

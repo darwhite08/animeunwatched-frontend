@@ -7,8 +7,8 @@ import OnboardingModal from "@/components/onboarding/OnboardingModal";
 import { SmoothScroll } from "@/providers/SmoothScroll";
 import { motion, AnimatePresence } from "framer-motion";
 import { usePathname } from "next/navigation";
-import { getMockUser } from "@/lib/mockAuth";
 import AnnouncementBanner from "@/components/ui/AnnouncementBanner";
+import { useAuthStore } from "@/stores/auth.store";
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -16,8 +16,8 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
 
   useEffect(() => {
     const alreadyOnboarded = localStorage.getItem("aw_onboarded") === "1";
-    const user = getMockUser();
-    if (!alreadyOnboarded && user !== null) setShowOnboarding(true);
+    const isAuth = useAuthStore.getState().isAuthenticated;
+    if (!alreadyOnboarded && isAuth) setShowOnboarding(true);
   }, []);
 
   const handleOnboardingComplete = () => {
@@ -27,13 +27,16 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
 
   return (
     <SmoothScroll>
-      <AnnouncementBanner
-        message="Watch Party feature launching Q3 2026 — get early access"
-        href="/watch-party"
-        linkLabel="Learn more →"
-        type="new"
-      />
-      <Navbar />
+      {/* Single fixed container keeps banner + navbar stacked without overlap */}
+      <div className="fixed top-0 left-0 right-0 z-[100]">
+        <AnnouncementBanner
+          message="Watch Party feature launching Q3 2026 — get early access"
+          href="/watch-party"
+          linkLabel="Learn more →"
+          type="new"
+        />
+        <Navbar />
+      </div>
       <AnimatePresence mode="wait">
         <motion.div
           key={pathname}

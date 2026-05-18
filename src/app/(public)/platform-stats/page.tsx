@@ -9,7 +9,8 @@ import {
   Trophy, Flame, Clock, Zap, RefreshCw,
 } from "lucide-react"
 import { AnimatedCounterText } from "@/components/ui/AnimatedCounter"
-import { ANIME_DB } from "@/lib/data/anime"
+import { useBrowseAnime } from "@/hooks/useAnime"
+import type { AnimeDTO } from "@/lib/api/types"
 
 /* ─── Fallback data ─── */
 const FALLBACK_STATS = {
@@ -22,14 +23,7 @@ const FALLBACK_STATS = {
   listEntries: 142803,
 }
 
-const FALLBACK_TOP = ANIME_DB.slice(0, 10).map((a) => ({
-  malId: a.rank,
-  title: a.title,
-  score: a.rating,
-  imageUrl: a.image,
-  type: a.type,
-  year: a.year,
-}))
+const FALLBACK_TOP: { malId: number; title: string; score: number; imageUrl: string; type: string; year: number }[] = []
 
 /* ─── Types ─── */
 type PlatformStats = typeof FALLBACK_STATS
@@ -83,6 +77,17 @@ export default function StatsPage() {
   const [lastUpdated, setLastUpdated] = useState<Date>(new Date())
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
+  /* browse anime for fallback top list */
+  const { data: browseData } = useBrowseAnime({ limit: 50 })
+  const browseTopAnime = (browseData?.data ?? []).slice(0, 10).map((a: AnimeDTO) => ({
+    malId: a.malId,
+    title: a.title,
+    score: a.score ?? 0,
+    imageUrl: a.imageUrl ?? "",
+    type: a.type ?? "TV",
+    year: a.year ?? 0,
+  }))
+
   /* platform stats */
   const statsQuery = useQuery<PlatformStats>({
     queryKey: ["analytics/stats", refreshKey],
@@ -116,7 +121,7 @@ export default function StatsPage() {
   })
 
   const stats: PlatformStats = statsQuery.data ?? FALLBACK_STATS
-  const topAnime: TopAnimeEntry[] = topQuery.data ?? FALLBACK_TOP
+  const topAnime: TopAnimeEntry[] = topQuery.data ?? (browseTopAnime.length > 0 ? browseTopAnime : FALLBACK_TOP)
 
   /* auto-refresh every 60s */
   useEffect(() => {

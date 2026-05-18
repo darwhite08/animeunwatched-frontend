@@ -1,11 +1,12 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState } from "react"
 import { motion } from "framer-motion"
 import { Star, Plus, Check, RefreshCw, ExternalLink } from "lucide-react"
 import Link from "next/link"
 import Image from "next/image"
-import { ANIME_DB } from "@/lib/data/anime"
+import { useBrowseAnime } from "@/hooks/useAnime"
+import type { AnimeDTO } from "@/lib/api/types"
 import { useWatchlist } from "@/stores/watchlist.store"
 import { useToast } from "@/stores/toast.store"
 
@@ -16,13 +17,27 @@ function getDayOfYear(): number {
   return Math.floor(diff / (1000 * 60 * 60 * 24))
 }
 
+function mapDTO(a: AnimeDTO, i: number) {
+  return { id: String(a.malId), title: a.title, titleJapanese: a.titleJapanese ?? "", rating: a.score ?? 0, year: a.year ?? 0, episodes: a.episodes, type: (["TV","Movie","OVA"] as const).includes(a.type as any) ? a.type as "TV"|"Movie"|"OVA" : "TV" as const, status: a.status?.toLowerCase().includes("airing") ? "airing" as const : "finished" as const, studio: a.studios[0] ?? "Unknown", genres: a.genres, synopsis: a.synopsis ?? "", image: a.imageUrl ?? "", tags: a.genres.map(g => g.toLowerCase().replace(/\s/g, "-")), category: "all" as const, rank: i+1 }
+}
+
 export default function AnimeOfTheDayCard() {
   const { add, remove, has } = useWatchlist()
   const { push } = useToast()
 
   const [offset, setOffset] = useState(0)
-  const dayIndex = (getDayOfYear() + offset) % ANIME_DB.length
-  const anime = ANIME_DB[dayIndex]
+  const { data, isLoading } = useBrowseAnime({ limit: 50 })
+  const list = (data?.data ?? []).map(mapDTO)
+  const dayIndex = list.length > 0 ? (getDayOfYear() + offset) % list.length : 0
+  const anime = list[dayIndex]
+
+  if (isLoading || !anime) {
+    return (
+      <div className="relative w-full rounded-[2.5rem] overflow-hidden border border-white/5 bg-[#0a0a0a] min-h-[340px] flex items-center justify-center">
+        <div className="w-8 h-8 rounded-full border-2 border-indigo-500/30 border-t-indigo-500 animate-spin" />
+      </div>
+    )
+  }
 
   const inList = has(anime.id)
 
@@ -37,7 +52,7 @@ export default function AnimeOfTheDayCard() {
   }
 
   const handleRefresh = () => {
-    setOffset(o => (o + 1) % ANIME_DB.length)
+    setOffset(o => (o + 1) % list.length)
   }
 
   return (

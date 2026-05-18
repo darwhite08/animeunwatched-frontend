@@ -3,12 +3,35 @@
 import { useState, useMemo } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import Image from "next/image"
-import { ANIME_DB, type Anime } from "@/lib/data/anime"
+import type { Anime } from "@/lib/data/anime"
 import { useToast } from "@/stores/toast.store"
 import {
   Star, Search, ShieldCheck, CheckCircle2,
   ChevronRight, RotateCcw, Trophy, Sparkles,
 } from "lucide-react"
+import { useBrowseAnime } from "@/hooks/useAnime"
+import { useCreateReview } from "@/hooks/useReviews"
+import { useUpsertListEntry } from "@/hooks/useAnime"
+import { useAuthStore } from "@/stores/auth.store"
+import type { AnimeDTO } from "@/lib/api/types"
+
+const mapDTO = (a: AnimeDTO, i: number): Anime => ({
+  id: String(a.malId),
+  title: a.title,
+  titleJapanese: a.titleJapanese ?? "",
+  rating: a.score ?? 0,
+  year: a.year ?? 0,
+  episodes: a.episodes,
+  type: (["TV", "Movie", "OVA"] as const).includes(a.type as any) ? a.type as any : "TV",
+  status: a.status?.toLowerCase().includes("airing") ? "airing" : "finished",
+  studio: a.studios[0] ?? "Unknown",
+  genres: a.genres,
+  synopsis: a.synopsis ?? "",
+  image: a.imageUrl ?? "",
+  tags: a.genres.map(g => g.toLowerCase().replace(/\s/g, "-")),
+  category: "all",
+  rank: i + 1,
+})
 
 /* ── Per-anime verification questions ── */
 type Q = { id: string; q: string; opts: string[]; correct: string }
@@ -56,6 +79,7 @@ const credLabel = (n: number) =>
   "Questionable 🤔"
 
 export default function RatePage() {
+  const isAuthenticated = useAuthStore(s => s.isAuthenticated)
   const { push } = useToast()
   const [step,    setStep]    = useState<Step>("select")
   const [anime,   setAnime]   = useState<Anime | null>(null)
@@ -64,9 +88,12 @@ export default function RatePage() {
   const [answers, setAnswers] = useState<Record<string, string>>({})
   const [cred,    setCred]    = useState(0)
 
+  const { data: browseData, isLoading } = useBrowseAnime({ limit: 20 })
+  const animeList = useMemo(() => (browseData?.data ?? []).map(mapDTO), [browseData])
+
   const filtered = useMemo(() =>
-    ANIME_DB.filter(a => a.title.toLowerCase().includes(query.toLowerCase())).slice(0, 8),
-  [query])
+    animeList.filter(a => a.title.toLowerCase().includes(query.toLowerCase())).slice(0, 8),
+  [animeList, query])
 
   const questions = useMemo((): Q[] => {
     if (!anime) return []
@@ -80,19 +107,37 @@ export default function RatePage() {
     setStep("verify")
   }
 
-  const submitVerify = () => {
+  const createReview = useCreateReview()
+  const upsert = useUpsertListEntry(anime ? parseInt(anime.id, 10) : 0)
+
+  const submitVerify = async () => {
     const score = (Object.entries(answers).filter(([id, ans]) => {
       const q = questions.find(q => q.id === id)
       return q?.correct === ans
-    }).length / questions.length) * 100
+    }).length / Math.max(1, questions.length)) * 100
     setCred(score)
     setStep("result")
+
+    if (isAuthenticated && anime && rating) {
+      const malId = parseInt(anime.id, 10)
+      // Save to watchlist as completed + score
+      upsert.mutate({ status: "COMPLETED", score: rating, episodesSeen: anime.episodes ?? 0 })
+      // Save as review
+      createReview.mutate({
+        animeId: anime.id,
+        score: rating,
+        body: `Rated ${rating}/10 via the Neural Rate system.`,
+        hasSpoilers: false,
+      })
+    }
     push(`Rating submitted! Credibility: ${score.toFixed(0)}%`, score >= 50 ? "success" : "info")
   }
 
   const reset = () => {
     setStep("select"); setAnime(null); setRating(null); setAnswers({}); setCred(0)
   }
+
+  if (isLoading) return null
 
   return (
     <main className="min-h-screen bg-[#020202] text-white pb-32">
@@ -168,7 +213,7 @@ export default function RatePage() {
               </div>
 
               <div className="grid grid-cols-2 gap-3">
-                {(query ? filtered : ANIME_DB.filter(a => a.rating >= 8.7).slice(0, 8)).map(a => (
+                {(query ? filtered : animeList.filter(a => a.rating >= 8.7).slice(0, 8)).map(a => (
                   <motion.button
                     key={a.id}
                     whileHover={{ scale:1.02 }}

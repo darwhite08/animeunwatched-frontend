@@ -4,6 +4,8 @@ import { useState } from "react"
 import { motion } from "framer-motion"
 import { Minus, Plus, Trophy } from "lucide-react"
 import { useToast } from "@/stores/toast.store"
+import { useUpsertListEntry } from "@/hooks/useAnime"
+import { useAuthStore } from "@/stores/auth.store"
 
 interface EpisodeTrackerProps {
   totalEpisodes: number | null
@@ -11,9 +13,19 @@ interface EpisodeTrackerProps {
   animeId: string
 }
 
-export default function EpisodeTracker({ totalEpisodes, currentEpisode: initialEpisode = 0 }: EpisodeTrackerProps) {
+export default function EpisodeTracker({ totalEpisodes, currentEpisode: initialEpisode = 0, animeId }: EpisodeTrackerProps) {
   const { push } = useToast()
+  const isAuthenticated = useAuthStore(s => s.isAuthenticated)
+  const upsert = useUpsertListEntry(animeId)
   const [current, setCurrent] = useState(initialEpisode)
+
+  const saveProgress = (newEps: number, isComplete: boolean) => {
+    if (!isAuthenticated) return
+    upsert.mutate({
+      status: isComplete ? "COMPLETED" : newEps > 0 ? "WATCHING" : "PLAN_TO_WATCH",
+      episodesSeen: newEps,
+    })
+  }
 
   /* Ongoing series */
   if (totalEpisodes === null) {
@@ -30,21 +42,26 @@ export default function EpisodeTracker({ totalEpisodes, currentEpisode: initialE
   const isCompleted = current === totalEpisodes
   const progress = totalEpisodes > 0 ? (current / totalEpisodes) * 100 : 0
 
-  const decrement = () => {
+    const decrement = () => {
     if (current <= 0) return
-    setCurrent(c => c - 1)
+    const next = current - 1
+    setCurrent(next)
+    saveProgress(next, false)
     push("Progress updated", "info")
   }
 
   const increment = () => {
     if (current >= totalEpisodes) return
     const next = current + 1
+    const complete = next === totalEpisodes
     setCurrent(next)
-    push(`Episode ${next} marked as watched! 🎌`, "success")
+    saveProgress(next, complete)
+    push(complete ? `🎉 Completed ${animeId ? "anime" : ""}! All ${totalEpisodes} episodes watched!` : `Episode ${next} marked watched! 🎌`, "success")
   }
 
   const markAll = () => {
     setCurrent(totalEpisodes)
+    saveProgress(totalEpisodes, true)
     push(`All ${totalEpisodes} episodes marked as watched! 🎌`, "success")
   }
 

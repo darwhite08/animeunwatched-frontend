@@ -1,19 +1,24 @@
 "use client"
 
 import { use } from "react"
-import { notFound } from "next/navigation"
-import { ANIME_DB } from "@/lib/data/anime"
 import { motion } from "framer-motion"
 import Link from "next/link"
 import { Users2, ChevronLeft } from "lucide-react"
+import { useBrowseAnime } from "@/hooks/useAnime"
+import type { AnimeDTO } from "@/lib/api/types"
+import type { Anime } from "@/lib/data/anime"
+
+function mapDTO(a: AnimeDTO, i: number): Anime {
+  return { id: String(a.malId), title: a.title, titleJapanese: a.titleJapanese ?? "", rating: a.score ?? 0, year: a.year ?? 0, episodes: a.episodes, type: (["TV","Movie","OVA"] as const).includes(a.type as any) ? a.type as any : "TV", status: a.status?.toLowerCase().includes("airing") ? "airing" : "finished", studio: a.studios[0] ?? "Unknown", genres: a.genres, synopsis: a.synopsis ?? "", image: a.imageUrl ?? "", tags: a.genres.map(g => g.toLowerCase().replace(/\s/g, "-")), category: "all", rank: i+1 }
+}
 
 const ROLES = ["Director", "Series Composition", "Character Design", "Music", "Art Director", "Animation Director"]
 const NAMES = ["Hiroyuki Imaishi", "Kazuhiro Furuhashi", "Yusuke Takeda", "Yoshihisa Hirano", "Shigeto Koyama", "Atsushi Nishigori"]
 
 export default function AnimeStaffPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params)
-  const anime = ANIME_DB.find(a => a.id === id)
-  if (!anime) notFound()
+  const { data: browseData, isLoading } = useBrowseAnime({ limit: 1 })
+  const anime = (browseData?.data ?? []).map(mapDTO)[0] ?? null
 
   const seed = id.split("").reduce((a, c) => a + c.charCodeAt(0), 0)
   const staff = ROLES.map((role, i) => ({
@@ -22,11 +27,13 @@ export default function AnimeStaffPage({ params }: { params: Promise<{ id: strin
     dept: ["Direction", "Script", "Art", "Sound", "Art", "Animation"][i],
   }))
 
+  if (isLoading) return <div className="min-h-screen bg-[#020202] text-white flex items-center justify-center text-white/30">Loading…</div>
+
   return (
     <div className="min-h-screen bg-[#020202] text-white pb-32">
       <div className="max-w-4xl mx-auto px-6 pt-32 space-y-8">
         <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-white/30 mb-2">
-          <Link href={`/anime/${id}`} className="hover:text-white transition-colors">{anime.title}</Link>
+          <Link href={`/anime/${id}`} className="hover:text-white transition-colors">{anime?.title ?? id}</Link>
           <span>·</span>
           <span className="text-white/60">Staff</span>
         </div>
@@ -41,7 +48,7 @@ export default function AnimeStaffPage({ params }: { params: Promise<{ id: strin
         {/* Studio card */}
         <div className="p-5 rounded-2xl bg-indigo-600/10 border border-indigo-500/20">
           <p className="text-[10px] font-black uppercase tracking-widest text-indigo-400/60 mb-1">Production Studio</p>
-          <p className="text-lg font-black text-white">{anime.studio}</p>
+          <p className="text-lg font-black text-white">{anime?.studio ?? "Unknown"}</p>
         </div>
 
         {/* Staff list */}
@@ -63,7 +70,7 @@ export default function AnimeStaffPage({ params }: { params: Promise<{ id: strin
         </div>
 
         <Link href={`/anime/${id}`} className="flex items-center gap-2 text-sm font-black uppercase tracking-widest text-indigo-400 hover:text-indigo-300 transition-colors justify-center mt-6">
-          <ChevronLeft size={14} /> Back to {anime.title}
+          <ChevronLeft size={14} /> Back to {anime?.title ?? id}
         </Link>
       </div>
     </div>

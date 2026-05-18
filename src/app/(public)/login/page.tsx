@@ -1,35 +1,126 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useRef } from "react"
 import { motion } from "framer-motion"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
+import Script from "next/script"
 import Image from "next/image"
 import { Eye, EyeOff, Loader2 } from "lucide-react"
-import { mockLogin } from "@/lib/mockAuth"
 import { useLogin } from "@/hooks/useAuth"
-import { ApiError } from "@/lib/api/client"
+import { useToast } from "@/stores/toast.store"
+import { useAuthStore } from "@/stores/auth.store"
+import { ApiError, api } from "@/lib/api/client"
+import { connectSocket } from "@/lib/socket"
+import { useQueryClient } from "@tanstack/react-query"
+import type { User } from "@/lib/api/types"
+
+/* ── Types injected by Google / Apple SDKs ────────────────────────────── */
+declare global {
+  interface Window {
+    google?: {
+      accounts: {
+        id: {
+          initialize: (cfg: object) => void
+          prompt: (n?: (ntf: { isNotDisplayed(): boolean; isSkippedMoment(): boolean }) => void) => void
+          cancel: () => void
+          renderButton: (el: HTMLElement, opts: object) => void
+        }
+      }
+    }
+    AppleID?: {
+      auth: {
+        init:   (cfg: object) => void
+        signIn: () => Promise<{
+          authorization: { id_token: string; code: string }
+          user?: { name?: { firstName?: string; lastName?: string }; email?: string }
+        }>
+      }
+    }
+  }
+}
 
 export default function LoginPage() {
-  const router = useRouter()
-  const login = useLogin()
+  const router  = useRouter()
+  const login   = useLogin()
+  const { push } = useToast()
+  const setAccess = useAuthStore(s => s.setAccess)
+  const setUser   = useAuthStore(s => s.setUser)
+
+  const qc = useQueryClient()
 
   const [oauthLoading, setOauthLoading] = useState<"google" | "apple" | null>(null)
-  const [form, setForm] = useState({ email: "", password: "" })
+  const [form, setForm]   = useState({ email: "", password: "" })
   const [showPass, setShowPass] = useState(false)
   const [formError, setFormError] = useState("")
 
   const set = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement>) =>
     setForm(f => ({ ...f, [k]: e.target.value }))
 
-  const handleOAuth = (provider: "google" | "apple") => {
-    setOauthLoading(provider)
-    setTimeout(() => {
-      mockLogin(provider)
-      router.push("/")
-    }, 600)
+  /* ── Shared: called after any OAuth provider succeeds ─────────────── */
+  function handleOAuthSuccess(user: User, accessToken: string) {
+    setAccess(accessToken)
+    setUser(user)
+    connectSocket(accessToken)
+    qc.invalidateQueries({ queryKey: ["auth/me"] })
+    router.push("/dashboard")
   }
 
+  /* ── Google — renderButton (stays on login page, no redirect) ──────── */
+  const googleBtnRef = useRef<HTMLDivElement>(null)
+
+  // Trigger Google's hidden rendered button — works on desktop + mobile without leaving the page
+  const handleGoogleLogin = () => {
+    const btn = googleBtnRef.current?.querySelector<HTMLElement>('[role="button"],button,div[tabindex="0"]')
+    if (btn) { btn.click(); return }
+    // Fallback: prompt
+    window.google?.accounts.id.prompt()
+  }
+
+  /* ── Apple ─────────────────────────────────────────────────────────── */
+  const handleAppleLogin = async () => {
+    if (!process.env.NEXT_PUBLIC_APPLE_CLIENT_ID) {
+      push("Apple Sign In is not configured (NEXT_PUBLIC_APPLE_CLIENT_ID missing)", "error")
+      return
+    }
+    if (!window.AppleID) {
+      push("Apple Sign In SDK not loaded", "error")
+      return
+    }
+
+    try {
+      setOauthLoading("apple")
+
+      window.AppleID.auth.init({
+        clientId:    process.env.NEXT_PUBLIC_APPLE_CLIENT_ID,
+        scope:       "name email",
+        redirectURI: window.location.origin + "/login",
+        usePopup:    true,
+      })
+
+      const data = await window.AppleID.auth.signIn()
+
+      const result = await api<{ accessToken: string; user: User }>("/auth/apple", {
+        method: "POST",
+        body:   JSON.stringify({
+          idToken:   data.authorization.id_token,
+          email:     data.user?.email,
+          firstName: data.user?.name?.firstName,
+          lastName:  data.user?.name?.lastName,
+        }),
+      })
+      handleOAuthSuccess(result.user, result.accessToken)
+    } catch (err) {
+      if ((err as { error?: string })?.error !== "popup_closed_by_user") {
+        const msg = err instanceof ApiError ? err.message : "Apple sign-in failed"
+        push(msg, "error")
+      }
+    } finally {
+      setOauthLoading(null)
+    }
+  }
+
+  /* ── Email / password ───────────────────────────────────────────────── */
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!form.email.trim() || !form.password) {
@@ -43,11 +134,9 @@ export default function LoginPage() {
         onSuccess: () => router.push("/dashboard"),
         onError: (err) => {
           if (err instanceof ApiError) {
-            if (err.code === "VALIDATION") {
-              setFormError("Invalid email or password.")
-            } else {
-              setFormError(err.message ?? "Something went wrong. Please try again.")
-            }
+            setFormError(err.code === "VALIDATION"
+              ? "Invalid email or password."
+              : (err.message ?? "Something went wrong. Please try again."))
           } else {
             setFormError("Unable to sign in. Please check your connection.")
           }
@@ -57,175 +146,205 @@ export default function LoginPage() {
   }
 
   const isSubmitting = login.isPending
-  const isDisabled = oauthLoading !== null || isSubmitting
+  const isDisabled   = oauthLoading !== null || isSubmitting
 
   return (
-    <main className="relative min-h-screen bg-black text-white flex items-center justify-center px-6">
+    <>
+      {/* Google Identity Services — renderButton keeps user on this page */}
+      <Script
+        src="https://accounts.google.com/gsi/client"
+        strategy="afterInteractive"
+        onLoad={() => {
+          window.google?.accounts.id.initialize({
+            client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID ?? "",
+            callback: async (response: { credential: string }) => {
+              try {
+                setOauthLoading("google")
+                const data = await api<{ accessToken: string; user: User }>("/auth/google", {
+                  method: "POST",
+                  body: JSON.stringify({ idToken: response.credential }),
+                })
+                handleOAuthSuccess(data.user, data.accessToken)
+              } catch (err) {
+                const msg = err instanceof ApiError ? err.message : "Google sign-in failed"
+                push(msg, "error")
+              } finally {
+                setOauthLoading(null)
+              }
+            },
+            // FedCM: native browser prompt with no redirect, no third-party cookies needed
+            use_fedcm_for_prompt: true,
+            itp_support: true,
+          })
+          // Render Google's button in hidden container — our custom button triggers it
+          if (googleBtnRef.current) {
+            window.google?.accounts.id.renderButton(googleBtnRef.current, {
+              type: "standard",
+              theme: "filled_black",
+              size: "large",
+              text: "continue_with",
+              shape: "pill",
+              width: 400,
+            })
+          }
+        }}
+      />
+      {/* Apple ID JS SDK */}
+      <Script
+        src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js"
+        strategy="afterInteractive"
+      />
 
-      {/* Background Glow */}
-      <div className="absolute inset-0 -z-10">
-        <div className="absolute top-[-200px] left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-indigo-600/20 blur-[140px] rounded-full" />
-      </div>
-
-      <motion.section
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="w-full max-w-md"
-      >
-        <div className="border border-white/10 bg-white/5 backdrop-blur-xl rounded-2xl p-10 shadow-[0_0_40px_rgba(99,102,241,0.15)]">
-
-          {/* Header */}
-          <div className="text-center space-y-3">
-            <h1 className="text-3xl md:text-4xl font-semibold bg-gradient-to-r from-white to-[#748298] bg-clip-text text-transparent">
-              Welcome Back
-            </h1>
-            <p className="text-sm text-white/60">
-              Continue your anime journey
-            </p>
-          </div>
-
-          {/* OAuth Buttons */}
-          <div className="mt-10 space-y-4">
-
-            {/* Google */}
-            <motion.button
-              onClick={() => handleOAuth("google")}
-              disabled={isDisabled}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="w-full h-12 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition flex items-center justify-center gap-3 font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:opacity-60 disabled:cursor-not-allowed"
-            >
-              <Image
-                src="/assets/icons/google.png"
-                alt="Google"
-                width={28}
-                height={40}
-                priority
-                className="object-contain"
-              />
-              {oauthLoading === "google" ? "Signing in..." : "Continue with Google"}
-            </motion.button>
-
-            {/* Apple */}
-            <motion.button
-              onClick={() => handleOAuth("apple")}
-              disabled={isDisabled}
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-              className="w-full h-12 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition flex items-center justify-center gap-3 font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:opacity-60 disabled:cursor-not-allowed"
-            >
-              <Image
-                src="/assets/icons/apple.png"
-                alt="Apple"
-                width={30}
-                height={40}
-                priority
-                className="object-contain"
-              />
-              {oauthLoading === "apple" ? "Signing in..." : "Continue with Apple"}
-            </motion.button>
-
-          </div>
-
-          {/* Divider */}
-          <div className="flex items-center gap-4 mt-8 mb-6">
-            <div className="flex-1 h-px bg-white/10" />
-            <span className="text-xs text-white/30 uppercase tracking-widest font-semibold">
-              or continue with email
-            </span>
-            <div className="flex-1 h-px bg-white/10" />
-          </div>
-
-          {/* Email + Password Form */}
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="block text-[10px] font-bold uppercase tracking-[0.2em] text-white/40 mb-2">
-                Email
-              </label>
-              <input
-                type="email"
-                value={form.email}
-                onChange={set("email")}
-                placeholder="you@domain.com"
-                autoComplete="email"
-                disabled={isDisabled}
-                className="w-full h-12 rounded-xl bg-white/5 border border-white/10 px-4 text-sm text-white placeholder:text-white/20 outline-none focus:border-indigo-500/50 focus:bg-white/[0.07] transition-all disabled:opacity-50"
-              />
-            </div>
-
-            <div>
-              <label className="block text-[10px] font-bold uppercase tracking-[0.2em] text-white/40 mb-2">
-                Password
-              </label>
-              <div className="relative">
-                <input
-                  type={showPass ? "text" : "password"}
-                  value={form.password}
-                  onChange={set("password")}
-                  placeholder="Your password"
-                  autoComplete="current-password"
-                  disabled={isDisabled}
-                  className="w-full h-12 rounded-xl bg-white/5 border border-white/10 px-4 pr-12 text-sm text-white placeholder:text-white/20 outline-none focus:border-indigo-500/50 focus:bg-white/[0.07] transition-all disabled:opacity-50"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPass(p => !p)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-white/30 hover:text-white transition-colors"
-                >
-                  {showPass ? <EyeOff size={16} /> : <Eye size={16} />}
-                </button>
-              </div>
-            </div>
-
-            {formError && (
-              <motion.p
-                initial={{ opacity: 0, y: -4 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="text-xs text-red-400 font-bold"
-              >
-                {formError}
-              </motion.p>
-            )}
-
-            <motion.button
-              whileHover={{ scale: 1.01 }}
-              whileTap={{ scale: 0.98 }}
-              type="submit"
-              disabled={isDisabled}
-              className="w-full h-12 rounded-xl bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all font-bold text-sm text-white flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-[0_0_30px_rgba(99,102,241,0.25)]"
-            >
-              {isSubmitting ? (
-                <><Loader2 size={15} className="animate-spin" /> Signing in...</>
-              ) : (
-                "Sign In"
-              )}
-            </motion.button>
-          </form>
-
-          {/* Terms */}
-          <p className="mt-8 text-xs text-center text-white/40">
-            By continuing, you agree to our{" "}
-            <span className="text-white/70 hover:text-white transition cursor-pointer">
-              Terms
-            </span>{" "}
-            &{" "}
-            <span className="text-white/70 hover:text-white transition cursor-pointer">
-              Privacy Policy
-            </span>
-          </p>
-          <p className="mt-6 text-sm text-center text-white/50">
-            Don&apos;t have an account?{" "}
-            <Link
-              href="/register"
-              className="text-indigo-400 hover:text-indigo-300 transition font-bold"
-            >
-              Sign up
-            </Link>
-          </p>
+      <main className="relative min-h-screen bg-black text-white flex items-center justify-center px-6">
+        <div className="absolute inset-0 -z-10">
+          <div className="absolute top-[-200px] left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-indigo-600/20 blur-[140px] rounded-full" />
         </div>
 
-      </motion.section>
-    </main>
+        <motion.section
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="w-full max-w-md"
+        >
+          <div className="border border-white/10 bg-white/5 backdrop-blur-xl rounded-2xl p-10 shadow-[0_0_40px_rgba(99,102,241,0.15)]">
+
+            <div className="text-center space-y-3">
+              <h1 className="text-3xl md:text-4xl font-semibold bg-gradient-to-r from-white to-[#748298] bg-clip-text text-transparent">
+                Welcome Back
+              </h1>
+              <p className="text-sm text-white/60">Continue your anime journey</p>
+            </div>
+
+            {/* Hidden Google renderButton container — our visible button triggers it */}
+            <div ref={googleBtnRef} style={{ position: "absolute", opacity: 0, pointerEvents: "none", width: 1, height: 1, overflow: "hidden" }} aria-hidden />
+
+            {/* OAuth Buttons */}
+            <div className="mt-10 space-y-4">
+
+              {/* Google */}
+              <motion.button
+                onClick={handleGoogleLogin}
+                disabled={isDisabled}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="w-full h-12 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition flex items-center justify-center gap-3 font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:opacity-60 disabled:cursor-not-allowed"
+              >
+                {oauthLoading === "google"
+                  ? <><Loader2 size={16} className="animate-spin" /> Signing in...</>
+                  : <>
+                      <Image src="/assets/icons/google.png" alt="Google" width={20} height={20} className="object-contain" />
+                      Continue with Google
+                    </>
+                }
+              </motion.button>
+
+              {/* Apple */}
+              <motion.button
+                onClick={handleAppleLogin}
+                disabled={isDisabled}
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+                className="w-full h-12 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition flex items-center justify-center gap-3 font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:opacity-60 disabled:cursor-not-allowed"
+              >
+                {oauthLoading === "apple"
+                  ? <><Loader2 size={16} className="animate-spin" /> Signing in...</>
+                  : <>
+                      <Image src="/assets/icons/apple.png" alt="Apple" width={18} height={18} className="object-contain invert" />
+                      Continue with Apple
+                    </>
+                }
+              </motion.button>
+            </div>
+
+            {/* Divider */}
+            <div className="flex items-center gap-4 mt-8 mb-6">
+              <div className="flex-1 h-px bg-white/10" />
+              <span className="text-xs text-white/30 uppercase tracking-widest font-semibold">
+                or continue with email
+              </span>
+              <div className="flex-1 h-px bg-white/10" />
+            </div>
+
+            {/* Email + password form */}
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label className="block text-[10px] font-bold uppercase tracking-[0.2em] text-white/40 mb-2">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  value={form.email}
+                  onChange={set("email")}
+                  placeholder="you@domain.com"
+                  autoComplete="email"
+                  disabled={isDisabled}
+                  className="w-full h-12 rounded-xl bg-white/5 border border-white/10 px-4 text-sm text-white placeholder:text-white/20 outline-none focus:border-indigo-500/50 focus:bg-white/[0.07] transition-all disabled:opacity-50"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[10px] font-bold uppercase tracking-[0.2em] text-white/40 mb-2">
+                  Password
+                </label>
+                <div className="relative">
+                  <input
+                    type={showPass ? "text" : "password"}
+                    value={form.password}
+                    onChange={set("password")}
+                    placeholder="Your password"
+                    autoComplete="current-password"
+                    disabled={isDisabled}
+                    className="w-full h-12 rounded-xl bg-white/5 border border-white/10 px-4 pr-12 text-sm text-white placeholder:text-white/20 outline-none focus:border-indigo-500/50 focus:bg-white/[0.07] transition-all disabled:opacity-50"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPass(p => !p)}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-white/30 hover:text-white transition-colors"
+                  >
+                    {showPass ? <EyeOff size={16} /> : <Eye size={16} />}
+                  </button>
+                </div>
+              </div>
+
+              {formError && (
+                <motion.p
+                  initial={{ opacity: 0, y: -4 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="text-xs text-red-400 font-bold"
+                >
+                  {formError}
+                </motion.p>
+              )}
+
+              <motion.button
+                whileHover={{ scale: 1.01 }}
+                whileTap={{ scale: 0.98 }}
+                type="submit"
+                disabled={isDisabled}
+                className="w-full h-12 rounded-xl bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all font-bold text-sm text-white flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-[0_0_30px_rgba(99,102,241,0.25)]"
+              >
+                {isSubmitting
+                  ? <><Loader2 size={15} className="animate-spin" /> Signing in...</>
+                  : "Sign In"
+                }
+              </motion.button>
+            </form>
+
+            <p className="mt-8 text-xs text-center text-white/40">
+              By continuing, you agree to our{" "}
+              <Link href="/terms" className="text-white/70 hover:text-white transition">Terms</Link>{" "}
+              &{" "}
+              <Link href="/privacy" className="text-white/70 hover:text-white transition">Privacy Policy</Link>
+            </p>
+            <p className="mt-6 text-sm text-center text-white/50">
+              Don&apos;t have an account?{" "}
+              <Link href="/register" className="text-indigo-400 hover:text-indigo-300 transition font-bold">
+                Sign up
+              </Link>
+            </p>
+          </div>
+        </motion.section>
+      </main>
+    </>
   )
 }

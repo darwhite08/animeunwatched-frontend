@@ -5,12 +5,12 @@ import { motion } from "framer-motion"
 import Image from "next/image"
 import Link from "next/link"
 import { Star, ChevronLeft, ChevronRight, Trophy, Medal, Award } from "lucide-react"
-import { ANIME_DB, type Anime } from "@/lib/data/anime"
+import { useBrowseAnime } from "@/hooks/useAnime"
+import type { AnimeDTO } from "@/lib/api/types"
+import type { Anime } from "@/lib/data/anime"
 
-// ─── Helpers ──────────────────────────────────────────────────────────────────
-
-function getAnimeForYear(year: number): Anime[] {
-  return ANIME_DB.filter((a) => a.year === year).sort((a, b) => b.rating - a.rating)
+function mapDTO(a: AnimeDTO, i: number): Anime {
+  return { id: String(a.malId), title: a.title, titleJapanese: a.titleJapanese ?? "", rating: a.score ?? 0, year: a.year ?? 0, episodes: a.episodes, type: (["TV","Movie","OVA"] as const).includes(a.type as any) ? a.type as any : "TV", status: a.status?.toLowerCase().includes("airing") ? "airing" : "finished", studio: a.studios[0] ?? "Unknown", genres: a.genres, synopsis: a.synopsis ?? "", image: a.imageUrl ?? "", tags: a.genres.map(g => g.toLowerCase().replace(/\s/g, "-")), category: "all", rank: i+1 }
 }
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
@@ -165,8 +165,10 @@ function AnimeGridCard({ anime, index }: { anime: Anime; index: number }) {
 export default function BestOfYearPage({ params }: { params: Promise<{ year: string }> }) {
   const { year: yearStr } = use(params)
   const year = Number(yearStr)
-  const animeList = getAnimeForYear(year)
+  const { data: browseData, isLoading } = useBrowseAnime({ year, limit: 30 })
+  const animeList = (browseData?.data ?? []).map(mapDTO).sort((a, b) => b.rating - a.rating)
   const hasData = animeList.length > 0
+  if (isLoading) return <div className="min-h-screen bg-[#020202] flex items-center justify-center text-white/30 text-sm">Loading…</div>
 
   const hero = animeList[0]
   const medalists = animeList.slice(1, 5)

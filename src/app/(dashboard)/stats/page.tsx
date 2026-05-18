@@ -3,6 +3,9 @@
 import { motion } from "framer-motion"
 import { Clock, BarChart2, TrendingUp, Star, Zap, Award, Calendar, CheckCircle2 } from "lucide-react"
 import Link from "next/link"
+import { useAuthStore } from "@/stores/auth.store"
+import { useUserList } from "@/hooks/useLists"
+import { useMemo } from "react"
 
 /* ── Mock stats data ── */
 const YEARLY = [
@@ -34,7 +37,30 @@ const TOP_STUDIOS = [
 ]
 
 export default function StatsPage() {
-  const total = YEARLY.reduce((s, y) => s + y.hours, 0)
+  const user = useAuthStore(s => s.user)
+  const { data: listData } = useUserList(user?.username ?? "")
+
+  const realStats = useMemo(() => {
+    const entries = listData?.data ?? []
+    const completed = entries.filter(e => e.status === "COMPLETED").length
+    const totalEps = entries.reduce((s, e) => s + e.episodesSeen, 0)
+    const totalHrs = Math.round(totalEps * 24 / 60)
+    const scores = entries.filter(e => e.score).map(e => e.score as number)
+    const avgScore = scores.length ? (scores.reduce((a, b) => a + b, 0) / scores.length).toFixed(1) : "—"
+
+    // Genre breakdown from list entries
+    const genreCount: Record<string, number> = {}
+    for (const e of entries) {
+      for (const g of e.anime?.genres ?? []) genreCount[g] = (genreCount[g] ?? 0) + 1
+    }
+    const topGenres = Object.entries(genreCount).sort((a, b) => b[1] - a[1]).slice(0, 5)
+    const totalGenreCount = topGenres.reduce((s, [, c]) => s + c, 0)
+
+    return { completed, totalEps, totalHrs, avgScore, topGenres, totalGenreCount, total: entries.length }
+  }, [listData])
+
+
+  const total = realStats.totalHrs || YEARLY.reduce((s, y) => s + y.hours, 0)
 
   return (
     <div className="max-w-5xl mx-auto px-6 py-12 pb-32 space-y-10">

@@ -18,6 +18,9 @@ import {
   AlertTriangle,
 } from "lucide-react"
 import { useToast } from "@/stores/toast.store"
+import { useClub, useJoinClub } from "@/hooks/useClubs"
+import { useClubThreads } from "@/hooks/useThreads"
+import { useAuthStore } from "@/stores/auth.store"
 
 /* ── Types ── */
 type ClubTab = "threads" | "members" | "about"
@@ -191,19 +194,49 @@ export default function ClubDetailPage({
 }) {
   const { slug } = use(params)
   const { push } = useToast()
+  const authUser = useAuthStore(s => s.user)
+  const { data: clubData } = useClub(slug)
+  const { data: threadsData } = useClubThreads(slug)
+  const displayThreads = (threadsData?.data ?? []).length > 0
+    ? (threadsData?.data ?? []).map(t => ({
+        id: t.id as unknown as number,
+        title: t.title,
+        excerpt: t.content.slice(0, 120) + (t.content.length > 120 ? "…" : ""),
+        author: t.author?.displayName ?? t.author?.username ?? "Anonymous",
+        avatar: (t.author?.displayName ?? t.author?.username ?? "?")[0].toUpperCase(),
+        replies: t._count?.replies ?? 0, views: 0,
+        time: (() => { const d = Date.now() - new Date(t.createdAt).getTime(); return d < 86400000 ? `${Math.floor(d/3600000)}h ago` : `${Math.floor(d/86400000)}d ago` })(),
+        isPinned: t.isPinned, tags: [],
+      }))
+    : MOCK_THREADS
+  const joinMut = useJoinClub(slug)
 
-  const [club, setClub] = useState<ClubData>(() => buildClubData(slug))
+  const apiClub = clubData?.club
+  const [clubState, setClubState] = useState<ClubData>(() => buildClubData(slug))
   const [activeTab, setActiveTab] = useState<ClubTab>("threads")
+  const [joined, setJoined] = useState(false)
+
+  // Merge real data into club state
+  const club: ClubData = apiClub ? {
+    ...clubState,
+    name: apiClub.name,
+    slug: apiClub.slug,
+    description: apiClub.description ?? clubState.description,
+    memberCount: apiClub._count?.members ?? clubState.memberCount,
+    threadCount: apiClub._count?.threads ?? clubState.threadCount,
+    isJoined: joined,
+  } : clubState
 
   const toggleJoin = () => {
-    setClub((prev) => {
-      const next = { ...prev, isJoined: !prev.isJoined }
-      push(
-        next.isJoined ? `Joined ${prev.name}!` : `Left ${prev.name}`,
-        next.isJoined ? "success" : "info",
-      )
-      return next
-    })
+    if (!authUser) { push("Sign in to join clubs", "info"); return }
+    const next = !joined
+    joinMut.mutate(
+      { join: next },
+      {
+        onSuccess: () => { setJoined(next); push(next ? `Joined ${club.name}! 🎌` : `Left ${club.name}`, next ? "success" : "info") },
+        onError: () => push("Failed to update membership", "error"),
+      }
+    )
   }
 
   return (
@@ -301,7 +334,7 @@ export default function ClubDetailPage({
             >
               <div className="flex items-center justify-between mb-6">
                 <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/25">
-                  {MOCK_THREADS.length} threads
+                  {club.threadCount || MOCK_THREADS.length} threads
                 </p>
                 <Link
                   href={`/clubs/${slug}/new-thread`}
@@ -311,7 +344,7 @@ export default function ClubDetailPage({
                 </Link>
               </div>
 
-              {MOCK_THREADS.map((thread, i) => (
+              {displayThreads.map((thread, i) => (
                 <motion.div
                   key={thread.id}
                   initial={{ opacity: 0, y: 8 }}
@@ -324,7 +357,7 @@ export default function ClubDetailPage({
                   >
                     <div className="flex-1 min-w-0 space-y-1.5">
                       <div className="flex items-center gap-2 flex-wrap">
-                        {thread.isTrending && (
+                        {!!((thread as Record<string, unknown>).isTrending) && (
                           <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-[9px] font-black uppercase tracking-wider text-amber-400">
                             <TrendingUp size={8} /> Trending
                           </span>
@@ -337,11 +370,11 @@ export default function ClubDetailPage({
                         <span>by {thread.author}</span>
                         <span className="flex items-center gap-1">
                           <MessageSquare size={9} />
-                          {thread.replyCount} replies
+                          {(thread as Record<string, unknown>).replyCount as number ?? 0} replies
                         </span>
                         <span className="flex items-center gap-1">
                           <Clock size={9} />
-                          {thread.lastActivity}
+                          {(thread as Record<string, unknown>).lastActivity as string ?? ""}
                         </span>
                       </div>
                     </div>

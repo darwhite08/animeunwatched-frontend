@@ -4,34 +4,64 @@ import { useState, useMemo } from "react"
 import { motion } from "framer-motion"
 import Link from "next/link"
 import Image from "next/image"
-import { ANIME_DB } from "@/lib/data/anime"
+import { useBrowseAnime } from "@/hooks/useAnime"
+import { useQuery } from "@tanstack/react-query"
+import { api } from "@/lib/api/client"
+import type { Paginated } from "@/lib/api/types"
 import { Star, ThumbsUp, Eye, SortAsc, PenSquare } from "lucide-react"
 import { useToast } from "@/stores/toast.store"
+import type { AnimeDTO } from "@/lib/api/types"
+import type { Anime } from "@/lib/data/anime"
 
-const MOCK = ANIME_DB.slice(0, 8).map((anime, i) => ({
-  id: i + 1, anime,
-  author: ["Otaku_Arch","ShadowWatcher","NeuralBot_X","VoidSeeker","CipherRonin","AlphaWatcher","DeltaWeeb","KurosakiFan"][i],
-  score: [10, 9, 10, 9, 8, 9, 9, 8][i],
-  body: [
-    "A perfect anime in every sense. Every arc delivers and the finale earns everything it built.",
-    "Starts slow, but episode 12 changes everything. The payoff is worth every minute.",
-    "Johan Liebert is the greatest villain in anime history. 74 episodes, not one wasted.",
-    "Season 1 is lightning in a bottle. What follows is the most ambitious political narrative in the medium.",
-    "Space, jazz, loneliness, and the best dub ever recorded. Timeless in every sense.",
-    "Season 2 pays off everything season 1 set up. The pacifism arc is mature beyond its genre.",
-    "Quiet, melancholic, and deeply moving. Made me think about mortality in ways no anime has.",
-    "The first arc is a perfect thriller. The battle of wits is unmatched in anime.",
-  ][i],
-  helpful: [312,187,245,134,298,156,421,89][i],
-  helpedByMe: [false,true,false,false,true,false,false,true][i],
-  date: ["2d","5d","1w","1w","2w","2w","3w","1m"][i] + " ago",
-  hasSpoilers: [false,false,false,true,false,false,false,true][i],
-}))
+function mapDTO(a: AnimeDTO, i: number): Anime {
+  return { id: String(a.malId), title: a.title, titleJapanese: a.titleJapanese ?? "", rating: a.score ?? 0, year: a.year ?? 0, episodes: a.episodes, type: (["TV","Movie","OVA"] as const).includes(a.type as any) ? a.type as any : "TV", status: a.status?.toLowerCase().includes("airing") ? "airing" : "finished", studio: a.studios[0] ?? "Unknown", genres: a.genres, synopsis: a.synopsis ?? "", image: a.imageUrl ?? "", tags: a.genres.map(g => g.toLowerCase().replace(/\s/g, "-")), category: "all", rank: i+1 }
+}
+
+const MOCK_AUTHORS = ["Otaku_Arch","ShadowWatcher","NeuralBot_X","VoidSeeker","CipherRonin","AlphaWatcher","DeltaWeeb","KurosakiFan"]
+const MOCK_SCORES = [10, 9, 10, 9, 8, 9, 9, 8]
+const MOCK_BODIES = [
+  "A perfect anime in every sense. Every arc delivers and the finale earns everything it built.",
+  "Starts slow, but episode 12 changes everything. The payoff is worth every minute.",
+  "Johan Liebert is the greatest villain in anime history. 74 episodes, not one wasted.",
+  "Season 1 is lightning in a bottle. What follows is the most ambitious political narrative in the medium.",
+  "Space, jazz, loneliness, and the best dub ever recorded. Timeless in every sense.",
+  "Season 2 pays off everything season 1 set up. The pacifism arc is mature beyond its genre.",
+  "Quiet, melancholic, and deeply moving. Made me think about mortality in ways no anime has.",
+  "The first arc is a perfect thriller. The battle of wits is unmatched in anime.",
+]
+const MOCK_HELPFUL = [312,187,245,134,298,156,421,89]
+const MOCK_HELPED_BY_ME = [false,true,false,false,true,false,false,true]
+const MOCK_DATES = ["2d","5d","1w","1w","2w","2w","3w","1m"]
+const MOCK_HAS_SPOILERS = [false,false,false,true,false,false,false,true]
+
+type ApiReview = { id: string; animeId: string; score: number; body: string; hasSpoilers: boolean; createdAt: string; _count?: { likes: number }; author: { username: string; displayName: string }; anime?: { id: string; malId: number; title: string; imageUrl: string | null } }
 
 export default function CommunityReviewsPage() {
   const { push } = useToast()
+  const { data: browseData } = useBrowseAnime({ limit: 12 })
+
+  const { data: reviewsApiData } = useQuery({
+    queryKey: ["community-reviews"],
+    queryFn: () => api<Paginated<ApiReview>>("/reviews?sort=helpful&limit=20"),
+  })
+
+  const apiReviews = (reviewsApiData?.data ?? []).map((r, i) => ({
+    id: i + 1,
+    anime: mapDTO({ id: r.anime?.id ?? "", malId: r.anime?.malId ?? 0, title: r.anime?.title ?? "Unknown", titleJapanese: null, synopsis: null, type: null, episodes: null, status: null, airedFrom: null, airedTo: null, season: null, year: null, rating: null, score: null, imageUrl: r.anime?.imageUrl ?? null, trailerUrl: null, source: null, genres: [] as string[], studios: [] as string[] } as any, i),
+    author: r.author?.displayName ?? r.author?.username ?? "Anonymous",
+    score: r.score, body: r.body,
+    helpful: r._count?.likes ?? 0, helpedByMe: false,
+    date: (() => { const d = Date.now() - new Date(r.createdAt).getTime(); return d < 86400000 ? `${Math.floor(d/3600000)}h ago` : `${Math.floor(d/86400000)}d ago` })(),
+    hasSpoilers: r.hasSpoilers,
+  }))
+
+  const MOCK = apiReviews.length > 0 ? apiReviews : (browseData?.data ?? []).map(mapDTO).slice(0, 8).map((anime, i) => ({
+    id: i + 1, anime, author: MOCK_AUTHORS[i] ?? "Anon", score: MOCK_SCORES[i] ?? 9,
+    body: MOCK_BODIES[i] ?? "", helpful: MOCK_HELPFUL[i] ?? 0, helpedByMe: MOCK_HELPED_BY_ME[i] ?? false,
+    date: (MOCK_DATES[i] ?? "1m") + " ago", hasSpoilers: MOCK_HAS_SPOILERS[i] ?? false,
+  }))
   const [sort, setSort] = useState<"helpful"|"recent"|"highest"|"lowest">("helpful")
-  const [helpedBy, setHelpedBy] = useState(new Set(MOCK.filter(r=>r.helpedByMe).map(r=>r.id)))
+  const [helpedBy, setHelpedBy] = useState<Set<number>>(new Set(MOCK.filter(r=>r.helpedByMe).map(r=>r.id)))
   const [revealed, setRevealed] = useState<Set<number>>(new Set())
 
   const sorted = useMemo(() => [...MOCK].sort((a,b) => {
@@ -39,7 +69,7 @@ export default function CommunityReviewsPage() {
     if (sort==="highest") return b.score - a.score
     if (sort==="lowest")  return a.score - b.score
     return 0
-  }), [sort])
+  }), [sort, MOCK])
 
   const toggleHelp = (id: number) => {
     setHelpedBy(s => { const n=new Set(s); n.has(id)?n.delete(id):n.add(id); return n })

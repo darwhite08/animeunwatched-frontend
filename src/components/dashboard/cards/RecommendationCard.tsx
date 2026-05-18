@@ -3,11 +3,27 @@
 import Link from "next/link"
 import { motion } from "framer-motion"
 import { Sparkles, ArrowRight, Star } from "lucide-react"
-import { ANIME_DB } from "@/lib/data/anime"
+import { useBrowseAnime } from "@/hooks/useAnime"
+import type { AnimeDTO } from "@/lib/api/types"
 
-const PICKS = ANIME_DB.filter(a => a.category === "top-rated").slice(0, 3)
+function mapDTO(a: AnimeDTO, i: number) {
+  return { id: String(a.malId), title: a.title, rating: a.score ?? 0, image: a.imageUrl ?? "" }
+}
 
 export default function RecommendationCard() {
+  const { data, isLoading } = useBrowseAnime({ limit: 10 })
+  const PICKS = [...(data?.data ?? [])]
+    .sort((a, b) => (b.score ?? 0) - (a.score ?? 0))
+    .slice(0, 3)
+    .map(mapDTO)
+  if (isLoading) {
+    return (
+      <div className="p-8 rounded-[2.5rem] border border-white/5 bg-[#0a0a0a] relative overflow-hidden h-48 flex items-center justify-center">
+        <div className="w-8 h-8 rounded-full border-2 border-indigo-500/30 border-t-indigo-500 animate-spin" />
+      </div>
+    )
+  }
+
   return (
     <div className="p-8 rounded-[2.5rem] border border-white/5 bg-[#0a0a0a] relative overflow-hidden group">
       {/* Glow */}

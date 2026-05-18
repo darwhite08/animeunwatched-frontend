@@ -5,6 +5,8 @@ import { motion } from "framer-motion"
 import Link from "next/link"
 import { Users, Search, Check, UserPlus, ArrowRight } from "lucide-react"
 import { useToast } from "@/stores/toast.store"
+import { useAuthStore } from "@/stores/auth.store"
+import { useFollowers, useFollowing } from "@/hooks/useUsers"
 
 type UserCard = {
   id: string; username: string; displayName: string
@@ -34,13 +36,27 @@ export default function FollowingPage() {
   const { push } = useToast()
   const [tab, setTab] = useState<Tab>("following")
   const [query, setQuery] = useState("")
-  const [followed, setFollowed] = useState<Set<string>>(() => {
-    const init = new Set<string>()
-    ;[...FOLLOWING_DATA, ...FOLLOWERS_DATA].filter(u => u.isFollowing).forEach(u => init.add(u.id))
-    return init
-  })
+  const [followed, setFollowed] = useState<Set<string>>(new Set())
 
-  const base = tab === "following" ? FOLLOWING_DATA : FOLLOWERS_DATA
+  const authUser = useAuthStore(s => s.user)
+  const { data: followingData } = useFollowing(authUser?.username ?? "")
+  const { data: followersData } = useFollowers(authUser?.username ?? "")
+
+  // Map API users to local UserCard type
+  const apiFollowing: UserCard[] = (followingData?.data ?? []).map((u: any) => ({
+    id: u.id, username: u.username, displayName: u.displayName,
+    reputation: u.reputation ?? 0, level: Math.max(1, Math.floor(Math.sqrt((u.reputation ?? 0) * 100 / 1000))),
+    title: "Shinobi", anime: 0, isFollowing: true,
+  }))
+  const apiFollowers: UserCard[] = (followersData?.data ?? []).map((u: any) => ({
+    id: u.id, username: u.username, displayName: u.displayName,
+    reputation: u.reputation ?? 0, level: Math.max(1, Math.floor(Math.sqrt((u.reputation ?? 0) * 100 / 1000))),
+    title: "Shinobi", anime: 0, isFollowing: followed.has(u.id),
+  }))
+
+  const base = tab === "following"
+    ? (apiFollowing.length > 0 ? apiFollowing : FOLLOWING_DATA)
+    : (apiFollowers.length > 0 ? apiFollowers : FOLLOWERS_DATA)
   const filtered = useMemo(() => base.filter(u =>
     !query || u.displayName.toLowerCase().includes(query.toLowerCase()) ||
     u.username.toLowerCase().includes(query.toLowerCase())
@@ -78,7 +94,7 @@ export default function FollowingPage() {
           >
             {t}
             <span className="ml-2 text-[9px] text-white/25 font-mono">
-              {t === "following" ? FOLLOWING_DATA.length : FOLLOWERS_DATA.length}
+              {t === "following" ? (apiFollowing.length || FOLLOWING_DATA.length) : (apiFollowers.length || FOLLOWERS_DATA.length)}
             </span>
             {tab === t && (
               <motion.div layoutId="follow-tab-line"

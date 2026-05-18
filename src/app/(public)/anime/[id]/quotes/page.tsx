@@ -1,12 +1,17 @@
 "use client"
 
 import { use, useState } from "react"
-import { notFound } from "next/navigation"
-import { ANIME_DB } from "@/lib/data/anime"
 import { motion, AnimatePresence } from "framer-motion"
 import Link from "next/link"
 import { Quote, ChevronLeft, Heart, Share2, Copy } from "lucide-react"
 import { useToast } from "@/stores/toast.store"
+import { useBrowseAnime } from "@/hooks/useAnime"
+import type { AnimeDTO } from "@/lib/api/types"
+import type { Anime } from "@/lib/data/anime"
+
+function mapDTO(a: AnimeDTO, i: number): Anime {
+  return { id: String(a.malId), title: a.title, titleJapanese: a.titleJapanese ?? "", rating: a.score ?? 0, year: a.year ?? 0, episodes: a.episodes, type: (["TV","Movie","OVA"] as const).includes(a.type as any) ? a.type as any : "TV", status: a.status?.toLowerCase().includes("airing") ? "airing" : "finished", studio: a.studios[0] ?? "Unknown", genres: a.genres, synopsis: a.synopsis ?? "", image: a.imageUrl ?? "", tags: a.genres.map(g => g.toLowerCase().replace(/\s/g, "-")), category: "all", rank: i+1 }
+}
 
 const QUOTE_POOL = [
   "Even if I can't see it, even if I can't feel it, the truth is always there.",
@@ -23,29 +28,31 @@ const SPEAKERS = ["Protagonist", "Antagonist", "Mentor", "Companion"]
 
 export default function AnimeQuotesPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params)
-  const anime = ANIME_DB.find(a => a.id === id)
-  if (!anime) notFound()
+  const { data: browseData, isLoading } = useBrowseAnime({ limit: 1 })
+  const anime = (browseData?.data ?? []).map(mapDTO)[0] ?? null
   const { push } = useToast()
 
   const seed = id.split("").reduce((a, c) => a + c.charCodeAt(0), 0)
   const quotes = QUOTE_POOL.map((q, i) => ({
     id: i, text: q,
     speaker: SPEAKERS[(seed + i) % SPEAKERS.length],
-    episode: `Episode ${((seed + i * 3) % (anime.episodes ?? 12)) + 1}`,
+    episode: `Episode ${((seed + i * 3) % (anime?.episodes ?? 12)) + 1}`,
     liked: false,
   }))
 
   const [liked, setLiked] = useState<Set<number>>(new Set())
 
   const copy = (text: string) => {
-    navigator.clipboard.writeText(`"${text}" — ${anime.title}`).then(() => push("Quote copied!", "success"))
+    navigator.clipboard.writeText(`"${text}" — ${anime?.title ?? ""}`).then(() => push("Quote copied!", "success"))
   }
+
+  if (isLoading) return <div className="min-h-screen bg-[#020202] text-white flex items-center justify-center text-white/30">Loading…</div>
 
   return (
     <div className="min-h-screen bg-[#020202] text-white pb-32">
       <div className="max-w-3xl mx-auto px-6 pt-32 space-y-8">
         <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-white/30 mb-2">
-          <Link href={`/anime/${id}`} className="hover:text-white transition-colors">{anime.title}</Link>
+          <Link href={`/anime/${id}`} className="hover:text-white transition-colors">{anime?.title ?? id}</Link>
           <span>·</span><span className="text-white/60">Quotes</span>
         </div>
 
@@ -87,7 +94,7 @@ export default function AnimeQuotesPage({ params }: { params: Promise<{ id: stri
         </div>
 
         <Link href={`/anime/${id}`} className="flex items-center gap-2 text-sm font-black uppercase tracking-widest text-indigo-400 hover:text-indigo-300 transition-colors justify-center">
-          <ChevronLeft size={14} /> Back to {anime.title}
+          <ChevronLeft size={14} /> Back to {anime?.title ?? id}
         </Link>
       </div>
     </div>

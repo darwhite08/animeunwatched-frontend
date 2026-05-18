@@ -14,6 +14,8 @@ import {
 } from "lucide-react"
 import Link from "next/link"
 import { useToast } from "@/stores/toast.store"
+import { useAuthStore } from "@/stores/auth.store"
+import { useUserList } from "@/hooks/useLists"
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -213,7 +215,25 @@ const PLATFORM_COLOR: Record<string, string> = {
 
 export default function HistoryPage() {
   const { push } = useToast()
-  const [entries, setEntries] = useState<HistoryEntry[]>(HISTORY_ENTRIES)
+  const user = useAuthStore(s => s.user)
+  const { data: listData } = useUserList(user?.username ?? "")
+
+  // Build history from real list entries (episodes seen = watching history proxy)
+  const apiHistory: HistoryEntry[] = (listData?.data ?? [])
+    .filter(e => e.episodesSeen > 0 || e.status === "COMPLETED")
+    .slice(0, 15)
+    .map((e, i) => ({
+      id: e.id as unknown as number,
+      animeTitle: e.anime?.title ?? "Unknown",
+      animeId: String(e.anime?.malId ?? ""),
+      episode: e.status === "COMPLETED" ? `Completed (${e.episodesSeen} eps)` : `Ep. ${e.episodesSeen}`,
+      watchedAt: new Date(e.updatedAt),
+      duration: "24 min",
+      platform: "AnimeUnwatched",
+      coverGradient: `from-indigo-${6 + (i % 4) * 100}/30 to-purple-${6 + (i % 3) * 100}/20`,
+    }))
+
+  const [entries, setEntries] = useState<HistoryEntry[]>(() => apiHistory.length > 0 ? apiHistory : HISTORY_ENTRIES)
   const [query, setQuery] = useState("")
 
   const filtered = useMemo(() => {

@@ -3,6 +3,9 @@
 import { useState } from "react"
 import { motion } from "framer-motion"
 import { FileText, Bold, Italic, List, Link as LinkIcon, Eye, EyeOff, Save, Send } from "lucide-react"
+import { useCreateBlog } from "@/hooks/useBlogs"
+import { useToast } from "@/stores/toast.store"
+import { useRouter } from "next/navigation"
 
 const TOOLBAR = [
   { icon: Bold,     label: "Bold",       md: "**text**" },
@@ -12,6 +15,9 @@ const TOOLBAR = [
 ]
 
 export default function CreateBlogPage() {
+  const router = useRouter()
+  const { push } = useToast()
+  const createBlog = useCreateBlog()
   const [title, setTitle] = useState("")
   const [body, setBody] = useState("")
   const [coverUrl, setCoverUrl] = useState("")
@@ -22,9 +28,19 @@ export default function CreateBlogPage() {
   const readTime = Math.max(1, Math.ceil(wordCount / 200))
 
   const handleAction = (action: "draft" | "publish") => {
-    if (!title.trim() || !body.trim()) return
-    setStatus(action === "publish" ? "published" : "saved")
-    setTimeout(() => setStatus("idle"), 3000)
+    if (!title.trim() || !body.trim()) { push("Title and content required", "info"); return }
+    const slug = title.toLowerCase().replace(/[^a-z0-9\s]/g, "").replace(/\s+/g, "-").slice(0, 60) + "-" + Date.now()
+    createBlog.mutate(
+      { title: title.trim(), body: body.trim(), status: action === "publish" ? "PUBLISHED" : "DRAFT" },
+      {
+        onSuccess: (data) => {
+          setStatus(action === "publish" ? "published" : "saved")
+          push(action === "publish" ? "Blog published!" : "Draft saved!", "success")
+          setTimeout(() => { setStatus("idle"); if (action === "publish") router.push("/creators/blog") }, 2000)
+        },
+        onError: () => push("Failed to save blog", "error"),
+      }
+    )
   }
 
   const insertMarkdown = (md: string) => {

@@ -15,7 +15,13 @@ import {
 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
-import { ANIME_DB, type Anime } from "@/lib/data/anime"
+import { useBrowseAnime } from "@/hooks/useAnime"
+import type { Anime } from "@/lib/data/anime"
+import type { AnimeDTO } from "@/lib/api/types"
+
+function mapDTO(a: AnimeDTO, i: number): Anime {
+  return { id: String(a.malId), title: a.title, titleJapanese: a.titleJapanese ?? "", rating: a.score ?? 0, year: a.year ?? 0, episodes: a.episodes, type: (["TV","Movie","OVA"] as const).includes(a.type as any) ? a.type as any : "TV", status: a.status?.toLowerCase().includes("airing") ? "airing" : "finished", studio: a.studios[0] ?? "Unknown", genres: a.genres, synopsis: a.synopsis ?? "", image: a.imageUrl ?? "", tags: a.genres.map(g => g.toLowerCase().replace(/\s/g, "-")), category: "all", rank: i+1 }
+}
 
 // ─── Mock thread data ────────────────────────────────────────────────────────
 
@@ -93,12 +99,6 @@ const THREAD_DATA = [
     trending: false,
   },
 ]
-
-// ─── Featured anime (top 3 by rating) ────────────────────────────────────────
-
-const FEATURED_ANIME = [...ANIME_DB]
-  .sort((a, b) => b.rating - a.rating)
-  .slice(0, 3)
 
 // ─── Thread count per anime ──────────────────────────────────────────────────
 
@@ -186,11 +186,13 @@ function FeaturedAnimeCard({ anime, index }: { anime: Anime; index: number }) {
 function ThreadRow({
   thread,
   index,
+  allAnime,
 }: {
   thread: (typeof THREAD_DATA)[number]
   index: number
+  allAnime: Anime[]
 }) {
-  const anime = ANIME_DB.find((a) => a.id === thread.animeId)
+  const anime = allAnime.find((a) => a.id === thread.animeId)
   if (!anime) return null
 
   return (
@@ -252,19 +254,22 @@ function ThreadRow({
 
 export default function AnimeDiscussionsPage() {
   const [query, setQuery] = useState("")
+  const { data: browseData } = useBrowseAnime({ limit: 20 })
+  const allAnime = (browseData?.data ?? []).map(mapDTO)
+  const FEATURED_ANIME = [...allAnime].sort((a, b) => b.rating - a.rating).slice(0, 3)
 
   const filteredThreads = useMemo(() => {
     if (!query.trim()) return THREAD_DATA
     const q = query.toLowerCase()
     return THREAD_DATA.filter((t) => {
-      const anime = ANIME_DB.find((a) => a.id === t.animeId)
+      const anime = allAnime.find((a) => a.id === t.animeId)
       return (
         t.title.toLowerCase().includes(q) ||
         anime?.title.toLowerCase().includes(q) ||
         t.author.toLowerCase().includes(q)
       )
     })
-  }, [query])
+  }, [query, allAnime])
 
   return (
     <div className="min-h-screen bg-[#020202] text-white pb-32">
@@ -350,7 +355,7 @@ export default function AnimeDiscussionsPage() {
           ) : (
             <div className="space-y-3">
               {filteredThreads.map((thread, i) => (
-                <ThreadRow key={thread.id} thread={thread} index={i} />
+                <ThreadRow key={thread.id} thread={thread} index={i} allAnime={allAnime} />
               ))}
             </div>
           )}

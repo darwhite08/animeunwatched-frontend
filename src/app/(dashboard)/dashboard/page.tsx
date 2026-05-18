@@ -44,8 +44,8 @@ export default function WorldClassDashboard() {
           </div>
 
           <div className="flex items-center gap-8 border-l border-white/10 pl-10">
-            <HeaderMetric label="Daily XP" value="+1,240" icon={Zap} color="text-yellow-400" />
-            <HeaderMetric label="Global Rank" value="#812" icon={TrendingUp} color="text-indigo-400" />
+            <HeaderMetric label="Reputation" value={String(user?.reputation ?? 0)} icon={Zap} color="text-yellow-400" />
+            <HeaderMetric label="Level" value={`${Math.max(1, Math.floor(Math.sqrt((user?.reputation ?? 0) * 100 / 1000)))}`} icon={TrendingUp} color="text-indigo-400" />
             <button className="p-4 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all">
                 <Bell size={20} className="text-white/60" />
             </button>
@@ -101,7 +101,7 @@ export default function WorldClassDashboard() {
            </div>
 
            <ActivityCard />
-           <XPCard xp={84000} reputation={840} />
+           <XPCard xp={(user?.reputation ?? 0) * 100} reputation={user?.reputation ?? 0} />
            <NowPlayingCard />
            <AnimeOfTheDayCard />
         </div>

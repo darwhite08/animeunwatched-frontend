@@ -1,10 +1,12 @@
 "use client"
 
-import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import Link from "next/link"
 import { MessageSquare, Heart, Trash2, Edit2, Plus, Eye } from "lucide-react"
 import { useToast } from "@/stores/toast.store"
+import { useAuthStore } from "@/stores/auth.store"
+import { useFeed } from "@/hooks/usePosts"
+import { useDeletePost } from "@/hooks/useThreads"
 
 const MY_POSTS = [
   { id:1, content:"Frieren's power scaling episode broke my brain. Mana concealment as the TRUE skill ceiling is the most thoughtful magic system reveal I've seen. 🤯", anime:"Frieren: Beyond Journey's End", likes:312, comments:48, views:2140, time:"2h ago" },
@@ -14,11 +16,42 @@ const MY_POSTS = [
   { id:5, content:"The way Vinland Saga S2 recontextualizes S1's violence is one of the most narratively brave things I've seen in anime.", anime:"Vinland Saga", likes:198, comments:27, views:1560, time:"3w ago" },
 ]
 
+function timeAgo(iso: string) {
+  const d = Date.now() - new Date(iso).getTime()
+  if (d < 60000) return "just now"
+  if (d < 3600000) return `${Math.floor(d/60000)}m ago`
+  if (d < 86400000) return `${Math.floor(d/3600000)}h ago`
+  return `${Math.floor(d/86400000)}d ago`
+}
+
 export default function MyPostsPage() {
   const { push } = useToast()
-  const [posts, setPosts] = useState(MY_POSTS)
+  const authUser = useAuthStore(s => s.user)
+  const { data: feedData } = useFeed()
 
-  const del = (id: number) => { setPosts(p => p.filter(x => x.id !== id)); push("Post deleted", "info") }
+  // Show only the user's own posts from their feed
+  const apiPosts = (feedData?.pages.flatMap(p => p.data) ?? [])
+    .filter(p => p.authorId === authUser?.id)
+    .map(p => ({
+      id: p.id as unknown as number,
+      content: p.content,
+      anime: p.anime?.title ?? "",
+      likes: p._count?.likes ?? 0,
+      comments: p._count?.comments ?? 0,
+      views: 0,
+      time: timeAgo(p.createdAt),
+    }))
+
+  const posts = apiPosts.length > 0 ? apiPosts : MY_POSTS
+  const deletePost = useDeletePost()
+  const del = (id: number) => {
+    const post = posts.find(p => p.id === id)
+    if (!post) return
+    deletePost.mutate(String(id), {
+      onSuccess: () => push("Post deleted", "info"),
+      onError: () => push("Failed to delete post", "error"),
+    })
+  }
 
   const totalLikes   = posts.reduce((s,p) => s + p.likes,    0)
   const totalViews   = posts.reduce((s,p) => s + p.views,    0)

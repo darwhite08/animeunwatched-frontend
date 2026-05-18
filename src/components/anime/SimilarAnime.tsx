@@ -4,17 +4,35 @@ import { motion } from "framer-motion"
 import Image from "next/image"
 import Link from "next/link"
 import { Star } from "lucide-react"
-import { ANIME_DB } from "@/lib/data/anime"
+import { useBrowseAnime } from "@/hooks/useAnime"
+import type { AnimeDTO } from "@/lib/api/types"
 
 interface SimilarAnimeProps {
   currentId: string
   genres: string[]
 }
 
+function mapDTO(a: AnimeDTO, i: number) {
+  return { id: String(a.malId), title: a.title, rating: a.score ?? 0, studio: a.studios[0] ?? "Unknown", image: a.imageUrl ?? "", genres: a.genres }
+}
+
 export default function SimilarAnime({ currentId, genres }: SimilarAnimeProps) {
-  const similar = ANIME_DB.filter(
-    (a) => a.id !== currentId && a.genres.some((g) => genres.includes(g))
-  ).slice(0, 4)
+  const { data, isLoading } = useBrowseAnime({ limit: 12 })
+  const similar = (data?.data ?? [])
+    .map(mapDTO)
+    .filter(a => a.id !== currentId && a.genres.some(g => genres.includes(g)))
+    .slice(0, 4)
+
+  if (isLoading) {
+    return (
+      <div className="space-y-4">
+        <h3 className="text-xs font-black uppercase italic tracking-widest text-white/40">More Like This</h3>
+        <div className="flex items-center justify-center h-20">
+          <div className="w-6 h-6 rounded-full border-2 border-indigo-500/30 border-t-indigo-500 animate-spin" />
+        </div>
+      </div>
+    )
+  }
 
   if (similar.length === 0) return null
 

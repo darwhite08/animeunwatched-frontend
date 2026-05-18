@@ -102,7 +102,7 @@ export default function Footer() {
 
             <div className="flex items-center gap-3">
               {[
-                { Icon: Github,  href: "https://github.com/darwhite08", label: "GitHub"  },
+                { Icon: Github,  href: "https://github.com/animeunwatched", label: "GitHub"  },
                 { Icon: Twitter, href: "https://twitter.com",           label: "Twitter" },
               ].map(({ Icon, href, label }) => (
                 <motion.a

@@ -16,6 +16,7 @@ import {
   Zap,
 } from "lucide-react"
 import { useToast } from "@/stores/toast.store"
+import { useClubs, useJoinClub } from "@/hooks/useClubs"
 
 /* ── Types ── */
 type Club = {
@@ -212,22 +213,25 @@ function ClubCard({
 /* ── Page ── */
 export default function ClubsPage() {
   const { push } = useToast()
-  const [clubs, setClubs] = useState<Club[]>(INITIAL_CLUBS)
   const [search, setSearch] = useState("")
   const [activeCategory, setActiveCategory] = useState("All")
 
+  const { data: clubsData } = useClubs()
+
+  // Merge real API clubs with mock fallback
+  const apiClubs: Club[] = (clubsData?.data ?? []).map(c => ({
+    id: c.id, slug: c.slug, name: c.name,
+    description: c.description ?? "A community for anime fans.",
+    memberCount: c._count.members, threadCount: c._count.threads,
+    category: "Discussion", coverGradient: "from-indigo-800/30 to-violet-800/20",
+    reputation: c.reputation, isJoined: false,
+  }))
+
+  const clubs: Club[] = apiClubs.length > 0 ? apiClubs : INITIAL_CLUBS
+
   const toggleJoin = (id: string) => {
-    setClubs((prev) =>
-      prev.map((c) => {
-        if (c.id !== id) return c
-        const next = { ...c, isJoined: !c.isJoined }
-        push(
-          next.isJoined ? `Joined ${c.name}!` : `Left ${c.name}`,
-          next.isJoined ? "success" : "info",
-        )
-        return next
-      }),
-    )
+    const c = clubs.find(x => x.id === id)
+    if (c) push(c.isJoined ? `Left ${c.name}` : `Joined ${c.name}!`, c.isJoined ? "info" : "success")
   }
 
   const filtered = clubs.filter((c) => {

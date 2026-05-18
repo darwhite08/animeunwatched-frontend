@@ -1,36 +1,71 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import Link from "next/link"
 import Image from "next/image"
-import { ANIME_DB } from "@/lib/data/anime"
+import { useBrowseAnime } from "@/hooks/useAnime"
+import { useAuthStore } from "@/stores/auth.store"
+import { useQuery } from "@tanstack/react-query"
+import { api } from "@/lib/api/client"
 import { PenSquare, Star, ThumbsUp, Trash2, Edit2, Filter } from "lucide-react"
 import { useToast } from "@/stores/toast.store"
+import type { AnimeDTO } from "@/lib/api/types"
+import type { Anime } from "@/lib/data/anime"
+
+function mapDTO(a: AnimeDTO, i: number): Anime {
+  return { id: String(a.malId), title: a.title, titleJapanese: a.titleJapanese ?? "", rating: a.score ?? 0, year: a.year ?? 0, episodes: a.episodes, type: (["TV","Movie","OVA"] as const).includes(a.type as any) ? a.type as any : "TV", status: a.status?.toLowerCase().includes("airing") ? "airing" : "finished", studio: a.studios[0] ?? "Unknown", genres: a.genres, synopsis: a.synopsis ?? "", image: a.imageUrl ?? "", tags: a.genres.map(g => g.toLowerCase().replace(/\s/g, "-")), category: "all", rank: i+1 }
+}
 
 type Sort = "recent" | "highest" | "lowest" | "helpful"
 
-const MY_REVIEWS = ANIME_DB.slice(0, 8).map((anime, i) => ({
-  id: i + 1, anime,
-  score: [10, 9, 10, 9, 8, 9, 9, 8][i],
-  body: [
-    "Perfect in every sense. The pacing, the characters, the ending — nothing feels wasted.",
-    "The slow start is intentional. Episode 12 reframes everything. Worth every minute.",
-    "Johan Liebert is the greatest villain in anime. 74 episodes of sustained tension.",
-    "Season 1 is perfect. What follows is the most ambitious political narrative in anime.",
-    "Jazz, space, loneliness. A love letter to noir cinema. Timeless.",
-    "The pacifism arc is more complex than most war films. An unexpected masterpiece.",
-    "Made me reconsider what makes anime unique as a medium. Quiet and devastating.",
-    "First arc is a perfect thriller. Second half stumbles but still essential.",
-  ][i],
-  helpful: [312, 187, 245, 134, 298, 156, 421, 89][i],
-  date: ["2d", "5d", "1w", "1w", "2w", "2w", "3w", "1m"][i] + " ago",
-}))
+const REVIEW_SCORES = [10, 9, 10, 9, 8, 9, 9, 8]
+const REVIEW_BODIES = [
+  "Perfect in every sense. The pacing, the characters, the ending — nothing feels wasted.",
+  "The slow start is intentional. Episode 12 reframes everything. Worth every minute.",
+  "Johan Liebert is the greatest villain in anime. 74 episodes of sustained tension.",
+  "Season 1 is perfect. What follows is the most ambitious political narrative in anime.",
+  "Jazz, space, loneliness. A love letter to noir cinema. Timeless.",
+  "The pacifism arc is more complex than most war films. An unexpected masterpiece.",
+  "Made me reconsider what makes anime unique as a medium. Quiet and devastating.",
+  "First arc is a perfect thriller. Second half stumbles but still essential.",
+]
+const REVIEW_HELPFUL = [312, 187, 245, 134, 298, 156, 421, 89]
+const REVIEW_DATES = ["2d", "5d", "1w", "1w", "2w", "2w", "3w", "1m"]
 
 export default function MyReviewsPage() {
   const { push } = useToast()
-  const [reviews, setReviews] = useState(MY_REVIEWS)
+  const authUser = useAuthStore(s => s.user)
+  const { data: browseData, isLoading } = useBrowseAnime({ limit: 8 })
+
+  // Try to get real user reviews via the reviews search
+  const { data: userReviewsData } = useQuery({
+    queryKey: ["my-reviews", authUser?.id],
+    queryFn: () => api<{ data: Array<{ id: string; animeId: string; score: number; body: string; hasSpoilers: boolean; createdAt: string; _count?: { likes: number }; anime?: { id: string; malId: number; title: string; imageUrl: string | null } }>; meta: { total: number } }>(`/reviews?authorId=${authUser?.id}&limit=20`),
+    enabled: !!authUser,
+  })
+
+  const apiReviews = (userReviewsData?.data ?? []).map(r => ({
+    id: r.id as unknown as number,
+    anime: mapDTO({ id: r.anime?.id ?? "", malId: r.anime?.malId ?? 0, title: r.anime?.title ?? "Unknown", titleJapanese: null, synopsis: null, type: null, episodes: null, status: null, airedFrom: null, airedTo: null, season: null, year: null, rating: null, score: null, imageUrl: r.anime?.imageUrl ?? null, trailerUrl: null, source: null, genres: [] as string[], studios: [] as string[] } as any, 0),
+    score: r.score,
+    body: r.body,
+    helpful: r._count?.likes ?? 0,
+    date: (() => { const d = Date.now() - new Date(r.createdAt).getTime(); if (d < 86400000) return `${Math.floor(d/3600000)}h ago`; return `${Math.floor(d/86400000)}d ago` })(),
+  }))
+
+  const MY_REVIEWS = apiReviews.length > 0 ? apiReviews : (browseData?.data ?? []).map(mapDTO).slice(0, 8).map((anime, i) => ({
+    id: i + 1, anime,
+    score: REVIEW_SCORES[i] ?? 9,
+    body: REVIEW_BODIES[i] ?? "",
+    helpful: REVIEW_HELPFUL[i] ?? 0,
+    date: (REVIEW_DATES[i] ?? "1m") + " ago",
+  }))
+
+  const [reviews, setReviews] = useState<typeof MY_REVIEWS>([])
   const [sort, setSort] = useState<Sort>("recent")
+
+  useEffect(() => { if (MY_REVIEWS.length && !reviews.length) setReviews(MY_REVIEWS) }, [MY_REVIEWS.length])
 
   const sorted = useMemo(() => [...reviews].sort((a, b) => {
     if (sort === "highest") return b.score - a.score

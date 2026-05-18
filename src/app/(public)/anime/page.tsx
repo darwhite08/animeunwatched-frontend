@@ -4,11 +4,30 @@ import { useState } from "react"
 import { motion } from "framer-motion"
 import Link from "next/link"
 import Image from "next/image"
-import { ANIME_DB } from "@/lib/data/anime"
 import AnimeCard from "@/components/bestanimelist/AnimeCard"
 import AnimeModal from "@/components/bestanimelist/AnimeModal"
 import type { Anime } from "@/lib/data/anime"
 import { Calendar, TrendingUp, Star, Clock } from "lucide-react"
+import { useBrowseAnime } from "@/hooks/useAnime"
+import type { AnimeDTO } from "@/lib/api/types"
+
+const mapDTO = (a: AnimeDTO, i: number): Anime => ({
+  id: String(a.malId),
+  title: a.title,
+  titleJapanese: a.titleJapanese ?? "",
+  rating: a.score ?? 0,
+  year: a.year ?? 0,
+  episodes: a.episodes,
+  type: (["TV", "Movie", "OVA"] as const).includes(a.type as any) ? a.type as any : "TV",
+  status: a.status?.toLowerCase().includes("airing") ? "airing" : "finished",
+  studio: a.studios[0] ?? "Unknown",
+  genres: a.genres,
+  synopsis: a.synopsis ?? "",
+  image: a.imageUrl ?? "",
+  tags: a.genres.map(g => g.toLowerCase().replace(/\s/g, "-")),
+  category: "all",
+  rank: i + 1,
+})
 
 const SEASONAL_YEARS = [2024, 2023, 2022, 2021, 2020]
 const SEASONS = ["winter", "spring", "summer", "fall"] as const
@@ -17,9 +36,14 @@ const SEASON_LABELS: Record<string, string> = { winter: "❄️ Winter", spring:
 export default function AnimeBrowsePage() {
   const [selected, setSelected] = useState<Anime | null>(null)
 
-  const TOP = ANIME_DB.sort((a, b) => b.rating - a.rating).slice(0, 12)
-  const AIRING = ANIME_DB.filter(a => a.status === "airing").slice(0, 6)
-  const RECENT = ANIME_DB.filter(a => a.year >= 2022).sort((a, b) => b.year - a.year).slice(0, 6)
+  const { data: browseData, isLoading } = useBrowseAnime({ limit: 24 })
+  const animeList = (browseData?.data ?? []).map(mapDTO)
+
+  if (isLoading) return null
+
+  const TOP = [...animeList].sort((a, b) => b.rating - a.rating).slice(0, 12)
+  const AIRING = animeList.filter(a => a.status === "airing").slice(0, 6)
+  const RECENT = animeList.filter(a => a.year >= 2022).sort((a, b) => b.year - a.year).slice(0, 6)
 
   return (
     <div className="min-h-screen bg-[#020202] text-white pb-32">
@@ -90,7 +114,7 @@ export default function AnimeBrowsePage() {
                   >
                     <span className="text-sm font-bold text-white/60 group-hover:text-white transition-colors">{y}</span>
                     <span className="text-[9px] text-white/20 group-hover:text-indigo-400 transition-colors font-mono">
-                      {ANIME_DB.filter(a => a.year === y).length} anime
+                      {animeList.filter(a => a.year === y).length} anime
                     </span>
                   </Link>
                 ))}

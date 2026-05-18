@@ -3,21 +3,12 @@
 import Link from "next/link"
 import { motion } from "framer-motion"
 import { Star, ChevronRight } from "lucide-react"
-import { ANIME_DB } from "@/lib/data/anime"
+import { useBrowseAnime } from "@/hooks/useAnime"
+import type { AnimeDTO } from "@/lib/api/types"
 
-/* ── Mock personal scores for the top-rated picks ── */
-const PERSONAL_SCORES: Record<string, number> = {
-  "fullmetal-alchemist-brotherhood": 10,
-  "steins-gate": 9.5,
-  "attack-on-titan": 9.5,
-  "hunter-x-hunter-2011": 9,
-  "monster": 9,
+function mapDTO(a: AnimeDTO, i: number) {
+  return { id: String(a.malId), title: a.title, rating: a.score ?? 0, studio: a.studios[0] ?? "Unknown", image: a.imageUrl ?? "" }
 }
-
-const TOP_FIVE = ANIME_DB
-  .filter(a => Object.keys(PERSONAL_SCORES).includes(a.id))
-  .sort((a, b) => (PERSONAL_SCORES[b.id] ?? 0) - (PERSONAL_SCORES[a.id] ?? 0))
-  .slice(0, 5)
 
 /* ── Score dot colour ── */
 function scoreColour(score: number) {
@@ -28,6 +19,17 @@ function scoreColour(score: number) {
 
 /* ── Component ── */
 export default function TopAnimeCard() {
+  const { data, isLoading } = useBrowseAnime({ limit: 5 })
+  const TOP_FIVE = (data?.data ?? []).map(mapDTO)
+
+  if (isLoading) {
+    return (
+      <div className="p-8 rounded-[2.5rem] border border-white/5 bg-[#0a0a0a] relative overflow-hidden h-48 flex items-center justify-center">
+        <div className="w-8 h-8 rounded-full border-2 border-amber-500/30 border-t-amber-500 animate-spin" />
+      </div>
+    )
+  }
+
   return (
     <div className="p-8 rounded-[2.5rem] border border-white/5 bg-[#0a0a0a] relative overflow-hidden">
       {/* Glow */}
@@ -50,7 +52,7 @@ export default function TopAnimeCard() {
       {/* Ranked list */}
       <ol className="space-y-2 relative z-10">
         {TOP_FIVE.map((anime, i) => {
-          const personal = PERSONAL_SCORES[anime.id] ?? 0
+          const personal = anime.rating
 
           return (
             <motion.li

@@ -27,13 +27,8 @@ import Image from "next/image"
 import Link from "next/link"
 import { useRef, useState } from "react"
 import ShareCard from "@/components/ui/ShareCard"
-import { ANIME_DB } from "@/lib/data/anime"
-
-/* ─────────────────────────────────────────────
-   Mock data
-───────────────────────────────────────────── */
-
-const WATCHLIST_ANIME = ANIME_DB.filter((a) => a.rating >= 8.8).slice(0, 8)
+import { useAuthStore } from "@/stores/auth.store"
+import { useUserList } from "@/hooks/useLists"
 
 const MOCK_REVIEWS = [
   {
@@ -124,8 +119,6 @@ const ACTIVITY_EVENTS = [
 const TABS = ["Activity", "Watchlist", "Reviews", "Blogs"] as const
 type Tab = (typeof TABS)[number]
 
-const WATCHLIST_STATUSES = ["Completed", "Watching"] as const
-
 /* ─────────────────────────────────────────────
    Sub-components
 ───────────────────────────────────────────── */
@@ -205,11 +198,22 @@ function ActivityTab() {
 }
 
 function WatchlistTab() {
+  const authUser = useAuthStore(s => s.user)
+  const { data: listData, isLoading } = useUserList(authUser?.username ?? "")
+  const watchlistAnime = (listData?.data ?? []).slice(0, 8).map(e => ({
+    id: String(e.anime?.malId ?? e.animeId),
+    title: e.anime?.title ?? "Unknown",
+    image: e.anime?.imageUrl ?? "",
+    rating: e.anime?.score ?? 0,
+    status: e.status,
+  }))
+  if (isLoading) return <div className="text-white/30 text-sm py-10 text-center">Loading…</div>
+  if (!authUser) return <div className="text-white/30 text-sm py-10 text-center">Sign in to see your watchlist</div>
+  if (watchlistAnime.length === 0) return <div className="text-white/30 text-sm py-10 text-center">No entries in your list yet</div>
   return (
     <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-      {WATCHLIST_ANIME.map((anime, i) => {
-        const status = WATCHLIST_STATUSES[i % 2]
-        const isWatching = status === "Watching"
+      {watchlistAnime.map((anime, i) => {
+        const isWatching = anime.status === "WATCHING"
         return (
           <motion.div
             key={anime.id}
@@ -394,12 +398,13 @@ export default function WorldClassProfile() {
   })
   const [shareOpen, setShareOpen] = useState(false)
   const [activeTab, setActiveTab] = useState<Tab>("Activity")
+  const authUser = useAuthStore(s => s.user)
 
   const stats = [
-    { label: "Archive", value: "124", icon: Bookmark, color: "text-indigo-400", sub: "Anime cataloged" },
-    { label: "Momentum", value: "22", icon: Flame, color: "text-orange-500", sub: "Day watch streak" },
-    { label: "Standing", value: "812", icon: Globe, color: "text-blue-400", sub: "Global percentile" },
-    { label: "Trust", value: "98", icon: ShieldCheck, color: "text-emerald-400", sub: "Verification score" },
+    { label: "Archive",  value: String(authUser ? "..." : "0"),   icon: Bookmark,    color: "text-indigo-400", sub: "Anime cataloged" },
+    { label: "Momentum", value: "22",                              icon: Flame,        color: "text-orange-500", sub: "Day watch streak" },
+    { label: "Standing", value: "812",                             icon: Globe,        color: "text-blue-400",   sub: "Global percentile" },
+    { label: "Trust",    value: String(authUser?.reputation ?? 0), icon: ShieldCheck,  color: "text-emerald-400",sub: "Reputation score" },
   ]
 
   return (
@@ -442,7 +447,7 @@ export default function WorldClassProfile() {
               <div className="space-y-1">
                 <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="flex items-center justify-center md:justify-start gap-4">
                   <h1 className="text-6xl md:text-7xl font-black tracking-tighter text-white">
-                    Priyanshu
+                    {authUser?.displayName ?? authUser?.username ?? "Shinobi"}
                   </h1>
                   <div className="p-[1px] rounded-full bg-gradient-to-r from-indigo-500 to-purple-500">
                     <span className="px-4 py-1 rounded-full bg-black text-indigo-400 text-[10px] font-black uppercase tracking-[0.2em] block">
@@ -606,8 +611,8 @@ export default function WorldClassProfile() {
         isOpen={shareOpen}
         onClose={() => setShareOpen(false)}
         title="My Anime Profile"
-        subtitle="darwhite08 · Level 20 Shinobi"
-        url="https://animeunwatched.com/u/darwhite08"
+        subtitle={`${authUser?.username ?? "shinobi"} · Level ${Math.max(1, Math.floor(Math.sqrt((authUser?.reputation ?? 0) * 100 / 1000)))} Shinobi`}
+        url={`https://animeunwatched.com/u/${authUser?.username ?? "shinobi"}`}
         type="profile"
       />
     </div>

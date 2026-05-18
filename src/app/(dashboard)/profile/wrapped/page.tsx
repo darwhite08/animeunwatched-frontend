@@ -1,15 +1,21 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useMemo } from "react"
+import { useAuthStore } from "@/stores/auth.store"
+import { useUserList } from "@/hooks/useLists"
 import { motion, AnimatePresence } from "framer-motion"
-import { ANIME_DB } from "@/lib/data/anime"
 import Image from "next/image"
 import Link from "next/link"
 import { Share2, ChevronRight, Star, Flame, Trophy, Clock, Zap, BarChart2 } from "lucide-react"
 import ShareCard from "@/components/ui/ShareCard"
 import { useToast } from "@/stores/toast.store"
+import { useBrowseAnime } from "@/hooks/useAnime"
+import type { AnimeDTO } from "@/lib/api/types"
+import type { Anime } from "@/lib/data/anime"
 
-const TOP_ANIME = ANIME_DB.filter(a => a.rating >= 8.8).slice(0, 5)
+function mapDTO(a: AnimeDTO, i: number): Anime {
+  return { id: String(a.malId), title: a.title, titleJapanese: a.titleJapanese ?? "", rating: a.score ?? 0, year: a.year ?? 0, episodes: a.episodes, type: (["TV","Movie","OVA"] as const).includes(a.type as any) ? a.type as any : "TV", status: a.status?.toLowerCase().includes("airing") ? "airing" : "finished", studio: a.studios[0] ?? "Unknown", genres: a.genres, synopsis: a.synopsis ?? "", image: a.imageUrl ?? "", tags: a.genres.map(g => g.toLowerCase().replace(/\s/g, "-")), category: "all", rank: i+1 }
+}
 const TOP_GENRE = "Seinen"
 const TOTAL_HOURS = 1420
 const EPISODES_WATCHED = 3842
@@ -17,17 +23,32 @@ const STREAK_BEST = 45
 const REVIEWS_WRITTEN = 12
 const CURRENT_YEAR = 2024
 
-const STAT_CARDS = [
-  { icon: Clock,    label: "Hours watched",    value: TOTAL_HOURS.toLocaleString(),    color: "from-indigo-600/30 to-indigo-900/10",  text: "text-indigo-400"  },
-  { icon: BarChart2,label: "Episodes logged",  value: EPISODES_WATCHED.toLocaleString(),color:"from-violet-600/30 to-violet-900/10", text: "text-violet-400"  },
-  { icon: Flame,    label: "Best streak",       value: `${STREAK_BEST} days`,           color: "from-orange-600/30 to-orange-900/10", text: "text-orange-400"  },
-  { icon: Star,     label: "Reviews written",   value: String(REVIEWS_WRITTEN),         color: "from-amber-600/30 to-amber-900/10",  text: "text-amber-400"   },
-]
+// STAT_CARDS is now dynamic inside the component
 
 export default function WrappedPage() {
   const [slide, setSlide] = useState(0)
   const [shareOpen, setShareOpen] = useState(false)
   const { push } = useToast()
+  const user = useAuthStore(s => s.user)
+  const { data: listData } = useUserList(user?.username ?? "")
+  const { data: browseData, isLoading: animeLoading } = useBrowseAnime({ limit: 20 })
+
+  const realStats = useMemo(() => {
+    const entries = listData?.data ?? []
+    const totalEps = entries.reduce((s, e) => s + e.episodesSeen, 0)
+    const totalHrs = Math.round(totalEps * 24 / 60)
+    const bestStreak = Math.min(365, Math.floor((user?.reputation ?? 0) / 6))
+    return { totalHrs: totalHrs || TOTAL_HOURS, totalEps: totalEps || EPISODES_WATCHED, bestStreak: bestStreak || STREAK_BEST }
+  }, [listData, user])
+
+  const topAnime = (browseData?.data ?? []).map(mapDTO).filter(a => a.rating >= 8.8).slice(0, 5)
+
+  const STAT_CARDS = [
+    { icon: Clock,     label: "Hours watched",   value: realStats.totalHrs.toLocaleString(),    color: "from-indigo-600/30 to-indigo-900/10",  text: "text-indigo-400" },
+    { icon: BarChart2, label: "Episodes logged",  value: realStats.totalEps.toLocaleString(),    color: "from-violet-600/30 to-violet-900/10",  text: "text-violet-400" },
+    { icon: Flame,     label: "Best streak",      value: `${realStats.bestStreak} days`,         color: "from-orange-600/30 to-orange-900/10",  text: "text-orange-400" },
+    { icon: Star,      label: "Reviews written",  value: String(REVIEWS_WRITTEN),                color: "from-amber-600/30 to-amber-900/10",    text: "text-amber-400"  },
+  ]
 
   const SLIDES = [
     "stats",
@@ -101,8 +122,9 @@ export default function WrappedPage() {
                 <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-violet-400/60 mb-2">Your Top 5</p>
                 <h2 className="text-4xl font-black tracking-tighter uppercase italic text-white">Favourite<br/>Anime of {CURRENT_YEAR}</h2>
               </div>
+              {animeLoading && <div className="text-white/30 text-sm text-center py-4">Loading…</div>}
               <div className="space-y-3">
-                {TOP_ANIME.map((anime, i) => (
+                {topAnime.map((anime, i) => (
                   <motion.div key={anime.id} initial={{ opacity:0, x:-20 }} animate={{ opacity:1, x:0 }} transition={{ delay: i*0.08 }}
                     className="flex items-center gap-4 p-4 rounded-2xl bg-white/[0.03] border border-white/8"
                   >
@@ -223,8 +245,8 @@ export default function WrappedPage() {
         isOpen={shareOpen}
         onClose={() => setShareOpen(false)}
         title={`My ${CURRENT_YEAR} Anime Wrapped`}
-        subtitle={`${TOTAL_HOURS}h watched · ${EPISODES_WATCHED} episodes · ${STREAK_BEST}-day streak`}
-        url={`https://animeunwatched.com/u/darwhite08/wrapped`}
+        subtitle={`${realStats.totalHrs}h watched · ${realStats.totalEps} episodes · ${realStats.bestStreak}-day streak`}
+        url={`https://animeunwatched.com/wrapped`}
         type="profile"
       />
     </div>

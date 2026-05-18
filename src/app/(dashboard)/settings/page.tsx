@@ -7,6 +7,7 @@ import {
   Save, Loader2, CheckCircle2, ChevronRight, Moon, Sun,
 } from "lucide-react"
 import { useToast } from "@/stores/toast.store"
+import { useAuthStore } from "@/stores/auth.store"
 
 type Tab = "account" | "notifications" | "appearance" | "privacy"
 
@@ -65,7 +66,8 @@ export default function SettingsPage() {
 function AccountTab() {
   const { push } = useToast()
   const [saving, setSaving] = useState(false)
-  const [form, setForm] = useState({ displayName: "Priyanshu", username: "darwhite08", email: "chandrapriyanshu10@gmail.com" })
+  const storeUser = useAuthStore(s => s.user)
+  const [form, setForm] = useState({ displayName: storeUser?.displayName ?? "", username: storeUser?.username ?? "", email: storeUser?.email ?? "" })
   const set = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement>) => setForm(f => ({ ...f, [k]: e.target.value }))
 
   const save = async () => {

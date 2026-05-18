@@ -1,34 +1,38 @@
 "use client"
 
-import { use } from "react"
-import { ANIME_DB } from "@/lib/data/anime"
-import { notFound } from "next/navigation"
+import { use, useState } from "react"
 import Link from "next/link"
 import { Star, ThumbsUp, ChevronLeft, Flag } from "lucide-react"
-import { useState } from "react"
 import { useToast } from "@/stores/toast.store"
 import { motion } from "framer-motion"
 import Image from "next/image"
+import { useBrowseAnime } from "@/hooks/useAnime"
+import type { AnimeDTO } from "@/lib/api/types"
+import type { Anime } from "@/lib/data/anime"
+
+function mapDTO(a: AnimeDTO, i: number): Anime {
+  return { id: String(a.malId), title: a.title, titleJapanese: a.titleJapanese ?? "", rating: a.score ?? 0, year: a.year ?? 0, episodes: a.episodes, type: (["TV","Movie","OVA"] as const).includes(a.type as any) ? a.type as any : "TV", status: a.status?.toLowerCase().includes("airing") ? "airing" : "finished", studio: a.studios[0] ?? "Unknown", genres: a.genres, synopsis: a.synopsis ?? "", image: a.imageUrl ?? "", tags: a.genres.map(g => g.toLowerCase().replace(/\s/g, "-")), category: "all", rank: i+1 }
+}
 
 export default function ReviewDetailPage({ params }: { params: Promise<{ id: string; reviewId: string }> }) {
   const { id, reviewId } = use(params)
-  const anime = ANIME_DB.find(a => a.id === id)
-  if (!anime) notFound()
+  const { data: browseData, isLoading } = useBrowseAnime({ limit: 1 })
+  const anime = (browseData?.data ?? []).map(mapDTO)[0] ?? null
   const { push } = useToast()
 
   const seed = reviewId.split("").reduce((a, c) => a + c.charCodeAt(0), 0)
   const authors = ["Otaku_Arch","ShadowWatcher","NeuralBot_X","VoidSeeker","CipherRonin"]
   const bodies = [
-    `An absolute masterpiece in every definition of the word. ${anime.title} manages to weave together themes of sacrifice, ambition, and human connection in a way that few anime—or any medium—have achieved. Every arc delivers on the promises made early on, and the finale earns every emotional beat.
+    `An absolute masterpiece in every definition of the word. ${anime?.title ?? ""} manages to weave together themes of sacrifice, ambition, and human connection in a way that few anime—or any medium—have achieved. Every arc delivers on the promises made early on, and the finale earns every emotional beat.
 
-The animation quality maintained by ${anime.studio} is consistently high, with key fight sequences and emotional moments given particular attention. The music composition ties everything together into a cohesive world.
+The animation quality maintained by ${anime?.studio ?? ""} is consistently high, with key fight sequences and emotional moments given particular attention. The music composition ties everything together into a cohesive world.
 
-If you have not yet watched ${anime.title}, stop what you're doing. This is required viewing for any anime enthusiast, and even for those who consider themselves casual fans. It will change your perspective on what animation can accomplish.`,
-    `I'll be honest: I went into ${anime.title} with low expectations. Everyone hyped it so much that I braced for disappointment. I was wrong.
+If you have not yet watched ${anime?.title ?? ""}, stop what you're doing. This is required viewing for any anime enthusiast, and even for those who consider themselves casual fans. It will change your perspective on what animation can accomplish.`,
+    `I'll be honest: I went into ${anime?.title ?? ""} with low expectations. Everyone hyped it so much that I braced for disappointment. I was wrong.
 
 The character writing is exceptional. Every major player has an arc that feels earned and complete. The pacing trusts the audience—it doesn't rush to deliver payoff, and it doesn't linger unnecessarily.
 
-${anime.studio}'s production values are evident throughout. The directing choices feel intentional rather than formulaic. This is anime made by people who care deeply about the craft.
+${anime?.studio ?? ""}'s production values are evident throughout. The directing choices feel intentional rather than formulaic. This is anime made by people who care deeply about the craft.
 
 My only minor criticism is that the middle section has a few episodes that feel slightly slower, but in retrospect, those episodes are doing crucial groundwork. The payoff justified every moment.`,
   ]
@@ -52,12 +56,14 @@ My only minor criticism is that the middle section has a few episodes that feel 
     setHelpCount(c => liked ? c - 1 : c + 1)
   }
 
+  if (isLoading) return <div className="min-h-screen bg-[#020202] text-white flex items-center justify-center text-white/30">Loading…</div>
+
   return (
     <div className="min-h-screen bg-[#020202] text-white pb-32">
       <div className="max-w-3xl mx-auto px-6 pt-32 space-y-8">
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-white/30">
-          <Link href={`/anime/${id}`} className="hover:text-white transition-colors">{anime.title}</Link>
+          <Link href={`/anime/${id}`} className="hover:text-white transition-colors">{anime?.title ?? id}</Link>
           <span>·</span>
           <Link href={`/anime/${id}/reviews`} className="hover:text-white transition-colors">Reviews</Link>
           <span>·</span>
@@ -67,11 +73,11 @@ My only minor criticism is that the middle section has a few episodes that feel 
         {/* Anime mini header */}
         <div className="flex items-center gap-4 p-5 rounded-2xl bg-white/[0.02] border border-white/8">
           <div className="relative h-14 w-10 rounded-xl overflow-hidden shrink-0">
-            <Image src={anime.image} alt={anime.title} fill className="object-cover" sizes="40px" />
+            <Image src={anime?.image ?? ""} alt={anime?.title ?? ""} fill className="object-cover" sizes="40px" />
           </div>
           <div>
-            <Link href={`/anime/${id}`} className="font-black text-white hover:text-indigo-300 transition-colors">{anime.title}</Link>
-            <p className="text-[10px] text-white/35 mt-0.5">{anime.studio} · {anime.year}</p>
+            <Link href={`/anime/${id}`} className="font-black text-white hover:text-indigo-300 transition-colors">{anime?.title ?? id}</Link>
+            <p className="text-[10px] text-white/35 mt-0.5">{anime?.studio} · {anime?.year}</p>
           </div>
         </div>
 

@@ -3,11 +3,27 @@
 import { useState, useEffect, useMemo, Suspense } from "react"
 import { useSearchParams } from "next/navigation"
 import { motion, AnimatePresence } from "framer-motion"
-import { Search, X, Star, Filter } from "lucide-react"
-import { searchAnime, ANIME_DB, type Anime } from "@/lib/data/anime"
+import { Search, X, Star, Loader2 } from "lucide-react"
+import type { Anime } from "@/lib/data/anime"
+import type { AnimeDTO } from "@/lib/api/types"
 import AnimeModal from "@/components/bestanimelist/AnimeModal"
 import Link from "next/link"
 import Image from "next/image"
+import { useSearchAnimeApi, useBrowseAnime } from "@/hooks/useAnime"
+import { useLeaderboard } from "@/hooks/useLeaderboard"
+import { useDiscover } from "@/hooks/usePosts"
+
+function mapDTO(a: AnimeDTO, i: number): Anime {
+  return {
+    id: String(a.malId), title: a.title, titleJapanese: a.titleJapanese ?? "",
+    rating: a.score ?? 0, year: a.year ?? 0, episodes: a.episodes,
+    type: (["TV","Movie","OVA"] as const).includes(a.type as "TV"|"Movie"|"OVA") ? (a.type as "TV"|"Movie"|"OVA") : "TV",
+    status: a.status?.toLowerCase().includes("airing") ? "airing" : "finished",
+    studio: a.studios[0] ?? "Unknown", genres: a.genres,
+    synopsis: a.synopsis ?? "", image: a.imageUrl ?? "/assets/png/tanjiro.png",
+    tags: a.genres.map(g => g.toLowerCase().replace(/\s/g, "-")), category: "all", rank: i + 1,
+  }
+}
 
 type Tab = "anime" | "users" | "posts"
 
@@ -25,16 +41,27 @@ function SearchContent() {
   const [tab,    setTab]    = useState<Tab>("anime")
   const [modal,  setModal]  = useState<Anime | null>(null)
 
-  const animeResults = useMemo(() => searchAnime(query).slice(0, 20), [query])
-  const userResults  = useMemo(() =>
-    MOCK_USERS.filter(u =>
-      !query || u.name.toLowerCase().includes(query.toLowerCase())
-    ), [query])
+  const searchQ = query.trim()
+  const { data: searchData, isLoading: searchLoading } = useSearchAnimeApi(searchQ)
+  const { data: browseData } = useBrowseAnime({ limit: 20 })
+  const { data: lbData } = useLeaderboard(20)
+  const { data: discoverPosts } = useDiscover()
+
+  const animeResults = useMemo(() => {
+    if (searchQ.length >= 2) return (searchData?.data ?? []).map(mapDTO)
+    return (browseData?.data ?? []).map(mapDTO)
+  }, [searchQ, searchData, browseData])
+
+  const apiUsers = (lbData?.data ?? []).map(u => ({ id: u.username, name: u.displayName, bio: `Level ${u.level} Shinobi`, archived: u.archived }))
+  const userResults = useMemo(() => {
+    const base = apiUsers.length > 0 ? apiUsers : MOCK_USERS
+    return base.filter(u => !query || u.name.toLowerCase().includes(query.toLowerCase()) || u.id.toLowerCase().includes(query.toLowerCase()))
+  }, [query, apiUsers])
 
   const TABS: { id: Tab; label: string; count: number }[] = [
     { id: "anime", label: "Anime",   count: animeResults.length },
     { id: "users", label: "Users",   count: userResults.length  },
-    { id: "posts", label: "Posts",   count: query ? 4 : 0       },
+    { id: "posts", label: "Posts",   count: (discoverPosts?.pages[0]?.data ?? []).length || 0 },
   ]
 
   return (
@@ -104,7 +131,12 @@ function SearchContent() {
         <AnimatePresence mode="wait">
           {tab === "anime" && (
             <motion.div key="anime" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-              {animeResults.length > 0 ? (
+              {searchLoading && searchQ.length >= 2 && (
+                <div className="flex items-center justify-center py-16">
+                  <Loader2 size={24} className="animate-spin text-indigo-400" />
+                </div>
+              )}
+              {!searchLoading && animeResults.length > 0 ? (
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-5">
                   {animeResults.map((anime, i) => (
                     <motion.div
@@ -176,22 +208,22 @@ function SearchContent() {
             <motion.div key="posts" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
               {query ? (
                 <div className="space-y-3">
-                  {["Why Frieren is the anime of the decade", "Gojo's Infinity — a physics breakdown", "Top 10 underrated gems of 2024", "Chainsaw Man season 2 predictions"].map((title, i) => (
-                    <motion.div
-                      key={title}
-                      initial={{ opacity: 0, y: 6 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: i * 0.05 }}
-                      className="p-5 rounded-2xl bg-white/[0.02] border border-white/8 hover:border-white/15 transition-all cursor-pointer"
-                    >
-                      <p className="font-bold text-white/80 hover:text-white">{title}</p>
-                      <div className="flex items-center gap-4 mt-2 text-xs text-white/25">
-                        <span>Otaku_Arch</span>
-                        <span>3h ago</span>
-                        <span>142 likes</span>
-                      </div>
-                    </motion.div>
-                  ))}
+                  {(discoverPosts?.pages[0]?.data ?? []).filter(p => !query || p.content.toLowerCase().includes(query.toLowerCase())).slice(0, 6).map((post, i) => {
+                    const author = post.author?.displayName ?? post.author?.username ?? "Anonymous"
+                    const d = Date.now() - new Date(post.createdAt).getTime()
+                    const timeStr = d < 3600000 ? `${Math.floor(d/60000)}m ago` : d < 86400000 ? `${Math.floor(d/3600000)}h ago` : `${Math.floor(d/86400000)}d ago`
+                    return (
+                      <motion.div key={post.id} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}
+                        className="p-5 rounded-2xl bg-white/[0.02] border border-white/8 hover:border-white/15 transition-all cursor-pointer">
+                        <p className="font-bold text-white/80 hover:text-white line-clamp-2">{post.content.slice(0, 100)}…</p>
+                        <div className="flex items-center gap-4 mt-2 text-xs text-white/25">
+                          <span>@{author}</span>
+                          <span>{timeStr}</span>
+                          <span>{post._count?.likes ?? 0} likes</span>
+                        </div>
+                      </motion.div>
+                    )
+                  })}
                 </div>
               ) : <EmptyState query="" tab="posts" />}
             </motion.div>

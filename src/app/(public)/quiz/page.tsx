@@ -3,13 +3,19 @@
 import { useState, useMemo } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { Brain, CheckCircle2, XCircle, Trophy, RotateCcw, ChevronRight } from "lucide-react"
-import { ANIME_DB } from "@/lib/data/anime"
+import { useBrowseAnime } from "@/hooks/useAnime"
+import type { AnimeDTO } from "@/lib/api/types"
+import type { Anime } from "@/lib/data/anime"
+
+function mapDTO(a: AnimeDTO, i: number): Anime {
+  return { id: String(a.malId), title: a.title, titleJapanese: a.titleJapanese ?? "", rating: a.score ?? 0, year: a.year ?? 0, episodes: a.episodes, type: (["TV","Movie","OVA"] as const).includes(a.type as any) ? a.type as any : "TV", status: a.status?.toLowerCase().includes("airing") ? "airing" : "finished", studio: a.studios[0] ?? "Unknown", genres: a.genres, synopsis: a.synopsis ?? "", image: a.imageUrl ?? "", tags: a.genres.map(g => g.toLowerCase().replace(/\s/g, "-")), category: "all", rank: i+1 }
+}
 
 type Question = { id: number; q: string; opts: string[]; correct: string; anime: string }
 
-function buildQuestions(): Question[] {
+function buildQuestions(animeList: Anime[]): Question[] {
   const qs: Question[] = []
-  ANIME_DB.forEach((anime, i) => {
+  animeList.forEach((anime, i) => {
     if (i % 3 === 0 && anime.studio) qs.push({ id: qs.length, q: `Which studio produced "${anime.title}"?`, opts: shuffled([anime.studio, "MAPPA", "Madhouse", "Bones"].filter((v,idx,a)=>a.indexOf(v)===idx).slice(0,4)), correct: anime.studio, anime: anime.title })
     if (i % 3 === 1 && anime.year) qs.push({ id: qs.length, q: `In what year did "${anime.title}" premiere?`, opts: shuffled([String(anime.year), String(anime.year-1), String(anime.year+2), String(anime.year-2)].filter((v,idx,a)=>a.indexOf(v)===idx)), correct: String(anime.year), anime: anime.title })
     if (i % 3 === 2 && anime.episodes) qs.push({ id: qs.length, q: `How many episodes does "${anime.title}" have?`, opts: shuffled([String(anime.episodes), String(Math.max(1,anime.episodes-2)), String(anime.episodes+4), String(anime.episodes+12)].filter((v,idx,a)=>a.indexOf(v)===idx)), correct: String(anime.episodes), anime: anime.title })
@@ -22,7 +28,9 @@ function shuffled<T>(arr: T[]): T[] {
 }
 
 export default function QuizPage() {
-  const questions = useMemo(() => buildQuestions(), [])
+  const { data: browseData, isLoading } = useBrowseAnime({ limit: 20 })
+  const animeList = useMemo(() => (browseData?.data ?? []).map(mapDTO), [browseData])
+  const questions = useMemo(() => buildQuestions(animeList), [animeList])
   const [idx, setIdx] = useState(0)
   const [selected, setSelected] = useState<string | null>(null)
   const [score, setScore] = useState(0)
@@ -49,8 +57,14 @@ export default function QuizPage() {
 
   const reset = () => { setIdx(0); setSelected(null); setScore(0); setDone(false); setAnswers([]) }
 
-  const pct = Math.round((score / questions.length) * 100)
+  const pct = Math.round((score / (questions.length || 1)) * 100)
   const grade = pct === 100 ? "Perfect! Legendary Shinobi 🏆" : pct >= 80 ? "Expert! Elite Jonin 🎯" : pct >= 60 ? "Good! Shinobi Level 👍" : pct >= 40 ? "Decent. Keep watching! 📺" : "Rookie! More anime needed 😅"
+
+  if (isLoading || questions.length === 0) return (
+    <div className="min-h-screen bg-[#020202] text-white flex items-center justify-center text-white/30">
+      {isLoading ? "Loading quiz…" : "Not enough anime data to build a quiz."}
+    </div>
+  )
 
   if (done) return (
     <div className="min-h-screen bg-[#020202] text-white flex items-center justify-center px-6">

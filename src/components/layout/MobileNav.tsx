@@ -5,8 +5,7 @@ import { usePathname } from "next/navigation"
 import { motion } from "framer-motion"
 import { LayoutGrid, MonitorPlay, Compass, Users, Bell } from "lucide-react"
 import { useNotifications } from "@/components/notifications/useNotifications"
-import { getMockUser } from "@/lib/mockAuth"
-import { useEffect, useState } from "react"
+import { useAuthStore } from "@/stores/auth.store"
 
 const TABS = [
   { href: "/dashboard",  icon: LayoutGrid, label: "Home"      },
@@ -19,13 +18,9 @@ const TABS = [
 export default function MobileNav() {
   const pathname = usePathname()
   const { unreadCount } = useNotifications()
-  const [loggedIn, setLoggedIn] = useState(false)
+  const isAuthenticated = useAuthStore(s => s.isAuthenticated)
 
-  useEffect(() => {
-    setLoggedIn(!!getMockUser())
-  }, [])
-
-  if (!loggedIn) return null
+  if (!isAuthenticated) return null
 
   return (
     <nav className="fixed bottom-0 inset-x-0 z-[80] md:hidden">

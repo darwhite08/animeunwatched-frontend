@@ -1,21 +1,54 @@
-"use client";
+"use client"
 
-import { useState } from "react";
+import { useEffect } from "react"
+import { useNotificationsQuery, useUnreadCount, useMarkRead, useMarkAllRead } from "@/hooks/useNotificationsQuery"
+import { getSocket } from "@/lib/socket"
+import { useQueryClient } from "@tanstack/react-query"
+import { useAuthStore } from "@/stores/auth.store"
 
 export const useNotifications = () => {
-  const [notifications, setNotifications] = useState([
-    { id: 1, type: 'achievement', message: "Neural Link: 7-Day Streak Achieved", time: "2m ago", read: false, node: "NODE_01" },
-    { id: 2, type: 'comment', message: "User 'Zoro' commented on your review", time: "15m ago", read: false, node: "NODE_04" },
-    { id: 3, type: 'update', message: "Solo Leveling S2: New Trailer Synced", time: "1h ago", read: true, node: "NODE_02" },
-  ]);
+  const qc = useQueryClient()
+  const isAuthenticated = useAuthStore(s => s.isAuthenticated)
 
-  const unreadCount = notifications.filter(n => !n.read).length;
+  const { data: notifData } = useNotificationsQuery()
+  const { data: unreadData } = useUnreadCount()
+  const markReadMut = useMarkRead()
+  const markAllMut  = useMarkAllRead()
 
-  const markAllAsRead = () => {
-    setNotifications(prev => prev.map(n => ({ ...n, read: true })));
-  };
+  // Real-time: socket.io "notification.new" event
+  useEffect(() => {
+    if (!isAuthenticated) return
+    const socket = getSocket()
+    if (!socket) return
+    const handler = () => {
+      qc.invalidateQueries({ queryKey: ["notifications"] })
+      qc.invalidateQueries({ queryKey: ["notifications/unread"] })
+    }
+    socket.on("notification.new", handler)
+    return () => { socket.off("notification.new", handler) }
+  }, [isAuthenticated, qc])
 
-  const clearAll = () => setNotifications([]);
+  const notifications = (notifData?.data ?? []).map(n => ({
+    id: n.id,
+    type: n.type,
+    message: (n.payload as Record<string, string>).title
+      ?? (n.payload as Record<string, string>).message
+      ?? n.type,
+    time: (() => {
+      const d = Date.now() - new Date(n.createdAt).getTime()
+      if (d < 60000) return "just now"
+      if (d < 3600000) return `${Math.floor(d/60000)}m ago`
+      if (d < 86400000) return `${Math.floor(d/3600000)}h ago`
+      return `${Math.floor(d/86400000)}d ago`
+    })(),
+    read: n.read,
+    node: "NODE_00",
+  }))
 
-  return { notifications, unreadCount, markAllAsRead, clearAll };
-};
+  const unreadCount = unreadData?.count ?? notifications.filter(n => !n.read).length
+
+  const markAllAsRead = () => markAllMut.mutate(undefined)
+  const clearAll      = () => markAllMut.mutate(undefined)
+
+  return { notifications, unreadCount, markAllAsRead, clearAll }
+}

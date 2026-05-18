@@ -5,30 +5,35 @@ import { motion } from "framer-motion"
 import { User, Camera, Trash2, Download, Loader2, CheckCircle2 } from "lucide-react"
 import { useToast } from "@/stores/toast.store"
 import { useAuthStore } from "@/stores/auth.store"
+import { useUpdateMe } from "@/hooks/useUsers"
 
 export default function AccountSettingsPage() {
   const { push } = useToast()
   const storeUser = useAuthStore(s => s.user)
+  const updateMe = useUpdateMe()
   const [saving, setSaving] = useState(false)
   const [saved, setSaved] = useState(false)
   const [deleting, setDeleting] = useState(false)
   const [form, setForm] = useState({
-    displayName: storeUser?.displayName ?? "Priyanshu",
-    username:    storeUser?.username    ?? "darwhite08",
-    email:       storeUser?.email       ?? "chandrapriyanshu10@gmail.com",
-    bio:         "Anime enjoyer. Tracking every frame.",
-    avatarUrl:   "",
+    displayName: storeUser?.displayName ?? "",
+    username:    storeUser?.username    ?? "",
+    email:       storeUser?.email       ?? "",
+    bio:         storeUser?.bio         ?? "Anime enjoyer. Tracking every frame.",
+    avatarUrl:   storeUser?.avatarUrl   ?? "",
   })
 
   const set = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
     setForm(f => ({ ...f, [k]: e.target.value }))
 
-  const save = async () => {
+  const save = () => {
     setSaving(true)
-    await new Promise(r => setTimeout(r, 900))
-    setSaving(false); setSaved(true)
-    push("Account saved!", "success")
-    setTimeout(() => setSaved(false), 3000)
+    updateMe.mutate(
+      { displayName: form.displayName, bio: form.bio, avatarUrl: form.avatarUrl || undefined },
+      {
+        onSuccess: () => { setSaving(false); setSaved(true); push("Account saved!", "success"); setTimeout(() => setSaved(false), 3000) },
+        onError:   () => { setSaving(false); push("Save failed. Try again.", "error") },
+      }
+    )
   }
 
   const exportData = () => {

@@ -6,6 +6,8 @@ import { Check, Plus, PenSquare, Share2 } from "lucide-react"
 import { useWatchlist } from "@/stores/watchlist.store"
 import { useToast } from "@/stores/toast.store"
 import type { Anime } from "@/lib/data/anime"
+import { useUpsertListEntry, useRemoveListEntry } from "@/hooks/useAnime"
+import { useAuthStore } from "@/stores/auth.store"
 
 interface FloatingActionsProps {
   anime: Anime
@@ -16,6 +18,10 @@ export default function FloatingActions({ anime, onReview }: FloatingActionsProp
   const [visible, setVisible] = useState(false)
   const { add, remove, has } = useWatchlist()
   const { push } = useToast()
+  const isAuthenticated = useAuthStore(s => s.isAuthenticated)
+  const malId = parseInt(anime.id, 10)
+  const upsert = useUpsertListEntry(isNaN(malId) ? 0 : malId)
+  const removeEntry = useRemoveListEntry(isNaN(malId) ? 0 : malId)
   const inList = has(anime.id)
 
   useEffect(() => {
@@ -25,8 +31,15 @@ export default function FloatingActions({ anime, onReview }: FloatingActionsProp
   }, [])
 
   const toggle = () => {
-    if (inList) { remove(anime.id); push(`Removed from watchlist`, "info") }
-    else { add(anime); push(`"${anime.title}" added to watchlist!`, "success") }
+    if (inList) {
+      remove(anime.id)
+      if (isAuthenticated && !isNaN(malId)) removeEntry.mutate(undefined)
+      push(`Removed from watchlist`, "info")
+    } else {
+      add(anime)
+      if (isAuthenticated && !isNaN(malId)) upsert.mutate({ status: "PLAN_TO_WATCH" })
+      push(`"${anime.title}" added to watchlist!`, "success")
+    }
   }
 
   const share = async () => {

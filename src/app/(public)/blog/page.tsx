@@ -1,6 +1,7 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useMemo } from "react"
+import { useBlogs } from "@/hooks/useBlogs"
 import { motion, AnimatePresence } from "framer-motion"
 import {
   BookOpen, Heart, Eye, Clock, User, TrendingUp, PenSquare, ChevronRight,
@@ -210,11 +211,24 @@ function BlogCard({ blog, index }: { blog: Blog; index: number }) {
 /* ── Page ── */
 export default function BlogListingPage() {
   const [activeCategory, setActiveCategory] = useState<Category>("All")
+  const { data: blogsData } = useBlogs()
+
+  const apiBlogs: Blog[] = useMemo(() => (blogsData?.data ?? []).map(b => ({
+    id: b.id, slug: b.slug, title: b.title,
+    excerpt: b.body.slice(0, 160) + "…",
+    author: b.author?.displayName ?? b.author?.username ?? "Anonymous",
+    readTime: Math.max(1, Math.ceil(b.body.split(" ").length / 200)),
+    publishedAt: b.publishedAt ? new Date(b.publishedAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "",
+    coverGradient: "from-indigo-900 via-violet-900 to-purple-900",
+    category: "Deep Dive" as const, likes: 0, views: 0,
+  })), [blogsData])
+
+  const allBlogs = apiBlogs.length > 0 ? apiBlogs : BLOGS
 
   const filtered =
     activeCategory === "All"
-      ? BLOGS
-      : BLOGS.filter(b => b.category === activeCategory)
+      ? allBlogs
+      : allBlogs.filter(b => b.category === activeCategory)
 
   return (
     <div className="min-h-screen bg-[#020202] text-white pb-32">

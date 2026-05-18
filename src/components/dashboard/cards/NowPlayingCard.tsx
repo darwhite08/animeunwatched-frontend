@@ -4,19 +4,33 @@ import { useState } from "react"
 import { motion } from "framer-motion"
 import Image from "next/image"
 import { Play, Pause, SkipForward, Plus, Check, ExternalLink } from "lucide-react"
-import { ANIME_DB } from "@/lib/data/anime"
+import { useBrowseAnime } from "@/hooks/useAnime"
+import type { AnimeDTO } from "@/lib/api/types"
 import { useWatchlist } from "@/stores/watchlist.store"
 import { useToast } from "@/stores/toast.store"
 import Link from "next/link"
 
-// Simulate "currently watching" — pick a random airing anime
-const NOW = ANIME_DB.find(a => a.status === "airing" && a.rating >= 8.5)!
+function mapDTO(a: AnimeDTO, i: number) {
+  return { id: String(a.malId), title: a.title, titleJapanese: a.titleJapanese ?? "", rating: a.score ?? 0, year: a.year ?? 0, episodes: a.episodes, type: (["TV","Movie","OVA"] as const).includes(a.type as any) ? a.type as "TV"|"Movie"|"OVA" : "TV" as const, status: a.status?.toLowerCase().includes("airing") ? "airing" as const : "finished" as const, studio: a.studios[0] ?? "Unknown", genres: a.genres, synopsis: a.synopsis ?? "", image: a.imageUrl ?? "", tags: a.genres.map(g => g.toLowerCase().replace(/\s/g, "-")), category: "all" as const, rank: i+1 }
+}
 
 export default function NowPlayingCard() {
   const [playing, setPlaying] = useState(false)
   const [episode, setEpisode] = useState(12)
   const { add, has } = useWatchlist()
   const { push } = useToast()
+  const { data, isLoading } = useBrowseAnime({ limit: 10 })
+  const list = (data?.data ?? []).map(mapDTO)
+  const NOW = list.find(a => a.status === "airing") ?? list[0]
+
+  if (isLoading || !NOW) {
+    return (
+      <div className="relative rounded-[2.5rem] overflow-hidden border border-white/5 bg-[#0a0a0a] h-48 flex items-center justify-center">
+        <div className="w-8 h-8 rounded-full border-2 border-indigo-500/30 border-t-indigo-500 animate-spin" />
+      </div>
+    )
+  }
+
   const inList = has(NOW.id)
 
   return (

@@ -2,7 +2,10 @@
 
 import { useState } from "react"
 import { motion } from "framer-motion"
+import { useRouter } from "next/navigation"
 import { Rss, ImagePlus, Hash, AtSign, Send, X, ChevronDown } from "lucide-react"
+import { useCreatePost } from "@/hooks/usePosts"
+import { useToast } from "@/stores/toast.store"
 
 const ANIME_TAGS = [
   "Attack on Titan", "Jujutsu Kaisen", "Demon Slayer", "One Piece",
@@ -10,12 +13,15 @@ const ANIME_TAGS = [
 ]
 
 export default function CreateFeedPage() {
+  const router = useRouter()
+  const { push } = useToast()
+  const createPost = useCreatePost()
+
   const [content, setContent] = useState("")
   const [selectedAnime, setSelectedAnime] = useState<string | null>(null)
   const [animeOpen, setAnimeOpen] = useState(false)
   const [tags, setTags] = useState<string[]>([])
   const [tagInput, setTagInput] = useState("")
-  const [submitted, setSubmitted] = useState(false)
 
   const charLimit = 500
   const remaining = charLimit - content.length
@@ -31,12 +37,21 @@ export default function CreateFeedPage() {
 
   const handleSubmit = () => {
     if (!content.trim() || overLimit) return
-    setSubmitted(true)
-    setTimeout(() => setSubmitted(false), 3000)
-    setContent("")
-    setTags([])
-    setSelectedAnime(null)
+    createPost.mutate(
+      { content: content.trim() },
+      {
+        onSuccess: () => {
+          push("Post published to your feed!", "success")
+          router.push("/creators/feed")
+        },
+        onError: () => {
+          push("Failed to publish post. Try again.", "error")
+        },
+      },
+    )
   }
+
+  const submitted = createPost.isSuccess
 
   return (
     <div className="max-w-2xl space-y-8">
@@ -175,11 +190,11 @@ export default function CreateFeedPage() {
 
           <button
             onClick={handleSubmit}
-            disabled={!content.trim() || overLimit}
+            disabled={!content.trim() || overLimit || createPost.isPending}
             className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 disabled:opacity-40 disabled:cursor-not-allowed transition text-sm font-medium"
           >
             <Send size={14} />
-            Post
+            {createPost.isPending ? "Posting…" : "Post"}
           </button>
         </div>
       </div>

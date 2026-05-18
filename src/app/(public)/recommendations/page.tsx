@@ -5,8 +5,13 @@ import { motion, AnimatePresence } from "framer-motion"
 import { Sparkles, Dna, Gem, Clapperboard, TrendingUp, ArrowRight, Brain } from "lucide-react"
 import Link from "next/link"
 import AnimeCard from "@/components/bestanimelist/AnimeCard"
-import { ANIME_DB } from "@/lib/data/anime"
+import { useBrowseAnime } from "@/hooks/useAnime"
 import type { Anime } from "@/lib/data/anime"
+import type { AnimeDTO } from "@/lib/api/types"
+
+function mapDTO(a: AnimeDTO, i: number): Anime {
+  return { id: String(a.malId), title: a.title, titleJapanese: a.titleJapanese ?? "", rating: a.score ?? 0, year: a.year ?? 0, episodes: a.episodes, type: (["TV","Movie","OVA"] as const).includes(a.type as any) ? a.type as any : "TV", status: a.status?.toLowerCase().includes("airing") ? "airing" : "finished", studio: a.studios[0] ?? "Unknown", genres: a.genres, synopsis: a.synopsis ?? "", image: a.imageUrl ?? "", tags: a.genres.map(g => g.toLowerCase().replace(/\s/g, "-")), category: "all", rank: i+1 }
+}
 
 /* ── Recommendation modes ── */
 type ModeId = "dna" | "gems" | "similar" | "trending"
@@ -43,20 +48,20 @@ const MODES: { id: ModeId; label: string; sub: string; icon: typeof Dna; accent:
 ]
 
 /* ── Per-mode anime slices ── */
-function getAnimeForMode(mode: ModeId): Anime[] {
+function getAnimeForMode(mode: ModeId, allAnime: Anime[]): Anime[] {
   switch (mode) {
     case "dna":
-      return ANIME_DB.filter(a =>
+      return allAnime.filter(a =>
         a.genres.some(g => ["Action", "Psychological"].includes(g))
       ).slice(0, 9)
     case "gems":
-      return ANIME_DB.filter(a => a.rating >= 8.5 && a.rank > 10).slice(0, 9)
+      return allAnime.filter(a => a.rating >= 8.5 && a.rank > 10).slice(0, 9)
     case "similar":
-      return ANIME_DB.filter(a => ["MAPPA", "Madhouse", "Bones"].includes(a.studio)).slice(0, 9)
+      return allAnime.filter(a => ["MAPPA", "Madhouse", "Bones"].includes(a.studio)).slice(0, 9)
     case "trending":
-      return ANIME_DB.filter(a => a.status === "airing" && a.rating >= 8.5).slice(0, 9)
+      return allAnime.filter(a => a.status === "airing" && a.rating >= 8.5).slice(0, 9)
     default:
-      return ANIME_DB.slice(0, 9)
+      return allAnime.slice(0, 9)
   }
 }
 
@@ -88,7 +93,9 @@ function AnimatedCounter({ target }: { target: number }) {
 export default function RecommendationsPage() {
   const [mode, setMode] = useState<ModeId>("dna")
   const [modalAnime, setModalAnime] = useState<Anime | null>(null)
-  const results = getAnimeForMode(mode)
+  const { data: browseData } = useBrowseAnime({ limit: 50 })
+  const allAnime = (browseData?.data ?? []).map(mapDTO)
+  const results = getAnimeForMode(mode, allAnime)
 
   return (
     <div className="min-h-screen bg-[#020202] text-white">

@@ -4,6 +4,7 @@ import type {
   AnimeDTO, ListEntry, WatchStatus,
   Post, PostComment, Paginated, CursorPaginated,
   Notification,
+  ConversationSummary, ConversationDetail, DirectMessage,
 } from "./types"
 
 /* ── Auth ── */
@@ -122,6 +123,45 @@ export const markRead = (id: string) =>
 
 export const markAllRead = () =>
   api<void>("/notifications/read-all", { method: "PATCH" })
+
+/* ── Leaderboard ── */
+export const getLeaderboard = (limit = 50, period = "all-time") =>
+  api<{ data: Array<{ rank: number; username: string; displayName: string; avatarUrl: string | null; reputation: number; xp: number; level: number; archived: number; reviews: number; posts: number }>; meta: { total: number; period: string } }>(`/users/leaderboard/top?limit=${limit}&period=${period}`)
+
+/* ── Chat (E2E encrypted DMs) ── */
+export const uploadPublicKey = (publicKey: string) =>
+  api<void>("/chat/keys/me", { method: "PUT", body: JSON.stringify({ publicKey }) })
+
+export const getRecipientPublicKey = (userId: string) =>
+  api<{ publicKey: string }>(`/chat/keys/${userId}`)
+
+export const listConversations = () =>
+  api<{ conversations: ConversationSummary[] }>("/chat/conversations")
+
+export const startConversation = (recipientId: string) =>
+  api<{ conversation: ConversationDetail }>("/chat/conversations", {
+    method: "POST",
+    body: JSON.stringify({ recipientId }),
+  })
+
+export const getConversation = (conversationId: string) =>
+  api<{ conversation: ConversationDetail }>(`/chat/conversations/${conversationId}`)
+
+export const getMessages = (conversationId: string, cursor?: string, limit = 30) => {
+  const qs = new URLSearchParams({ limit: String(limit), ...(cursor ? { cursor } : {}) })
+  return api<{ messages: DirectMessage[]; nextCursor: string | null }>(
+    `/chat/conversations/${conversationId}/messages?${qs}`
+  )
+}
+
+export const sendEncryptedMessage = (conversationId: string, ciphertext: string, iv: string) =>
+  api<{ message: DirectMessage }>(`/chat/conversations/${conversationId}/messages`, {
+    method: "POST",
+    body: JSON.stringify({ ciphertext, iv }),
+  })
+
+export const markConversationRead = (conversationId: string) =>
+  api<{ conversationId: string; readAt: string }>(`/chat/conversations/${conversationId}/read`, { method: "PATCH" })
 
 /* ── Search ── */
 export const search = (

@@ -3,6 +3,8 @@
 import { motion } from "framer-motion"
 import Link from "next/link"
 import { TrendingUp, Hash, ArrowRight } from "lucide-react"
+import { useDiscover } from "@/hooks/usePosts"
+import { useMemo } from "react"
 
 const TRENDING = [
   { tag: "frieren",       posts: 842,  hot: true  },
@@ -16,6 +18,21 @@ const TRENDING = [
 ]
 
 export default function TrendingWidget() {
+  const { data: postsData } = useDiscover()
+  const posts = postsData?.pages[0]?.data ?? []
+
+  // Build trending tags from real post anime titles
+  const realTrending = useMemo(() => {
+    const tagCount: Record<string, number> = {}
+    for (const p of posts) {
+      if (p.anime?.title) {
+        const tag = p.anime.title.toLowerCase().replace(/[^a-z0-9]/g, "-").replace(/-+/g, "-").slice(0, 20)
+        tagCount[tag] = (tagCount[tag] ?? 0) + 1
+      }
+    }
+    const apiTags = Object.entries(tagCount).sort((a, b) => b[1] - a[1]).slice(0, 6).map(([tag, count]) => ({ tag, posts: count * 15, hot: count >= 2 }))
+    return apiTags.length > 0 ? apiTags : TRENDING
+  }, [posts])
   return (
     <div className="p-5 rounded-2xl bg-white/[0.02] border border-white/8 space-y-4">
       <div className="flex items-center justify-between">
@@ -29,7 +46,7 @@ export default function TrendingWidget() {
       </div>
 
       <div className="space-y-1">
-        {TRENDING.map(({ tag, posts, hot }, i) => (
+        {realTrending.map(({ tag, posts, hot }, i) => (
           <motion.button
             key={tag}
             initial={{ opacity: 0, x: -8 }}

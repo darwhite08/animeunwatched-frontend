@@ -8,8 +8,14 @@ import {
   Heart, List, User, X, ChevronRight, Plus, Tag, Star,
   Clock, Check,
 } from "lucide-react"
-import { ANIME_DB, type Anime } from "@/lib/data/anime"
+import type { Anime } from "@/lib/data/anime"
+import type { AnimeDTO } from "@/lib/api/types"
+import { useBrowseAnime } from "@/hooks/useAnime"
 import AnimeModal from "@/components/bestanimelist/AnimeModal"
+
+function mapDTO(a: AnimeDTO, i: number): Anime {
+  return { id: String(a.malId), title: a.title, titleJapanese: a.titleJapanese ?? "", rating: a.score ?? 0, year: a.year ?? 0, episodes: a.episodes, type: (["TV","Movie","OVA"] as const).includes(a.type as any) ? a.type as any : "TV", status: a.status?.toLowerCase().includes("airing") ? "airing" : "finished", studio: a.studios[0] ?? "Unknown", genres: a.genres, synopsis: a.synopsis ?? "", image: a.imageUrl ?? "", tags: a.genres.map(g => g.toLowerCase().replace(/\s/g, "-")), category: "all", rank: i+1 }
+}
 
 /* ── Types ── */
 interface CommunityList {
@@ -94,9 +100,9 @@ const COMMUNITY_LISTS: CommunityList[] = [
 ]
 
 /* ── Cover grid ── */
-function ListCoverGrid({ ids }: { ids: string[] }) {
+function ListCoverGrid({ ids, allAnime }: { ids: string[]; allAnime: Anime[] }) {
   const covers = ids
-    .map(id => ANIME_DB.find(a => a.id === id))
+    .map(id => allAnime.find(a => a.id === id))
     .filter((a): a is Anime => !!a)
     .slice(0, 4)
 
@@ -125,9 +131,10 @@ function ListCoverGrid({ ids }: { ids: string[] }) {
 interface ListCardProps {
   list: CommunityList
   onClick: (list: CommunityList) => void
+  allAnime: Anime[]
 }
 
-function ListCard({ list, onClick }: ListCardProps) {
+function ListCard({ list, onClick, allAnime }: ListCardProps) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -139,7 +146,7 @@ function ListCard({ list, onClick }: ListCardProps) {
       <div className="flex gap-4">
         {/* Cover grid */}
         <div className="w-20 h-20 shrink-0">
-          <ListCoverGrid ids={list.coverAnimeIds} />
+          <ListCoverGrid ids={list.coverAnimeIds} allAnime={allAnime} />
         </div>
 
         {/* Info */}
@@ -191,17 +198,18 @@ interface ListModalProps {
   list: CommunityList | null
   onClose: () => void
   onAnimeClick: (anime: Anime) => void
+  allAnime: Anime[]
 }
 
-function ListDetailModal({ list, onClose, onAnimeClick }: ListModalProps) {
+function ListDetailModal({ list, onClose, onAnimeClick, allAnime }: ListModalProps) {
   if (!list) return null
 
   const animes = list.coverAnimeIds
-    .map(id => ANIME_DB.find(a => a.id === id))
+    .map(id => allAnime.find(a => a.id === id))
     .filter((a): a is Anime => !!a)
 
   // Fill up with extra matches if fewer than animeCount
-  const extraAnimes = ANIME_DB.filter(a => !list.coverAnimeIds.includes(a.id))
+  const extraAnimes = allAnime.filter(a => !list.coverAnimeIds.includes(a.id))
     .slice(0, Math.max(0, list.animeCount - animes.length))
 
   const allAnimes = [...animes, ...extraAnimes]
@@ -313,6 +321,8 @@ function ListDetailModal({ list, onClose, onAnimeClick }: ListModalProps) {
 export default function PublicListsPage() {
   const [openList, setOpenList] = useState<CommunityList | null>(null)
   const [openAnime, setOpenAnime] = useState<Anime | null>(null)
+  const { data: browseData } = useBrowseAnime({ limit: 20 })
+  const allAnime = (browseData?.data ?? []).map(mapDTO)
 
   const handleAnimeClick = (anime: Anime) => {
     setOpenAnime(anime)
@@ -347,7 +357,7 @@ export default function PublicListsPage() {
       {/* Grid */}
       <div className="max-w-6xl mx-auto px-6 grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
         {COMMUNITY_LISTS.map(list => (
-          <ListCard key={list.id} list={list} onClick={setOpenList} />
+          <ListCard key={list.id} list={list} onClick={setOpenList} allAnime={allAnime} />
         ))}
       </div>
 
@@ -357,6 +367,7 @@ export default function PublicListsPage() {
           list={openList}
           onClose={() => setOpenList(null)}
           onAnimeClick={handleAnimeClick}
+          allAnime={allAnime}
         />
       )}
 

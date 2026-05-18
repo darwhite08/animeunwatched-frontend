@@ -4,6 +4,7 @@ import { use } from "react"
 import { motion } from "framer-motion"
 import Link from "next/link"
 import { ChevronRight, Clock, Eye, Heart, PenSquare, User } from "lucide-react"
+import { useBlogs } from "@/hooks/useBlogs"
 
 /* ── Types ── */
 type BlogCategory = "Deep Dive" | "Review" | "Theory" | "Opinion" | "List"
@@ -20,66 +21,19 @@ interface BlogPost {
   likes: number
 }
 
-/* ── Mock post generator ── */
-const POST_TEMPLATES: {
-  title: string
-  excerpt: string
-  category: BlogCategory
-  coverGradient: string
-}[] = [
-  {
-    title: "Why Frieren is the Most Honest Fantasy in Years",
-    excerpt:
-      "Most isekai asks you to imagine power. Frieren asks you to feel loss. It's the rare fantasy that earns every emotional beat through restraint, not spectacle.",
-    category: "Deep Dive",
-    coverGradient: "from-indigo-900 via-violet-900 to-purple-900",
-  },
-  {
-    title: "The Physics Behind Jujutsu Kaisen's Cursed Energy",
-    excerpt:
-      "What if cursed energy followed thermodynamic laws? We break down domain expansion, reversal techniques, and Gojo's infinity through the lens of real physics.",
-    category: "Theory",
-    coverGradient: "from-blue-900 via-cyan-900 to-teal-900",
-  },
-  {
-    title: "Monster: A Perfect Slow Burn That Demands Your Patience",
-    excerpt:
-      "74 episodes. No filler. No power-ups. Just a surgeon, a sociopath, and one of the most meticulously constructed narratives in anime history.",
-    category: "Review",
-    coverGradient: "from-slate-900 via-zinc-800 to-gray-900",
-  },
-  {
-    title: "Chainsaw Man is the Anti-Shonen and That's the Point",
-    excerpt:
-      "Every shonen convention gets inverted, subverted, and deconstructed in Fujimoto's opus. Power fantasy, nakama, and heroism are all put on trial.",
-    category: "Opinion",
-    coverGradient: "from-red-900 via-rose-900 to-orange-900",
-  },
+/* ── Cover gradients (cycled by index) ── */
+const COVER_GRADIENTS = [
+  "from-indigo-900 via-violet-900 to-purple-900",
+  "from-blue-900 via-cyan-900 to-teal-900",
+  "from-slate-900 via-zinc-800 to-gray-900",
+  "from-red-900 via-rose-900 to-orange-900",
+  "from-emerald-900 via-green-900 to-teal-900",
+  "from-amber-900 via-yellow-900 to-orange-900",
 ]
 
-const PUBLISHED_DATES = [
-  "May 3, 2026",
-  "Apr 20, 2026",
-  "Apr 10, 2026",
-  "Apr 5, 2026",
-]
-const READ_TIMES = [8, 10, 11, 9]
-const VIEW_COUNTS = [14300, 21500, 33700, 17200]
-const LIKE_COUNTS = [842, 976, 1560, 731]
-
-function buildBlogPosts(username: string): BlogPost[] {
-  const seed = username.split("").reduce((acc, c) => acc + c.charCodeAt(0), 0)
-  return POST_TEMPLATES.map((t, i) => ({
-    id: String(i + 1),
-    title: t.title,
-    excerpt: t.excerpt,
-    category: t.category,
-    coverGradient: t.coverGradient,
-    publishedAt: PUBLISHED_DATES[i],
-    readTime: READ_TIMES[(i + seed) % READ_TIMES.length],
-    views: ((VIEW_COUNTS[i] + seed * 10) % 30000) + 5000,
-    likes: ((LIKE_COUNTS[i] + seed) % 1500) + 200,
-  }))
+function formatDate(iso: string | null): string {
+  if (!iso) return "Draft"
+  return new Date(iso).toLocaleDateString("en-US", { year: "numeric", month: "short", day: "numeric" })
 }
 
 /* ── Blog card ── */
@@ -136,7 +90,24 @@ export default function UserBlogPage({
   params: Promise<{ username: string }>
 }) {
   const { username } = use(params)
-  const posts = buildBlogPosts(username)
+  const { data: blogsData, isLoading } = useBlogs()
+
+  // Filter blogs by this user (published only), fall back to empty array
+  const rawBlogs = (blogsData?.data ?? []).filter(
+    (b) => b.author.username === username && b.status === "PUBLISHED",
+  )
+
+  const posts: BlogPost[] = rawBlogs.map((b, i) => ({
+    id: b.id,
+    title: b.title,
+    excerpt: b.body.replace(/[#*`_>~\[\]]/g, "").slice(0, 160),
+    category: "Deep Dive" as BlogCategory,
+    coverGradient: COVER_GRADIENTS[i % COVER_GRADIENTS.length],
+    publishedAt: formatDate(b.publishedAt),
+    readTime: Math.max(1, Math.ceil(b.body.split(/\s+/).length / 200)),
+    views: 0,
+    likes: 0,
+  }))
 
   return (
     <div className="min-h-screen bg-[#020202] text-white pb-32">
@@ -165,7 +136,9 @@ export default function UserBlogPage({
             <h1 className="text-5xl font-black tracking-tighter uppercase italic text-white leading-none">
               @{username}&apos;s Articles<span className="text-indigo-500">.</span>
             </h1>
-            <p className="text-white/35 text-sm mt-2">{posts.length} articles published</p>
+            <p className="text-white/35 text-sm mt-2">
+              {isLoading ? "Loading…" : `${posts.length} article${posts.length !== 1 ? "s" : ""} published`}
+            </p>
           </div>
 
           <div className="flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-white/[0.02] border border-white/8 text-[10px] font-black uppercase tracking-widest text-white/30">
@@ -174,12 +147,31 @@ export default function UserBlogPage({
           </div>
         </motion.div>
 
+        {/* Loading state */}
+        {isLoading && (
+          <div className="grid sm:grid-cols-2 gap-6">
+            {[0, 1, 2, 3].map((i) => (
+              <div key={i} className="h-64 rounded-2xl bg-white/[0.03] border border-white/5 animate-pulse" />
+            ))}
+          </div>
+        )}
+
+        {/* Empty state */}
+        {!isLoading && posts.length === 0 && (
+          <div className="text-center py-24 space-y-3">
+            <p className="text-white/20 text-4xl font-black uppercase italic">No Articles Yet</p>
+            <p className="text-white/25 text-sm">@{username} hasn&apos;t published any blogs yet.</p>
+          </div>
+        )}
+
         {/* 2-col grid */}
-        <div className="grid sm:grid-cols-2 gap-6">
-          {posts.map((post, i) => (
-            <BlogCard key={post.id} post={post} index={i} />
-          ))}
-        </div>
+        {!isLoading && posts.length > 0 && (
+          <div className="grid sm:grid-cols-2 gap-6">
+            {posts.map((post, i) => (
+              <BlogCard key={post.id} post={post} index={i} />
+            ))}
+          </div>
+        )}
 
         {/* More articles CTA */}
         <motion.div

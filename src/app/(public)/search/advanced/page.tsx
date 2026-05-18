@@ -8,9 +8,15 @@ import {
 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
-import { ANIME_DB, type Anime } from "@/lib/data/anime"
+import { type Anime } from "@/lib/data/anime"
 import AnimeModal from "@/components/bestanimelist/AnimeModal"
 import { useToast } from "@/stores/toast.store"
+import { useBrowseAnime, useSearchAnimeApi } from "@/hooks/useAnime"
+import type { AnimeDTO } from "@/lib/api/types"
+
+function mapDTO(a: AnimeDTO, i: number): Anime {
+  return { id: String(a.malId), title: a.title, titleJapanese: a.titleJapanese ?? "", rating: a.score ?? 0, year: a.year ?? 0, episodes: a.episodes, type: (["TV","Movie","OVA"] as const).includes(a.type as any) ? a.type as any : "TV", status: a.status?.toLowerCase().includes("airing") ? "airing" : "finished", studio: a.studios[0] ?? "Unknown", genres: a.genres, synopsis: a.synopsis ?? "", image: a.imageUrl ?? "", tags: a.genres.map(g => g.toLowerCase().replace(/\s/g, "-")), category: "all", rank: i+1 }
+}
 
 /* ── Types ── */
 type SearchType = "anime" | "users" | "posts" | "clubs" | "blogs" | "reviews"
@@ -216,6 +222,15 @@ function AdvancedSearchContent() {
   })
   const [modal, setModal] = useState<Anime | null>(null)
 
+  const { data: browseData } = useBrowseAnime({ limit: 24 })
+  const { data: searchData } = useSearchAnimeApi(animeFilters.title.length >= 2 ? animeFilters.title : "")
+  const baseAnimeList = useMemo(() => {
+    const src: AnimeDTO[] = animeFilters.title.length >= 2
+      ? (searchData?.data ?? [])
+      : (browseData?.data ?? [])
+    return src.map(mapDTO)
+  }, [browseData, searchData, animeFilters.title])
+
   const updateAnime = (key: keyof AnimeFilters, value: string | string[]) =>
     setAnimeFilters((f) => ({ ...f, [key]: value }))
 
@@ -231,8 +246,7 @@ function AdvancedSearchContent() {
     setAnimeFilters({ title: "", genres: [], yearMin: "", yearMax: "", ratingMin: "", type: "", status: "" })
 
   const animeResults = useMemo(() => {
-    return ANIME_DB.filter((a) => {
-      if (animeFilters.title && !a.title.toLowerCase().includes(animeFilters.title.toLowerCase())) return false
+    return baseAnimeList.filter((a) => {
       if (animeFilters.genres.length > 0 && !animeFilters.genres.every((g) => a.genres.includes(g))) return false
       if (animeFilters.yearMin && a.year < Number(animeFilters.yearMin)) return false
       if (animeFilters.yearMax && a.year > Number(animeFilters.yearMax)) return false
@@ -241,7 +255,7 @@ function AdvancedSearchContent() {
       if (animeFilters.status && a.status !== animeFilters.status) return false
       return true
     }).sort((a, b) => b.rating - a.rating)
-  }, [animeFilters])
+  }, [baseAnimeList, animeFilters])
 
   const handleSaveSearch = () => {
     push("Search saved to your profile!", "success")

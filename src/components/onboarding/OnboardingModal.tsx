@@ -13,10 +13,15 @@ import {
   X,
 } from "lucide-react"
 import Image from "next/image"
-import { ANIME_DB } from "@/lib/data/anime"
 import type { Anime } from "@/lib/data/anime"
+import { useBrowseAnime } from "@/hooks/useAnime"
+import type { AnimeDTO } from "@/lib/api/types"
 import { useWatchlist } from "@/stores/watchlist.store"
 import { useToast } from "@/stores/toast.store"
+
+function mapDTO(a: AnimeDTO, i: number): Anime {
+  return { id: String(a.malId), title: a.title, titleJapanese: a.titleJapanese ?? "", rating: a.score ?? 0, year: a.year ?? 0, episodes: a.episodes, type: (["TV","Movie","OVA"] as const).includes(a.type as any) ? a.type as "TV"|"Movie"|"OVA" : "TV" as const, status: a.status?.toLowerCase().includes("airing") ? "airing" : "finished", studio: a.studios[0] ?? "Unknown", genres: a.genres, synopsis: a.synopsis ?? "", image: a.imageUrl ?? "", tags: a.genres.map(g => g.toLowerCase().replace(/\s/g, "-")), category: "all" as const, rank: i+1 }
+}
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -71,11 +76,6 @@ const GENRE_OPTIONS = [
   "Sci-Fi",
   "Horror",
 ]
-
-// Top 12 by rank
-const ONBOARDING_ANIME = [...ANIME_DB]
-  .sort((a, b) => a.rank - b.rank)
-  .slice(0, 12)
 
 // ─── Step slide variants ──────────────────────────────────────────────────────
 
@@ -169,9 +169,11 @@ function StepIdentity({
 function StepPickAnime({
   selectedIds,
   onToggle,
+  animeList,
 }: {
   selectedIds: Set<string>
   onToggle: (id: string, anime: Anime) => void
+  animeList: Anime[]
 }) {
   const count = selectedIds.size
   const min = 5
@@ -212,7 +214,7 @@ function StepPickAnime({
 
       {/* Grid */}
       <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 max-h-[380px] overflow-y-auto pr-1 scrollbar-thin">
-        {ONBOARDING_ANIME.map((anime) => {
+        {animeList.map((anime) => {
           const isSelected = selectedIds.has(anime.id)
           return (
             <button
@@ -446,6 +448,11 @@ export default function OnboardingModal({
 
   const addToWatchlist = useWatchlist((s) => s.add)
   const toast = useToast((s) => s.push)
+  const { data: browseData } = useBrowseAnime({ limit: 50 })
+  const ONBOARDING_ANIME = [...(browseData?.data ?? [])]
+    .map(mapDTO)
+    .sort((a, b) => a.rank - b.rank)
+    .slice(0, 12)
 
   // Lock body scroll while open
   useEffect(() => {
@@ -587,6 +594,7 @@ export default function OnboardingModal({
                     <StepPickAnime
                       selectedIds={selectedAnimeIds}
                       onToggle={toggleAnime}
+                      animeList={ONBOARDING_ANIME}
                     />
                   )}
                   {step === 3 && (

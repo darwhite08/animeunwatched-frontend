@@ -8,6 +8,7 @@ import {
 } from "lucide-react"
 import Link from "next/link"
 import { useToast } from "@/stores/toast.store"
+import { useBlog } from "@/hooks/useBlogs"
 
 /* ── Types ── */
 type BlogMeta = {
@@ -174,7 +175,16 @@ const RELATED_POSTS: RelatedPost[] = [
 ]
 
 /* ── Article body ── */
-function ArticleBody() {
+function ArticleBody({ apiContent }: { apiContent?: string }) {
+  if (apiContent) {
+    return (
+      <div className="space-y-6 text-white/70 text-base leading-relaxed">
+        {apiContent.split("\n\n").map((para, i) => (
+          <p key={i}>{para}</p>
+        ))}
+      </div>
+    )
+  }
   return (
     <div className="space-y-6 text-white/70 text-base leading-relaxed">
       <p>
@@ -274,7 +284,23 @@ function ArticleBody() {
 export default function BlogReaderPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = use(params)
   const { push } = useToast()
-  const meta = BLOG_META[slug] ?? { ...FALLBACK_META, slug, title: slug.replace(/-/g, " ") }
+  const { data: blogData } = useBlog(slug)
+
+  // Use real blog if available, fall back to mock
+  const apiBlog = blogData?.blog
+  const meta = apiBlog ? {
+    slug: apiBlog.slug,
+    title: apiBlog.title,
+    author: apiBlog.author?.displayName ?? apiBlog.author?.username ?? "Anonymous",
+    authorAvatar: (apiBlog.author?.displayName ?? apiBlog.author?.username ?? "?")[0].toUpperCase(),
+    publishedAt: apiBlog.publishedAt ? new Date(apiBlog.publishedAt).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" }) : "",
+    readTime: Math.max(1, Math.ceil(apiBlog.body.split(" ").length / 200)),
+    coverGradient: "from-indigo-900 via-violet-900 to-purple-900",
+    tags: [],
+    likes: 0,
+    views: 0,
+    content: apiBlog.body,
+  } : (BLOG_META[slug] ?? { ...FALLBACK_META, slug, title: slug.replace(/-/g, " ") })
 
   const [liked, setLiked]       = useState(false)
   const [likeCount, setLikeCount] = useState(meta.likes)
@@ -318,7 +344,7 @@ export default function BlogReaderPage({ params }: { params: Promise<{ slug: str
         {/* Category */}
         <div className="absolute top-6 right-6">
           <span className="px-3 py-1 rounded-full bg-black/50 backdrop-blur-md border border-white/10 text-[10px] font-black uppercase tracking-widest text-indigo-400">
-            {meta.category}
+            {(meta as Record<string, unknown>).category as string ?? "Article"}
           </span>
         </div>
 
@@ -337,7 +363,7 @@ export default function BlogReaderPage({ params }: { params: Promise<{ slug: str
             transition={{ delay: 0.1 }}
             className="mt-2 text-white/40 text-sm max-w-2xl"
           >
-            {meta.excerpt}
+            {(meta as Record<string, unknown>).excerpt as string ?? ""}
           </motion.p>
         </div>
       </div>
@@ -387,7 +413,7 @@ export default function BlogReaderPage({ params }: { params: Promise<{ slug: str
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
         >
-          <ArticleBody />
+          <ArticleBody apiContent={(meta as { content?: string }).content} />
         </motion.div>
 
         {/* Like / Share / Bookmark bar */}

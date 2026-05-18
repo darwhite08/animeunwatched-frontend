@@ -1,6 +1,8 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useMemo } from "react"
+import { useQuery } from "@tanstack/react-query"
+import { api } from "@/lib/api/client"
 import { motion, AnimatePresence } from "framer-motion"
 import { Shield, CheckCircle2, XCircle, Clock, FileText, Star, BookOpen, User } from "lucide-react"
 import { useToast } from "@/stores/toast.store"
@@ -116,8 +118,25 @@ const STATUS_CONFIG: Record<ReportStatus, { label: string; color: string }> = {
 }
 
 export default function ModerationPage() {
+  // Try real admin reports
+  const { data: adminData } = useQuery({
+    queryKey: ["admin-reports"],
+    queryFn: () => api<{ data: Array<{ id: string; targetType: string; reason: string; status: string; createdAt: string; reporter: { username: string }; targetId: string }> }>("/admin/reports").catch(() => ({ data: [] })),
+    retry: false,
+  })
+  const apiReports: Report[] = useMemo(() =>
+    (adminData?.data ?? []).map(r => ({
+      id: r.id,
+      contentType: (r.targetType as ContentType) || "post",
+      reporter: r.reporter?.username ?? "anonymous",
+      targetPreview: `Content ID: ${r.targetId.slice(0, 20)}`,
+      reason: r.reason,
+      date: new Date(r.createdAt).toISOString().split("T")[0],
+      status: (r.status?.toLowerCase() as ReportStatus) || "open",
+    }))
+  , [adminData])
   const { push } = useToast()
-  const [reports, setReports] = useState<Report[]>(MOCK_REPORTS)
+  const [reports, setReports] = useState<Report[]>(() => apiReports.length > 0 ? apiReports : MOCK_REPORTS)
   const [activeFilter, setActiveFilter] = useState<FilterTab>("all")
 
   const open      = reports.filter(r => r.status === "open").length

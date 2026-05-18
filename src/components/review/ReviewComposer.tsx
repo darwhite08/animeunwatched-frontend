@@ -4,6 +4,8 @@ import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { X, Star, AlertTriangle, Send, Loader2 } from "lucide-react"
 import { useToast } from "@/stores/toast.store"
+import { useCreateReview } from "@/hooks/useReviews"
+import { useAuthStore } from "@/stores/auth.store"
 
 interface ReviewComposerProps {
   isOpen: boolean
@@ -14,22 +16,31 @@ interface ReviewComposerProps {
 
 export default function ReviewComposer({ isOpen, onClose, animeTitle, animeId }: ReviewComposerProps) {
   const { push } = useToast()
+  const isAuthenticated = useAuthStore(s => s.isAuthenticated)
+  const createReview = useCreateReview()
   const [score, setScore] = useState<number | null>(null)
   const [body, setBody] = useState("")
   const [hasSpoilers, setHasSpoilers] = useState(false)
   const [hovered, setHovered] = useState<number | null>(null)
-  const [submitting, setSubmitting] = useState(false)
 
-  const canSubmit = score !== null && body.trim().length >= 20
+  const submitting = createReview.isPending
+  const canSubmit = score !== null && body.trim().length >= 20 && isAuthenticated
 
-  const handleSubmit = async () => {
-    if (!canSubmit) return
-    setSubmitting(true)
-    await new Promise(r => setTimeout(r, 800))
-    setSubmitting(false)
-    push(`Review for "${animeTitle}" submitted!`, "success")
-    onClose()
-    setScore(null); setBody(""); setHasSpoilers(false)
+  const handleSubmit = () => {
+    if (!canSubmit) { if (!isAuthenticated) { push("Sign in to write reviews", "info"); onClose(); } return }
+    createReview.mutate(
+      { animeId, score: score!, body: body.trim(), hasSpoilers },
+      {
+        onSuccess: () => {
+          push(`Review for "${animeTitle}" published!`, "success")
+          onClose(); setScore(null); setBody(""); setHasSpoilers(false)
+        },
+        onError: (e: Error) => {
+          if (e.message?.includes("CONFLICT")) push("You've already reviewed this anime", "info")
+          else push("Failed to submit review. Try again.", "error")
+        },
+      }
+    )
   }
 
   const starLabel = (n: number) =>

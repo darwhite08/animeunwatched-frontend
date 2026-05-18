@@ -1,12 +1,17 @@
 "use client"
 
 import { use } from "react"
-import { notFound } from "next/navigation"
-import { ANIME_DB } from "@/lib/data/anime"
 import { motion } from "framer-motion"
 import Link from "next/link"
 import Image from "next/image"
 import { Users, ChevronLeft, Star } from "lucide-react"
+import { useBrowseAnime } from "@/hooks/useAnime"
+import type { AnimeDTO } from "@/lib/api/types"
+import type { Anime } from "@/lib/data/anime"
+
+function mapDTO(a: AnimeDTO, i: number): Anime {
+  return { id: String(a.malId), title: a.title, titleJapanese: a.titleJapanese ?? "", rating: a.score ?? 0, year: a.year ?? 0, episodes: a.episodes, type: (["TV","Movie","OVA"] as const).includes(a.type as any) ? a.type as any : "TV", status: a.status?.toLowerCase().includes("airing") ? "airing" : "finished", studio: a.studios[0] ?? "Unknown", genres: a.genres, synopsis: a.synopsis ?? "", image: a.imageUrl ?? "", tags: a.genres.map(g => g.toLowerCase().replace(/\s/g, "-")), category: "all", rank: i+1 }
+}
 
 // Mock character data seeded by anime
 const getCharacters = (animeId: string) => {
@@ -31,16 +36,18 @@ const getCharacters = (animeId: string) => {
 
 export default function AnimeCharactersPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params)
-  const anime = ANIME_DB.find(a => a.id === id)
-  if (!anime) notFound()
+  const { data: browseData, isLoading } = useBrowseAnime({ limit: 1 })
+  const anime = (browseData?.data ?? []).map(mapDTO)[0] ?? null
 
   const chars = getCharacters(id)
+
+  if (isLoading) return <div className="min-h-screen bg-[#020202] text-white flex items-center justify-center text-white/30">Loading…</div>
 
   return (
     <div className="min-h-screen bg-[#020202] text-white pb-32">
       {/* Mini hero */}
       <div className="relative h-40 overflow-hidden">
-        <Image src={anime.image} alt={anime.title} fill className="object-cover brightness-[0.2] blur-sm" />
+        <Image src={anime?.image ?? ""} alt={anime?.title ?? ""} fill className="object-cover brightness-[0.2] blur-sm" />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#020202]" />
       </div>
 
@@ -49,7 +56,7 @@ export default function AnimeCharactersPage({ params }: { params: Promise<{ id: 
         <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-white/30 mb-6">
           <Link href="/bestanimelist" className="hover:text-white transition-colors">Archive</Link>
           <span>·</span>
-          <Link href={`/anime/${id}`} className="hover:text-white transition-colors truncate max-w-[200px]">{anime.title}</Link>
+          <Link href={`/anime/${id}`} className="hover:text-white transition-colors truncate max-w-[200px]">{anime?.title ?? id}</Link>
           <span>·</span>
           <span className="text-white/60">Characters</span>
         </div>
@@ -95,7 +102,7 @@ export default function AnimeCharactersPage({ params }: { params: Promise<{ id: 
         {/* Back link */}
         <div className="mt-10 flex justify-center">
           <Link href={`/anime/${id}`} className="flex items-center gap-2 text-sm font-black uppercase tracking-widest text-indigo-400 hover:text-indigo-300 transition-colors">
-            <ChevronLeft size={14} /> Back to {anime.title}
+            <ChevronLeft size={14} /> Back to {anime?.title ?? id}
           </Link>
         </div>
       </div>

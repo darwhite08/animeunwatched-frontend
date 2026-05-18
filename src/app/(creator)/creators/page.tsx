@@ -2,9 +2,12 @@
 
 import Link from "next/link"
 import { motion } from "framer-motion"
-import { Eye, Star, Zap, BookOpen, BarChart3 } from "lucide-react"
+import { Eye, Star, Zap, BookOpen, BarChart3, Rss } from "lucide-react"
 import CreatorDashboard from "@/components/creator/creator/CreatorDashboard"
 import { useCreatorStats } from "@/hooks/useCreator"
+import { useAuthStore } from "@/stores/auth.store"
+import { useBlogs } from "@/hooks/useBlogs"
+import { useFeed } from "@/hooks/usePosts"
 
 // Fallback 7-day chart data
 const CHART_DATA = [
@@ -20,16 +23,33 @@ const MAX_VIEWS = Math.max(...CHART_DATA.map(d => d.views))
 
 export default function BlogPage() {
   const { data: statsData } = useCreatorStats()
+  const user = useAuthStore(s => s.user)
+  const { data: blogsData } = useBlogs()
+  const { data: feedData }  = useFeed()
 
-  const totalViews     = statsData?.totalViews     ?? 24800
-  const publishedBlogs = statsData?.publishedBlogs ?? 2
-  const reputation     = statsData?.reputation      ?? 840
+  const totalViews = statsData?.totalViews ?? 0
+
+  // Real blog count: published blogs authored by the current user
+  const publishedBlogs =
+    statsData?.publishedBlogs ??
+    (blogsData?.data?.filter(b => b.authorId === user?.id && b.status === "PUBLISHED").length ?? 0)
+
+  // Real reputation from auth store
+  const reputation =
+    statsData?.reputation ?? user?.reputation ?? 0
+
+  // Real post count: all feed posts authored by the current user
+  const postCount =
+    statsData?.postCount ??
+    (feedData?.pages.flatMap(p => p.data).filter(p => p.authorId === user?.id).length ?? 0)
+
   // XP Level derived from reputation (every 500 rep = 1 level)
-  const xpLevel        = Math.floor(reputation / 500) + 1
+  const xpLevel = Math.floor(reputation / 500) + 1
 
   const STAT_BAR = [
     { label: "Total Views",     value: totalViews >= 1000 ? `${(totalViews / 1000).toFixed(1)}k` : String(totalViews), icon: Eye,      color: "text-indigo-400",  bg: "bg-indigo-500/10"  },
     { label: "Published Blogs", value: String(publishedBlogs), icon: BookOpen, color: "text-rose-400",    bg: "bg-rose-500/10"    },
+    { label: "Feed Posts",      value: String(postCount),      icon: Rss,      color: "text-teal-400",    bg: "bg-teal-500/10"    },
     { label: "Reputation",      value: String(reputation),     icon: Star,     color: "text-amber-400",   bg: "bg-amber-500/10"   },
     { label: "XP Level",        value: `Lv. ${xpLevel}`,       icon: Zap,      color: "text-emerald-400", bg: "bg-emerald-500/10" },
   ]
@@ -61,7 +81,7 @@ export default function BlogPage() {
           </div>
 
           {/* Stats bar */}
-          <div className="grid grid-cols-2 xl:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 xl:grid-cols-5 gap-4">
             {STAT_BAR.map((s, i) => (
               <motion.div
                 key={s.label}

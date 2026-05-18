@@ -16,6 +16,8 @@ import {
   ChevronLeft,
 } from "lucide-react"
 import { useToast } from "@/stores/toast.store"
+import { useClubThreads, useCreateClubThread } from "@/hooks/useThreads"
+import { useAuthStore } from "@/stores/auth.store"
 
 /* ── Types ── */
 type Thread = {
@@ -312,14 +314,43 @@ export default function ClubThreadsPage({
 }) {
   const { slug } = use(params)
   const { push } = useToast()
+  const authUser = useAuthStore(s => s.user)
   const clubName = slugToName(slug)
+  const createThread = useCreateClubThread(slug)
 
   const [page, setPage] = useState(1)
-  const threads = buildThreads(slug)
-  const totalPages = 3 // stub — would come from API
+  const [composerOpen, setComposerOpen] = useState(false)
+  const [newTitle, setNewTitle] = useState("")
+  const [newContent, setNewContent] = useState("")
+
+  const { data: threadsData } = useClubThreads(slug, page)
+  const apiThreads = (threadsData?.data ?? []).map((t): Thread => ({
+    id: t.id, title: t.title,
+    excerpt: t.content.slice(0, 100) + (t.content.length > 100 ? "…" : ""),
+    author: t.author?.displayName ?? t.author?.username ?? "Anonymous",
+    replyCount: t._count?.replies ?? 0, views: 0,
+    lastActivity: (() => { const d = Date.now() - new Date(t.createdAt).getTime(); return d < 3600000 ? `${Math.floor(d/60000)}m ago` : d < 86400000 ? `${Math.floor(d/3600000)}h ago` : `${Math.floor(d/86400000)}d ago` })(),
+    isPinned: t.isPinned,
+    isTrending: false,
+    tags: [],
+  }))
+  const threads = apiThreads.length > 0 ? apiThreads : buildThreads(slug)
+  const totalPages = threadsData?.meta ? Math.ceil(threadsData.meta.total / 20) : 3
 
   const handleNewThread = () => {
-    push("Thread composer coming soon!", "info")
+    if (!authUser) { push("Sign in to create threads", "info"); return }
+    setComposerOpen(c => !c)
+  }
+
+  const submitThread = () => {
+    if (!newTitle.trim() || !newContent.trim()) { push("Title and content required", "info"); return }
+    createThread.mutate(
+      { title: newTitle.trim(), content: newContent.trim() },
+      {
+        onSuccess: () => { setComposerOpen(false); setNewTitle(""); setNewContent(""); push("Thread created! 🎌", "success") },
+        onError: () => push("Failed to create thread", "error"),
+      }
+    )
   }
 
   return (
@@ -377,6 +408,26 @@ export default function ClubThreadsPage({
             <Plus size={14} /> New Thread
           </button>
         </motion.div>
+
+        {/* ── Thread composer ── */}
+        {composerOpen && (
+          <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }}
+            className="overflow-hidden mb-6">
+            <div className="bg-zinc-900/80 border border-indigo-500/20 rounded-2xl p-5 space-y-4">
+              <input type="text" value={newTitle} onChange={e => setNewTitle(e.target.value)} placeholder="Thread title…"
+                className="w-full bg-transparent border-b border-white/10 text-sm font-bold text-white placeholder:text-white/25 outline-none py-2" />
+              <textarea value={newContent} onChange={e => setNewContent(e.target.value)} rows={4} placeholder="Share your thoughts…"
+                className="w-full bg-transparent text-sm text-white/70 placeholder:text-white/25 resize-none outline-none" />
+              <div className="flex items-center justify-end gap-3 pt-1 border-t border-white/5">
+                <button onClick={() => setComposerOpen(false)} className="text-xs text-white/40 hover:text-white transition-colors">Cancel</button>
+                <button onClick={submitThread} disabled={createThread.isPending}
+                  className="flex items-center gap-2 px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-xs font-black uppercase tracking-widest text-white transition-all">
+                  Post Thread
+                </button>
+              </div>
+            </div>
+          </motion.div>
+        )}
 
         {/* ── Pinned threads ── */}
         <motion.div

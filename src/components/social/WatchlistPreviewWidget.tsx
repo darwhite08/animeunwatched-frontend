@@ -4,15 +4,28 @@ import { motion } from "framer-motion"
 import Image from "next/image"
 import Link from "next/link"
 import { MonitorPlay, ArrowRight, Plus, Check } from "lucide-react"
-import { ANIME_DB } from "@/lib/data/anime"
+import { useBrowseAnime } from "@/hooks/useAnime"
+import type { AnimeDTO } from "@/lib/api/types"
 import { useWatchlist } from "@/stores/watchlist.store"
 import { useToast } from "@/stores/toast.store"
 
-const PREVIEW = ANIME_DB.filter(a => a.status === "airing").slice(0, 4)
+function mapDTO(a: AnimeDTO, i: number) {
+  return { id: String(a.malId), title: a.title, rating: a.score ?? 0, year: a.year ?? 0, episodes: a.episodes, type: (["TV","Movie","OVA"] as const).includes(a.type as any) ? a.type as "TV"|"Movie"|"OVA" : "TV" as const, status: a.status?.toLowerCase().includes("airing") ? "airing" as const : "finished" as const, studio: a.studios[0] ?? "Unknown", genres: a.genres, synopsis: a.synopsis ?? "", image: a.imageUrl ?? "", tags: a.genres.map(g => g.toLowerCase().replace(/\s/g, "-")), category: "all" as const, rank: i+1, titleJapanese: a.titleJapanese ?? "" }
+}
 
 export default function WatchlistPreviewWidget() {
   const { add, has } = useWatchlist()
   const { push } = useToast()
+  const { data, isLoading } = useBrowseAnime({ limit: 10 })
+  const PREVIEW = (data?.data ?? []).map(mapDTO).filter(a => a.status === "airing").slice(0, 4)
+
+  if (isLoading) {
+    return (
+      <div className="p-5 rounded-2xl bg-white/[0.02] border border-white/8 h-40 flex items-center justify-center">
+        <div className="w-6 h-6 rounded-full border-2 border-emerald-500/30 border-t-emerald-500 animate-spin" />
+      </div>
+    )
+  }
 
   return (
     <div className="p-5 rounded-2xl bg-white/[0.02] border border-white/8 space-y-4">

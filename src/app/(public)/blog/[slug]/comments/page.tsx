@@ -5,6 +5,7 @@ import { motion } from "framer-motion"
 import Link from "next/link"
 import { MessageSquare, Send, ThumbsUp, ChevronLeft } from "lucide-react"
 import { useToast } from "@/stores/toast.store"
+import { useAuthStore } from "@/stores/auth.store"
 
 type Comment = { id: number; author: string; avatar: string; body: string; time: string; likes: number; likedByMe: boolean; replies?: Comment[] }
 
@@ -28,7 +29,7 @@ export default function BlogCommentsPage({ params }: { params: Promise<{ slug: s
 
   const submit = () => {
     if (!draft.trim()) return
-    setComments(prev => [{ id: Date.now(), author:"darwhite08", avatar:"D", body:draft, time:"just now", likes:0, likedByMe:false }, ...prev])
+    const u = useAuthStore.getState().user; const name = u?.username ?? "you"; setComments(prev => [{ id: Date.now(), author: name, avatar: name[0]?.toUpperCase() ?? "?", body:draft, time:"just now", likes:0, likedByMe:false }, ...prev])
     setDraft("")
     push("Comment posted!", "success")
   }

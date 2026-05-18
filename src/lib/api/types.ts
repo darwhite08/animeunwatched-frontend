@@ -1,5 +1,31 @@
 /* DTOs mirroring the backend API contract. Never import from the backend repo. */
 
+// ── Chat (E2E encrypted DMs) ─────────────────────────────────────────────────
+export interface DirectMessage {
+  id:             string
+  conversationId: string
+  senderId:       string
+  ciphertext:     string        // AES-GCM encrypted, base64
+  iv:             string        // AES-GCM IV, base64
+  createdAt:      string
+  readAt:         string | null
+  decryptedText?: string        // populated client-side after decryption
+}
+
+export interface ConversationSummary {
+  id:          string
+  otherUser:   { id: string; username: string; displayName: string; avatarUrl: string | null }
+  lastMessage: DirectMessage | null
+  updatedAt:   string
+}
+
+export interface ConversationDetail {
+  id:        string
+  otherUser: { id: string; username: string; displayName: string; avatarUrl: string | null }
+  publicKey: string | null   // recipient's ECDH P-256 public key (JWK)
+  createdAt: string
+}
+
 export type Role = "USER" | "MOD" | "ADMIN"
 export type WatchStatus = "PLAN_TO_WATCH" | "WATCHING" | "COMPLETED" | "ON_HOLD" | "DROPPED"
 export type BlogStatus = "DRAFT" | "PUBLISHED"
@@ -35,8 +61,8 @@ export interface AnimeDTO {
   imageUrl: string | null
   trailerUrl: string | null
   source: string | null
-  genres: { name: string }[]
-  studios: { name: string }[]
+  genres: string[]
+  studios: string[]
 }
 
 export interface ListEntry {

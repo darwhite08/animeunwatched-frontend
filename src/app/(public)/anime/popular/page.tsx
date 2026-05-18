@@ -5,10 +5,29 @@ import { motion } from "framer-motion"
 import { Flame, ChevronRight, Star, TrendingUp, ListPlus, MessageSquare } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
-import { ANIME_DB, type Anime } from "@/lib/data/anime"
+import type { Anime } from "@/lib/data/anime"
 import AnimeModal from "@/components/bestanimelist/AnimeModal"
+import { useBrowseAnime } from "@/hooks/useAnime"
+import type { AnimeDTO } from "@/lib/api/types"
 
-/* ── helpers ── */
+const mapDTO = (a: AnimeDTO, i: number): Anime => ({
+  id: String(a.malId),
+  title: a.title,
+  titleJapanese: a.titleJapanese ?? "",
+  rating: a.score ?? 0,
+  year: a.year ?? 0,
+  episodes: a.episodes,
+  type: (["TV", "Movie", "OVA"] as const).includes(a.type as any) ? a.type as any : "TV",
+  status: a.status?.toLowerCase().includes("airing") ? "airing" : "finished",
+  studio: a.studios[0] ?? "Unknown",
+  genres: a.genres,
+  synopsis: a.synopsis ?? "",
+  image: a.imageUrl ?? "",
+  tags: a.genres.map(g => g.toLowerCase().replace(/\s/g, "-")),
+  category: "all",
+  rank: i + 1,
+})
+
 function shuffle<T>(arr: T[]): T[] {
   const a = [...arr]
   for (let i = a.length - 1; i > 0; i--) {
@@ -94,20 +113,25 @@ function HorizontalSection({ title, icon, accent, items, onSelect, viewAllHref =
 export default function PopularAnimePage() {
   const [selected, setSelected] = useState<Anime | null>(null)
 
+  const { data: browseData, isLoading } = useBrowseAnime({ limit: 24 })
+  const animeList = useMemo(() => (browseData?.data ?? []).map(mapDTO), [browseData])
+
   // "Most Watched" — top 6 by rating (mock as watch count proxy)
   const mostWatched = useMemo(
-    () => [...ANIME_DB].sort((a, b) => b.rating - a.rating).slice(0, 6),
-    [],
+    () => [...animeList].sort((a, b) => b.rating - a.rating).slice(0, 6),
+    [animeList],
   )
 
   // "Most Added to Lists" — random 6
-  const mostAdded = useMemo(() => shuffle(ANIME_DB).slice(0, 6), [])
+  const mostAdded = useMemo(() => shuffle(animeList).slice(0, 6), [animeList])
 
   // "Most Reviewed" — top 6 by rating (second ranking set, different order)
   const mostReviewed = useMemo(
-    () => [...ANIME_DB].sort((a, b) => b.rating - a.rating || a.rank - b.rank).slice(6, 12),
-    [],
+    () => [...animeList].sort((a, b) => b.rating - a.rating || a.rank - b.rank).slice(6, 12),
+    [animeList],
   )
+
+  if (isLoading) return null
 
   return (
     <div className="min-h-screen bg-[#020202] text-white pb-32">

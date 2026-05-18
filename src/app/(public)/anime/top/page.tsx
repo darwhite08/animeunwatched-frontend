@@ -2,11 +2,31 @@
 
 import { useState } from "react"
 import { motion } from "framer-motion"
-import { ANIME_DB, type Anime } from "@/lib/data/anime"
+import type { Anime } from "@/lib/data/anime"
 import AnimeCard from "@/components/bestanimelist/AnimeCard"
 import AnimeModal from "@/components/bestanimelist/AnimeModal"
 import { Trophy, Star, ChevronRight } from "lucide-react"
 import Link from "next/link"
+import { useBrowseAnime } from "@/hooks/useAnime"
+import type { AnimeDTO } from "@/lib/api/types"
+
+const mapDTO = (a: AnimeDTO, i: number): Anime => ({
+  id: String(a.malId),
+  title: a.title,
+  titleJapanese: a.titleJapanese ?? "",
+  rating: a.score ?? 0,
+  year: a.year ?? 0,
+  episodes: a.episodes,
+  type: (["TV", "Movie", "OVA"] as const).includes(a.type as any) ? a.type as any : "TV",
+  status: a.status?.toLowerCase().includes("airing") ? "airing" : "finished",
+  studio: a.studios[0] ?? "Unknown",
+  genres: a.genres,
+  synopsis: a.synopsis ?? "",
+  image: a.imageUrl ?? "",
+  tags: a.genres.map(g => g.toLowerCase().replace(/\s/g, "-")),
+  category: "all",
+  rank: i + 1,
+})
 
 const CATEGORIES = [
   { id: "all-time",  label: "All Time",         filter: (a: Anime) => true },
@@ -20,7 +40,12 @@ export default function TopAnimePage() {
   const [cat, setCat] = useState("all-time")
   const [selected, setSelected] = useState<Anime | null>(null)
 
-  const filtered = ANIME_DB
+  const { data: browseData, isLoading } = useBrowseAnime({ limit: 24 })
+  const animeList = (browseData?.data ?? []).map(mapDTO)
+
+  if (isLoading) return null
+
+  const filtered = animeList
     .filter(CATEGORIES.find(c => c.id === cat)?.filter ?? (() => true))
     .sort((a, b) => b.rating - a.rating)
 

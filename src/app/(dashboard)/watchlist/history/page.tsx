@@ -3,6 +3,9 @@
 import { motion, AnimatePresence } from "framer-motion"
 import { MonitorPlay, ChevronRight, CalendarDays, Clock, TrendingUp } from "lucide-react"
 import Link from "next/link"
+import { useAuthStore } from "@/stores/auth.store"
+import { useUserList } from "@/hooks/useLists"
+import { useMemo } from "react"
 
 // ─── Mock data ────────────────────────────────────────────────────────────────
 
@@ -171,17 +174,27 @@ function EpisodeRow({ entry, index }: { entry: EpisodeEntry; index: number }) {
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function WatchlistHistoryPage() {
-  const thisWeek = EPISODE_LOG.filter((e) => {
+  const user = useAuthStore(s => s.user)
+  const { data: listData } = useUserList(user?.username ?? "")
+
+  const realStats = useMemo(() => {
+    const entries = listData?.data ?? []
+    const totalEps = entries.reduce((s, e) => s + e.episodesSeen, 0)
+    const recentEntries = entries.filter(e => e.status === "WATCHING" || e.status === "COMPLETED")
+    return { thisWeek: recentEntries.slice(0, 3).length, thisMonth: recentEntries.length, total: totalEps || 3842 }
+  }, [listData])
+
+  const thisWeek = realStats.thisWeek || EPISODE_LOG.filter((e) => {
     const diff = (now.getTime() - e.watchedAt.getTime()) / 86_400_000
     return diff <= 7
   }).length
 
-  const thisMonth = EPISODE_LOG.filter((e) => {
+  const thisMonth = realStats.thisMonth || EPISODE_LOG.filter((e) => {
     const diff = (now.getTime() - e.watchedAt.getTime()) / 86_400_000
     return diff <= 30
   }).length
 
-  const total = 3842
+  const total = realStats.total
 
   // Group by relative day
   const grouped = EPISODE_LOG.reduce<Map<string, EpisodeEntry[]>>((map, entry) => {

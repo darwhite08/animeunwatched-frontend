@@ -1,15 +1,20 @@
 "use client"
 
 import { use, useState } from "react"
-import { notFound } from "next/navigation"
 import { motion } from "framer-motion"
 import Link from "next/link"
 import {
   ChevronRight, Star, Tv2, Film, BookOpen,
   CheckCircle2, ListPlus, Clock, Play,
 } from "lucide-react"
-import { ANIME_DB } from "@/lib/data/anime"
+import { useBrowseAnime } from "@/hooks/useAnime"
 import { useToast } from "@/stores/toast.store"
+import type { AnimeDTO } from "@/lib/api/types"
+import type { Anime } from "@/lib/data/anime"
+
+function mapDTO(a: AnimeDTO, i: number): Anime {
+  return { id: String(a.malId), title: a.title, titleJapanese: a.titleJapanese ?? "", rating: a.score ?? 0, year: a.year ?? 0, episodes: a.episodes, type: (["TV","Movie","OVA"] as const).includes(a.type as any) ? a.type as any : "TV", status: a.status?.toLowerCase().includes("airing") ? "airing" : "finished", studio: a.studios[0] ?? "Unknown", genres: a.genres, synopsis: a.synopsis ?? "", image: a.imageUrl ?? "", tags: a.genres.map(g => g.toLowerCase().replace(/\s/g, "-")), category: "all", rank: i+1 }
+}
 
 /* ── Types ── */
 type EntryType = "Main Series" | "Prequel" | "Sequel" | "Side Story" | "Movie" | "OVA"
@@ -208,14 +213,14 @@ export default function FranchisePage({
   const { push } = useToast()
   const [added, setAdded] = useState(false)
 
-  const anime = ANIME_DB.find((a) => a.id === id)
-  if (!anime) notFound()
+  const { data: browseData, isLoading } = useBrowseAnime({ limit: 6 })
+  const anime = (browseData?.data ?? []).map(mapDTO)[0] ?? null
 
-  const franchise = buildFranchise(anime.id, anime.title, anime.year)
+  const franchise = anime ? buildFranchise(id, anime.title, anime.year) : []
 
   const handleAddAll = () => {
     setAdded(true)
-    push(`Added all ${anime.title} franchise entries to your watchlist!`, "success")
+    push(`Added all ${anime?.title ?? ""} franchise entries to your watchlist!`, "success")
   }
 
   const stats = {
@@ -229,6 +234,8 @@ export default function FranchisePage({
       franchise.filter((e) => e.rating !== null).length,
   }
 
+  if (isLoading) return <div className="min-h-screen bg-[#020202] text-white flex items-center justify-center text-white/30">Loading…</div>
+
   return (
     <div className="min-h-screen bg-[#020202] text-white pb-32">
       <div className="max-w-3xl mx-auto px-6 pt-28 pb-10">
@@ -239,8 +246,8 @@ export default function FranchisePage({
             Anime
           </Link>
           <ChevronRight size={11} className="text-white/15" />
-          <Link href={`/anime/${anime.id}`} className="hover:text-white/60 transition-colors truncate max-w-[180px]">
-            {anime.title}
+          <Link href={`/anime/${id}`} className="hover:text-white/60 transition-colors truncate max-w-[180px]">
+            {anime?.title ?? id}
           </Link>
           <ChevronRight size={11} className="text-white/15" />
           <span className="text-indigo-400">Franchise</span>
@@ -256,7 +263,7 @@ export default function FranchisePage({
             Complete Franchise
           </p>
           <h1 className="text-4xl sm:text-5xl font-black tracking-tighter uppercase italic text-white leading-none mb-2">
-            {anime.title}
+            {anime?.title ?? id}
             <span className="text-indigo-500">.</span>
           </h1>
           <p className="text-white/35 text-sm">All related entries in the same series universe.</p>
@@ -329,11 +336,11 @@ export default function FranchisePage({
           className="mt-10 pt-8 border-t border-white/5"
         >
           <Link
-            href={`/anime/${anime.id}`}
+            href={`/anime/${id}`}
             className="inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-indigo-400 hover:text-indigo-300 transition-colors"
           >
             <ChevronRight size={12} className="rotate-180" />
-            Back to {anime.title}
+            Back to {anime?.title ?? id}
           </Link>
         </motion.div>
       </div>

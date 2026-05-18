@@ -5,17 +5,33 @@ import { motion } from "framer-motion"
 import Image from "next/image"
 import Link from "next/link"
 import { Star, Plus, Check, ArrowRight, Film } from "lucide-react"
-import { ANIME_DB, type Anime } from "@/lib/data/anime"
+import type { Anime } from "@/lib/data/anime"
 import { useWatchlist } from "@/stores/watchlist.store"
 import { useToast } from "@/stores/toast.store"
 import AnimeCard from "@/components/bestanimelist/AnimeCard"
 import AnimeModal from "@/components/bestanimelist/AnimeModal"
+import { useBrowseAnime } from "@/hooks/useAnime"
+import type { AnimeDTO } from "@/lib/api/types"
 
-/* ── Data slices ──────────────────────────────────────────────────────── */
-const TRENDING = ANIME_DB.filter((a) => a.category === "trending").slice(0, 4)
-const HIDDEN_GEMS = ANIME_DB.filter(
-  (a) => a.rating >= 8.5 && a.rank > 10
-).slice(0, 4)
+const mapDTO = (a: AnimeDTO, i: number): Anime => ({
+  id: String(a.malId),
+  title: a.title,
+  titleJapanese: a.titleJapanese ?? "",
+  rating: a.score ?? 0,
+  year: a.year ?? 0,
+  episodes: a.episodes,
+  type: (["TV", "Movie", "OVA"] as const).includes(a.type as any) ? a.type as any : "TV",
+  status: a.status?.toLowerCase().includes("airing") ? "airing" : "finished",
+  studio: a.studios[0] ?? "Unknown",
+  genres: a.genres,
+  synopsis: a.synopsis ?? "",
+  image: a.imageUrl ?? "",
+  tags: a.genres.map(g => g.toLowerCase().replace(/\s/g, "-")),
+  category: "all",
+  rank: i + 1,
+})
+
+/* ── Data slices are computed inside the component from API data ── */
 
 const GENRES = ["Action", "Psychological", "Romance", "Fantasy", "Sci-Fi"] as const
 type Genre = (typeof GENRES)[number]
@@ -202,15 +218,23 @@ export default function DiscoverPage() {
   const [modalAnime, setModalAnime] = useState<Anime | null>(null)
   const [modalOpen, setModalOpen] = useState(false)
 
-  const genreAnime = ANIME_DB.filter((a) => a.genres.includes(selectedGenre))
+  const { data: browseData, isLoading } = useBrowseAnime({ limit: 18 })
+  const animeList = (browseData?.data ?? []).map(mapDTO)
+
+  if (isLoading) return null
+
+  const TRENDING = animeList.slice(0, 4)
+  const HIDDEN_GEMS = animeList.filter((a) => a.rating >= 8.5 && a.rank > 10).slice(0, 4)
+
+  const genreAnime = animeList.filter((a) => a.genres.includes(selectedGenre))
 
   const studioAnime = selectedStudio
-    ? ANIME_DB.filter((a) => a.studio === selectedStudio)
+    ? animeList.filter((a) => a.studio === selectedStudio)
     : []
 
   const studioCounts = STUDIOS.map((s) => ({
     ...s,
-    count: ANIME_DB.filter((a) => a.studio === s.name).length,
+    count: animeList.filter((a) => a.studio === s.name).length,
   }))
 
   const openModal = (anime: Anime) => {

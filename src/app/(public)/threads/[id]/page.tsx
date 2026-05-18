@@ -1,6 +1,8 @@
 "use client"
 
 import { use, useState } from "react"
+import { useThread, useReplies, useCreateReply } from "@/hooks/useThreads"
+import { useAuthStore } from "@/stores/auth.store"
 import { motion, AnimatePresence } from "framer-motion"
 import Link from "next/link"
 import {
@@ -211,9 +213,35 @@ export default function ThreadDetailPage({
 }) {
   const { id } = use(params)
   const { push } = useToast()
-  const thread = buildThreadData(id)
+  const isAuthenticated = useAuthStore(s => s.isAuthenticated)
+  const authUser = useAuthStore(s => s.user)
 
-  const [replies, setReplies] = useState<ReplyItem[]>(INITIAL_REPLIES)
+  const { data: threadData } = useThread(id)
+  const { data: repliesData } = useReplies(id)
+  const createReplyMut = useCreateReply(id)
+
+  // Merge real data with mock fallback
+  const apiThread = threadData?.thread
+  const thread = apiThread ? {
+    ...buildThreadData(id),
+    title: apiThread.title,
+    content: apiThread.content,
+    author: apiThread.author?.displayName ?? apiThread.author?.username ?? "Anonymous",
+    isPinned: apiThread.isPinned,
+    isLocked: apiThread.isLocked,
+    createdAt: apiThread.createdAt,
+  } : buildThreadData(id)
+
+  const apiReplies: ReplyItem[] = (repliesData?.data ?? []).map(r => ({
+    id: r.id,
+    author: r.author?.displayName ?? r.author?.username ?? "Anonymous",
+    avatar: (r.author?.displayName ?? r.author?.username ?? "?")[0].toUpperCase(),
+    content: r.content,
+    likes: 0, liked: false,
+    date: (() => { const d = Date.now() - new Date(r.createdAt).getTime(); return d < 3600000 ? `${Math.floor(d/60000)}m ago` : `${Math.floor(d/3600000)}h ago` })(),
+  }))
+
+  const [replies, setReplies] = useState<ReplyItem[]>(() => apiReplies.length > 0 ? apiReplies : INITIAL_REPLIES)
   const [composerText, setComposerText] = useState("")
   const [replyingTo, setReplyingTo] = useState<string | null>(null)
 
@@ -228,18 +256,26 @@ export default function ThreadDetailPage({
   }
 
   const submitReply = (text: string) => {
-    const newReply: ReplyItem = {
-      id: `r-${Date.now()}`,
-      author: "darwhite08",
-      avatar: "D",
-      date: "just now",
-      content: text,
-      likes: 0,
-      liked: false,
-    }
-    setReplies((prev) => [newReply, ...prev])
-    push("Reply posted!", "success")
-    setReplyingTo(null)
+    if (!isAuthenticated) { push("Sign in to reply", "info"); return }
+    createReplyMut.mutate(
+      { content: text, parentId: replyingTo ?? undefined },
+      {
+        onSuccess: () => {
+          const newReply: ReplyItem = {
+            id: `r-${Date.now()}`,
+            author: authUser?.displayName ?? authUser?.username ?? "You",
+            avatar: (authUser?.displayName ?? authUser?.username ?? "?")[0].toUpperCase(),
+            date: "just now",
+            content: text,
+            likes: 0, liked: false,
+          }
+          setReplies(prev => [newReply, ...prev])
+          push("Reply posted!", "success")
+          setReplyingTo(null)
+        },
+        onError: () => push("Failed to post reply", "error"),
+      }
+    )
   }
 
   const submitMainReply = () => {

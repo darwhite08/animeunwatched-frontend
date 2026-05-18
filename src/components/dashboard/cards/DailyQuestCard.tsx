@@ -1,19 +1,22 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useMemo } from "react"
 import { motion } from "framer-motion"
 import Link from "next/link"
+import { useAuthStore } from "@/stores/auth.store"
+import { useUserList } from "@/hooks/useLists"
+import { useDiscover } from "@/hooks/usePosts"
 import { Target, CheckCircle2, Circle, Zap, Clock } from "lucide-react"
 import { useToast } from "@/stores/toast.store"
 
 type Quest = { id: string; label: string; xp: number; progress: number; total: number; href: string }
 
 const QUESTS: Quest[] = [
-  { id:"q1", label:"Watch 1 episode",       xp:50,  progress:1, total:1, href:"/watchlist"  },
-  { id:"q2", label:"Rate an anime",          xp:100, progress:0, total:1, href:"/rate"       },
-  { id:"q3", label:"Write a post",           xp:75,  progress:0, total:1, href:"/community"  },
-  { id:"q4", label:"Check the leaderboard",  xp:25,  progress:1, total:1, href:"/leaderboard"},
-  { id:"q5", label:"Add 1 anime to list",    xp:50,  progress:1, total:1, href:"/bestanimelist"},
+  { id:"q1", label:"Watch 1 episode today",   xp:50,  progress:0, total:1, href:"/watchlist"    },
+  { id:"q2", label:"Rate an anime",           xp:100, progress:0, total:1, href:"/rate"          },
+  { id:"q3", label:"Write a community post",  xp:75,  progress:0, total:1, href:"/community"     },
+  { id:"q4", label:"Check the leaderboard",   xp:25,  progress:0, total:1, href:"/leaderboard"   },
+  { id:"q5", label:"Discover new anime",      xp:50,  progress:0, total:1, href:"/ai-discover"   },
 ]
 
 function useCountdown() {
@@ -36,10 +39,28 @@ function useCountdown() {
 export default function DailyQuestCard() {
   const { push } = useToast()
   const timeLeft = useCountdown()
-  const done = QUESTS.filter(q => q.progress >= q.total).length
-  const totalXp = QUESTS.reduce((s, q) => s + q.xp, 0)
-  const earnedXp = QUESTS.filter(q => q.progress >= q.total).reduce((s, q) => s + q.xp, 0)
-  const allDone = done === QUESTS.length
+  const user = useAuthStore(s => s.user)
+  const { data: listData } = useUserList(user?.username ?? "")
+  const { data: discoverData } = useDiscover()
+
+  // Compute real quest progress
+  const realQuests = useMemo(() => {
+    const watchingCount = (listData?.data ?? []).filter(e => e.episodesSeen > 0).length
+    const postsCount = (discoverData?.pages[0]?.data ?? []).filter(p => p.authorId === user?.id).length
+    return QUESTS.map(q => ({
+      ...q,
+      progress: q.id === "q1" ? Math.min(1, watchingCount) :
+                q.id === "q3" ? Math.min(1, postsCount) :
+                q.id === "q4" ? 1 : // just viewed = always done
+                q.id === "q5" ? 1 : // just being on the site = done
+                q.progress,
+    }))
+  }, [listData, discoverData, user])
+
+  const done = realQuests.filter(q => q.progress >= q.total).length
+  const totalXp = realQuests.reduce((s, q) => s + q.xp, 0)
+  const earnedXp = realQuests.filter(q => q.progress >= q.total).reduce((s, q) => s + q.xp, 0)
+  const allDone = done === realQuests.length
   const [claimed, setClaimed] = useState(false)
 
   const claim = () => {
@@ -86,7 +107,7 @@ export default function DailyQuestCard() {
 
       {/* Quest list */}
       <div className="space-y-2.5 relative z-10">
-        {QUESTS.map((q, i) => {
+        {realQuests.map((q, i) => {
           const complete = q.progress >= q.total
           return (
             <motion.div key={q.id} initial={{ opacity:0, x:-8 }} animate={{ opacity:1, x:0 }} transition={{ delay: i*0.07 }}>

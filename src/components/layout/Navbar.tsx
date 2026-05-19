@@ -10,6 +10,7 @@ import {
   TrendingUp, Calendar, Star, Bot, BookOpen,
   Users, Vote, LayoutList, Trophy, Flame, Newspaper,
   MonitorPlay, BarChart2, BookMarked, MessageSquare,
+  Tag, Building2, Layers,
 } from "lucide-react";
 import { useWatchlist } from "@/stores/watchlist.store";
 import { useAuthStore } from "@/stores/auth.store";
@@ -21,26 +22,27 @@ import ProfileMenu from "./ProfileMenu";
 /* ── Dropdown link data ─────────────────────────────────────── */
 
 const ANIME_LINKS = [
-  { name: "Browse All",   href: "/bestanimelist", icon: LayoutList,  desc: "Full anime archive" },
-  { name: "AI Discover",  href: "/ai-discover",   icon: Bot,          desc: "Neural recommendations" },
-  { name: "Seasonal",     href: "/seasonal",      icon: Calendar,     desc: "Currently airing" },
-  { name: "Top Rated",    href: "/rankings",      icon: Star,         desc: "Community ranked" },
-  { name: "New Releases", href: "/anime/new",     icon: Flame,        desc: "Just dropped" },
+  { name: "Browse All",       href: "/bestanimelist",    icon: LayoutList,  desc: "All 30,000+ anime" },
+  { name: "AI Discover",      href: "/ai-discover",      icon: Bot,         desc: "Neural recommendations" },
+  { name: "Seasonal",         href: "/seasonal",         icon: Calendar,    desc: "Any year & season" },
+  { name: "Top Rated",        href: "/rankings",         icon: Star,        desc: "Community ranked" },
+  { name: "Genres",           href: "/genres",           icon: Tag,         desc: "Browse by genre" },
+  { name: "Studios",          href: "/studios",          icon: Building2,   desc: "Browse by studio" },
+  { name: "Recommendations",  href: "/recommendations",  icon: Sparkles,    desc: "Picks for you" },
+  { name: "Collections",      href: "/collections",      icon: Layers,      desc: "Curated lists" },
 ];
 
 const COMMUNITY_LINKS = [
   { name: "Feed",        href: "/community",   icon: Newspaper,  desc: "Latest posts" },
-  { name: "Clubs",       href: "/clubs",       icon: Users,       desc: "Join a community" },
-  { name: "Blog",        href: "/blog",        icon: BookOpen,    desc: "Long-form articles" },
-  { name: "Polls",       href: "/poll",        icon: Vote,        desc: "Vote & debate" },
-  { name: "Leaderboard", href: "/leaderboard", icon: Trophy,      desc: "Top users" },
+  { name: "Clubs",       href: "/clubs",       icon: Users,      desc: "Join a community" },
+  { name: "Blog",        href: "/blog",        icon: BookOpen,   desc: "Long-form articles" },
+  { name: "Polls",       href: "/poll",        icon: Vote,       desc: "Vote & debate" },
+  { name: "Leaderboard", href: "/leaderboard", icon: Trophy,     desc: "Top users" },
 ];
 
+// MY LIST dropdown only shows dashboard-level personal actions
 const MY_LINKS = [
-  { name: "Watchlist", href: "/watchlist", icon: MonitorPlay, desc: "Anime you're tracking" },
-  { name: "Readlist",  href: "/readlist",  icon: BookMarked,  desc: "Manga you're reading" },
-  { name: "Stats",     href: "/stats",     icon: BarChart2,   desc: "Your anime stats" },
-  { name: "Streak",    href: "/streak",    icon: Flame,       desc: "Daily watching streak" },
+  { name: "Dashboard", href: "/dashboard", icon: MonitorPlay, desc: "Your personal hub" },
 ];
 
 /* ── Homepage section themes ────────────────────────────────── */
@@ -155,9 +157,9 @@ export default function Navbar() {
       {/* Nav pill */}
       <motion.nav
         animate={{
-          backgroundColor: scrolled ? theme.bg  : "rgba(0,0,0,0.08)",
-          borderColor:     scrolled ? theme.border : "rgba(255,255,255,0.06)",
-          boxShadow:       scrolled ? theme.glow  : "none",
+          backgroundColor: scrolled ? "rgba(5,5,10,0.92)" : "rgba(0,0,0,0.08)",
+          borderColor:     scrolled ? "rgba(255,255,255,0.18)" : "rgba(255,255,255,0.06)",
+          boxShadow:       "none",
         }}
         transition={T}
         className="relative flex w-full max-w-[1200px] items-center justify-between rounded-[2rem] px-6 backdrop-blur-2xl border"
@@ -165,16 +167,16 @@ export default function Navbar() {
       >
         {/* ── Logo ── */}
         <Link href="/" className="group flex items-center gap-2 shrink-0">
-          <motion.div animate={{ boxShadow: `0 0 24px ${theme.dotColor}` }} transition={T}
-            className="rounded-xl transition-transform group-hover:scale-105">
+          <div className="rounded-xl transition-transform group-hover:scale-105"
+            style={{ boxShadow: "0 0 18px rgba(255,255,255,0.15)" }}>
             {/* Kaiveron K mark */}
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="32" height="32">
               <rect width="100" height="100" rx="18" fill="#0A0F1E"/>
               <path d="M 30 28 L 40 28 L 40 46 L 47 46 L 54 28 L 64 28 L 53 50 L 50 50 L 60 72 L 50 72 L 44 60 L 40 60 L 40 72 L 30 72 Z" fill="#F4F2EC"/>
             </svg>
-          </motion.div>
+          </div>
           <span className="text-lg font-black tracking-tight text-white uppercase italic hidden sm:block">
-            KAIVERON<motion.span animate={{ color: theme.dotColor }} transition={T}>.</motion.span>
+            KAIVERON<span className="text-white/40">.</span>
           </span>
         </Link>
 

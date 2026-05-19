@@ -1,133 +1,271 @@
 "use client"
 
-import { useState } from "react"
-import { motion } from "framer-motion"
-import Link from "next/link"
+import { useState, useMemo } from "react"
+import { motion, AnimatePresence } from "framer-motion"
+import { CalendarDays, ChevronLeft, ChevronRight, ChevronDown } from "lucide-react"
+import { useSeasonal } from "@/hooks/useAnime"
 import AnimeModal from "@/components/bestanimelist/AnimeModal"
 import type { Anime } from "@/lib/data/anime"
 import type { AnimeDTO } from "@/lib/api/types"
-import { CalendarDays, ChevronRight, Loader2 } from "lucide-react"
-import { useBrowseAnime } from "@/hooks/useAnime"
 
 const SEASONS = ["winter", "spring", "summer", "fall"] as const
-const SEASON_DATA = {
-  winter: { emoji: "❄️", months: "Jan–Mar", color: "from-blue-900/30 to-slate-900/10",   border: "border-blue-500/20",   accent: "text-blue-400",   cta: "bg-blue-700 hover:bg-blue-600" },
-  spring: { emoji: "🌸", months: "Apr–Jun", color: "from-pink-900/30 to-rose-900/10",    border: "border-pink-500/20",   accent: "text-pink-400",   cta: "bg-pink-700 hover:bg-pink-600" },
-  summer: { emoji: "☀️", months: "Jul–Sep", color: "from-amber-900/30 to-orange-900/10", border: "border-amber-500/20",  accent: "text-amber-400",  cta: "bg-amber-700 hover:bg-amber-600" },
-  fall:   { emoji: "🍂", months: "Oct–Dec", color: "from-orange-900/30 to-red-900/10",   border: "border-orange-500/20", accent: "text-orange-400", cta: "bg-orange-700 hover:bg-orange-600" },
+type Season = typeof SEASONS[number]
+
+const SEASON_META: Record<Season, { emoji: string; months: string; accent: string; badge: string }> = {
+  winter: { emoji: "❄️", months: "Jan – Mar", accent: "text-blue-400",   badge: "bg-blue-500/15 text-blue-300 border-blue-500/20"    },
+  spring: { emoji: "🌸", months: "Apr – Jun", accent: "text-pink-400",   badge: "bg-pink-500/15 text-pink-300 border-pink-500/20"    },
+  summer: { emoji: "☀️", months: "Jul – Sep", accent: "text-amber-400",  badge: "bg-amber-500/15 text-amber-300 border-amber-500/20"  },
+  fall:   { emoji: "🍂", months: "Oct – Dec", accent: "text-orange-400", badge: "bg-orange-500/15 text-orange-300 border-orange-500/20"},
 }
 
-const YEARS = [2024, 2023, 2022, 2021]
+const EARLIEST_YEAR = 1917
+const CURRENT_YEAR  = new Date().getFullYear()
+const YEAR_LIST     = Array.from({ length: CURRENT_YEAR - EARLIEST_YEAR + 1 }, (_, i) => CURRENT_YEAR - i)
+
+function getCurrentSeason(): Season {
+  const m = new Date().getMonth() + 1
+  if (m <= 3) return "winter"
+  if (m <= 6) return "spring"
+  if (m <= 9) return "summer"
+  return "fall"
+}
 
 function mapDTO(a: AnimeDTO, i: number): Anime {
   return {
     id: String(a.malId), title: a.title, titleJapanese: a.titleJapanese ?? "",
     rating: a.score ?? 0, year: a.year ?? 0, episodes: a.episodes,
-    type: (["TV","Movie","OVA"] as const).includes(a.type as "TV"|"Movie"|"OVA") ? (a.type as "TV"|"Movie"|"OVA") : "TV",
+    type: (["TV","Movie","OVA"] as const).includes(a.type as "TV"|"Movie"|"OVA")
+      ? (a.type as "TV"|"Movie"|"OVA") : "TV",
     status: a.status?.toLowerCase().includes("airing") ? "airing" : "finished",
     studio: a.studios[0] ?? "Unknown", genres: a.genres,
-    synopsis: a.synopsis ?? "", image: a.imageUrl ?? "",
+    synopsis: a.synopsis ?? "", image: a.imageUrl ?? "/assets/png/tanjiro.png",
     tags: a.genres.map(g => g.toLowerCase().replace(/\s/g, "-")), category: "all", rank: i + 1,
   }
 }
 
 export default function SeasonalPage() {
-  const [selectedAnime, setSelectedAnime] = useState<Anime | null>(null)
-  const { data, isLoading } = useBrowseAnime({ limit: 50 })
+  const [year,     setYear]     = useState(CURRENT_YEAR)
+  const [season,   setSeason]   = useState<Season>(getCurrentSeason())
+  const [yearOpen, setYearOpen] = useState(false)
+  const [selected, setSelected] = useState<Anime | null>(null)
 
-  const allAnime = data?.data?.map(mapDTO) ?? []
-  const airingCount = allAnime.filter(a => a.status === "airing").length
-  const currentYear = 2024
+  const { data, isLoading, isError, refetch } = useSeasonal(year, season)
+  const anime = useMemo(() => (data?.data ?? []).map(mapDTO), [data])
+  const meta  = SEASON_META[season]
 
-  const grid = YEARS.map(year => ({
-    year,
-    seasons: SEASONS.map(s => ({
-      season: s,
-      anime: allAnime.filter(a => a.year === year).slice(0, 4),
-      count: allAnime.filter(a => a.year === year).length,
-    })),
-  }))
+  function shiftYear(delta: number) {
+    setYear(y => Math.max(EARLIEST_YEAR, Math.min(CURRENT_YEAR, y + delta)))
+  }
+  function shiftSeason(delta: number) {
+    const idx  = SEASONS.indexOf(season)
+    const next = (idx + delta + SEASONS.length) % SEASONS.length
+    if (delta > 0 && idx === SEASONS.length - 1) shiftYear(1)
+    if (delta < 0 && idx === 0) shiftYear(-1)
+    setSeason(SEASONS[next])
+  }
 
   return (
-    <div className="min-h-screen bg-[#020202] text-white pb-32">
+    <div className="min-h-screen bg-[#020202] text-white pb-40">
+      {/* Header */}
       <div className="max-w-7xl mx-auto px-6 pt-32 pb-10">
         <div className="flex items-center gap-3 mb-4">
-          <CalendarDays size={18} className="text-indigo-400" />
+          <CalendarDays size={16} className="text-indigo-400" />
           <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-indigo-400/60">Seasonal Archive</p>
         </div>
         <h1 className="text-6xl font-black tracking-tighter uppercase italic text-white leading-none mb-3">
           Seasonal<span className="text-indigo-500">.</span>
         </h1>
-        <p className="text-white/35 text-sm mb-8">Browse anime by airing season — every year, every quarter.</p>
+        <p className="text-white/30 text-sm">Every anime, every season — from {EARLIEST_YEAR} to {CURRENT_YEAR}.</p>
+      </div>
 
-        {/* Current season hero */}
-        <div className={`p-8 rounded-[2rem] bg-gradient-to-br ${SEASON_DATA.fall.color} ${SEASON_DATA.fall.border} border flex flex-col md:flex-row items-center justify-between gap-6`}>
-          <div>
-            <p className="text-[9px] font-black uppercase tracking-widest text-orange-400/70 mb-2">Now Airing</p>
-            <h2 className="text-3xl font-black tracking-tighter text-white uppercase italic">
-              {SEASON_DATA.fall.emoji} Fall {currentYear}
-            </h2>
-            <p className="text-white/35 text-sm mt-1">{SEASON_DATA.fall.months} · {airingCount} anime airing</p>
+      {/* Sticky picker bar */}
+      <div className="sticky top-0 z-30 bg-[#020202]/90 backdrop-blur-xl border-b border-white/5">
+        <div className="max-w-7xl mx-auto px-6 py-4 flex flex-wrap items-center gap-4">
+
+          {/* Year control */}
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => shiftYear(-1)} disabled={year <= EARLIEST_YEAR}
+              className="p-1.5 rounded-lg text-white/40 hover:text-white hover:bg-white/8 disabled:opacity-20 disabled:cursor-not-allowed transition-all"
+            >
+              <ChevronLeft size={16} />
+            </button>
+
+            <div className="relative">
+              <button
+                onClick={() => setYearOpen(o => !o)}
+                className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white/6 border border-white/10 text-sm font-black text-white hover:bg-white/10 transition-all min-w-[90px] justify-center"
+              >
+                {year}
+                <ChevronDown size={13} className={`text-white/40 transition-transform ${yearOpen ? "rotate-180" : ""}`} />
+              </button>
+              <AnimatePresence>
+                {yearOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }}
+                    className="absolute top-full mt-2 left-0 z-50 w-32 bg-[#111] border border-white/10 rounded-2xl overflow-hidden shadow-2xl"
+                  >
+                    <div className="max-h-64 overflow-y-auto scrollbar-hide">
+                      {YEAR_LIST.map(y => (
+                        <button key={y} onClick={() => { setYear(y); setYearOpen(false) }}
+                          className={`w-full text-left px-4 py-2 text-sm font-bold transition-colors ${
+                            y === year ? "bg-indigo-600/20 text-indigo-400" : "text-white/60 hover:text-white hover:bg-white/5"
+                          }`}
+                        >
+                          {y}
+                        </button>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+
+            <button
+              onClick={() => shiftYear(1)} disabled={year >= CURRENT_YEAR}
+              className="p-1.5 rounded-lg text-white/40 hover:text-white hover:bg-white/8 disabled:opacity-20 disabled:cursor-not-allowed transition-all"
+            >
+              <ChevronRight size={16} />
+            </button>
           </div>
-          <Link href={`/anime/season/${currentYear}/fall`}
-            className={`flex items-center gap-2 px-6 py-3.5 rounded-2xl ${SEASON_DATA.fall.cta} text-sm font-black uppercase tracking-widest text-white transition-all shrink-0`}>
-            Browse Fall {currentYear} <ChevronRight size={14} />
-          </Link>
+
+          {/* Season tabs */}
+          <div className="flex items-center gap-1.5 bg-white/4 border border-white/8 rounded-2xl p-1">
+            {SEASONS.map(s => {
+              const m = SEASON_META[s]
+              const active = s === season
+              return (
+                <button key={s} onClick={() => setSeason(s)}
+                  className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${
+                    active ? "bg-white/12 text-white shadow-sm" : "text-white/35 hover:text-white hover:bg-white/6"
+                  }`}
+                >
+                  <span>{m.emoji}</span>
+                  <span className={active ? m.accent : ""}>{s}</span>
+                </button>
+              )
+            })}
+          </div>
+
+          {/* Season arrows */}
+          <div className="flex items-center gap-1 ml-auto">
+            <button onClick={() => shiftSeason(-1)} title="Previous season"
+              className="p-1.5 rounded-lg text-white/40 hover:text-white hover:bg-white/8 transition-all">
+              <ChevronLeft size={16} />
+            </button>
+            <button onClick={() => shiftSeason(1)} title="Next season"
+              className="p-1.5 rounded-lg text-white/40 hover:text-white hover:bg-white/8 transition-all">
+              <ChevronRight size={16} />
+            </button>
+          </div>
         </div>
       </div>
 
-      {isLoading && (
-        <div className="flex justify-center py-16"><Loader2 size={24} className="animate-spin text-indigo-400" /></div>
-      )}
-
-      <div className="max-w-7xl mx-auto px-6 space-y-16">
-        {grid.map(({ year, seasons }) => (
-          <div key={year}>
-            <div className="flex items-center gap-4 mb-8">
-              <h2 className="text-3xl font-black tracking-tighter text-white/80 uppercase italic">{year}</h2>
-              <div className="flex-1 h-px bg-white/5" />
-              <Link href={`/anime/season/${year}/fall`}
-                className="text-[10px] font-black uppercase tracking-widest text-indigo-400 hover:text-indigo-300 transition-colors">
-                All seasons →
-              </Link>
-            </div>
-
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
-              {seasons.map(({ season, anime, count }) => {
-                const s = SEASON_DATA[season]
-                return (
-                  <motion.div key={season} initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-                    <Link href={`/anime/season/${year}/${season}`}
-                      className={`group block p-5 rounded-2xl bg-gradient-to-br ${s.color} ${s.border} border hover:border-white/20 transition-all space-y-3`}>
-                      <div className="flex items-center justify-between">
-                        <div>
-                          <span className="text-2xl">{s.emoji}</span>
-                          <p className={`text-sm font-black uppercase ${s.accent} mt-1`}>{season}</p>
-                          <p className="text-[9px] text-white/30">{s.months}</p>
-                        </div>
-                        <ChevronRight size={14} className="text-white/20 group-hover:text-white group-hover:translate-x-0.5 transition-all" />
-                      </div>
-                      <div className="flex -space-x-2">
-                        {anime.slice(0, 4).map(a => (
-                          <div key={a.id} className="relative h-8 w-6 rounded overflow-hidden border border-black/40 shrink-0 bg-white/10">
-                            {a.image && <img src={a.image} alt={a.title} className="w-full h-full object-cover" />}
-                          </div>
-                        ))}
-                        {anime.length === 0 && (
-                          <div className="h-8 w-6 rounded bg-white/5 border border-white/10" />
-                        )}
-                      </div>
-                      <p className="text-[9px] text-white/25 font-mono">{count} in archive</p>
-                    </Link>
-                  </motion.div>
-                )
-              })}
-            </div>
-          </div>
-        ))}
+      {/* Season label */}
+      <div className="max-w-7xl mx-auto px-6 pt-8 pb-6 flex items-center gap-4">
+        <h2 className="text-3xl font-black tracking-tighter uppercase italic text-white">
+          {meta.emoji} {season.charAt(0).toUpperCase() + season.slice(1)} {year}
+        </h2>
+        <span className={`px-3 py-1 rounded-full border text-[10px] font-black uppercase tracking-widest ${meta.badge}`}>
+          {meta.months}
+        </span>
+        {!isLoading && !isError && (
+          <span className="text-[10px] font-black text-white/25 uppercase tracking-widest ml-auto">
+            {anime.length} titles
+          </span>
+        )}
       </div>
 
-      <AnimeModal isOpen={selectedAnime !== null} onClose={() => setSelectedAnime(null)} anime={selectedAnime} />
+      {/* Content */}
+      <div className="max-w-7xl mx-auto px-6">
+
+        {isLoading && (
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-5">
+            {Array.from({ length: 18 }).map((_, i) => (
+              <div key={i} className="aspect-[2/3] rounded-[1.8rem] bg-white/[0.04] animate-pulse"
+                style={{ animationDelay: `${i * 40}ms` }} />
+            ))}
+          </div>
+        )}
+
+        {isError && !isLoading && (
+          <div className="py-32 text-center border border-dashed border-white/5 rounded-[3rem]">
+            <p className="text-white/25 font-black uppercase tracking-widest text-xs mb-4">
+              Could not load {season} {year}
+            </p>
+            <button onClick={() => refetch()}
+              className="text-xs text-indigo-400 hover:text-indigo-300 font-black uppercase tracking-widest">
+              Retry
+            </button>
+          </div>
+        )}
+
+        {!isLoading && !isError && anime.length === 0 && (
+          <div className="py-32 text-center border border-dashed border-white/5 rounded-[3rem]">
+            <p className="text-5xl mb-4">{meta.emoji}</p>
+            <p className="text-white/20 font-black uppercase tracking-widest text-xs">
+              No anime archived for {season} {year}
+            </p>
+            <p className="text-white/10 text-[10px] mt-2">Try an adjacent season or year</p>
+          </div>
+        )}
+
+        {!isLoading && !isError && anime.length > 0 && (
+          <AnimatePresence mode="wait">
+            <motion.div key={`${year}-${season}`}
+              initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.22 }}
+              className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-5"
+            >
+              {anime.map((a, i) => (
+                <motion.div key={a.id}
+                  initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: Math.min(i * 0.025, 0.4) }}
+                  onClick={() => setSelected(a)}
+                  className="group relative cursor-pointer"
+                >
+                  <div className="aspect-[2/3] rounded-[1.6rem] overflow-hidden bg-white/[0.04] relative">
+                    {a.image ? (
+                      <img src={a.image} alt={a.title} loading="lazy"
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-white/10 text-4xl font-black">
+                        {a.title[0]}
+                      </div>
+                    )}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-3">
+                      {a.rating > 0 && (
+                        <span className="text-[10px] font-black text-amber-400">★ {a.rating.toFixed(1)}</span>
+                      )}
+                    </div>
+                    {a.rating >= 8.0 && (
+                      <div className="absolute top-2 right-2 px-2 py-0.5 rounded-full bg-amber-500/90 text-[8px] font-black text-black">
+                        {a.rating.toFixed(1)}
+                      </div>
+                    )}
+                    {a.status === "airing" && (
+                      <div className="absolute top-2 left-2 flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-500/20 border border-emerald-500/30">
+                        <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                        <span className="text-[7px] font-black text-emerald-400 uppercase">Live</span>
+                      </div>
+                    )}
+                  </div>
+                  <div className="mt-2.5 px-0.5">
+                    <p className="text-[11px] font-bold text-white/80 leading-tight line-clamp-2 group-hover:text-white transition-colors">
+                      {a.title}
+                    </p>
+                    {a.studio !== "Unknown" && (
+                      <p className="text-[9px] text-white/25 mt-0.5 truncate">{a.studio}</p>
+                    )}
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
+          </AnimatePresence>
+        )}
+      </div>
+
+      <AnimeModal isOpen={selected !== null} onClose={() => setSelected(null)} anime={selected} />
     </div>
   )
 }

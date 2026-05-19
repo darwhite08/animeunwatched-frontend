@@ -44,42 +44,39 @@ export default function BestAnimeListPage() {
   const [selectedGenres, setSelectedGenres] = useState<string[]>([])
   const [selectedType, setSelectedType] = useState("")
   const [query, setQuery] = useState("")
+  const [page, setPage] = useState(1)
+  const LIMIT = 24
 
-  // Build API params
+  // Reset to page 1 when filters change
+  const handleCategoryChange = useCallback((c: string) => { setCategory(c); setPage(1) }, [])
+  const handleQueryChange = useCallback((q: string) => { setQuery(q); setPage(1) }, [])
+  const handleTypeChange = useCallback((t: string) => { setSelectedType(t); setPage(1) }, [])
+
+  // Build API params — pass page so backend paginates Jikan directly
   const apiParams = useMemo(() => {
-    const params: Parameters<typeof useBrowseAnime>[0] = { limit: 50 }
+    const params: Parameters<typeof useBrowseAnime>[0] = { limit: LIMIT, page }
     if (query.trim()) params.q = query.trim()
     if (selectedType) params.type = selectedType
+    // Category maps to API filters (handled server-side via Jikan)
+    if (category === "new") params.type = params.type || "TV"
     return params
-  }, [query, selectedType])
+  }, [query, selectedType, category, page])
 
   const { data, isLoading, isError } = useBrowseAnime(apiParams)
 
+  const totalPages = data?.meta?.pages ?? 1
+  const totalAnime = data?.meta?.total ?? 0
+
   const allAnime: Anime[] = useMemo(() => {
     if (!data?.data) return []
-    return data.data.map((a, i) => mapDTO(a, i + 1))
-  }, [data])
+    return data.data.map((a, i) => mapDTO(a, (page - 1) * LIMIT + i + 1))
+  }, [data, page])
 
-  // Client-side genre + category filter
+  // Client-side category sort (top-rated / new) on top of server results
   const filtered = useMemo(() => {
     let results = [...allAnime]
-
-    if (category === "trending") {
-      // Trending = currently airing OR highest rated, sorted score desc
-      results = results
-        .filter(a => a.status === "airing" || a.rating >= 8.0)
-        .sort((a, b) => b.rating - a.rating)
-    } else if (category === "top-rated") {
-      // Highest rated = score >= 8.5, sorted desc
-      results = results
-        .filter(a => a.rating >= 8.5)
-        .sort((a, b) => b.rating - a.rating)
-    } else if (category === "new") {
-      // Newly synced = most recent years first, then by score
-      results = [...results].sort((a, b) => b.year - a.year || b.rating - a.rating)
-    }
-    // "all" → no extra filter, keeps API order (score desc from backend)
-
+    if (category === "top-rated") results = results.filter(a => a.rating >= 8.0)
+    if (category === "new") results = [...results].sort((a, b) => b.year - a.year || b.rating - a.rating)
     if (selectedGenres.length > 0) {
       results = results.filter(a =>
         selectedGenres.every(g => a.genres.some(ag => ag.toLowerCase().includes(g.toLowerCase())))
@@ -119,11 +116,11 @@ export default function BestAnimeListPage() {
       <div className="max-w-7xl mx-auto px-6">
         {/* Toolbar */}
         <div className="flex flex-wrap items-center justify-between gap-4 mb-10 py-4 border-b border-white/5">
-          <CategoryTabs active={category} onChange={setCategory} />
+          <CategoryTabs active={category} onChange={handleCategoryChange} />
           <div className="flex items-center gap-3">
             <div className="relative group">
               <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/30 group-focus-within:text-indigo-400 transition-colors" />
-              <input value={query} onChange={e => setQuery(e.target.value)}
+              <input value={query} onChange={e => handleQueryChange(e.target.value)}
                 placeholder="Search anime…"
                 className="pl-8 pr-8 py-2 bg-white/5 border border-white/10 rounded-full text-[11px] font-medium text-white placeholder:text-white/20 outline-none focus:border-indigo-500/50 w-44 focus:w-64 transition-all duration-300" />
               {query && (
@@ -194,6 +191,64 @@ export default function BestAnimeListPage() {
             <p className="text-white/20 font-black uppercase tracking-widest text-xs">No archives match your query</p>
             <button onClick={handleReset} className="mt-6 text-xs text-indigo-400 hover:text-indigo-300 font-black uppercase tracking-widest">Clear filters</button>
           </motion.div>
+        )}
+
+        {/* ── Pagination ──────────────────────────────────────────────── */}
+        {!isLoading && !isError && totalPages > 1 && (
+          <div className="flex items-center justify-center gap-2 pt-8 pb-4 flex-wrap">
+            {/* Prev */}
+            <button
+              onClick={() => { setPage(p => Math.max(1, p - 1)); window.scrollTo({ top: 0, behavior: "smooth" }) }}
+              disabled={page === 1}
+              className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-xs font-black text-white/50 hover:text-white hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed transition-all uppercase tracking-widest"
+            >
+              ← Prev
+            </button>
+
+            {/* Page numbers */}
+            {(() => {
+              const nums: (number | "...")[] = []
+              const delta = 2
+              for (let i = 1; i <= totalPages; i++) {
+                if (i === 1 || i === totalPages || (i >= page - delta && i <= page + delta)) {
+                  nums.push(i)
+                } else if (nums[nums.length - 1] !== "...") {
+                  nums.push("...")
+                }
+              }
+              return nums.map((n, idx) =>
+                n === "..." ? (
+                  <span key={`dots-${idx}`} className="text-white/20 px-1 text-xs">…</span>
+                ) : (
+                  <button
+                    key={n}
+                    onClick={() => { setPage(n as number); window.scrollTo({ top: 0, behavior: "smooth" }) }}
+                    className={`w-9 h-9 rounded-xl text-xs font-black transition-all ${
+                      page === n
+                        ? "bg-indigo-600 text-white shadow-[0_0_16px_rgba(99,102,241,0.4)]"
+                        : "bg-white/5 border border-white/10 text-white/40 hover:text-white hover:bg-white/10"
+                    }`}
+                  >
+                    {n}
+                  </button>
+                )
+              )
+            })()}
+
+            {/* Next */}
+            <button
+              onClick={() => { setPage(p => Math.min(totalPages, p + 1)); window.scrollTo({ top: 0, behavior: "smooth" }) }}
+              disabled={page >= totalPages}
+              className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-xs font-black text-white/50 hover:text-white hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed transition-all uppercase tracking-widest"
+            >
+              Next →
+            </button>
+
+            {/* Total count */}
+            <span className="w-full text-center text-[10px] text-white/20 font-black uppercase tracking-widest mt-2">
+              Page {page} of {totalPages.toLocaleString()} — {totalAnime.toLocaleString()} anime total
+            </span>
+          </div>
         )}
       </div>
 

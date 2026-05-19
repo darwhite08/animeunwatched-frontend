@@ -1,4 +1,5 @@
 import "./globals.css"
+import PageLoader from "@/components/ui/PageLoader"
 import ToastContainer from "@/components/layout/ToastContainer"
 import BackToTop from "@/components/ui/BackToTop"
 import KeyboardShortcutsOverlay from "@/components/ui/KeyboardShortcutsOverlay"
@@ -34,6 +35,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body className="bg-black text-white antialiased">
+        <PageLoader />
         <QueryProvider>
           <SessionProvider>
             <LenisProvider>

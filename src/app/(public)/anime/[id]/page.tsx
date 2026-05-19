@@ -50,7 +50,7 @@ import Image from "next/image"
 import Link from "next/link"
 import {
   Star, Clock, Monitor, Plus, Check, Share2, ChevronLeft,
-  MessageSquare, Heart, Sparkles, PenSquare, Flag, BookOpen, Calendar, Play,
+  MessageSquare, Heart, Sparkles, PenSquare, Flag, BookOpen, Calendar, Play, Tv,
 } from "lucide-react"
 import EpisodeTracker from "@/components/anime/EpisodeTracker"
 import { AnimeThreadsSection } from "@/components/anime/AnimeThreadsSection"
@@ -298,6 +298,30 @@ function AnimeDetail({ anime, rawAnime }: { anime: Anime; rawAnime?: AnimeDTO })
               )}
             </div>
 
+            {/* Trailer */}
+            <div>
+              <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/30 mb-4">Trailer</h2>
+              <div className="relative w-full aspect-video rounded-2xl overflow-hidden bg-black/40 border border-white/8">
+                <iframe
+                  src={(() => {
+                    const url = rawAnime?.trailerUrl
+                    if (!url) return "https://www.youtube.com/embed/dQw4w9WgXcQ"
+                    // convert watch?v= → embed/
+                    const m = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([A-Za-z0-9_-]{11})/)
+                    return m ? `https://www.youtube.com/embed/${m[1]}` : "https://www.youtube.com/embed/dQw4w9WgXcQ"
+                  })()}
+                  title={`${anime.title} — Trailer`}
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                  className="absolute inset-0 w-full h-full"
+                  loading="lazy"
+                />
+              </div>
+              {!rawAnime?.trailerUrl && (
+                <p className="text-[9px] text-white/20 mt-2 font-mono">Placeholder trailer — official trailer coming soon</p>
+              )}
+            </div>
+
             {/* Tags */}
             <div>
               <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/30 mb-4">Neural Tags</h2>
@@ -413,6 +437,32 @@ function AnimeDetail({ anime, rawAnime }: { anime: Anime; rawAnime?: AnimeDTO })
                   </Link>
                 ))}
               </div>
+            </div>
+
+            {/* Where to Watch */}
+            <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/8 space-y-4">
+              <div className="flex items-center gap-2">
+                <Tv size={13} className="text-white/30" />
+                <h3 className="text-[9px] font-black uppercase tracking-[0.3em] text-white/25">Where to Watch</h3>
+              </div>
+              <div className="space-y-2">
+                {[
+                  { name: "Crunchyroll", color: "text-orange-400", bg: "bg-orange-500/10 border-orange-500/20", search: `https://www.crunchyroll.com/search?q=${encodeURIComponent(anime.title)}` },
+                  { name: "Netflix",     color: "text-red-400",    bg: "bg-red-500/10 border-red-500/20",       search: `https://www.netflix.com/search?q=${encodeURIComponent(anime.title)}` },
+                  { name: "Funimation",  color: "text-violet-400", bg: "bg-violet-500/10 border-violet-500/20", search: `https://www.funimation.com/search/?q=${encodeURIComponent(anime.title)}` },
+                  { name: "HiDive",      color: "text-cyan-400",   bg: "bg-cyan-500/10 border-cyan-500/20",     search: `https://www.hidive.com/search#q=${encodeURIComponent(anime.title)}` },
+                ].map(p => (
+                  <a key={p.name} href={p.search} target="_blank" rel="noopener noreferrer"
+                    className={`flex items-center justify-between px-4 py-2.5 rounded-xl border text-xs font-bold transition-all hover:scale-[1.02] ${p.bg}`}
+                  >
+                    <span className={p.color}>{p.name}</span>
+                    <span className="text-white/20 text-[9px]">Search →</span>
+                  </a>
+                ))}
+              </div>
+              <p className="text-[8px] text-white/15 font-mono leading-relaxed">
+                Availability varies by region. Links open search results on each platform.
+              </p>
             </div>
 
             {/* Season link */}

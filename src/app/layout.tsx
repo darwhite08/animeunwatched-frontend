@@ -9,16 +9,16 @@ import { SessionProvider } from "@/components/layout/SessionProvider"
 import { LenisProvider } from "@/providers/LenisProvider"
 
 export const metadata = {
-  title: { default: "AnimeUnwatched — Neural Archive", template: "%s | AnimeUnwatched" },
+  title: { default: "Kaiveron — Neural Anime Archive", template: "%s | Kaiveron" },
   description: "Track, rate, and discover anime that deserves more hype. AI-powered recommendations for true enthusiasts.",
-  keywords: ["anime", "manga", "watchlist", "tracker", "ai discover", "anime list"],
+  keywords: ["anime", "manga", "watchlist", "tracker", "ai discover", "anime list", "kaiveron"],
   openGraph: {
     type: "website",
-    siteName: "AnimeUnwatched",
-    title: "AnimeUnwatched — Neural Archive",
+    siteName: "Kaiveron",
+    title: "Kaiveron — Neural Anime Archive",
     description: "Track, rate, and discover anime that deserves more hype.",
   },
-  twitter: { card: "summary_large_image", title: "AnimeUnwatched" },
+  twitter: { card: "summary_large_image", title: "Kaiveron" },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

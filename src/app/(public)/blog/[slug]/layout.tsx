@@ -4,8 +4,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   // Slug-based title generation
   const title = slug.replace(/-/g, " ").replace(/\b\w/g, c => c.toUpperCase())
   return {
-    title: `${title} | The Chronicle — AnimeUnwatched`,
-    description: `Read "${title}" on The Chronicle — anime long-form journalism by the AnimeUnwatched community.`,
+    title: `${title} | The Chronicle — Kaiveron`,
+    description: `Read "${title}" on The Chronicle — anime long-form journalism by the Kaiveron community.`,
     openGraph: { title, type: "article" },
   }
 }

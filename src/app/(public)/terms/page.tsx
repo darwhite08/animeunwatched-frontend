@@ -1,12 +1,12 @@
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "Terms of Service | AnimeUnwatched",
-  description: "AnimeUnwatched terms of service and usage rules.",
+  title: "Terms of Service | Kaiveron",
+  description: "Kaiveron terms of service and usage rules.",
 }
 
 const SECTIONS = [
-  { title: "Acceptance", content: "By using AnimeUnwatched, you agree to these terms. If you don't agree, don't use the service. We may update terms — continued use means acceptance." },
+  { title: "Acceptance", content: "By using Kaiveron, you agree to these terms. If you don't agree, don't use the service. We may update terms — continued use means acceptance." },
   { title: "Your Account", content: "You're responsible for your account security. Use a strong password. Don't share credentials. We're not liable for unauthorized access due to your negligence. One account per person." },
   { title: "Content Rules", content: "No harassment, hate speech, or illegal content. No spam or automated bot activity. Anime spoilers must be tagged. Content that violates these rules will be removed and accounts may be suspended." },
   { title: "Intellectual Property", content: "Your content remains yours. By posting, you grant us a license to display it on the platform. We don't claim ownership. Anime images and metadata are sourced from Jikan (MyAnimeList API) under their terms." },

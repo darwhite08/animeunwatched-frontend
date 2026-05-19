@@ -180,7 +180,7 @@ export default function StatsPage() {
             transition={{ delay: 0.15 }}
             className="mt-6 text-white/40 text-base max-w-xl mx-auto leading-relaxed"
           >
-            Live platform metrics across every Shinobi, club, post, and review on AnimeUnwatched.
+            Live platform metrics across every Shinobi, club, post, and review on Kaiveron.
           </motion.p>
         </div>
       </section>

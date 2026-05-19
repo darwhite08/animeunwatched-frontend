@@ -88,11 +88,12 @@ export default function Footer() {
           {/* Brand column */}
           <div className="col-span-2 md:col-span-2 space-y-6 lg:col-span-2">
             <Link href="/" className="flex items-center gap-2.5 group w-fit">
-              <div className="h-9 w-9 rounded-xl bg-indigo-600 flex items-center justify-center shadow-[0_0_18px_rgba(79,70,229,0.4)] group-hover:scale-110 transition-transform">
-                <Zap size={17} className="text-white" fill="white" />
-              </div>
-              <span className="text-lg font-black tracking-tighter text-white uppercase">
-                UNWATCHED<span className="text-indigo-500">.</span>
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="36" height="36" className="group-hover:scale-110 transition-transform flex-shrink-0">
+                <rect width="100" height="100" rx="18" fill="#0A0F1E"/>
+                <path d="M 30 28 L 40 28 L 40 46 L 47 46 L 54 28 L 64 28 L 53 50 L 50 50 L 60 72 L 50 72 L 44 60 L 40 60 L 40 72 L 30 72 Z" fill="#F4F2EC"/>
+              </svg>
+              <span className="text-lg font-black tracking-tight text-white uppercase italic">
+                KAIVERON<span className="text-indigo-500">.</span>
               </span>
             </Link>
 
@@ -102,7 +103,7 @@ export default function Footer() {
 
             <div className="flex items-center gap-3">
               {[
-                { Icon: Github,  href: "https://github.com/animeunwatched", label: "GitHub"  },
+                { Icon: Github,  href: "https://github.com/kaiveron", label: "GitHub"  },
                 { Icon: Twitter, href: "https://twitter.com",           label: "Twitter" },
               ].map(({ Icon, href, label }) => (
                 <motion.a
@@ -154,7 +155,7 @@ export default function Footer() {
       <div className="border-t border-white/5">
         <div className="max-w-7xl mx-auto px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
           <p className="text-[10px] font-black text-white/15 uppercase tracking-widest">
-            © {year} AnimeUnwatched • Neural Archive Protocol
+            © {year} Kaiveron • Neural Archive Protocol
           </p>
           <div className="flex items-center gap-6">
             {[

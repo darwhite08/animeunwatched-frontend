@@ -166,11 +166,15 @@ export default function Navbar() {
         {/* ── Logo ── */}
         <Link href="/" className="group flex items-center gap-2 shrink-0">
           <motion.div animate={{ boxShadow: `0 0 24px ${theme.dotColor}` }} transition={T}
-            className="h-8 w-8 rounded-xl bg-indigo-600 flex items-center justify-center transition-transform group-hover:rotate-12">
-            <Sparkles size={18} className="text-white" />
+            className="rounded-xl transition-transform group-hover:scale-105">
+            {/* Kaiveron K mark */}
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="32" height="32">
+              <rect width="100" height="100" rx="18" fill="#0A0F1E"/>
+              <path d="M 30 28 L 40 28 L 40 46 L 47 46 L 54 28 L 64 28 L 53 50 L 50 50 L 60 72 L 50 72 L 44 60 L 40 60 L 40 72 L 30 72 Z" fill="#F4F2EC"/>
+            </svg>
           </motion.div>
-          <span className="text-lg font-black tracking-tighter text-white uppercase italic hidden sm:block">
-            UNWATCHED<motion.span animate={{ color: theme.dotColor }} transition={T}>.</motion.span>
+          <span className="text-lg font-black tracking-tight text-white uppercase italic hidden sm:block">
+            KAIVERON<motion.span animate={{ color: theme.dotColor }} transition={T}>.</motion.span>
           </span>
         </Link>
 

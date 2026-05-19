@@ -2,8 +2,8 @@ import type { MetadataRoute } from "next"
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "AnimeUnwatched — Neural Archive",
-    short_name: "Unwatched",
+    name: "Kaiveron — Neural Anime Archive",
+    short_name: "Kaiveron",
     description: "Track, rate, and discover anime that deserves more hype. AI-powered recommendations.",
     start_url: "/",
     display: "standalone",

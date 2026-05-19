@@ -167,7 +167,7 @@ export default function NotificationSettingsPage() {
           Notification<br />Preferences
         </h1>
         <p className="text-xs text-white/30 mt-2">
-          Control exactly when and how AnimeUnwatched reaches you.
+          Control exactly when and how Kaiveron reaches you.
         </p>
       </div>
 

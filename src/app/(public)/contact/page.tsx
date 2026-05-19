@@ -12,7 +12,7 @@ const CONTACT_CARDS = [
     title: "Bug Reports",
     desc: "Found a bug? Open a GitHub issue and we'll triage it within 24 hours.",
     cta: "Open an Issue",
-    href: "https://github.com/darwhite08/animeunwatched-frontend/issues/new",
+    href: "https://github.com/darwhite08/kaiveron-frontend/issues/new",
     color: "text-white",
     bg: "bg-white/8",
     border: "border-white/10",
@@ -23,7 +23,7 @@ const CONTACT_CARDS = [
     title: "Feature Requests",
     desc: "Have an idea? Drop it in the #feature-requests channel on our Discord server.",
     cta: "Join Discord",
-    href: "https://discord.gg/animeunwatched",
+    href: "https://discord.gg/kaiveron",
     color: "text-violet-400",
     bg: "bg-violet-500/8",
     border: "border-violet-500/15",
@@ -47,8 +47,8 @@ type Category = (typeof CATEGORIES)[number]
 
 const SOCIAL_LINKS = [
   { icon: Github,         label: "GitHub",  href: "https://github.com/darwhite08"        },
-  { icon: Twitter,        label: "Twitter", href: "https://twitter.com/animeunwatched"   },
-  { icon: MessageSquare,  label: "Discord", href: "https://discord.gg/animeunwatched"    },
+  { icon: Twitter,        label: "Twitter", href: "https://twitter.com/kaiveron"   },
+  { icon: MessageSquare,  label: "Discord", href: "https://discord.gg/kaiveron"    },
 ]
 
 /* ── Page ── */

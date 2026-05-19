@@ -607,7 +607,7 @@ export default function WorldClassProfile() {
         onClose={() => setShareOpen(false)}
         title="My Anime Profile"
         subtitle={`${authUser?.username ?? "shinobi"} · Level ${Math.max(1, Math.floor(Math.sqrt((authUser?.reputation ?? 0) * 100 / 1000)))} Shinobi`}
-        url={`https://animeunwatched.com/u/${authUser?.username ?? "shinobi"}`}
+        url={`https://kaiveron.app/u/${authUser?.username ?? "shinobi"}`}
         type="profile"
       />
     </div>

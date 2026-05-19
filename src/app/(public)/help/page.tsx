@@ -58,7 +58,7 @@ const FAQ_GROUPS: FAQGroup[] = [
       },
       {
         q: "What are the level titles?",
-        a: "AnimeUnwatched has 100 levels with Shinobi-style rank titles. Levels 1–10 are 'Academy Student', 11–25 are 'Genin', 26–45 are 'Chunin', 46–65 are 'Jonin', 66–85 are 'ANBU', 86–99 are 'Kage', and level 100 is the rare 'Eternal Oracle'. Your level title shows on your public profile and beside your username in all community spaces.",
+        a: "Kaiveron has 100 levels with Shinobi-style rank titles. Levels 1–10 are 'Academy Student', 11–25 are 'Genin', 26–45 are 'Chunin', 46–65 are 'Jonin', 66–85 are 'ANBU', 86–99 are 'Kage', and level 100 is the rare 'Eternal Oracle'. Your level title shows on your public profile and beside your username in all community spaces.",
       },
       {
         q: "How do streaks work?",
@@ -208,7 +208,7 @@ export default function HelpPage() {
             transition={{ delay: 0.12 }}
             className="text-white/40 text-base max-w-lg mx-auto mb-10"
           >
-            Everything you need to know about AnimeUnwatched — the Neural Oracle, gamification, creator tools, and more.
+            Everything you need to know about Kaiveron — the Neural Oracle, gamification, creator tools, and more.
           </motion.p>
 
           {/* Search */}
@@ -322,7 +322,7 @@ export default function HelpPage() {
                   </a>
 
                   <a
-                    href="https://discord.gg/animeunwatched"
+                    href="https://discord.gg/kaiveron"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center gap-3 px-4 py-3.5 rounded-xl border border-white/8 bg-white/[0.02] hover:border-violet-500/30 hover:bg-white/[0.04] transition-all group"

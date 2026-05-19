@@ -267,7 +267,7 @@ export default function ConnectedAccountsPage() {
         <div>
           <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/30">Export</p>
           <p className="text-xs text-white/30 mt-1">
-            Download a copy of your AnimeUnwatched library and data.
+            Download a copy of your Kaiveron library and data.
           </p>
         </div>
         <div className="grid grid-cols-2 gap-4">

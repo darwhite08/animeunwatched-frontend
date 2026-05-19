@@ -96,7 +96,7 @@ export default function AboutPage() {
             animate={{ opacity: 1, y: 0 }}
             className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-indigo-500/25 bg-indigo-500/8 text-[10px] font-black uppercase tracking-[0.3em] text-indigo-400 mb-8"
           >
-            About AnimeUnwatched
+            About Kaiveron
           </motion.div>
 
           <motion.h1

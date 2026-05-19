@@ -123,7 +123,7 @@ export default function SitemapPage() {
             transition={{ delay: 0.1 }}
             className="text-white/40 text-base max-w-xl leading-relaxed"
           >
-            Every page on AnimeUnwatched, organized by section. Find what you need — fast.
+            Every page on Kaiveron, organized by section. Find what you need — fast.
           </motion.p>
         </div>
       </section>

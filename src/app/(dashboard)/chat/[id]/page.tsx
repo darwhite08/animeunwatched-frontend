@@ -286,7 +286,7 @@ function ContextRail({ conv, onClose, sharedFiles }: { conv: ConversationDetail;
           <svg width={12} height={12} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
           End-to-end encrypted
         </div>
-        <div style={{ fontSize:11.5, color:"var(--ink-2)", lineHeight:1.55 }}>Messages are encrypted on your device. AnimeUnwatched servers can't read them.</div>
+        <div style={{ fontSize:11.5, color:"var(--ink-2)", lineHeight:1.55 }}>Messages are encrypted on your device. Kaiveron servers can't read them.</div>
         <div style={{ marginTop:8, padding:"5px 8px", background:"rgba(0,0,0,0.25)", borderRadius:6, fontFamily:"monospace", fontSize:10.5, color:"var(--ink-4)", wordBreak:"break-all" }}>
           <div style={{ fontSize:9, color:"var(--ink-4)", textTransform:"uppercase", letterSpacing:"0.08em", marginBottom:3 }}>Safety number</div>
           {conv.otherUser.id.slice(-16).match(/.{1,4}/g)?.join(" ")}

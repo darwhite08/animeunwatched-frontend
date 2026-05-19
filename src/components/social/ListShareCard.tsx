@@ -22,7 +22,7 @@ export default function ListShareCard() {
 
   const PROFILE = { username: user?.username ?? "shinobi", totalCount: listData?.meta?.total ?? 0, year: new Date().getFullYear() }
 
-  const shareUrl = `https://animeunwatched.com/u/${PROFILE.username}`
+  const shareUrl = `https://kaiveron.app/u/${PROFILE.username}`
 
   const handleCopyLink = async () => {
     try {
@@ -37,7 +37,7 @@ export default function ListShareCard() {
 
   const handleTwitter = () => {
     const text = encodeURIComponent(
-      `My ${PROFILE.year} anime list — ${PROFILE.totalCount} anime tracked on AnimeUnwatched 🎌\n${shareUrl}`
+      `My ${PROFILE.year} anime list — ${PROFILE.totalCount} anime tracked on Kaiveron 🎌\n${shareUrl}`
     )
     window.open(`https://twitter.com/intent/tweet?text=${text}`, "_blank", "noopener,noreferrer")
   }
@@ -55,7 +55,7 @@ export default function ListShareCard() {
         {/* Header bar */}
         <div className="relative z-10 flex items-center justify-between px-5 py-4 border-b border-zinc-800/80">
           <span className="font-black uppercase tracking-widest text-indigo-400 text-sm">
-            UNWATCHED.
+            KAIVERON.
           </span>
           <span className="text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full bg-violet-500/20 text-violet-300 border border-violet-500/30">
             Watchlist
@@ -111,7 +111,7 @@ export default function ListShareCard() {
 
         {/* Footer bar */}
         <div className="relative z-10 flex items-center justify-between px-5 py-3 bg-zinc-900/60 border-t border-zinc-800/60">
-          <span className="text-zinc-500 text-xs">animeunwatched.com</span>
+          <span className="text-zinc-500 text-xs">kaiveron.app</span>
           <span className="text-zinc-600 text-[10px] font-mono">Track. Share. Flex.</span>
         </div>
       </div>

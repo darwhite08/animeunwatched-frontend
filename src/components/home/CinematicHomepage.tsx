@@ -742,7 +742,7 @@ function FinalCTASection() {
         <div className="flex justify-center mb-10">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.04] border border-white/[0.08]">
             <Sparkles size={11} className="text-indigo-400" />
-            <span className="text-[11px] font-medium text-white/45">AnimeUnwatched · Open Beta</span>
+            <span className="text-[11px] font-medium text-white/45">Kaiveron · Open Beta</span>
           </div>
         </div>
 

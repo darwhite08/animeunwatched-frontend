@@ -3,8 +3,8 @@ import Link from "next/link"
 import { FileText, Download, Mail } from "lucide-react"
 
 export const metadata: Metadata = {
-  title: "Press Kit | AnimeUnwatched",
-  description: "Media resources, brand assets, and press contact for AnimeUnwatched.",
+  title: "Press Kit | Kaiveron",
+  description: "Media resources, brand assets, and press contact for Kaiveron.",
 }
 
 const STATS = [
@@ -15,10 +15,10 @@ const STATS = [
 ]
 
 const PRESS = [
-  { date: "May 2026",   title: "AnimeUnwatched launches Neural Oracle AI discovery engine", type: "Product Launch" },
+  { date: "May 2026",   title: "Kaiveron launches Neural Oracle AI discovery engine", type: "Product Launch" },
   { date: "Apr 2026",   title: "Community reaches 10,000 active Shinobi milestone",         type: "Milestone"      },
   { date: "Mar 2026",   title: "Creator Studio opens to all users with blog and poll tools", type: "Feature"        },
-  { date: "Feb 2026",   title: "AnimeUnwatched v3.0 — Full platform rebuild",               type: "Major Release"  },
+  { date: "Feb 2026",   title: "Kaiveron v3.0 — Full platform rebuild",               type: "Major Release"  },
 ]
 
 export default function PressPage() {
@@ -33,7 +33,7 @@ export default function PressPage() {
             Press Kit<span className="text-indigo-500">.</span>
           </h1>
           <p className="text-white/35 text-sm max-w-xl">
-            Resources for journalists and media covering AnimeUnwatched. For press inquiries, contact us at press@animeunwatched.com.
+            Resources for journalists and media covering Kaiveron. For press inquiries, contact us at press@kaiveron.app.
           </p>
         </div>
 

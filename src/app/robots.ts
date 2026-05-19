@@ -15,6 +15,6 @@ export default function robots(): MetadataRoute.Robots {
         ],
       },
     ],
-    sitemap: "https://animeunwatched.com/sitemap.xml",
+    sitemap: "https://kaiveron.app/sitemap.xml",
   }
 }

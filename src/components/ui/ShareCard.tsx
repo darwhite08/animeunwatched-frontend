@@ -44,7 +44,7 @@ function CardPreview({
       {/* Top bar */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-zinc-800">
         <span className="font-black uppercase tracking-widest text-indigo-400 text-sm">
-          UNWATCHED.
+          KAIVERON.
         </span>
         <span className="text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full bg-violet-500/20 text-violet-300 border border-violet-500/30">
           {TYPE_LABELS[type]}
@@ -77,10 +77,10 @@ function CardPreview({
             )}
           </div>
         ) : (
-          <span className="text-zinc-500 text-xs">animeunwatched.com</span>
+          <span className="text-zinc-500 text-xs">kaiveron.app</span>
         )}
         <span className="text-zinc-600 text-[10px] font-mono">
-          Track it on AnimeUnwatched
+          Track it on Kaiveron
         </span>
       </div>
     </div>

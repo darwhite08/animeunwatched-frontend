@@ -256,7 +256,7 @@ export default function RoadmapPage() {
               Feature requests, complaints, and wild ideas are all welcome. The best ones get shipped.
             </p>
             <a
-              href="https://discord.gg/animeunwatched"
+              href="https://discord.gg/kaiveron"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 px-7 py-3 rounded-xl bg-violet-600 hover:bg-violet-500 text-sm font-black uppercase tracking-widest text-white transition-all"

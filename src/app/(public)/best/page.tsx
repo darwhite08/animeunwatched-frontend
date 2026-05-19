@@ -106,7 +106,7 @@ export default function BestOfPage() {
             animate={{ opacity: 1, y: 0 }}
             className="text-[10px] font-black uppercase tracking-[0.5em] text-amber-400 mb-4"
           >
-            AnimeUnwatched — Editorial
+            Kaiveron — Editorial
           </motion.p>
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
@@ -125,7 +125,7 @@ export default function BestOfPage() {
             className="mt-6 text-white/40 text-sm max-w-xl leading-relaxed"
           >
             A decade of anime ranked. Explore the #1 rated anime for every year from 2015 to 2024,
-            curated by the AnimeUnwatched community.
+            curated by the Kaiveron community.
           </motion.p>
         </div>
       </div>

@@ -296,7 +296,7 @@ export default function CreatorSpotlightPage() {
             animate={{ opacity: 1, y: 0 }}
             className="text-[10px] font-black uppercase tracking-[0.5em] text-amber-400 mb-4"
           >
-            AnimeUnwatched — Community
+            Kaiveron — Community
           </motion.p>
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
@@ -314,7 +314,7 @@ export default function CreatorSpotlightPage() {
             transition={{ delay: 0.25 }}
             className="mt-6 text-white/40 text-sm max-w-xl leading-relaxed"
           >
-            Celebrating the voices behind AnimeUnwatched's best content — May 2026 edition.
+            Celebrating the voices behind Kaiveron's best content — May 2026 edition.
             These creators write the takes, analyses, and guides that keep the community sharp.
           </motion.p>
         </div>
@@ -360,7 +360,7 @@ export default function CreatorSpotlightPage() {
               Become a Creator<span className="text-indigo-400">.</span>
             </h3>
             <p className="text-white/40 text-sm max-w-md leading-relaxed">
-              Got hot takes, deep analyses, or hidden gems to share? Publish on AnimeUnwatched
+              Got hot takes, deep analyses, or hidden gems to share? Publish on Kaiveron
               and reach thousands of fans who actually care.
             </p>
           </div>

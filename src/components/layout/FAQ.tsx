@@ -68,7 +68,7 @@ export default function FAQ() {
           transition={{ delay: 0.2 }}
           className="text-white/40 max-w-sm text-lg font-medium leading-relaxed tracking-tight"
         >
-          Decrypting common inquiries regarding the AnimeUnwatched protocol, data sovereignty, and neural syncing.
+          Decrypting common inquiries regarding the Kaiveron protocol, data sovereignty, and neural syncing.
         </motion.p>
       </div>
 

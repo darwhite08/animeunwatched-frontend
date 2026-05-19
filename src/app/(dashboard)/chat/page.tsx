@@ -50,7 +50,7 @@ export default function ChatEmptyPage() {
         <div className="space-y-2">
           <h2 className="text-[18px] font-bold text-white tracking-tight">Select a conversation</h2>
           <p className="text-[12.5px] leading-relaxed" style={{ color: "rgba(255,255,255,0.35)" }}>
-            Pick a chat from the left panel or click ✏ to start a new encrypted conversation with any Shinobi on AnimeUnwatched.
+            Pick a chat from the left panel or click ✏ to start a new encrypted conversation with any Shinobi on Kaiveron.
           </p>
         </div>
 

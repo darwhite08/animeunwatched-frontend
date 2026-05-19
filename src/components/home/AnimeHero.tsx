@@ -119,7 +119,7 @@ function TopNav() {
       <Link href="/" className="flex items-center gap-2.5 shrink-0">
         <span className="bob-slow"><SkullMark size={48} /></span>
         <span className="hidden sm:block leading-none">
-          <span className="block font-display text-white text-base tracking-wider">animeunwatched</span>
+          <span className="block font-display text-white text-base tracking-wider">kaiveron</span>
           <span className="block font-type text-white/70 text-[10px] tracking-[0.3em] uppercase mt-1">ship&apos;s log</span>
         </span>
       </Link>
@@ -212,7 +212,7 @@ export default function AnimeHero() {
             <div className="inline-flex items-center gap-3 mb-5 fade-in-up" style={{ animationDelay:"0.3s" }}>
               <span className="h-[2px] w-8" style={{ background:"#f7c33d" }} />
               <span className="font-type text-[11px] tracking-[0.4em] uppercase" style={{ color:"#f7c33d" }}>
-                animeunwatched · ep. 01
+                kaiveron · ep. 01
               </span>
             </div>
 

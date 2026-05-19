@@ -124,7 +124,7 @@ function AnimeDetail({ anime, rawAnime }: { anime: Anime; rawAnime?: AnimeDTO })
               "worstRating": 1,
               "ratingCount": 1000
             },
-            "url": `https://animeunwatched.com/anime/${anime.id}`,
+            "url": `https://kaiveron.app/anime/${anime.id}`,
             "image": anime.image
           }).replace(/<\/script>/gi, "<\\/script>"),
         }}
@@ -452,7 +452,7 @@ function AnimeDetail({ anime, rawAnime }: { anime: Anime; rawAnime?: AnimeDTO })
         onClose={() => setShareOpen(false)}
         title={anime.title}
         subtitle={`★ ${anime.rating.toFixed(1)} · ${anime.studio} · ${anime.year}`}
-        url={typeof window !== "undefined" ? window.location.href : `https://animeunwatched.com/anime/${anime.id}`}
+        url={typeof window !== "undefined" ? window.location.href : `https://kaiveron.app/anime/${anime.id}`}
         type="anime"
       />
       <ReviewComposer

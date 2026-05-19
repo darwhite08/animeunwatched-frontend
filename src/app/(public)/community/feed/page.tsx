@@ -304,7 +304,7 @@ export default function PublicFeedPage() {
             className="flex flex-col gap-3 p-5 rounded-2xl bg-gradient-to-br from-indigo-600/15 to-violet-600/10 border border-indigo-500/20 hover:from-indigo-600/20 transition-all"
           >
             <p className="text-sm font-black text-white">
-              Join AnimeUnwatched<span className="text-indigo-400">.</span>
+              Join Kaiveron<span className="text-indigo-400">.</span>
             </p>
             <p className="text-[11px] text-white/40 leading-relaxed">
               Track what you watch, share your takes, join clubs, and discover hidden gems — all for free.
@@ -322,7 +322,7 @@ export default function PublicFeedPage() {
         onClose={() => setSharingPost(null)}
         title={(sharingPost?.content.slice(0, 60) ?? "") + "…"}
         subtitle={`by @${sharingPost?.author ?? ""}`}
-        url={`https://animeunwatched.com/posts/${sharingPost?.id ?? ""}`}
+        url={`https://kaiveron.app/posts/${sharingPost?.id ?? ""}`}
         type="post"
       />
     </div>

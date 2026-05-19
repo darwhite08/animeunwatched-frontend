@@ -40,7 +40,7 @@ export default function AnimeModal({ isOpen, onClose, anime }: AnimeModalProps) 
 
   const handleShare = async () => {
     try {
-      await navigator.clipboard.writeText(`${anime.title} — rated ${anime.rating}/10 on AnimeUnwatched`)
+      await navigator.clipboard.writeText(`${anime.title} — rated ${anime.rating}/10 on Kaiveron`)
       push("Copied to clipboard", "success")
     } catch {
       push("Could not copy", "error")

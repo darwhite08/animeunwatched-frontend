@@ -185,7 +185,7 @@ export default function BestOfYearPage({ params }: { params: Promise<{ year: str
             animate={{ opacity: 1, y: 0 }}
             className="text-[10px] font-black uppercase tracking-[0.5em] text-indigo-400 mb-4"
           >
-            AnimeUnwatched — Editorial
+            Kaiveron — Editorial
           </motion.p>
           <motion.h1
             initial={{ opacity: 0, y: 20 }}

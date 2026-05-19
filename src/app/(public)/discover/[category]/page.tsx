@@ -78,7 +78,7 @@ const CATEGORY_META: Record<string, CategoryMeta> = {
 const FALLBACK_META: CategoryMeta = {
   emoji: "📺",
   title: "Discover",
-  description: "A curated selection from the AnimeUnwatched catalogue.",
+  description: "A curated selection from the Kaiveron catalogue.",
   accentClass: "text-indigo-400",
   filter: () => true,
 }

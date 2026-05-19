@@ -1,5 +1,5 @@
 /**
- * End-to-end encryption for AnimeUnwatched DMs.
+ * End-to-end encryption for Kaiveron DMs.
  *
  * Protocol:
  *  1. Each client generates an ECDH P-256 key pair.

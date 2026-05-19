@@ -38,7 +38,7 @@ const METHOD_STYLE: Record<HttpMethod, { bg: string; text: string; border: strin
 
 /* ─── Code blocks ─── */
 const AUTH_EXAMPLE = `// Every protected request needs a Bearer token
-const response = await fetch("https://api.animeunwatched.com/api/v1/users/me", {
+const response = await fetch("https://api.kaiveron.app/api/v1/users/me", {
   headers: {
     Authorization: \`Bearer \${accessToken}\`,
     "Content-Type": "application/json",
@@ -48,7 +48,7 @@ const response = await fetch("https://api.animeunwatched.com/api/v1/users/me", {
 
 const { user } = await response.json()`
 
-const CURL_EXAMPLE = `curl -X GET "https://api.animeunwatched.com/api/v1/analytics/top-anime" \\
+const CURL_EXAMPLE = `curl -X GET "https://api.kaiveron.app/api/v1/analytics/top-anime" \\
   -H "Accept: application/json"
 
 # Response:
@@ -144,7 +144,7 @@ export default function ApiDocsPage() {
             transition={{ delay: 0.1 }}
             className="text-white/45 text-base max-w-2xl leading-relaxed"
           >
-            Build anime apps on the AnimeUnwatched infrastructure. Access the full catalog,
+            Build anime apps on the Kaiveron infrastructure. Access the full catalog,
             community data, and analytics via a clean REST API with JWT authentication.
           </motion.p>
         </div>
@@ -300,7 +300,7 @@ export default function ApiDocsPage() {
             </p>
             <div className="flex items-center gap-2 text-[10px] text-white/20 font-mono mt-2">
               <Code2 size={10} className="text-indigo-500/50" />
-              npm install @animeunwatched/sdk <span className="text-white/10">— arriving Q3 2026</span>
+              npm install @kaiveron/sdk <span className="text-white/10">— arriving Q3 2026</span>
             </div>
           </div>
         </motion.section>

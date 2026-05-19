@@ -136,7 +136,7 @@ export default function AnimeEpisodesPage({
   const FILTERS: { id: EpisodeFilter; label: string }[] = [
     { id: "all",       label: "All"       },
     { id: "watched",   label: "Watched"   },
-    { id: "unwatched", label: "Unwatched" },
+    { id: "unwatched", label: "Kaiveron" },
   ]
 
   if (isLoading) return <div className="min-h-screen bg-[#020202] text-white flex items-center justify-center text-white/30">Loading…</div>

@@ -1,8 +1,8 @@
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "Privacy Policy | AnimeUnwatched",
-  description: "How AnimeUnwatched handles your data, privacy, and security.",
+  title: "Privacy Policy | Kaiveron",
+  description: "How Kaiveron handles your data, privacy, and security.",
 }
 
 const SECTIONS = [
@@ -28,7 +28,7 @@ const SECTIONS = [
   },
   {
     title: "Contact",
-    content: "Privacy questions? Email us at privacy@animeunwatched.com. We respond within 48 hours. For data deletion requests, use the in-app Settings page for immediate action.",
+    content: "Privacy questions? Email us at privacy@kaiveron.app. We respond within 48 hours. For data deletion requests, use the in-app Settings page for immediate action.",
   },
 ]
 

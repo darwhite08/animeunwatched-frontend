@@ -229,7 +229,7 @@ export default function HistoryPage() {
       episode: e.status === "COMPLETED" ? `Completed (${e.episodesSeen} eps)` : `Ep. ${e.episodesSeen}`,
       watchedAt: new Date(e.updatedAt),
       duration: "24 min",
-      platform: "AnimeUnwatched",
+      platform: "Kaiveron",
       coverGradient: `from-indigo-${6 + (i % 4) * 100}/30 to-purple-${6 + (i % 3) * 100}/20`,
     }))
 

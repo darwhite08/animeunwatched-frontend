@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import Link from "next/link"
 import { Crown, CheckCircle2, Zap, Star, Shield } from "lucide-react"
 
-export const metadata: Metadata = { title: "Billing | AnimeUnwatched" }
+export const metadata: Metadata = { title: "Billing | Kaiveron" }
 
 const PRO_FEATURES = [
   "Unlimited anime lists (Free: 500)",
@@ -42,7 +42,7 @@ export default function BillingPage() {
             <Crown size={18} className="text-amber-400" />
           </div>
           <div>
-            <p className="font-black text-white">AnimeUnwatched Pro</p>
+            <p className="font-black text-white">Kaiveron Pro</p>
             <p className="text-[10px] text-indigo-400/70 uppercase tracking-widest">Ascend to Prime Grade</p>
           </div>
           <div className="ml-auto text-right">

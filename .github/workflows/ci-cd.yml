@@ -1,0 +1,93 @@
+name: Frontend CI/CD
+
+on:
+  push:
+    branches: [main, production]
+  pull_request:
+    branches: [main, production]
+
+env:
+  NODE_VERSION: '20'
+
+jobs:
+  # ── Job 1: Test & Type-check ─────────────────────────────────────────────────
+  test:
+    name: Test & Type-check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: TypeScript check
+        run: npx tsc --noEmit
+
+      - name: Run tests
+        run: npm test
+        env:
+          CI: true
+
+  # ── Job 2: Build check ───────────────────────────────────────────────────────
+  build:
+    name: Production build
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+        env:
+          NEXT_PUBLIC_API_BASE: ${{ secrets.NEXT_PUBLIC_API_BASE }}
+          NEXT_PUBLIC_SOCKET_URL: ${{ secrets.NEXT_PUBLIC_SOCKET_URL }}
+          NEXT_PUBLIC_GOOGLE_CLIENT_ID: ${{ secrets.NEXT_PUBLIC_GOOGLE_CLIENT_ID }}
+
+  # ── Job 3: Deploy to Vercel (only on push to main/production) ───────────────
+  deploy:
+    name: Deploy to Vercel
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.event_name == 'push'
+    environment:
+      name: ${{ github.ref_name == 'production' && 'production' || 'preview' }}
+      url: ${{ steps.deploy.outputs.url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install Vercel CLI
+        run: npm install -g vercel@latest
+
+      - name: Pull Vercel environment
+        run: vercel pull --yes --environment=${{ github.ref_name == 'production' && 'production' || 'preview' }} --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Build project artifacts
+        run: vercel build ${{ github.ref_name == 'production' && '--prod' || '' }} --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Deploy to Vercel
+        id: deploy
+        run: |
+          URL=$(vercel deploy --prebuilt ${{ github.ref_name == 'production' && '--prod' || '' }} --token=${{ secrets.VERCEL_TOKEN }})
+          echo "url=$URL" >> $GITHUB_OUTPUT
+          echo "Deployed to: $URL"

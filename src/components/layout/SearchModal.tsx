@@ -57,8 +57,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
     if (suggestTimerRef.current) clearTimeout(suggestTimerRef.current)
     suggestTimerRef.current = setTimeout(async () => {
       try {
-        const base = process.env.NEXT_PUBLIC_API_BASE ?? "http://localhost:4000"
-        const res = await fetch(`${base}/api/v1/search/suggestions?q=${encodeURIComponent(query)}`)
+        const res = await fetch(`/api/v1/search/suggestions?q=${encodeURIComponent(query)}`)
         if (res.ok) {
           const data = await res.json() as { anime: unknown[]; users: UserSuggestion[] }
           setUserSuggestions(data.users?.slice(0, 2) ?? [])

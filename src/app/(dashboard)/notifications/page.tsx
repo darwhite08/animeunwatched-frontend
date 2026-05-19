@@ -10,7 +10,7 @@ import type { Notification } from "@/lib/api/types"
 type NotifType = "achievement" | "comment" | "update" | "follow" | "poll" | "system"
 
 type Notif = {
-  id: number
+  id: string
   type: NotifType
   title: string
   body: string
@@ -29,14 +29,14 @@ const ICON_MAP: Record<NotifType, { icon: typeof Bell; color: string; bg: string
 }
 
 const INITIAL: Notif[] = [
-  { id: 1,  type: "achievement", title: "7-Day Streak Achieved",         body: "Neural Link: your consistency unlocked Flame Grade II.",                 time: "2m ago",   read: false, node: "NODE_01" },
-  { id: 2,  type: "comment",     title: "New comment on your review",    body: "User 'Zoro' replied to your Attack on Titan review.",                    time: "18m ago",  read: false, node: "NODE_04" },
-  { id: 3,  type: "poll",        title: "Poll results are in",           body: "The poll 'Best Anime of 2024?' you voted in has closed. Dungeon Meshi won.", time: "1h ago", read: false, node: "NODE_07" },
-  { id: 4,  type: "update",      title: "Solo Leveling S2: Trailer Live", body: "New content synced to the neural archive.",                            time: "3h ago",   read: true,  node: "NODE_02" },
-  { id: 5,  type: "follow",      title: "New follower",                  body: "User 'ShadowWatcher' followed your profile.",                            time: "5h ago",   read: true,  node: "NODE_09" },
-  { id: 6,  type: "achievement", title: "100 Archives Logged",           body: "You've catalogued 100 anime. Badge: Centurion Watcher unlocked.",        time: "1d ago",   read: true,  node: "NODE_03" },
-  { id: 7,  type: "system",      title: "Platform Update v4.2",          body: "AI Oracle precision improved to 98.4%. Neural search now indexes tags.", time: "2d ago",   read: true,  node: "NODE_00" },
-  { id: 8,  type: "comment",     title: "Mentioned in a thread",         body: "Your theory on Eren's plan is trending in the community.",               time: "3d ago",   read: true,  node: "NODE_05" },
+  { id: "1", type: "achievement", title: "7-Day Streak Achieved",          body: "Neural Link: your consistency unlocked Flame Grade II.",                    time: "2m ago",   read: false, node: "NODE_01" },
+  { id: "2", type: "comment",     title: "New comment on your review",     body: "User 'Zoro' replied to your Attack on Titan review.",                       time: "18m ago",  read: false, node: "NODE_04" },
+  { id: "3", type: "poll",        title: "Poll results are in",            body: "The poll 'Best Anime of 2024?' you voted in has closed. Dungeon Meshi won.", time: "1h ago",   read: false, node: "NODE_07" },
+  { id: "4", type: "update",      title: "Solo Leveling S2: Trailer Live", body: "New content synced to the neural archive.",                               time: "3h ago",   read: true,  node: "NODE_02" },
+  { id: "5", type: "follow",      title: "New follower",                   body: "User 'ShadowWatcher' followed your profile.",                              time: "5h ago",   read: true,  node: "NODE_09" },
+  { id: "6", type: "achievement", title: "100 Archives Logged",            body: "You've catalogued 100 anime. Badge: Centurion Watcher unlocked.",           time: "1d ago",   read: true,  node: "NODE_03" },
+  { id: "7", type: "system",      title: "Platform Update v4.2",           body: "AI Oracle precision improved to 98.4%. Neural search now indexes tags.",    time: "2d ago",   read: true,  node: "NODE_00" },
+  { id: "8", type: "comment",     title: "Mentioned in a thread",          body: "Your theory on Eren's plan is trending in the community.",                  time: "3d ago",   read: true,  node: "NODE_05" },
 ]
 
 type Filter = "all" | "unread"
@@ -59,7 +59,7 @@ export default function NotificationsPage() {
 
   // Map API notifications to local Notif type, fall back to INITIAL
   const apiNotifs: Notif[] = (apiData?.data ?? []).map((n: Notification) => ({
-    id: n.id as unknown as number,
+    id: n.id,
     type: (["achievement","comment","update","follow","poll","system"].includes(n.type) ? n.type : "system") as NotifType,
     title: (n.payload as Record<string,string>).title ?? n.type,
     body:  (n.payload as Record<string,string>).description ?? (n.payload as Record<string,string>).message ?? "",
@@ -77,11 +77,11 @@ export default function NotificationsPage() {
     })
   }
   const clearAll = () => markAllMut.mutate(undefined, { onSuccess: () => push("All marked as read", "info") })
-  const markRead = (id: number) => {
+  const markRead = (id: string) => {
     const notif = notifs.find(n => n.id === id)
-    if (notif && !notif.read) markReadMut.mutate(String(id))
+    if (notif && !notif.read) markReadMut.mutate(id)
   }
-  const dismiss = (id: number) => markReadMut.mutate(String(id))
+  const dismiss = (id: string) => markReadMut.mutate(id)
 
   const visible = filter === "unread" ? notifs.filter(n => !n.read) : notifs
 

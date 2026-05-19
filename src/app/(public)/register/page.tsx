@@ -57,35 +57,56 @@ export default function RegisterPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    if (!form.username.trim() || !form.email.trim() || !form.password) {
-      setError("All fields are required.")
-      return
-    }
-    if (form.password.length < 8) {
-      setError("Password must be at least 8 characters.")
-      return
-    }
     setError("")
+
+    // Client-side validation with clear field-specific messages
+    if (!form.username.trim()) { setError("Username is required."); return }
+    if (form.username.trim().length < 3) { setError("Username must be at least 3 characters."); return }
+    if (form.username.trim().length > 30) { setError("Username must be 30 characters or less."); return }
+    if (!/^[a-zA-Z0-9_]+$/.test(form.username.trim())) {
+      setError("Username can only contain letters, numbers and underscores (_)."); return
+    }
+    if (!form.email.trim()) { setError("Email is required."); return }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())) {
+      setError("Please enter a valid email address."); return
+    }
+    if (!form.password) { setError("Password is required."); return }
+    if (form.password.length < 8) { setError("Password must be at least 8 characters."); return }
+    if (form.password.length > 128) { setError("Password must be 128 characters or less."); return }
+
     register.mutate(
       {
-        email: form.email,
-        username: form.username,
-        displayName: form.username,
-        password: form.password,
+        email:       form.email.trim(),
+        username:    form.username.trim(),
+        displayName: form.username.trim(),
+        password:    form.password,
       },
       {
         onSuccess: () => router.push("/dashboard"),
         onError: (err) => {
           if (err instanceof ApiError) {
             if (err.code === "CONFLICT") {
-              setError("An account with that email or username already exists.")
+              setError("An account with that email or username already exists. Try signing in instead.")
             } else if (err.code === "VALIDATION") {
-              setError(err.message ?? "Please check your details and try again.")
+              // Extract first meaningful Zod issue if available
+              const issues = (err as ApiError & { issues?: Array<{ path: string[]; message: string }> }).issues
+              if (issues?.length) {
+                const first = issues[0]
+                const field = first.path?.[0]
+                const fieldLabel = field === "email" ? "Email"
+                  : field === "username" ? "Username"
+                  : field === "password" ? "Password"
+                  : field === "displayName" ? "Display name"
+                  : null
+                setError(fieldLabel ? `${fieldLabel}: ${first.message}` : first.message)
+              } else {
+                setError("Please check your details: username (3–30 chars, letters/numbers/_), valid email, password (8+ chars).")
+              }
             } else {
               setError(err.message ?? "Something went wrong. Please try again.")
             }
           } else {
-            setError("Unable to create account. Please check your connection.")
+            setError("Unable to create account. Please check your connection and try again.")
           }
         },
       }
@@ -158,27 +179,27 @@ export default function RegisterPage() {
 
           {/* OAuth */}
           <div className="space-y-3 mb-6">
-            {(["google", "apple"] as const).map(provider => (
-              <motion.button
-                key={provider}
-                whileHover={{ scale: 1.015 }}
-                whileTap={{ scale: 0.985 }}
-                onClick={() => handleOAuth(provider)}
-                disabled={isDisabled}
-                className="w-full h-12 rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 transition-all flex items-center justify-center gap-3 text-sm font-bold disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                <Image
-                  src={`/assets/icons/${provider}.png`}
-                  alt={provider}
-                  width={22}
-                  height={22}
-                  className="object-contain"
-                />
-                {oauthLoading === provider
-                  ? "Connecting…"
-                  : `Continue with ${provider.charAt(0).toUpperCase() + provider.slice(1)}`}
-              </motion.button>
-            ))}
+            {/* Google — redirect flow (works on localhost without Google Console setup) */}
+            <motion.a
+              href="/api/v1/auth/google/redirect"
+              whileHover={{ scale: 1.015 }}
+              whileTap={{ scale: 0.985 }}
+              className="w-full h-12 rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 transition-all flex items-center justify-center gap-3 text-sm font-bold"
+            >
+              <Image src="/assets/icons/google.png" alt="google" width={22} height={22} className="object-contain" />
+              Continue with Google
+            </motion.a>
+            {/* Apple */}
+            <motion.button
+              whileHover={{ scale: 1.015 }}
+              whileTap={{ scale: 0.985 }}
+              onClick={() => handleOAuth("apple")}
+              disabled={isDisabled}
+              className="w-full h-12 rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 transition-all flex items-center justify-center gap-3 text-sm font-bold disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              <Image src="/assets/icons/apple.png" alt="apple" width={22} height={22} className="object-contain" />
+              {oauthLoading === "apple" ? "Connecting…" : "Continue with Apple"}
+            </motion.button>
           </div>
 
           {/* Divider */}
@@ -197,11 +218,25 @@ export default function RegisterPage() {
               <input
                 value={form.username}
                 onChange={set("username")}
-                placeholder="shinobi_arch"
+                placeholder="shinobi_arch (min. 3 chars)"
                 autoComplete="username"
+                minLength={3}
+                maxLength={30}
                 disabled={isDisabled}
-                className="w-full h-12 rounded-2xl bg-white/5 border border-white/10 px-4 text-sm text-white placeholder:text-white/20 outline-none focus:border-indigo-500/50 focus:bg-white/[0.07] transition-all disabled:opacity-50"
+                className={`w-full h-12 rounded-2xl bg-white/5 border px-4 text-sm text-white placeholder:text-white/20 outline-none focus:border-indigo-500/50 focus:bg-white/[0.07] transition-all disabled:opacity-50 ${
+                  form.username && form.username.length < 3 ? "border-red-500/50" : "border-white/10"
+                }`}
               />
+              {form.username.length > 0 && form.username.length < 3 && (
+                <p className="text-[11px] text-red-400/80 mt-1 ml-1">
+                  {3 - form.username.length} more character{3 - form.username.length > 1 ? "s" : ""} needed
+                </p>
+              )}
+              {form.username.length > 0 && !/^[a-zA-Z0-9_]+$/.test(form.username) && (
+                <p className="text-[11px] text-red-400/80 mt-1 ml-1">
+                  Only letters, numbers, and underscores allowed
+                </p>
+              )}
             </div>
 
             <div>
@@ -241,6 +276,11 @@ export default function RegisterPage() {
                   {showPass ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
               </div>
+              {form.password.length > 0 && form.password.length < 8 && (
+                <p className="text-[11px] text-red-400/80 mt-1 ml-1">
+                  {8 - form.password.length} more character{8 - form.password.length > 1 ? "s" : ""} needed
+                </p>
+              )}
             </div>
 
             {error && (
@@ -284,9 +324,9 @@ export default function RegisterPage() {
 
           <p className="mt-6 text-xs text-center text-white/30">
             By registering, you agree to our{" "}
-            <span className="text-white/60 hover:text-white transition-colors cursor-pointer">Terms</span>
+            <Link href="/terms" className="text-white/60 hover:text-white transition-colors">Terms</Link>
             {" "}&{" "}
-            <span className="text-white/60 hover:text-white transition-colors cursor-pointer">Privacy Policy</span>
+            <Link href="/privacy" className="text-white/60 hover:text-white transition-colors">Privacy Policy</Link>
           </p>
 
           <p className="mt-4 text-sm text-center text-white/40">

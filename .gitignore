@@ -39,4 +39,5 @@ pnpm-debug.log*
 .idea/
 
 # macOS
-.DS_Store
+.DS_Store.env.local
+certs/

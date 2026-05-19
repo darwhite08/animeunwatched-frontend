@@ -5,12 +5,13 @@ import { useParams } from "next/navigation"
 import Image from "next/image"
 import Link from "next/link"
 import { AnimatePresence, motion } from "framer-motion"
-import { useMessages, useSendMessage, useMarkRead, useChatSocket } from "@/hooks/useChat"
+import { useMessages, useSendMessage, useMarkRead, useChatSocket, useTypingIndicator } from "@/hooks/useChat"
 import { useAuthStore } from "@/stores/auth.store"
-import { getOrCreateKeyPair, getSharedKey, encryptMessage, decryptMessage } from "@/lib/e2e-crypto"
+import { getOrCreateKeyPair, getSharedKey, encryptMessage, decryptMessage, isE2EAvailable } from "@/lib/e2e-crypto"
 import { useUserList } from "@/hooks/useLists"
 import { useToast } from "@/stores/toast.store"
 import { useWebRTC } from "@/hooks/useWebRTC"
+import { useMicPermission } from "@/hooks/useMicPermission"
 import { IncomingCallCard, ActiveCallModal } from "@/components/chat/CallUI"
 import { Avatar } from "../layout"
 import * as ep from "@/lib/api/endpoints"
@@ -32,17 +33,32 @@ const dayLabel = (iso: string) => {
 }
 
 /* ─── Decrypt cache ──────────────────────────────────────────────────────── */
+const PLAIN_IV = "PLAIN_NO_E2E"
+
 function useDecrypt(msgs: DirectMessage[], key: CryptoKey | null) {
   const [cache, setCache] = useState<Record<string, string>>({})
   useEffect(() => { setCache({}) }, [key])
   useEffect(() => {
-    if (!key || !msgs.length) return
+    if (!msgs.length) return
     const todo = msgs.filter(m => !(m.id in cache))
     if (!todo.length) return
     Promise.all(todo.map(async m => {
+      // Plain messages (sent without E2E from HTTP context) — always readable
+      if (m.iv === PLAIN_IV) {
+        try {
+          const text = decodeURIComponent(escape(atob(m.ciphertext)))
+          return [m.id, text] as const
+        } catch { return [m.id, m.ciphertext] as const }
+      }
+      // E2E messages — require key
+      if (!key) return null // keep as undefined (spinner) until key is ready
       try { return [m.id, await decryptMessage(key, m.ciphertext, m.iv)] as const }
       catch { return [m.id, "⚠ Could not decrypt"] as const }
-    })).then(r => setCache(p => { const n={...p}; r.forEach(([id,t])=>n[id]=t); return n }))
+    })).then(r => {
+      const valid = r.filter(Boolean) as [string, string][]
+      if (!valid.length) return
+      setCache(p => { const n={...p}; valid.forEach(([id,t])=>n[id]=t); return n })
+    })
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [msgs.length, key])
   return cache
@@ -115,7 +131,16 @@ function AIResponseBubble({ body, payload }: { body:string; payload:AIPayload })
         <span className="mono" style={{ fontSize:10, color:"var(--ink-4)" }}>· AI Oracle</span>
       </div>
       <div style={{ fontSize:14, color:"var(--ink)", marginBottom:10, lineHeight:1.5 }}
-        dangerouslySetInnerHTML={{ __html: body.replace(/\*\*(.+?)\*\*/g,"<strong style='font-weight:600;color:#fff'>$1</strong>") }} />
+        dangerouslySetInnerHTML={{
+          // Escape HTML entities first to prevent XSS, then render **bold** markdown
+          __html: body
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;")
+            .replace(/\*\*(.+?)\*\*/g, "<strong style='font-weight:600;color:#fff'>$1</strong>")
+        }} />
       {payload.rows && (
         <div style={{ background:"rgba(0,0,0,0.20)", border:"1px solid var(--line)", borderRadius:10, overflow:"hidden" }}>
           <div style={{ display:"grid", gridTemplateColumns:"1.4fr 1fr 1fr 0.9fr", padding:"8px 12px", fontSize:10.5, fontWeight:600, letterSpacing:"0.08em", textTransform:"uppercase", color:"var(--ink-4)", borderBottom:"1px solid var(--line)" }}>
@@ -437,8 +462,7 @@ function MsgRow({ m, isMine, text, authorSrc, authorName }: { m:GM; isMine:boole
           {isDecrypting ? (
             <div style={{ ...bubble, display:"inline-block", padding:"8px 13px 9px", borderRadius:14 }}>
               <span style={{ color:"var(--ink-4)", fontSize:13, display:"flex", alignItems:"center", gap:6 }}>
-                <div style={{ width:10, height:10, border:"1.5px solid var(--indigo)", borderTopColor:"transparent", borderRadius:"50%", animation:"spin 0.6s linear infinite" }}/>
-                Decrypting…
+                🔒 <span style={{ opacity:0.6 }}>Encrypted — open this chat to read</span>
               </span>
             </div>
           ) : isError ? (
@@ -553,7 +577,7 @@ export default function ConversationPage() {
   const prevScrollH = useRef(0)
 
   useChatSocket(conversationId)
-
+  const { permission: micPerm, requestMic } = useMicPermission()
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useMessages(conversationId)
   const messages  = [...(data?.pages??[])].reverse().flatMap(p=>[...p.messages].reverse())
   const grouped   = groupMsgs(messages)
@@ -562,6 +586,17 @@ export default function ConversationPage() {
   const sendMutation = useSendMessage(conversationId)
   const markReadMut  = useMarkRead(conversationId)
   const webrtc       = useWebRTC()
+  const { otherTyping, emitTyping, stopTyping } = useTypingIndicator(
+    conversationId,
+    conv?.otherUser?.id ?? null,
+  )
+
+  // Auto-clear stale permission error when user grants mic access in browser panel
+  useEffect(() => {
+    if (micPerm === "granted" && webrtc.callError?.includes("blocked")) {
+      webrtc.hangUp() // clears callError so the "Try calling" buttons appear
+    }
+  }, [micPerm, webrtc.callError]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const scrollToBottom = useCallback((behavior: ScrollBehavior = "smooth") => {
     const el = scrollRef.current; if (!el) return
@@ -578,6 +613,25 @@ export default function ConversationPage() {
 
   const initCrypto = useCallback(async (cancelled: { v: boolean }) => {
     setCryptoError(null)
+
+    // Non-secure context (http:// on a LAN IP): crypto.subtle is unavailable.
+    // Skip E2E setup entirely — messaging still works via server-side encoding.
+    if (!isE2EAvailable) {
+      try {
+        const { conversation } = await ep.getConversation(conversationId)
+        if (cancelled.v) return
+        setConv(conversation)
+        // No sharedKey — encryptMessage/decryptMessage handle null key with base64 fallback
+        setCryptoError("no-e2e") // special marker: not a real error, just no E2E
+      } catch (e) {
+        if (!cancelled.v) setCryptoError("Could not load conversation.")
+        console.error("[Chat]", e)
+      } finally {
+        if (!cancelled.v) setInitLoading(false)
+      }
+      return
+    }
+
     try {
       const { publicKeyJwk, privateKey } = await getOrCreateKeyPair()
       await ep.uploadPublicKey(publicKeyJwk)
@@ -602,6 +656,16 @@ export default function ConversationPage() {
     const c = { v:false }; setInitLoading(true); setSharedKey(null)
     initCrypto(c); return () => { c.v = true }
   }, [conversationId, initCrypto])
+
+  // Auto-retry key exchange every 10s while waiting (not in no-e2e mode)
+  useEffect(() => {
+    if (!cryptoError?.includes("Waiting") || !isE2EAvailable) return
+    const timer = setInterval(() => {
+      const c = { v: false }
+      initCrypto(c)
+    }, 10_000)
+    return () => clearInterval(timer)
+  }, [cryptoError, initCrypto])
 
   useEffect(() => {
     const last = messages[messages.length-1]; if (!last) return
@@ -631,7 +695,10 @@ export default function ConversationPage() {
 
   const handleSend = useCallback(async () => {
     const text = input.trim()
-    if ((!text && !pendingFiles.length) || !sharedKeyRef.current || sendMutation.isPending) return
+    // Allow sending when: E2E key ready, no-E2E mode (LAN HTTP), OR waiting for key
+    // encryptMessage(null, text) uses base64 fallback when key is null
+    const canEncrypt = !!sharedKeyRef.current || !isE2EAvailable || cryptoReady
+    if ((!text && !pendingFiles.length) || !canEncrypt || sendMutation.isPending) return
 
     // /ask command — show local AI response bubble (matching chat-thread.jsx AIResponse)
     if (text.startsWith("/ask ") && text.length > 5) {
@@ -657,6 +724,7 @@ export default function ConversationPage() {
       content = text ? `${labels}\n${text}` : labels
     }
     setInput(""); setPendingFiles([]); setShowEmoji(false); setShowSlash(false)
+    stopTyping()
     const el = inputRef.current; if (el) { el.style.height="auto"; el.focus() }
     try {
       const { ciphertext, iv } = await encryptMessage(sharedKeyRef.current, content)
@@ -676,14 +744,17 @@ export default function ConversationPage() {
     const val = e.target.value
     setInput(val)
     autoResize()
-    // Show slash menu when input starts with /
     setShowSlash(val.startsWith("/") && val.length >= 1 && !val.includes(" "))
+    if (val) emitTyping()
   }
 
   // Local AI response (from /ask command — cosmetic demo matching chat-thread.jsx)
   const [aiResponse, setAiResponse] = useState<{ body:string; payload:AIPayload } | null>(null)
 
-  const canSend = (input.trim().length>0||pendingFiles.length>0) && !!sharedKey && !sendMutation.isPending
+  // Messaging works when: E2E key ready OR waiting/no-E2E (uses base64 fallback)
+  // "Waiting for other user" is NOT a reason to block sending — messages still go through
+  const cryptoReady = !!sharedKey || !isE2EAvailable || !!cryptoError?.includes("Waiting")
+  const canSend = (input.trim().length>0||pendingFiles.length>0) && cryptoReady && !sendMutation.isPending
   const other   = conv?.otherUser
 
   // Extract shared files from all decrypted messages
@@ -697,8 +768,16 @@ export default function ConversationPage() {
   })
 
   const initiateCall = (type: "audio"|"video") => {
-    if (!other||!me) return
-    webrtc.call(other.id, type, me.displayName, me.avatarUrl??null)
+    if (!other || !me) return
+    if (webrtc.status !== "idle") return
+    // Always let getUserMedia be the source of truth — never pre-block based on
+    // Permissions API state which can be stale after the user changes browser settings
+    webrtc.call(
+      other.id,
+      type,
+      me.displayName || me.username,
+      me.avatarUrl ?? null,
+    )
   }
 
   if (initLoading) return (
@@ -741,18 +820,27 @@ export default function ConversationPage() {
 
           {/* Actions */}
           <div style={{ marginLeft:"auto", display:"flex", alignItems:"center", gap:2, flexShrink:0 }}>
+            {/* Mic blocked indicator */}
+            {micPerm === "denied" && (
+              <span title="Microphone blocked — click a call button to see how to fix it"
+                style={{ fontSize:13, cursor:"default", opacity:0.6 }}>🎙️🚫</span>
+            )}
             {[
-              { title:"Voice call", onClick:()=>initiateCall("audio"), d:"M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.99 10.86 19.79 19.79 0 0 1 1.93 2.18 2 2 0 0 1 3.9 0H6.9a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 7.91a16 16 0 0 0 6.13 6.13l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92Z" },
-              { title:"Video call", onClick:()=>initiateCall("video"), d:"M15 10l4.553-2.069A1 1 0 0 1 21 8.82v6.361a1 1 0 0 1-1.447.894L15 14M3 8a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z" },
-              { title:"Search", onClick:()=>{}, d:"M11 11c0-3.87 2.13-7 7-7m-7 7a7 7 0 1 1 0-14 7 7 0 0 1 0 14Z" },
-            ].map(({ title, onClick, d }) => (
-              <button key={title} onClick={onClick} title={title}
-                style={{ width:30, height:30, borderRadius:"var(--r-sm)", display:"grid", placeItems:"center", color:"var(--ink-3)", background:"transparent", border:"none", cursor:"pointer", transition:"background 120ms,color 120ms" }}
-                onMouseEnter={e=>Object.assign((e.currentTarget as HTMLElement).style,{background:"var(--bg-2)",color:"var(--ink)"})}
-                onMouseLeave={e=>Object.assign((e.currentTarget as HTMLElement).style,{background:"transparent",color:"var(--ink-3)"})}>
+              { id:"audio", title: micPerm==="denied" ? "🚫 Mic blocked — click for help" : "Voice call", onClick:()=>initiateCall("audio"), d:"M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.99 10.86 19.79 19.79 0 0 1 1.93 2.18 2 2 0 0 1 3.9 0H6.9a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 7.91a16 16 0 0 0 6.13 6.13l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92Z", isCall: true },
+              { id:"video", title: micPerm==="denied" ? "🚫 Mic blocked — click for help" : "Video call", onClick:()=>initiateCall("video"), d:"M15 10l4.553-2.069A1 1 0 0 1 21 8.82v6.361a1 1 0 0 1-1.447.894L15 14M3 8a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z", isCall: true },
+              { id:"search", title:"Search", onClick:()=>{}, d:"M11 11c0-3.87 2.13-7 7-7m-7 7a7 7 0 1 1 0-14 7 7 0 0 1 0 14Z", isCall: false },
+            ].map(({ id, title, onClick, d, isCall }) => {
+              const inCall = webrtc.status !== "idle"
+              const disabled = isCall && inCall
+              const blockedColor = micPerm === "denied" && isCall ? "rgba(239,68,68,0.7)" : "var(--ink-3)"
+              return (
+              <button key={id} onClick={disabled ? undefined : () => onClick()} title={title}
+                style={{ width:30, height:30, borderRadius:"var(--r-sm)", display:"grid", placeItems:"center", color: disabled ? "var(--ink-5)" : blockedColor, background:"transparent", border:"none", cursor: disabled ? "not-allowed" : "pointer", transition:"background 120ms,color 120ms", opacity: disabled ? 0.4 : 1 }}
+                onMouseEnter={e=>!disabled && Object.assign((e.currentTarget as HTMLElement).style,{background:"var(--bg-2)",color:"var(--ink)"})}
+                onMouseLeave={e=>!disabled && Object.assign((e.currentTarget as HTMLElement).style,{background:"transparent",color: blockedColor})}>
                 <svg width={15} height={15} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round"><path d={d}/></svg>
               </button>
-            ))}
+            )})}
             <button onClick={()=>setShowContext(p=>!p)} title="Details"
               style={{ width:30, height:30, borderRadius:"var(--r-sm)", display:"grid", placeItems:"center", background:showContext?"var(--indigo-soft)":"transparent", color:showContext?"var(--indigo)":"var(--ink-3)", border:showContext?"1px solid var(--indigo-ring)":"none", cursor:"pointer", transition:"all 120ms" }}>
               <svg width={15} height={15} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
@@ -760,13 +848,31 @@ export default function ConversationPage() {
           </div>
         </div>
 
+        {/* No-E2E mode banner (HTTP on LAN IP — crypto.subtle unavailable) */}
+        {cryptoError === "no-e2e" && (
+          <div style={{ flexShrink:0, padding:"6px 24px", background:"oklch(0.28 0.08 60/0.25)", borderBottom:"1px solid oklch(0.50 0.10 60/0.30)", display:"flex", alignItems:"center", gap:8 }}>
+            <span style={{ fontSize:12, color:"oklch(0.82 0.12 80)" }}>
+              🔓 Messages are server-encrypted (E2E unavailable on HTTP). Use <strong>localhost:3000</strong> for full E2E encryption.
+            </span>
+          </div>
+        )}
+
         {/* Crypto error */}
-        {cryptoError && (
+        {cryptoError && cryptoError !== "no-e2e" && (
           <div style={{ flexShrink:0, padding:"8px 24px", background:"oklch(0.32 0.12 75/0.20)", borderBottom:"1px solid oklch(0.50 0.12 75/0.25)", display:"flex", alignItems:"center", justifyContent:"space-between", gap:10 }}>
-            <span style={{ fontSize:11.5, color:"var(--amber)" }}>⚠ {cryptoError}</span>
+            <span style={{ fontSize:11.5, color:"var(--amber)", display:"flex", alignItems:"center", gap:6 }}>
+              {cryptoError.includes("Waiting") ? (
+                <>
+                  <span style={{ width:7, height:7, borderRadius:"50%", background:"var(--amber)", animation:"pulse 1.5s ease-in-out infinite", flexShrink:0, display:"inline-block" }}/>
+                  Waiting for {other?.displayName ?? "the other user"} to open the chat — checking every 10 s
+                </>
+              ) : (
+                <>⚠ {cryptoError}</>
+              )}
+            </span>
             <button onClick={()=>{ setInitLoading(true); const c={v:false}; initCrypto(c) }}
-              style={{ padding:"3px 10px", borderRadius:6, background:"transparent", border:"1px solid oklch(0.50 0.12 75/0.5)", color:"var(--amber)", fontSize:11, fontWeight:600, cursor:"pointer", fontFamily:"inherit" }}>
-              Retry
+              style={{ padding:"3px 10px", borderRadius:6, background:"transparent", border:"1px solid oklch(0.50 0.12 75/0.5)", color:"var(--amber)", fontSize:11, fontWeight:600, cursor:"pointer", fontFamily:"inherit", flexShrink:0 }}>
+              Retry now
             </button>
           </div>
         )}
@@ -804,7 +910,7 @@ export default function ConversationPage() {
                   </div>
                 )}
                 <MsgRow m={msg} isMine={isMine}
-                  text={sharedKey ? decrypted[msg.id] : undefined}
+                  text={decrypted[msg.id]}
                   authorSrc={isMine ? me?.avatarUrl : other?.avatarUrl}
                   authorName={isMine ? (me?.displayName??"You") : (other?.displayName??"Them")}
                 />
@@ -831,6 +937,11 @@ export default function ConversationPage() {
                 <button onClick={()=>setAiResponse(null)} style={{ fontSize:10.5, color:"var(--ink-4)", background:"none", border:"none", cursor:"pointer", marginTop:4, fontFamily:"inherit" }}>Dismiss</button>
               </div>
             </div>
+          )}
+
+          {/* Typing indicator */}
+          {otherTyping && conv?.otherUser && (
+            <TypingIndicator name={conv.otherUser.displayName} src={conv.otherUser.avatarUrl} />
           )}
 
           <div style={{ height:4 }}/>
@@ -871,10 +982,18 @@ export default function ConversationPage() {
               onChange={handleInputChange}
               onFocus={()=>setFocus(true)} onBlur={()=>setFocus(false)}
               onKeyDown={onKey}
-              placeholder={sharedKey ? `Message ${other?.displayName?.split(" ")[0]??"…"} — type / for commands` : cryptoError ? "Encryption error — click Retry" : "Setting up encryption…"}
-              disabled={!sharedKey || sendMutation.isPending}
+              placeholder={
+                cryptoError?.includes("Waiting")
+                  ? `Message ${other?.displayName?.split(" ")[0]??"…"} — key exchange pending, messages still send`
+                  : cryptoReady
+                    ? `Message ${other?.displayName?.split(" ")[0]??"…"} — type / for commands`
+                    : cryptoError && cryptoError !== "no-e2e"
+                      ? "Encryption error — click Retry"
+                      : "Setting up encryption…"
+              }
+              disabled={!cryptoReady || sendMutation.isPending}
               rows={1}
-              style={{ width:"100%", minHeight:44, maxHeight:200, padding:"12px 14px 8px", background:"transparent", border:"none", outline:"none", color:"var(--ink)", fontSize:14, lineHeight:1.5, resize:"none", fontFamily:"inherit", opacity:!sharedKey||sendMutation.isPending?0.5:1 }}
+              style={{ width:"100%", minHeight:44, maxHeight:200, padding:"12px 14px 8px", background:"transparent", border:"none", outline:"none", color:"var(--ink)", fontSize:14, lineHeight:1.5, resize:"none", fontFamily:"inherit", opacity:!cryptoReady||sendMutation.isPending?0.5:1 }}
             />
             {/* Toolbar */}
             <div style={{ display:"flex", alignItems:"center", gap:2, padding:"6px 8px", borderTop:"1px solid var(--line)" }}>
@@ -925,7 +1044,7 @@ export default function ConversationPage() {
             ))}
             <span style={{ marginLeft:"auto", display:"inline-flex", alignItems:"center", gap:5, color:"var(--ink-4)", flexShrink:0 }}>
               <svg width={9} height={9} viewBox="0 0 24 24" fill="none" stroke="oklch(0.80 0.14 162)" strokeWidth={2.4} strokeLinecap="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
-              {sharedKey ? "Encrypted on your device" : "Server encrypted"}
+              {sharedKey ? "Encrypted on your device" : !isE2EAvailable ? "Server encrypted (HTTP mode)" : "Server encrypted"}
             </span>
           </div>
         </div>
@@ -933,6 +1052,65 @@ export default function ConversationPage() {
 
       {/* Context rail */}
       <AnimatePresence>{showContext && conv && <ContextRail conv={conv} onClose={()=>setShowContext(false)} sharedFiles={sharedFiles}/>}</AnimatePresence>
+
+      {/* Call error toast */}
+      {webrtc.callError && (
+        <div style={{
+          position:"fixed", top:24, left:"50%", transform:"translateX(-50%)", zIndex:10000,
+          background:"#140c0c", border:"1px solid rgba(239,68,68,0.35)",
+          borderRadius:18, padding:"16px 18px", maxWidth:440, minWidth:280,
+          color:"#fca5a5", fontSize:13,
+          boxShadow:"0 20px 60px rgba(0,0,0,0.85)",
+        }}>
+          <div style={{ display:"flex", alignItems:"flex-start", gap:10 }}>
+            <span style={{ fontSize:18, flexShrink:0 }}>
+              {webrtc.callError === "MACOS_SYSTEM_BLOCK" ? "🚫" : "⚠️"}
+            </span>
+            <div style={{ flex:1 }}>
+
+              {webrtc.callError === "MACOS_SYSTEM_BLOCK" ? (
+                /* macOS system-level block — browser toggles may show green but hardware is denied */
+                <>
+                  <p style={{ margin:"0 0 6px", fontWeight:700, color:"#f87171", fontSize:13.5 }}>
+                    Camera / Microphone blocked
+                  </p>
+                  <p style={{ margin:"0 0 10px", fontSize:12.5, color:"rgba(252,165,165,0.75)", lineHeight:1.6 }}>
+                    Your browser toggles may show <strong>green</strong>, but macOS is blocking hardware access for Chrome. Fix it in System Settings:
+                  </p>
+                  <ol style={{ margin:"0 0 14px", padding:"0 0 0 16px", fontSize:12, color:"rgba(252,165,165,0.7)", lineHeight:2 }}>
+                    <li>Open <strong style={{color:"#fca5a5"}}>Apple Menu → System Settings</strong></li>
+                    <li>Go to <strong style={{color:"#fca5a5"}}>Privacy &amp; Security → Microphone</strong></li>
+                    <li>Enable the toggle next to <strong style={{color:"#fca5a5"}}>Google Chrome</strong></li>
+                    <li>Do the same for <strong style={{color:"#fca5a5"}}>Camera</strong></li>
+                    <li>Quit and reopen Chrome, then try calling again</li>
+                  </ol>
+                  <div style={{ display:"flex", gap:8 }}>
+                    <button onClick={() => webrtc.hangUp()}
+                      style={{ flex:1, padding:"8px 0", borderRadius:10, fontSize:12, fontWeight:600, cursor:"pointer", background:"rgba(239,68,68,0.12)", border:"1px solid rgba(239,68,68,0.25)", color:"#fca5a5" }}>
+                      Dismiss
+                    </button>
+                    <button onClick={() => { webrtc.hangUp(); setTimeout(()=>initiateCall("audio"), 200) }}
+                      style={{ flex:1, padding:"8px 0", borderRadius:10, fontSize:12, fontWeight:700, cursor:"pointer", background:"rgba(74,222,128,0.12)", border:"1px solid rgba(74,222,128,0.3)", color:"#4ade80" }}>
+                      Try again
+                    </button>
+                  </div>
+                </>
+              ) : (
+                /* Generic error */
+                <>
+                  <p style={{ margin:"0 0 10px", lineHeight:1.55 }}>{webrtc.callError.split("\n\n")[0]}</p>
+                  <button onClick={() => webrtc.hangUp()}
+                    style={{ padding:"6px 16px", borderRadius:8, fontSize:12, fontWeight:600, cursor:"pointer", background:"rgba(239,68,68,0.12)", border:"1px solid rgba(239,68,68,0.25)", color:"#fca5a5" }}>
+                    Dismiss
+                  </button>
+                </>
+              )}
+            </div>
+            <button onClick={() => webrtc.hangUp()}
+              style={{ fontSize:16, color:"rgba(255,255,255,0.2)", cursor:"pointer", background:"none", border:"none", flexShrink:0 }}>✕</button>
+          </div>
+        </div>
+      )}
 
       {/* Call UI */}
       <AnimatePresence>
@@ -942,7 +1120,23 @@ export default function ConversationPage() {
       </AnimatePresence>
       <AnimatePresence>
         {(webrtc.status==="calling"||webrtc.status==="active") && (
-          <ActiveCallModal callType={webrtc.callType} peerName={other?.displayName??"…"} peerAvatar={other?.avatarUrl??null} duration={webrtc.duration} isMuted={webrtc.isMuted} isCamOff={webrtc.isCamOff} isSpeakerOff={webrtc.isSpeakerOff} status={webrtc.status} localVideoEl={webrtc.localVideoEl} remoteVideoEl={webrtc.remoteVideoEl} onMute={webrtc.toggleMute} onCamera={webrtc.toggleCamera} onSpeaker={webrtc.toggleSpeaker} onHangUp={webrtc.hangUp}/>
+          <ActiveCallModal
+            callType={webrtc.callType}
+            peerName={other?.displayName??"…"}
+            peerAvatar={other?.avatarUrl??null}
+            duration={webrtc.duration}
+            isMuted={webrtc.isMuted}
+            isCamOff={webrtc.isCamOff}
+            isSpeakerOff={webrtc.isSpeakerOff}
+            status={webrtc.status}
+            localVideoEl={webrtc.localVideoEl}
+            remoteVideoEl={webrtc.remoteVideoEl}
+            onMute={webrtc.toggleMute}
+            onCamera={webrtc.toggleCamera}
+            onSpeaker={webrtc.toggleSpeaker}
+            onHangUp={webrtc.hangUp}
+            onVideoElemsReady={webrtc.onVideoElemsReady}
+          />
         )}
       </AnimatePresence>
     </div>

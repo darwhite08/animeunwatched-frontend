@@ -440,7 +440,11 @@ export default function FeedPage() {
                       {post._count?.comments ?? 0}
                     </button>
                     <button
-                      onClick={() => push("Post link copied to clipboard!", "success")}
+                      onClick={() => {
+                        const url = `${window.location.origin}/posts/${post.id}`
+                        navigator.clipboard.writeText(url).catch(() => {})
+                        push("Post link copied to clipboard!", "success")
+                      }}
                       className="flex items-center gap-1.5 text-xs font-bold text-white/30 hover:text-white/60 transition-colors ml-auto"
                     >
                       <Share2 size={13} />

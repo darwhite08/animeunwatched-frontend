@@ -79,15 +79,20 @@ function MarkdownPreview({ source }: { source: string }) {
         if (line.trim() === "") {
           return <div key={i} className="h-1" />
         }
-        /* bold / italic inline */
-        const processed = line
+        /* bold / italic inline — escape HTML first to prevent XSS */
+        const escaped = line
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+        const processed = escaped
           .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
           .replace(/\*(.+?)\*/g, "<em>$1</em>")
           .replace(/`(.+?)`/g, '<code class="bg-white/10 px-1 rounded text-amber-300 text-xs">$1</code>')
         return (
           <p
             key={i}
-            dangerouslySetInnerHTML={{ __html: processed }}  // safe: user's own input
+            dangerouslySetInnerHTML={{ __html: processed }}
           />
         )
       })}

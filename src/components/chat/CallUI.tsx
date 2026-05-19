@@ -145,6 +145,7 @@ export function ActiveCallModal({
   isMuted, isCamOff, isSpeakerOff, status,
   localVideoEl, remoteVideoEl,
   onMute, onCamera, onSpeaker, onHangUp,
+  onVideoElemsReady,
 }: {
   callType: CallType; peerName: string; peerAvatar: string | null
   duration: number; isMuted: boolean; isCamOff: boolean; isSpeakerOff: boolean
@@ -152,6 +153,7 @@ export function ActiveCallModal({
   localVideoEl: React.RefObject<HTMLVideoElement | null>
   remoteVideoEl: React.RefObject<HTMLVideoElement | null>
   onMute: () => void; onCamera: () => void; onSpeaker: () => void; onHangUp: () => void
+  onVideoElemsReady?: () => void
 }) {
   // Attach video refs
   const remoteRef = useRef<HTMLVideoElement>(null)
@@ -169,7 +171,9 @@ export function ActiveCallModal({
       localRef.current.playsInline = true
       localRef.current.muted       = true
     }
-  }, [localVideoEl, remoteVideoEl])
+    // CRITICAL: notify hook that video elements are ready so it can apply streams
+    onVideoElemsReady?.()
+  }, [localVideoEl, remoteVideoEl, onVideoElemsReady])
 
   const isCalling = status === "calling"
   const statusLabel = isCalling ? "Calling…" : formatDuration(duration)

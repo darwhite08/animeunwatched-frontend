@@ -284,9 +284,16 @@ function ArticleBody({ apiContent }: { apiContent?: string }) {
 export default function BlogReaderPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = use(params)
   const { push } = useToast()
-  const { data: blogData } = useBlog(slug)
+  const { data: blogData, isLoading: blogLoading, isError: blogError } = useBlog(slug)
 
-  // Use real blog if available, fall back to mock
+  // Show loading skeleton while blog is fetching
+  if (blogLoading) return (
+    <div className="min-h-screen bg-[#020202] flex items-center justify-center">
+      <div className="w-8 h-8 border-2 border-indigo-500/30 border-t-indigo-500 rounded-full animate-spin" />
+    </div>
+  )
+
+  // Use real blog if available, fall back to mock for dev/demo
   const apiBlog = blogData?.blog
   const meta = apiBlog ? {
     slug: apiBlog.slug,

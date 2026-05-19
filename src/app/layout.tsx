@@ -24,6 +24,15 @@ export const metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
+      <head>
+        {/* Google Fonts — loaded as <link> to avoid CSS @import order issues with Tailwind v4 */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Caveat+Brush&family=Bowlby+One+SC&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Special+Elite&display=swap"
+          rel="stylesheet"
+        />
+      </head>
       <body className="bg-black text-white antialiased">
         <QueryProvider>
           <SessionProvider>

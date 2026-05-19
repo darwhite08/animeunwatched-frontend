@@ -262,6 +262,7 @@ export default function UserProfilePage({
       }
     : buildMockUser(username)
 
+  const isOwnProfile = currentUser?.username === username
   const [following, setFollowing] = useState(false)
   const [likedPosts, setLikedPosts] = useState<Set<number>>(new Set())
 
@@ -414,6 +415,7 @@ export default function UserProfilePage({
                 transition={{ delay: 0.3 }}
                 className="flex items-center justify-center md:justify-start gap-3 flex-wrap"
               >
+                {!isOwnProfile && (
                 <button
                   onClick={toggleFollow}
                   className={`flex items-center gap-2 px-7 py-3 rounded-2xl text-sm font-black uppercase tracking-widest transition-all duration-300 ${
@@ -428,13 +430,16 @@ export default function UserProfilePage({
                     <><UserPlus size={15} /> Follow</>
                   )}
                 </button>
+                )}
 
+                {!isOwnProfile && (
                 <button
                   onClick={handleMessage}
                   className="flex items-center gap-2 px-5 py-3 rounded-2xl text-sm font-black uppercase tracking-widest bg-white/8 border border-white/15 text-white/70 hover:bg-white/12 hover:text-white transition-all duration-300"
                 >
                   <Mail size={15} /> Message
                 </button>
+                )}
 
                 <div className="flex items-center gap-1.5 text-[10px] font-bold text-white/30 uppercase tracking-widest">
                   <Clock size={11} />

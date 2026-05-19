@@ -74,8 +74,6 @@ export default function AnimeDetailPage({ params }: { params: Promise<{ id: stri
   // All IDs are now numeric malIds from the API
   if (!isNaN(malId)) return <AnimeDetailLoader malId={malId} />
   return notFound()
-
-  return notFound()
 }
 
 function AnimeDetail({ anime, rawAnime }: { anime: Anime; rawAnime?: AnimeDTO }) {
@@ -109,6 +107,7 @@ function AnimeDetail({ anime, rawAnime }: { anime: Anime; rawAnime?: AnimeDTO })
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
+          // Escape </script> to prevent script injection in JSON-LD data
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "Movie",
@@ -127,7 +126,7 @@ function AnimeDetail({ anime, rawAnime }: { anime: Anime; rawAnime?: AnimeDTO })
             },
             "url": `https://animeunwatched.com/anime/${anime.id}`,
             "image": anime.image
-          })
+          }).replace(/<\/script>/gi, "<\\/script>"),
         }}
       />
 

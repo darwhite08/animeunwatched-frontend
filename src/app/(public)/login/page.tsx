@@ -71,10 +71,15 @@ export default function LoginPage() {
 
   // Trigger Google's hidden rendered button — works on desktop + mobile without leaving the page
   const handleGoogleLogin = () => {
+    setOauthLoading("google")
     const btn = googleBtnRef.current?.querySelector<HTMLElement>('[role="button"],button,div[tabindex="0"]')
     if (btn) { btn.click(); return }
-    // Fallback: prompt
-    window.google?.accounts.id.prompt()
+    // Fallback: prompt — clears loading state if user dismisses the dialog
+    window.google?.accounts.id.prompt((notification: { isNotDisplayed(): boolean; isSkippedMoment(): boolean }) => {
+      if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+        setOauthLoading(null)
+      }
+    })
   }
 
   /* ── Apple ─────────────────────────────────────────────────────────── */
@@ -221,22 +226,21 @@ export default function LoginPage() {
             {/* OAuth Buttons */}
             <div className="mt-10 space-y-4">
 
-              {/* Google */}
-              <motion.button
-                onClick={handleGoogleLogin}
-                disabled={isDisabled}
+              {/* Google — redirect flow (works on localhost without Google Console setup) */}
+              <motion.a
+                href="/api/v1/auth/google/redirect"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className="w-full h-12 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition flex items-center justify-center gap-3 font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:opacity-60 disabled:cursor-not-allowed"
+                className="w-full h-12 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition flex items-center justify-center gap-3 font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500"
               >
-                {oauthLoading === "google"
+                {false
                   ? <><Loader2 size={16} className="animate-spin" /> Signing in...</>
                   : <>
                       <Image src="/assets/icons/google.png" alt="Google" width={20} height={20} className="object-contain" />
                       Continue with Google
                     </>
                 }
-              </motion.button>
+              </motion.a>
 
               {/* Apple */}
               <motion.button

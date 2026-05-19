@@ -46,3 +46,14 @@ export function useUpdateBlog(slug: string) {
     },
   })
 }
+
+export function useDeleteBlog(slug: string) {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: () => api<void>(`/blogs/${slug}`, { method: "DELETE" }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: blogsKey })
+      qc.removeQueries({ queryKey: blogKey(slug) })
+    },
+  })
+}

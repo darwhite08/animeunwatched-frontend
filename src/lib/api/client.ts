@@ -2,15 +2,34 @@
 
 import { useAuthStore } from "@/stores/auth.store"
 
-const BASE = process.env.NEXT_PUBLIC_API_BASE ?? "http://localhost:4000"
+// When the browser is on localhost, talk directly to the backend.
+// When on any other device (phone, tablet), use the Next.js proxy at the same origin
+// so only port 3000 needs to be reachable — no direct port 4000 access required.
+function getApiBase(): string {
+  if (typeof window === "undefined") {
+    // Server-side: use the configured backend URL directly
+    return process.env.API_BASE ?? "http://localhost:4000"
+  }
+  const host = window.location.hostname
+  if (host === "localhost" || host === "127.0.0.1") {
+    // Desktop/localhost: direct backend connection
+    return process.env.NEXT_PUBLIC_API_BASE ?? "http://localhost:4000"
+  }
+  // Phone/tablet on LAN: use relative URL so requests go through the Next.js proxy
+  // next.config.ts rewrites /api/v1/* → backend, so only port 3000 is needed
+  return ""
+}
+const BASE = getApiBase()
 
 export class ApiError extends Error {
+  name = "ApiError" as const
   constructor(
     public status: number,
     public code: string,
     message: string,
   ) {
     super(message)
+    Object.setPrototypeOf(this, new.target.prototype)
   }
 }
 

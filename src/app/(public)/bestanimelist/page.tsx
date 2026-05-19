@@ -62,12 +62,24 @@ export default function BestAnimeListPage() {
 
   // Client-side genre + category filter
   const filtered = useMemo(() => {
-    let results = allAnime
-    if (category !== "all") {
-      if (category === "airing") results = results.filter(a => a.status === "airing")
-      else if (category === "movie") results = results.filter(a => a.type === "Movie")
-      else if (category === "top-rated") results = results.filter(a => a.rating >= 8.5)
+    let results = [...allAnime]
+
+    if (category === "trending") {
+      // Trending = currently airing OR highest rated, sorted score desc
+      results = results
+        .filter(a => a.status === "airing" || a.rating >= 8.0)
+        .sort((a, b) => b.rating - a.rating)
+    } else if (category === "top-rated") {
+      // Highest rated = score >= 8.5, sorted desc
+      results = results
+        .filter(a => a.rating >= 8.5)
+        .sort((a, b) => b.rating - a.rating)
+    } else if (category === "new") {
+      // Newly synced = most recent years first, then by score
+      results = [...results].sort((a, b) => b.year - a.year || b.rating - a.rating)
     }
+    // "all" → no extra filter, keeps API order (score desc from backend)
+
     if (selectedGenres.length > 0) {
       results = results.filter(a =>
         selectedGenres.every(g => a.genres.some(ag => ag.toLowerCase().includes(g.toLowerCase())))

@@ -32,11 +32,20 @@ export function useCreateReview() {
   })
 }
 
-export function useLikeReview(reviewId: string) {
+export function useLikeReview(reviewId: string, animeId: string) {
   const qc = useQueryClient()
   return useMutation({
     mutationFn: ({ like }: { like: boolean }) =>
       api<void>(`/reviews/${reviewId}/like`, { method: like ? "POST" : "DELETE" }),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["reviews"] }),
+    // Invalidate only the specific anime's reviews, not all reviews
+    onSuccess: () => qc.invalidateQueries({ queryKey: reviewsKey(animeId) }),
+  })
+}
+
+export function useDeleteReview(reviewId: string, animeId: string) {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: () => api<void>(`/reviews/${reviewId}`, { method: "DELETE" }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: reviewsKey(animeId) }),
   })
 }

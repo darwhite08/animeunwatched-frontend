@@ -1,6 +1,6 @@
 "use client"
 
-import { motion, AnimatePresence, useScroll } from "framer-motion"
+import { motion, AnimatePresence } from "framer-motion"
 import {
   Edit3,
   Camera,
@@ -25,7 +25,7 @@ import {
 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
-import { useRef, useState } from "react"
+import { useState } from "react"
 import ShareCard from "@/components/ui/ShareCard"
 import { useAuthStore } from "@/stores/auth.store"
 import { useUserList } from "@/hooks/useLists"
@@ -391,11 +391,6 @@ function BlogsTab() {
    Page
 ───────────────────────────────────────────── */
 export default function WorldClassProfile() {
-  const containerRef = useRef(null)
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end start"],
-  })
   const [shareOpen, setShareOpen] = useState(false)
   const [activeTab, setActiveTab] = useState<Tab>("Activity")
   const authUser = useAuthStore(s => s.user)
@@ -408,7 +403,7 @@ export default function WorldClassProfile() {
   ]
 
   return (
-    <div ref={containerRef} className="max-w-[1400px] mx-auto space-y-16 pb-32 px-6">
+    <div className="max-w-[1400px] mx-auto space-y-16 pb-32 px-6">
 
       {/* 1. MASTER HEADER: THE INFINITY CANVAS */}
       <section className="relative min-h-[450px] flex items-end overflow-hidden rounded-[3rem] border border-white/5 bg-[#050505] shadow-2xl">

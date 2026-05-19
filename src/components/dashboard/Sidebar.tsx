@@ -10,6 +10,7 @@ import {
   BookOpen, History, Tag, Building2, Sparkles, Layers,
 } from "lucide-react"
 import { useWatchlist } from "@/stores/watchlist.store"
+import { useUnreadCount } from "@/hooks/useNotificationsQuery"
 
 const NAV = [
   {
@@ -48,10 +49,12 @@ const NAV = [
 
 export default function Sidebar() {
   const pathname  = usePathname()
-  const wlCount   = useWatchlist(s => s.count)
-  const user      = useAuthStore(s => s.user)
+  const wlCount      = useWatchlist(s => s.count)
+  const { data: unreadData } = useUnreadCount()
+  const unreadCount  = unreadData?.count ?? 0
+  const user         = useAuthStore(s => s.user)
   const rep       = user?.reputation ?? 0
-  const level     = Math.max(1, Math.floor(Math.sqrt(rep * 100 / 1000)))
+  const level     = Math.max(1, Math.floor(Math.sqrt(Math.max(0, rep) * 100 / 1000)))
   const streak    = Math.min(365, Math.floor(rep / 10))
   const grade     = level >= 10 ? "Grade IV" : level >= 7 ? "Grade III" : level >= 4 ? "Grade II" : "Grade I"
 
@@ -105,9 +108,10 @@ export default function Sidebar() {
                     </div>
                     {"badge" in item && item.badge && (
                       <span className="relative z-10 flex items-center gap-1">
-                        {wlCount > 0 && item.name === "Watchlist" ? null : null}
-                        {item.name === "Notifications" && (
-                          <span className="px-1.5 py-0.5 rounded-full bg-indigo-600/30 text-[8px] font-black text-indigo-400">2</span>
+                        {item.name === "Notifications" && unreadCount > 0 && (
+                          <span className="px-1.5 py-0.5 rounded-full bg-indigo-600/30 text-[8px] font-black text-indigo-400">
+                            {unreadCount > 99 ? "99+" : unreadCount}
+                          </span>
                         )}
                       </span>
                     )}

@@ -15,6 +15,14 @@
  * sent to the server.
  */
 
+// ── Secure-context guard ──────────────────────────────────────────────────────
+// crypto.subtle (Web Crypto API) is ONLY available on secure contexts:
+// https, localhost, or 127.0.0.1. When accessed via a LAN IP over HTTP
+// (e.g. from a phone on http://192.168.x.x), SubtleCrypto is unavailable.
+// We detect this and export a flag so the UI can show a clear warning.
+export const isE2EAvailable: boolean =
+  typeof window !== "undefined" && !!window.crypto?.subtle
+
 // Use localStorage so keys persist across browser sessions, tabs, and refreshes.
 // Without this, closing a tab generates a new key pair, making all old messages
 // show "Could not decrypt" because the shared secret changes.
@@ -123,10 +131,23 @@ export async function getSharedKey(
 
 // ── Encrypt / Decrypt ─────────────────────────────────────────────────────────
 
+// Marker stored in IV field to indicate a non-E2E (server-readable) message.
+// Used when crypto.subtle is unavailable (HTTP on LAN IP).
+const PLAIN_IV_MARKER = "PLAIN_NO_E2E"
+
 export async function encryptMessage(
-  sharedKey: CryptoKey,
+  sharedKey: CryptoKey | null,
   plaintext: string,
 ): Promise<{ ciphertext: string; iv: string }> {
+  // Fallback: no E2E available (non-secure context like http://192.168.x.x)
+  // Encode as base64 so the API still receives ciphertext+iv fields.
+  if (!sharedKey || !isE2EAvailable) {
+    return {
+      ciphertext: btoa(unescape(encodeURIComponent(plaintext))),
+      iv:         PLAIN_IV_MARKER,
+    }
+  }
+
   const iv      = window.crypto.getRandomValues(new Uint8Array(12))
   const encoded = new TextEncoder().encode(plaintext)
 
@@ -143,10 +164,23 @@ export async function encryptMessage(
 }
 
 export async function decryptMessage(
-  sharedKey: CryptoKey,
+  sharedKey: CryptoKey | null,
   ciphertext: string,
   iv: string,
 ): Promise<string> {
+  // If this message was sent without E2E (plain marker), just base64-decode it
+  if (iv === PLAIN_IV_MARKER) {
+    try {
+      return decodeURIComponent(escape(atob(ciphertext)))
+    } catch {
+      return ciphertext
+    }
+  }
+
+  if (!sharedKey || !isE2EAvailable) {
+    throw new Error("E2E key unavailable")
+  }
+
   const decrypted = await window.crypto.subtle.decrypt(
     { name: "AES-GCM", iv: b64ToBytes(iv) },
     sharedKey,

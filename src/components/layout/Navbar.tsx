@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { useWatchlist } from "@/stores/watchlist.store";
 import { useAuthStore } from "@/stores/auth.store";
+import { disconnectSocket } from "@/lib/socket";
 import NotificationBell from "@/components/notifications/NotificationBell";
 import SearchModal from "./SearchModal";
 import ProfileMenu from "./ProfileMenu";
@@ -150,16 +151,6 @@ export default function Navbar() {
           className="absolute top-0 left-0 right-0 h-[2px] z-[101]" />
       )}
 
-      {/* Chapter label above nav on homepage */}
-      {isHomePage && scrolled && (
-        <motion.div key={`lbl-${activeSection}`}
-          initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.22 }}
-          className={`mb-1.5 px-3 py-1 rounded-full text-[8px] font-black uppercase tracking-[0.4em] ${theme.accent} border hidden lg:flex items-center gap-1.5`}
-          style={{ backgroundColor: theme.dotColor + "18", borderColor: theme.dotColor + "40" }}>
-          <motion.span animate={{ backgroundColor: theme.dotColor }} className="w-1.5 h-1.5 rounded-full inline-block" />
-          {theme.label}
-        </motion.div>
-      )}
 
       {/* Nav pill */}
       <motion.nav
@@ -169,7 +160,7 @@ export default function Navbar() {
           boxShadow:       scrolled ? theme.glow  : "none",
         }}
         transition={T}
-        className="relative flex w-full max-w-[1040px] items-center justify-between rounded-[2rem] px-6 backdrop-blur-2xl border"
+        className="relative flex w-full max-w-[1200px] items-center justify-between rounded-[2rem] px-6 backdrop-blur-2xl border"
         style={{ paddingTop: scrolled ? "8px" : "11px", paddingBottom: scrolled ? "8px" : "11px" }}
       >
         {/* ── Logo ── */}
@@ -184,17 +175,17 @@ export default function Navbar() {
         </Link>
 
         {/* ── Desktop nav links ── */}
-        <nav className="hidden lg:flex items-center gap-0.5" aria-label="Main navigation">
+        <nav className="hidden lg:flex items-center gap-1" aria-label="Main navigation">
 
           <Link href="/"
-            className={`px-4 py-2.5 text-[10px] font-black uppercase tracking-widest rounded-full transition-all ${pathname === "/" ? "text-white bg-white/10" : "text-white/40 hover:text-white hover:bg-white/5"}`}>
+            className={`whitespace-nowrap px-4 py-2 text-[10px] font-black uppercase tracking-widest rounded-full transition-all ${pathname === "/" ? "text-white bg-white/10" : "text-white/40 hover:text-white hover:bg-white/5"}`}>
             Home
           </Link>
 
           {/* Anime dropdown */}
           <div className="relative" onMouseEnter={() => enterDropdown("anime")} onMouseLeave={leaveDropdown}>
             <button
-              className={`flex items-center gap-1 px-4 py-2.5 text-[10px] font-black uppercase tracking-widest rounded-full transition-all ${isAnimePath || openDropdown === "anime" ? "text-white bg-white/10" : "text-white/40 hover:text-white hover:bg-white/5"}`}
+              className={`whitespace-nowrap flex items-center gap-1 px-4 py-2 text-[10px] font-black uppercase tracking-widest rounded-full transition-all ${isAnimePath || openDropdown === "anime" ? "text-white bg-white/10" : "text-white/40 hover:text-white hover:bg-white/5"}`}
               aria-expanded={openDropdown === "anime"} aria-haspopup="menu">
               Anime
               <ChevronDown size={11} className={`transition-transform duration-200 ${openDropdown === "anime" ? "rotate-180" : ""}`} />
@@ -207,7 +198,7 @@ export default function Navbar() {
           {/* Community dropdown */}
           <div className="relative" onMouseEnter={() => enterDropdown("community")} onMouseLeave={leaveDropdown}>
             <button
-              className={`flex items-center gap-1 px-4 py-2.5 text-[10px] font-black uppercase tracking-widest rounded-full transition-all ${isCommunityPath || openDropdown === "community" ? "text-white bg-white/10" : "text-white/40 hover:text-white hover:bg-white/5"}`}
+              className={`whitespace-nowrap flex items-center gap-1 px-4 py-2 text-[10px] font-black uppercase tracking-widest rounded-full transition-all ${isCommunityPath || openDropdown === "community" ? "text-white bg-white/10" : "text-white/40 hover:text-white hover:bg-white/5"}`}
               aria-expanded={openDropdown === "community"} aria-haspopup="menu">
               Community
               <ChevronDown size={11} className={`transition-transform duration-200 ${openDropdown === "community" ? "rotate-180" : ""}`} />
@@ -221,7 +212,7 @@ export default function Navbar() {
           {isHydrated && isAuthenticated && (
             <div className="relative" onMouseEnter={() => enterDropdown("my")} onMouseLeave={leaveDropdown}>
               <button
-                className={`flex items-center gap-1 px-4 py-2.5 text-[10px] font-black uppercase tracking-widest rounded-full transition-all ${isMyPath || openDropdown === "my" ? "text-white bg-white/10" : "text-white/40 hover:text-white hover:bg-white/5"}`}
+                className={`whitespace-nowrap flex items-center gap-1 px-4 py-2 text-[10px] font-black uppercase tracking-widest rounded-full transition-all ${isMyPath || openDropdown === "my" ? "text-white bg-white/10" : "text-white/40 hover:text-white hover:bg-white/5"}`}
                 aria-expanded={openDropdown === "my"} aria-haspopup="menu">
                 My List
                 <ChevronDown size={11} className={`transition-transform duration-200 ${openDropdown === "my" ? "rotate-180" : ""}`} />
@@ -233,14 +224,14 @@ export default function Navbar() {
           )}
 
           <Link href="/rankings"
-            className={`flex items-center gap-1.5 px-4 py-2.5 text-[10px] font-black uppercase tracking-widest rounded-full transition-all ${pathname.startsWith("/rankings") ? "text-white bg-white/10" : "text-white/40 hover:text-white hover:bg-white/5"}`}>
+            className={`whitespace-nowrap flex items-center gap-1.5 px-4 py-2 text-[10px] font-black uppercase tracking-widest rounded-full transition-all ${pathname.startsWith("/rankings") ? "text-white bg-white/10" : "text-white/40 hover:text-white hover:bg-white/5"}`}>
             <TrendingUp size={11} />
             Rankings
           </Link>
         </nav>
 
         {/* ── Actions ── */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5">
           {/* Search */}
           <button onClick={() => setSearchOpen(true)}
             className="flex items-center gap-2 h-9 px-3 rounded-full bg-white/5 border border-white/8 text-white/40 hover:text-white hover:bg-white/10 hover:border-white/15 transition-all">
@@ -280,7 +271,7 @@ export default function Navbar() {
                     {(storeUser.displayName ?? storeUser.username)[0].toUpperCase()}
                   </div>
                 )}
-                <span className="text-[10px] font-black text-white/80 hidden xl:block uppercase tracking-wide max-w-[80px] truncate">
+                <span className="text-[10px] font-black text-white/80 hidden xl:block uppercase tracking-wide max-w-[72px] truncate">
                   {storeUser.displayName ?? storeUser.username}
                 </span>
               </button>
@@ -289,8 +280,8 @@ export default function Navbar() {
                 isOpen={profileOpen}
                 onClose={() => setProfileOpen(false)}
                 onLogout={() => {
-                  const BASE = process.env.NEXT_PUBLIC_API_BASE ?? "http://localhost:4000"
-                  fetch(`${BASE}/api/v1/auth/logout`, { method: "POST", credentials: "include" }).catch(() => {})
+                  fetch(`/api/v1/auth/logout`, { method: "POST", credentials: "include" }).catch(() => {})
+                  disconnectSocket()
                   useAuthStore.getState().clear()
                   setProfileOpen(false)
                   if (typeof window !== "undefined") window.location.href = "/"

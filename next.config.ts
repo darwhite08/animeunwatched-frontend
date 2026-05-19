@@ -1,5 +1,28 @@
 import type { NextConfig } from "next";
 
+const securityHeaders = [
+  { key: "X-DNS-Prefetch-Control",  value: "on" },
+  { key: "X-Frame-Options",         value: "SAMEORIGIN" },
+  { key: "X-Content-Type-Options",  value: "nosniff" },
+  { key: "Referrer-Policy",         value: "strict-origin-when-cross-origin" },
+  { key: "Permissions-Policy",      value: "camera=(), microphone=(), geolocation=()" },
+  {
+    key: "Content-Security-Policy",
+    value: [
+      "default-src 'self'",
+      "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://accounts.google.com https://apis.google.com",
+      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+      "font-src 'self' https://fonts.gstatic.com data:",
+      "img-src 'self' data: blob: https://cdn.myanimelist.net https://myanimelist.net https://images.unsplash.com https://img.anisearch.com https://cdn.noitatnemucod.net https://img1.ak.crunchyroll.com https://encrypted-tbn0.gstatic.com https://s4.anilist.co https://media.kitsu.app https://lh3.googleusercontent.com https://lh4.googleusercontent.com https://lh5.googleusercontent.com https://lh6.googleusercontent.com https://avatars.githubusercontent.com",
+      "connect-src 'self' http://localhost:4000 http://192.168.31.167:4000 https://api.jikan.moe https://accounts.google.com wss: ws:",
+      "frame-src 'self' https://accounts.google.com",
+      "object-src 'none'",
+      "base-uri 'self'",
+      "form-action 'self'",
+    ].join("; "),
+  },
+];
+
 const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
@@ -22,9 +45,37 @@ const nextConfig: NextConfig = {
     minimumCacheTTL: 86400,
   },
   experimental: {
-    // Only import what's used from these packages — reduces bundle and compile time
     optimizePackageImports: ["lucide-react", "framer-motion", "date-fns"],
   },
+  // Allow phones and tablets on the local network to access HMR/dev assets
+  allowedDevOrigins: ["192.168.31.167"],
+  // Fix workspace root warning from turbopack when lockfiles are present in multiple locations
+  turbopack: {
+    root: __dirname,
+  },
+  async headers() {
+    return [
+      {
+        source: "/(.*)",
+        headers: securityHeaders,
+      },
+    ];
+  },
+  // Proxy /api/v1/* and /health to the backend — this lets phones/tablets reach the
+  // backend through port 3000 (Next.js) without needing direct access to port 4000.
+  async rewrites() {
+    const backendUrl = process.env.API_BASE ?? "http://localhost:4000";
+    return [
+      { source: "/api/v1/:path*",  destination: `${backendUrl}/api/v1/:path*` },
+      { source: "/health",         destination: `${backendUrl}/health` },
+      { source: "/sitemap.xml",    destination: `${backendUrl}/sitemap.xml` },
+      // NOTE: Socket.IO WebSockets CANNOT be proxied through Next.js rewrites.
+      // The socket connects directly to the backend (port 4000) from the client.
+      // On LAN (phone), port 4000 must be reachable — see socket.ts for the URL logic.
+    ];
+  },
+  // Compress responses
+  compress: true,
 };
 
 export default nextConfig;

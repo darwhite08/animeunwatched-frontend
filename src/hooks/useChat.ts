@@ -1,7 +1,7 @@
 "use client"
 
 import { useQuery, useMutation, useInfiniteQuery, useQueryClient } from "@tanstack/react-query"
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState, useCallback } from "react"
 import { useAuthStore } from "@/stores/auth.store"
 import * as ep from "@/lib/api/endpoints"
 import { getSocket } from "@/lib/socket"
@@ -188,4 +188,74 @@ export function useChatSocket(conversationId: string | null) {
       cleanup?.()
     }
   }, [qc])
+}
+
+// ── Typing indicator ──────────────────────────────────────────────────────────
+
+/** Emit typing events and track whether the other user is typing. */
+export function useTypingIndicator(conversationId: string | null, otherUserId: string | null) {
+  const [otherTyping, setOtherTyping] = useState(false)
+  const stopTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const typingRef    = useRef(false)
+
+  // Listen for incoming typing events
+  useEffect(() => {
+    let retryTimer: ReturnType<typeof setTimeout> | null = null
+    let cleanup: (() => void) | undefined
+    let unmounted = false
+
+    function attach() {
+      const socket = getSocket()
+      if (!socket) { retryTimer = setTimeout(() => { if (!unmounted) attach() }, 800); return }
+
+      const onStart = ({ conversationId: cid }: { from: string; conversationId: string }) => {
+        if (cid !== conversationId) return
+        setOtherTyping(true)
+        // Auto-clear after 4s in case stop event is missed
+        if (stopTimerRef.current) clearTimeout(stopTimerRef.current)
+        stopTimerRef.current = setTimeout(() => setOtherTyping(false), 4_000)
+      }
+
+      const onStop = ({ conversationId: cid }: { from: string; conversationId: string }) => {
+        if (cid !== conversationId) return
+        if (stopTimerRef.current) clearTimeout(stopTimerRef.current)
+        setOtherTyping(false)
+      }
+
+      socket.on("typing:start", onStart)
+      socket.on("typing:stop",  onStop)
+      cleanup = () => { socket.off("typing:start", onStart); socket.off("typing:stop", onStop) }
+    }
+
+    attach()
+    return () => { unmounted = true; if (retryTimer) clearTimeout(retryTimer); cleanup?.() }
+  }, [conversationId])
+
+  /** Call when the user starts typing; debounces the stop event. */
+  const emitTyping = useCallback(() => {
+    if (!conversationId || !otherUserId) return
+    const socket = getSocket()
+    if (!socket?.connected) return
+
+    if (!typingRef.current) {
+      typingRef.current = true
+      socket.emit("typing:start", { conversationId, to: otherUserId })
+    }
+    // Stop typing after 3s of inactivity
+    if (stopTimerRef.current) clearTimeout(stopTimerRef.current)
+    stopTimerRef.current = setTimeout(() => {
+      typingRef.current = false
+      socket.emit("typing:stop", { conversationId, to: otherUserId })
+    }, 3_000)
+  }, [conversationId, otherUserId])
+
+  /** Call explicitly on blur or send. */
+  const stopTyping = useCallback(() => {
+    if (!conversationId || !otherUserId || !typingRef.current) return
+    typingRef.current = false
+    if (stopTimerRef.current) clearTimeout(stopTimerRef.current)
+    getSocket()?.emit("typing:stop", { conversationId, to: otherUserId })
+  }, [conversationId, otherUserId])
+
+  return { otherTyping, emitTyping, stopTyping }
 }

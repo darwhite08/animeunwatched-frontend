@@ -4,7 +4,9 @@ import { useEffect, useRef } from "react"
 import { useAuthStore } from "@/stores/auth.store"
 import { connectSocket, disconnectSocket, updateSocketToken } from "@/lib/socket"
 
-const BASE = process.env.NEXT_PUBLIC_API_BASE ?? "http://localhost:4000"
+// Use relative /api/v1 path so it works on any device (phone, tablet, desktop)
+// Next.js rewrites /api/v1/* to the backend internally
+const BASE = ""
 
 export function SessionProvider({ children }: { children: React.ReactNode }) {
   const { setAccess, setUser, clear } = useAuthStore()

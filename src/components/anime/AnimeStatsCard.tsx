@@ -46,7 +46,7 @@ export function AnimeStatsCard({ anime }: AnimeStatsCardProps) {
       ? "bg-emerald-500"
       : anime.rating >= 8
       ? "bg-amber-400"
-      : "bg-indigo-400"
+      : "bg-amber-400"
 
   return (
     <TiltCard intensity={5} scale={1.01} glare={false}>

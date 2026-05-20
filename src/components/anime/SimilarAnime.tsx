@@ -75,7 +75,7 @@ export default function SimilarAnime({ currentId, genres }: SimilarAnimeProps) {
                   {anime.studio}
                 </p>
                 <div className="flex items-center gap-1 mt-1">
-                  <Star size={9} fill="#6366f1" className="text-indigo-500 flex-shrink-0" />
+                  <Star size={9} fill="#f59e0b" className="text-amber-400 flex-shrink-0" />
                   <span className="text-[9px] font-black text-white/60">
                     {anime.rating.toFixed(1)}
                   </span>

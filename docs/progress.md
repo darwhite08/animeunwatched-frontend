@@ -135,13 +135,15 @@ Update on every PR merge.
 ## Phase 8 — Polish + launch
 
 ### Todo
-- [ ] PWA manifest + service worker
-- [ ] Lighthouse pass
-- [ ] Sentry SDK
 - [ ] Skeleton loaders on every async surface (partially done)
 - [ ] i18n scaffold
 
 ### Done
+- [x] Sentry frontend: @sentry/nextjs installed; sentry.client/server/edge.config.ts with conditional init; withSentryConfig in next.config.ts (90f3141)
+- [x] Sentry backend: @sentry/node installed; init in app.ts; captureException in error middleware; SENTRY_DSN in .env.example (c266f31)
+- [x] PWA service worker: public/sw.js (network-first API, cache-first static, offline fallback); public/offline.html; SW registered in root layout (90f3141)
+- [x] Fix production auth redirect loop: (auth)/layout.tsx now waits for sessionReady, redirects to /user/{slug}/dashboard directly (90f3141)
+- [x] Performance: manifest.ts theme_color changed to gold #f59e0b; viewport export (themeColor, initialScale) in root layout (90f3141)
 - [x] Skeleton components (39bd375)
 - [x] 3D TiltCard component (c77f4ab)
 - [x] ToastContainer globally mounted (14bb8dc)

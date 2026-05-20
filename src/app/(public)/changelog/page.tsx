@@ -191,7 +191,7 @@ export default function ChangelogPage() {
           transition={{ delay: 0.5 }}
           className="mt-16 flex items-center gap-2 text-[10px] text-white/20 font-mono"
         >
-          <Zap size={10} className="text-indigo-500/50" />
+          <Zap size={10} className="text-amber-500/50" />
           Changelog auto-archives every production deploy. All times UTC.
         </motion.div>
       </div>

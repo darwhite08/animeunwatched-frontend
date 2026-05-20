@@ -61,7 +61,7 @@ export const RankingTable = () => {
                   <p className="text-xl font-black text-white/60 italic leading-none">Lvl {player.lvl}</p>
                </div>
                <div className="text-right w-32">
-                  <p className="text-[10px] font-black text-indigo-400/50 uppercase tracking-[0.2em]">Experience</p>
+                  <p className="text-[10px] font-black text-amber-400/50 uppercase tracking-[0.2em]">Experience</p>
                   <p className="text-2xl font-black text-white tracking-tighter leading-none">{player.xp}</p>
                </div>
             </div>

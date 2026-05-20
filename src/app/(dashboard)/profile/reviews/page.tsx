@@ -157,7 +157,7 @@ export default function MyReviewsPage() {
               <p className="text-sm text-white/60 leading-relaxed line-clamp-3">{r.body}</p>
               <div className="flex items-center justify-between pt-2 border-t border-white/5 text-[9px] text-white/25">
                 <span>{r.helpful} people found this helpful</span>
-                <Link href={`/anime/${r.anime.id}/reviews`} className="text-indigo-400/60 hover:text-amber-400 transition-colors font-black uppercase tracking-widest">
+                <Link href={`/anime/${r.anime.id}/reviews`} className="text-amber-400/60 hover:text-amber-400 transition-colors font-black uppercase tracking-widest">
                   View on Anime →
                 </Link>
               </div>

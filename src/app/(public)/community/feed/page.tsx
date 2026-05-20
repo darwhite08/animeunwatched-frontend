@@ -103,7 +103,7 @@ function PostCard({
           {post.tags.map((tag) => (
             <span
               key={tag}
-              className="text-[9px] font-bold text-indigo-400/60 hover:text-amber-400 cursor-pointer transition-colors"
+              className="text-[9px] font-bold text-amber-400/60 hover:text-amber-400 cursor-pointer transition-colors"
             >
               #{tag}
             </span>

@@ -261,7 +261,7 @@ function CreatorGridCard({ creator, index }: { creator: Creator; index: number }
       {/* Best article */}
       <Link
         href={`/blog/${creator.bestArticleSlug}`}
-        className="block text-[10px] text-indigo-400/70 hover:text-amber-300 font-bold transition-colors line-clamp-2 leading-relaxed"
+        className="block text-[10px] text-amber-400/70 hover:text-amber-300 font-bold transition-colors line-clamp-2 leading-relaxed"
       >
         → {creator.bestArticleTitle}
       </Link>

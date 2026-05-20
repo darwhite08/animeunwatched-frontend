@@ -199,7 +199,7 @@ export default function RecommendationsPage() {
               <h2 className="text-[10px] font-black uppercase tracking-[0.4em] text-white/30">
                 {isLoading ? "Loading…" : `${results.length} results`} · {MODES.find(m => m.id === mode)?.label}
               </h2>
-              <div className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-wider text-indigo-400/60">
+              <div className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-wider text-amber-400/60">
                 <Sparkles size={10} />
                 AI curated
               </div>

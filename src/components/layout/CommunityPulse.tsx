@@ -163,7 +163,7 @@ export default function CommunityPulse() {
                    <h4 className="text-3xl font-black tracking-tighter italic text-white leading-none">
                      Join the Global <br/> Consensus.
                    </h4>
-                   <p className="text-indigo-100/70 text-sm font-medium leading-relaxed max-w-[240px]">
+                   <p className="text-amber-100/70 text-sm font-medium leading-relaxed max-w-[240px]">
                      Influence the seasonal Hall of Fame and forge your standing in the Dojo.
                    </p>
                  </div>

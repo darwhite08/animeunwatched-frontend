@@ -85,7 +85,7 @@ export default function NeuralDiscovery() {
           <div className="absolute -bottom-3 -right-3 w-6 h-6 border-b-2 border-r-2 border-indigo-500/50 hidden md:block" />
           
           {/* Top Meta Bar */}
-          <div className="absolute -top-8 right-0 text-[10px] font-mono text-indigo-300/60 tracking-[0.2em] uppercase flex items-center gap-3 hidden md:flex">
+          <div className="absolute -top-8 right-0 text-[10px] font-mono text-amber-300/60 tracking-[0.2em] uppercase flex items-center gap-3 hidden md:flex">
             <ScanEye size={14} className="text-amber-400" />
             <span>Pattern Recognition: <span className="text-amber-400 font-bold">Active</span></span>
           </div>
@@ -97,7 +97,7 @@ export default function NeuralDiscovery() {
           </div>
 
           {/* Bottom Meta Bar */}
-          <div className="absolute -bottom-8 left-0 text-[10px] font-mono text-indigo-300/60 tracking-[0.2em] uppercase flex items-center gap-3 hidden md:flex">
+          <div className="absolute -bottom-8 left-0 text-[10px] font-mono text-amber-300/60 tracking-[0.2em] uppercase flex items-center gap-3 hidden md:flex">
             <Activity size={14} className="text-amber-400 animate-pulse" />
             <span>Syncing with Global Archives...</span>
           </div>

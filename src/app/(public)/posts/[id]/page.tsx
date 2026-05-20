@@ -463,7 +463,7 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
               {post.tags.length > 0 && (
                 <div className="flex flex-wrap gap-1.5">
                   {post.tags.map(tag => (
-                    <span key={tag} className="text-[9px] font-bold text-indigo-400/60 hover:text-amber-400 cursor-pointer transition-colors">
+                    <span key={tag} className="text-[9px] font-bold text-amber-400/60 hover:text-amber-400 cursor-pointer transition-colors">
                       #{tag}
                     </span>
                   ))}
@@ -549,7 +549,7 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
                     className="block p-4 rounded-2xl bg-white/[0.02] border border-white/8 hover:border-indigo-500/25 hover:bg-white/[0.04] transition-all group"
                   >
                     {rp.anime && (
-                      <span className="inline-flex items-center gap-1 mb-2 text-[9px] font-bold text-indigo-400/60">
+                      <span className="inline-flex items-center gap-1 mb-2 text-[9px] font-bold text-amber-400/60">
                         <Star size={8} /> {rp.anime}
                       </span>
                     )}

@@ -172,7 +172,7 @@ function ListCard({ list, onClick, allAnime }: ListCardProps) {
         {list.tags.map(tag => (
           <span
             key={tag}
-            className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-indigo-500/8 border border-indigo-500/15 text-[8px] font-black uppercase tracking-wider text-indigo-400/70"
+            className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-indigo-500/8 border border-indigo-500/15 text-[8px] font-black uppercase tracking-wider text-amber-400/70"
           >
             <Tag size={7} />
             {tag}
@@ -185,7 +185,7 @@ function ListCard({ list, onClick, allAnime }: ListCardProps) {
         <button className="flex items-center gap-1.5 text-[10px] font-black text-white/25 hover:text-rose-400 transition-colors">
           <Heart size={11} /> {list.likes.toLocaleString()}
         </button>
-        <span className="flex items-center gap-1 text-[10px] font-black uppercase tracking-widest text-indigo-400/50 group-hover:text-amber-400 transition-colors">
+        <span className="flex items-center gap-1 text-[10px] font-black uppercase tracking-widest text-amber-400/50 group-hover:text-amber-400 transition-colors">
           View List <ChevronRight size={11} />
         </span>
       </div>
@@ -263,7 +263,7 @@ function ListDetailModal({ list, onClose, onAnimeClick, allAnime }: ListModalPro
               {list.tags.map(tag => (
                 <span
                   key={tag}
-                  className="px-2 py-0.5 rounded-full bg-indigo-500/8 border border-indigo-500/15 text-[8px] font-black uppercase tracking-wider text-indigo-400/70"
+                  className="px-2 py-0.5 rounded-full bg-indigo-500/8 border border-indigo-500/15 text-[8px] font-black uppercase tracking-wider text-amber-400/70"
                 >
                   {tag}
                 </span>
@@ -301,7 +301,7 @@ function ListDetailModal({ list, onClose, onAnimeClick, allAnime }: ListModalPro
                     <span>{anime.year}</span>
                   </div>
                 </div>
-                <Check size={13} className="text-indigo-400/40 group-hover:text-amber-400 shrink-0 transition-colors" />
+                <Check size={13} className="text-amber-400/40 group-hover:text-amber-400 shrink-0 transition-colors" />
               </motion.div>
             ))}
 

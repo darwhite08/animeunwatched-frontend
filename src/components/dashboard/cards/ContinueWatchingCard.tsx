@@ -40,7 +40,7 @@ export default function ContinueWatchingCard() {
           <MonitorPlay size={14} className="text-amber-400" />
           <h4 className="text-xs font-black uppercase tracking-[0.28em] text-white/30">Continue Watching</h4>
         </div>
-        <Link href="/watchlist" className="text-[9px] font-black uppercase tracking-widest text-indigo-400/60 hover:text-amber-400 transition-colors flex items-center gap-1">
+        <Link href="/watchlist" className="text-[9px] font-black uppercase tracking-widest text-amber-400/60 hover:text-amber-400 transition-colors flex items-center gap-1">
           All <ChevronRight size={10} />
         </Link>
       </div>

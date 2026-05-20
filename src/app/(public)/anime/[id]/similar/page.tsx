@@ -156,7 +156,7 @@ export default function SimilarAnimePage({
                     {common.slice(0, 2).map(g => (
                       <span
                         key={g}
-                        className="px-2 py-0.5 rounded-full bg-indigo-500/8 border border-indigo-500/15 text-[8px] font-black uppercase tracking-wider text-indigo-400/70"
+                        className="px-2 py-0.5 rounded-full bg-indigo-500/8 border border-indigo-500/15 text-[8px] font-black uppercase tracking-wider text-amber-400/70"
                       >
                         {g}
                       </span>

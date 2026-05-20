@@ -118,7 +118,7 @@ export default function HeroSection() {
             initial={{ opacity:0, x:-16 }}
             animate={{ opacity:1, x:0 }}
             transition={{ delay:0.28 }}
-            className="text-[9px] font-mono font-black uppercase tracking-[0.48em] text-indigo-400/60"
+            className="text-[9px] font-mono font-black uppercase tracking-[0.48em] text-amber-400/60"
           >
             Neural Archive Protocol // V4.0
           </motion.p>
@@ -167,7 +167,7 @@ export default function HeroSection() {
               href="/ai-discover"
               className="group inline-flex items-center gap-2.5 rounded-2xl px-6 py-3.5 text-[11px] font-black uppercase tracking-widest text-black hover:-translate-y-0.5 transition-all active:scale-[0.98]" style={{background:"linear-gradient(135deg,#fbbf24,#f59e0b)",boxShadow:"0 0 36px rgba(245,158,11,0.4)"}}
             >
-              <Zap size={13} className="text-indigo-200" />
+              <Zap size={13} className="text-amber-200" />
               Enter Neural Oracle
               <ArrowRight size={12} className="transition-transform group-hover:translate-x-1" />
             </Link>

@@ -43,7 +43,7 @@ export default function BillingPage() {
           </div>
           <div>
             <p className="font-black text-white">Kaiveron Pro</p>
-            <p className="text-[10px] text-indigo-400/70 uppercase tracking-widest">Ascend to Prime Grade</p>
+            <p className="text-[10px] text-amber-400/70 uppercase tracking-widest">Ascend to Prime Grade</p>
           </div>
           <div className="ml-auto text-right">
             <p className="text-2xl font-black text-white">$4.99<span className="text-sm text-white/30">/mo</span></p>

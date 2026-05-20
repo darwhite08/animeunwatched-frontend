@@ -287,7 +287,7 @@ export default function CinematicHero() {
                   >
                     <div className="flex items-center gap-1.5 mb-1.5">
                       <Sparkles size={10} className="text-amber-400 shrink-0" />
-                      <span className="text-[10px] text-indigo-300/60 font-medium">AI Match</span>
+                      <span className="text-[10px] text-amber-300/60 font-medium">AI Match</span>
                     </div>
                     <p className="text-[12px] font-semibold text-white">98% for you</p>
                     <p className="text-[9px] text-white/30 mt-0.5">Based on your taste</p>

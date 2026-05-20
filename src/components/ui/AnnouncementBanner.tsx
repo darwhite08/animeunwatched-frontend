@@ -24,7 +24,7 @@ function hashMessage(str: string): string {
 const TYPE_STYLES = {
   new: {
     bg: "bg-gradient-to-r from-indigo-600 via-violet-600 to-indigo-600",
-    text: "text-indigo-100",
+    text: "text-amber-100",
     linkClass: "text-white underline-offset-2 hover:underline font-black",
     icon: Sparkles,
     iconClass: "text-violet-300",

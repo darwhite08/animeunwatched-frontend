@@ -299,7 +299,7 @@ export default function ApiDocsPage() {
               Star the repo to get notified on launch.
             </p>
             <div className="flex items-center gap-2 text-[10px] text-white/20 font-mono mt-2">
-              <Code2 size={10} className="text-indigo-500/50" />
+              <Code2 size={10} className="text-amber-500/50" />
               npm install @kaiveron/sdk <span className="text-white/10">— arriving Q3 2026</span>
             </div>
           </div>

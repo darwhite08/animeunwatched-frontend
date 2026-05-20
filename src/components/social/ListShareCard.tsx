@@ -99,7 +99,7 @@ export default function ListShareCard() {
           <div className="mt-3 space-y-1">
             {TOP_5.map((anime, i) => (
               <div key={anime.id} className="flex items-center gap-2">
-                <span className="text-[9px] font-black text-indigo-400/60 w-3 shrink-0">{i + 1}</span>
+                <span className="text-[9px] font-black text-amber-400/60 w-3 shrink-0">{i + 1}</span>
                 <span className="text-[11px] font-bold text-zinc-300 truncate">{anime.title}</span>
                 <span className="ml-auto text-[9px] font-bold text-amber-400/70 shrink-0">
                   ★ {anime.rating}

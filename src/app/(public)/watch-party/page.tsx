@@ -92,7 +92,7 @@ export default function WatchPartyPage() {
               <div>
                 <div className="flex items-center gap-3">
                   <p className="font-black text-white/70">{phase}</p>
-                  <span className="text-[9px] font-mono text-indigo-400/70 uppercase tracking-widest">{date}</span>
+                  <span className="text-[9px] font-mono text-amber-400/70 uppercase tracking-widest">{date}</span>
                 </div>
                 <p className="text-xs text-white/35 mt-0.5">{desc}</p>
               </div>

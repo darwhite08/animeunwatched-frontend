@@ -69,7 +69,7 @@ export default function AnimeQuotesPage({ params }: { params: Promise<{ id: stri
               className="group p-6 rounded-2xl bg-white/[0.02] border border-white/8 hover:border-indigo-500/20 transition-colors space-y-4"
             >
               <div className="flex items-start gap-4">
-                <Quote size={20} className="text-indigo-400/40 shrink-0 mt-1" />
+                <Quote size={20} className="text-amber-400/40 shrink-0 mt-1" />
                 <p className="text-base text-white/80 leading-relaxed italic font-medium flex-1">{q.text}</p>
               </div>
 

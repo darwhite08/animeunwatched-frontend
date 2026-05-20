@@ -46,7 +46,7 @@ export default function PrivacyPage() {
           {SECTIONS.map((s, i) => (
             <div key={s.title} className="space-y-3">
               <h2 className="text-lg font-black uppercase tracking-tight text-white">
-                <span className="text-indigo-500/50 font-mono text-sm mr-2">{String(i + 1).padStart(2, "0")}.</span>
+                <span className="text-amber-500/50 font-mono text-sm mr-2">{String(i + 1).padStart(2, "0")}.</span>
                 {s.title}
               </h2>
               <p className="text-white/55 leading-relaxed font-medium">{s.content}</p>

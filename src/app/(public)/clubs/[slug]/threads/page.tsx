@@ -390,7 +390,7 @@ export default function ClubThreadsPage({
           className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-10"
         >
           <div className="space-y-2">
-            <p className="text-[10px] font-black uppercase tracking-[0.35em] text-indigo-400/70">
+            <p className="text-[10px] font-black uppercase tracking-[0.35em] text-amber-400/70">
               Community
             </p>
             <h1 className="text-4xl sm:text-5xl font-black uppercase italic tracking-tighter text-white leading-none">

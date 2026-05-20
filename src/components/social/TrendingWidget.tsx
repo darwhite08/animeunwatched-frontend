@@ -40,7 +40,7 @@ export default function TrendingWidget() {
           <TrendingUp size={14} className="text-amber-400" />
           <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40">Trending</h3>
         </div>
-        <Link href="/trending" className="text-[9px] font-black uppercase tracking-widest text-indigo-400/60 hover:text-amber-400 transition-colors flex items-center gap-1">
+        <Link href="/trending" className="text-[9px] font-black uppercase tracking-widest text-amber-400/60 hover:text-amber-400 transition-colors flex items-center gap-1">
           All <ArrowRight size={10} />
         </Link>
       </div>

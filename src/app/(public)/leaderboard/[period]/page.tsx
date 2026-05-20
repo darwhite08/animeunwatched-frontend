@@ -39,7 +39,7 @@ export default function PeriodLeaderboardPage({ params }: { params: Promise<{ pe
     <div className="min-h-screen bg-[#020202] text-white pb-32">
       <div className="max-w-4xl mx-auto px-6 pt-32 space-y-10">
         <div>
-          <Link href="/leaderboard" className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-indigo-400/60 hover:text-amber-400 transition-colors mb-4">
+          <Link href="/leaderboard" className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-amber-400/60 hover:text-amber-400 transition-colors mb-4">
             <ChevronLeft size={11}/> Full Leaderboard
           </Link>
           <div className="flex items-center gap-3 mb-2">

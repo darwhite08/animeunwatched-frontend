@@ -221,7 +221,7 @@ export default function CreateThreadPage({
                 animate={{ opacity: 1 }}
                 className="min-h-[220px] rounded-2xl border border-indigo-500/20 bg-indigo-500/5 px-5 py-4"
               >
-                <p className="text-[9px] font-black uppercase tracking-[0.3em] text-indigo-400/50 mb-4">
+                <p className="text-[9px] font-black uppercase tracking-[0.3em] text-amber-400/50 mb-4">
                   Preview
                 </p>
                 <MarkdownPreview source={content} />

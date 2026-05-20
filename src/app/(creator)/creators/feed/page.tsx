@@ -165,7 +165,7 @@ function FeedPostRow({ post, index }: { post: FeedPost; index: number }) {
         <div className="flex items-center gap-2 mb-1">
           <span className={`text-xs border px-2.5 py-0.5 rounded-full ${cls}`}>{label}</span>
           {post.anime && (
-            <span className="text-xs text-indigo-400/80 bg-indigo-600/10 px-2.5 py-0.5 rounded-full">
+            <span className="text-xs text-amber-400/80 bg-indigo-600/10 px-2.5 py-0.5 rounded-full">
               {post.anime}
             </span>
           )}

@@ -103,7 +103,7 @@ export default function SitemapPage() {
             <div className="p-2 rounded-xl bg-indigo-500/10 border border-indigo-500/20">
               <Map size={18} className="text-amber-400" />
             </div>
-            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-indigo-400/70">
+            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-amber-400/70">
               Navigation
             </span>
           </motion.div>

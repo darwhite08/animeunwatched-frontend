@@ -327,7 +327,7 @@ function AnimeDetail({ anime, rawAnime }: { anime: Anime; rawAnime?: AnimeDTO })
               <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/30 mb-4">Neural Tags</h2>
               <div className="flex flex-wrap gap-2">
                 {anime.tags.map(t => (
-                  <span key={t} className="px-3 py-1 rounded-lg bg-indigo-500/8 border border-indigo-500/15 text-[10px] font-bold text-indigo-400/80 uppercase tracking-wider">
+                  <span key={t} className="px-3 py-1 rounded-lg bg-indigo-500/8 border border-indigo-500/15 text-[10px] font-bold text-amber-400/80 uppercase tracking-wider">
                     {t}
                   </span>
                 ))}
@@ -487,7 +487,7 @@ function AnimeDetail({ anime, rawAnime }: { anime: Anime; rawAnime?: AnimeDTO })
                 <p className="text-sm font-bold text-white">Find Similar Anime</p>
                 <p className="text-[10px] text-white/35 mt-0.5">Use Neural Oracle to discover more</p>
               </div>
-              <ChevronLeft size={14} className="text-indigo-400/50 group-hover:text-amber-400 rotate-180 ml-auto transition-all group-hover:translate-x-0.5" />
+              <ChevronLeft size={14} className="text-amber-400/50 group-hover:text-amber-400 rotate-180 ml-auto transition-all group-hover:translate-x-0.5" />
             </Link>
           </div>
         </div>

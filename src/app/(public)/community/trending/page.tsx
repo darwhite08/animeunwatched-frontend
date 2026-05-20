@@ -192,7 +192,7 @@ function PostCard({ post, index }: { post: TrendingPost; index: number }) {
       {post.tags.length > 0 && (
         <div className="flex flex-wrap gap-1.5">
           {post.tags.map((t) => (
-            <span key={t} className="text-[9px] font-bold text-indigo-400/50">
+            <span key={t} className="text-[9px] font-bold text-amber-400/50">
               #{t}
             </span>
           ))}

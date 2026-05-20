@@ -357,7 +357,7 @@ export default function BlogListingPage() {
               </p>
               <p className="text-[10px] text-white/35 mt-0.5">Share your takes with the community</p>
             </div>
-            <ChevronRight size={14} className="text-indigo-400/40 group-hover:text-amber-400 ml-auto transition-all group-hover:translate-x-0.5" />
+            <ChevronRight size={14} className="text-amber-400/40 group-hover:text-amber-400 ml-auto transition-all group-hover:translate-x-0.5" />
           </Link>
         </div>
       </div>

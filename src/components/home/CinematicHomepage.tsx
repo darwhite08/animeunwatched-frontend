@@ -197,7 +197,7 @@ function AIOracleSection() {
                 initial={{ opacity: 0, y: 8 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="text-[11px] font-medium uppercase tracking-[0.25em] text-indigo-400/60 mb-4"
+                className="text-[11px] font-medium uppercase tracking-[0.25em] text-amber-400/60 mb-4"
               >
                 AI Discovery
               </motion.p>
@@ -309,7 +309,7 @@ function AIOracleSection() {
               <div className="border-t border-white/[0.06]">
                 <div className="px-5 py-3 flex items-center justify-between bg-white/[0.01]">
                   <p className="text-[10px] font-medium uppercase tracking-[0.15em] text-white/20">Top matches</p>
-                  <span className="text-[9px] text-indigo-400/50 font-medium">3 results</span>
+                  <span className="text-[9px] text-amber-400/50 font-medium">3 results</span>
                 </div>
                 <AnimatePresence mode="wait">
                   <motion.div
@@ -353,7 +353,7 @@ function AIOracleSection() {
                 </AnimatePresence>
 
                 <div className="px-5 py-3.5 border-t border-white/[0.05] bg-white/[0.01]">
-                  <Link href="/ai-discover" className="text-[11px] text-indigo-400/60 hover:text-amber-400 transition-colors font-medium inline-flex items-center gap-1">
+                  <Link href="/ai-discover" className="text-[11px] text-amber-400/60 hover:text-amber-400 transition-colors font-medium inline-flex items-center gap-1">
                     Open AI discovery <ArrowRight size={11} />
                   </Link>
                 </div>
@@ -387,7 +387,7 @@ function CommunitySection() {
                 initial={{ opacity: 0, y: 8 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="text-[11px] font-medium uppercase tracking-[0.25em] text-indigo-400/60 mb-4"
+                className="text-[11px] font-medium uppercase tracking-[0.25em] text-amber-400/60 mb-4"
               >
                 Community
               </motion.p>
@@ -554,7 +554,7 @@ function CommunitySection() {
                 ))}
               </div>
               <div className="px-5 py-3 border-t border-white/[0.05] bg-white/[0.01]">
-                <Link href="/leaderboard" className="text-[11px] text-indigo-400/60 hover:text-amber-400 font-medium flex items-center gap-1 transition-colors">
+                <Link href="/leaderboard" className="text-[11px] text-amber-400/60 hover:text-amber-400 font-medium flex items-center gap-1 transition-colors">
                   View full leaderboard <ArrowRight size={11} />
                 </Link>
               </div>
@@ -595,7 +595,7 @@ function ShowcaseSection() {
                   <div className={`h-full rounded-full ${pct === 100 ? "bg-emerald-500/70" : "bg-indigo-500/70"}`} style={{ width: `${pct}%` }} />
                 </div>
               </div>
-              <span className={`text-[8px] font-medium shrink-0 ${pct === 100 ? "text-emerald-400/60" : "text-indigo-400/50"}`}>{status}</span>
+              <span className={`text-[8px] font-medium shrink-0 ${pct === 100 ? "text-emerald-400/60" : "text-amber-400/50"}`}>{status}</span>
             </div>
           ))}
         </div>
@@ -679,7 +679,7 @@ function ShowcaseSection() {
             >
               <div>
                 <span className={`inline-block text-[10px] font-semibold uppercase tracking-[0.15em] mb-3 px-2.5 py-1 rounded-md ${
-                  accent === "indigo" ? "text-indigo-300/80 bg-indigo-500/10" :
+                  accent === "indigo" ? "text-amber-300/80 bg-indigo-500/10" :
                   accent === "amber" ? "text-amber-300/80 bg-amber-500/10" : "text-violet-300/80 bg-violet-500/10"
                 }`}>{tag}</span>
                 <h3 className="text-[15px] font-semibold text-white leading-snug mb-2.5">{title}</h3>
@@ -694,7 +694,7 @@ function ShowcaseSection() {
               <Link
                 href={href}
                 className={`inline-flex items-center gap-1.5 text-[13px] font-medium transition-all ${
-                  accent === "indigo" ? "text-indigo-400/60 hover:text-amber-400" :
+                  accent === "indigo" ? "text-amber-400/60 hover:text-amber-400" :
                   accent === "amber" ? "text-amber-400/60 hover:text-amber-400" : "text-violet-400/60 hover:text-violet-400"
                 }`}
               >

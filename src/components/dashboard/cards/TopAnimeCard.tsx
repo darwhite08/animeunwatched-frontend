@@ -43,7 +43,7 @@ export default function TopAnimeCard() {
         </div>
         <Link
           href="/rate"
-          className="flex items-center gap-1 text-[9px] font-black uppercase tracking-widest text-indigo-400/60 hover:text-amber-400 transition-colors"
+          className="flex items-center gap-1 text-[9px] font-black uppercase tracking-widest text-amber-400/60 hover:text-amber-400 transition-colors"
         >
           Rate Another <ChevronRight size={10} />
         </Link>

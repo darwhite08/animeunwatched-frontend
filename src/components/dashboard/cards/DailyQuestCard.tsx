@@ -71,7 +71,7 @@ export default function DailyQuestCard() {
 
   return (
     <div className="p-8 rounded-[2.5rem] border border-white/5 bg-[#0a0a0a] space-y-6 relative overflow-hidden">
-      <div className="absolute -right-6 -bottom-6 text-indigo-500/5 pointer-events-none">
+      <div className="absolute -right-6 -bottom-6 text-amber-500/5 pointer-events-none">
         <Target size={120} strokeWidth={1} />
       </div>
 
@@ -120,7 +120,7 @@ export default function DailyQuestCard() {
                 <span className={`text-sm font-bold flex-1 transition-colors ${complete ? "text-white/40 line-through" : "text-white/70 group-hover:text-white"}`}>
                   {q.label}
                 </span>
-                <span className={`text-[9px] font-black px-2 py-0.5 rounded-full flex items-center gap-1 ${complete ? "bg-emerald-500/10 text-emerald-400/60" : "bg-indigo-500/10 text-indigo-400/80"}`}>
+                <span className={`text-[9px] font-black px-2 py-0.5 rounded-full flex items-center gap-1 ${complete ? "bg-emerald-500/10 text-emerald-400/60" : "bg-indigo-500/10 text-amber-400/80"}`}>
                   <Zap size={8} fill="currentColor" /> +{q.xp}
                 </span>
               </Link>

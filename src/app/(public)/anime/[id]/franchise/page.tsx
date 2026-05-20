@@ -166,7 +166,7 @@ function FranchiseRow({
             </span>
           )}
         </div>
-        <p className={`font-black text-sm uppercase italic tracking-tight truncate ${isCurrent ? "text-indigo-200" : "text-white"}`}>
+        <p className={`font-black text-sm uppercase italic tracking-tight truncate ${isCurrent ? "text-amber-200" : "text-white"}`}>
           {entry.title}
         </p>
         <div className="flex items-center gap-3 mt-1 text-[10px] text-white/30">

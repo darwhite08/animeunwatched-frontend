@@ -115,7 +115,7 @@ export default function QuizPage() {
         <AnimatePresence mode="wait">
           <motion.div key={idx} initial={{ opacity:0, x:30 }} animate={{ opacity:1, x:0 }} exit={{ opacity:0, x:-30 }} className="space-y-6">
             <div className="space-y-2">
-              <p className="text-[10px] font-black uppercase tracking-widest text-indigo-400/60">{q.anime}</p>
+              <p className="text-[10px] font-black uppercase tracking-widest text-amber-400/60">{q.anime}</p>
               <h2 className="text-2xl font-black tracking-tighter text-white">{q.q}</h2>
             </div>
 

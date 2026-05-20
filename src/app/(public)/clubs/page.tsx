@@ -260,7 +260,7 @@ export default function ClubsPage() {
           >
             <div className="flex items-end justify-between gap-6 flex-wrap">
               <div>
-                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-indigo-400/70 mb-3">
+                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-amber-400/70 mb-3">
                   Community
                 </p>
                 <h1 className="text-6xl font-black uppercase italic tracking-tighter text-white leading-none">

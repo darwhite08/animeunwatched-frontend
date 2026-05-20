@@ -108,7 +108,7 @@ export const WatchCard = ({ anime, onRemove }: { anime: WatchItem; onRemove?: (i
             {anime.title}
           </Link>
           <p className="text-xs font-bold text-white/25 uppercase tracking-widest mt-1 flex items-center gap-1.5">
-            <Layers size={11} className="text-indigo-500/50" /> {anime.ep}
+            <Layers size={11} className="text-amber-500/50" /> {anime.ep}
           </p>
         </div>
 

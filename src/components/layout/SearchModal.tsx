@@ -146,7 +146,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                           className={`group flex items-center justify-between px-4 py-3 rounded-xl hover:bg-white/5 cursor-pointer transition-all ${cursor === i ? "bg-white/5" : ""}`}
                         >
                           <div className="flex items-center gap-3 text-white/50 group-hover:text-white">
-                            <item.icon size={14} className="text-indigo-500/70 group-hover:text-amber-400" />
+                            <item.icon size={14} className="text-amber-500/70 group-hover:text-amber-400" />
                             <span className="text-sm font-bold uppercase tracking-tight">{item.label}</span>
                           </div>
                           <span className="text-[9px] font-mono text-white/10 group-hover:text-white/30">{item.cmd}</span>
@@ -243,7 +243,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                   <span>↵ open</span>
                   <span>esc close</span>
                 </div>
-                <div className="text-[9px] font-black text-indigo-500/40 uppercase tracking-widest animate-pulse">
+                <div className="text-[9px] font-black text-amber-500/40 uppercase tracking-widest animate-pulse">
                   {query ? `${results.length} matches` : "Neural_Link_Ready"}
                 </div>
               </div>

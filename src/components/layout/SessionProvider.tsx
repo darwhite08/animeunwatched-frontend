@@ -4,22 +4,26 @@ import { useEffect, useRef } from "react"
 import { useAuthStore } from "@/stores/auth.store"
 import { connectSocket, disconnectSocket, updateSocketToken } from "@/lib/socket"
 
-// Use relative /api/v1 path so it works on any device (phone, tablet, desktop)
-// Next.js rewrites /api/v1/* to the backend internally
 const BASE = ""
 
 export function SessionProvider({ children }: { children: React.ReactNode }) {
-  const { setAccess, setUser, clear } = useAuthStore()
+  const { setAccess, setUser, setSessionReady, clear } = useAuthStore()
   const bootstrapped = useRef(false)
 
-  // Bootstrap session from refresh cookie on page load
+  // Bootstrap session from refresh cookie on page load.
+  // setSessionReady() is called in every code path so layouts can reliably
+  // wait for it before making auth-dependent decisions (e.g. slug redirect).
   useEffect(() => {
     if (bootstrapped.current) return
     bootstrapped.current = true
 
     fetch(`${BASE}/api/v1/auth/refresh`, { method: "POST", credentials: "include" })
       .then(async (res) => {
-        if (!res.ok) { clear(); return null }
+        if (!res.ok) {
+          clear()
+          setSessionReady()   // confirmed: not authenticated
+          return null
+        }
         const { accessToken } = (await res.json()) as { accessToken: string }
         setAccess(accessToken)
         connectSocket(accessToken)
@@ -29,14 +33,21 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
         })
       })
       .then(async (res) => {
-        if (!res?.ok) return
+        if (!res?.ok) {
+          setSessionReady()   // refresh succeeded but /me failed
+          return
+        }
         const { user } = await res.json()
         setUser(user)
+        setSessionReady()     // fully authenticated — user.slug is now available
       })
-      .catch(() => clear())
-  }, [setAccess, setUser, clear])
+      .catch(() => {
+        clear()
+        setSessionReady()     // network error
+      })
+  }, [setAccess, setUser, setSessionReady, clear])
 
-  // Reconnect socket when access token changes (after refresh rotation)
+  // Reconnect socket when access token rotates
   useEffect(() => {
     const unsub = useAuthStore.subscribe((state, prev) => {
       if (state.accessToken && state.accessToken !== prev.accessToken) {

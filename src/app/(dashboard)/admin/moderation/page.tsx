@@ -166,7 +166,7 @@ export default function ModerationPage() {
       {/* Header */}
       <div className="flex items-start justify-between">
         <div>
-          <p className="text-[9px] font-mono font-black uppercase tracking-[0.4em] text-indigo-400/60 mb-2">
+          <p className="text-[9px] font-mono font-black uppercase tracking-[0.4em] text-amber-400/60 mb-2">
             Admin Panel
           </p>
           <h1 className="text-4xl font-black tracking-tighter text-white uppercase italic">

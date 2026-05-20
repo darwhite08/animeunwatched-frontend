@@ -114,7 +114,7 @@ export default function SimilarAnimePage({
           transition={{ delay: 0.1 }}
           className="mb-8"
         >
-          <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-indigo-400/60 mb-3">
+          <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-amber-400/60 mb-3">
             Recommendations
           </p>
           <h2 className="text-5xl font-black tracking-tighter uppercase italic text-white leading-none">

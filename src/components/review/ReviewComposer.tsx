@@ -78,7 +78,7 @@ export default function ReviewComposer({ isOpen, onClose, animeTitle, animeId }:
             </button>
 
             <div>
-              <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-indigo-400/60 mb-1">Write a Review</p>
+              <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-amber-400/60 mb-1">Write a Review</p>
               <h2 className="text-2xl font-black tracking-tighter text-white">{animeTitle}</h2>
             </div>
 

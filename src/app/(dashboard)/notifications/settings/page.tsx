@@ -164,7 +164,7 @@ export default function NotificationDashboardSettingsPage() {
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
       >
-        <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-indigo-400/60 mb-2">
+        <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-amber-400/60 mb-2">
           Dashboard · Notifications
         </p>
         <h1 className="text-4xl font-black tracking-tighter text-white uppercase italic leading-none">

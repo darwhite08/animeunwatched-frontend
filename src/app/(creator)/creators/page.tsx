@@ -64,7 +64,7 @@ export default function BlogPage() {
           {/* Hub header with analytics link */}
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-[9px] font-mono font-black uppercase tracking-[0.4em] text-indigo-400/60 mb-1">
+              <p className="text-[9px] font-mono font-black uppercase tracking-[0.4em] text-amber-400/60 mb-1">
                 Creator Hub
               </p>
               <h1 className="text-3xl font-black tracking-tighter text-white uppercase italic">

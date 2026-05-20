@@ -239,7 +239,7 @@ function ListDetailModal({ list, onClose, onAnimeClick, allAnime }: ListModalPro
             >
               <X size={18} />
             </button>
-            <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-indigo-400/60 mb-2">
+            <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-amber-400/60 mb-2">
               Community List
             </p>
             <h2 className="text-2xl font-black uppercase italic tracking-tighter text-white leading-tight mb-3 pr-10">
@@ -334,7 +334,7 @@ export default function PublicListsPage() {
       <div className="max-w-6xl mx-auto px-6 pt-32 pb-10">
         <div className="flex items-center gap-3 mb-4">
           <List size={16} className="text-indigo-400" />
-          <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-indigo-400/60">
+          <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-amber-400/60">
             Curated by the Community
           </p>
         </div>

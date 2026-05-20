@@ -42,7 +42,7 @@ export default function AppearancePage() {
       <div className="flex items-center gap-3">
         <Palette size={20} className="text-indigo-400" />
         <div>
-          <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-indigo-400/60">Customization</p>
+          <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-amber-400/60">Customization</p>
           <h1 className="text-2xl font-black tracking-tighter uppercase italic text-white">Appearance</h1>
         </div>
       </div>

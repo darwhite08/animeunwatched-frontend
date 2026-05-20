@@ -81,7 +81,7 @@ export default function CommunityReviewsPage() {
       <div className="max-w-4xl mx-auto px-6 pt-32 space-y-8">
         <div className="flex items-end justify-between gap-4">
           <div>
-            <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-indigo-400/60 mb-2">Community Voices</p>
+            <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-amber-400/60 mb-2">Community Voices</p>
             <h1 className="text-5xl font-black tracking-tighter uppercase italic text-white">
               Reviews<span style={{color:"#f59e0b"}}>.</span>
             </h1>

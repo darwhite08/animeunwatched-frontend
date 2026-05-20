@@ -130,7 +130,7 @@ export default function UserBlogPage({
           className="flex flex-col sm:flex-row sm:items-end justify-between gap-5 mb-10"
         >
           <div>
-            <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-indigo-400/60 mb-3">
+            <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-amber-400/60 mb-3">
               Community Long-form
             </p>
             <h1 className="text-5xl font-black tracking-tighter uppercase italic text-white leading-none">

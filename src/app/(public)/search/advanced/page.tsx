@@ -279,7 +279,7 @@ function AdvancedSearchContent() {
         animate={{ opacity: 1, y: 0 }}
         className="mb-10"
       >
-        <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-indigo-400/60 mb-3">
+        <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-amber-400/60 mb-3">
           Neural Archive
         </p>
         <div className="flex items-end justify-between gap-4 flex-wrap">

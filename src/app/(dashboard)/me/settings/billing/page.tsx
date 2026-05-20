@@ -19,7 +19,7 @@ export default function BillingPage() {
   return (
     <div className="max-w-2xl mx-auto px-6 py-12 pb-32 space-y-8">
       <div>
-        <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-indigo-400/60 mb-2">Subscription</p>
+        <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-amber-400/60 mb-2">Subscription</p>
         <h1 className="text-3xl font-black tracking-tighter uppercase italic text-white">Billing & Plan</h1>
       </div>
 

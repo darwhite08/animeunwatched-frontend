@@ -76,7 +76,7 @@ export default function KeyboardShortcutsOverlay() {
             </button>
 
             <div className="mb-6">
-              <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-indigo-400/60 mb-1">Keyboard Shortcuts</p>
+              <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-amber-400/60 mb-1">Keyboard Shortcuts</p>
               <h2 className="text-xl font-black tracking-tighter text-white">Command Palette</h2>
             </div>
 

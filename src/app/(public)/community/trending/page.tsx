@@ -255,7 +255,7 @@ export default function CommunityTrendingPage() {
           animate={{ opacity: 1, y: 0 }}
           className="mb-12"
         >
-          <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-indigo-400/60 mb-3">
+          <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-amber-400/60 mb-3">
             Live · Updated every 15 min
           </p>
           <div className="flex items-center gap-4 mb-2">

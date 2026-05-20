@@ -259,7 +259,7 @@ export default function FranchisePage({
           animate={{ opacity: 1, y: 0 }}
           className="mb-10"
         >
-          <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-indigo-400/60 mb-3">
+          <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-amber-400/60 mb-3">
             Complete Franchise
           </p>
           <h1 className="text-4xl sm:text-5xl font-black tracking-tighter uppercase italic text-white leading-none mb-2">

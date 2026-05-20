@@ -86,7 +86,7 @@ export default function MyReviewsPage() {
     <div className="max-w-3xl mx-auto px-6 py-12 pb-32 space-y-8">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-indigo-400/60 mb-2">Your Opinions</p>
+          <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-amber-400/60 mb-2">Your Opinions</p>
           <h1 className="text-3xl font-black tracking-tighter uppercase italic text-white">
             My Reviews<span style={{color:"#f59e0b"}}>.</span>
           </h1>

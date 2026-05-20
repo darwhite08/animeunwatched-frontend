@@ -158,7 +158,7 @@ export default function CreateThreadPage({
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
         >
-          <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-indigo-400/60 mb-2">
+          <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-amber-400/60 mb-2">
             {name}
           </p>
           <h1 className="text-4xl md:text-5xl font-black uppercase italic tracking-tighter text-white leading-none">

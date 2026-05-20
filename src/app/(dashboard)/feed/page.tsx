@@ -324,7 +324,7 @@ export default function FeedPage() {
               {feedTab === key && (
                 <motion.div
                   layoutId="feed-tab-line"
-                  className="absolute bottom-0 left-0 right-0 h-[2px] bg-indigo-500 rounded-full"
+                  className="absolute bottom-0 left-0 right-0 h-[2px] rounded-full" style={{background:"#f59e0b"}}
                 />
               )}
             </button>
@@ -590,7 +590,7 @@ export default function FeedPage() {
                   </Link>
                   <div className="flex-1 min-w-0">
                     <Link href={`/u/${s.username}`}>
-                      <p className="text-xs font-black text-white hover:text-indigo-300 transition-colors truncate">
+                      <p className="text-xs font-black text-white hover:text-amber-300 transition-colors truncate">
                         @{s.username}
                       </p>
                     </Link>
@@ -616,7 +616,7 @@ export default function FeedPage() {
             </div>
             <Link
               href="/users"
-              className="flex items-center justify-center gap-1.5 pt-2 text-[10px] font-black uppercase tracking-widest text-indigo-400 hover:text-indigo-300 transition-colors border-t border-white/5"
+              className="flex items-center justify-center gap-1.5 pt-2 text-[10px] font-black uppercase tracking-widest text-amber-400 hover:text-amber-300 transition-colors border-t border-white/5"
             >
               See all recommendations <ChevronRight size={11} />
             </Link>
@@ -660,7 +660,7 @@ export default function FeedPage() {
               <Users size={16} className="text-indigo-400" />
             </div>
             <div className="flex-1">
-              <p className="text-sm font-bold text-white group-hover:text-indigo-300 transition-colors">
+              <p className="text-sm font-bold text-white group-hover:text-amber-300 transition-colors">
                 Community
               </p>
               <p className="text-[10px] text-white/35 mt-0.5">

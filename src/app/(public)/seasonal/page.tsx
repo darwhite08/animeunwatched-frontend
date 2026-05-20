@@ -70,7 +70,7 @@ export default function SeasonalPage() {
       <div className="max-w-7xl mx-auto px-6 pt-32 pb-10">
         <div className="flex items-center gap-3 mb-4">
           <CalendarDays size={16} className="text-indigo-400" />
-          <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-indigo-400/60">Seasonal Archive</p>
+          <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-amber-400/60">Seasonal Archive</p>
         </div>
         <h1 className="text-6xl font-black tracking-tighter uppercase italic text-white leading-none mb-3">
           Seasonal<span style={{color:"#f59e0b"}}>.</span>

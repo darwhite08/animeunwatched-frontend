@@ -90,7 +90,7 @@ export default function NotificationsPage() {
       {/* Header */}
       <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="text-[9px] font-mono font-black uppercase tracking-[0.4em] text-indigo-400/60 mb-2">Neural_Feed</p>
+          <p className="text-[9px] font-mono font-black uppercase tracking-[0.4em] text-amber-400/60 mb-2">Neural_Feed</p>
           <h1 className="text-4xl font-black tracking-tighter text-white uppercase italic">Notifications</h1>
         </div>
         <div className="flex items-center gap-2 mt-2">

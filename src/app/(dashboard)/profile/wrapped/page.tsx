@@ -97,7 +97,7 @@ export default function WrappedPage() {
           {slide === 0 && (
             <motion.div key="stats" initial={{ opacity:0, y:30 }} animate={{ opacity:1, y:0 }} exit={{ opacity:0, y:-30 }} className="space-y-8 text-center">
               <div>
-                <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-indigo-400/60 mb-2">{CURRENT_YEAR} Wrapped</p>
+                <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-amber-400/60 mb-2">{CURRENT_YEAR} Wrapped</p>
                 <h1 className="text-5xl font-black tracking-tighter uppercase italic text-white">Your Year<br/>in Anime<span style={{color:"#f59e0b"}}>.</span></h1>
                 <p className="text-white/35 text-sm mt-3">A lot happened. Here's the data.</p>
               </div>
@@ -206,7 +206,7 @@ export default function WrappedPage() {
           {slide === 4 && (
             <motion.div key="share" initial={{ opacity:0, y:30 }} animate={{ opacity:1, y:0 }} exit={{ opacity:0, y:-30 }} className="space-y-8 text-center">
               <div>
-                <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-indigo-400/60 mb-2">Share your story</p>
+                <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-amber-400/60 mb-2">Share your story</p>
                 <h2 className="text-5xl font-black tracking-tighter uppercase italic text-white">
                   That was<br/>{CURRENT_YEAR}<span style={{color:"#f59e0b"}}>.</span>
                 </h2>

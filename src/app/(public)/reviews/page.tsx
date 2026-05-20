@@ -91,7 +91,7 @@ export default function ReviewsPage() {
     <div className="min-h-screen bg-[#020202] text-white pb-32">
       {/* Header */}
       <div className="max-w-5xl mx-auto px-6 pt-32 pb-10">
-        <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-indigo-400/60 mb-3">Community Voices</p>
+        <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-amber-400/60 mb-3">Community Voices</p>
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-5">
           <div>
             <h1 className="text-5xl font-black tracking-tighter uppercase italic text-white leading-none mb-2">

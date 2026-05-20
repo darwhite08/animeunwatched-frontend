@@ -212,7 +212,7 @@ export default function ConnectedAccountsPage() {
 
       {/* Header */}
       <div>
-        <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-indigo-400/60 mb-2">Settings</p>
+        <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-amber-400/60 mb-2">Settings</p>
         <h1 className="text-3xl font-black tracking-tighter uppercase italic text-white">
           Connected Accounts
         </h1>

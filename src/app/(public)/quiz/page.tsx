@@ -73,7 +73,7 @@ export default function QuizPage() {
           <Trophy size={40} className="text-indigo-400" />
         </div>
         <div>
-          <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-indigo-400/60 mb-2">Quiz Complete</p>
+          <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-amber-400/60 mb-2">Quiz Complete</p>
           <h1 className="text-5xl font-black tracking-tighter uppercase italic text-white">{score}/{questions.length}</h1>
           <p className="text-white/40 text-sm mt-2">{grade}</p>
         </div>
@@ -101,7 +101,7 @@ export default function QuizPage() {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Brain size={18} className="text-indigo-400" />
-            <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-indigo-400/60">Neural Quiz</p>
+            <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-amber-400/60">Neural Quiz</p>
           </div>
           <span className="text-sm font-black text-white/40">{idx+1} / {questions.length}</span>
         </div>

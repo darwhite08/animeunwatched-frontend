@@ -374,7 +374,7 @@ export default function PollsPage() {
       <div className="border-b border-white/5 bg-[#020202]/80 backdrop-blur-xl sticky top-[72px] z-30">
         <div className="max-w-7xl mx-auto px-6 py-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
-            <div className="flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.4em] text-indigo-400 mb-2">
+            <div className="flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.4em] text-amber-400 mb-2">
               <Vote size={11} />
               Community Consensus
               <span className="ml-1 flex items-center gap-1 text-emerald-400/70">

@@ -401,7 +401,7 @@ export default function SecuritySettingsPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <p className="text-[9px] font-mono font-black uppercase tracking-[0.4em] text-indigo-400/60 mb-2">
+        <p className="text-[9px] font-mono font-black uppercase tracking-[0.4em] text-amber-400/60 mb-2">
           Settings · Security
         </p>
         <h1 className="text-4xl font-black tracking-tighter text-white uppercase italic leading-none">

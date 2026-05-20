@@ -19,7 +19,7 @@ export default function TermsPage() {
   return (
     <div className="min-h-screen bg-[#020202] text-white pb-32">
       <div className="max-w-3xl mx-auto px-6 pt-32">
-        <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-indigo-400/60 mb-4">Legal</p>
+        <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-amber-400/60 mb-4">Legal</p>
         <h1 className="text-5xl font-black tracking-tighter uppercase italic text-white mb-3">
           Terms of Service<span style={{color:"#f59e0b"}}>.</span>
         </h1>

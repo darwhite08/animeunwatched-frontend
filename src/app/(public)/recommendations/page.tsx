@@ -128,7 +128,7 @@ export default function RecommendationsPage() {
           >
             <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-indigo-600/15 border border-indigo-500/20">
               <Brain size={13} className="text-indigo-400" />
-              <span className="text-[9px] font-black uppercase tracking-[0.4em] text-indigo-400">Neural Oracle</span>
+              <span className="text-[9px] font-black uppercase tracking-[0.4em] text-amber-400">Neural Oracle</span>
             </div>
           </motion.div>
 

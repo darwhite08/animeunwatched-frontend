@@ -160,7 +160,7 @@ export default function NotificationSettingsPage() {
     <div className="max-w-2xl mx-auto px-6 py-12 space-y-8 pb-32">
       {/* Header */}
       <div>
-        <p className="text-[9px] font-mono font-black uppercase tracking-[0.4em] text-indigo-400/60 mb-2">
+        <p className="text-[9px] font-mono font-black uppercase tracking-[0.4em] text-amber-400/60 mb-2">
           Settings · Notifications
         </p>
         <h1 className="text-4xl font-black tracking-tighter text-white uppercase italic">

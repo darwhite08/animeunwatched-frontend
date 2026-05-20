@@ -70,7 +70,7 @@ export default function RankingsPage() {
   return (
     <div className="min-h-screen bg-[#020202] text-white pb-32">
       <div className="max-w-7xl mx-auto px-6 pt-32 pb-10">
-        <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-indigo-400/60 mb-3">Neural Rankings</p>
+        <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-amber-400/60 mb-3">Neural Rankings</p>
         <h1 className="text-6xl font-black tracking-tighter uppercase italic text-white leading-none mb-2">
           Rankings<span style={{color:"#f59e0b"}}>.</span>
         </h1>

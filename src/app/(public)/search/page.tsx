@@ -70,7 +70,7 @@ function SearchContent() {
 
         {/* Header */}
         <div>
-          <p className="text-[9px] font-mono font-black uppercase tracking-[0.4em] text-indigo-400/60 mb-2">
+          <p className="text-[9px] font-mono font-black uppercase tracking-[0.4em] text-amber-400/60 mb-2">
             Neural Archive Search
           </p>
           <h1 className="text-4xl md:text-5xl font-black tracking-tighter text-white uppercase italic mb-8">

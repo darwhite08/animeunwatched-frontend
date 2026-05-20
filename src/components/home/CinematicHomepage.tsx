@@ -369,7 +369,7 @@ function AIOracleSection() {
 /* ─── SECTION 3: COMMUNITY ─── */
 function CommunitySection() {
   const { data: discoverPosts } = useBrowseAnime({ limit: 1 })
-  const animeTotalApprox = discoverPosts?.meta?.total ?? 310
+  const animeTotalApprox = discoverPosts?.meta?.total ?? 30161
 
   return (
     <section className="min-h-screen py-24 bg-[#08080f] relative z-[2] overflow-hidden flex items-center">
@@ -807,7 +807,7 @@ function FinalCTASection() {
             <div className="flex items-center gap-5 text-center">
               {[
                 { v: "4.2M", l: "Episodes tracked" },
-                { v: "310+", l: "Anime catalogued"  },
+                { v: "30K+", l: "Anime catalogued"  },
                 { v: "8.4★", l: "Avg rating"        },
               ].map(({ v, l }, i) => (
                 <div key={l} className={`${i > 0 ? "pl-5 border-l border-white/[0.06]" : ""}`}>

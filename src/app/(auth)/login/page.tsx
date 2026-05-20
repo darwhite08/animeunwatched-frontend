@@ -211,13 +211,38 @@ export default function LoginPage() {
           transition={{ duration: 0.6 }}
           className="w-full max-w-md"
         >
-          <div className="border border-white/10 bg-white/5 backdrop-blur-xl rounded-2xl p-10 shadow-[0_0_40px_rgba(99,102,241,0.15)]">
+          <div className="border border-white/10 bg-white/5 backdrop-blur-xl rounded-2xl p-10"
+            style={{ boxShadow: "0 0 40px rgba(245,158,11,0.1), 0 20px 60px rgba(0,0,0,0.5)" }}>
 
-            <div className="text-center space-y-3">
-              <h1 className="text-3xl md:text-4xl font-semibold bg-gradient-to-r from-white to-[#748298] bg-clip-text text-transparent">
+            {/* Logo */}
+            <div className="flex flex-col items-center gap-3 mb-8">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="52" height="52"
+                style={{ filter: "drop-shadow(0 0 16px rgba(245,158,11,0.4))" }}>
+                <defs>
+                  <linearGradient id="loginKGold" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#fbbf24"/>
+                    <stop offset="100%" stopColor="#f59e0b"/>
+                  </linearGradient>
+                </defs>
+                <rect width="100" height="100" rx="22" fill="#0A0F1E"/>
+                <path d="M 30 28 L 40 28 L 40 46 L 47 46 L 54 28 L 64 28 L 53 50 L 50 50 L 60 72 L 50 72 L 44 60 L 40 60 L 40 72 L 30 72 Z"
+                  fill="url(#loginKGold)"/>
+              </svg>
+              <div className="text-center">
+                <p className="text-lg font-black tracking-tight text-white uppercase italic">
+                  KAIVERON<span style={{ color: "#f59e0b" }}>.</span>
+                </p>
+                <p className="text-[10px] font-black uppercase tracking-[0.35em] text-white/25 mt-0.5">
+                  Neural Anime Archive
+                </p>
+              </div>
+            </div>
+
+            <div className="text-center space-y-2 mb-8">
+              <h1 className="text-2xl font-black tracking-tighter text-white italic uppercase">
                 Welcome Back
               </h1>
-              <p className="text-sm text-white/60">Continue your anime journey</p>
+              <p className="text-sm text-white/50">Continue your anime journey</p>
             </div>
 
             {/* Hidden Google renderButton container — our visible button triggers it */}
@@ -231,7 +256,7 @@ export default function LoginPage() {
                 href="/api/v1/auth/google/redirect"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className="w-full h-12 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition flex items-center justify-center gap-3 font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                className="w-full h-12 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition flex items-center justify-center gap-3 font-medium focus:outline-none focus:ring-2 focus:ring-amber-500"
               >
                 {false
                   ? <><Loader2 size={16} className="animate-spin" /> Signing in...</>
@@ -248,7 +273,7 @@ export default function LoginPage() {
                 disabled={isDisabled}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className="w-full h-12 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition flex items-center justify-center gap-3 font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 disabled:opacity-60 disabled:cursor-not-allowed"
+                className="w-full h-12 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition flex items-center justify-center gap-3 font-medium focus:outline-none focus:ring-2 focus:ring-amber-500 disabled:opacity-60 disabled:cursor-not-allowed"
               >
                 {oauthLoading === "apple"
                   ? <><Loader2 size={16} className="animate-spin" /> Signing in...</>

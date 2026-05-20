@@ -180,7 +180,7 @@ export default function RatePage() {
           {(["select","rate","verify","result"] as Step[]).map((s, i, arr) => (
             <div key={s} className="flex items-center gap-2">
               <div className={`w-7 h-7 rounded-full flex items-center justify-center text-[10px] font-black border transition-all ${
-                s === step                             ? "bg-indigo-600 border-indigo-500 text-white" :
+                s === step                             ? "bg-amber-500 border-amber-400 text-black" :
                 arr.indexOf(step) > i                  ? "bg-emerald-600/20 border-emerald-500/30 text-emerald-400" :
                                                          "bg-white/5 border-white/10 text-white/20"
               }`}>
@@ -263,7 +263,7 @@ export default function RatePage() {
                       onClick={() => setRating(n)}
                       className={`aspect-square rounded-xl border font-black text-sm transition-all ${
                         rating === n
-                          ? "bg-indigo-600 border-indigo-500 text-white shadow-[0_0_20px_rgba(99,102,241,0.4)]"
+                          ? "bg-amber-500 border-amber-400 text-black shadow-[0_0_20px_rgba(99,102,241,0.4)]"
                           : rating && n <= rating
                           ? "bg-indigo-600/20 border-indigo-500/30 text-indigo-400"
                           : "bg-white/5 border-white/8 text-white/30 hover:border-indigo-500/30 hover:text-white"

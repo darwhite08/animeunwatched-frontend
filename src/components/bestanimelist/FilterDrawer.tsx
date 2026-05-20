@@ -49,12 +49,13 @@ export default function FilterDrawer({
             {/* Header */}
             <div className="flex items-center justify-between p-8 border-b border-white/5">
               <div className="flex items-center gap-3">
-                <SlidersHorizontal size={16} className="text-indigo-400" />
+                <SlidersHorizontal size={16} className="text-amber-400" />
                 <h2 className="text-base font-black text-white uppercase italic tracking-tighter">
                   Refine Results
                 </h2>
                 {totalActive > 0 && (
-                  <span className="px-2 py-0.5 rounded-full bg-indigo-600 text-[9px] font-black text-white">
+                  <span className="px-2 py-0.5 rounded-full text-[9px] font-black text-black"
+                    style={{ background: "linear-gradient(135deg, #fbbf24, #f59e0b)" }}>
                     {totalActive}
                   </span>
                 )}

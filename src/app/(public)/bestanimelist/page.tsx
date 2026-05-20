@@ -212,7 +212,7 @@ export default function BestAnimeListPage() {
               <ListFilter size={13} className="text-indigo-500" />
               Refine
               {activeFilterCount > 0 && (
-                <span className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-indigo-600 text-[8px] font-black flex items-center justify-center">
+                <span className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full text-[8px] font-black text-black flex items-center justify-center" style={{background:"linear-gradient(135deg,#fbbf24,#f59e0b)"}}>
                   {activeFilterCount}
                 </span>
               )}

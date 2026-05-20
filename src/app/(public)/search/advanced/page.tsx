@@ -286,7 +286,7 @@ function AdvancedSearchContent() {
           <h1 className="text-5xl sm:text-6xl font-black tracking-tighter uppercase italic text-white leading-none">
             Advanced<br />
             <span className="text-indigo-400">Search</span>
-            <span className="text-indigo-500">.</span>
+            <span style={{color:"#f59e0b"}}>.</span>
           </h1>
           <Link
             href="/search"

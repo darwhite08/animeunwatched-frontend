@@ -120,7 +120,7 @@ export default function SimilarAnimePage({
           <h2 className="text-5xl font-black tracking-tighter uppercase italic text-white leading-none">
             Anime Similar to<br />
             <span className="text-indigo-400">{anime.title}</span>
-            <span className="text-indigo-500">.</span>
+            <span style={{color:"#f59e0b"}}>.</span>
           </h2>
           <p className="text-white/35 text-sm mt-3">
             {similar.length} titles matched · rated ≥ 7.5 · sorted by rating

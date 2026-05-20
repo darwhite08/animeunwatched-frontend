@@ -62,7 +62,7 @@ export default function MyPostsPage() {
       <div className="flex items-start justify-between gap-4">
         <div>
           <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-indigo-400/60 mb-2">Your Voice</p>
-          <h1 className="text-3xl font-black tracking-tighter uppercase italic text-white">My Posts<span className="text-indigo-500">.</span></h1>
+          <h1 className="text-3xl font-black tracking-tighter uppercase italic text-white">My Posts<span style={{color:"#f59e0b"}}>.</span></h1>
         </div>
         <Link href="/community" className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-xs font-black uppercase tracking-widest text-white transition-all mt-2">
           <Plus size={13}/> New Post

@@ -256,7 +256,7 @@ export default function DiscoverPage() {
             Catalogue
           </p>
           <h1 className="text-5xl sm:text-7xl font-black uppercase italic tracking-tighter text-white leading-none">
-            Browse<span className="text-indigo-500">.</span>
+            Browse<span style={{color:"#f59e0b"}}>.</span>
           </h1>
           <p className="text-white/40 text-sm max-w-lg leading-relaxed">
             Curated anime for every mood. Trending picks, hidden gems, genre deep-dives, and studio spotlights — all in one place.

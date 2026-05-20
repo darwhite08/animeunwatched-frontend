@@ -193,7 +193,7 @@ export default function BestOfYearPage({ params }: { params: Promise<{ year: str
             transition={{ delay: 0.1 }}
             className="text-7xl md:text-9xl font-black italic uppercase tracking-tighter leading-none text-white"
           >
-            Best of<span className="text-indigo-500">.</span>
+            Best of<span style={{color:"#f59e0b"}}>.</span>
             <br />
             <span className="text-white/20">{year}</span>
           </motion.h1>

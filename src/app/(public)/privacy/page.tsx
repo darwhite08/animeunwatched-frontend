@@ -38,7 +38,7 @@ export default function PrivacyPage() {
       <div className="max-w-3xl mx-auto px-6 pt-32">
         <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-indigo-400/60 mb-4">Legal</p>
         <h1 className="text-5xl font-black tracking-tighter uppercase italic text-white mb-3">
-          Privacy Policy<span className="text-indigo-500">.</span>
+          Privacy Policy<span style={{color:"#f59e0b"}}>.</span>
         </h1>
         <p className="text-white/35 text-sm mb-12">Last updated: May 2026 · We are committed to protecting your data.</p>
 

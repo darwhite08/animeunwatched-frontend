@@ -59,7 +59,7 @@ export default function AnimeQuotesPage({ params }: { params: Promise<{ id: stri
         <div className="flex items-center gap-3">
           <Quote size={20} className="text-indigo-400" />
           <h1 className="text-3xl font-black tracking-tighter uppercase italic text-white">
-            Memorable Quotes<span className="text-indigo-500">.</span>
+            Memorable Quotes<span style={{color:"#f59e0b"}}>.</span>
           </h1>
         </div>
 

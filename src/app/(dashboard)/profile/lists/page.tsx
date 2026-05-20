@@ -67,7 +67,7 @@ export default function MyListsPage() {
         <div>
           <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-indigo-400/60 mb-2">My Archive</p>
           <h1 className="text-3xl font-black tracking-tighter uppercase italic text-white">
-            My Lists<span className="text-indigo-500">.</span>
+            My Lists<span style={{color:"#f59e0b"}}>.</span>
           </h1>
           <p className="text-white/35 text-sm mt-1">{lists.length} curated lists</p>
         </div>

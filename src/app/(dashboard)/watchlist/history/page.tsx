@@ -226,7 +226,7 @@ export default function WatchlistHistoryPage() {
           <MonitorPlay size={13} /> Episode Log
         </motion.p>
         <h1 className="text-6xl md:text-7xl font-black tracking-tighter text-white italic leading-none">
-          Episode<span className="text-indigo-500">.</span>
+          Episode<span style={{color:"#f59e0b"}}>.</span>
           <br />
           <span className="text-white/20">History</span>
         </h1>

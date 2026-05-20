@@ -245,7 +245,7 @@ export default function BlogListingPage() {
               Community Long-form
             </span>
             <h1 className="mt-4 text-5xl md:text-7xl font-black tracking-tighter uppercase italic text-white leading-none">
-              The Chronicle<span className="text-indigo-500">.</span>
+              The Chronicle<span style={{color:"#f59e0b"}}>.</span>
             </h1>
             <p className="mt-3 text-white/30 text-base max-w-lg">
               Long-form anime journalism by the community — deep dives, reviews, theories, and takes.

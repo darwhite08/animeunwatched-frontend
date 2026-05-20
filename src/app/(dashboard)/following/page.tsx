@@ -76,9 +76,9 @@ export default function FollowingPage() {
       {/* Header */}
       <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-indigo-400/60 mb-2">Social Graph</p>
+          <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-amber-400/60 mb-2">Social Graph</p>
           <h1 className="text-4xl font-black tracking-tighter uppercase italic text-white">
-            Connections<span className="text-indigo-500">.</span>
+            Connections<span style={{color:"#f59e0b"}}>.</span>
           </h1>
         </div>
         <Link href="/users" className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-white/10 bg-white/[0.03] text-xs font-black uppercase tracking-widest text-white/50 hover:text-white hover:bg-white/[0.06] transition-all mt-2">
@@ -98,7 +98,7 @@ export default function FollowingPage() {
             </span>
             {tab === t && (
               <motion.div layoutId="follow-tab-line"
-                className="absolute bottom-0 left-0 right-0 h-[2px] bg-indigo-500 rounded-full"
+                className="absolute bottom-0 left-0 right-0 h-[2px] bg-amber-500 rounded-full"
               />
             )}
           </button>
@@ -110,7 +110,7 @@ export default function FollowingPage() {
         <Search size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30" />
         <input value={query} onChange={e => setQuery(e.target.value)}
           placeholder={`Search ${tab}…`}
-          className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-2xl text-sm text-white placeholder:text-white/20 outline-none focus:border-indigo-500/40"
+          className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-2xl text-sm text-white placeholder:text-white/20 outline-none focus:border-amber-500/40"
         />
       </div>
 
@@ -133,7 +133,7 @@ export default function FollowingPage() {
                     <p className="font-black text-white/80 group-hover:text-white transition-colors truncate">{u.displayName}</p>
                   </Link>
                   <p className="text-[9px] text-white/30 mt-0.5">@{u.username} · Lv.{u.level} {u.title}</p>
-                  <p className="text-[9px] text-indigo-400/60 mt-0.5">{u.anime} anime · {u.reputation} rep</p>
+                  <p className="text-[9px] text-amber-400/60 mt-0.5">{u.anime} anime · {u.reputation} rep</p>
                 </div>
                 <button onClick={() => toggle(u)}
                   className={`shrink-0 flex items-center gap-1.5 px-3 py-2 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all ${
@@ -151,7 +151,7 @@ export default function FollowingPage() {
         <div className="py-16 text-center border border-dashed border-white/5 rounded-[3rem]">
           <Users size={24} className="mx-auto mb-3 text-white/15" />
           <p className="text-white/20 text-xs font-black uppercase tracking-widest">No results</p>
-          <Link href="/users" className="mt-4 inline-flex items-center gap-1.5 text-xs text-indigo-400 hover:text-indigo-300 font-black uppercase tracking-widest transition-colors">
+          <Link href="/users" className="mt-4 inline-flex items-center gap-1.5 text-xs text-amber-400 hover:text-amber-300 font-black uppercase tracking-widest transition-colors">
             Find Shinobi <ArrowRight size={11} />
           </Link>
         </div>

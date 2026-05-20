@@ -17,7 +17,7 @@ const YEARLY = [
 
 const GENRE_DATA = [
   { genre: "Seinen",        hours: 487, pct: 34, color: "bg-amber-500"    },
-  { genre: "Action",        hours: 355, pct: 25, color: "bg-indigo-500"   },
+  { genre: "Action",        hours: 355, pct: 25, color: "bg-amber-500"   },
   { genre: "Psychological", hours: 213, pct: 15, color: "bg-purple-500"   },
   { genre: "Fantasy",       hours: 185, pct: 13, color: "bg-emerald-500"  },
   { genre: "Romance",       hours: 99,  pct: 7,  color: "bg-pink-500"     },
@@ -67,9 +67,9 @@ export default function StatsPage() {
 
       {/* Header */}
       <div>
-        <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-indigo-400/60 mb-2">Viewing Analytics</p>
+        <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-amber-400/60 mb-2">Viewing Analytics</p>
         <h1 className="text-4xl font-black tracking-tighter uppercase italic text-white">
-          Watch Stats<span className="text-indigo-500">.</span>
+          Watch Stats<span style={{color:"#f59e0b"}}>.</span>
         </h1>
         <p className="text-white/35 text-sm mt-1">Your complete anime viewing history</p>
       </div>
@@ -77,7 +77,7 @@ export default function StatsPage() {
       {/* Hero numbers */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {[
-          { icon: Clock,        value: `${total.toLocaleString()}h`, label: "Total Hours",      color: "text-indigo-400", bg: "bg-indigo-500/10" },
+          { icon: Clock,        value: `${total.toLocaleString()}h`, label: "Total Hours",      color: "text-amber-400", bg: "bg-amber-500/10" },
           { icon: BarChart2,    value: "10,034",                     label: "Episodes Watched", color: "text-blue-400",   bg: "bg-blue-500/10"   },
           { icon: CheckCircle2, value: "348",                        label: "Completed",        color: "text-emerald-400",bg: "bg-emerald-500/10"},
           { icon: Star,         value: "8.4",                        label: "Avg Score",        color: "text-amber-400",  bg: "bg-amber-500/10"  },
@@ -160,7 +160,7 @@ export default function StatsPage() {
                 <div className="w-20 h-1.5 bg-white/5 rounded-full overflow-hidden">
                   <motion.div initial={{ width:0 }} animate={{ width:`${(s.hours/TOP_STUDIOS[0].hours)*100}%` }}
                     transition={{ delay: i*0.08+0.2, duration:0.6 }}
-                    className="h-full bg-indigo-500 rounded-full"
+                    className="h-full bg-amber-500 rounded-full"
                   />
                 </div>
               </motion.div>
@@ -175,7 +175,7 @@ export default function StatsPage() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {YEARLY.map((y, i) => (
             <motion.div key={y.year} initial={{ opacity:0, y:8 }} animate={{ opacity:1, y:0 }} transition={{ delay: i*0.08 }}
-              className="text-center space-y-2 p-4 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-indigo-500/20 transition-colors"
+              className="text-center space-y-2 p-4 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-amber-500/20 transition-colors"
             >
               <p className="text-[10px] font-black uppercase tracking-widest text-white/30">{y.year}</p>
               <p className="text-2xl font-black text-white tracking-tighter">{y.hours}h</p>

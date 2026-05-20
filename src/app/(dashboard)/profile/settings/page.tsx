@@ -81,7 +81,7 @@ export default function ProfileSettingsIndex() {
       <div>
         <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-indigo-400/60 mb-2">Preferences</p>
         <h1 className="text-3xl font-black tracking-tighter uppercase italic text-white">
-          Settings<span className="text-indigo-500">.</span>
+          Settings<span style={{color:"#f59e0b"}}>.</span>
         </h1>
         <p className="text-white/35 text-sm mt-1">
           {user ? `Signed in as @${user.username}` : "Manage your account, privacy, and preferences"}

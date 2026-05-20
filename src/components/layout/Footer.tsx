@@ -99,7 +99,7 @@ export default function Footer() {
                 <path d="M 30 28 L 40 28 L 40 46 L 47 46 L 54 28 L 64 28 L 53 50 L 50 50 L 60 72 L 50 72 L 44 60 L 40 60 L 40 72 L 30 72 Z" fill="#F4F2EC"/>
               </svg>
               <span className="text-lg font-black tracking-tight text-white uppercase italic">
-                KAIVERON<span className="text-indigo-500">.</span>
+                KAIVERON<span style={{color:"#f59e0b"}}>.</span>
               </span>
             </Link>
 

@@ -181,7 +181,7 @@ export default function NewClubPage() {
           className="mb-10"
         >
           <h1 className="text-5xl font-black uppercase italic tracking-tighter text-white leading-none">
-            Create Club<span className="text-indigo-500">.</span>
+            Create Club<span style={{color:"#f59e0b"}}>.</span>
           </h1>
           <p className="mt-3 text-white/40 text-sm">
             Build a home for your anime corner of the community.

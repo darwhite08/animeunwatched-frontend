@@ -88,7 +88,7 @@ export default function MyReviewsPage() {
         <div>
           <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-indigo-400/60 mb-2">Your Opinions</p>
           <h1 className="text-3xl font-black tracking-tighter uppercase italic text-white">
-            My Reviews<span className="text-indigo-500">.</span>
+            My Reviews<span style={{color:"#f59e0b"}}>.</span>
           </h1>
         </div>
         <Link href="/rate" className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-xs font-black uppercase tracking-widest text-white transition-all mt-2">

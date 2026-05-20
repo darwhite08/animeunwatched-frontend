@@ -40,7 +40,7 @@ export default function StudioPage({ params }: { params: Promise<{ name: string 
             <Building2 size={24} className="text-indigo-400" />
           </div>
           <div>
-            <h1 className="text-4xl font-black tracking-tighter uppercase italic text-white">{studioName}<span className="text-indigo-500">.</span></h1>
+            <h1 className="text-4xl font-black tracking-tighter uppercase italic text-white">{studioName}<span style={{color:"#f59e0b"}}>.</span></h1>
             <div className="flex items-center gap-4 mt-1 text-[10px] text-white/30 font-mono">
               <span>{anime.length} anime</span>
               <span>·</span>

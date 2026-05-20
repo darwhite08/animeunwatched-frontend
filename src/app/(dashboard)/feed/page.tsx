@@ -298,7 +298,7 @@ export default function FeedPage() {
           <div className="flex-1">
             <div className="flex items-center gap-3">
               <h1 className="text-2xl font-black tracking-tighter uppercase italic text-white">
-                Your Feed<span className="text-indigo-500">.</span>
+                Your Feed<span style={{color:"#f59e0b"}}>.</span>
               </h1>
               {/* Live badge */}
               <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-[9px] font-black uppercase tracking-widest text-emerald-400">

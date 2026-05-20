@@ -168,7 +168,7 @@ export default function RatePage() {
             <ShieldCheck size={12} /> Verified Rating System
           </motion.div>
           <h1 className="text-4xl md:text-5xl font-black tracking-tighter uppercase italic text-white">
-            Rate & Verify<span className="text-indigo-500">.</span>
+            Rate & Verify<span style={{color:"#f59e0b"}}>.</span>
           </h1>
           <p className="text-white/40 text-sm max-w-md mx-auto">
             Your rating is weighted by credibility. Prove you've actually watched it to increase its impact.

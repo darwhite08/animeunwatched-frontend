@@ -139,7 +139,7 @@ export default function CommunityPage() {
         <div className="max-w-6xl mx-auto px-6 py-5 flex items-center justify-between gap-4">
           <div>
             <h1 className="text-2xl font-black tracking-tighter uppercase italic text-white">
-              Community<span className="text-indigo-500">.</span>
+              Community<span style={{color:"#f59e0b"}}>.</span>
             </h1>
             <p className="text-xs text-white/30 mt-0.5">
               {posts.length > 0 ? `${posts.length}+ posts from the Shinobi` : "What the Shinobi are watching and saying"}

@@ -51,7 +51,7 @@ export default function AnimeBrowsePage() {
       <div className="border-b border-white/5 bg-[#020202]/80 backdrop-blur-md sticky top-[72px] z-30">
         <div className="max-w-7xl mx-auto px-6 py-5">
           <h1 className="text-3xl font-black tracking-tighter uppercase italic text-white">
-            Anime Browse<span className="text-indigo-500">.</span>
+            Anime Browse<span style={{color:"#f59e0b"}}>.</span>
           </h1>
           <p className="text-white/35 text-sm mt-0.5">Your gateway to every archive in the neural network</p>
         </div>

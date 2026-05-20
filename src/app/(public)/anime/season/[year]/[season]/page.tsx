@@ -68,7 +68,7 @@ export default function SeasonPage({ params }: { params: Promise<{ year: string;
                 {SEASON_MONTHS[seasonLower]} · {year}
               </p>
               <h1 className="text-5xl md:text-7xl font-black tracking-tighter uppercase italic text-white leading-none">
-                {seasonLower.charAt(0).toUpperCase() + seasonLower.slice(1)}<span className="text-indigo-500">.</span>
+                {seasonLower.charAt(0).toUpperCase() + seasonLower.slice(1)}<span style={{color:"#f59e0b"}}>.</span>
                 <br />
                 <span className="text-white/40">{year}</span>
               </h1>

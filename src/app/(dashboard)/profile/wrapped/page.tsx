@@ -98,7 +98,7 @@ export default function WrappedPage() {
             <motion.div key="stats" initial={{ opacity:0, y:30 }} animate={{ opacity:1, y:0 }} exit={{ opacity:0, y:-30 }} className="space-y-8 text-center">
               <div>
                 <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-indigo-400/60 mb-2">{CURRENT_YEAR} Wrapped</p>
-                <h1 className="text-5xl font-black tracking-tighter uppercase italic text-white">Your Year<br/>in Anime<span className="text-indigo-500">.</span></h1>
+                <h1 className="text-5xl font-black tracking-tighter uppercase italic text-white">Your Year<br/>in Anime<span style={{color:"#f59e0b"}}>.</span></h1>
                 <p className="text-white/35 text-sm mt-3">A lot happened. Here's the data.</p>
               </div>
               <div className="grid grid-cols-2 gap-4">
@@ -208,7 +208,7 @@ export default function WrappedPage() {
               <div>
                 <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-indigo-400/60 mb-2">Share your story</p>
                 <h2 className="text-5xl font-black tracking-tighter uppercase italic text-white">
-                  That was<br/>{CURRENT_YEAR}<span className="text-indigo-500">.</span>
+                  That was<br/>{CURRENT_YEAR}<span style={{color:"#f59e0b"}}>.</span>
                 </h2>
                 <p className="text-white/35 text-sm mt-3">Share your Anime Wrapped with the world.</p>
               </div>

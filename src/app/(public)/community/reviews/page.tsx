@@ -83,7 +83,7 @@ export default function CommunityReviewsPage() {
           <div>
             <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-indigo-400/60 mb-2">Community Voices</p>
             <h1 className="text-5xl font-black tracking-tighter uppercase italic text-white">
-              Reviews<span className="text-indigo-500">.</span>
+              Reviews<span style={{color:"#f59e0b"}}>.</span>
             </h1>
             <p className="text-white/35 text-sm mt-1">{MOCK.length} community reviews</p>
           </div>

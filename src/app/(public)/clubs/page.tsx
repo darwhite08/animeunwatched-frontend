@@ -264,7 +264,7 @@ export default function ClubsPage() {
                   Community
                 </p>
                 <h1 className="text-6xl font-black uppercase italic tracking-tighter text-white leading-none">
-                  Clubs<span className="text-indigo-500">.</span>
+                  Clubs<span style={{color:"#f59e0b"}}>.</span>
                 </h1>
                 <p className="mt-3 text-white/40 text-sm max-w-md">
                   Join the conversation, build your community. Find your people.

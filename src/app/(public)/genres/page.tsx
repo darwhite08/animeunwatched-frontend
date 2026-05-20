@@ -147,7 +147,7 @@ export default function GenresPage() {
         <motion.h1 initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }}
           className="text-6xl md:text-8xl font-black tracking-tighter text-white italic leading-none"
         >
-          Genre<span className="text-indigo-500">.</span>
+          Genre<span style={{color:"#f59e0b"}}>.</span>
           <br /><span className="text-white/20">Explorer</span>
         </motion.h1>
         <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.1 }}

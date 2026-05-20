@@ -341,7 +341,7 @@ export default function PublicListsPage() {
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6">
           <div>
             <h1 className="text-6xl font-black tracking-tighter uppercase italic text-white leading-none mb-2">
-              Community Lists<span className="text-indigo-500">.</span>
+              Community Lists<span style={{color:"#f59e0b"}}>.</span>
             </h1>
             <p className="text-white/35 text-sm">{COMMUNITY_LISTS.length} curated lists from the archive community</p>
           </div>

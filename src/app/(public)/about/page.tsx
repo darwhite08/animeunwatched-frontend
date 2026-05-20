@@ -126,7 +126,7 @@ export default function AboutPage() {
         <div className="text-center mb-12">
           <p className="text-[10px] font-black uppercase tracking-[0.35em] text-white/25 mb-3">Our Mission</p>
           <h2 className="text-3xl font-black tracking-tighter uppercase italic text-white">
-            Three Pillars<span className="text-indigo-500">.</span>
+            Three Pillars<span style={{color:"#f59e0b"}}>.</span>
           </h2>
         </div>
 
@@ -212,7 +212,7 @@ export default function AboutPage() {
           <div className="text-center mb-12">
             <p className="text-[10px] font-black uppercase tracking-[0.35em] text-white/25 mb-3">Engineering</p>
             <h2 className="text-3xl font-black tracking-tighter uppercase italic text-white">
-              Built on Truth Not Hype<span className="text-indigo-500">.</span>
+              Built on Truth Not Hype<span style={{color:"#f59e0b"}}>.</span>
             </h2>
             <p className="mt-3 text-sm text-white/35">Every technology chosen for performance and longevity — not hype cycles.</p>
           </div>

@@ -158,7 +158,7 @@ export default function ContactPage() {
           <div className="mb-8">
             <p className="text-[10px] font-black uppercase tracking-[0.35em] text-white/25 mb-2">Direct Message</p>
             <h2 className="text-2xl font-black tracking-tighter uppercase italic text-white">
-              Send a Message<span className="text-indigo-500">.</span>
+              Send a Message<span style={{color:"#f59e0b"}}>.</span>
             </h2>
           </div>
 

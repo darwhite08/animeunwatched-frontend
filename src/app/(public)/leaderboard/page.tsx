@@ -101,7 +101,7 @@ export default function PublicLeaderboardPage() {
               <Trophy size={11} /> Global Hall of Fame
             </motion.div>
             <h1 className="text-5xl md:text-6xl font-black tracking-tighter text-white uppercase italic leading-none">
-              The Pantheon<span className="text-indigo-500">.</span>
+              The Pantheon<span style={{color:"#f59e0b"}}>.</span>
             </h1>
             <p className="text-white/35 text-sm mt-3">12,402 Shinobi competing globally</p>
           </div>

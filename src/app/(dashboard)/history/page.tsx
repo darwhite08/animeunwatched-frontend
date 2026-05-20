@@ -282,12 +282,12 @@ export default function HistoryPage() {
           <motion.p
             initial={{ opacity: 0, x: -16 }}
             animate={{ opacity: 1, x: 0 }}
-            className="flex items-center gap-2 text-indigo-400 font-black uppercase tracking-[0.4em] text-[10px]"
+            className="flex items-center gap-2 text-amber-400 font-black uppercase tracking-[0.4em] text-[10px]"
           >
             <History size={13} /> Viewing Log
           </motion.p>
           <h1 className="text-6xl md:text-7xl font-black tracking-tighter text-white italic leading-none">
-            Watch<span className="text-indigo-500">.</span>
+            Watch<span style={{color:"#f59e0b"}}>.</span>
             <br />
             <span className="text-white/20">History</span>
           </h1>
@@ -318,7 +318,7 @@ export default function HistoryPage() {
             key={label}
             className="rounded-2xl border border-white/5 bg-white/[0.02] p-5"
           >
-            <div className="flex items-center gap-2 text-indigo-400 mb-2">
+            <div className="flex items-center gap-2 text-amber-400 mb-2">
               {icon}
               <span className="text-[9px] font-black uppercase tracking-widest text-white/30">
                 {label}
@@ -334,14 +334,14 @@ export default function HistoryPage() {
         <div className="relative group flex-1">
           <Search
             size={14}
-            className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-indigo-400 transition-colors"
+            className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-amber-400 transition-colors"
           />
           <input
             type="text"
             placeholder="Filter by anime name…"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            className="w-full pl-11 pr-10 py-3 rounded-2xl bg-white/[0.03] border border-white/10 text-white placeholder:text-white/20 focus:outline-none focus:border-indigo-500/40 transition-all text-sm"
+            className="w-full pl-11 pr-10 py-3 rounded-2xl bg-white/[0.03] border border-white/10 text-white placeholder:text-white/20 focus:outline-none focus:border-amber-500/40 transition-all text-sm"
           />
           {query && (
             <button
@@ -384,7 +384,7 @@ export default function HistoryPage() {
           </p>
           <button
             onClick={() => setQuery("")}
-            className="mt-4 text-xs text-indigo-400 hover:text-indigo-300 font-black uppercase tracking-widest"
+            className="mt-4 text-xs text-amber-400 hover:text-amber-300 font-black uppercase tracking-widest"
           >
             Clear search
           </button>

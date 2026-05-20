@@ -95,7 +95,7 @@ export default function ReviewsPage() {
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-5">
           <div>
             <h1 className="text-5xl font-black tracking-tighter uppercase italic text-white leading-none mb-2">
-              Reviews<span className="text-indigo-500">.</span>
+              Reviews<span style={{color:"#f59e0b"}}>.</span>
             </h1>
             <p className="text-white/35 text-sm">{reviews.length} community reviews</p>
           </div>

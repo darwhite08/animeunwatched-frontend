@@ -291,7 +291,7 @@ export default function StatsPage() {
           <div className="text-center mb-12">
             <p className="text-[10px] font-black uppercase tracking-[0.35em] text-white/25 mb-2">Milestones</p>
             <h2 className="text-3xl font-black tracking-tighter uppercase italic text-white">
-              By the Numbers<span className="text-indigo-500">.</span>
+              By the Numbers<span style={{color:"#f59e0b"}}>.</span>
             </h2>
           </div>
 

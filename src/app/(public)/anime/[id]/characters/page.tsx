@@ -64,7 +64,7 @@ export default function AnimeCharactersPage({ params }: { params: Promise<{ id: 
         <div className="flex items-center gap-3 mb-8">
           <Users size={18} className="text-indigo-400" />
           <h1 className="text-3xl font-black tracking-tighter uppercase italic text-white">
-            Characters<span className="text-indigo-500">.</span>
+            Characters<span style={{color:"#f59e0b"}}>.</span>
           </h1>
           <span className="text-sm text-white/30 font-mono">{chars.length} shown</span>
         </div>

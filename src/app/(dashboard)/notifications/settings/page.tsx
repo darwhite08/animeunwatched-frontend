@@ -170,7 +170,7 @@ export default function NotificationDashboardSettingsPage() {
         <h1 className="text-4xl font-black tracking-tighter text-white uppercase italic leading-none">
           Notification<br />
           <span className="text-indigo-400">Settings</span>
-          <span className="text-indigo-500">.</span>
+          <span style={{color:"#f59e0b"}}>.</span>
         </h1>
         <p className="text-xs text-white/30 mt-2">
           {enabledCount} of {NOTIF_TYPES.length} notification types enabled

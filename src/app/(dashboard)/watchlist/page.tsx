@@ -97,7 +97,7 @@ export default function WatchlistPage() {
             <MonitorPlay size={13} /> Neural Transmission • Active
           </motion.p>
           <h1 className="text-6xl md:text-7xl font-black tracking-tighter text-white leading-none">
-            Archives<span className="text-indigo-500">.</span>
+            Archives<span style={{color:"#f59e0b"}}>.</span>
           </h1>
           <p className="text-white/35 text-sm">{items.length} anime tracked</p>
         </div>

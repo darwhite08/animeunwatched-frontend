@@ -72,7 +72,7 @@ export default function RankingsPage() {
       <div className="max-w-7xl mx-auto px-6 pt-32 pb-10">
         <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-indigo-400/60 mb-3">Neural Rankings</p>
         <h1 className="text-6xl font-black tracking-tighter uppercase italic text-white leading-none mb-2">
-          Rankings<span className="text-indigo-500">.</span>
+          Rankings<span style={{color:"#f59e0b"}}>.</span>
         </h1>
         <p className="text-white/35 text-sm mb-10">Ranked by community credibility-weighted scores</p>
 

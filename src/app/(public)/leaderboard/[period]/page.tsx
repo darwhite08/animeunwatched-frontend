@@ -44,7 +44,7 @@ export default function PeriodLeaderboardPage({ params }: { params: Promise<{ pe
           </Link>
           <div className="flex items-center gap-3 mb-2">
             <Trophy size={20} className="text-amber-400" />
-            <h1 className="text-4xl font-black tracking-tighter uppercase italic text-white">{config.label}<span className="text-indigo-500">.</span></h1>
+            <h1 className="text-4xl font-black tracking-tighter uppercase italic text-white">{config.label}<span style={{color:"#f59e0b"}}>.</span></h1>
           </div>
           <p className="text-white/35 text-sm">{config.desc}</p>
         </div>

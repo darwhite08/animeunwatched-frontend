@@ -74,7 +74,7 @@ function SearchContent() {
             Neural Archive Search
           </p>
           <h1 className="text-4xl md:text-5xl font-black tracking-tighter text-white uppercase italic mb-8">
-            Search<span className="text-indigo-500">.</span>
+            Search<span style={{color:"#f59e0b"}}>.</span>
           </h1>
 
           {/* Search box */}

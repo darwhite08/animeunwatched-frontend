@@ -264,7 +264,7 @@ export default function FranchisePage({
           </p>
           <h1 className="text-4xl sm:text-5xl font-black tracking-tighter uppercase italic text-white leading-none mb-2">
             {anime?.title ?? id}
-            <span className="text-indigo-500">.</span>
+            <span style={{color:"#f59e0b"}}>.</span>
           </h1>
           <p className="text-white/35 text-sm">All related entries in the same series universe.</p>
         </motion.div>

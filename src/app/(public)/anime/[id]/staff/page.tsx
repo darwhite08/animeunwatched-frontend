@@ -41,7 +41,7 @@ export default function AnimeStaffPage({ params }: { params: Promise<{ id: strin
         <div className="flex items-center gap-3">
           <Users2 size={18} className="text-indigo-400" />
           <h1 className="text-3xl font-black tracking-tighter uppercase italic text-white">
-            Staff<span className="text-indigo-500">.</span>
+            Staff<span style={{color:"#f59e0b"}}>.</span>
           </h1>
         </div>
 

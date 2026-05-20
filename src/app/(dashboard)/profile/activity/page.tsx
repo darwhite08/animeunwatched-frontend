@@ -87,7 +87,7 @@ export default function ActivityPage() {
       <div>
         <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-indigo-400/60 mb-2">Your History</p>
         <h1 className="text-3xl font-black tracking-tighter uppercase italic text-white">
-          Activity<span className="text-indigo-500">.</span>
+          Activity<span style={{color:"#f59e0b"}}>.</span>
         </h1>
         <p className="text-white/35 text-sm mt-1">{EVENTS.length} event{EVENTS.length !== 1 ? "s" : ""} tracked</p>
       </div>

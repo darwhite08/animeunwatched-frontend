@@ -179,7 +179,7 @@ export default function AnimeReviewsPage({ params }: { params: Promise<{ id: str
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
           <div>
             <h2 className="text-3xl font-black uppercase italic tracking-tighter text-white leading-none">
-              Reviews<span className="text-indigo-500">.</span>
+              Reviews<span style={{color:"#f59e0b"}}>.</span>
             </h2>
             <p className="text-white/25 text-xs mt-1">{reviews.length} reviews · Page 1 of 3</p>
           </div>

@@ -54,7 +54,7 @@ export default function CollectionDetailPage({ params }: { params: Promise<{ id:
                 <Layers size={20} className="text-white/50" />
                 <span className="text-[9px] font-mono uppercase tracking-[0.4em] text-white/30">Curated Collection</span>
               </div>
-              <h1 className="text-5xl font-black tracking-tighter uppercase italic text-white leading-none">{col.name}<span className="text-indigo-500">.</span></h1>
+              <h1 className="text-5xl font-black tracking-tighter uppercase italic text-white leading-none">{col.name}<span style={{color:"#f59e0b"}}>.</span></h1>
               <p className="text-white/50 text-sm max-w-xl leading-relaxed">{col.description}</p>
               <div className="flex items-center gap-4 text-[10px] text-white/30">
                 <span>Curated by <span className="text-white/60 font-black">{col.curator}</span></span>

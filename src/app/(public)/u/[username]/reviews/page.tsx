@@ -156,7 +156,7 @@ export default function UserReviewsPage({
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-5 mb-8">
           <div>
             <h1 className="text-5xl font-black tracking-tighter uppercase italic text-white leading-none">
-              @{username}&apos;s Reviews<span className="text-indigo-500">.</span>
+              @{username}&apos;s Reviews<span style={{color:"#f59e0b"}}>.</span>
             </h1>
             <p className="text-white/35 text-sm mt-2">{reviews.length} reviews</p>
           </div>

@@ -276,7 +276,7 @@ export default function ClubMembersPage({
               Community
             </p>
             <h1 className="text-4xl sm:text-5xl font-black uppercase italic tracking-tighter text-white leading-none">
-              Members<span className="text-indigo-500">.</span>
+              Members<span style={{color:"#f59e0b"}}>.</span>
             </h1>
             <p className="text-white/35 text-xs">
               {members.length.toLocaleString()} members in {clubName}

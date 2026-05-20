@@ -164,7 +164,7 @@ export const ANIME_DB: Anime[] = [
     synopsis:
       "A young Viking warrior seeks revenge for his father's murder, only to gradually question whether violence can ever be the answer. Set against brutal Norse raids, the saga becomes a profound meditation on pacifism and purpose. One of the most emotionally mature action anime ever made.",
     image:
-      "https://images.unsplash.com/photo-1476611338391-6f395a0dd82e?q=80&w=800&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1578632767115-351597cf2477?q=80https://images.unsplash.com/photo-1476611338391-6f395a0dd82e?q=80&w=800&auto=format&fit=cropw=800https://images.unsplash.com/photo-1476611338391-6f395a0dd82e?q=80&w=800&auto=format&fit=cropauto=formathttps://images.unsplash.com/photo-1476611338391-6f395a0dd82e?q=80&w=800&auto=format&fit=cropfit=crop",
     tags: ["vikings", "revenge", "pacifism", "historical", "dark", "mature", "character growth"],
     category: "top-rated",
     rank: 8,

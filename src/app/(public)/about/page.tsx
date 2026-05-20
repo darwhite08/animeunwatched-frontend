@@ -12,7 +12,7 @@ const PILLARS = [
   {
     icon: Compass,
     title: "Discovery",
-    color: "text-indigo-400",
+    color: "text-amber-400",
     bg: "bg-indigo-500/10",
     border: "border-indigo-500/20",
     desc: "AI-powered recommendations that understand your taste profile, not just what's trending. Our Neural Oracle maps your DNA across 12 taste dimensions so every suggestion lands.",
@@ -49,7 +49,7 @@ const TEAM = [
     initial: "D",
     name: "darwhite08",
     role: "Founder & Lead Shinobi",
-    from: "from-indigo-500 to-violet-600",
+    from: "from-amber-500 to-orange-500",
     quote: "We had 400 anime on our lists and no platform worthy of them. So we built one.",
   },
   {
@@ -94,7 +94,7 @@ export default function AboutPage() {
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-indigo-500/25 bg-indigo-500/8 text-[10px] font-black uppercase tracking-[0.3em] text-indigo-400 mb-8"
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-amber-500/25 bg-amber-500/8 text-[10px] font-black uppercase tracking-[0.3em] text-amber-400 mb-8"
           >
             About Kaiveron
           </motion.div>
@@ -106,7 +106,7 @@ export default function AboutPage() {
             className="text-5xl md:text-7xl font-black tracking-tighter uppercase italic leading-[0.92] text-white"
           >
             We Built The Anime Social Platform That Should Have{" "}
-            <span className="text-indigo-400">Existed Years Ago.</span>
+            <span style={{color:"#f59e0b"}}>Existed Years Ago.</span>
           </motion.h1>
 
           <motion.p
@@ -198,7 +198,7 @@ export default function AboutPage() {
                 <p className="text-[10px] font-bold text-white/30 uppercase tracking-widest mt-0.5">{member.role}</p>
               </div>
               {/* Quote */}
-              <blockquote className="text-sm text-white/45 leading-relaxed italic border-l-2 border-indigo-500/40 pl-4">
+              <blockquote className="text-sm text-white/45 leading-relaxed italic border-l-2 border-amber-500/40 pl-4">
                 "{member.quote}"
               </blockquote>
             </motion.div>

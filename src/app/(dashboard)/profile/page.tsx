@@ -57,7 +57,7 @@ const MOCK_REVIEWS = [
     id: 3,
     animeTitle: "Vinland Saga",
     animeImage:
-      "https://images.unsplash.com/photo-1476611338391-6f395a0dd82e?q=80&w=400&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1578632767115-351597cf2477?q=80https://images.unsplash.com/photo-1476611338391-6f395a0dd82e?q=80&w=400&auto=format&fit=cropw=400https://images.unsplash.com/photo-1476611338391-6f395a0dd82e?q=80&w=400&auto=format&fit=cropauto=formathttps://images.unsplash.com/photo-1476611338391-6f395a0dd82e?q=80&w=400&auto=format&fit=cropfit=crop",
     score: 9,
     excerpt:
       "Season 2 is where this show transcends the genre. Thorfinn's transformation from revenge-fueled warrior to a man pursuing genuine peace is one of the most compelling character arcs I've witnessed in anime.",

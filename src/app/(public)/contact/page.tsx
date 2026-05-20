@@ -35,10 +35,10 @@ const CONTACT_CARDS = [
     desc: "Partnerships, press, or sponsorships — email us directly and we'll respond within 48 hours.",
     cta: "info@athavita.com",
     href: "mailto:info@athavita.com",
-    color: "text-indigo-400",
-    bg: "bg-indigo-500/8",
-    border: "border-indigo-500/15",
-    hoverBorder: "hover:border-indigo-500/35",
+    color: "text-amber-400",
+    bg: "bg-amber-500/8",
+    border: "border-amber-500/15",
+    hoverBorder: "hover:border-amber-500/35",
   },
 ]
 
@@ -88,7 +88,7 @@ export default function ContactPage() {
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-indigo-500/25 bg-indigo-500/8 text-[10px] font-black uppercase tracking-[0.3em] text-indigo-400 mb-8"
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-amber-500/25 bg-amber-500/8 text-[10px] font-black uppercase tracking-[0.3em] text-amber-400 mb-8"
           >
             Contact
           </motion.div>
@@ -100,7 +100,7 @@ export default function ContactPage() {
             className="text-5xl md:text-6xl font-black tracking-tighter uppercase italic leading-[0.92] text-white mb-4"
           >
             Get in<br />
-            <span className="text-indigo-400">Touch.</span>
+            <span style={{color:"#f59e0b"}}>Touch.</span>
           </motion.h1>
 
           <motion.p
@@ -175,7 +175,7 @@ export default function ContactPage() {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Your name"
-                  className="w-full bg-white/[0.03] border border-white/8 rounded-xl px-4 py-3.5 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-indigo-500/50 focus:bg-white/[0.05] transition-all"
+                  className="w-full bg-white/[0.03] border border-white/8 rounded-xl px-4 py-3.5 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-amber-500/50 focus:bg-white/[0.05] transition-all"
                 />
               </div>
 
@@ -190,7 +190,7 @@ export default function ContactPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="you@example.com"
-                  className="w-full bg-white/[0.03] border border-white/8 rounded-xl px-4 py-3.5 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-indigo-500/50 focus:bg-white/[0.05] transition-all"
+                  className="w-full bg-white/[0.03] border border-white/8 rounded-xl px-4 py-3.5 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-amber-500/50 focus:bg-white/[0.05] transition-all"
                 />
               </div>
             </div>
@@ -203,7 +203,7 @@ export default function ContactPage() {
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value as Category)}
-                className="w-full bg-white/[0.03] border border-white/8 rounded-xl px-4 py-3.5 text-sm text-white focus:outline-none focus:border-indigo-500/50 focus:bg-white/[0.05] transition-all appearance-none cursor-pointer"
+                className="w-full bg-white/[0.03] border border-white/8 rounded-xl px-4 py-3.5 text-sm text-white focus:outline-none focus:border-amber-500/50 focus:bg-white/[0.05] transition-all appearance-none cursor-pointer"
               >
                 {CATEGORIES.map((c) => (
                   <option key={c} value={c} className="bg-[#111] text-white">
@@ -224,7 +224,7 @@ export default function ContactPage() {
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 placeholder="Write your message here…"
-                className="w-full bg-white/[0.03] border border-white/8 rounded-xl px-4 py-3.5 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-indigo-500/50 focus:bg-white/[0.05] transition-all resize-none"
+                className="w-full bg-white/[0.03] border border-white/8 rounded-xl px-4 py-3.5 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-amber-500/50 focus:bg-white/[0.05] transition-all resize-none"
               />
             </div>
 

@@ -65,7 +65,7 @@ function PostCard({ post }: { post: Post }) {
       <div className="flex items-start justify-between">
         <div className="flex items-center gap-3">
           <Link href={`/u/${post.author?.username ?? ""}`}>
-            <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center font-black text-sm hover:scale-105 transition-transform">
+            <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center font-black text-sm hover:scale-105 transition-transform">
               {avatarLetter}
             </div>
           </Link>

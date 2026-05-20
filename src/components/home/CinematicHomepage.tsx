@@ -244,7 +244,7 @@ function AIOracleSection() {
             </div>
 
             <Link href="/ai-discover"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-sm font-medium text-white transition-colors"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-black uppercase tracking-wide text-black transition-all" style={{background:"linear-gradient(135deg,#fbbf24,#f59e0b)",boxShadow:"0 4px 20px rgba(245,158,11,0.35)"}}
             >
               <Sparkles size={13} /> Try AI discovery
             </Link>
@@ -461,7 +461,7 @@ function CommunitySection() {
               className="flex gap-3"
             >
               <Link href="/leaderboard"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-sm font-medium text-white transition-colors"
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-black uppercase tracking-wide text-black transition-all" style={{background:"linear-gradient(135deg,#fbbf24,#f59e0b)",boxShadow:"0 4px 20px rgba(245,158,11,0.35)"}}
               >
                 <Trophy size={13} /> View leaderboard
               </Link>
@@ -770,8 +770,8 @@ function FinalCTASection() {
         {/* CTA */}
         <div className="flex flex-col items-center gap-4">
           <Link href="/register"
-            className="group inline-flex items-center gap-2.5 px-8 py-4 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-base font-semibold text-white transition-all"
-            style={{ boxShadow: "0 0 40px rgba(99,102,241,0.3), 0 4px 16px rgba(99,102,241,0.2)" }}
+            className="group inline-flex items-center gap-2.5 px-8 py-4 rounded-xl text-base font-black uppercase tracking-wide text-black transition-all"
+            style={{ background: "linear-gradient(135deg,#fbbf24,#f59e0b)", boxShadow: "0 4px 30px rgba(245,158,11,0.4)" }}
           >
             Create your free account
             <ArrowRight size={16} className="group-hover:translate-x-0.5 transition-transform" />

@@ -95,6 +95,7 @@ export default function AnimeEpisodesPage({
   params: Promise<{ id: string }>
 }) {
   const { id } = use(params)
+  const animeId = id  // used in episode discussion links
   const malId = Number(id)
   const { data: animeData, isLoading } = useAnime(malId > 0 ? malId : 0)
   const anime = animeData?.anime ? mapDTO(animeData.anime, 0) : null
@@ -296,6 +297,15 @@ export default function AnimeEpisodesPage({
                 <Check size={11} className={ep.watched ? "" : "opacity-30"} />
                 {ep.watched ? "Watched" : "Mark"}
               </button>
+
+              {/* Episode discussion link */}
+              <Link
+                href={`/anime/${animeId}/discuss?ep=${ep.number}`}
+                title={`Discuss Episode ${ep.number}`}
+                className="flex items-center justify-center h-9 w-9 rounded-xl bg-white/5 border border-white/8 text-white/30 hover:bg-amber-500/15 hover:text-amber-400 hover:border-amber-500/25 transition-all shrink-0 text-[10px] font-black"
+              >
+                💬
+              </Link>
 
               {/* Play button */}
               <button

@@ -82,6 +82,18 @@ export interface ListEntry {
   anime?: AnimeDTO
 }
 
+export interface Thread {
+  id: string
+  title: string
+  content: string
+  animeId?: string | null
+  clubId?: string | null
+  createdAt: string
+  updatedAt: string
+  author: Pick<User, "id" | "username" | "displayName" | "avatarUrl">
+  _count?: { replies: number; likes: number }
+}
+
 export interface Post {
   id: string
   authorId: string

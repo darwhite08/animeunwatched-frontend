@@ -69,7 +69,7 @@ export default function ContinueWatchingCard() {
               <p className="text-[9px] text-white/30 uppercase tracking-widest mt-0.5">Up next: {item.next}</p>
               <div className="mt-2 h-1 w-full bg-white/5 rounded-full overflow-hidden">
                 <motion.div initial={{ width: 0 }} animate={{ width: `${item.progress}%` }} transition={{ duration: 0.8, delay: i * 0.1, ease: "easeOut" }}
-                  className="h-full bg-gradient-to-r from-indigo-600 to-indigo-400 rounded-full" />
+                  className="h-full bg-gradient-to-r from-amber-600 to-amber-400 rounded-full" />
               </div>
             </div>
             <button onClick={() => push(`Opening ${item.next}…`, "info")}

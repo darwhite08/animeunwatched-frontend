@@ -45,11 +45,17 @@ export default function DailyQuestCard() {
 
   // Compute real quest progress
   const realQuests = useMemo(() => {
-    const watchingCount = (listData?.data ?? []).filter(e => e.episodesSeen > 0).length
+    const entries = listData?.data ?? []
+    // q1: any entry updated today with episodesSeen > 0
+    const todayStart = new Date(); todayStart.setHours(0,0,0,0)
+    const watchedToday = entries.filter(e => e.episodesSeen > 0 && new Date(e.updatedAt) >= todayStart).length
+    // q2: any entry with a score set
+    const ratedCount = entries.filter(e => e.score !== null).length
     const postsCount = (discoverData?.pages[0]?.data ?? []).filter(p => p.authorId === user?.id).length
     return QUESTS.map(q => ({
       ...q,
-      progress: q.id === "q1" ? Math.min(1, watchingCount) :
+      progress: q.id === "q1" ? Math.min(1, watchedToday) :
+                q.id === "q2" ? Math.min(1, ratedCount) :
                 q.id === "q3" ? Math.min(1, postsCount) :
                 q.id === "q4" ? 1 : // just viewed = always done
                 q.id === "q5" ? 1 : // just being on the site = done

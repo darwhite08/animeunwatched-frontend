@@ -4,23 +4,54 @@ import Link from "next/link"
 import { motion } from "framer-motion"
 import { Star, ChevronRight } from "lucide-react"
 import { useBrowseAnime } from "@/hooks/useAnime"
+import { useUserList } from "@/hooks/useLists"
+import { useAuthStore } from "@/stores/auth.store"
+import { useMemo } from "react"
 import type { AnimeDTO } from "@/lib/api/types"
 
-function mapDTO(a: AnimeDTO, i: number) {
-  return { id: String(a.malId), title: a.title, rating: a.score ?? 0, studio: a.studios[0] ?? "Unknown", image: a.imageUrl ?? "" }
+function mapBrowse(a: AnimeDTO, i: number) {
+  return { id: String(a.malId), title: a.title, rating: a.score ?? 0, studio: a.studios[0] ?? "Unknown", image: a.imageUrl ?? "", rank: i + 1 }
 }
 
 /* ── Score dot colour ── */
 function scoreColour(score: number) {
-  if (score >= 9.5) return "text-amber-400"
-  if (score >= 9)   return "text-amber-400"
+  if (score >= 9) return "text-amber-400"
+  if (score >= 7) return "text-amber-300"
   return "text-white/60"
 }
 
 /* ── Component ── */
 export default function TopAnimeCard() {
-  const { data, isLoading } = useBrowseAnime({ limit: 5 })
-  const TOP_FIVE = (data?.data ?? []).map(mapDTO)
+  const user = useAuthStore(s => s.user)
+
+  // Primary: COMPLETED entries from user's list, sorted by score descending
+  const { data: listData, isLoading: listLoading } = useUserList(user?.username ?? "", "COMPLETED")
+
+  // Fallback: browse API top rated
+  const completed = useMemo(() => {
+    return (listData?.data ?? [])
+      .filter(e => e.score !== null)
+      .sort((a, b) => (b.score ?? 0) - (a.score ?? 0))
+      .slice(0, 5)
+      .map((e, i) => ({
+        id: String(e.anime?.malId ?? e.animeId),
+        title: e.anime?.title ?? "Unknown",
+        rating: e.score ?? e.anime?.score ?? 0,
+        studio: e.anime?.studios?.[0] ?? "Unknown",
+        image: e.anime?.imageUrl ?? "",
+        rank: i + 1,
+      }))
+  }, [listData])
+
+  // Only fetch browse fallback when list is done loading and has no scored completed entries
+  const needsFallback = !listLoading && completed.length === 0
+  const { data: browseData, isLoading: browseLoading } = useBrowseAnime({ limit: 5 })
+
+  const TOP_FIVE = completed.length > 0
+    ? completed
+    : (browseData?.data ?? []).map(mapBrowse)
+
+  const isLoading = listLoading || (needsFallback && browseLoading)
 
   if (isLoading) {
     return (
@@ -39,7 +70,9 @@ export default function TopAnimeCard() {
       <div className="flex items-center justify-between mb-7 relative z-10">
         <div className="flex items-center gap-2">
           <Star size={14} className="text-amber-400" fill="currentColor" />
-          <h4 className="text-xs font-black uppercase tracking-[0.28em] text-white/30">Your Top Anime</h4>
+          <h4 className="text-xs font-black uppercase tracking-[0.28em] text-white/30">
+            {completed.length > 0 ? "Your Top Rated" : "Top Anime"}
+          </h4>
         </div>
         <Link
           href="/rate"
@@ -48,6 +81,17 @@ export default function TopAnimeCard() {
           Rate Another <ChevronRight size={10} />
         </Link>
       </div>
+
+      {/* Empty state */}
+      {TOP_FIVE.length === 0 && (
+        <div className="py-6 text-center">
+          <Star size={20} className="mx-auto mb-2 text-white/10" fill="currentColor" />
+          <p className="text-[10px] text-white/20 font-black uppercase tracking-widest">No rated anime yet</p>
+          <Link href="/bestanimelist" className="mt-2 block text-[9px] text-amber-400 hover:text-amber-300 font-black uppercase tracking-widest">
+            Browse & Rate →
+          </Link>
+        </div>
+      )}
 
       {/* Ranked list */}
       <ol className="space-y-2 relative z-10">
@@ -91,13 +135,13 @@ export default function TopAnimeCard() {
                   </p>
                 </div>
 
-                {/* Personal score */}
+                {/* Score */}
                 <div className="shrink-0 flex flex-col items-end gap-0.5">
                   <span className={`text-base font-black leading-none ${scoreColour(personal)}`}>
                     {personal.toFixed(1)}
                   </span>
                   <span className="text-[8px] font-bold uppercase tracking-widest text-white/20">
-                    Personal
+                    {completed.length > 0 ? "Rated" : "Score"}
                   </span>
                 </div>
               </Link>

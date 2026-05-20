@@ -68,6 +68,26 @@ function CommentRow({ comment }: { comment: PostComment }) {
   )
 }
 
+/* ── Spoiler block — blurs content until user clicks to reveal ── */
+function SpoilerBlock({ text }: { text: string }) {
+  const [revealed, setRevealed] = useState(false)
+  return (
+    <div className="relative">
+      <p className={`text-[15px] leading-relaxed transition-all duration-300 ${
+        revealed ? "text-white/85 blur-none" : "text-white/20 blur-md select-none"
+      }`}>
+        {text}
+      </p>
+      {!revealed && (
+        <button onClick={() => setRevealed(true)}
+          className="absolute inset-0 flex items-center justify-center rounded-xl bg-amber-500/8 border border-amber-500/20 text-[11px] font-black uppercase tracking-widest text-amber-400 hover:bg-amber-500/15 transition-all">
+          ⚠️ Spoiler — click to reveal
+        </button>
+      )}
+    </div>
+  )
+}
+
 /* ── Post card ── */
 function PostCard({ post }: { post: Post }) {
   const { push }       = useToast()
@@ -164,7 +184,14 @@ function PostCard({ post }: { post: Post }) {
         )}
 
         {/* Content */}
-        <p className="text-[15px] text-white/85 leading-relaxed">{post.content}</p>
+        {/* Spoiler-aware content rendering */}
+        {(() => {
+          const spoilerMatch = post.content.match(/^\[spoiler\]([\s\S]*)\[\/spoiler\]$/)
+          if (spoilerMatch) {
+            return <SpoilerBlock text={spoilerMatch[1]} />
+          }
+          return <p className="text-[15px] text-white/85 leading-relaxed">{post.content}</p>
+        })()}
 
         {/* Actions */}
         <div className="flex items-center gap-1 pt-1 border-t border-white/5">
@@ -273,6 +300,7 @@ export default function CommunityPage() {
   const [feedTab, setFeedTab] = useState<FeedTab>("trending")
   const [composing, setComposing] = useState(false)
   const [draft, setDraft] = useState("")
+  const [isSpoiler, setIsSpoiler] = useState(false)
 
   const { data, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage } = useDiscover()
   const createPost = useCreatePost()
@@ -282,14 +310,16 @@ export default function CommunityPage() {
   const submitPost = useCallback(() => {
     if (!draft.trim()) return
     if (!isAuthenticated) { push("Sign in to post", "info"); return }
+    // Wrap spoiler content in [spoiler] tags for the backend to handle
+    const content = isSpoiler ? `[spoiler]${draft}[/spoiler]` : draft
     createPost.mutate(
-      { content: draft },
+      { content },
       {
-        onSuccess: () => { setDraft(""); setComposing(false); push("Post published!", "success") },
+        onSuccess: () => { setDraft(""); setComposing(false); setIsSpoiler(false); push("Post published!", "success") },
         onError:   () => push("Failed to post. Try again.", "error"),
       }
     )
-  }, [draft, isAuthenticated, createPost, push])
+  }, [draft, isAuthenticated, createPost, push, isSpoiler])
 
   return (
     <div className="min-h-screen bg-[#020202] text-white pb-32">
@@ -359,6 +389,14 @@ export default function CommunityPage() {
                       {[AtSign, Hash, ImageIcon].map((Icon, i) => (
                         <button key={i} className="p-1.5 text-white/30 hover:text-white transition-colors"><Icon size={15} /></button>
                       ))}
+                      {/* Spoiler toggle */}
+                      <button onClick={() => setIsSpoiler(s => !s)}
+                        title="Mark as spoiler"
+                        className={`flex items-center gap-1 px-2 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest transition-all ${
+                          isSpoiler ? "bg-amber-500/20 text-amber-400 border border-amber-500/30" : "text-white/30 hover:text-amber-400 hover:bg-amber-500/10"
+                        }`}>
+                        ⚠️ Spoiler
+                      </button>
                     </div>
                     <div className="flex items-center gap-2">
                       <span className={`text-[10px] font-mono ${500 - draft.length < 50 ? "text-amber-400" : "text-white/20"}`}>{500 - draft.length}</span>

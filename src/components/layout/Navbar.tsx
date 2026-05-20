@@ -12,7 +12,7 @@ import {
 import {
   List, Robot, CalendarDots, Star, Tag, Buildings, SquaresFour,
   Lightning, Newspaper, UsersThree, BookOpenText, ChartBar, Trophy,
-  MonitorPlay, Sparkle, ArrowRight, House, CalendarCheck,
+  MonitorPlay, Sparkle, ArrowRight, House, CalendarCheck, Smiley,
 } from "@phosphor-icons/react";
 import { useWatchlist } from "@/stores/watchlist.store";
 import { useAuthStore } from "@/stores/auth.store";
@@ -31,6 +31,7 @@ const ANIME_LINKS = [
   { name: "Top Rated",        href: "/rankings",         icon: Star,          desc: "Community ranked" },
   { name: "Genres",           href: "/genres",           icon: Tag,           desc: "Browse by genre" },
   { name: "Studios",          href: "/studios",          icon: Buildings,     desc: "Browse by studio" },
+  { name: "Mood Picker",      href: "/mood",             icon: Smiley,        desc: "Match your vibe" },
   { name: "Recommendations",  href: "/recommendations",  icon: Sparkle,       desc: "Picks for you" },
   { name: "Collections",      href: "/collections",      icon: SquaresFour,   desc: "Curated lists" },
 ];

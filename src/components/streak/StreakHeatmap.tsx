@@ -30,7 +30,7 @@ export const StreakHeatmap = () => {
               ${d.intensity === 1 ? "bg-indigo-900/40" : ""}
               ${d.intensity === 2 ? "bg-indigo-700/60" : ""}
               ${d.intensity === 3 ? "bg-indigo-500" : ""}
-              ${d.intensity === 4 ? "bg-indigo-400 shadow-[0_0_15px_rgba(129,140,248,0.5)]" : ""}
+              ${d.intensity === 4 ? "bg-amber-400 shadow-[0_0_15px_rgba(251,191,36,0.5)]" : ""}
             `}
           />
         ))}

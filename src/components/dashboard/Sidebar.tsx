@@ -7,7 +7,7 @@ import { useAuthStore } from "@/stores/auth.store"
 import {
   LayoutGrid, Book, MonitorPlay, Activity, BarChart2,
   User, Users, Bell, Settings, Flame, Zap, ChevronRight, Trophy,
-  BookOpen, History, Tag,
+  BookOpen, History,
 } from "lucide-react"
 import { useWatchlist } from "@/stores/watchlist.store"
 import { useUnreadCount } from "@/hooks/useNotificationsQuery"
@@ -24,14 +24,6 @@ const NAV = [
       { name: "Watch Stats",  href: "/stats",      icon: BarChart2  },
       { name: "Manga",        href: "/manga",      icon: BookOpen   },
       { name: "History",      href: "/history",    icon: History    },
-    ],
-  },
-  {
-    label: "Community",
-    items: [
-      { name: "Community",    href: "/community",   icon: Users     },
-      { name: "Clubs",        href: "/clubs",       icon: Tag       },
-      { name: "Leaderboard",  href: "/leaderboard", icon: Zap       },
     ],
   },
   {

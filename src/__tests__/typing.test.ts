@@ -63,7 +63,8 @@ describe("typing debounce timing", () => {
 
   it("stop typing fires after 3s of inactivity", () => {
     const stopFn = vi.fn()
-    let typingTimer: ReturnType<typeof setTimeout> | null = null
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let typingTimer: any = null
 
     function emitTyping() {
       if (typingTimer) clearTimeout(typingTimer)
@@ -83,7 +84,8 @@ describe("typing debounce timing", () => {
 
   it("stop fires only once even with many keypresses", () => {
     const stopFn = vi.fn()
-    let typingTimer: ReturnType<typeof setTimeout> | null = null
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let typingTimer: any = null
 
     function emitTyping() {
       if (typingTimer) clearTimeout(typingTimer)

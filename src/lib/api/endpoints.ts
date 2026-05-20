@@ -42,7 +42,8 @@ export const getFollowing = (username: string, page = 1) =>
 
 /* ── Anime ── */
 export const browseAnime = (params: {
-  q?: string; year?: number; season?: string; type?: string; page?: number; limit?: number
+  q?: string; year?: number; season?: string; type?: string; status?: string;
+  studio?: string; start_date?: string; end_date?: string; page?: number; limit?: number
 }) => {
   const qs = new URLSearchParams(
     Object.entries(params)

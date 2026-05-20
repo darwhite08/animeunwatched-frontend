@@ -19,9 +19,10 @@ const STATUS_MAP: Record<WatchStatus, string> = {
   COMPLETED: "Completed",
   ON_HOLD: "On Hold",
   DROPPED: "Dropped",
+  REWATCHING: "Rewatching",  // Most-requested missing status
 }
 
-const TABS = ["All", "Watching", "Plan to Watch", "Completed", "On Hold", "Dropped"]
+const TABS = ["All", "Watching", "Rewatching", "Plan to Watch", "Completed", "On Hold", "Dropped"]
 
 type WatchItem = { id: string; title: string; ep: string; progress: number; platform: string; status: string; image: string }
 

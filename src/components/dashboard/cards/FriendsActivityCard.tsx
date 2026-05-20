@@ -90,7 +90,7 @@ export default function FriendsActivityCard() {
       <div className="space-y-4 relative z-10">
         {activities.map((a, i) => {
           const name = a.user.displayName ?? a.user.username
-          const statusLabel = a.status === "COMPLETED" ? "finished" : a.status === "WATCHING" ? "watching" : "added"
+          const statusLabel = a.status === "COMPLETED" ? "finished" : a.status === "WATCHING" ? "watching" : a.status === "REWATCHING" ? "rewatching" : "added"
           return (
             <motion.div key={i} initial={{ opacity: 0, x: 12 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.07 }}>
               <Link href={`/anime/${a.anime.malId}`} className="flex items-center gap-3.5 group/item cursor-pointer">

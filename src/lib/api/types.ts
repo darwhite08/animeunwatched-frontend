@@ -27,7 +27,7 @@ export interface ConversationDetail {
 }
 
 export type Role = "USER" | "MOD" | "ADMIN"
-export type WatchStatus = "PLAN_TO_WATCH" | "WATCHING" | "COMPLETED" | "ON_HOLD" | "DROPPED"
+export type WatchStatus = "PLAN_TO_WATCH" | "WATCHING" | "COMPLETED" | "ON_HOLD" | "DROPPED" | "REWATCHING"
 export type BlogStatus = "DRAFT" | "PUBLISHED"
 
 export interface User {

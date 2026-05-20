@@ -138,7 +138,7 @@ const TABS: Array<"All" | MangaStatus> = [
 
 const STATUS_STYLE: Record<MangaStatus, string> = {
   Reading:        "bg-emerald-500/15 text-emerald-400 border-emerald-500/20",
-  Completed:      "bg-indigo-500/15 text-indigo-400 border-indigo-500/20",
+  Completed:      "bg-amber-500/15 text-amber-400 border-amber-500/20",
   "Plan to Read": "bg-white/5 text-white/40 border-white/10",
   "On Hold":      "bg-amber-500/15 text-amber-400 border-amber-500/20",
 }
@@ -243,7 +243,7 @@ export default function MangaPage() {
         {[
           { label: "Total",         value: stats.total,     color: "text-white" },
           { label: "Reading",       value: stats.reading,   color: "text-emerald-400" },
-          { label: "Completed",     value: stats.completed, color: "text-indigo-400" },
+          { label: "Completed",     value: stats.completed, color: "text-amber-400" },
           { label: "Plan to Read",  value: stats.planned,   color: "text-white/40" },
         ].map(({ label, value, color }) => (
           <div
@@ -429,9 +429,9 @@ function MangaCard({
               transition={{ delay: 0.2, duration: 0.6, ease: "easeOut" }}
               className={`h-full rounded-full ${
                 isComplete
-                  ? "bg-indigo-500"
+                  ? "bg-amber-500"
                   : pct > 50
-                  ? "bg-violet-500"
+                  ? "bg-emerald-500"
                   : "bg-white/30"
               }`}
             />

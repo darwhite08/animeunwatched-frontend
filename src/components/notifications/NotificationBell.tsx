@@ -23,7 +23,7 @@ export default function NotificationBell() {
     <div className="relative" ref={bellRef}>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="relative p-2.5 rounded-full bg-white/5 border border-white/5 text-white/40 hover:text-white hover:bg-indigo-500/20 transition-all group"
+        className="relative p-2.5 rounded-full bg-white/5 border border-white/5 text-white/40 hover:text-white hover:bg-amber-500/10 transition-all group"
       >
         <Bell size={18} className={unreadCount > 0 ? "animate-bounce" : ""} />
         

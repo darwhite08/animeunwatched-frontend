@@ -284,7 +284,7 @@ export default function UserListPage({
                 onClick={() => setFilterStatus(tab)}
                 className={`relative px-5 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-200 ${
                   filterStatus === tab
-                    ? "bg-indigo-600 text-white shadow-[0_4px_16px_rgba(99,102,241,0.3)]"
+                    ? "bg-amber-500 text-black shadow-[0_4px_16px_rgba(245,158,11,0.3)]"
                     : "bg-white/[0.04] border border-white/8 text-white/40 hover:text-white/80 hover:bg-white/8"
                 }`}
               >

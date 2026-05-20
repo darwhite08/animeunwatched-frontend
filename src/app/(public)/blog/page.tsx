@@ -260,7 +260,7 @@ export default function BlogListingPage() {
                 onClick={() => setActiveCategory(cat)}
                 className={`relative px-5 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${
                   activeCategory === cat
-                    ? "bg-indigo-600 text-white shadow-[0_0_20px_rgba(99,102,241,0.3)]"
+                    ? "bg-amber-500 text-black shadow-[0_0_20px_rgba(245,158,11,0.4)]"
                     : "bg-white/5 border border-white/8 text-white/40 hover:text-white hover:bg-white/10"
                 }`}
               >

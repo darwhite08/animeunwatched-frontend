@@ -460,7 +460,7 @@ export default function WorldClassProfile() {
                       <Zap size={14} className="text-yellow-500" />
                     </div>
                   ))}
-                  <div className="w-10 h-10 rounded-full border-2 border-black bg-indigo-600 flex items-center justify-center text-[10px] font-bold">
+                  <div className="w-10 h-10 rounded-full border-2 border-black bg-amber-500 flex items-center justify-center text-[10px] font-bold text-black">
                     +12
                   </div>
                 </div>

@@ -114,7 +114,7 @@ function FilterPill<T extends string>({
           onClick={() => onChange(opt)}
           className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-200 ${
             value === opt
-              ? "bg-indigo-600 text-white shadow-[0_0_16px_rgba(99,102,241,0.3)]"
+              ? "bg-amber-500 text-black shadow-[0_0_16px_rgba(245,158,11,0.4)]"
               : "bg-white/[0.03] border border-white/8 text-white/40 hover:text-white hover:border-white/15"
           }`}
         >

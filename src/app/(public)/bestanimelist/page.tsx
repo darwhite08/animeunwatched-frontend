@@ -369,7 +369,7 @@ export default function BestAnimeListPage() {
                     onClick={() => { setPage(n as number); window.scrollTo({ top: 0, behavior: "smooth" }) }}
                     className={`w-9 h-9 rounded-xl text-xs font-black transition-all ${
                       page === n
-                        ? "bg-indigo-600 text-white shadow-[0_0_16px_rgba(99,102,241,0.4)]"
+                        ? "bg-amber-500 text-black shadow-[0_0_16px_rgba(245,158,11,0.4)]"
                         : "bg-white/5 border border-white/10 text-white/40 hover:text-white hover:bg-white/10"
                     }`}
                   >

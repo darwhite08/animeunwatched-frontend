@@ -135,7 +135,7 @@ export function AnimeThreadsSection({ animeId, animeTitle }: AnimeThreadsSection
             onClick={() => setActiveFilter(f)}
             className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider transition-all border ${
               activeFilter === f
-                ? "bg-indigo-600 border-indigo-500 text-white"
+                ? "bg-amber-500 border-amber-400 text-black"
                 : "bg-white/[0.03] border-white/8 text-white/35 hover:text-white/60 hover:border-white/15"
             }`}
           >

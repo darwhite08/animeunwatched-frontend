@@ -51,7 +51,7 @@ export default function MobileNav() {
                   />
                   {/* Notification badge */}
                   {label === "Alerts" && unreadCount > 0 && (
-                    <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-indigo-600 text-[8px] font-black text-white flex items-center justify-center">
+                    <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full text-[8px] font-black text-black" style={{background:"linear-gradient(135deg,#fbbf24,#f59e0b)"}} className-removed=" flex items-center justify-center">
                       {unreadCount > 9 ? "9+" : unreadCount}
                     </span>
                   )}

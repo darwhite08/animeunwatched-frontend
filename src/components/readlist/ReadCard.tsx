@@ -43,7 +43,7 @@ export const ReadCard = ({ manga }: { manga: any }) => {
 
         {/* Floating Play Icon on Hover */}
         <div className="absolute inset-0 z-20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-4 group-hover:translate-y-0">
-          <div className="h-16 w-16 rounded-full bg-indigo-600 flex items-center justify-center text-white shadow-[0_0_30px_rgba(79,70,229,0.5)]">
+          <div className="h-16 w-16 rounded-full bg-amber-500 flex items-center justify-center text-black shadow-[0_0_30px_rgba(79,70,229,0.5)]">
             <BookOpen size={24} />
           </div>
         </div>

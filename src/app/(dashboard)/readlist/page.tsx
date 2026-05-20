@@ -67,7 +67,7 @@ export default function ReadlistPage() {
             onClick={() => setActiveTab(tab)}
             className={`px-8 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest whitespace-nowrap transition-all ${
               activeTab === tab 
-              ? "bg-indigo-600 text-white shadow-[0_0_30px_rgba(79,70,229,0.4)]" 
+              ? "bg-amber-500 text-black shadow-[0_0_30px_rgba(245,158,11,0.4)]" 
               : "bg-white/5 text-white/40 hover:bg-white/10 border border-white/5"
             }`}
           >

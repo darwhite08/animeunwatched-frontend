@@ -21,7 +21,7 @@ export default function CategoryTabs({ active, onChange }: CategoryTabsProps) {
           {active === cat.id && (
             <motion.div
               layoutId="tab-bg"
-              className="absolute inset-0 bg-indigo-600 rounded-full shadow-[0_0_20px_rgba(79,70,229,0.4)]"
+              className="absolute inset-0 rounded-full" style={{background:"linear-gradient(135deg,#fbbf24,#f59e0b)",boxShadow:"0 0 20px rgba(245,158,11,0.4)"}} className-removed=""
               transition={{ type: "spring", bounce: 0.2, duration: 0.5 }}
             />
           )}

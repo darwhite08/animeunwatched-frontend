@@ -72,7 +72,7 @@ export default function FloatingActions({ anime, onReview }: FloatingActionsProp
             className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${
               inList
                 ? "bg-emerald-600 text-white"
-                : "bg-indigo-600 text-white shadow-[0_0_16px_rgba(99,102,241,0.4)]"
+                : "bg-amber-500 text-black shadow-[0_0_16px_rgba(245,158,11,0.4)]"
             }`}
           >
             {inList ? <Check size={13} /> : <Plus size={13} />}

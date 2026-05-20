@@ -327,7 +327,7 @@ export default function AnimeReviewsPage({ params }: { params: Promise<{ id: str
               key={p}
               className={`h-9 w-9 rounded-xl text-[10px] font-black transition-all ${
                 p === 1
-                  ? "bg-indigo-600 text-white shadow-[0_0_16px_rgba(99,102,241,0.4)]"
+                  ? "bg-amber-500 text-black shadow-[0_0_16px_rgba(245,158,11,0.4)]"
                   : "bg-white/[0.02] border border-white/5 text-white/30 hover:bg-white/5 hover:text-white/60"
               }`}
             >

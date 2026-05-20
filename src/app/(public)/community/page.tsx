@@ -129,7 +129,10 @@ function PostCard({ post }: { post: Post }) {
   return (
     <motion.article layout initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
       className="border border-white/8 hover:border-white/12 rounded-2xl overflow-hidden transition-colors"
-      style={{ background: "linear-gradient(160deg, rgba(15,15,25,0.9), rgba(10,10,18,0.95))" }}
+      style={{
+        background: "linear-gradient(160deg, rgba(15,15,25,0.9), rgba(10,10,18,0.95))",
+        scrollMarginTop: "160px",  // account for sticky navbar + community header
+      }}
     >
       <div className="p-5 space-y-4">
         {/* Author row */}
@@ -290,44 +293,43 @@ export default function CommunityPage() {
 
   return (
     <div className="min-h-screen bg-[#020202] text-white pb-32">
-      {/* Page header — scrolls with page (New Post lives in sticky bar below) */}
-      <div className="max-w-6xl mx-auto px-6 pt-8 pb-4">
-        <h1 className="text-2xl font-black tracking-tighter uppercase italic text-white">
-          Community<span style={{ color: "#f59e0b" }}>.</span>
-        </h1>
-        <p className="text-xs text-white/30 mt-0.5">
-          {posts.length > 0 ? `${posts.length}+ posts from the Shinobi` : "What the Shinobi are watching and saying"}
-        </p>
-      </div>
-
-      {/* Sticky bar — tabs + New Post button always visible when scrolling */}
-      <div className="sticky top-[72px] z-30 bg-[#020202]/95 backdrop-blur-xl border-b border-white/5">
-        <div className="max-w-6xl mx-auto px-6 flex items-center justify-between gap-4">
-          {/* Tabs */}
-          <div className="flex items-center gap-1">
-            {(["trending", "following", "latest"] as FeedTab[]).map(t => (
-              <button key={t} onClick={() => setFeedTab(t)}
-                className={`relative px-4 py-3 text-[11px] font-black uppercase tracking-widest capitalize transition-colors ${
-                  feedTab === t ? "text-white" : "text-white/30 hover:text-white/60"
-                }`}>
-                {t}
-                {feedTab === t && (
-                  <motion.div layoutId="feed-tab-line"
-                    className="absolute bottom-0 left-0 right-0 h-[2px] bg-amber-500 rounded-full" />
-                )}
-              </button>
-            ))}
+      {/* Fully sticky header — compact so it doesn't eat into post space */}
+      <div className="sticky top-[72px] z-30 bg-[#020202]/96 backdrop-blur-xl border-b border-white/5">
+        {/* Title row */}
+        <div className="max-w-6xl mx-auto px-6 pt-4 pb-2 flex items-center justify-between gap-4">
+          <div>
+            <h1 className="text-xl font-black tracking-tighter uppercase italic text-white leading-tight">
+              Community<span style={{ color: "#f59e0b" }}>.</span>
+            </h1>
+            <p className="text-[10px] text-white/30 mt-0.5">
+              {posts.length > 0 ? `${posts.length}+ posts from the Shinobi` : "The Dojo"}
+            </p>
           </div>
-
-          {/* New Post — always accessible regardless of scroll position */}
           <button onClick={() => setComposing(c => !c)}
             className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-[11px] font-black uppercase tracking-widest text-black transition-all hover:scale-105 shrink-0"
             style={{ background: "linear-gradient(135deg, #fbbf24, #f59e0b)", boxShadow: "0 4px 12px rgba(245,158,11,0.3)" }}>
             <Plus size={12} /> New Post
           </button>
         </div>
+
+        {/* Tab row */}
+        <div className="max-w-6xl mx-auto px-6 flex items-center gap-1 pb-0">
+          {(["trending", "following", "latest"] as FeedTab[]).map(t => (
+            <button key={t} onClick={() => setFeedTab(t)}
+              className={`relative px-4 py-2.5 text-[11px] font-black uppercase tracking-widest capitalize transition-colors ${
+                feedTab === t ? "text-white" : "text-white/30 hover:text-white/60"
+              }`}>
+              {t}
+              {feedTab === t && (
+                <motion.div layoutId="feed-tab-line"
+                  className="absolute bottom-0 left-0 right-0 h-[2px] bg-amber-500 rounded-full" />
+              )}
+            </button>
+          ))}
+        </div>
       </div>
 
+      {/* Content — pt-6 gives breathing room below the sticky header */}
       <div className="max-w-6xl mx-auto px-6 pt-6 grid lg:grid-cols-3 gap-8">
 
         {/* Feed */}

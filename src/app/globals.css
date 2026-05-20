@@ -1,5 +1,42 @@
 @import "tailwindcss";
 
+/* ── Kaiveron Premium Palette CSS Variables ── */
+:root {
+  /* Core */
+  --k-bg:           #05050f;
+  --k-surface:      #0d0d1a;
+  --k-surface-2:    #111120;
+  /* Brand */
+  --k-indigo:       #6366f1;
+  --k-indigo-dim:   rgba(99,102,241,0.12);
+  --k-indigo-border:rgba(99,102,241,0.25);
+  /* Premium gold */
+  --k-gold:         #f59e0b;
+  --k-gold-bright:  #fbbf24;
+  --k-gold-dim:     rgba(245,158,11,0.12);
+  --k-gold-border:  rgba(245,158,11,0.28);
+  --k-gold-glow:    0 0 20px rgba(245,158,11,0.18);
+  /* Text */
+  --k-text:         rgba(255,255,255,0.85);
+  --k-text-muted:   rgba(255,255,255,0.40);
+  --k-text-subtle:  rgba(255,255,255,0.20);
+  /* Borders */
+  --k-border:       rgba(255,255,255,0.07);
+  --k-border-hover: rgba(255,255,255,0.15);
+}
+
+/* Gold shimmer utility */
+.k-gold-shimmer {
+  background: linear-gradient(90deg, transparent, rgba(245,158,11,0.4), transparent);
+}
+
+/* Premium card glass */
+.k-card {
+  background: var(--k-surface);
+  border: 1px solid var(--k-border);
+  backdrop-filter: blur(20px);
+}
+
 /* ── Hero Section CSS (from Hero Section.html) ── */
 .hero-bg {
   background:

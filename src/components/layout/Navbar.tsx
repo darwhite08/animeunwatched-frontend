@@ -6,12 +6,14 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Search, Sparkles, Menu, X, Bookmark, ChevronDown,
-  TrendingUp, Calendar, Star, Bot, BookOpen,
-  Users, Vote, LayoutList, Trophy, Flame, Newspaper,
-  MonitorPlay, BarChart2, BookMarked, MessageSquare,
-  Tag, Building2, Layers,
+  Search, Menu, X, Bookmark, ChevronDown,
+  TrendingUp, MessageSquare,
 } from "lucide-react";
+import {
+  List, Robot, CalendarDots, Star, Tag, Buildings, SquaresFour,
+  Lightning, Newspaper, UsersThree, BookOpenText, ChartBar, Trophy,
+  MonitorPlay, Sparkle, ArrowRight, House,
+} from "@phosphor-icons/react";
 import { useWatchlist } from "@/stores/watchlist.store";
 import { useAuthStore } from "@/stores/auth.store";
 import { disconnectSocket } from "@/lib/socket";
@@ -22,25 +24,24 @@ import ProfileMenu from "./ProfileMenu";
 /* ── Dropdown link data ─────────────────────────────────────── */
 
 const ANIME_LINKS = [
-  { name: "Browse All",       href: "/bestanimelist",    icon: LayoutList,  desc: "All 30,000+ anime" },
-  { name: "AI Discover",      href: "/ai-discover",      icon: Bot,         desc: "Neural recommendations" },
-  { name: "Seasonal",         href: "/seasonal",         icon: Calendar,    desc: "Any year & season" },
-  { name: "Top Rated",        href: "/rankings",         icon: Star,        desc: "Community ranked" },
-  { name: "Genres",           href: "/genres",           icon: Tag,         desc: "Browse by genre" },
-  { name: "Studios",          href: "/studios",          icon: Building2,   desc: "Browse by studio" },
-  { name: "Recommendations",  href: "/recommendations",  icon: Sparkles,    desc: "Picks for you" },
-  { name: "Collections",      href: "/collections",      icon: Layers,      desc: "Curated lists" },
+  { name: "Browse All",       href: "/bestanimelist",    icon: List,         desc: "All 30,000+ anime" },
+  { name: "AI Discover",      href: "/ai-discover",      icon: Robot,        desc: "Neural recommendations" },
+  { name: "Seasonal",         href: "/seasonal",         icon: CalendarDots, desc: "Any year & season" },
+  { name: "Top Rated",        href: "/rankings",         icon: Star,         desc: "Community ranked" },
+  { name: "Genres",           href: "/genres",           icon: Tag,          desc: "Browse by genre" },
+  { name: "Studios",          href: "/studios",          icon: Buildings,    desc: "Browse by studio" },
+  { name: "Recommendations",  href: "/recommendations",  icon: Sparkle,      desc: "Picks for you" },
+  { name: "Collections",      href: "/collections",      icon: SquaresFour,  desc: "Curated lists" },
 ];
 
 const COMMUNITY_LINKS = [
-  { name: "Feed",        href: "/community",   icon: Newspaper,  desc: "Latest posts" },
-  { name: "Clubs",       href: "/clubs",       icon: Users,      desc: "Join a community" },
-  { name: "Blog",        href: "/blog",        icon: BookOpen,   desc: "Long-form articles" },
-  { name: "Polls",       href: "/poll",        icon: Vote,       desc: "Vote & debate" },
-  { name: "Leaderboard", href: "/leaderboard", icon: Trophy,     desc: "Top users" },
+  { name: "Feed",        href: "/community",   icon: Newspaper,    desc: "Latest posts" },
+  { name: "Clubs",       href: "/clubs",       icon: UsersThree,   desc: "Join a community" },
+  { name: "Blog",        href: "/blog",        icon: BookOpenText, desc: "Long-form articles" },
+  { name: "Polls",       href: "/poll",        icon: ChartBar,     desc: "Vote & debate" },
+  { name: "Leaderboard", href: "/leaderboard", icon: Trophy,       desc: "Top users" },
 ];
 
-// MY LIST dropdown only shows dashboard-level personal actions
 const MY_LINKS = [
   { name: "Dashboard", href: "/dashboard", icon: MonitorPlay, desc: "Your personal hub" },
 ];
@@ -95,12 +96,12 @@ function NavDropdown({ items, onClose }: { items: DropItem[]; onClose: () => voi
                 <div
                   className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0 transition-all duration-200 group-hover:scale-110"
                   style={{
-                    background: "linear-gradient(135deg, rgba(245,158,11,0.15) 0%, rgba(251,191,36,0.08) 100%)",
-                    border: "1px solid rgba(245,158,11,0.25)",
-                    boxShadow: "0 2px 8px rgba(245,158,11,0.1), inset 0 1px 0 rgba(245,158,11,0.2)",
+                    background: "linear-gradient(135deg, rgba(245,158,11,0.18) 0%, rgba(251,191,36,0.10) 100%)",
+                    border: "1px solid rgba(245,158,11,0.3)",
+                    boxShadow: "0 2px 10px rgba(245,158,11,0.15), inset 0 1px 0 rgba(255,255,255,0.08)",
                   }}
                 >
-                  <Icon size={14} className="text-amber-400 group-hover:text-amber-300 transition-colors" />
+                  <Icon size={16} weight="duotone" className="text-amber-400 group-hover:text-amber-300 transition-colors" />
                 </div>
 
                 <div className="min-w-0 flex-1">
@@ -412,7 +413,7 @@ function MobileSection({ title, links, onClose }: { title: string; links: DropIt
                 border: "1px solid rgba(245,158,11,0.2)",
               }}
             >
-              <Icon size={13} className="text-amber-400/80 group-hover:text-amber-300 transition-colors" />
+              <Icon size={14} weight="duotone" className="text-amber-400/80 group-hover:text-amber-300 transition-colors" />
             </div>
             <div>
               <p className="text-[11px] font-black uppercase tracking-wider leading-none">{l.name}</p>

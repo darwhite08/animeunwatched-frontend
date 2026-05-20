@@ -1,7 +1,8 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { Star, Play, Plus, Check } from "lucide-react"
+import { Plus, Check } from "lucide-react"
+import { Star, Play } from "@phosphor-icons/react"
 import Image from "next/image"
 import type { Anime } from "@/lib/data/anime"
 import { useWatchlist } from "@/stores/watchlist.store"
@@ -31,86 +32,110 @@ export default function AnimeCard({ anime, index, onClick }: AnimeCardProps) {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ delay: Math.min(index * 0.04, 0.5) }}
+      transition={{ delay: Math.min(index * 0.035, 0.4), ease: [0.22, 1, 0.36, 1] }}
       onClick={() => onClick(anime)}
       className="group relative aspect-[2/3] w-full cursor-pointer"
     >
-      <div className="absolute -inset-1 bg-gradient-to-b from-indigo-500/20 to-purple-500/20 rounded-[2rem] blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+      {/* Premium glow on hover — gold tint */}
+      <div className="absolute -inset-[3px] rounded-[2rem] opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+        style={{ background: "linear-gradient(135deg, rgba(245,158,11,0.25), rgba(99,102,241,0.20))", filter: "blur(12px)" }}
+      />
 
-      <div className="relative h-full w-full bg-[#0a0a0a] rounded-[1.8rem] overflow-hidden border border-white/5 hover:border-white/15 transition-colors duration-500">
+      <div className="relative h-full w-full bg-[#0a0a12] rounded-[1.7rem] overflow-hidden border border-white/[0.07] group-hover:border-amber-500/25 transition-colors duration-500"
+        style={{ boxShadow: "0 4px 24px rgba(0,0,0,0.4)" }}
+      >
+        {/* Poster image */}
         {anime.image ? (
           <Image
             src={anime.image}
             alt={anime.title}
             fill
-            className="object-cover transition-all duration-700 scale-105 group-hover:scale-110 brightness-[0.7] group-hover:brightness-50"
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 20vw"
-            priority={index < 5}
+            className="object-cover transition-all duration-700 scale-[1.04] group-hover:scale-110 brightness-[0.75] group-hover:brightness-[0.45]"
+            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 18vw"
+            priority={index < 6}
             onError={(e) => { (e.target as HTMLImageElement).style.display = "none" }}
           />
         ) : (
-          <div className="absolute inset-0 bg-gradient-to-br from-indigo-900/40 to-purple-900/20 flex items-center justify-center">
-            <span className="text-3xl font-black text-white/10">{anime.title[0]}</span>
+          <div className="absolute inset-0 bg-gradient-to-br from-indigo-900/50 to-violet-900/30 flex items-center justify-center">
+            <span className="text-4xl font-black text-white/10 uppercase">{anime.title[0]}</span>
           </div>
         )}
 
-        {/* Rank badge */}
-        <div className="absolute top-4 left-4">
-          <div className="px-2 py-1 bg-black/60 backdrop-blur-md border border-white/10 rounded-lg text-[9px] font-black text-indigo-400 uppercase italic">
-            #{anime.rank}
+        {/* Score badge — gold */}
+        {anime.rating > 0 && (
+          <div className="absolute top-3 left-3">
+            <div className="flex items-center gap-1 px-2 py-1 rounded-lg backdrop-blur-md"
+              style={{
+                background: "linear-gradient(135deg, rgba(245,158,11,0.3), rgba(245,158,11,0.15))",
+                border: "1px solid rgba(245,158,11,0.4)",
+                boxShadow: "0 2px 8px rgba(245,158,11,0.15)",
+              }}
+            >
+              <Star size={9} weight="fill" className="text-amber-400" />
+              <span className="text-[9px] font-black text-amber-300">{anime.rating.toFixed(1)}</span>
+            </div>
           </div>
-        </div>
+        )}
 
-        {/* Watchlist toggle */}
+        {/* Watchlist button */}
         <button
           onClick={handleToggleList}
-          className={`absolute top-4 right-4 h-8 w-8 flex items-center justify-center rounded-full transition-all duration-300 ${
+          className={`absolute top-3 right-3 h-7 w-7 flex items-center justify-center rounded-full transition-all duration-300 shadow-lg ${
             inList
-              ? "bg-emerald-500 opacity-100 translate-x-0"
-              : "bg-indigo-600 opacity-0 translate-x-4 group-hover:opacity-100 group-hover:translate-x-0"
+              ? "bg-emerald-500 opacity-100 scale-100"
+              : "bg-indigo-600/90 opacity-0 scale-75 group-hover:opacity-100 group-hover:scale-100"
           }`}
         >
-          {inList ? <Check size={14} className="text-white" /> : <Plus size={16} className="text-white" />}
+          {inList ? <Check size={12} className="text-white" /> : <Plus size={13} className="text-white" />}
         </button>
 
-        {/* Status badge */}
+        {/* Live badge */}
         {anime.status === "airing" && (
-          <div className="absolute top-4 left-1/2 -translate-x-1/2">
-            <span className="flex items-center gap-1 px-2 py-0.5 bg-emerald-500/20 border border-emerald-500/30 rounded-full text-[8px] font-black text-emerald-400 uppercase tracking-wider">
-              <span className="w-1 h-1 rounded-full bg-emerald-400 animate-pulse" />
+          <div className="absolute top-3 left-1/2 -translate-x-1/2">
+            <span className="flex items-center gap-1 px-2 py-0.5 bg-emerald-500/20 border border-emerald-500/30 rounded-full text-[7px] font-black text-emerald-400 uppercase tracking-wider backdrop-blur-sm">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
               Live
             </span>
           </div>
         )}
 
-        {/* Bottom metadata */}
-        <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black via-black/80 to-transparent p-5 translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
-          <div className="flex items-center gap-2 mb-1.5">
-            <Star size={11} fill="#6366f1" className="text-indigo-500" />
-            <span className="text-xs font-black text-white">{anime.rating.toFixed(1)}</span>
-            <div className="h-1 w-1 rounded-full bg-white/20" />
-            <span className="text-[9px] font-bold text-white/40 uppercase tracking-tighter">{anime.year}</span>
-            <div className="h-1 w-1 rounded-full bg-white/20" />
-            <span className="text-[9px] font-bold text-white/40 uppercase">{anime.type}</span>
+        {/* Bottom info panel — slides up on hover */}
+        <div className="absolute inset-x-0 bottom-0 p-4 translate-y-1 group-hover:translate-y-0 transition-transform duration-400"
+          style={{ background: "linear-gradient(to top, rgba(0,0,0,0.96) 0%, rgba(0,0,0,0.85) 60%, transparent 100%)" }}
+        >
+          {/* Year + type meta */}
+          <div className="flex items-center gap-1.5 mb-1.5 opacity-60 group-hover:opacity-80 transition-opacity">
+            <span className="text-[8px] font-black text-white/50 uppercase tracking-widest">{anime.year}</span>
+            <span className="w-0.5 h-0.5 rounded-full bg-white/25" />
+            <span className="text-[8px] font-black text-white/50 uppercase tracking-widest">{anime.type}</span>
           </div>
 
-          <h3 className="text-sm font-black text-white uppercase italic tracking-tighter leading-tight mb-3 line-clamp-2">
+          <h3 className="text-[11px] font-black text-white uppercase italic tracking-tight leading-tight mb-2.5 line-clamp-2">
             {anime.title}
           </h3>
 
-          <div className="flex flex-wrap gap-1 mb-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          {/* Genre tags — appear on hover */}
+          <div className="flex flex-wrap gap-1 mb-2.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-75">
             {anime.genres.slice(0, 2).map(g => (
-              <span key={g} className="text-[8px] font-black uppercase tracking-wider px-2 py-0.5 bg-white/10 rounded-full text-white/60">
+              <span key={g} className="text-[7px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded-md"
+                style={{ background: "rgba(245,158,11,0.1)", border: "1px solid rgba(245,158,11,0.15)", color: "rgba(245,158,11,0.7)" }}>
                 {g}
               </span>
             ))}
           </div>
 
-          <button className="w-full py-2.5 bg-white text-black rounded-xl text-[9px] font-black uppercase tracking-[0.2em] flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity delay-75 hover:bg-indigo-400 hover:text-white">
-            <Play size={11} fill="currentColor" /> View Details
+          {/* CTA button — premium gold */}
+          <button className="w-full py-2 rounded-xl text-[8px] font-black uppercase tracking-[0.2em] flex items-center justify-center gap-1.5 opacity-0 group-hover:opacity-100 transition-all duration-300 delay-100"
+            style={{
+              background: "linear-gradient(135deg, rgba(245,158,11,0.9), rgba(251,191,36,0.8))",
+              color: "#000",
+              boxShadow: "0 4px 16px rgba(245,158,11,0.3)",
+            }}
+          >
+            <Play size={10} weight="fill" /> View Details
           </button>
         </div>
       </div>

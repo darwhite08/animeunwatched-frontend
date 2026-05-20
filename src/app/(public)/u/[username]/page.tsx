@@ -351,7 +351,7 @@ export default function UserProfilePage({
       <section className="relative overflow-hidden">
         {/* Mesh gradient background */}
         <div className="absolute inset-0 z-0">
-          <div className="absolute top-[-20%] right-[-10%] w-[55%] h-[120%] bg-indigo-700/20 blur-[140px] rounded-full animate-pulse" />
+          <div className="absolute top-[-20%] right-[-10%] w-[55%] h-[120%] bg-amber-700/20 blur-[140px] rounded-full animate-pulse" />
           <div className="absolute top-[10%] left-[-15%] w-[45%] h-[90%] bg-violet-900/15 blur-[120px] rounded-full" />
           <div className="absolute bottom-[-10%] right-[20%] w-[30%] h-[60%] bg-blue-800/10 blur-[100px] rounded-full animate-pulse [animation-delay:1.5s]" />
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#020202]/40 to-[#020202]" />

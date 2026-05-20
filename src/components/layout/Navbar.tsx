@@ -389,7 +389,7 @@ export default function Navbar() {
                 ) : (
                   <>
                     <Link href="/dashboard" onClick={() => setMobileMenuOpen(false)} className="flex items-center px-3 py-3 rounded-xl text-xs font-bold text-white/50 hover:text-white hover:bg-white/5 transition-all">Dashboard</Link>
-                    <Link href="/settings"  onClick={() => setMobileMenuOpen(false)} className="flex items-center px-3 py-3 rounded-xl text-xs font-bold text-white/50 hover:text-white hover:bg-white/5 transition-all">Settings</Link>
+                    <Link href="/me/settings/account"  onClick={() => setMobileMenuOpen(false)} className="flex items-center px-3 py-3 rounded-xl text-xs font-bold text-white/50 hover:text-white hover:bg-white/5 transition-all">Settings</Link>
                   </>
                 )}
               </div>

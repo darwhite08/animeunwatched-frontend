@@ -32,7 +32,7 @@ const NAV = [
       { name: "Profile",       href: "/profile",       icon: User      },
       { name: "Following",     href: "/following",     icon: Users     },
       { name: "Notifications", href: "/notifications", icon: Bell, badge: true },
-      { name: "Settings",      href: "/settings/account", icon: Settings  },
+      { name: "Settings",      href: "/me/settings/account", icon: Settings  },
     ],
   },
 ]

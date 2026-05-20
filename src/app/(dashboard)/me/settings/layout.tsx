@@ -8,16 +8,16 @@ import {
 import { motion } from "framer-motion"
 
 const NAV = [
-  { href: "/me/settings/account",       icon: User,     label: "Account"       },
-  { href: "/me/settings/notifications",  icon: Bell,     label: "Notifications" },
-  { href: "/me/settings/appearance",     icon: Palette,  label: "Appearance"    },
-  { href: "/me/settings/privacy",        icon: Shield,   label: "Privacy"       },
-  { href: "/me/settings/security",       icon: Lock,     label: "Security"      },
-  { href: "/me/settings/billing",        icon: CreditCard, label: "Billing"     },
-  { href: "/me/settings/connected",      icon: Link2,    label: "Connected"     },
+  { href: "/me/settings/account",       icon: User,       label: "Account"       },
+  { href: "/me/settings/notifications", icon: Bell,       label: "Notifications" },
+  { href: "/me/settings/appearance",    icon: Palette,    label: "Appearance"    },
+  { href: "/me/settings/privacy",       icon: Shield,     label: "Privacy"       },
+  { href: "/me/settings/security",      icon: Lock,       label: "Security"      },
+  { href: "/me/settings/billing",       icon: CreditCard, label: "Billing"       },
+  { href: "/me/settings/connected",     icon: Link2,      label: "Connected"     },
 ]
 
-export default function SettingsLayout({ children }: { children: React.ReactNode }) {
+export default function MeSettingsLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
 
   return (
@@ -28,7 +28,7 @@ export default function SettingsLayout({ children }: { children: React.ReactNode
           <Settings size={14} className="text-amber-400" />
           <p className="text-[9px] font-mono font-black uppercase tracking-[0.4em]"
             style={{ color: "rgba(245,158,11,0.6)" }}>
-            System Configuration
+            me / settings
           </p>
         </div>
         <h1 className="text-4xl font-black tracking-tighter text-white uppercase italic">
@@ -51,7 +51,7 @@ export default function SettingsLayout({ children }: { children: React.ReactNode
                 }`}
               >
                 {active && (
-                  <motion.div layoutId="settings-pill"
+                  <motion.div layoutId="me-settings-pill"
                     className="absolute inset-0 rounded-xl"
                     style={{
                       background: "linear-gradient(135deg, rgba(245,158,11,0.1), rgba(245,158,11,0.05))",
@@ -61,7 +61,7 @@ export default function SettingsLayout({ children }: { children: React.ReactNode
                   />
                 )}
                 <item.icon size={15}
-                  className={`relative z-10 transition-colors ${active ? "text-amber-400" : "group-hover:text-amber-400/70"}`}
+                  className={`relative z-10 transition-colors ${active ? "text-amber-400" : ""}`}
                 />
                 <span className="relative z-10">{item.label}</span>
               </Link>

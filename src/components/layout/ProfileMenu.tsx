@@ -16,7 +16,7 @@ const LINKS = [
   { href: "/profile",              icon: User,           label: "Profile"    },
   { href: "/watchlist",            icon: BookmarkSimple, label: "Watchlist"  },
   { href: "/creators/create/blog", icon: PenNib,         label: "Write Blog" },
-  { href: "/settings",             icon: Gear,           label: "Settings"   },
+  { href: "/me/settings/account",   icon: Gear,           label: "Settings"   },
 ]
 
 export default function ProfileMenu({ user, isOpen, onClose, onLogout }: ProfileMenuProps) {

@@ -1,8 +1,10 @@
 "use client"
+
 import { useEffect } from "react"
 import { useRouter } from "next/navigation"
-export default function Redirect() {
+
+export default function MeSettingsRedirect() {
   const router = useRouter()
-  useEffect(() => { router.replace("/me/settings/appearance") }, [router])
+  useEffect(() => { router.replace("/me/settings/account") }, [router])
   return null
 }

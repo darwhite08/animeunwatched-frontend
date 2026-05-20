@@ -8,7 +8,7 @@ export const RoutineCard = () => {
   return (
     <div className="p-8 rounded-[2.5rem] border border-white/5 bg-[#0a0a0a] shadow-2xl space-y-6 group">
       <div className="flex items-center gap-3">
-        <div className="p-2 rounded-xl bg-indigo-500/10 text-amber-400">
+        <div className="p-2 rounded-xl bg-amber-500/10 text-amber-400">
           <Clock size={18} />
         </div>
         <h4 className="text-sm font-black uppercase tracking-widest text-white/70">Peak Activity</h4>
@@ -22,7 +22,7 @@ export const RoutineCard = () => {
             animate={{ height: `${height}%` }}
             transition={{ delay: i * 0.05, duration: 1, ease: "circOut" }}
             className={`flex-1 rounded-t-sm transition-colors duration-500
-              ${height > 70 ? "bg-indigo-500" : "bg-white/10 group-hover:bg-white/20"}
+              ${height > 70 ? "bg-amber-500" : "bg-white/10 group-hover:bg-white/20"}
             `}
           />
         ))}

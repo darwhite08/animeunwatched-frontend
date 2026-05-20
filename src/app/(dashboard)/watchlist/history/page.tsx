@@ -80,8 +80,8 @@ function buildCalendarMap(): Map<number, number> {
 function calColor(count: number): string {
   if (count === 0) return "bg-white/5 border-white/5"
   if (count === 1) return "bg-indigo-900/70 border-indigo-700/30"
-  if (count === 2) return "bg-indigo-700/80 border-indigo-500/30"
-  return "bg-indigo-500 border-indigo-400/50"
+  if (count === 2) return "bg-indigo-700/80 border-amber-500/30"
+  return "bg-amber-500 border-indigo-400/50"
 }
 
 function CalendarGrid() {
@@ -100,8 +100,8 @@ function CalendarGrid() {
         <div className="flex items-center gap-1.5 text-[9px] text-white/20 font-bold">
           <span className="w-3 h-3 rounded-sm bg-white/5 border border-white/5 inline-block" /> 0
           <span className="w-3 h-3 rounded-sm bg-indigo-900/70 border-indigo-700/30 inline-block ml-2" /> 1
-          <span className="w-3 h-3 rounded-sm bg-indigo-700/80 border-indigo-500/30 inline-block ml-2" /> 2
-          <span className="w-3 h-3 rounded-sm bg-indigo-500 border-indigo-400/50 inline-block ml-2" /> 3+
+          <span className="w-3 h-3 rounded-sm bg-indigo-700/80 border-amber-500/30 inline-block ml-2" /> 2
+          <span className="w-3 h-3 rounded-sm bg-amber-500 border-indigo-400/50 inline-block ml-2" /> 3+
         </div>
       </div>
       <div className="grid grid-cols-[repeat(30,1fr)] gap-1">

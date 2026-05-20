@@ -36,9 +36,9 @@ export default function BillingPage() {
       </div>
 
       {/* Pro upgrade */}
-      <div className="p-7 rounded-[2rem] bg-gradient-to-br from-indigo-600/20 to-violet-600/10 border border-indigo-500/30 space-y-6">
+      <div className="p-7 rounded-[2rem] bg-gradient-to-br from-indigo-600/20 to-violet-600/10 border border-amber-500/30 space-y-6">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-indigo-600/30 border border-indigo-500/30 flex items-center justify-center">
+          <div className="w-10 h-10 rounded-xl bg-amber-600/30 border border-amber-500/30 flex items-center justify-center">
             <Crown size={18} className="text-amber-400" />
           </div>
           <div>

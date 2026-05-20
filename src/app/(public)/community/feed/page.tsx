@@ -88,7 +88,7 @@ function PostCard({
       {post.anime && (
         <Link
           href="/bestanimelist"
-          className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-indigo-500/8 border border-indigo-500/15 text-[10px] font-bold text-amber-400 hover:bg-indigo-500/15 transition-colors"
+          className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-amber-500/8 border border-amber-500/15 text-[10px] font-bold text-amber-400 hover:bg-amber-500/15 transition-colors"
         >
           <Star size={9} /> {post.anime}
         </Link>
@@ -211,7 +211,7 @@ export default function PublicFeedPage() {
               className="relative flex items-center gap-1.5 px-5 py-3 text-[11px] font-black uppercase tracking-widest text-white/15 hover:text-white/30 transition-colors"
             >
               Following
-              <span className="ml-1 px-1.5 py-0.5 rounded-full bg-indigo-500/15 text-amber-400 text-[8px] font-black uppercase tracking-wider">
+              <span className="ml-1 px-1.5 py-0.5 rounded-full bg-amber-500/15 text-amber-400 text-[8px] font-black uppercase tracking-wider">
                 Login
               </span>
             </Link>
@@ -226,7 +226,7 @@ export default function PublicFeedPage() {
           <motion.div
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
-            className="flex items-center gap-4 px-5 py-4 rounded-2xl bg-indigo-600/10 border border-indigo-500/20"
+            className="flex items-center gap-4 px-5 py-4 rounded-2xl bg-amber-600/10 border border-amber-500/20"
           >
             <div className="flex-1 min-w-0">
               <p className="text-sm font-black text-white/80">
@@ -301,7 +301,7 @@ export default function PublicFeedPage() {
           {/* Sign-up CTA */}
           <Link
             href="/register"
-            className="flex flex-col gap-3 p-5 rounded-2xl bg-gradient-to-br from-indigo-600/15 to-violet-600/10 border border-indigo-500/20 hover:from-indigo-600/20 transition-all"
+            className="flex flex-col gap-3 p-5 rounded-2xl bg-gradient-to-br from-indigo-600/15 to-violet-600/10 border border-amber-500/20 hover:from-indigo-600/20 transition-all"
           >
             <p className="text-sm font-black text-white">
               Join Kaiveron<span className="text-amber-400">.</span>

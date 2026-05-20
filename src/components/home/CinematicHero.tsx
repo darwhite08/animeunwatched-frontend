@@ -282,7 +282,7 @@ export default function CinematicHero() {
                   <motion.div
                     animate={{ y: [0, -5, 0] }}
                     transition={{ duration: 5.6, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
-                    className="w-[136px] p-3 rounded-xl border border-indigo-500/[0.14] bg-indigo-500/[0.06]"
+                    className="w-[136px] p-3 rounded-xl border border-amber-500/[0.14] bg-amber-500/[0.06]"
                     style={{ backdropFilter: "blur(12px)" }}
                   >
                     <div className="flex items-center gap-1.5 mb-1.5">

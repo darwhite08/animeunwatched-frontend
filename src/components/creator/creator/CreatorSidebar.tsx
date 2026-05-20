@@ -123,7 +123,7 @@ export default function CreatorSidebar() {
             onClick={() => router.push("/creator")}
             className={`px-3 py-2 rounded-lg text-sm cursor-pointer
     ${!folderFromUrl
-                ? "bg-indigo-600/20 text-white"
+                ? "bg-amber-600/20 text-white"
                 : "text-white/60 hover:bg-white/5"
               }`}
           >
@@ -259,7 +259,7 @@ function NavItem({
       href={href}
       className={`flex items-center gap-3 px-4 py-3 rounded-xl transition
         ${active
-          ? "bg-indigo-600/20 border border-indigo-500/40 text-white"
+          ? "bg-amber-600/20 border border-amber-500/40 text-white"
           : "text-white/60 hover:bg-white/5 hover:text-white"
         }`}
     >
@@ -314,7 +314,7 @@ function FolderSection({
               key={folder.id}
               className={`flex items-center justify-between px-3 py-2 rounded-lg text-sm group cursor-pointer
                 ${activeFolder === folder.id
-                  ? "bg-indigo-600/20 text-white"
+                  ? "bg-amber-600/20 text-white"
                   : "text-white/60 hover:bg-white/5"
                 }`}
             onClick={() =>

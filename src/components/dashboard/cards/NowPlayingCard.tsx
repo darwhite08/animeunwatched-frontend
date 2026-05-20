@@ -26,7 +26,7 @@ export default function NowPlayingCard() {
   if (isLoading || !NOW) {
     return (
       <div className="relative rounded-[2.5rem] overflow-hidden border border-white/5 bg-[#0a0a0a] h-48 flex items-center justify-center">
-        <div className="w-8 h-8 rounded-full border-2 border-indigo-500/30 border-t-indigo-500 animate-spin" />
+        <div className="w-8 h-8 rounded-full border-2 border-amber-500/30 border-t-indigo-500 animate-spin" />
       </div>
     )
   }

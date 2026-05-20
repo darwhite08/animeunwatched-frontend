@@ -70,11 +70,11 @@ export default function WrappedPage() {
         className="absolute inset-0 pointer-events-none"
       >
         <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] blur-[160px] rounded-full ${
-          slide === 0 ? "bg-indigo-600/15" :
+          slide === 0 ? "bg-amber-600/15" :
           slide === 1 ? "bg-violet-600/15" :
           slide === 2 ? "bg-amber-600/10"  :
           slide === 3 ? "bg-emerald-600/10" :
-                        "bg-indigo-600/20"
+                        "bg-amber-600/20"
         }`} />
       </motion.div>
 
@@ -84,7 +84,7 @@ export default function WrappedPage() {
           <button
             key={i}
             onClick={() => setSlide(i)}
-            className={`h-1.5 rounded-full transition-all ${i === slide ? "w-8 bg-indigo-500" : "w-1.5 bg-white/20"}`}
+            className={`h-1.5 rounded-full transition-all ${i === slide ? "w-8 bg-amber-500" : "w-1.5 bg-white/20"}`}
           />
         ))}
       </div>

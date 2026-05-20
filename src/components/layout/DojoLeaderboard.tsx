@@ -23,7 +23,7 @@ const PANTHEON_DATA = [
     level: 88,
     xp: "840K",
     accent: "from-indigo-400 to-purple-600",
-    border: "border-indigo-500/30",
+    border: "border-amber-500/30",
     glow: "shadow-[0_0_30px_-5px_rgba(99,102,241,0.2)]",
     Icon: Swords,
   },
@@ -65,7 +65,7 @@ export default function DojoLeaderboard() {
           <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-white/[0.02] border border-white/[0.05] backdrop-blur-md">
             <span className="relative flex h-2.5 w-2.5">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-indigo-500"></span>
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-500"></span>
             </span>
             <span className="text-amber-300 text-[10px] font-black uppercase tracking-[0.3em]">
               Global Server Rankings • Live

@@ -319,7 +319,7 @@ export default function UserProfilePage({
       value: user.stats.archived.toLocaleString(),
       icon: Bookmark,
       color: "text-amber-400",
-      glow: "group-hover:bg-indigo-500/10",
+      glow: "group-hover:bg-amber-500/10",
     },
     {
       label: "Day Streak",
@@ -375,7 +375,7 @@ export default function UserProfilePage({
                 </div>
               </div>
               {/* Level pip */}
-              <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-black border border-indigo-500/40 text-[9px] font-black text-amber-400 uppercase tracking-widest whitespace-nowrap">
+              <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-black border border-amber-500/40 text-[9px] font-black text-amber-400 uppercase tracking-widest whitespace-nowrap">
                 Lvl {user.level}
               </div>
             </motion.div>
@@ -389,7 +389,7 @@ export default function UserProfilePage({
                 className="space-y-2"
               >
                 {/* Grade badge */}
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gradient-to-r from-indigo-500/20 to-violet-500/20 border border-indigo-500/30 text-[9px] font-black uppercase tracking-[0.2em] text-amber-300">
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gradient-to-r from-indigo-500/20 to-violet-500/20 border border-amber-500/30 text-[9px] font-black uppercase tracking-[0.2em] text-amber-300">
                   <Award size={10} />
                   {user.grade}
                 </div>
@@ -509,7 +509,7 @@ export default function UserProfilePage({
                 transition={{ delay: i * 0.07 }}
               >
                 <Link href={`/anime/${anime.id}`} className="group block">
-                  <div className="relative aspect-[3/4] rounded-xl overflow-hidden border border-white/8 group-hover:border-indigo-500/30 transition-all">
+                  <div className="relative aspect-[3/4] rounded-xl overflow-hidden border border-white/8 group-hover:border-amber-500/30 transition-all">
                     <Image
                       src={anime.image}
                       alt={anime.title}
@@ -531,7 +531,7 @@ export default function UserProfilePage({
 
           <Link
             href={`/u/${user.username}/list`}
-            className="flex items-center justify-between p-4 rounded-xl bg-white/[0.02] border border-white/8 hover:border-indigo-500/20 hover:bg-white/[0.04] transition-all group"
+            className="flex items-center justify-between p-4 rounded-xl bg-white/[0.02] border border-white/8 hover:border-amber-500/20 hover:bg-white/[0.04] transition-all group"
           >
             <div className="flex items-center gap-3">
               <BookOpen size={15} className="text-amber-400" />
@@ -575,7 +575,7 @@ export default function UserProfilePage({
                   transition={{ delay: i * 0.08 }}
                   className="relative pl-20 group"
                 >
-                  <div className="absolute left-0 top-1/2 -translate-y-1/2 w-16 h-16 rounded-2xl bg-zinc-900 border border-white/5 flex items-center justify-center z-10 group-hover:border-indigo-500/40 transition-all shadow-lg">
+                  <div className="absolute left-0 top-1/2 -translate-y-1/2 w-16 h-16 rounded-2xl bg-zinc-900 border border-white/5 flex items-center justify-center z-10 group-hover:border-amber-500/40 transition-all shadow-lg">
                     <evt.icon size={20} className="text-amber-400" />
                   </div>
                   <div className="p-5 rounded-[1.5rem] bg-white/[0.02] border border-white/5 group-hover:bg-white/[0.04] transition-all flex justify-between items-center">
@@ -613,7 +613,7 @@ export default function UserProfilePage({
                     {post.anime && (
                       <Link
                         href="/bestanimelist"
-                        className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-indigo-500/8 border border-indigo-500/15 text-[10px] font-bold text-amber-400 hover:bg-indigo-500/15 transition-colors"
+                        className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-amber-500/8 border border-amber-500/15 text-[10px] font-bold text-amber-400 hover:bg-amber-500/15 transition-colors"
                       >
                         <Star size={9} /> {post.anime}
                       </Link>
@@ -701,7 +701,7 @@ export default function UserProfilePage({
                   transition={{ delay: i * 0.07 }}
                 >
                   <Link href={`/anime/${anime.id}`} className="group block">
-                    <div className="relative aspect-[3/4] rounded-2xl overflow-hidden border border-white/8 group-hover:border-indigo-500/30 transition-all">
+                    <div className="relative aspect-[3/4] rounded-2xl overflow-hidden border border-white/8 group-hover:border-amber-500/30 transition-all">
                       <Image
                         src={anime.image}
                         alt={anime.title}
@@ -728,7 +728,7 @@ export default function UserProfilePage({
             {/* Reading list CTA */}
             <Link
               href="/bestanimelist"
-              className="flex items-center justify-between p-5 rounded-2xl bg-white/[0.02] border border-white/8 hover:border-indigo-500/20 hover:bg-white/[0.04] transition-all group"
+              className="flex items-center justify-between p-5 rounded-2xl bg-white/[0.02] border border-white/8 hover:border-amber-500/20 hover:bg-white/[0.04] transition-all group"
             >
               <div className="flex items-center gap-3">
                 <BookOpen size={18} className="text-amber-400" />

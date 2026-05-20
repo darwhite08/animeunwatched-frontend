@@ -36,7 +36,7 @@ export default function StudioPage({ params }: { params: Promise<{ name: string 
         </Link>
 
         <div className="flex items-center gap-4 mb-4">
-          <div className="w-14 h-14 rounded-2xl bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center">
+          <div className="w-14 h-14 rounded-2xl bg-amber-600/20 border border-amber-500/30 flex items-center justify-center">
             <Building2 size={24} className="text-amber-400" />
           </div>
           <div>
@@ -55,7 +55,7 @@ export default function StudioPage({ params }: { params: Promise<{ name: string 
             {anime[0] && (
               <motion.div initial={{ opacity:0,y:16 }} animate={{ opacity:1,y:0 }}
                 onClick={() => setSelected(anime[0])}
-                className="group p-6 rounded-2xl bg-gradient-to-br from-indigo-600/15 to-violet-600/10 border border-indigo-500/25 mb-8 cursor-pointer hover:border-indigo-500/40 transition-all"
+                className="group p-6 rounded-2xl bg-gradient-to-br from-indigo-600/15 to-violet-600/10 border border-amber-500/25 mb-8 cursor-pointer hover:border-amber-500/40 transition-all"
               >
                 <p className="text-[9px] font-black uppercase tracking-widest text-amber-400/60 mb-2">Top Rated by {studioName}</p>
                 <div className="flex items-center gap-4">

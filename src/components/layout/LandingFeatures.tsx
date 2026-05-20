@@ -12,7 +12,7 @@ const FEATURES = [
     tags: ["Predictive_Scoring", "DNA_Mapping", "Seasonal_Forecast"],
     icon: Sparkles,
     glow: "group-hover:shadow-[0_0_60px_-15px_rgba(99,102,241,0.4)]",
-    border: "group-hover:border-indigo-500/50",
+    border: "group-hover:border-amber-500/50",
     gradient: "from-indigo-500/20 via-indigo-500/5 to-transparent",
     iconColor: "text-amber-400",
     span: "md:col-span-8",

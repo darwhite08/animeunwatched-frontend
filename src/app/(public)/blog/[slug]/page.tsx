@@ -213,7 +213,7 @@ function ArticleBody({ apiContent }: { apiContent?: string }) {
         starting line of a longer, quieter journey toward understanding what those years meant.
       </p>
 
-      <blockquote className="border-l-4 border-indigo-500 pl-5 py-1 italic text-white/50 text-sm">
+      <blockquote className="border-l-4 border-amber-500 pl-5 py-1 italic text-white/50 text-sm">
         &ldquo;I didn&apos;t know much about Himmel. I want to understand, even if it takes me a
         hundred years.&rdquo; — Frieren
       </blockquote>
@@ -289,7 +289,7 @@ export default function BlogReaderPage({ params }: { params: Promise<{ slug: str
   // Show loading skeleton while blog is fetching
   if (blogLoading) return (
     <div className="min-h-screen bg-[#020202] flex items-center justify-center">
-      <div className="w-8 h-8 border-2 border-indigo-500/30 border-t-indigo-500 rounded-full animate-spin" />
+      <div className="w-8 h-8 border-2 border-amber-500/30 border-t-indigo-500 rounded-full animate-spin" />
     </div>
   )
 
@@ -448,7 +448,7 @@ export default function BlogReaderPage({ params }: { params: Promise<{ slug: str
             onClick={() => { setBookmarked(b => !b); push(bookmarked ? "Removed bookmark" : "Bookmarked!", "success") }}
             className={`ml-auto flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all border ${
               bookmarked
-                ? "bg-indigo-500/15 border-indigo-500/25 text-amber-400"
+                ? "bg-amber-500/15 border-amber-500/25 text-amber-400"
                 : "bg-white/[0.04] border-white/10 text-white/40 hover:text-amber-400"
             }`}
           >
@@ -467,7 +467,7 @@ export default function BlogReaderPage({ params }: { params: Promise<{ slug: str
               <Link
                 key={rp.slug}
                 href={`/blog/${rp.slug}`}
-                className="group block rounded-2xl overflow-hidden bg-zinc-900/60 border border-white/8 hover:border-indigo-500/30 transition-all"
+                className="group block rounded-2xl overflow-hidden bg-zinc-900/60 border border-white/8 hover:border-amber-500/30 transition-all"
               >
                 <div className={`h-28 bg-gradient-to-br ${rp.coverGradient} relative`}>
                   <div className="absolute inset-0 bg-black/30" />

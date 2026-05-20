@@ -18,12 +18,12 @@ type Event = {
 const TYPE_CONFIG: Record<EventType, { icon: typeof Activity; color: string; bg: string }> = {
   watch:  { icon: Play,          color:"text-emerald-400", bg:"bg-emerald-500/10" },
   rate:   { icon: Star,          color:"text-amber-400",   bg:"bg-amber-500/10"   },
-  add:    { icon: Bookmark,      color:"text-amber-400",  bg:"bg-indigo-500/10"  },
+  add:    { icon: Bookmark,      color:"text-amber-400",  bg:"bg-amber-500/10"  },
   review: { icon: MessageCircle, color:"text-blue-400",    bg:"bg-blue-500/10"    },
   badge:  { icon: Trophy,        color:"text-purple-400",  bg:"bg-purple-500/10"  },
   like:   { icon: Heart,         color:"text-rose-400",    bg:"bg-rose-500/10"    },
   follow: { icon: Activity,      color:"text-teal-400",    bg:"bg-teal-500/10"    },
-  post:   { icon: MessageCircle, color:"text-amber-400",  bg:"bg-indigo-500/10"  },
+  post:   { icon: MessageCircle, color:"text-amber-400",  bg:"bg-amber-500/10"  },
 }
 
 const ALL_TYPES: EventType[] = ["watch","rate","add","review","badge","like","follow","post"]

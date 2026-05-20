@@ -31,7 +31,7 @@ const ENDPOINTS: Endpoint[] = [
 
 const METHOD_STYLE: Record<HttpMethod, { bg: string; text: string; border: string }> = {
   GET:    { bg: "bg-emerald-500/10", text: "text-emerald-400", border: "border-emerald-500/20" },
-  POST:   { bg: "bg-indigo-500/10",  text: "text-amber-400",  border: "border-indigo-500/20"  },
+  POST:   { bg: "bg-amber-500/10",  text: "text-amber-400",  border: "border-amber-500/20"  },
   PATCH:  { bg: "bg-amber-500/10",   text: "text-amber-400",   border: "border-amber-500/20"   },
   DELETE: { bg: "bg-rose-500/10",    text: "text-rose-400",    border: "border-rose-500/20"    },
 }
@@ -112,7 +112,7 @@ export default function ApiDocsPage() {
       {/* ── Header ── */}
       <section className="relative overflow-hidden border-b border-white/5">
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-indigo-600/7 blur-[130px] rounded-full" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-amber-600/7 blur-[130px] rounded-full" />
         </div>
 
         <div className="relative z-10 max-w-4xl mx-auto px-6 pt-24 pb-16">
@@ -121,10 +121,10 @@ export default function ApiDocsPage() {
             animate={{ opacity: 1, y: 0 }}
             className="flex items-center gap-3 mb-6"
           >
-            <div className="p-2 rounded-xl bg-indigo-500/10 border border-indigo-500/20">
+            <div className="p-2 rounded-xl bg-amber-500/10 border border-amber-500/20">
               <Code2 size={18} className="text-amber-400" />
             </div>
-            <span className="px-3 py-1 rounded-full bg-indigo-600/15 border border-indigo-500/25 text-xs font-black font-mono text-amber-400">
+            <span className="px-3 py-1 rounded-full bg-amber-600/15 border border-amber-500/25 text-xs font-black font-mono text-amber-400">
               v1.0.0
             </span>
           </motion.div>
@@ -185,7 +185,7 @@ export default function ApiDocsPage() {
           transition={{ delay: 0.18 }}
         >
           <div className="flex items-center gap-3 mb-6">
-            <div className="p-2 rounded-xl bg-indigo-500/10 border border-indigo-500/20">
+            <div className="p-2 rounded-xl bg-amber-500/10 border border-amber-500/20">
               <BookOpen size={16} className="text-amber-400" />
             </div>
             <h2 className="text-xl font-black tracking-tighter uppercase italic text-white">
@@ -247,10 +247,10 @@ export default function ApiDocsPage() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.26 }}
-          className="rounded-2xl border border-indigo-500/20 bg-indigo-600/5 p-7 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5"
+          className="rounded-2xl border border-amber-500/20 bg-amber-600/5 p-7 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5"
         >
           <div className="flex items-center gap-4">
-            <div className="p-2.5 rounded-xl bg-indigo-500/15 border border-indigo-500/25">
+            <div className="p-2.5 rounded-xl bg-amber-500/15 border border-amber-500/25">
               <ExternalLink size={16} className="text-amber-400" />
             </div>
             <div>

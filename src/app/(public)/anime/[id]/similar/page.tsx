@@ -19,7 +19,7 @@ function mapDTO(a: AnimeDTO, i: number): Anime {
 /* ── Genre tag chip ── */
 function GenreChip({ genre }: { genre: string }) {
   return (
-    <span className="px-3 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-[10px] font-black uppercase tracking-widest text-amber-400">
+    <span className="px-3 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-[10px] font-black uppercase tracking-widest text-amber-400">
       {genre}
     </span>
   )
@@ -156,7 +156,7 @@ export default function SimilarAnimePage({
                     {common.slice(0, 2).map(g => (
                       <span
                         key={g}
-                        className="px-2 py-0.5 rounded-full bg-indigo-500/8 border border-indigo-500/15 text-[8px] font-black uppercase tracking-wider text-amber-400/70"
+                        className="px-2 py-0.5 rounded-full bg-amber-500/8 border border-amber-500/15 text-[8px] font-black uppercase tracking-wider text-amber-400/70"
                       >
                         {g}
                       </span>
@@ -171,7 +171,7 @@ export default function SimilarAnimePage({
             <p className="text-white/20 text-sm font-bold">No similar anime found with rating ≥ 7.5.</p>
             <Link
               href="/bestanimelist"
-              className="inline-flex items-center gap-2 mt-4 px-5 py-3 rounded-2xl bg-indigo-600/15 border border-indigo-500/20 text-[11px] font-black uppercase tracking-widest text-amber-400 hover:bg-indigo-600/25 transition-all"
+              className="inline-flex items-center gap-2 mt-4 px-5 py-3 rounded-2xl bg-amber-600/15 border border-amber-500/20 text-[11px] font-black uppercase tracking-widest text-amber-400 hover:bg-amber-600/25 transition-all"
             >
               Browse All Anime <ChevronRight size={12} />
             </Link>

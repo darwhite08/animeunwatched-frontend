@@ -118,7 +118,7 @@ export default function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   whileHover={{ y: -2, scale: 1.05 }}
-                  className="p-2.5 rounded-xl border border-white/8 bg-white/[0.02] text-white/35 hover:text-white hover:border-indigo-500/30 transition-all"
+                  className="p-2.5 rounded-xl border border-white/8 bg-white/[0.02] text-white/35 hover:text-white hover:border-amber-500/30 transition-all"
                   title={label}
                 >
                   <Icon size={16} />

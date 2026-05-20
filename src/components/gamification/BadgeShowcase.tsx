@@ -152,10 +152,10 @@ const RARITY_CONFIG = {
   rare: {
     label: "Rare",
     color: "text-amber-300",
-    borderEarned: "border-indigo-500/60",
+    borderEarned: "border-amber-500/60",
     borderLocked: "border-indigo-800/30",
     glow: "hover:shadow-indigo-500/20",
-    bg: "bg-indigo-500/10",
+    bg: "bg-amber-500/10",
     bar: "bg-indigo-400",
     pill: "bg-indigo-900/60 text-amber-300",
   },

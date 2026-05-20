@@ -40,7 +40,7 @@ export const ActivityCard = () => {
         : "text-amber-400"
       const statusBg = entry.status === "COMPLETED" ? "bg-amber-500/10"
         : entry.status === "WATCHING" ? "bg-emerald-500/10"
-        : "bg-indigo-500/10"
+        : "bg-amber-500/10"
       const title = entry.status === "COMPLETED" ? "Completed"
         : entry.status === "WATCHING" ? `Watching Ep. ${entry.episodesSeen}`
         : entry.status === "PLAN_TO_WATCH" ? "Added to List"
@@ -60,7 +60,7 @@ export const ActivityCard = () => {
 
   return (
     <div className="p-8 rounded-[2.5rem] border border-white/5 bg-[#0a0a0a] flex flex-col gap-6 relative overflow-hidden group">
-      <div className="absolute -right-8 -bottom-8 w-32 h-32 bg-indigo-500/5 blur-[40px] rounded-full pointer-events-none group-hover:bg-indigo-500/10 transition-colors duration-700" />
+      <div className="absolute -right-8 -bottom-8 w-32 h-32 bg-amber-500/5 blur-[40px] rounded-full pointer-events-none group-hover:bg-amber-500/10 transition-colors duration-700" />
 
       <div className="flex items-center justify-between relative z-10">
         <h4 className="text-xs font-black uppercase tracking-[0.28em] text-white/30 flex items-center gap-2">

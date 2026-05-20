@@ -91,7 +91,7 @@ function buildMembers(slug: string): Member[] {
 /* ── Styles ── */
 const ROLE_STYLES: Record<Role, string> = {
   ADMIN: "bg-amber-500/15 border-amber-500/30 text-amber-400",
-  MOD:   "bg-indigo-500/15 border-indigo-500/30 text-amber-400",
+  MOD:   "bg-amber-500/15 border-amber-500/30 text-amber-400",
   USER:  "bg-white/5 border-white/10 text-white/40",
 }
 
@@ -325,7 +325,7 @@ export default function ClubMembersPage({
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search members…"
-            className="w-full sm:max-w-md pl-10 pr-4 py-3 rounded-xl bg-white/[0.03] border border-white/8 text-sm text-white placeholder:text-white/25 focus:outline-none focus:border-indigo-500/40 focus:bg-white/[0.05] transition-all"
+            className="w-full sm:max-w-md pl-10 pr-4 py-3 rounded-xl bg-white/[0.03] border border-white/8 text-sm text-white placeholder:text-white/25 focus:outline-none focus:border-amber-500/40 focus:bg-white/[0.05] transition-all"
           />
         </motion.div>
 
@@ -367,7 +367,7 @@ export default function ClubMembersPage({
               <p className="text-xs text-white/20">Try a different search</p>
               <button
                 onClick={() => setSearch("")}
-                className="mt-2 px-5 py-2.5 rounded-xl bg-indigo-600/20 border border-indigo-500/20 text-xs font-black uppercase tracking-widest text-amber-400 hover:bg-indigo-600/30 transition-all"
+                className="mt-2 px-5 py-2.5 rounded-xl bg-amber-600/20 border border-amber-500/20 text-xs font-black uppercase tracking-widest text-amber-400 hover:bg-amber-600/30 transition-all"
               >
                 Clear search
               </button>

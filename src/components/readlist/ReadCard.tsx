@@ -16,7 +16,7 @@ export const ReadCard = ({ manga }: { manga: any }) => {
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.95 }}
       whileHover={{ y: -12 }}
-      className="group relative rounded-[2.8rem] border border-white/5 bg-[#080808] overflow-hidden transition-all duration-700 hover:border-indigo-500/40 hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.8)]"
+      className="group relative rounded-[2.8rem] border border-white/5 bg-[#080808] overflow-hidden transition-all duration-700 hover:border-amber-500/40 hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.8)]"
     >
       {/* COVER IMAGE WITH DYNAMIC OVERLAY */}
       <div className="relative h-80 w-full overflow-hidden">

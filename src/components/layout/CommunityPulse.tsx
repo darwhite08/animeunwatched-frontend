@@ -6,7 +6,7 @@ import { Activity, MessageSquare, Globe, Radio, Terminal, Flame, BookOpen, Arrow
 // Upgraded mock data to match the Cyberpunk/Neural lore
 const LIVE_STREAM = [
   { id: "LOG_892", user: "User_77", action: "Achieved 100-Day Streak", target: "System_Core", time: "0.02s ago", icon: Flame, color: "text-orange-500", bg: "bg-orange-500/10" },
-  { id: "LOG_891", user: "Otaku_Arch", action: "Archived Masterpiece", target: "'Monster'", time: "1.4s ago", icon: BookOpen, color: "text-amber-400", bg: "bg-indigo-500/10" },
+  { id: "LOG_891", user: "Otaku_Arch", action: "Archived Masterpiece", target: "'Monster'", time: "1.4s ago", icon: BookOpen, color: "text-amber-400", bg: "bg-amber-500/10" },
   { id: "LOG_890", user: "Shinobi_X", action: "Cast Global Vote", target: "'Studio MAPPA'", time: "3.2s ago", icon: ShieldAlert, color: "text-emerald-400", bg: "bg-emerald-500/10" },
   { id: "LOG_889", user: "Neural_Bot", action: "Oracle Engine Update", target: "Algorithm v4.2", time: "12.0s ago", icon: Terminal, color: "text-white/60", bg: "bg-white/5" },
 ];
@@ -21,7 +21,7 @@ export default function CommunityPulse() {
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:3rem_3rem] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_50%,#000_60%,transparent_100%)]" />
         
         {/* Core Glowing Orbs */}
-        <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[600px] h-[600px] bg-indigo-600/10 blur-[150px] rounded-full mix-blend-screen animate-pulse" />
+        <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[600px] h-[600px] bg-amber-600/10 blur-[150px] rounded-full mix-blend-screen animate-pulse" />
         <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-[500px] h-[500px] bg-emerald-600/5 blur-[120px] rounded-full mix-blend-screen" />
       </div>
 
@@ -62,7 +62,7 @@ export default function CommunityPulse() {
             className="lg:col-span-7 relative p-8 md:p-12 rounded-[2.5rem] bg-[#080808]/80 backdrop-blur-2xl border border-white/10 overflow-hidden group"
           >
             {/* Feed Background Glow */}
-            <div className="absolute top-0 right-0 w-96 h-96 bg-indigo-500/5 blur-[100px] rounded-full pointer-events-none opacity-50 group-hover:opacity-100 transition-opacity duration-700" />
+            <div className="absolute top-0 right-0 w-96 h-96 bg-amber-500/5 blur-[100px] rounded-full pointer-events-none opacity-50 group-hover:opacity-100 transition-opacity duration-700" />
             
             <div className="flex items-center justify-between mb-12 relative z-10">
               <h3 className="text-sm font-black text-white/60 uppercase tracking-[0.3em]">Transmission_Log</h3>
@@ -122,7 +122,7 @@ export default function CommunityPulse() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.2 }}
-              className="flex-1 p-8 md:p-10 rounded-[2.5rem] bg-[#080808]/80 backdrop-blur-2xl border border-white/10 group hover:border-indigo-500/30 transition-colors duration-500 flex flex-col justify-center relative overflow-hidden"
+              className="flex-1 p-8 md:p-10 rounded-[2.5rem] bg-[#080808]/80 backdrop-blur-2xl border border-white/10 group hover:border-amber-500/30 transition-colors duration-500 flex flex-col justify-center relative overflow-hidden"
             >
               <div className="absolute -right-10 -top-10 text-white/[0.02] group-hover:text-white/[0.05] transition-colors duration-700 pointer-events-none transform group-hover:scale-110 group-hover:-rotate-12">
                   <Globe size={180} strokeWidth={1} />
@@ -149,7 +149,7 @@ export default function CommunityPulse() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.3 }}
-              className="p-8 md:p-10 rounded-[2.5rem] bg-gradient-to-br from-indigo-600 to-purple-800 border border-indigo-500/30 relative overflow-hidden group cursor-pointer shadow-[0_20px_50px_rgba(79,70,229,0.15)]"
+              className="p-8 md:p-10 rounded-[2.5rem] bg-gradient-to-br from-indigo-600 to-purple-800 border border-amber-500/30 relative overflow-hidden group cursor-pointer shadow-[0_20px_50px_rgba(79,70,229,0.15)]"
             >
               {/* Hover Light Sweep */}
               <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-[150%] group-hover:translate-x-[150%] transition-transform duration-1000 ease-in-out" />

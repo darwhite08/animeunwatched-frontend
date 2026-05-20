@@ -69,7 +69,7 @@ export default function QuizPage() {
   if (done) return (
     <div className="min-h-screen bg-[#020202] text-white flex items-center justify-center px-6">
       <motion.div initial={{ opacity:0, scale:0.9 }} animate={{ opacity:1, scale:1 }} className="max-w-md w-full text-center space-y-8">
-        <div className="w-24 h-24 mx-auto rounded-[2rem] bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center">
+        <div className="w-24 h-24 mx-auto rounded-[2rem] bg-amber-600/20 border border-amber-500/30 flex items-center justify-center">
           <Trophy size={40} className="text-amber-400" />
         </div>
         <div>
@@ -128,7 +128,7 @@ export default function QuizPage() {
                       state === "correct" ? "bg-emerald-500/15 border-emerald-500/40 text-white" :
                       state === "wrong"   ? "bg-red-500/15 border-red-500/40 text-white" :
                       hasAnswered         ? "border-white/5 bg-white/[0.02] text-white/30" :
-                                            "border-white/10 bg-white/[0.03] text-white/70 hover:border-indigo-500/40 hover:bg-indigo-500/8 hover:text-white"
+                                            "border-white/10 bg-white/[0.03] text-white/70 hover:border-amber-500/40 hover:bg-amber-500/8 hover:text-white"
                     }`}
                   >
                     {opt}

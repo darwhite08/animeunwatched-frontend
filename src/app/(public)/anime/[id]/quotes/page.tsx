@@ -66,7 +66,7 @@ export default function AnimeQuotesPage({ params }: { params: Promise<{ id: stri
         <div className="space-y-4">
           {quotes.map((q, i) => (
             <motion.div key={q.id} initial={{ opacity:0, y:10 }} animate={{ opacity:1, y:0 }} transition={{ delay:i*0.06 }}
-              className="group p-6 rounded-2xl bg-white/[0.02] border border-white/8 hover:border-indigo-500/20 transition-colors space-y-4"
+              className="group p-6 rounded-2xl bg-white/[0.02] border border-white/8 hover:border-amber-500/20 transition-colors space-y-4"
             >
               <div className="flex items-start gap-4">
                 <Quote size={20} className="text-amber-400/40 shrink-0 mt-1" />

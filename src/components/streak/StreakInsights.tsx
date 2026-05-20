@@ -58,7 +58,7 @@ export const StreakInsights = () => {
         ))}
 
         {/* Action Suggestion */}
-        <div className="p-6 rounded-[2rem] bg-indigo-600/10 border border-indigo-500/20 flex items-center gap-4 group cursor-pointer hover:bg-indigo-600/20 transition-all">
+        <div className="p-6 rounded-[2rem] bg-amber-600/10 border border-amber-500/20 flex items-center gap-4 group cursor-pointer hover:bg-amber-600/20 transition-all">
           <AlertCircle className="text-amber-400 shrink-0" size={20} />
           <p className="text-[11px] font-bold text-amber-200 leading-tight">
             Verify today's episode of <span className="text-white">One Piece</span> to maintain your standing.

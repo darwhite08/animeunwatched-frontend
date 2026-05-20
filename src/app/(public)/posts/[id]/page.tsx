@@ -444,7 +444,7 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
               {post.anime && (
                 <Link
                   href="/bestanimelist"
-                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-indigo-500/8 border border-indigo-500/15 text-[10px] font-bold text-amber-400 hover:bg-indigo-500/15 transition-colors"
+                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-amber-500/8 border border-amber-500/15 text-[10px] font-bold text-amber-400 hover:bg-amber-500/15 transition-colors"
                 >
                   <Star size={9} /> {post.anime}
                 </Link>
@@ -546,7 +546,7 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
                 >
                   <Link
                     href={`/posts/${rp.id}`}
-                    className="block p-4 rounded-2xl bg-white/[0.02] border border-white/8 hover:border-indigo-500/25 hover:bg-white/[0.04] transition-all group"
+                    className="block p-4 rounded-2xl bg-white/[0.02] border border-white/8 hover:border-amber-500/25 hover:bg-white/[0.04] transition-all group"
                   >
                     {rp.anime && (
                       <span className="inline-flex items-center gap-1 mb-2 text-[9px] font-bold text-amber-400/60">

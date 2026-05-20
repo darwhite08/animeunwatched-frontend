@@ -57,7 +57,7 @@ export default function PressPage() {
                   <FileText size={16} className="text-amber-400" />
                   <span className="text-sm font-bold text-white/70">{item}</span>
                 </div>
-                <button className="p-2 rounded-lg bg-indigo-600/10 text-amber-400 hover:bg-indigo-600/20 transition-colors">
+                <button className="p-2 rounded-lg bg-amber-600/10 text-amber-400 hover:bg-amber-600/20 transition-colors">
                   <Download size={13} />
                 </button>
               </div>
@@ -91,7 +91,7 @@ export default function PressPage() {
             <div key={p.title} className="flex items-center gap-4 p-5 rounded-2xl bg-white/[0.02] border border-white/8 hover:border-white/15 transition-colors">
               <div className="shrink-0">
                 <p className="text-[9px] font-mono text-white/25 uppercase">{p.date}</p>
-                <span className="text-[8px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-indigo-500/10 text-amber-400 border border-indigo-500/20">{p.type}</span>
+                <span className="text-[8px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20">{p.type}</span>
               </div>
               <p className="text-sm font-bold text-white/70 flex-1">{p.title}</p>
             </div>
@@ -99,7 +99,7 @@ export default function PressPage() {
         </div>
 
         {/* Contact */}
-        <div className="p-7 rounded-[2rem] bg-indigo-600/10 border border-indigo-500/20 flex items-center justify-between gap-6">
+        <div className="p-7 rounded-[2rem] bg-amber-600/10 border border-amber-500/20 flex items-center justify-between gap-6">
           <div>
             <p className="font-black text-white mb-1">Press Contact</p>
             <p className="text-sm text-white/50">For interviews, fact-checking, and media inquiries</p>

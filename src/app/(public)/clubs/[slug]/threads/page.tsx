@@ -198,7 +198,7 @@ function ThreadRow({ thread, index }: { thread: Thread; index: number }) {
     >
       <Link
         href={`/threads/${thread.id}`}
-        className="group flex gap-5 p-5 rounded-2xl bg-white/[0.02] border border-white/8 hover:border-indigo-500/25 hover:bg-white/[0.04] transition-all duration-300"
+        className="group flex gap-5 p-5 rounded-2xl bg-white/[0.02] border border-white/8 hover:border-amber-500/25 hover:bg-white/[0.04] transition-all duration-300"
       >
         {/* Left: content */}
         <div className="flex-1 min-w-0 space-y-2">
@@ -413,7 +413,7 @@ export default function ClubThreadsPage({
         {composerOpen && (
           <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }}
             className="overflow-hidden mb-6">
-            <div className="bg-zinc-900/80 border border-indigo-500/20 rounded-2xl p-5 space-y-4">
+            <div className="bg-zinc-900/80 border border-amber-500/20 rounded-2xl p-5 space-y-4">
               <input type="text" value={newTitle} onChange={e => setNewTitle(e.target.value)} placeholder="Thread title…"
                 className="w-full bg-transparent border-b border-white/10 text-sm font-bold text-white placeholder:text-white/25 outline-none py-2" />
               <textarea value={newContent} onChange={e => setNewContent(e.target.value)} rows={4} placeholder="Share your thoughts…"

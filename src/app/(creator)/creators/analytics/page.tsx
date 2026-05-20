@@ -16,7 +16,7 @@ const TOP_CONTENT_FALLBACK = [
 
 const TYPE_COLORS: Record<string, string> = {
   Blog: "bg-purple-500/20 text-purple-400 border-purple-500/20",
-  Feed: "bg-indigo-500/20 text-amber-400 border-indigo-500/20",
+  Feed: "bg-amber-500/20 text-amber-400 border-amber-500/20",
   Poll: "bg-amber-500/20 text-amber-400 border-amber-500/20",
 }
 
@@ -46,7 +46,7 @@ export default function AnalyticsPage() {
   const reputation      = statsData?.reputation       ?? 840
 
   const METRICS = [
-    { label: "Total Views",    value: totalViews >= 1000 ? `${(totalViews / 1000).toFixed(1)}k` : String(totalViews), delta: "+18%", up: true,  icon: Eye,           color: "text-amber-400",  bg: "bg-indigo-500/10"  },
+    { label: "Total Views",    value: totalViews >= 1000 ? `${(totalViews / 1000).toFixed(1)}k` : String(totalViews), delta: "+18%", up: true,  icon: Eye,           color: "text-amber-400",  bg: "bg-amber-500/10"  },
     { label: "Published",      value: String(publishedBlogs), delta: "+0%",  up: true,  icon: BarChart3,     color: "text-rose-400",    bg: "bg-rose-500/10"    },
     { label: "Total Posts",    value: String(postCount),      delta: "+5%",  up: true,  icon: MessageCircle, color: "text-amber-400",   bg: "bg-amber-500/10"   },
     { label: "Reputation",     value: String(reputation),     delta: "+9%",  up: true,  icon: Users,         color: "text-emerald-400", bg: "bg-emerald-500/10" },
@@ -69,7 +69,7 @@ export default function AnalyticsPage() {
       {/* Header */}
       <div className="flex items-start justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center">
+          <div className="w-10 h-10 rounded-xl bg-amber-600/20 border border-amber-500/30 flex items-center justify-center">
             <BarChart3 size={18} className="text-amber-400" />
           </div>
           <div>
@@ -80,7 +80,7 @@ export default function AnalyticsPage() {
 
         <button
           onClick={handleSync}
-          className="flex items-center gap-2 text-xs font-semibold text-amber-400 hover:text-amber-300 border border-indigo-500/30 hover:border-indigo-500/60 bg-indigo-600/10 hover:bg-indigo-600/20 px-3 py-2 rounded-xl transition-all"
+          className="flex items-center gap-2 text-xs font-semibold text-amber-400 hover:text-amber-300 border border-amber-500/30 hover:border-amber-500/60 bg-amber-600/10 hover:bg-amber-600/20 px-3 py-2 rounded-xl transition-all"
         >
           <RefreshCw size={13} />
           Sync with Backend

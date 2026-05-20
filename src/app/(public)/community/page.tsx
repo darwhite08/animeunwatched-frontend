@@ -83,7 +83,7 @@ function PostCard({ post }: { post: Post }) {
 
       {post.anime && (
         <Link href={`/anime/${post.anime.malId}`}
-          className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-indigo-500/8 border border-indigo-500/15 text-[10px] font-bold text-amber-400 hover:bg-indigo-500/15 transition-colors">
+          className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-amber-500/8 border border-amber-500/15 text-[10px] font-bold text-amber-400 hover:bg-amber-500/15 transition-colors">
           <Star size={9} /> {post.anime.title}
         </Link>
       )}
@@ -173,7 +173,7 @@ export default function CommunityPage() {
           <AnimatePresence>
             {composing && (
               <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} className="overflow-hidden">
-                <div className="bg-zinc-900 border border-indigo-500/20 rounded-2xl p-5 space-y-4">
+                <div className="bg-zinc-900 border border-amber-500/20 rounded-2xl p-5 space-y-4">
                   <textarea value={draft} onChange={e => setDraft(e.target.value)}
                     placeholder={isAuthenticated ? "Share a theory, hot take, or reaction…" : "Sign in to post…"}
                     rows={4} autoFocus disabled={!isAuthenticated}
@@ -259,7 +259,7 @@ export default function CommunityPage() {
             <div className="flex flex-wrap gap-2">
               {TRENDING_TAGS.map((tag, i) => (
                 <motion.span key={tag} initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: i * 0.04 }}
-                  className="px-3 py-1.5 rounded-full bg-white/5 border border-white/8 text-[10px] font-bold text-white/50 hover:text-amber-400 hover:border-indigo-500/25 cursor-pointer transition-all">
+                  className="px-3 py-1.5 rounded-full bg-white/5 border border-white/8 text-[10px] font-bold text-white/50 hover:text-amber-400 hover:border-amber-500/25 cursor-pointer transition-all">
                   #{tag}
                 </motion.span>
               ))}
@@ -306,8 +306,8 @@ export default function CommunityPage() {
           </div>
 
           <Link href="/creators"
-            className="flex items-center gap-3 p-5 rounded-2xl bg-gradient-to-br from-indigo-600/15 to-violet-600/10 border border-indigo-500/20 hover:from-indigo-600/20 transition-all group">
-            <div className="h-10 w-10 rounded-xl bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center shrink-0">
+            className="flex items-center gap-3 p-5 rounded-2xl bg-gradient-to-br from-indigo-600/15 to-violet-600/10 border border-amber-500/20 hover:from-indigo-600/20 transition-all group">
+            <div className="h-10 w-10 rounded-xl bg-amber-600/20 border border-amber-500/30 flex items-center justify-center shrink-0">
               <Users size={16} className="text-amber-400" />
             </div>
             <div>

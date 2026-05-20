@@ -35,7 +35,7 @@ export const TopThree = () => {
 
           <div className={`relative p-8 rounded-[3.5rem] border transition-all duration-700 overflow-hidden ${
             user.pos === 1 
-              ? 'bg-gradient-to-b from-indigo-500/20 to-black border-indigo-500/40 py-16' 
+              ? 'bg-gradient-to-b from-indigo-500/20 to-black border-amber-500/40 py-16' 
               : 'bg-[#0a0a0a] border-white/5 py-12'
           }`}>
             {/* Shimmer effect for Rank 1 */}

@@ -99,7 +99,7 @@ function Toggle({
       role="switch"
       className={`relative w-11 h-6 rounded-full transition-colors duration-200 ${
         disabled ? "opacity-30 cursor-not-allowed" : "cursor-pointer"
-      } ${checked && !disabled ? "bg-indigo-600" : "bg-white/10"}`}
+      } ${checked && !disabled ? "bg-amber-600" : "bg-white/10"}`}
     >
       <span
         className={`absolute top-1 h-4 w-4 rounded-full bg-white shadow transition-transform duration-200 ${
@@ -194,7 +194,7 @@ export default function NotificationDashboardSettingsPage() {
             key={label}
             className={`p-4 rounded-xl border text-center transition-all ${
               active
-                ? "bg-indigo-600/8 border-indigo-500/20"
+                ? "bg-amber-600/8 border-amber-500/20"
                 : "bg-white/[0.02] border-white/8 opacity-50"
             }`}
           >
@@ -252,7 +252,7 @@ export default function NotificationDashboardSettingsPage() {
               onClick={() => { setDigest(id); setSaved(false) }}
               className={`p-4 rounded-xl border text-left transition-all ${
                 digest === id
-                  ? "bg-indigo-600/12 border-indigo-500/35"
+                  ? "bg-amber-600/12 border-amber-500/35"
                   : "bg-white/[0.02] border-white/8 hover:border-white/15"
               }`}
             >

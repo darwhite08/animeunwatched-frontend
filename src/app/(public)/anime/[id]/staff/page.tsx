@@ -46,7 +46,7 @@ export default function AnimeStaffPage({ params }: { params: Promise<{ id: strin
         </div>
 
         {/* Studio card */}
-        <div className="p-5 rounded-2xl bg-indigo-600/10 border border-indigo-500/20">
+        <div className="p-5 rounded-2xl bg-amber-600/10 border border-amber-500/20">
           <p className="text-[10px] font-black uppercase tracking-widest text-amber-400/60 mb-1">Production Studio</p>
           <p className="text-lg font-black text-white">{anime?.studio ?? "Unknown"}</p>
         </div>

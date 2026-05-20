@@ -200,7 +200,7 @@ export default function BestAnimeListPage() {
               <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/30 group-focus-within:text-amber-400 transition-colors" />
               <input value={query} onChange={e => handleQueryChange(e.target.value)}
                 placeholder="Search anime…"
-                className="pl-8 pr-8 py-2 bg-white/5 border border-white/10 rounded-full text-[11px] font-medium text-white placeholder:text-white/20 outline-none focus:border-indigo-500/50 w-44 focus:w-64 transition-all duration-300" />
+                className="pl-8 pr-8 py-2 bg-white/5 border border-white/10 rounded-full text-[11px] font-medium text-white placeholder:text-white/20 outline-none focus:border-amber-500/50 w-44 focus:w-64 transition-all duration-300" />
               {query && (
                 <button onClick={() => setQuery("")} className="absolute right-3 top-1/2 -translate-y-1/2">
                   <X size={11} className="text-white/30 hover:text-white" />

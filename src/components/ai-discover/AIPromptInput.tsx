@@ -111,7 +111,7 @@ export default function AIPromptInput({ onSearch }: AIPromptInputProps) {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.06 }}
                 onClick={() => setPrompt(text)}
-                className="group/btn relative px-3 py-1.5 text-[10px] font-bold rounded-lg border border-white/5 text-white/40 hover:text-amber-400 hover:border-indigo-500/20 transition-all duration-300"
+                className="group/btn relative px-3 py-1.5 text-[10px] font-bold rounded-lg border border-white/5 text-white/40 hover:text-amber-400 hover:border-amber-500/20 transition-all duration-300"
               >
                 <span className="relative z-10 uppercase tracking-wider">{text}</span>
               </motion.button>
@@ -124,7 +124,7 @@ export default function AIPromptInput({ onSearch }: AIPromptInputProps) {
               <Cpu size={11} />
               <span>Hardware Acceleration: ON</span>
               <div className="h-1 w-10 bg-white/5 rounded-full overflow-hidden">
-                <motion.div animate={{ x: [-40, 40] }} transition={{ repeat: Infinity, duration: 1.5 }} className="h-full w-4 bg-indigo-500/40" />
+                <motion.div animate={{ x: [-40, 40] }} transition={{ repeat: Infinity, duration: 1.5 }} className="h-full w-4 bg-amber-500/40" />
               </div>
             </div>
 

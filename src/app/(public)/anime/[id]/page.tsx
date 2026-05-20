@@ -37,7 +37,7 @@ function AnimeDetailLoader({ malId }: { malId: number }) {
 
   if (isLoading) return (
     <div className="min-h-screen bg-[#020202] flex items-center justify-center">
-      <div className="w-8 h-8 border-2 border-indigo-500/30 border-t-indigo-500 rounded-full animate-spin" />
+      <div className="w-8 h-8 border-2 border-amber-500/30 border-t-indigo-500 rounded-full animate-spin" />
     </div>
   )
 
@@ -146,7 +146,7 @@ function AnimeDetail({ anime, rawAnime }: { anime: Anime; rawAnime?: AnimeDTO })
 
         {/* Rank chip */}
         <div className="absolute top-6 left-6 md:left-[max(1.5rem,calc((100vw-1280px)/2+1.5rem))]">
-          <span className="px-3 py-1 bg-black/60 backdrop-blur-md border border-indigo-500/30 rounded-full text-[10px] font-black text-amber-400 uppercase tracking-widest">
+          <span className="px-3 py-1 bg-black/60 backdrop-blur-md border border-amber-500/30 rounded-full text-[10px] font-black text-amber-400 uppercase tracking-widest">
             #{anime.rank} Neural Ranked
           </span>
         </div>
@@ -327,7 +327,7 @@ function AnimeDetail({ anime, rawAnime }: { anime: Anime; rawAnime?: AnimeDTO })
               <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/30 mb-4">Neural Tags</h2>
               <div className="flex flex-wrap gap-2">
                 {anime.tags.map(t => (
-                  <span key={t} className="px-3 py-1 rounded-lg bg-indigo-500/8 border border-indigo-500/15 text-[10px] font-bold text-amber-400/80 uppercase tracking-wider">
+                  <span key={t} className="px-3 py-1 rounded-lg bg-amber-500/8 border border-amber-500/15 text-[10px] font-bold text-amber-400/80 uppercase tracking-wider">
                     {t}
                   </span>
                 ))}
@@ -480,7 +480,7 @@ function AnimeDetail({ anime, rawAnime }: { anime: Anime; rawAnime?: AnimeDTO })
             {/* AI Discover CTA */}
             <Link
               href="/ai-discover"
-              className="flex items-center gap-3 p-5 rounded-2xl bg-indigo-600/10 border border-indigo-500/20 hover:bg-indigo-600/15 transition-colors group"
+              className="flex items-center gap-3 p-5 rounded-2xl bg-amber-600/10 border border-amber-500/20 hover:bg-amber-600/15 transition-colors group"
             >
               <Sparkles size={16} className="text-amber-400 shrink-0" />
               <div>

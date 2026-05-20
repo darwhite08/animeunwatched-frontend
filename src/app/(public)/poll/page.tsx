@@ -147,7 +147,7 @@ const TRENDING_TAGS = [
 ]
 
 const CATEGORY_CONFIG: Record<Poll["category"], { label: string; color: string }> = {
-  ranking:    { label: "Ranking",    color: "bg-indigo-500/10 text-amber-400 border-indigo-500/20"    },
+  ranking:    { label: "Ranking",    color: "bg-amber-500/10 text-amber-400 border-amber-500/20"    },
   vs:         { label: "VS Battle",  color: "bg-red-500/10 text-red-400 border-red-500/20"             },
   prediction: { label: "Prediction", color: "bg-amber-500/10 text-amber-400 border-amber-500/20"       },
   opinion:    { label: "Opinion",    color: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20" },
@@ -195,10 +195,10 @@ function PollCard({ poll }: { poll: Poll }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-40px" }}
       transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-      className="relative group p-8 rounded-3xl border border-white/5 bg-[#0a0a0a] hover:border-indigo-500/20 transition-all duration-500 overflow-hidden"
+      className="relative group p-8 rounded-3xl border border-white/5 bg-[#0a0a0a] hover:border-amber-500/20 transition-all duration-500 overflow-hidden"
     >
       {/* ambient glow */}
-      <div className="absolute top-0 right-0 w-56 h-56 bg-indigo-600/5 blur-[100px] pointer-events-none group-hover:bg-indigo-600/8 transition-all" />
+      <div className="absolute top-0 right-0 w-56 h-56 bg-amber-600/5 blur-[100px] pointer-events-none group-hover:bg-amber-600/8 transition-all" />
 
       <div className="relative z-10 space-y-6">
         {/* Header meta */}
@@ -253,7 +253,7 @@ function PollCard({ poll }: { poll: Poll }) {
                 disabled={!!voted || poll.status === "ended"}
                 className={`relative w-full text-left p-4 rounded-2xl border transition-all duration-300 group/opt overflow-hidden ${
                   isSelected
-                    ? "border-indigo-500/50 bg-indigo-500/5"
+                    ? "border-amber-500/50 bg-amber-500/5"
                     : isWinner && poll.status === "ended"
                     ? "border-amber-500/30 bg-amber-500/5"
                     : "border-white/5 bg-white/[0.02] hover:bg-white/[0.04] disabled:cursor-default"
@@ -267,7 +267,7 @@ function PollCard({ poll }: { poll: Poll }) {
                     transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.05 }}
                     className={`absolute inset-0 ${
                       isSelected
-                        ? "bg-indigo-500/12"
+                        ? "bg-amber-500/12"
                         : isWinner && poll.status === "ended"
                         ? "bg-amber-500/10"
                         : "bg-white/[0.03]"
@@ -498,10 +498,10 @@ export default function PollsPage() {
           </div>
 
           {/* Create a Poll CTA */}
-          <div className="relative overflow-hidden p-6 rounded-2xl bg-gradient-to-br from-indigo-600/15 via-violet-600/8 to-transparent border border-indigo-500/20 space-y-4">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/10 blur-[60px] pointer-events-none" />
+          <div className="relative overflow-hidden p-6 rounded-2xl bg-gradient-to-br from-indigo-600/15 via-violet-600/8 to-transparent border border-amber-500/20 space-y-4">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500/10 blur-[60px] pointer-events-none" />
             <div className="relative z-10 space-y-3">
-              <div className="h-11 w-11 rounded-2xl bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center">
+              <div className="h-11 w-11 rounded-2xl bg-amber-600/20 border border-amber-500/30 flex items-center justify-center">
                 <Vote size={18} className="text-amber-400" />
               </div>
               <div>
@@ -535,7 +535,7 @@ export default function PollsPage() {
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: i * 0.04 }}
-                  className="px-3 py-1.5 rounded-full bg-white/5 border border-white/8 text-[9px] font-bold text-white/45 hover:text-amber-400 hover:border-indigo-500/25 cursor-pointer transition-all"
+                  className="px-3 py-1.5 rounded-full bg-white/5 border border-white/8 text-[9px] font-bold text-white/45 hover:text-amber-400 hover:border-amber-500/25 cursor-pointer transition-all"
                 >
                   {tag}
                 </motion.span>

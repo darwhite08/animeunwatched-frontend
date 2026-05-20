@@ -233,7 +233,7 @@ function AIOracleSection() {
                   onClick={() => setActive(i)}
                   className={`w-full text-left px-4 py-3 rounded-xl border transition-all flex items-center gap-3 ${
                     active === i
-                      ? "bg-indigo-600/10 border-indigo-500/30 text-white/80"
+                      ? "bg-amber-600/10 border-amber-500/30 text-white/80"
                       : "bg-white/[0.02] border-white/[0.06] text-white/35 hover:bg-white/[0.04] hover:border-white/[0.1] hover:text-white/55"
                   }`}
                 >
@@ -416,7 +416,7 @@ function CommunitySection() {
                 { icon: Flame,  label: "Daily Streaks",    desc: "Watch daily to compound XP.",     color: "text-orange-400", bg: "bg-orange-500/[0.12]", border: "border-orange-500/[0.18]" },
                 { icon: Trophy, label: "Leaderboard",      desc: "Rank globally by season.",         color: "text-amber-400",  bg: "bg-amber-500/[0.12]",  border: "border-amber-500/[0.18]"  },
                 { icon: Star,   label: "Badges & Titles",  desc: "100+ achievements to unlock.",     color: "text-violet-400", bg: "bg-violet-500/[0.12]", border: "border-violet-500/[0.18]" },
-                { icon: Users,  label: "Social Feed",      desc: "Follow fans with similar taste.",  color: "text-amber-400", bg: "bg-indigo-500/[0.12]", border: "border-indigo-500/[0.18]" },
+                { icon: Users,  label: "Social Feed",      desc: "Follow fans with similar taste.",  color: "text-amber-400", bg: "bg-amber-500/[0.12]", border: "border-amber-500/[0.18]" },
               ].map(({ icon: Icon, label, desc, color, bg, border }, i) => (
                 <motion.div
                   key={label}
@@ -513,9 +513,9 @@ function CommunitySection() {
               <div className="divide-y divide-white/[0.04]">
                 {[
                   { rank: 1, name: "Otaku_Arch",    title: "Legendary",   xp: "1.2M", pct: 88, streak: 42, accent: "bg-amber-500/55"   },
-                  { rank: 2, name: "ShadowWatcher", title: "Arch-Mage",   xp: "840K", pct: 70, streak: 31, accent: "bg-indigo-500/50"  },
-                  { rank: 3, name: "Void_Seeker",   title: "Elite Jonin", xp: "620K", pct: 55, streak: 22, accent: "bg-indigo-500/40"  },
-                  { rank: 4, name: "NightOwl_88",   title: "Jonin",       xp: "410K", pct: 40, streak: 17, accent: "bg-indigo-500/30"  },
+                  { rank: 2, name: "ShadowWatcher", title: "Arch-Mage",   xp: "840K", pct: 70, streak: 31, accent: "bg-amber-500/50"  },
+                  { rank: 3, name: "Void_Seeker",   title: "Elite Jonin", xp: "620K", pct: 55, streak: 22, accent: "bg-amber-500/40"  },
+                  { rank: 4, name: "NightOwl_88",   title: "Jonin",       xp: "410K", pct: 40, streak: 17, accent: "bg-amber-500/30"  },
                 ].map(({ rank, name, title, xp, pct, streak, accent }, i) => (
                   <motion.div
                     key={name}
@@ -592,7 +592,7 @@ function ShowcaseSection() {
                   <span className="text-[8px] text-white/25 shrink-0 ml-2">{ep}</span>
                 </div>
                 <div className="h-1 bg-white/[0.06] rounded-full">
-                  <div className={`h-full rounded-full ${pct === 100 ? "bg-emerald-500/70" : "bg-indigo-500/70"}`} style={{ width: `${pct}%` }} />
+                  <div className={`h-full rounded-full ${pct === 100 ? "bg-emerald-500/70" : "bg-amber-500/70"}`} style={{ width: `${pct}%` }} />
                 </div>
               </div>
               <span className={`text-[8px] font-medium shrink-0 ${pct === 100 ? "text-emerald-400/60" : "text-amber-400/50"}`}>{status}</span>
@@ -679,7 +679,7 @@ function ShowcaseSection() {
             >
               <div>
                 <span className={`inline-block text-[10px] font-semibold uppercase tracking-[0.15em] mb-3 px-2.5 py-1 rounded-md ${
-                  accent === "indigo" ? "text-amber-300/80 bg-indigo-500/10" :
+                  accent === "indigo" ? "text-amber-300/80 bg-amber-500/10" :
                   accent === "amber" ? "text-amber-300/80 bg-amber-500/10" : "text-violet-300/80 bg-violet-500/10"
                 }`}>{tag}</span>
                 <h3 className="text-[15px] font-semibold text-white leading-snug mb-2.5">{title}</h3>
@@ -731,7 +731,7 @@ function FinalCTASection() {
       <motion.div
         animate={{ scale: [1, 1.1, 1], opacity: [0.07, 0.13, 0.07] }}
         transition={{ duration: 10, repeat: Infinity }}
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-indigo-600 blur-[180px] rounded-full pointer-events-none"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-amber-600 blur-[180px] rounded-full pointer-events-none"
       />
       {/* Dot grid */}
       <div className="absolute inset-0 opacity-[0.025] pointer-events-none" style={{ backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.8) 1px, transparent 1px)", backgroundSize: "40px 40px" }} />
@@ -854,7 +854,7 @@ function ScrollProgressBar() {
   return (
     <>
       <motion.div
-        className="fixed top-0 left-0 right-0 h-[2px] bg-indigo-500 z-[200] origin-left opacity-60"
+        className="fixed top-0 left-0 right-0 h-[2px] bg-amber-500 z-[200] origin-left opacity-60"
         style={{ scaleX }}
       />
       <div className="fixed right-6 top-1/2 -translate-y-1/2 z-[150] hidden lg:flex flex-col gap-3">

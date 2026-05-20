@@ -4,7 +4,7 @@ import { motion } from "framer-motion"
 
 export const MainStreakCard = ({ currentStreak, bestStreak }: { currentStreak: number; bestStreak: number }) => (
   <section className="relative overflow-hidden rounded-[3rem] border border-white/10 bg-gradient-to-br from-indigo-950/40 to-black p-12 shadow-2xl group">
-    <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-600/10 blur-[100px] -translate-y-1/2 translate-x-1/2" />
+    <div className="absolute top-0 right-0 w-64 h-64 bg-amber-600/10 blur-[100px] -translate-y-1/2 translate-x-1/2" />
     
     <div className="relative z-10 flex flex-col md:flex-row justify-between items-center gap-12">
       <div className="space-y-4 text-center md:text-left">

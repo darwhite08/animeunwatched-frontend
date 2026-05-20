@@ -303,7 +303,7 @@ function StepGenres({
               className={[
                 "px-5 py-2.5 rounded-full border font-bold uppercase text-sm tracking-wide transition-all duration-200 cursor-pointer",
                 isSelected
-                  ? "border-indigo-500 bg-indigo-500/20 text-amber-300 shadow-[0_0_12px_rgba(99,102,241,0.25)]"
+                  ? "border-amber-500 bg-amber-500/20 text-amber-300 shadow-[0_0_12px_rgba(99,102,241,0.25)]"
                   : "border-zinc-700 bg-zinc-900/60 text-zinc-400 hover:border-zinc-500 hover:text-zinc-300",
               ].join(" ")}
             >

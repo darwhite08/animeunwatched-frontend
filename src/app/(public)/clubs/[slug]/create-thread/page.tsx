@@ -64,7 +64,7 @@ function MarkdownPreview({ source }: { source: string }) {
         }
         if (line.startsWith("> ")) {
           return (
-            <blockquote key={i} className="border-l-4 border-indigo-500 pl-4 italic text-white/45 text-sm">
+            <blockquote key={i} className="border-l-4 border-amber-500 pl-4 italic text-white/45 text-sm">
               {line.slice(2)}
             </blockquote>
           )
@@ -192,7 +192,7 @@ export default function CreateThreadPage({
               className={`w-full rounded-2xl bg-black/30 border px-5 py-3.5 text-sm text-white placeholder:text-white/20 outline-none transition-colors ${
                 title.trim().length > 0 && !titleOk
                   ? "border-amber-500/30 focus:border-amber-500/50"
-                  : "border-white/10 focus:border-indigo-500/40"
+                  : "border-white/10 focus:border-amber-500/40"
               }`}
             />
             <p className="text-[9px] text-right text-white/20">{title.length}/120</p>
@@ -219,7 +219,7 @@ export default function CreateThreadPage({
                 key="preview"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="min-h-[220px] rounded-2xl border border-indigo-500/20 bg-indigo-500/5 px-5 py-4"
+                className="min-h-[220px] rounded-2xl border border-amber-500/20 bg-amber-500/5 px-5 py-4"
               >
                 <p className="text-[9px] font-black uppercase tracking-[0.3em] text-amber-400/50 mb-4">
                   Preview
@@ -236,7 +236,7 @@ export default function CreateThreadPage({
                   className={`w-full rounded-2xl bg-black/30 border px-5 py-4 text-sm text-white placeholder:text-white/15 outline-none resize-none leading-relaxed transition-colors font-mono ${
                     content.trim().length > 0 && !contentOk
                       ? "border-amber-500/30 focus:border-amber-500/50"
-                      : "border-white/10 focus:border-indigo-500/40"
+                      : "border-white/10 focus:border-amber-500/40"
                   }`}
                 />
               </motion.div>
@@ -266,14 +266,14 @@ export default function CreateThreadPage({
               value={tagsRaw}
               onChange={(e) => setTagsRaw(e.target.value)}
               placeholder="e.g. theory, episode-5, spoilers, hot-take"
-              className="w-full rounded-2xl bg-black/30 border border-white/10 px-5 py-3.5 text-sm text-white placeholder:text-white/20 outline-none focus:border-indigo-500/40 transition-colors"
+              className="w-full rounded-2xl bg-black/30 border border-white/10 px-5 py-3.5 text-sm text-white placeholder:text-white/20 outline-none focus:border-amber-500/40 transition-colors"
             />
             {tags.length > 0 && (
               <div className="flex flex-wrap gap-2 pt-1">
                 {tags.map((tag) => (
                   <span
                     key={tag}
-                    className="px-2.5 py-0.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-[9px] font-bold text-amber-400"
+                    className="px-2.5 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-[9px] font-bold text-amber-400"
                   >
                     #{tag}
                   </span>

@@ -24,7 +24,7 @@ export default function WatchlistTabs() {
           {tab}
 
           {active === tab && (
-            <span className="absolute bottom-0 left-0 h-[2px] w-full bg-indigo-600 rounded-full" />
+            <span className="absolute bottom-0 left-0 h-[2px] w-full bg-amber-600 rounded-full" />
           )}
         </button>
       ))}

@@ -129,7 +129,7 @@ export default function ReviewComposer({ isOpen, onClose, animeTitle, animeId }:
                 placeholder="Share your thoughts on this anime… (minimum 20 characters)"
                 rows={5}
                 maxLength={2000}
-                className="w-full rounded-2xl bg-white/[0.03] border border-white/10 px-4 py-3 text-sm text-white placeholder:text-white/20 outline-none focus:border-indigo-500/40 resize-none leading-relaxed transition-colors"
+                className="w-full rounded-2xl bg-white/[0.03] border border-white/10 px-4 py-3 text-sm text-white placeholder:text-white/20 outline-none focus:border-amber-500/40 resize-none leading-relaxed transition-colors"
               />
             </div>
 

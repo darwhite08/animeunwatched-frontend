@@ -30,7 +30,7 @@ export default function FinalCTA() {
       </div>
 
       {/* 2. THE INDIGO EVENT HORIZON */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120vw] h-[500px] bg-indigo-600/10 blur-[150px] rounded-[100%] pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120vw] h-[500px] bg-amber-600/10 blur-[150px] rounded-[100%] pointer-events-none" />
       <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-indigo-500/50 to-transparent" />
 
       {/* 3. FOUR-CORNER CROSSHAIRS (HUD Detail) */}
@@ -50,7 +50,7 @@ export default function FinalCTA() {
         <div className="flex items-center gap-3 mb-12">
           <div className="flex h-2 w-2 relative">
              <span className="animate-ping absolute inline-flex h-2 w-2 rounded-full bg-indigo-400 opacity-75" />
-             <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-500" />
+             <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500" />
           </div>
           <span className="text-[10px] font-mono tracking-[0.4em] text-amber-400 uppercase">
             Global_Sync_Available // V.4.0
@@ -62,7 +62,7 @@ export default function FinalCTA() {
           Your <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-white/20">Legend</span><br />
           <span className="relative inline-block">
             {/* Inner text glow */}
-            <span className="absolute -inset-4 bg-indigo-500/30 blur-2xl rounded-full opacity-60 animate-pulse pointer-events-none" />
+            <span className="absolute -inset-4 bg-amber-500/30 blur-2xl rounded-full opacity-60 animate-pulse pointer-events-none" />
             <span className="relative text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-500">
               Starts Here.
             </span>

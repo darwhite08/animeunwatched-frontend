@@ -90,7 +90,7 @@ function SearchContent() {
               onChange={e => setQuery(e.target.value)}
               autoFocus
               placeholder="Search anime, users, tags…"
-              className="w-full pl-13 pr-12 py-4 text-lg font-medium bg-white/[0.04] border border-white/10 rounded-2xl text-white placeholder:text-white/20 outline-none focus:border-indigo-500/50 focus:bg-white/[0.06] transition-all"
+              className="w-full pl-13 pr-12 py-4 text-lg font-medium bg-white/[0.04] border border-white/10 rounded-2xl text-white placeholder:text-white/20 outline-none focus:border-amber-500/50 focus:bg-white/[0.06] transition-all"
             />
             {query && (
               <button

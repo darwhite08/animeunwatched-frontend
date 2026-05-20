@@ -64,7 +64,7 @@ export default function PrivacySettingsPage() {
               <p className="text-[10px] text-white/35 mt-0.5 ml-5">{t.desc}</p>
             </div>
             <button onClick={() => toggle(t.id)}
-              className={`relative w-11 h-6 rounded-full transition-colors shrink-0 ml-4 ${t.value ? "bg-indigo-600" : "bg-white/10"}`}
+              className={`relative w-11 h-6 rounded-full transition-colors shrink-0 ml-4 ${t.value ? "bg-amber-600" : "bg-white/10"}`}
             >
               <span className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition-transform ${t.value ? "translate-x-5" : "translate-x-0.5"}`} />
             </button>

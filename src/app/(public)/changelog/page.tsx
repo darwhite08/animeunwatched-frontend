@@ -133,7 +133,7 @@ export default function ChangelogPage() {
                 {/* Timeline dot */}
                 <div className={`absolute left-0 top-1.5 h-[22px] w-[22px] rounded-full border-2 flex items-center justify-center ${
                   i === 0
-                    ? "border-indigo-500 bg-indigo-600/30"
+                    ? "border-amber-500 bg-amber-600/30"
                     : "border-white/15 bg-[#020202]"
                 }`}>
                   <div className={`h-2 w-2 rounded-full ${i === 0 ? "bg-indigo-400" : "bg-white/20"}`} />
@@ -142,12 +142,12 @@ export default function ChangelogPage() {
                 {/* Card */}
                 <div className={`rounded-[1.75rem] border p-7 space-y-5 ${
                   i === 0
-                    ? "border-indigo-500/25 bg-indigo-600/5"
+                    ? "border-amber-500/25 bg-amber-600/5"
                     : "border-white/8 bg-[#0a0a0a]"
                 }`}>
                   {/* Top row */}
                   <div className="flex flex-wrap items-center gap-3">
-                    <span className="px-3 py-1 rounded-lg bg-indigo-600/15 border border-indigo-500/25 text-xs font-black text-amber-400 font-mono tracking-wider">
+                    <span className="px-3 py-1 rounded-lg bg-amber-600/15 border border-amber-500/25 text-xs font-black text-amber-400 font-mono tracking-wider">
                       {release.version}
                     </span>
                     <span className={`px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest ${

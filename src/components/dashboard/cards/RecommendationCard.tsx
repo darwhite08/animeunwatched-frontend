@@ -19,7 +19,7 @@ export default function RecommendationCard() {
   if (isLoading) {
     return (
       <div className="p-8 rounded-[2.5rem] border border-white/5 bg-[#0a0a0a] relative overflow-hidden h-48 flex items-center justify-center">
-        <div className="w-8 h-8 rounded-full border-2 border-indigo-500/30 border-t-indigo-500 animate-spin" />
+        <div className="w-8 h-8 rounded-full border-2 border-amber-500/30 border-t-indigo-500 animate-spin" />
       </div>
     )
   }
@@ -27,7 +27,7 @@ export default function RecommendationCard() {
   return (
     <div className="p-8 rounded-[2.5rem] border border-white/5 bg-[#0a0a0a] relative overflow-hidden group">
       {/* Glow */}
-      <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-600/8 blur-[60px] rounded-full pointer-events-none group-hover:bg-indigo-600/14 transition-colors duration-700" />
+      <div className="absolute top-0 right-0 w-64 h-64 bg-amber-600/8 blur-[60px] rounded-full pointer-events-none group-hover:bg-amber-600/14 transition-colors duration-700" />
 
       <div className="relative z-10 flex items-start justify-between mb-8">
         <div>

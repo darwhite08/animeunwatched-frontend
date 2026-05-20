@@ -32,7 +32,7 @@ type FranchiseEntry = {
 
 /* ── Helpers ── */
 const TYPE_COLORS: Record<EntryType, string> = {
-  "Main Series": "bg-indigo-500/15 border-indigo-500/30 text-amber-400",
+  "Main Series": "bg-amber-500/15 border-amber-500/30 text-amber-400",
   "Prequel":     "bg-violet-500/15 border-violet-500/30 text-violet-400",
   "Sequel":      "bg-blue-500/15  border-blue-500/30  text-blue-400",
   "Side Story":  "bg-amber-500/15 border-amber-500/30 text-amber-400",
@@ -129,13 +129,13 @@ function FranchiseRow({
       transition={{ delay: 0.1 + index * 0.07 }}
       className={`relative flex items-center gap-5 p-5 rounded-2xl border transition-all ${
         isCurrent
-          ? "bg-indigo-600/10 border-indigo-500/30"
+          ? "bg-amber-600/10 border-amber-500/30"
           : "bg-white/[0.02] border-white/8 hover:border-white/15 hover:bg-white/[0.04]"
       }`}
     >
       {/* Timeline dot */}
       <div className="hidden sm:flex flex-col items-center shrink-0">
-        <div className={`h-4 w-4 rounded-full border-2 ${isCurrent ? "bg-indigo-500 border-indigo-400" : "bg-white/10 border-white/20"}`} />
+        <div className={`h-4 w-4 rounded-full border-2 ${isCurrent ? "bg-amber-500 border-indigo-400" : "bg-white/10 border-white/20"}`} />
         {index < 5 && <div className="w-px flex-1 min-h-[2.5rem] bg-white/8 mt-1" />}
       </div>
 
@@ -151,7 +151,7 @@ function FranchiseRow({
             {entry.type}
           </span>
           {isCurrent && (
-            <span className="px-2.5 py-0.5 rounded-full bg-indigo-500/20 border border-indigo-500/40 text-[9px] font-black uppercase tracking-widest text-amber-300 flex items-center gap-1">
+            <span className="px-2.5 py-0.5 rounded-full bg-amber-500/20 border border-amber-500/40 text-[9px] font-black uppercase tracking-widest text-amber-300 flex items-center gap-1">
               <CheckCircle2 size={9} /> Currently Viewing
             </span>
           )}

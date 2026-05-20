@@ -81,7 +81,7 @@ export default function RankingsPage() {
           {CATEGORIES.map(c => (
             <button key={c.id} onClick={() => changeCategory(c.id)}
               className={`p-4 rounded-2xl border text-left transition-all ${
-                cat === c.id ? "border-indigo-500/40 bg-indigo-500/10" : "border-white/8 bg-white/[0.02] hover:border-white/15"
+                cat === c.id ? "border-amber-500/40 bg-amber-500/10" : "border-white/8 bg-white/[0.02] hover:border-white/15"
               }`}>
               <c.icon size={16} className={cat === c.id ? "text-amber-400" : "text-white/30"} />
               <p className={`font-black text-sm mt-2 ${cat === c.id ? "text-white" : "text-white/60"}`}>{c.label}</p>
@@ -125,7 +125,7 @@ export default function RankingsPage() {
                         initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: i * 0.08 }}
                         onClick={() => setSelected(anime)}
-                        className={`group p-5 rounded-2xl border cursor-pointer transition-all hover:border-indigo-500/30 ${
+                        className={`group p-5 rounded-2xl border cursor-pointer transition-all hover:border-amber-500/30 ${
                           pos === 0 ? "border-amber-500/30 bg-amber-500/5" : "border-white/8 bg-white/[0.02]"
                         }`}
                       >

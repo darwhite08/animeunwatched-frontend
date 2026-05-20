@@ -28,7 +28,7 @@ export default function SimilarAnime({ currentId, genres }: SimilarAnimeProps) {
       <div className="space-y-4">
         <h3 className="text-xs font-black uppercase italic tracking-widest text-white/40">More Like This</h3>
         <div className="flex items-center justify-center h-20">
-          <div className="w-6 h-6 rounded-full border-2 border-indigo-500/30 border-t-indigo-500 animate-spin" />
+          <div className="w-6 h-6 rounded-full border-2 border-amber-500/30 border-t-indigo-500 animate-spin" />
         </div>
       </div>
     )

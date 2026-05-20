@@ -173,7 +173,7 @@ function InlineReply({
       exit={{ opacity: 0, height: 0 }}
       className="overflow-hidden mt-3"
     >
-      <div className="p-4 rounded-xl bg-zinc-900/80 border border-indigo-500/20 space-y-3">
+      <div className="p-4 rounded-xl bg-zinc-900/80 border border-amber-500/20 space-y-3">
         <p className="text-[10px] font-black uppercase tracking-widest text-amber-400">
           Replying to {authorName}
         </p>

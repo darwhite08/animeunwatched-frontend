@@ -96,7 +96,7 @@ export default function PublicLeaderboardPage() {
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div>
             <motion.div initial={{ opacity:0, x:-16 }} animate={{ opacity:1, x:0 }}
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-[9px] font-black uppercase tracking-[0.3em] text-amber-400 mb-4"
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-[9px] font-black uppercase tracking-[0.3em] text-amber-400 mb-4"
             >
               <Trophy size={11} /> Global Hall of Fame
             </motion.div>
@@ -175,7 +175,7 @@ export default function PublicLeaderboardPage() {
               return (
                 <motion.div key={user.rank} initial={{ opacity:0, x:-12 }} animate={{ opacity:1, x:0 }} transition={{ delay: i*0.03 }}
                   className={`grid grid-cols-[2rem_1fr_5rem_5rem_5rem_5rem] gap-4 items-center px-5 py-4 rounded-2xl border transition-all ${
-                    isMe ? "border-indigo-500/30 bg-indigo-500/8" : "border-white/5 bg-white/[0.01] hover:bg-white/[0.03] hover:border-white/12"
+                    isMe ? "border-amber-500/30 bg-amber-500/8" : "border-white/5 bg-white/[0.01] hover:bg-white/[0.03] hover:border-white/12"
                   }`}
                 >
                   <span className={`text-sm font-black ${isMe ? "text-amber-400" : "text-white/30"}`}>

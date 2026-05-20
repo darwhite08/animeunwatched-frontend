@@ -34,7 +34,7 @@ export default function AnimeOfTheDayCard() {
   if (isLoading || !anime) {
     return (
       <div className="relative w-full rounded-[2.5rem] overflow-hidden border border-white/5 bg-[#0a0a0a] min-h-[340px] flex items-center justify-center">
-        <div className="w-8 h-8 rounded-full border-2 border-indigo-500/30 border-t-indigo-500 animate-spin" />
+        <div className="w-8 h-8 rounded-full border-2 border-amber-500/30 border-t-indigo-500 animate-spin" />
       </div>
     )
   }

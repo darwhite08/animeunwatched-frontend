@@ -164,7 +164,7 @@ function BlogCard({ blog, index }: { blog: Blog; index: number }) {
     >
       <Link
         href={`/blog/${blog.slug}`}
-        className="group block bg-zinc-900/60 border border-white/8 hover:border-indigo-500/30 rounded-2xl overflow-hidden transition-all"
+        className="group block bg-zinc-900/60 border border-white/8 hover:border-amber-500/30 rounded-2xl overflow-hidden transition-all"
       >
         {/* Cover gradient */}
         <div className={`h-40 w-full bg-gradient-to-br ${blog.coverGradient} relative`}>
@@ -241,7 +241,7 @@ export default function BlogListingPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            <span className="px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-[10px] font-black uppercase tracking-widest text-amber-400">
+            <span className="px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-[10px] font-black uppercase tracking-widest text-amber-400">
               Community Long-form
             </span>
             <h1 className="mt-4 text-5xl md:text-7xl font-black tracking-tighter uppercase italic text-white leading-none">
@@ -335,7 +335,7 @@ export default function BlogListingPage() {
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: i * 0.03 }}
-                  className="px-3 py-1.5 rounded-full bg-white/5 border border-white/8 text-[10px] font-bold text-white/50 hover:text-amber-400 hover:border-indigo-500/25 cursor-pointer transition-all"
+                  className="px-3 py-1.5 rounded-full bg-white/5 border border-white/8 text-[10px] font-bold text-white/50 hover:text-amber-400 hover:border-amber-500/25 cursor-pointer transition-all"
                 >
                   #{tag}
                 </motion.span>
@@ -346,9 +346,9 @@ export default function BlogListingPage() {
           {/* Write CTA */}
           <Link
             href="/creators/create/blog"
-            className="flex items-center gap-3 p-5 rounded-2xl bg-gradient-to-br from-indigo-600/15 to-violet-600/10 border border-indigo-500/20 hover:from-indigo-600/20 transition-all group"
+            className="flex items-center gap-3 p-5 rounded-2xl bg-gradient-to-br from-indigo-600/15 to-violet-600/10 border border-amber-500/20 hover:from-indigo-600/20 transition-all group"
           >
-            <div className="h-10 w-10 rounded-xl bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center shrink-0">
+            <div className="h-10 w-10 rounded-xl bg-amber-600/20 border border-amber-500/30 flex items-center justify-center shrink-0">
               <PenSquare size={16} className="text-amber-400" />
             </div>
             <div>

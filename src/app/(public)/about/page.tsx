@@ -13,8 +13,8 @@ const PILLARS = [
     icon: Compass,
     title: "Discovery",
     color: "text-amber-400",
-    bg: "bg-indigo-500/10",
-    border: "border-indigo-500/20",
+    bg: "bg-amber-500/10",
+    border: "border-amber-500/20",
     desc: "AI-powered recommendations that understand your taste profile, not just what's trending. Our Neural Oracle maps your DNA across 12 taste dimensions so every suggestion lands.",
   },
   {
@@ -87,7 +87,7 @@ export default function AboutPage() {
       <section className="relative overflow-hidden border-b border-white/5">
         {/* Background glow */}
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-indigo-600/8 blur-[120px] rounded-full" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-amber-600/8 blur-[120px] rounded-full" />
         </div>
 
         <div className="relative z-10 max-w-5xl mx-auto px-6 pt-24 pb-20 text-center">
@@ -224,9 +224,9 @@ export default function AboutPage() {
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.07 }}
-                className="flex items-center gap-5 p-5 rounded-2xl border border-white/5 bg-white/[0.02] hover:border-indigo-500/20 hover:bg-white/[0.035] transition-all group"
+                className="flex items-center gap-5 p-5 rounded-2xl border border-white/5 bg-white/[0.02] hover:border-amber-500/20 hover:bg-white/[0.035] transition-all group"
               >
-                <div className="p-2.5 rounded-xl bg-indigo-500/10 text-amber-400 shrink-0 group-hover:bg-indigo-500/15 transition-colors">
+                <div className="p-2.5 rounded-xl bg-amber-500/10 text-amber-400 shrink-0 group-hover:bg-amber-500/15 transition-colors">
                   <item.icon size={18} />
                 </div>
                 <div>
@@ -245,10 +245,10 @@ export default function AboutPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="relative overflow-hidden rounded-[2.5rem] border border-indigo-500/20 bg-gradient-to-br from-indigo-600/12 via-violet-600/8 to-transparent p-12 text-center"
+          className="relative overflow-hidden rounded-[2.5rem] border border-amber-500/20 bg-gradient-to-br from-indigo-600/12 via-violet-600/8 to-transparent p-12 text-center"
         >
           <div className="absolute inset-0 pointer-events-none">
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-48 bg-indigo-600/12 blur-[80px] rounded-full" />
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-48 bg-amber-600/12 blur-[80px] rounded-full" />
           </div>
           <div className="relative z-10">
             <h2 className="text-4xl font-black tracking-tighter uppercase italic text-white mb-4">

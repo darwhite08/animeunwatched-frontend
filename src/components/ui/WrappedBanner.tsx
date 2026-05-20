@@ -25,7 +25,7 @@ export default function WrappedBanner() {
           initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, height: 0, marginBottom: 0 }}
-          className="relative flex items-center justify-between gap-4 p-4 rounded-2xl bg-gradient-to-r from-indigo-600/20 to-violet-600/15 border border-indigo-500/25 mb-6"
+          className="relative flex items-center justify-between gap-4 p-4 rounded-2xl bg-gradient-to-r from-indigo-600/20 to-violet-600/15 border border-amber-500/25 mb-6"
         >
           {/* Shimmer */}
           <motion.div

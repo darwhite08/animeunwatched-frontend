@@ -39,7 +39,7 @@ export default function MobileNav() {
                 {active && (
                   <motion.div
                     layoutId="mobile-nav-active"
-                    className="absolute inset-0 bg-indigo-600/20 rounded-xl"
+                    className="absolute inset-0 bg-amber-600/20 rounded-xl"
                     transition={{ type: "spring", stiffness: 380, damping: 30 }}
                   />
                 )}

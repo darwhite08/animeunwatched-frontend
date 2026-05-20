@@ -22,7 +22,7 @@ export const StreakHeader = () => {
       </div>
 
       <div className="flex items-center gap-4 bg-white/[0.03] border border-white/5 p-4 rounded-3xl backdrop-blur-md">
-        <div className="h-12 w-12 rounded-2xl bg-indigo-600/20 flex items-center justify-center text-amber-400">
+        <div className="h-12 w-12 rounded-2xl bg-amber-600/20 flex items-center justify-center text-amber-400">
           <Award size={24} />
         </div>
         <div>

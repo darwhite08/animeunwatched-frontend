@@ -48,7 +48,7 @@ function Toggle({ checked, onChange, disabled }: { checked: boolean; onChange: (
       disabled={disabled}
       className={`relative w-11 h-6 rounded-full transition-colors duration-200 ${
         disabled ? "opacity-30 cursor-not-allowed" : "cursor-pointer"
-      } ${checked && !disabled ? "bg-indigo-600" : "bg-white/10"}`}
+      } ${checked && !disabled ? "bg-amber-600" : "bg-white/10"}`}
     >
       <span
         className={`absolute top-1 h-4 w-4 rounded-full bg-white shadow transition-transform duration-200 ${
@@ -183,7 +183,7 @@ export default function NotificationSettingsPage() {
               transition={{ delay: i * 0.07 }}
               className={`p-5 rounded-2xl border transition-all ${
                 delivery[d.id] && !d.disabled
-                  ? "bg-indigo-600/10 border-indigo-500/25"
+                  ? "bg-amber-600/10 border-amber-500/25"
                   : "bg-white/[0.02] border-white/8"
               }`}
             >

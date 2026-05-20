@@ -28,8 +28,8 @@ const FAQ_GROUPS: FAQGroup[] = [
     title: "Getting Started",
     icon: Zap,
     color: "text-amber-400",
-    bg: "bg-indigo-500/10",
-    border: "border-indigo-500/20",
+    bg: "bg-amber-500/10",
+    border: "border-amber-500/20",
     items: [
       {
         q: "How do I create an account?",
@@ -180,14 +180,14 @@ export default function HelpPage() {
       {/* ── Hero ── */}
       <section className="relative overflow-hidden border-b border-white/5">
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[400px] bg-indigo-600/8 blur-[120px] rounded-full" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[400px] bg-amber-600/8 blur-[120px] rounded-full" />
         </div>
 
         <div className="relative z-10 max-w-4xl mx-auto px-6 pt-24 pb-16 text-center">
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-indigo-500/25 bg-indigo-500/8 text-[10px] font-black uppercase tracking-[0.3em] text-amber-400 mb-8"
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-amber-500/25 bg-amber-500/8 text-[10px] font-black uppercase tracking-[0.3em] text-amber-400 mb-8"
           >
             Help Center
           </motion.div>
@@ -224,7 +224,7 @@ export default function HelpPage() {
               placeholder="Search questions…"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              className="w-full bg-white/[0.04] border border-white/10 rounded-2xl pl-11 pr-5 py-4 text-sm text-white placeholder:text-white/25 focus:outline-none focus:border-indigo-500/50 focus:bg-white/[0.06] transition-all"
+              className="w-full bg-white/[0.04] border border-white/10 rounded-2xl pl-11 pr-5 py-4 text-sm text-white placeholder:text-white/25 focus:outline-none focus:border-amber-500/50 focus:bg-white/[0.06] transition-all"
             />
             {query && (
               <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[10px] font-black text-white/25 uppercase tracking-widest">
@@ -295,9 +295,9 @@ export default function HelpPage() {
                 initial={{ opacity: 0, x: 16 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.15 }}
-                className="rounded-[2rem] border border-indigo-500/20 bg-gradient-to-br from-indigo-600/10 via-violet-600/6 to-transparent p-8"
+                className="rounded-[2rem] border border-amber-500/20 bg-gradient-to-br from-indigo-600/10 via-violet-600/6 to-transparent p-8"
               >
-                <div className="h-12 w-12 rounded-2xl bg-indigo-500/15 flex items-center justify-center mb-6">
+                <div className="h-12 w-12 rounded-2xl bg-amber-500/15 flex items-center justify-center mb-6">
                   <MessageSquare size={20} className="text-amber-400" />
                 </div>
                 <h3 className="text-xl font-black tracking-tighter uppercase italic text-white mb-2">
@@ -312,7 +312,7 @@ export default function HelpPage() {
                     href="https://github.com/darwhite08"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-3 px-4 py-3.5 rounded-xl border border-white/8 bg-white/[0.02] hover:border-indigo-500/30 hover:bg-white/[0.04] transition-all group"
+                    className="flex items-center gap-3 px-4 py-3.5 rounded-xl border border-white/8 bg-white/[0.02] hover:border-amber-500/30 hover:bg-white/[0.04] transition-all group"
                   >
                     <Github size={16} className="text-white/40 group-hover:text-white transition-colors" />
                     <div>

@@ -21,7 +21,7 @@ export const WatchStatsCard = () => {
   }, [listData])
 
   const stats = [
-    { label: "Total Hours",  value: realStats.total > 0 ? String(realStats.totalHrs.toLocaleString()) : "—",    icon: Clock,        color: "text-amber-400",  bg: "bg-indigo-500/10"  },
+    { label: "Total Hours",  value: realStats.total > 0 ? String(realStats.totalHrs.toLocaleString()) : "—",    icon: Clock,        color: "text-amber-400",  bg: "bg-amber-500/10"  },
     { label: "Episodes",     value: realStats.total > 0 ? String(realStats.totalEps.toLocaleString()) : "—",    icon: Monitor,      color: "text-blue-400",    bg: "bg-blue-500/10"    },
     { label: "Completed",    value: realStats.total > 0 ? String(realStats.completed) : "—",                    icon: CheckCircle2, color: "text-emerald-400", bg: "bg-emerald-500/10" },
     { label: "Mean Score",   value: realStats.meanScore,                                                         icon: Star,         color: "text-yellow-400",  bg: "bg-yellow-500/10"  },

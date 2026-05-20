@@ -127,7 +127,7 @@ export default function Sidebar() {
                     {"badge" in item && item.badge && (
                       <span className="relative z-10 flex items-center gap-1">
                         {item.name === "Notifications" && unreadCount > 0 && (
-                          <span className="px-1.5 py-0.5 rounded-full bg-indigo-600/30 text-[8px] font-black text-amber-400">
+                          <span className="px-1.5 py-0.5 rounded-full bg-amber-600/30 text-[8px] font-black text-amber-400">
                             {unreadCount > 99 ? "99+" : unreadCount}
                           </span>
                         )}
@@ -152,7 +152,7 @@ export default function Sidebar() {
       {/* Streak footer */}
       <div className="px-4 pb-5 pt-3 border-t border-white/5">
         <Link href={slug ? userPath(slug, "streak") : "/streak"} className="block group">
-          <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/8 space-y-3 group-hover:bg-white/[0.05] group-hover:border-indigo-500/25 transition-all">
+          <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/8 space-y-3 group-hover:bg-white/[0.05] group-hover:border-amber-500/25 transition-all">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2.5">
                 <div className="p-1.5 rounded-lg bg-orange-500/10 text-orange-500">

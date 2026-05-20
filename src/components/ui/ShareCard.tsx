@@ -112,7 +112,7 @@ function ShareButton({
           ? "border-zinc-800 bg-zinc-900/40 text-zinc-700 cursor-not-allowed"
           : muted
           ? "border-zinc-700/60 bg-zinc-900/60 text-zinc-400 hover:border-zinc-500 hover:text-zinc-200 hover:bg-zinc-800/60"
-          : "border-indigo-500/40 bg-indigo-500/10 text-amber-300 hover:border-indigo-400 hover:bg-indigo-500/20",
+          : "border-amber-500/40 bg-amber-500/10 text-amber-300 hover:border-indigo-400 hover:bg-amber-500/20",
       ].join(" ")}
     >
       <span className="transition-transform duration-200 group-hover:scale-110">

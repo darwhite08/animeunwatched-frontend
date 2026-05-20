@@ -291,7 +291,7 @@ export default function CategoryDiscoverPage({
                   setTypeFilter("all")
                   setStatusFilter("all")
                 }}
-                className="mt-2 px-5 py-2.5 rounded-xl bg-indigo-600/20 border border-indigo-500/20 text-xs font-black uppercase tracking-widest text-amber-400 hover:bg-indigo-600/30 transition-all"
+                className="mt-2 px-5 py-2.5 rounded-xl bg-amber-600/20 border border-amber-500/20 text-xs font-black uppercase tracking-widest text-amber-400 hover:bg-amber-600/30 transition-all"
               >
                 Clear filters
               </button>

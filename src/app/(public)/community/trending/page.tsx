@@ -180,7 +180,7 @@ function PostCard({ post, index }: { post: TrendingPost; index: number }) {
 
       {/* Anime badge */}
       {post.anime && (
-        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-lg bg-indigo-500/8 border border-indigo-500/15 text-[9px] font-bold text-amber-400">
+        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-lg bg-amber-500/8 border border-amber-500/15 text-[9px] font-bold text-amber-400">
           <Star size={8} /> {post.anime}
         </span>
       )}
@@ -232,7 +232,7 @@ function PollBar({ pct, color }: { pct: number; color: string }) {
   )
 }
 
-const POLL_COLORS = ["bg-indigo-500", "bg-violet-500", "bg-blue-500"]
+const POLL_COLORS = ["bg-amber-500", "bg-violet-500", "bg-blue-500"]
 
 /* ── Page ── */
 export default function CommunityTrendingPage() {
@@ -304,7 +304,7 @@ export default function CommunityTrendingPage() {
         <section className="mb-14">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-3">
-              <div className="h-8 w-8 rounded-xl bg-indigo-500/15 border border-indigo-500/20 flex items-center justify-center">
+              <div className="h-8 w-8 rounded-xl bg-amber-500/15 border border-amber-500/20 flex items-center justify-center">
                 <TrendingUp size={15} className="text-amber-400" />
               </div>
               <div>
@@ -327,7 +327,7 @@ export default function CommunityTrendingPage() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.05 + i * 0.07 }}
-                className="group relative rounded-2xl overflow-hidden border border-white/8 hover:border-indigo-500/30 transition-all cursor-pointer"
+                className="group relative rounded-2xl overflow-hidden border border-white/8 hover:border-amber-500/30 transition-all cursor-pointer"
               >
                 <Link href={`/anime/${anime.id}`} className="block">
                   <div className="relative aspect-[3/4]">
@@ -427,7 +427,7 @@ export default function CommunityTrendingPage() {
           </div>
           <Link
             href="/trending"
-            className="flex items-center gap-2 px-6 py-3 rounded-xl bg-indigo-600/15 border border-indigo-500/25 text-[11px] font-black uppercase tracking-widest text-amber-400 hover:bg-indigo-600/25 transition-all"
+            className="flex items-center gap-2 px-6 py-3 rounded-xl bg-amber-600/15 border border-amber-500/25 text-[11px] font-black uppercase tracking-widest text-amber-400 hover:bg-amber-600/25 transition-all"
           >
             Full Trending <ArrowUpRight size={12} />
           </Link>

@@ -86,7 +86,7 @@ export default function AnimeCard({ anime, index, onClick }: AnimeCardProps) {
           className={`absolute top-3 right-3 h-7 w-7 flex items-center justify-center rounded-full transition-all duration-300 shadow-lg ${
             inList
               ? "bg-emerald-500 opacity-100 scale-100"
-              : "bg-indigo-600/90 opacity-0 scale-75 group-hover:opacity-100 group-hover:scale-100"
+              : "bg-amber-600/90 opacity-0 scale-75 group-hover:opacity-100 group-hover:scale-100"
           }`}
         >
           {inList ? <Check size={12} className="text-white" /> : <Plus size={13} className="text-white" />}

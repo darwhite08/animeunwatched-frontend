@@ -135,14 +135,14 @@ export default function AccountSettingsPage() {
           <div key={k}>
             <label className="block text-[10px] font-black uppercase tracking-[0.2em] text-white/35 mb-1.5">{label}</label>
             <input type={type} value={form[k]} onChange={set(k)} placeholder={placeholder}
-              className="w-full rounded-2xl bg-black/30 border border-white/10 px-4 py-3 text-sm text-white placeholder:text-white/20 outline-none focus:border-indigo-500/40 transition-colors"
+              className="w-full rounded-2xl bg-black/30 border border-white/10 px-4 py-3 text-sm text-white placeholder:text-white/20 outline-none focus:border-amber-500/40 transition-colors"
             />
           </div>
         ))}
         <div>
           <label className="block text-[10px] font-black uppercase tracking-[0.2em] text-white/35 mb-1.5">Bio</label>
           <textarea value={form.bio} onChange={set("bio")} rows={3} maxLength={200}
-            className="w-full rounded-2xl bg-black/30 border border-white/10 px-4 py-3 text-sm text-white placeholder:text-white/20 outline-none focus:border-indigo-500/40 resize-none transition-colors"
+            className="w-full rounded-2xl bg-black/30 border border-white/10 px-4 py-3 text-sm text-white placeholder:text-white/20 outline-none focus:border-amber-500/40 resize-none transition-colors"
           />
           <p className="text-[9px] text-right text-white/20 mt-1">{form.bio.length}/200</p>
         </div>

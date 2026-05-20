@@ -54,7 +54,7 @@ export default function AppearancePage() {
           {THEMES.map(({ id, icon: Icon, label, desc }) => (
             <button key={id} onClick={() => setTheme(id)}
               className={`p-5 rounded-2xl border text-left transition-all ${
-                theme === id ? "border-indigo-500/50 bg-indigo-500/10" : "border-white/8 bg-white/[0.02] hover:border-white/15"
+                theme === id ? "border-amber-500/50 bg-amber-500/10" : "border-white/8 bg-white/[0.02] hover:border-white/15"
               }`}
             >
               <Icon size={20} className={theme === id ? "text-amber-400" : "text-white/30"} />

@@ -112,7 +112,7 @@ function PasswordField({
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder ?? "••••••••"}
-          className="w-full rounded-xl bg-black/40 border border-white/10 pl-4 pr-11 py-3 text-sm text-white placeholder:text-white/20 outline-none focus:border-indigo-500/50 transition-colors"
+          className="w-full rounded-xl bg-black/40 border border-white/10 pl-4 pr-11 py-3 text-sm text-white placeholder:text-white/20 outline-none focus:border-amber-500/50 transition-colors"
         />
         <button
           type="button"
@@ -148,13 +148,13 @@ function ActiveSessions({
               transition={{ delay: i * 0.07 }}
               className={`flex items-center gap-4 p-4 rounded-xl border transition-all ${
                 session.isCurrent
-                  ? "bg-indigo-500/8 border-indigo-500/20"
+                  ? "bg-amber-500/8 border-amber-500/20"
                   : "bg-white/[0.015] border-white/8 hover:border-white/15"
               }`}
             >
               <div
                 className={`h-10 w-10 rounded-xl flex items-center justify-center shrink-0 ${
-                  session.isCurrent ? "bg-indigo-500/15" : "bg-white/5"
+                  session.isCurrent ? "bg-amber-500/15" : "bg-white/5"
                 }`}
               >
                 <Icon
@@ -242,8 +242,8 @@ function PasswordChange() {
 function TwoFactor() {
   return (
     <Section title="Two-Factor Authentication">
-      <div className="flex items-start gap-4 p-5 rounded-xl bg-indigo-500/5 border border-indigo-500/15">
-        <div className="h-10 w-10 shrink-0 rounded-xl bg-indigo-500/15 flex items-center justify-center">
+      <div className="flex items-start gap-4 p-5 rounded-xl bg-amber-500/5 border border-amber-500/15">
+        <div className="h-10 w-10 shrink-0 rounded-xl bg-amber-500/15 flex items-center justify-center">
           <Lock size={16} className="text-amber-400" />
         </div>
         <div>
@@ -253,7 +253,7 @@ function TwoFactor() {
           <p className="text-xs text-white/35 mt-1 leading-relaxed max-w-sm">
             Authenticator app and SMS-based two-factor authentication are in active development. You will receive a notification when it rolls out.
           </p>
-          <span className="mt-3 inline-block px-3 py-1 rounded-full bg-indigo-500/15 border border-indigo-500/25 text-[9px] font-black uppercase tracking-widest text-amber-400">
+          <span className="mt-3 inline-block px-3 py-1 rounded-full bg-amber-500/15 border border-amber-500/25 text-[9px] font-black uppercase tracking-widest text-amber-400">
             Q3 2026
           </span>
         </div>

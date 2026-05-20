@@ -181,7 +181,7 @@ function ActivityTab() {
           transition={{ delay: i * 0.1 }}
           className="relative pl-20 group cursor-pointer"
         >
-          <div className="absolute left-0 top-1/2 -translate-y-1/2 w-16 h-16 rounded-2xl bg-zinc-900 border border-white/5 flex items-center justify-center z-10 group-hover:border-indigo-500/50 transition-all shadow-xl">
+          <div className="absolute left-0 top-1/2 -translate-y-1/2 w-16 h-16 rounded-2xl bg-zinc-900 border border-white/5 flex items-center justify-center z-10 group-hover:border-amber-500/50 transition-all shadow-xl">
             <item.icon size={22} className="text-amber-400" />
           </div>
           <div className="p-8 rounded-[2rem] bg-white/[0.02] border border-white/5 group-hover:bg-white/[0.04] transition-all flex justify-between items-center">
@@ -221,7 +221,7 @@ function WatchlistTab() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: i * 0.05 }}
-            className="group relative rounded-2xl overflow-hidden border border-white/8 hover:border-indigo-500/30 bg-[#0a0a0a] transition-all duration-400"
+            className="group relative rounded-2xl overflow-hidden border border-white/8 hover:border-amber-500/30 bg-[#0a0a0a] transition-all duration-400"
           >
             {/* Cover */}
             <div className="relative aspect-[2/3] w-full">
@@ -238,7 +238,7 @@ function WatchlistTab() {
                   className={`px-2 py-0.5 rounded-md text-[8px] font-black uppercase tracking-widest ${
                     isWatching
                       ? "bg-emerald-500/25 text-emerald-400 border border-emerald-500/30"
-                      : "bg-indigo-500/25 text-amber-400 border border-indigo-500/30"
+                      : "bg-amber-500/25 text-amber-400 border border-amber-500/30"
                   }`}
                 >
                   {isWatching ? "● Watching" : "✓ Completed"}
@@ -345,7 +345,7 @@ function BlogsTab() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: i * 0.08 }}
-          className="group flex flex-col rounded-[2rem] overflow-hidden border border-white/5 bg-[#0a0a0a] hover:border-indigo-500/30 hover:bg-zinc-900/50 transition-all duration-400 cursor-pointer"
+          className="group flex flex-col rounded-[2rem] overflow-hidden border border-white/5 bg-[#0a0a0a] hover:border-amber-500/30 hover:bg-zinc-900/50 transition-all duration-400 cursor-pointer"
         >
           {/* Gradient banner */}
           <div className="h-32 bg-gradient-to-br from-indigo-600/30 via-purple-700/20 to-violet-900/30 relative">
@@ -409,7 +409,7 @@ export default function WorldClassProfile() {
       <section className="relative min-h-[450px] flex items-end overflow-hidden rounded-[3rem] border border-white/5 bg-[#050505] shadow-2xl">
         {/* Animated Mesh Gradient Background */}
         <div className="absolute inset-0 z-0">
-          <div className="absolute top-[-10%] right-[-5%] w-[60%] h-[80%] bg-indigo-600/20 blur-[120px] rounded-full animate-pulse" />
+          <div className="absolute top-[-10%] right-[-5%] w-[60%] h-[80%] bg-amber-600/20 blur-[120px] rounded-full animate-pulse" />
           <div className="absolute bottom-[-20%] left-[-10%] w-[50%] h-[70%] bg-purple-900/10 blur-[100px] rounded-full" />
           <div className="absolute inset-0 bg-[url('https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/hero/bg-gradient-3.svg')] bg-cover opacity-20 mix-blend-overlay" />
         </div>
@@ -519,7 +519,7 @@ export default function WorldClassProfile() {
               <p className="text-xs font-bold text-white/30 uppercase tracking-[0.2em]">{stat.label}</p>
             </div>
             <p className="mt-6 text-sm text-white/40 font-medium">{stat.sub}</p>
-            <div className="absolute -bottom-4 -right-4 w-24 h-24 bg-white/5 rounded-full blur-2xl group-hover:bg-indigo-500/10 transition-all" />
+            <div className="absolute -bottom-4 -right-4 w-24 h-24 bg-white/5 rounded-full blur-2xl group-hover:bg-amber-500/10 transition-all" />
           </motion.div>
         ))}
       </section>

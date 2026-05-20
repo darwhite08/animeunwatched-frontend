@@ -15,7 +15,7 @@ const SECTIONS = [
   {
     group: "Profile",
     items: [
-      { href:"/settings/account",    icon:User,       label:"Account",           desc:"Name, username, email, bio",          color:"text-amber-400", bg:"bg-indigo-500/10" },
+      { href:"/settings/account",    icon:User,       label:"Account",           desc:"Name, username, email, bio",          color:"text-amber-400", bg:"bg-amber-500/10" },
       { href:"/settings/appearance", icon:Palette,    label:"Appearance",        desc:"Theme, accent color, text size",      color:"text-violet-400", bg:"bg-violet-500/10" },
     ]
   },
@@ -100,7 +100,7 @@ export default function ProfileSettingsIndex() {
             value={form.displayName}
             onChange={setField("displayName")}
             placeholder="Your name"
-            className="w-full rounded-2xl bg-black/30 border border-white/10 px-4 py-3 text-sm text-white placeholder:text-white/20 outline-none focus:border-indigo-500/40 transition-colors"
+            className="w-full rounded-2xl bg-black/30 border border-white/10 px-4 py-3 text-sm text-white placeholder:text-white/20 outline-none focus:border-amber-500/40 transition-colors"
           />
         </div>
         <div>
@@ -113,7 +113,7 @@ export default function ProfileSettingsIndex() {
             rows={2}
             maxLength={200}
             placeholder="Tell the community about yourself…"
-            className="w-full rounded-2xl bg-black/30 border border-white/10 px-4 py-3 text-sm text-white placeholder:text-white/20 outline-none focus:border-indigo-500/40 resize-none transition-colors"
+            className="w-full rounded-2xl bg-black/30 border border-white/10 px-4 py-3 text-sm text-white placeholder:text-white/20 outline-none focus:border-amber-500/40 resize-none transition-colors"
           />
           <p className="text-[9px] text-right text-white/20 mt-1">{form.bio.length}/200</p>
         </div>

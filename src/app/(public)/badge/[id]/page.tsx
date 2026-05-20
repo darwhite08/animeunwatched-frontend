@@ -228,12 +228,12 @@ export default function BadgeDetailPage({ params }: { params: Promise<{ id: stri
           className="relative overflow-hidden rounded-3xl border border-white/8 bg-zinc-900/60 p-8 md:p-12"
         >
           {/* Background glow */}
-          <div className="absolute -top-20 -right-20 h-64 w-64 rounded-full bg-indigo-500/8 blur-3xl pointer-events-none" />
+          <div className="absolute -top-20 -right-20 h-64 w-64 rounded-full bg-amber-500/8 blur-3xl pointer-events-none" />
           <div className="absolute -bottom-20 -left-20 h-64 w-64 rounded-full bg-violet-500/6 blur-3xl pointer-events-none" />
 
           <div className="relative flex flex-col sm:flex-row items-start sm:items-center gap-8">
             {/* Emoji badge */}
-            <div className="h-28 w-28 rounded-3xl bg-gradient-to-br from-indigo-900/80 to-violet-900/80 border border-indigo-500/20 flex items-center justify-center text-6xl shrink-0 shadow-[0_0_48px_rgba(99,102,241,0.2)]">
+            <div className="h-28 w-28 rounded-3xl bg-gradient-to-br from-indigo-900/80 to-violet-900/80 border border-amber-500/20 flex items-center justify-center text-6xl shrink-0 shadow-[0_0_48px_rgba(99,102,241,0.2)]">
               {badge.emoji}
             </div>
 
@@ -324,7 +324,7 @@ export default function BadgeDetailPage({ params }: { params: Promise<{ id: stri
                     initial={{ opacity: 0, scale: 0.94 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: 0.15 + i * 0.06 }}
-                    className="p-4 rounded-2xl bg-white/[0.02] border border-white/8 hover:border-indigo-500/20 hover:bg-white/[0.04] transition-all flex flex-col items-center gap-3 text-center group"
+                    className="p-4 rounded-2xl bg-white/[0.02] border border-white/8 hover:border-amber-500/20 hover:bg-white/[0.04] transition-all flex flex-col items-center gap-3 text-center group"
                   >
                     <div className={`h-12 w-12 rounded-xl bg-gradient-to-br ${earner.avatarColor} flex items-center justify-center font-black text-lg text-white group-hover:scale-105 transition-transform`}>
                       {earner.avatar}
@@ -358,7 +358,7 @@ export default function BadgeDetailPage({ params }: { params: Promise<{ id: stri
               <ol className="space-y-4">
                 {badge.steps.map((step, i) => (
                   <li key={i} className="flex items-start gap-3 text-sm text-white/55 leading-relaxed">
-                    <span className="shrink-0 mt-0.5 h-5 w-5 rounded-full bg-indigo-500/15 border border-indigo-500/25 flex items-center justify-center text-[9px] font-black text-amber-400">
+                    <span className="shrink-0 mt-0.5 h-5 w-5 rounded-full bg-amber-500/15 border border-amber-500/25 flex items-center justify-center text-[9px] font-black text-amber-400">
                       {i + 1}
                     </span>
                     {step}
@@ -375,7 +375,7 @@ export default function BadgeDetailPage({ params }: { params: Promise<{ id: stri
             {/* All badges link */}
             <Link
               href="/achievements"
-              className="block p-5 rounded-2xl bg-white/[0.02] border border-white/8 hover:border-indigo-500/20 transition-all group text-center"
+              className="block p-5 rounded-2xl bg-white/[0.02] border border-white/8 hover:border-amber-500/20 transition-all group text-center"
             >
               <p className="text-xs font-black uppercase italic tracking-tight text-white/50 group-hover:text-white transition-colors">
                 View All Badges

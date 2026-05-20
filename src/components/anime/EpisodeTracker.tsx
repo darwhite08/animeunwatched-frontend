@@ -86,7 +86,7 @@ export default function EpisodeTracker({ totalEpisodes, currentEpisode: initialE
         <motion.div
           animate={{ width: `${progress}%` }}
           transition={{ type: "spring", stiffness: 120, damping: 20 }}
-          className={`h-full rounded-full ${isCompleted ? "bg-emerald-400" : "bg-indigo-500"}`}
+          className={`h-full rounded-full ${isCompleted ? "bg-emerald-400" : "bg-amber-500"}`}
         />
       </div>
 
@@ -107,7 +107,7 @@ export default function EpisodeTracker({ totalEpisodes, currentEpisode: initialE
         <button
           onClick={increment}
           disabled={isCompleted}
-          className="h-9 w-9 rounded-xl border border-indigo-500/30 bg-indigo-500/10 flex items-center justify-center text-amber-400 hover:bg-indigo-500/20 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+          className="h-9 w-9 rounded-xl border border-amber-500/30 bg-amber-500/10 flex items-center justify-center text-amber-400 hover:bg-amber-500/20 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
         >
           <Plus size={14} />
         </button>

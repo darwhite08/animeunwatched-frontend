@@ -21,7 +21,7 @@ const SECTIONS: SiteSection[] = [
   {
     title: "Discovery",
     color: "text-amber-400",
-    border: "border-indigo-500/20",
+    border: "border-amber-500/20",
     links: [
       { label: "Home",          href: "/" },
       { label: "Browse",        href: "/discover" },
@@ -91,7 +91,7 @@ export default function SitemapPage() {
       {/* ── Header ── */}
       <section className="relative overflow-hidden border-b border-white/5">
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-indigo-600/6 blur-[130px] rounded-full" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-amber-600/6 blur-[130px] rounded-full" />
         </div>
 
         <div className="relative z-10 max-w-5xl mx-auto px-6 pt-24 pb-16">
@@ -100,7 +100,7 @@ export default function SitemapPage() {
             animate={{ opacity: 1, y: 0 }}
             className="flex items-center gap-3 mb-6"
           >
-            <div className="p-2 rounded-xl bg-indigo-500/10 border border-indigo-500/20">
+            <div className="p-2 rounded-xl bg-amber-500/10 border border-amber-500/20">
               <Map size={18} className="text-amber-400" />
             </div>
             <span className="text-[10px] font-black uppercase tracking-[0.3em] text-amber-400/70">

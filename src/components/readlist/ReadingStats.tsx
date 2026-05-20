@@ -8,7 +8,7 @@ const STATS = [
   { label: "Completed",     value: "12",     icon: CheckCircle,  color: "text-emerald-400", bg: "bg-emerald-500/10"},
   { label: "Avg. Pace",     value: "4 Ch/d", icon: Zap,          color: "text-amber-400",   bg: "bg-amber-500/10"  },
   { label: "Hours Read",    value: "240h",   icon: Clock,        color: "text-purple-400",  bg: "bg-purple-500/10" },
-  { label: "This Month",    value: "+8",     icon: TrendingUp,   color: "text-amber-400",  bg: "bg-indigo-500/10" },
+  { label: "This Month",    value: "+8",     icon: TrendingUp,   color: "text-amber-400",  bg: "bg-amber-500/10" },
 ]
 
 export const ReadingStats = () => (

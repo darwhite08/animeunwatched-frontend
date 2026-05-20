@@ -48,7 +48,7 @@ export default function ListShareCard() {
       <div className="relative rounded-3xl overflow-hidden border border-zinc-700/60 bg-[#0d0d0d] shadow-2xl select-none">
         {/* Ambient glow */}
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-0 right-0 w-56 h-56 bg-indigo-600/15 blur-[80px] rounded-full" />
+          <div className="absolute top-0 right-0 w-56 h-56 bg-amber-600/15 blur-[80px] rounded-full" />
           <div className="absolute bottom-0 left-0 w-40 h-40 bg-violet-700/10 blur-[60px] rounded-full" />
         </div>
 
@@ -121,7 +121,7 @@ export default function ListShareCard() {
         {/* Twitter / X */}
         <button
           onClick={handleTwitter}
-          className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-2xl border border-indigo-500/40 bg-indigo-500/10 text-amber-300 hover:border-indigo-400 hover:bg-indigo-500/20 transition-all duration-200 group"
+          className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-2xl border border-amber-500/40 bg-amber-500/10 text-amber-300 hover:border-indigo-400 hover:bg-amber-500/20 transition-all duration-200 group"
         >
           <Share2 className="w-4 h-4 transition-transform duration-200 group-hover:scale-110" />
           <span className="text-[10px] font-black uppercase tracking-widest">Share on Twitter</span>

@@ -182,7 +182,7 @@ export default function AnimeEpisodesPage({
             </Link>
             <p className="text-[10px] text-white/30 mt-0.5 font-mono">{anime?.titleJapanese}</p>
             <div className="flex items-center gap-3 mt-2">
-              <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-[10px] font-black text-amber-400">
+              <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-[10px] font-black text-amber-400">
                 <Tv size={11} />
                 {anime?.episodes == null ? "Ongoing" : `${anime.episodes} Episodes`}
               </div>
@@ -290,7 +290,7 @@ export default function AnimeEpisodesPage({
                 className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-[9px] font-black uppercase tracking-wider transition-all shrink-0 ${
                   ep.watched
                     ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/20 hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/20"
-                    : "bg-white/5 text-white/30 border border-white/8 hover:bg-indigo-500/15 hover:text-amber-400 hover:border-indigo-500/25"
+                    : "bg-white/5 text-white/30 border border-white/8 hover:bg-amber-500/15 hover:text-amber-400 hover:border-amber-500/25"
                 }`}
               >
                 <Check size={11} className={ep.watched ? "" : "opacity-30"} />
@@ -300,7 +300,7 @@ export default function AnimeEpisodesPage({
               {/* Play button */}
               <button
                 onClick={() => push("Streaming coming soon!", "info")}
-                className="flex items-center justify-center h-9 w-9 rounded-xl bg-white/5 border border-white/8 text-white/30 hover:bg-indigo-600 hover:text-white hover:border-indigo-500 transition-all shrink-0"
+                className="flex items-center justify-center h-9 w-9 rounded-xl bg-white/5 border border-white/8 text-white/30 hover:bg-amber-600 hover:text-white hover:border-amber-500 transition-all shrink-0"
               >
                 <Play size={14} fill="currentColor" />
               </button>

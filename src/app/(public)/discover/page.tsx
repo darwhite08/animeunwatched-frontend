@@ -73,7 +73,7 @@ function TrendingCard({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay: index * 0.08 }}
-      className="group relative flex gap-0 bg-[#0a0a0a] rounded-2xl border border-white/5 hover:border-indigo-500/20 overflow-hidden transition-all duration-500"
+      className="group relative flex gap-0 bg-[#0a0a0a] rounded-2xl border border-white/5 hover:border-amber-500/20 overflow-hidden transition-all duration-500"
     >
       {/* Glow */}
       <div className="absolute -inset-px bg-gradient-to-r from-indigo-500/10 to-purple-500/10 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
@@ -89,7 +89,7 @@ function TrendingCard({
         />
         <div className="absolute inset-0 bg-gradient-to-r from-transparent to-[#0a0a0a]" />
         {/* Rank */}
-        <div className="absolute top-3 left-3 px-2 py-1 bg-black/70 backdrop-blur border border-indigo-500/30 rounded-lg text-[9px] font-black text-amber-400 uppercase italic">
+        <div className="absolute top-3 left-3 px-2 py-1 bg-black/70 backdrop-blur border border-amber-500/30 rounded-lg text-[9px] font-black text-amber-400 uppercase italic">
           #{anime.rank}
         </div>
         {anime.status === "airing" && (
@@ -156,7 +156,7 @@ function TrendingCard({
           </Link>
           <button
             onClick={() => onPreview(anime)}
-            className="flex items-center gap-1.5 px-4 py-2 rounded-xl border border-indigo-500/20 bg-indigo-500/5 text-amber-400 hover:bg-indigo-500/10 transition-all text-[10px] font-black uppercase tracking-widest"
+            className="flex items-center gap-1.5 px-4 py-2 rounded-xl border border-amber-500/20 bg-amber-500/5 text-amber-400 hover:bg-amber-500/10 transition-all text-[10px] font-black uppercase tracking-widest"
           >
             Quick Preview
           </button>
@@ -186,7 +186,7 @@ function StudioCard({
       onClick={onClick}
       className={`relative text-left p-5 rounded-2xl border transition-all duration-300 w-full ${
         selected
-          ? "bg-indigo-600/10 border-indigo-500/40"
+          ? "bg-amber-600/10 border-amber-500/40"
           : "bg-[#0a0a0a] border-white/5 hover:border-white/15"
       }`}
     >
@@ -198,7 +198,7 @@ function StudioCard({
           <div className="h-10 w-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center">
             <Film size={18} className={selected ? "text-amber-400" : "text-white/30"} />
           </div>
-          <span className={`text-xs font-black px-2 py-0.5 rounded-full ${selected ? "bg-indigo-500/20 text-amber-400" : "bg-white/5 text-white/30"}`}>
+          <span className={`text-xs font-black px-2 py-0.5 rounded-full ${selected ? "bg-amber-500/20 text-amber-400" : "bg-white/5 text-white/30"}`}>
             {count} anime
           </span>
         </div>

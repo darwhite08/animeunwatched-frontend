@@ -33,7 +33,7 @@ export default function ContinueWatchingCard() {
 
   return (
     <div className="p-8 rounded-[2.5rem] border border-white/5 bg-[#0a0a0a] space-y-6 relative overflow-hidden">
-      <div className="absolute -top-10 -right-10 w-40 h-40 bg-indigo-500/5 blur-[50px] rounded-full pointer-events-none" />
+      <div className="absolute -top-10 -right-10 w-40 h-40 bg-amber-500/5 blur-[50px] rounded-full pointer-events-none" />
 
       <div className="flex items-center justify-between relative z-10">
         <div className="flex items-center gap-2">
@@ -73,7 +73,7 @@ export default function ContinueWatchingCard() {
               </div>
             </div>
             <button onClick={() => push(`Opening ${item.next}…`, "info")}
-              className="shrink-0 w-9 h-9 rounded-xl bg-indigo-600/10 border border-indigo-500/20 flex items-center justify-center text-amber-400 hover:bg-indigo-600 hover:text-white hover:border-transparent transition-all opacity-0 group-hover:opacity-100">
+              className="shrink-0 w-9 h-9 rounded-xl bg-amber-600/10 border border-amber-500/20 flex items-center justify-center text-amber-400 hover:bg-amber-600 hover:text-white hover:border-transparent transition-all opacity-0 group-hover:opacity-100">
               <Play size={13} fill="currentColor" />
             </button>
           </motion.div>

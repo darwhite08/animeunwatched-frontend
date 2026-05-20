@@ -341,7 +341,7 @@ export default function FeedPage() {
           <motion.div
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-zinc-900/70 border border-indigo-500/20 rounded-2xl p-5 space-y-4"
+            className="bg-zinc-900/70 border border-amber-500/20 rounded-2xl p-5 space-y-4"
           >
             <div className="flex items-start gap-3">
               <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center font-black text-sm shrink-0">
@@ -654,9 +654,9 @@ export default function FeedPage() {
           {/* Community link */}
           <Link
             href="/community"
-            className="flex items-center gap-3 p-5 rounded-2xl bg-gradient-to-br from-indigo-600/15 to-violet-600/10 border border-indigo-500/20 hover:from-indigo-600/20 transition-all group"
+            className="flex items-center gap-3 p-5 rounded-2xl bg-gradient-to-br from-indigo-600/15 to-violet-600/10 border border-amber-500/20 hover:from-indigo-600/20 transition-all group"
           >
-            <div className="h-10 w-10 rounded-xl bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center shrink-0">
+            <div className="h-10 w-10 rounded-xl bg-amber-600/20 border border-amber-500/30 flex items-center justify-center shrink-0">
               <Users size={16} className="text-amber-400" />
             </div>
             <div className="flex-1">

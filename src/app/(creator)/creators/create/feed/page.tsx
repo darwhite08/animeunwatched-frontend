@@ -57,7 +57,7 @@ export default function CreateFeedPage() {
     <div className="max-w-2xl space-y-8">
       {/* Header */}
       <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-xl bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center">
+        <div className="w-10 h-10 rounded-xl bg-amber-600/20 border border-amber-500/30 flex items-center justify-center">
           <Rss size={18} className="text-amber-400" />
         </div>
         <div>
@@ -131,7 +131,7 @@ export default function CreateFeedPage() {
 
           {selectedAnime && (
             <div className="flex items-center gap-2 mt-2">
-              <span className="text-xs bg-indigo-600/20 text-amber-400 px-3 py-1 rounded-full">
+              <span className="text-xs bg-amber-600/20 text-amber-400 px-3 py-1 rounded-full">
                 {selectedAnime}
               </span>
               <button onClick={() => setSelectedAnime(null)}>

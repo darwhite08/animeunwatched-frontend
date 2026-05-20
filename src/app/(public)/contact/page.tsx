@@ -81,7 +81,7 @@ export default function ContactPage() {
       {/* ── Hero ── */}
       <section className="relative overflow-hidden border-b border-white/5">
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[350px] bg-indigo-600/8 blur-[120px] rounded-full" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[350px] bg-amber-600/8 blur-[120px] rounded-full" />
         </div>
 
         <div className="relative z-10 max-w-4xl mx-auto px-6 pt-24 pb-16 text-center">
@@ -266,7 +266,7 @@ export default function ContactPage() {
                 target="_blank"
                 rel="noopener noreferrer"
                 whileHover={{ y: -3, scale: 1.08 }}
-                className="flex items-center gap-2 px-5 py-2.5 rounded-xl border border-white/8 bg-white/[0.02] text-white/40 hover:text-white hover:border-indigo-500/30 hover:bg-white/[0.05] transition-all text-xs font-black uppercase tracking-wider"
+                className="flex items-center gap-2 px-5 py-2.5 rounded-xl border border-white/8 bg-white/[0.02] text-white/40 hover:text-white hover:border-amber-500/30 hover:bg-white/[0.05] transition-all text-xs font-black uppercase tracking-wider"
               >
                 <Icon size={14} />
                 {label}

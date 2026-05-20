@@ -63,7 +63,7 @@ export default function AnimeBrowsePage() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {[
             { href: "/bestanimelist", icon: Star,      label: "Top Rated",     desc: "Highest neural scores",    color: "from-amber-600/20 to-amber-900/5",  border: "border-amber-500/20", text: "text-amber-400"   },
-            { href: "/calendar",      icon: Calendar,   label: "Seasonal",      desc: "Browse by season & year",  color: "from-indigo-600/20 to-indigo-900/5", border: "border-indigo-500/20",text: "text-amber-400"  },
+            { href: "/calendar",      icon: Calendar,   label: "Seasonal",      desc: "Browse by season & year",  color: "from-indigo-600/20 to-indigo-900/5", border: "border-amber-500/20",text: "text-amber-400"  },
             { href: "/discover",      icon: TrendingUp, label: "Trending",      desc: "What's hot right now",      color: "from-rose-600/20 to-rose-900/5",    border: "border-rose-500/20",  text: "text-rose-400"    },
             { href: "/ai-discover",   icon: Clock,      label: "For You",       desc: "AI-matched to your taste",  color: "from-violet-600/20 to-violet-900/5",border: "border-violet-500/20",text: "text-violet-400"  },
           ].map(({ href, icon: Icon, label, desc, color, border, text }) => (
@@ -110,7 +110,7 @@ export default function AnimeBrowsePage() {
                 <p className="text-[10px] font-black uppercase tracking-widest text-white/30">{SEASON_LABELS[s]}</p>
                 {SEASONAL_YEARS.map(y => (
                   <Link key={y} href={`/anime/season/${y}/${s}`}
-                    className="flex items-center justify-between px-4 py-2.5 rounded-xl bg-white/[0.02] border border-white/8 hover:border-indigo-500/25 hover:bg-white/[0.04] transition-all group"
+                    className="flex items-center justify-between px-4 py-2.5 rounded-xl bg-white/[0.02] border border-white/8 hover:border-amber-500/25 hover:bg-white/[0.04] transition-all group"
                   >
                     <span className="text-sm font-bold text-white/60 group-hover:text-white transition-colors">{y}</span>
                     <span className="text-[9px] text-white/20 group-hover:text-amber-400 transition-colors font-mono">

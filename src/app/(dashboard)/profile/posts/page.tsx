@@ -93,7 +93,7 @@ export default function MyPostsPage() {
               className="p-5 rounded-2xl bg-white/[0.02] border border-white/8 hover:border-white/15 transition-colors space-y-3"
             >
               {p.anime && (
-                <span className="inline-flex items-center text-[9px] font-bold text-amber-400 bg-indigo-500/8 border border-indigo-500/15 px-2.5 py-1 rounded-lg">
+                <span className="inline-flex items-center text-[9px] font-bold text-amber-400 bg-amber-500/8 border border-amber-500/15 px-2.5 py-1 rounded-lg">
                   {p.anime}
                 </span>
               )}

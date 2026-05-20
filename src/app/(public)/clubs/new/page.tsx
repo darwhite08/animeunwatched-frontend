@@ -153,7 +153,7 @@ export default function NewClubPage() {
   }
 
   const inputClass =
-    "w-full px-4 py-3 rounded-xl bg-white/[0.03] border border-white/8 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-indigo-500/50 focus:bg-white/[0.05] transition-all"
+    "w-full px-4 py-3 rounded-xl bg-white/[0.03] border border-white/8 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-amber-500/50 focus:bg-white/[0.05] transition-all"
 
   return (
     <div className="min-h-screen bg-[#020202] text-white pb-32">

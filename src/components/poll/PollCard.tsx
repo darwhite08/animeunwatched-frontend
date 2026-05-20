@@ -8,9 +8,9 @@ export const PollCard = ({ poll }: { poll: any }) => {
   const [voted, setVoted] = useState<string | null>(null)
 
   return (
-    <div className="relative group p-10 rounded-[3rem] border border-white/5 bg-[#0a0a0a] overflow-hidden transition-all duration-500 hover:border-indigo-500/30">
+    <div className="relative group p-10 rounded-[3rem] border border-white/5 bg-[#0a0a0a] overflow-hidden transition-all duration-500 hover:border-amber-500/30">
       {/* Background Ambient Glow */}
-      <div className="absolute top-0 right-0 w-64 h-64 bg-indigo-600/5 blur-[100px] pointer-events-none" />
+      <div className="absolute top-0 right-0 w-64 h-64 bg-amber-600/5 blur-[100px] pointer-events-none" />
       
       <div className="relative z-10 space-y-8">
         {/* Meta Header */}
@@ -45,7 +45,7 @@ export const PollCard = ({ poll }: { poll: any }) => {
                 disabled={!!voted}
                 className={`relative w-full text-left p-6 rounded-2xl border transition-all duration-500 group/opt ${
                   isSelected 
-                  ? "border-indigo-500/50 bg-indigo-500/5" 
+                  ? "border-amber-500/50 bg-amber-500/5" 
                   : "border-white/5 bg-white/[0.02] hover:bg-white/[0.04]"
                 } ${voted && !isSelected ? "opacity-50 grayscale" : ""}`}
               >

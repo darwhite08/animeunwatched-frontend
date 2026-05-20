@@ -71,7 +71,7 @@ export default function SidebarLevelCard({
               </div>
 
               {tier && (
-                <span className="text-[10px] uppercase tracking-wide px-2 py-1 rounded-full bg-indigo-600/20 text-amber-400 border border-indigo-500/20">
+                <span className="text-[10px] uppercase tracking-wide px-2 py-1 rounded-full bg-amber-600/20 text-amber-400 border border-amber-500/20">
                   {tier}
                 </span>
               )}

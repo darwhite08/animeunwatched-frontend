@@ -172,7 +172,7 @@ function ListCard({ list, onClick, allAnime }: ListCardProps) {
         {list.tags.map(tag => (
           <span
             key={tag}
-            className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-indigo-500/8 border border-indigo-500/15 text-[8px] font-black uppercase tracking-wider text-amber-400/70"
+            className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-500/8 border border-amber-500/15 text-[8px] font-black uppercase tracking-wider text-amber-400/70"
           >
             <Tag size={7} />
             {tag}
@@ -263,7 +263,7 @@ function ListDetailModal({ list, onClose, onAnimeClick, allAnime }: ListModalPro
               {list.tags.map(tag => (
                 <span
                   key={tag}
-                  className="px-2 py-0.5 rounded-full bg-indigo-500/8 border border-indigo-500/15 text-[8px] font-black uppercase tracking-wider text-amber-400/70"
+                  className="px-2 py-0.5 rounded-full bg-amber-500/8 border border-amber-500/15 text-[8px] font-black uppercase tracking-wider text-amber-400/70"
                 >
                   {tag}
                 </span>

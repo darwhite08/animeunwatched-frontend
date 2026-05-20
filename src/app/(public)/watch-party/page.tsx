@@ -18,11 +18,11 @@ export default function WatchPartyPage() {
       {/* Hero */}
       <div className="relative min-h-[60vh] flex items-center justify-center overflow-hidden">
         <motion.div animate={{ scale:[1,1.08,1], opacity:[0.15,0.25,0.15] }} transition={{ duration:8, repeat:Infinity }}
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-indigo-600 blur-[160px] rounded-full pointer-events-none"
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-amber-600 blur-[160px] rounded-full pointer-events-none"
         />
         <div className="relative z-10 text-center max-w-2xl mx-auto px-6 space-y-6 pt-32">
           <motion.div initial={{ opacity:0, y:-10 }} animate={{ opacity:1, y:0 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-indigo-500/25 bg-indigo-500/8"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-amber-500/25 bg-amber-500/8"
           >
             <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
             <span className="text-[10px] font-black uppercase tracking-[0.3em] text-amber-400">Coming Soon</span>
@@ -66,9 +66,9 @@ export default function WatchPartyPage() {
           {FEATURES.map(({ icon: Icon, title, desc }, i) => (
             <motion.div key={title} initial={{ opacity:0, y:16 }} whileInView={{ opacity:1, y:0 }} viewport={{ once:true }}
               transition={{ delay: i*0.07 }}
-              className="p-6 rounded-2xl bg-white/[0.02] border border-white/8 hover:border-indigo-500/20 transition-all group space-y-3"
+              className="p-6 rounded-2xl bg-white/[0.02] border border-white/8 hover:border-amber-500/20 transition-all group space-y-3"
             >
-              <div className="w-10 h-10 rounded-xl bg-indigo-600/15 border border-indigo-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+              <div className="w-10 h-10 rounded-xl bg-amber-600/15 border border-amber-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
                 <Icon size={18} className="text-amber-400" />
               </div>
               <p className="font-black text-white">{title}</p>

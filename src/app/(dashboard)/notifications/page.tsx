@@ -21,7 +21,7 @@ type Notif = {
 
 const ICON_MAP: Record<NotifType, { icon: typeof Bell; color: string; bg: string }> = {
   achievement: { icon: Flame,    color: "text-orange-400", bg: "bg-orange-500/10" },
-  comment:     { icon: BookOpen, color: "text-amber-400", bg: "bg-indigo-500/10" },
+  comment:     { icon: BookOpen, color: "text-amber-400", bg: "bg-amber-500/10" },
   update:      { icon: Zap,      color: "text-yellow-400", bg: "bg-yellow-500/10" },
   follow:      { icon: Trophy,   color: "text-emerald-400",bg: "bg-emerald-500/10"},
   poll:        { icon: Vote,     color: "text-violet-400", bg: "bg-violet-500/10" },
@@ -97,7 +97,7 @@ export default function NotificationsPage() {
           {unreadCount > 0 && (
             <button
               onClick={markAllRead}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider text-amber-400 hover:bg-indigo-500/10 border border-indigo-500/20 transition-colors"
+              className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider text-amber-400 hover:bg-amber-500/10 border border-amber-500/20 transition-colors"
             >
               <CheckCheck size={13} /> Mark all read
             </button>
@@ -158,12 +158,12 @@ export default function NotificationsPage() {
                   className={`group relative flex items-start gap-4 p-5 rounded-2xl border transition-all cursor-pointer ${
                     notif.read
                       ? "border-white/5 bg-transparent hover:bg-white/[0.02]"
-                      : "border-indigo-500/15 bg-indigo-500/5 hover:bg-indigo-500/8"
+                      : "border-amber-500/15 bg-amber-500/5 hover:bg-amber-500/8"
                   }`}
                 >
                   {/* Unread dot */}
                   {!notif.read && (
-                    <div className="absolute top-5 right-5 h-2 w-2 rounded-full bg-indigo-500" />
+                    <div className="absolute top-5 right-5 h-2 w-2 rounded-full bg-amber-500" />
                   )}
 
                   <div className={`shrink-0 p-2.5 rounded-xl ${bg}`}>

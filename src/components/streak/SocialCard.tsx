@@ -2,7 +2,7 @@
 import { Globe, Users } from "lucide-react"
 
 export const SocialCard = () => (
-  <div className="p-8 rounded-[2.5rem] border border-white/5 bg-[#0a0a0a] flex flex-col justify-between h-full group hover:border-indigo-500/30 transition-all">
+  <div className="p-8 rounded-[2.5rem] border border-white/5 bg-[#0a0a0a] flex flex-col justify-between h-full group hover:border-amber-500/30 transition-all">
     <div className="flex justify-between items-start">
       <div className="p-3 rounded-2xl bg-blue-500/10 text-blue-400">
         <Globe size={20} />

@@ -120,7 +120,7 @@ export default function DailyQuestCard() {
                 <span className={`text-sm font-bold flex-1 transition-colors ${complete ? "text-white/40 line-through" : "text-white/70 group-hover:text-white"}`}>
                   {q.label}
                 </span>
-                <span className={`text-[9px] font-black px-2 py-0.5 rounded-full flex items-center gap-1 ${complete ? "bg-emerald-500/10 text-emerald-400/60" : "bg-indigo-500/10 text-amber-400/80"}`}>
+                <span className={`text-[9px] font-black px-2 py-0.5 rounded-full flex items-center gap-1 ${complete ? "bg-emerald-500/10 text-emerald-400/60" : "bg-amber-500/10 text-amber-400/80"}`}>
                   <Zap size={8} fill="currentColor" /> +{q.xp}
                 </span>
               </Link>

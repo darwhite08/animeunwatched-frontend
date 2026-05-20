@@ -11,9 +11,9 @@ const CONTENT_TYPES = [
     label:   "Feed Post",
     desc:    "Share a theory, hot take, or anime reaction with your followers.",
     color:   "from-indigo-600/30 to-indigo-800/10",
-    border:  "hover:border-indigo-500/50",
+    border:  "hover:border-amber-500/50",
     glow:    "hover:shadow-[0_0_40px_rgba(99,102,241,0.15)]",
-    badge:   "text-amber-400 bg-indigo-500/10 border-indigo-500/20",
+    badge:   "text-amber-400 bg-amber-500/10 border-amber-500/20",
     tag:     "Quick",
   },
   {

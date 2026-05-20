@@ -235,7 +235,7 @@ function CreatorGridCard({ creator, index }: { creator: Creator; index: number }
             {creator.displayName}
           </p>
           <p className="text-[10px] text-white/30 font-bold">@{creator.username}</p>
-          <span className="inline-block mt-1 px-2 py-0.5 rounded-full bg-indigo-500/10 border border-indigo-500/15 text-[9px] font-black text-amber-400 uppercase tracking-wider">
+          <span className="inline-block mt-1 px-2 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/15 text-[9px] font-black text-amber-400 uppercase tracking-wider">
             {creator.specialty}
           </span>
         </div>
@@ -353,7 +353,7 @@ export default function CreatorSpotlightPage() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
-          className="flex flex-col sm:flex-row items-center justify-between gap-6 p-8 rounded-3xl bg-gradient-to-br from-indigo-600/15 to-violet-600/10 border border-indigo-500/20"
+          className="flex flex-col sm:flex-row items-center justify-between gap-6 p-8 rounded-3xl bg-gradient-to-br from-indigo-600/15 to-violet-600/10 border border-amber-500/20"
         >
           <div className="space-y-2">
             <h3 className="text-2xl font-black uppercase italic tracking-tight text-white">

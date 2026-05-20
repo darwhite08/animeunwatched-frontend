@@ -19,7 +19,7 @@ type WatchItem = {
 
 const STATUS_CONFIG: Record<string, { color: string; bg: string }> = {
   "Watching":      { color: "text-emerald-400", bg: "bg-emerald-500/10" },
-  "Plan to Watch": { color: "text-amber-400",  bg: "bg-indigo-500/10"  },
+  "Plan to Watch": { color: "text-amber-400",  bg: "bg-amber-500/10"  },
   "Completed":     { color: "text-amber-400",   bg: "bg-amber-500/10"   },
   "On Hold":       { color: "text-orange-400",  bg: "bg-orange-500/10"  },
   "Dropped":       { color: "text-red-400",     bg: "bg-red-500/10"     },
@@ -41,7 +41,7 @@ export const WatchCard = ({ anime, onRemove }: { anime: WatchItem; onRemove?: (i
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.9 }}
-      className="group relative rounded-[2.5rem] border border-white/5 bg-[#080808] overflow-hidden flex flex-col h-full hover:border-indigo-500/30 transition-all duration-500 shadow-[0_20px_40px_-10px_rgba(0,0,0,0.5)]"
+      className="group relative rounded-[2.5rem] border border-white/5 bg-[#080808] overflow-hidden flex flex-col h-full hover:border-amber-500/30 transition-all duration-500 shadow-[0_20px_40px_-10px_rgba(0,0,0,0.5)]"
       style={{ transformStyle: "preserve-3d" }}
     >
       {/* IMAGE */}
@@ -135,7 +135,7 @@ export const WatchCard = ({ anime, onRemove }: { anime: WatchItem; onRemove?: (i
           </button>
           <button
             onClick={() => push(`Opening ${anime.title}…`, "info")}
-            className="h-11 w-11 flex items-center justify-center rounded-2xl bg-indigo-600/15 border border-indigo-500/25 text-amber-400 hover:bg-indigo-600 hover:text-white transition-all"
+            className="h-11 w-11 flex items-center justify-center rounded-2xl bg-amber-600/15 border border-amber-500/25 text-amber-400 hover:bg-amber-600 hover:text-white transition-all"
           >
             <Play size={15} fill="currentColor" />
           </button>

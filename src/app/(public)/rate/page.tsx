@@ -163,7 +163,7 @@ export default function RatePage() {
           <motion.div
             initial={{ opacity:0, y:-12 }}
             animate={{ opacity:1, y:0 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-[10px] font-black uppercase tracking-[0.3em] text-amber-400"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-500/10 border border-amber-500/20 text-[10px] font-black uppercase tracking-[0.3em] text-amber-400"
           >
             <ShieldCheck size={12} /> Verified Rating System
           </motion.div>
@@ -208,7 +208,7 @@ export default function RatePage() {
                   onChange={e => setQuery(e.target.value)}
                   placeholder="Search anime to rate…"
                   autoFocus
-                  className="w-full pl-11 pr-4 py-4 bg-white/5 border border-white/10 rounded-2xl text-white placeholder:text-white/25 outline-none focus:border-indigo-500/50 text-sm"
+                  className="w-full pl-11 pr-4 py-4 bg-white/5 border border-white/10 rounded-2xl text-white placeholder:text-white/25 outline-none focus:border-amber-500/50 text-sm"
                 />
               </div>
 
@@ -219,7 +219,7 @@ export default function RatePage() {
                     whileHover={{ scale:1.02 }}
                     whileTap={{ scale:0.97 }}
                     onClick={() => selectAnime(a)}
-                    className="flex items-center gap-3 p-3 rounded-2xl bg-white/[0.03] border border-white/8 hover:border-indigo-500/30 hover:bg-indigo-500/8 transition-all text-left group"
+                    className="flex items-center gap-3 p-3 rounded-2xl bg-white/[0.03] border border-white/8 hover:border-amber-500/30 hover:bg-amber-500/8 transition-all text-left group"
                   >
                     <div className="relative h-12 w-9 rounded-lg overflow-hidden shrink-0">
                       <Image src={a.image} alt={a.title} fill className="object-cover" sizes="36px" />
@@ -265,8 +265,8 @@ export default function RatePage() {
                         rating === n
                           ? "bg-amber-500 border-amber-400 text-black shadow-[0_0_20px_rgba(99,102,241,0.4)]"
                           : rating && n <= rating
-                          ? "bg-indigo-600/20 border-indigo-500/30 text-amber-400"
-                          : "bg-white/5 border-white/8 text-white/30 hover:border-indigo-500/30 hover:text-white"
+                          ? "bg-amber-600/20 border-amber-500/30 text-amber-400"
+                          : "bg-white/5 border-white/8 text-white/30 hover:border-amber-500/30 hover:text-white"
                       }`}
                     >
                       {n}
@@ -322,8 +322,8 @@ export default function RatePage() {
                         onClick={() => setAnswers(prev => ({ ...prev, [q.id]: opt }))}
                         className={`px-4 py-3 rounded-xl border text-sm text-left transition-all ${
                           answers[q.id] === opt
-                            ? "bg-indigo-600/20 border-indigo-500 text-white"
-                            : "border-white/10 bg-white/[0.02] text-white/50 hover:border-indigo-500/30 hover:text-white"
+                            ? "bg-amber-600/20 border-amber-500 text-white"
+                            : "border-white/10 bg-white/[0.02] text-white/50 hover:border-amber-500/30 hover:text-white"
                         }`}
                       >
                         {opt}

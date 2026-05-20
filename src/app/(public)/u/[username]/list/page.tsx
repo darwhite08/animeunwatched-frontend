@@ -41,7 +41,7 @@ function apiStatusToUI(s: string): WatchStatus {
 
 const STATUS_COLORS: Record<WatchStatus, string> = {
   "Watching":       "bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
-  "Completed":      "bg-indigo-500/20 text-amber-400 border-indigo-500/30",
+  "Completed":      "bg-amber-500/20 text-amber-400 border-amber-500/30",
   "Plan to Watch":  "bg-amber-500/20 text-amber-400 border-amber-500/30",
   "On Hold":        "bg-rose-500/20 text-rose-400 border-rose-500/30",
 }
@@ -108,7 +108,7 @@ function ListCard({ entry, index, onAdd }: ListCardProps) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay: Math.min(index * 0.04, 0.4), duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
-      className="group relative rounded-2xl overflow-hidden border border-white/5 bg-[#0a0a0a] hover:border-indigo-500/25 hover:bg-zinc-900/60 transition-all duration-400"
+      className="group relative rounded-2xl overflow-hidden border border-white/5 bg-[#0a0a0a] hover:border-amber-500/25 hover:bg-zinc-900/60 transition-all duration-400"
     >
       {/* Cover */}
       <div className="relative aspect-[2/3] w-full">

@@ -54,7 +54,7 @@ export default function BlogCommentsPage({ params }: { params: Promise<{ slug: s
         </div>
 
         {/* Compose */}
-        <div className="p-5 rounded-2xl bg-white/[0.02] border border-indigo-500/15 space-y-3">
+        <div className="p-5 rounded-2xl bg-white/[0.02] border border-amber-500/15 space-y-3">
           <textarea value={draft} onChange={e=>setDraft(e.target.value)}
             placeholder="Share your thoughts…"
             rows={3}

@@ -95,7 +95,7 @@ export default function AIResultsGrid({ results, hasSearched, query }: AIResults
                       transition={{ delay: i * 0.06 }}
                       whileHover={{ y: -8 }}
                       onClick={() => setSelectedAnime(anime)}
-                      className="group relative aspect-[16/10] bg-white/5 rounded-[2rem] border border-white/5 hover:border-indigo-500/30 overflow-hidden p-1 cursor-pointer transition-colors duration-300"
+                      className="group relative aspect-[16/10] bg-white/5 rounded-[2rem] border border-white/5 hover:border-amber-500/30 overflow-hidden p-1 cursor-pointer transition-colors duration-300"
                     >
                       <div className="relative h-full w-full rounded-[1.8rem] overflow-hidden flex flex-col justify-end p-5">
                         <img

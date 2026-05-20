@@ -41,7 +41,7 @@ const STAT_CONFIG = [
 ]
 
 const COLOR_MAP: Record<string, { bg: string; border: string; text: string; glow: string }> = {
-  indigo:  { bg: "bg-indigo-500/10",  border: "border-indigo-500/20",  text: "text-amber-400",  glow: "bg-indigo-500" },
+  indigo:  { bg: "bg-amber-500/10",  border: "border-amber-500/20",  text: "text-amber-400",  glow: "bg-amber-500" },
   violet:  { bg: "bg-violet-500/10",  border: "border-violet-500/20",  text: "text-violet-400",  glow: "bg-violet-500" },
   fuchsia: { bg: "bg-fuchsia-500/10", border: "border-fuchsia-500/20", text: "text-fuchsia-400", glow: "bg-fuchsia-500" },
   cyan:    { bg: "bg-cyan-500/10",    border: "border-cyan-500/20",    text: "text-cyan-400",    glow: "bg-cyan-500" },
@@ -152,14 +152,14 @@ export default function StatsPage() {
       {/* ── Hero ── */}
       <section className="relative overflow-hidden border-b border-white/5">
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[400px] bg-indigo-600/7 blur-[130px] rounded-full" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[400px] bg-amber-600/7 blur-[130px] rounded-full" />
         </div>
 
         <div className="relative z-10 max-w-5xl mx-auto px-6 pt-24 pb-16 text-center">
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-3 px-4 py-2 rounded-full border border-indigo-500/25 bg-indigo-500/8 text-amber-400 mb-8"
+            className="inline-flex items-center gap-3 px-4 py-2 rounded-full border border-amber-500/25 bg-amber-500/8 text-amber-400 mb-8"
           >
             <LivePulse />
             <span className="text-[10px] font-black uppercase tracking-[0.3em]">Platform Stats</span>
@@ -306,7 +306,7 @@ export default function StatsPage() {
                   transition={{ delay: i * 0.08 }}
                   className="text-center space-y-3"
                 >
-                  <div className="mx-auto h-12 w-12 rounded-2xl bg-indigo-500/10 border border-indigo-500/15 flex items-center justify-center text-amber-400">
+                  <div className="mx-auto h-12 w-12 rounded-2xl bg-amber-500/10 border border-amber-500/15 flex items-center justify-center text-amber-400">
                     <Icon size={20} />
                   </div>
                   <p className="text-4xl font-black tracking-tighter text-white">{s.value}</p>

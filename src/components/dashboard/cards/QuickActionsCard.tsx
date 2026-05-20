@@ -19,7 +19,7 @@ export default function QuickActionsCard() {
   return (
     <div className="p-8 rounded-[2.5rem] border border-white/5 bg-[#0a0a0a] relative overflow-hidden">
       {/* Ambient glow */}
-      <div className="absolute -top-10 left-1/2 -translate-x-1/2 w-64 h-32 bg-indigo-600/5 blur-[80px] rounded-full pointer-events-none" />
+      <div className="absolute -top-10 left-1/2 -translate-x-1/2 w-64 h-32 bg-amber-600/5 blur-[80px] rounded-full pointer-events-none" />
 
       {/* Header */}
       <p className="text-[9px] font-mono font-black uppercase tracking-[0.4em] text-white/20 mb-6 relative z-10">

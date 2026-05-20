@@ -149,7 +149,7 @@ export default function RegisterPage() {
     <main className="relative min-h-screen bg-[#020202] text-white flex items-center justify-center px-6 py-20">
       {/* Background glows */}
       <div className="absolute inset-0 -z-10 pointer-events-none">
-        <div className="absolute top-[-200px] left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-indigo-600/15 blur-[150px] rounded-full" />
+        <div className="absolute top-[-200px] left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-amber-600/15 blur-[150px] rounded-full" />
         <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-violet-700/10 blur-[120px] rounded-full" />
       </div>
 
@@ -224,7 +224,7 @@ export default function RegisterPage() {
                 minLength={3}
                 maxLength={30}
                 disabled={isDisabled}
-                className={`w-full h-12 rounded-2xl bg-white/5 border px-4 text-sm text-white placeholder:text-white/20 outline-none focus:border-indigo-500/50 focus:bg-white/[0.07] transition-all disabled:opacity-50 ${
+                className={`w-full h-12 rounded-2xl bg-white/5 border px-4 text-sm text-white placeholder:text-white/20 outline-none focus:border-amber-500/50 focus:bg-white/[0.07] transition-all disabled:opacity-50 ${
                   form.username && form.username.length < 3 ? "border-red-500/50" : "border-white/10"
                 }`}
               />
@@ -251,7 +251,7 @@ export default function RegisterPage() {
                 placeholder="you@domain.com"
                 autoComplete="email"
                 disabled={isDisabled}
-                className="w-full h-12 rounded-2xl bg-white/5 border border-white/10 px-4 text-sm text-white placeholder:text-white/20 outline-none focus:border-indigo-500/50 focus:bg-white/[0.07] transition-all disabled:opacity-50"
+                className="w-full h-12 rounded-2xl bg-white/5 border border-white/10 px-4 text-sm text-white placeholder:text-white/20 outline-none focus:border-amber-500/50 focus:bg-white/[0.07] transition-all disabled:opacity-50"
               />
             </div>
 
@@ -267,7 +267,7 @@ export default function RegisterPage() {
                   placeholder="Min. 8 characters"
                   autoComplete="new-password"
                   disabled={isDisabled}
-                  className="w-full h-12 rounded-2xl bg-white/5 border border-white/10 px-4 pr-12 text-sm text-white placeholder:text-white/20 outline-none focus:border-indigo-500/50 focus:bg-white/[0.07] transition-all disabled:opacity-50"
+                  className="w-full h-12 rounded-2xl bg-white/5 border border-white/10 px-4 pr-12 text-sm text-white placeholder:text-white/20 outline-none focus:border-amber-500/50 focus:bg-white/[0.07] transition-all disabled:opacity-50"
                 />
                 <button
                   type="button"

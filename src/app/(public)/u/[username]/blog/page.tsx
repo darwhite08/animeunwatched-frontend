@@ -43,7 +43,7 @@ function BlogCard({ post, index }: { post: BlogPost; index: number }) {
       initial={{ opacity: 0, y: 18 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.07, duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
-      className="group block bg-zinc-900/60 border border-white/8 hover:border-indigo-500/30 rounded-2xl overflow-hidden transition-all"
+      className="group block bg-zinc-900/60 border border-white/8 hover:border-amber-500/30 rounded-2xl overflow-hidden transition-all"
     >
       {/* Cover gradient */}
       <div className={`h-40 w-full bg-gradient-to-br ${post.coverGradient} relative`}>
@@ -185,7 +185,7 @@ export default function UserBlogPage({
           </p>
           <Link
             href={`/u/${username}`}
-            className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-white/[0.04] border border-white/10 hover:border-indigo-500/30 hover:bg-white/[0.07] text-sm font-black uppercase tracking-widest text-white/60 hover:text-white transition-all"
+            className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-white/[0.04] border border-white/10 hover:border-amber-500/30 hover:bg-white/[0.07] text-sm font-black uppercase tracking-widest text-white/60 hover:text-white transition-all"
           >
             <PenSquare size={14} className="text-amber-400" />
             More articles by @{username}

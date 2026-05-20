@@ -113,7 +113,7 @@ function IntegrationCard({ integration }: { integration: Integration }) {
             : isConnected
             ? "border border-red-500/20 text-red-400 hover:bg-red-500/8 bg-transparent"
             : isConnecting
-            ? "bg-indigo-600/50 text-white/60 cursor-wait"
+            ? "bg-amber-600/50 text-white/60 cursor-wait"
             : "bg-amber-500 hover:bg-amber-400 text-black shadow-[0_0_16px_rgba(99,102,241,0.25)]"
         }`}
       >
@@ -161,8 +161,8 @@ function ImportZone() {
       onClick={() => inputRef.current?.click()}
       className={`relative cursor-pointer rounded-2xl border-2 border-dashed px-8 py-10 text-center transition-all duration-200 ${
         dragging
-          ? "border-indigo-500/60 bg-indigo-500/5"
-          : "border-white/10 bg-white/[0.01] hover:border-indigo-500/30 hover:bg-white/[0.03]"
+          ? "border-amber-500/60 bg-amber-500/5"
+          : "border-white/10 bg-white/[0.01] hover:border-amber-500/30 hover:bg-white/[0.03]"
       }`}
     >
       <input
@@ -183,7 +183,7 @@ function ImportZone() {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="absolute inset-0 rounded-2xl bg-indigo-500/5 flex items-center justify-center"
+          className="absolute inset-0 rounded-2xl bg-amber-500/5 flex items-center justify-center"
         >
           <p className="text-sm font-black uppercase italic tracking-widest text-amber-400">
             Drop to Import
@@ -291,9 +291,9 @@ export default function ConnectedAccountsPage() {
           {/* JSON */}
           <button
             onClick={() => exportAs("json")}
-            className="group flex items-center gap-4 p-5 rounded-2xl bg-white/[0.02] border border-white/8 hover:border-indigo-500/25 hover:bg-indigo-500/5 transition-all text-left"
+            className="group flex items-center gap-4 p-5 rounded-2xl bg-white/[0.02] border border-white/8 hover:border-amber-500/25 hover:bg-amber-500/5 transition-all text-left"
           >
-            <div className="h-10 w-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center shrink-0">
+            <div className="h-10 w-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0">
               <FileJson size={16} className="text-amber-400" />
             </div>
             <div>

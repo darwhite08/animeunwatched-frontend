@@ -109,7 +109,7 @@ export default function SeasonalPage() {
                       {YEAR_LIST.map(y => (
                         <button key={y} onClick={() => { setYear(y); setYearOpen(false) }}
                           className={`w-full text-left px-4 py-2 text-sm font-bold transition-colors ${
-                            y === year ? "bg-indigo-600/20 text-amber-400" : "text-white/60 hover:text-white hover:bg-white/5"
+                            y === year ? "bg-amber-600/20 text-amber-400" : "text-white/60 hover:text-white hover:bg-white/5"
                           }`}
                         >
                           {y}

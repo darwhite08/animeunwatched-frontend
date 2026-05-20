@@ -122,7 +122,7 @@ function FeaturedAnimeCard({ anime, index }: { anime: Anime; index: number }) {
       initial={{ opacity: 0, y: 24 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.1 * index, duration: 0.45 }}
-      className="relative rounded-[2rem] overflow-hidden border border-white/5 bg-[#0a0a0a] group hover:border-indigo-500/30 transition-all duration-500"
+      className="relative rounded-[2rem] overflow-hidden border border-white/5 bg-[#0a0a0a] group hover:border-amber-500/30 transition-all duration-500"
     >
       {/* Blurred BG */}
       <div className="absolute inset-0">
@@ -276,7 +276,7 @@ export default function AnimeDiscussionsPage() {
       {/* ── Page Header ── */}
       <div className="relative overflow-hidden border-b border-white/5">
         <div className="absolute inset-0 bg-gradient-to-br from-indigo-950/40 via-transparent to-violet-950/30 pointer-events-none" />
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[300px] bg-indigo-600/8 blur-[100px] rounded-full pointer-events-none" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[300px] bg-amber-600/8 blur-[100px] rounded-full pointer-events-none" />
 
         <div className="relative z-10 max-w-6xl mx-auto px-6 py-20">
           <motion.div
@@ -329,7 +329,7 @@ export default function AnimeDiscussionsPage() {
               placeholder="Search discussions by anime, topic, or author…"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              className="w-full pl-11 pr-5 py-4 rounded-2xl bg-white/[0.04] border border-white/8 focus:border-indigo-500/40 focus:bg-white/[0.06] text-white text-sm font-medium placeholder:text-white/20 outline-none transition-all"
+              className="w-full pl-11 pr-5 py-4 rounded-2xl bg-white/[0.04] border border-white/8 focus:border-amber-500/40 focus:bg-white/[0.06] text-white text-sm font-medium placeholder:text-white/20 outline-none transition-all"
             />
           </div>
         </section>
@@ -365,7 +365,7 @@ export default function AnimeDiscussionsPage() {
         <section className="relative rounded-[2.5rem] overflow-hidden border border-white/5 bg-[#0a0a0a] p-10 text-center">
           <div className="absolute inset-0 bg-gradient-to-br from-violet-600/8 via-transparent to-indigo-600/8 pointer-events-none" />
           <div className="relative z-10 max-w-md mx-auto space-y-5">
-            <div className="w-14 h-14 rounded-2xl bg-indigo-600/20 border border-indigo-500/20 flex items-center justify-center mx-auto">
+            <div className="w-14 h-14 rounded-2xl bg-amber-600/20 border border-amber-500/20 flex items-center justify-center mx-auto">
               <MessageSquare size={22} className="text-amber-400" />
             </div>
             <h3 className="text-3xl font-black uppercase italic tracking-tight text-white">

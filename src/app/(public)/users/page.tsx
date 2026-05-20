@@ -50,7 +50,7 @@ export default function UsersPage() {
       {/* Header */}
       <div className="max-w-4xl mx-auto px-6 pt-32 pb-10">
         <motion.div initial={{ opacity:0, x:-16 }} animate={{ opacity:1, x:0 }}
-          className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-[10px] font-black uppercase tracking-[0.3em] text-amber-400 mb-5"
+          className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-[10px] font-black uppercase tracking-[0.3em] text-amber-400 mb-5"
         >
           <Users size={11} /> Shinobi Directory
         </motion.div>
@@ -67,7 +67,7 @@ export default function UsersPage() {
             <Search size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30" />
             <input value={query} onChange={e => setQuery(e.target.value)}
               placeholder="Search Shinobi…"
-              className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-2xl text-sm text-white placeholder:text-white/20 outline-none focus:border-indigo-500/40"
+              className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-2xl text-sm text-white placeholder:text-white/20 outline-none focus:border-amber-500/40"
             />
           </div>
           <div className="flex gap-2">
@@ -84,7 +84,7 @@ export default function UsersPage() {
           {sorted.map((user, i) => (
             <motion.div key={user.id} initial={{ opacity:0, y:8 }} animate={{ opacity:1, y:0 }} transition={{ delay: i*0.04 }}>
               <Link href={`/u/${user.username}`}
-                className="flex items-center gap-4 p-4 rounded-2xl bg-white/[0.02] border border-white/8 hover:border-indigo-500/20 hover:bg-white/[0.04] transition-all group"
+                className="flex items-center gap-4 p-4 rounded-2xl bg-white/[0.02] border border-white/8 hover:border-amber-500/20 hover:bg-white/[0.04] transition-all group"
               >
                 <span className="text-sm font-black text-white/20 w-6 shrink-0">#{i+1}</span>
                 <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-lg font-black shrink-0 group-hover:scale-105 transition-transform">

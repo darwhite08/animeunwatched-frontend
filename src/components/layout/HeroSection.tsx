@@ -57,7 +57,7 @@ export default function HeroSection() {
       <motion.div
         animate={{ scale:[1,1.07,1], opacity:[0.18,0.3,0.18] }}
         transition={{ duration:9, repeat:Infinity, ease:"easeInOut" }}
-        className="absolute top-[20%] left-[-5%] w-[480px] h-[480px] bg-indigo-600 blur-[160px] rounded-full pointer-events-none"
+        className="absolute top-[20%] left-[-5%] w-[480px] h-[480px] bg-amber-600 blur-[160px] rounded-full pointer-events-none"
       />
       {/* violet glow — right, behind characters */}
       <motion.div
@@ -88,7 +88,7 @@ export default function HeroSection() {
         <div className="flex items-center gap-3 border border-white/10 bg-white/[0.04] backdrop-blur-xl rounded-full px-5 py-2.5">
           <span className="relative flex h-2 w-2 shrink-0">
             <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-indigo-400 opacity-70" />
-            <span className="relative inline-flex h-2 w-2 rounded-full bg-indigo-500" />
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-amber-500" />
           </span>
           <AnimatePresence mode="wait">
             <motion.span
@@ -209,7 +209,7 @@ export default function HeroSection() {
         >
           {/* floor glow */}
           <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[400px] h-[180px] bg-violet-600/25 blur-[55px] rounded-full" />
-          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[220px] h-[100px] bg-indigo-500/30 blur-[35px] rounded-full" />
+          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[220px] h-[100px] bg-amber-500/30 blur-[35px] rounded-full" />
 
           {CHARS.map((c, i) => (
             <motion.div

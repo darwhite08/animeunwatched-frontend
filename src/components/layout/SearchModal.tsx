@@ -161,7 +161,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                         <button
                           key={term}
                           onClick={() => setQuery(term)}
-                          className={`group w-full flex items-center justify-between px-4 py-3 rounded-xl hover:bg-indigo-600/10 transition-all border border-transparent hover:border-indigo-500/20 ${cursor === QUICK_ACTIONS.length + i ? "bg-indigo-600/10 border-indigo-500/20" : ""}`}
+                          className={`group w-full flex items-center justify-between px-4 py-3 rounded-xl hover:bg-amber-600/10 transition-all border border-transparent hover:border-amber-500/20 ${cursor === QUICK_ACTIONS.length + i ? "bg-amber-600/10 border-amber-500/20" : ""}`}
                         >
                           <div className="flex items-center gap-3">
                             <div className="h-7 w-7 rounded-lg bg-white/5 flex items-center justify-center text-white/20 group-hover:text-amber-400">

@@ -22,7 +22,7 @@ const MODES: { id: ModeId; label: string; sub: string; icon: typeof Dna; accent:
     label:  "Based on Your DNA",
     sub:    "Action · Psychological · Top genres",
     icon:   Dna,
-    accent: "from-indigo-600/30 to-violet-600/20 border-indigo-500/25",
+    accent: "from-indigo-600/30 to-violet-600/20 border-amber-500/25",
   },
   {
     id:     "gems",
@@ -115,7 +115,7 @@ export default function RecommendationsPage() {
       {/* ── Cinematic header ── */}
       <div className="relative overflow-hidden border-b border-white/5">
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute -top-32 left-1/4 w-96 h-96 bg-indigo-600/10 blur-[120px] rounded-full" />
+          <div className="absolute -top-32 left-1/4 w-96 h-96 bg-amber-600/10 blur-[120px] rounded-full" />
           <div className="absolute -top-16 right-1/3 w-72 h-72 bg-violet-600/8 blur-[100px] rounded-full" />
         </div>
 
@@ -126,7 +126,7 @@ export default function RecommendationsPage() {
             transition={{ duration: 0.5 }}
             className="flex items-center gap-3 mb-4"
           >
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-indigo-600/15 border border-indigo-500/20">
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-600/15 border border-amber-500/20">
               <Brain size={13} className="text-amber-400" />
               <span className="text-[9px] font-black uppercase tracking-[0.4em] text-amber-400">Neural Oracle</span>
             </div>
@@ -217,7 +217,7 @@ export default function RecommendationsPage() {
                 {results.map((anime, idx) => (
                   <div key={anime.id} className="space-y-2">
                     {/* Match score badge */}
-                    <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-600/10 border border-indigo-500/15 w-fit">
+                    <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-amber-600/10 border border-amber-500/15 w-fit">
                       <span className="text-[9px] font-black text-amber-400 uppercase tracking-widest">
                         <AnimatedCounter target={matchScore(anime, mode)} />% Match
                       </span>
@@ -236,11 +236,11 @@ export default function RecommendationsPage() {
           {/* AI Oracle sidebar */}
           <aside className="xl:w-80 shrink-0">
             <div className="sticky top-6 space-y-4">
-              <div className="p-6 rounded-2xl bg-gradient-to-br from-indigo-600/10 to-violet-600/8 border border-indigo-500/20 relative overflow-hidden">
-                <div className="absolute -top-8 -right-8 w-32 h-32 bg-indigo-600/15 blur-[50px] rounded-full pointer-events-none" />
+              <div className="p-6 rounded-2xl bg-gradient-to-br from-indigo-600/10 to-violet-600/8 border border-amber-500/20 relative overflow-hidden">
+                <div className="absolute -top-8 -right-8 w-32 h-32 bg-amber-600/15 blur-[50px] rounded-full pointer-events-none" />
                 <div className="relative z-10">
                   <div className="flex items-center gap-2 mb-4">
-                    <div className="p-2 rounded-xl bg-indigo-600/20">
+                    <div className="p-2 rounded-xl bg-amber-600/20">
                       <Brain size={16} className="text-amber-400" />
                     </div>
                     <div>

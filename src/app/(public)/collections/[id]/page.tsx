@@ -25,7 +25,7 @@ const COLLECTIONS_DATA: Record<string, {
   binge:          { name:"Binge in a Weekend",         description:"Complete series under 25 episodes. Maximum impact, minimum time investment.",               curator:"ShadowWatcher",accentClass:"from-emerald-900/40 to-emerald-950/10 border-emerald-500/20",filter:a=>(a.episodes??999)<=25&&a.rating>=8.6 },
   "dark-fantasy": { name:"Dark Fantasy",               description:"Brutal, beautiful, and unrelenting. For when you want your anime to hurt.",                  curator:"VoidSeeker",  accentClass:"from-rose-900/40 to-rose-950/10 border-rose-500/20",    filter:a=>(a.genres.includes("Seinen")||a.genres.includes("Horror"))&&a.rating>=8.5 },
   scifi:          { name:"Sci-Fi & Cyberpunk",         description:"Time travel, mechs, post-human futures, and the weight of technology on the soul.",          curator:"CipherRonin", accentClass:"from-sky-900/40 to-sky-950/10 border-sky-500/20",     filter:a=>a.genres.includes("Sci-Fi") },
-  emotional:      { name:"Emotional Devastators",      description:"Warning: keep tissues nearby. These will break you, then rebuild you.",                       curator:"Neural Oracle",accentClass:"from-indigo-900/40 to-indigo-950/10 border-indigo-500/20",filter:a=>a.tags.some(t=>["emotional","tragedy","grief"].includes(t)) },
+  emotional:      { name:"Emotional Devastators",      description:"Warning: keep tissues nearby. These will break you, then rebuild you.",                       curator:"Neural Oracle",accentClass:"from-indigo-900/40 to-indigo-950/10 border-amber-500/20",filter:a=>a.tags.some(t=>["emotional","tragedy","grief"].includes(t)) },
 }
 
 export default function CollectionDetailPage({ params }: { params: Promise<{ id: string }> }) {

@@ -33,7 +33,7 @@ export function FilterCheckboxGroup({ title, options, selected, onChange }: Prop
               <label key={opt.id} className="flex items-center gap-3 cursor-pointer group">
                 <div
                   className={`relative h-4 w-4 rounded border flex items-center justify-center transition-colors ${
-                    checked ? "bg-indigo-600 border-indigo-500" : "bg-white/5 border-white/10 group-hover:border-indigo-500/50"
+                    checked ? "bg-amber-600 border-amber-500" : "bg-white/5 border-white/10 group-hover:border-amber-500/50"
                   }`}
                   onClick={() => onChange(opt.id)}
                 >

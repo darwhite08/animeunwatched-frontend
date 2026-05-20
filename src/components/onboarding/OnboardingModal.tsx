@@ -404,7 +404,8 @@ function StepReady({
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.4 }}
         onClick={onEnter}
-        className="w-full flex items-center justify-center gap-2 px-6 py-4 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-white font-black uppercase tracking-widest text-sm transition-colors duration-200 shadow-[0_0_30px_rgba(99,102,241,0.4)]"
+        className="w-full flex items-center justify-center gap-2 px-6 py-4 rounded-2xl text-black font-black uppercase tracking-widest text-sm transition-all duration-200"
+        style={{ background: "linear-gradient(135deg, #fbbf24, #f59e0b)", boxShadow: "0 0 30px rgba(245,158,11,0.4)" }}
       >
         Enter the Archive
         <ArrowRight className="w-4 h-4" />

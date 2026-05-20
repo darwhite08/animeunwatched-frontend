@@ -301,7 +301,8 @@ export default function Navbar() {
           {/* Auth CTA / Profile */}
           {isHydrated && !isAuthenticated ? (
             <Link href="/login"
-              className="px-5 py-2 rounded-full bg-indigo-600 hover:bg-indigo-500 text-[10px] font-black text-white uppercase tracking-widest transition-all">
+              className="px-5 py-2 rounded-full text-[10px] font-black text-black uppercase tracking-widest transition-all hover:scale-105"
+              style={{ background: "linear-gradient(135deg, #fbbf24, #f59e0b)", boxShadow: "0 2px 12px rgba(245,158,11,0.35)" }}>
               Sign In
             </Link>
           ) : isHydrated && isAuthenticated && storeUser ? (
@@ -381,7 +382,8 @@ export default function Navbar() {
               <div className="border-t border-white/5 pt-3">
                 {!isAuthenticated ? (
                   <Link href="/login" onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center justify-center px-4 py-3 rounded-xl text-xs font-black text-white bg-indigo-600 hover:bg-indigo-500 transition-all uppercase tracking-widest">
+                    className="flex items-center justify-center px-4 py-3 rounded-xl text-xs font-black text-black transition-all uppercase tracking-widest"
+                    style={{ background: "linear-gradient(135deg, #fbbf24, #f59e0b)" }}>
                     Sign In
                   </Link>
                 ) : (
@@ -434,7 +436,8 @@ function WatchlistLink() {
       className="relative hidden sm:flex h-9 w-9 items-center justify-center rounded-full bg-white/5 border border-white/8 text-white/40 hover:text-white hover:bg-white/10 hover:border-white/15 transition-all">
       <Bookmark size={15} />
       {count > 0 && (
-        <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-indigo-600 text-[8px] font-black text-white flex items-center justify-center">
+        <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full text-[8px] font-black text-black flex items-center justify-center"
+          style={{ background: "linear-gradient(135deg, #fbbf24, #f59e0b)" }}>
           {count > 9 ? "9+" : count}
         </span>
       )}

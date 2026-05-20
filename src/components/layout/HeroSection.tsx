@@ -165,7 +165,7 @@ export default function HeroSection() {
           >
             <Link
               href="/ai-discover"
-              className="group inline-flex items-center gap-2.5 rounded-2xl bg-indigo-600 px-6 py-3.5 text-[11px] font-black uppercase tracking-widest text-white shadow-[0_0_36px_rgba(99,102,241,0.4)] hover:bg-indigo-500 hover:shadow-[0_0_56px_rgba(99,102,241,0.65)] hover:-translate-y-0.5 transition-all active:scale-[0.98]"
+              className="group inline-flex items-center gap-2.5 rounded-2xl px-6 py-3.5 text-[11px] font-black uppercase tracking-widest text-black hover:-translate-y-0.5 transition-all active:scale-[0.98]" style={{background:"linear-gradient(135deg,#fbbf24,#f59e0b)",boxShadow:"0 0 36px rgba(245,158,11,0.4)"}}
             >
               <Zap size={13} className="text-indigo-200" />
               Enter Neural Oracle

@@ -152,7 +152,8 @@ export default function ReviewComposer({ isOpen, onClose, animeTitle, animeId }:
             <button
               onClick={handleSubmit}
               disabled={!canSubmit || submitting}
-              className="w-full py-4 rounded-2xl bg-indigo-600 hover:bg-indigo-500 disabled:opacity-40 disabled:cursor-not-allowed font-black text-xs uppercase tracking-widest text-white transition-all flex items-center justify-center gap-2.5"
+              className="w-full py-4 rounded-2xl disabled:opacity-40 disabled:cursor-not-allowed font-black text-xs uppercase tracking-widest text-black transition-all flex items-center justify-center gap-2.5"
+              style={{ background: "linear-gradient(135deg, #fbbf24, #f59e0b)", boxShadow: "0 4px 16px rgba(245,158,11,0.3)" }}
             >
               {submitting ? <><Loader2 size={14} className="animate-spin" /> Submitting…</> : <><Send size={14} /> Submit Review</>}
             </button>

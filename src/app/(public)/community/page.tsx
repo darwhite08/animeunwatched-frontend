@@ -156,7 +156,7 @@ function PostCard({ post }: { post: Post }) {
         {post.anime && (
           <Link href={`/anime/${post.anime.malId}`}
             className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-amber-500/10 border border-amber-500/20 text-[10px] font-bold text-amber-400 hover:bg-amber-500/20 transition-colors">
-            <Star size={9} weight="fill" className="text-amber-400" /> {post.anime.title}
+            <Star size={9} fill="currentColor" className="text-amber-400" /> {post.anime.title}
           </Link>
         )}
 
@@ -290,38 +290,42 @@ export default function CommunityPage() {
 
   return (
     <div className="min-h-screen bg-[#020202] text-white pb-32">
-      {/* Sticky header */}
-      <div className="border-b border-white/5 bg-black/40 backdrop-blur-md sticky top-[72px] z-30">
-        <div className="max-w-6xl mx-auto px-6 py-5 flex items-center justify-between gap-4">
-          <div>
-            <h1 className="text-2xl font-black tracking-tighter uppercase italic text-white">
-              Community<span style={{color:"#f59e0b"}}>.</span>
-            </h1>
-            <p className="text-xs text-white/30 mt-0.5">
-              {posts.length > 0 ? `${posts.length}+ posts from the Shinobi` : "What the Shinobi are watching and saying"}
-            </p>
-          </div>
-          <button onClick={() => setComposing(c => !c)}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest text-black transition-all hover:scale-105"
-            style={{ background: "linear-gradient(135deg, #fbbf24, #f59e0b)", boxShadow: "0 4px 16px rgba(245,158,11,0.35)" }}>
-            <Plus size={13} /> New Post
-          </button>
+      {/* Page header — NOT sticky so posts are never cut */}
+      <div className="max-w-6xl mx-auto px-6 pt-8 pb-6 flex items-center justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-black tracking-tighter uppercase italic text-white">
+            Community<span style={{ color: "#f59e0b" }}>.</span>
+          </h1>
+          <p className="text-xs text-white/30 mt-0.5">
+            {posts.length > 0 ? `${posts.length}+ posts from the Shinobi` : "What the Shinobi are watching and saying"}
+          </p>
         </div>
+        <button onClick={() => setComposing(c => !c)}
+          className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest text-black transition-all hover:scale-105 shrink-0"
+          style={{ background: "linear-gradient(135deg, #fbbf24, #f59e0b)", boxShadow: "0 4px 16px rgba(245,158,11,0.35)" }}>
+          <Plus size={13} /> New Post
+        </button>
+      </div>
 
-        <div className="max-w-6xl mx-auto px-6 flex items-center gap-1 pb-0">
+      {/* Tabs — sticky only the tabs row, minimal height */}
+      <div className="sticky top-[72px] z-30 bg-[#020202]/95 backdrop-blur-xl border-b border-white/5">
+        <div className="max-w-6xl mx-auto px-6 flex items-center gap-1">
           {(["trending", "following", "latest"] as FeedTab[]).map(t => (
             <button key={t} onClick={() => setFeedTab(t)}
               className={`relative px-5 py-3 text-[11px] font-black uppercase tracking-widest capitalize transition-colors ${
                 feedTab === t ? "text-white" : "text-white/30 hover:text-white/60"
               }`}>
               {t}
-              {feedTab === t && <motion.div layoutId="feed-tab-line" className="absolute bottom-0 left-0 right-0 h-[2px] bg-amber-500 rounded-full" />}
+              {feedTab === t && (
+                <motion.div layoutId="feed-tab-line"
+                  className="absolute bottom-0 left-0 right-0 h-[2px] bg-amber-500 rounded-full" />
+              )}
             </button>
           ))}
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-6 pt-8 grid lg:grid-cols-3 gap-8">
+      <div className="max-w-6xl mx-auto px-6 pt-6 grid lg:grid-cols-3 gap-8">
 
         {/* Feed */}
         <div className="lg:col-span-2 space-y-5">

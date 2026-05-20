@@ -87,7 +87,7 @@ export default function HeroSection() {
       >
         <div className="flex items-center gap-3 border border-white/10 bg-white/[0.04] backdrop-blur-xl rounded-full px-5 py-2.5">
           <span className="relative flex h-2 w-2 shrink-0">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-indigo-400 opacity-70" />
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-amber-400 opacity-70" />
             <span className="relative inline-flex h-2 w-2 rounded-full bg-amber-500" />
           </span>
           <AnimatePresence mode="wait">

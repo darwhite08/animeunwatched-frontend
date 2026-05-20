@@ -156,7 +156,7 @@ const RARITY_CONFIG = {
     borderLocked: "border-indigo-800/30",
     glow: "hover:shadow-indigo-500/20",
     bg: "bg-amber-500/10",
-    bar: "bg-indigo-400",
+    bar: "bg-amber-400",
     pill: "bg-indigo-900/60 text-amber-300",
   },
   legendary: {

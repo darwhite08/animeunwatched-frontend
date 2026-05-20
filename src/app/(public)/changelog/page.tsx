@@ -136,7 +136,7 @@ export default function ChangelogPage() {
                     ? "border-amber-500 bg-amber-600/30"
                     : "border-white/15 bg-[#020202]"
                 }`}>
-                  <div className={`h-2 w-2 rounded-full ${i === 0 ? "bg-indigo-400" : "bg-white/20"}`} />
+                  <div className={`h-2 w-2 rounded-full ${i === 0 ? "bg-amber-400" : "bg-white/20"}`} />
                 </div>
 
                 {/* Card */}

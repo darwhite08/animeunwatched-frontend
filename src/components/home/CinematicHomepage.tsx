@@ -237,7 +237,7 @@ function AIOracleSection() {
                       : "bg-white/[0.02] border-white/[0.06] text-white/35 hover:bg-white/[0.04] hover:border-white/[0.1] hover:text-white/55"
                   }`}
                 >
-                  <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${active === i ? "bg-indigo-400" : "bg-white/15"}`} />
+                  <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${active === i ? "bg-amber-400" : "bg-white/15"}`} />
                   <span className="text-[13px] font-medium">&ldquo;{p.full}&rdquo;</span>
                 </motion.button>
               ))}

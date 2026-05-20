@@ -49,7 +49,7 @@ export default function FinalCTA() {
         {/* Pre-Title Status */}
         <div className="flex items-center gap-3 mb-12">
           <div className="flex h-2 w-2 relative">
-             <span className="animate-ping absolute inline-flex h-2 w-2 rounded-full bg-indigo-400 opacity-75" />
+             <span className="animate-ping absolute inline-flex h-2 w-2 rounded-full bg-amber-400 opacity-75" />
              <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500" />
           </div>
           <span className="text-[10px] font-mono tracking-[0.4em] text-amber-400 uppercase">

@@ -9,6 +9,13 @@ import { KeyboardShortcuts } from "@/providers/KeyboardShortcuts"
 import { SessionProvider } from "@/components/layout/SessionProvider"
 import { LenisProvider } from "@/providers/LenisProvider"
 
+export const viewport = {
+  themeColor: "#f59e0b",
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+}
+
 export const metadata = {
   title: { default: "Kaiveron — Neural Anime Archive", template: "%s | Kaiveron" },
   description: "Track, rate, and discover anime that deserves more hype. AI-powered recommendations for true enthusiasts.",
@@ -26,6 +33,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <head>
+          {/* Register service worker for PWA offline support */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `if ('serviceWorker' in navigator) { window.addEventListener('load', function() { navigator.serviceWorker.register('/sw.js').catch(function(){}); }); }`,
+          }}
+        />
         {/* Google Fonts — loaded as <link> to avoid CSS @import order issues with Tailwind v4 */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />

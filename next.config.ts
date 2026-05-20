@@ -1,4 +1,5 @@
 import type { NextConfig } from "next";
+import { withSentryConfig } from "@sentry/nextjs";
 
 const securityHeaders = [
   { key: "X-DNS-Prefetch-Control",  value: "on" },
@@ -78,4 +79,20 @@ const nextConfig: NextConfig = {
   compress: true,
 };
 
-export default nextConfig;
+// Only wrap with Sentry if DSN is configured
+const hasSentryDSN = Boolean(process.env.NEXT_PUBLIC_SENTRY_DSN)
+
+export default hasSentryDSN
+  ? withSentryConfig(nextConfig, {
+      // Suppresses source map upload logs during build
+      silent: true,
+      // Widens the upload to include chunks
+      widenClientFileUpload: true,
+      // Routes browser requests to Sentry through Next.js to avoid ad-blockers
+      tunnelRoute: "/monitoring",
+      // Hides source maps from generated client bundles
+      hideSourceMaps: true,
+      // Automatically tree-shake Sentry logger statements
+      disableLogger: true,
+    })
+  : nextConfig;

@@ -25,30 +25,57 @@ export default function WorldClassDashboard() {
       <WrappedBanner />
 
       {/* 1. CINEMATIC HEADER SECTION */}
-      <header className="relative overflow-hidden rounded-[3rem] bg-[#050505] border border-white/5 p-12 shadow-2xl group">
-        {/* Ambient Mesh Glow */}
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-indigo-600/10 blur-[120px] rounded-full pointer-events-none group-hover:bg-indigo-500/20 transition-all duration-1000" />
-        
+      <header className="relative overflow-hidden rounded-[3rem] border p-12 shadow-2xl group"
+        style={{
+          background: "linear-gradient(160deg, #0a0a14 0%, #070710 100%)",
+          borderColor: "rgba(245,158,11,0.15)",
+          boxShadow: "0 0 80px rgba(245,158,11,0.06), 0 4px 40px rgba(0,0,0,0.5)",
+        }}>
+        {/* Gold ambient glow */}
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] blur-[130px] rounded-full pointer-events-none transition-all duration-1000"
+          style={{ background: "rgba(245,158,11,0.07)" }} />
+        <div className="absolute bottom-0 left-0 w-[300px] h-[300px] blur-[100px] rounded-full pointer-events-none"
+          style={{ background: "rgba(99,102,241,0.05)" }} />
+
+        {/* Gold top shimmer line */}
+        <div className="absolute top-0 left-0 right-0 h-px"
+          style={{ background: "linear-gradient(90deg, transparent, rgba(245,158,11,0.5), transparent)" }} />
+
         <div className="relative z-10 flex flex-col lg:flex-row justify-between items-end gap-10">
           <div className="space-y-4">
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
-              className="flex items-center gap-2 text-indigo-400 font-black uppercase tracking-[0.4em] text-[10px]"
+              className="flex items-center gap-2 font-black uppercase tracking-[0.4em] text-[10px]"
+              style={{ color: "#f59e0b" }}
             >
-              <Crown size={14} className="animate-pulse" /> Neural Link Active • Grade II
+              <Crown size={14} className="animate-pulse" />
+              Neural Link Active •{" "}
+              {(() => {
+                const rep = user?.reputation ?? 0
+                const level = Math.max(1, Math.floor(Math.sqrt(rep * 100 / 1000)))
+                return level >= 10 ? "Grade IV" : level >= 7 ? "Grade III" : level >= 4 ? "Grade II" : "Grade I"
+              })()}
             </motion.div>
-            <h1 className="text-7xl font-black tracking-tighter text-white leading-none">
-              Welcome, <span className="bg-gradient-to-b from-white to-neutral-500 bg-clip-text text-transparent italic">{user?.displayName ?? "Shinobi"}</span>
+            <h1 className="text-6xl lg:text-7xl font-black tracking-tighter text-white leading-none">
+              Welcome,{" "}
+              <span className="italic" style={{
+                backgroundImage: "linear-gradient(135deg, #fbbf24, #f59e0b, #ffffff)",
+                WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
+              }}>
+                {user?.displayName ?? "Shinobi"}
+              </span>
             </h1>
           </div>
 
           <div className="flex items-center gap-8 border-l border-white/10 pl-10">
-            <HeaderMetric label="Reputation" value={String(user?.reputation ?? 0)} icon={Zap} color="text-yellow-400" />
-            <HeaderMetric label="Level" value={`${Math.max(1, Math.floor(Math.sqrt((user?.reputation ?? 0) * 100 / 1000)))}`} icon={TrendingUp} color="text-indigo-400" />
-            <button className="p-4 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all">
-                <Bell size={20} className="text-white/60" />
-            </button>
+            <HeaderMetric label="Reputation" value={String(user?.reputation ?? 0)} icon={Zap} color="text-amber-400" />
+            <HeaderMetric label="Level"
+              value={String(Math.max(1, Math.floor(Math.sqrt((user?.reputation ?? 0) * 100 / 1000))))}
+              icon={TrendingUp} color="text-indigo-400" />
+            <Link href="/notifications" className="p-4 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all">
+              <Bell size={20} className="text-white/60" />
+            </Link>
           </div>
         </div>
       </header>
@@ -62,22 +89,41 @@ export default function WorldClassDashboard() {
           
           <div className="grid md:grid-cols-2 gap-8">
             {/* STREAK BENTO */}
-            <motion.div 
-                whileHover={{ y: -5 }}
-                className="p-10 rounded-[2.5rem] bg-white/[0.02] border border-white/5 hover:border-orange-500/30 transition-all duration-500 group relative overflow-hidden"
-            >
-                <div className="absolute -right-6 -top-6 text-orange-500/5 rotate-12 group-hover:rotate-0 transition-transform duration-700">
-                    <Flame size={180} />
-                </div>
-                <div className="flex justify-between items-center mb-12 relative z-10">
-                    <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/30">Current Momentum</h4>
-                    <div className="p-2 rounded-lg bg-orange-500/10 text-orange-500"><Flame size={20} /></div>
-                </div>
-                <p className="text-8xl font-black tracking-tighter relative z-10 text-white">22<span className="text-xl text-white/20 ml-2 italic font-medium">Days</span></p>
-                <div className="mt-8 h-2 w-full bg-white/5 rounded-full overflow-hidden relative z-10">
-                    <motion.div initial={{ width: 0 }} animate={{ width: "70%" }} className="h-full bg-gradient-to-r from-orange-600 to-orange-400 shadow-[0_0_20px_rgba(249,115,22,0.4)]" />
-                </div>
-            </motion.div>
+            {(() => {
+              const rep = user?.reputation ?? 0
+              const streak = Math.min(365, Math.floor(rep / 10))
+              const pct = Math.min(100, (streak % 30) / 30 * 100)
+              return (
+                <Link href="/streak">
+                  <motion.div
+                    whileHover={{ y: -5 }}
+                    className="p-10 rounded-[2.5rem] border transition-all duration-500 group relative overflow-hidden cursor-pointer"
+                    style={{
+                      background: "linear-gradient(160deg, #0a0a14 0%, #070710 100%)",
+                      borderColor: "rgba(249,115,22,0.15)",
+                    }}
+                  >
+                    <div className="absolute -right-6 -top-6 text-orange-500/5 rotate-12 group-hover:rotate-0 transition-transform duration-700">
+                      <Flame size={180} />
+                    </div>
+                    <div className="flex justify-between items-center mb-12 relative z-10">
+                      <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/30">Current Momentum</h4>
+                      <div className="p-2 rounded-lg bg-orange-500/10 text-orange-500"><Flame size={20} /></div>
+                    </div>
+                    <p className="text-8xl font-black tracking-tighter relative z-10 text-white">
+                      {streak}<span className="text-xl text-white/20 ml-2 italic font-medium">Days</span>
+                    </p>
+                    <div className="mt-8 h-2 w-full bg-white/5 rounded-full overflow-hidden relative z-10">
+                      <motion.div
+                        initial={{ width: 0 }}
+                        animate={{ width: `${pct}%` }}
+                        className="h-full bg-gradient-to-r from-orange-600 to-amber-400 shadow-[0_0_20px_rgba(249,115,22,0.4)]"
+                      />
+                    </div>
+                  </motion.div>
+                </Link>
+              )
+            })()}
 
             <GenreCard />
           </div>
@@ -86,17 +132,25 @@ export default function WorldClassDashboard() {
         {/* RIGHT: INSIGHTS & UTILITY (4 Cols) */}
         <div className="lg:col-span-4 space-y-8 flex flex-col">
            {/* PREMIUM CTA CARD */}
-           <div className="p-10 rounded-[3rem] bg-indigo-600 text-white shadow-2xl shadow-indigo-600/20 relative overflow-hidden group flex-1">
+           <div className="p-10 rounded-[3rem] text-black relative overflow-hidden group flex-1"
+             style={{
+               background: "linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%)",
+               boxShadow: "0 20px 60px rgba(245,158,11,0.4)",
+             }}>
               <div className="absolute -right-10 -top-10 w-48 h-48 bg-white/20 blur-3xl rounded-full group-hover:scale-150 transition-transform duration-1000" />
+              {/* Top shimmer */}
+              <div className="absolute top-0 left-0 right-0 h-px bg-white/30" />
               <div className="relative z-10 h-full flex flex-col justify-between">
                 <div>
-                    <div className="h-12 w-12 rounded-2xl bg-white/20 flex items-center justify-center mb-8">
-                        <Crown size={24} />
+                    <div className="h-12 w-12 rounded-2xl bg-black/15 flex items-center justify-center mb-8">
+                        <Crown size={24} className="text-black" />
                     </div>
-                    <h4 className="text-4xl font-black tracking-tighter leading-[0.9] italic">Ascend to<br />Prime Grade</h4>
-                    <p className="mt-6 text-indigo-100/70 text-sm font-medium leading-relaxed">Access the neural archives, verified chronicles, and legendary status badges.</p>
+                    <h4 className="text-4xl font-black tracking-tighter leading-[0.9] italic text-black">Ascend to<br />Prime Grade</h4>
+                    <p className="mt-6 text-black/60 text-sm font-medium leading-relaxed">Access the neural archives, verified chronicles, and legendary status badges.</p>
                 </div>
-                <button className="mt-10 w-full py-5 rounded-2xl bg-white text-indigo-600 font-black uppercase tracking-widest text-[11px] hover:shadow-2xl transition-all active:scale-95">Upgrade Identity</button>
+                <button className="mt-10 w-full py-5 rounded-2xl bg-black/15 text-black font-black uppercase tracking-widest text-[11px] hover:bg-black/25 transition-all active:scale-95 border border-black/10">
+                  Upgrade Identity
+                </button>
               </div>
            </div>
 

@@ -2,161 +2,241 @@
 
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import Link from "next/link"
-import Image from "next/image"
+import { ChevronRight, Loader2 } from "lucide-react"
+import { SquaresFour } from "@phosphor-icons/react"
 import { useBrowseAnime } from "@/hooks/useAnime"
 import AnimeCard from "@/components/bestanimelist/AnimeCard"
 import AnimeModal from "@/components/bestanimelist/AnimeModal"
 import type { Anime } from "@/lib/data/anime"
 import type { AnimeDTO } from "@/lib/api/types"
-import { Layers, ChevronRight } from "lucide-react"
 
 function mapDTO(a: AnimeDTO, i: number): Anime {
-  return { id: String(a.malId), title: a.title, titleJapanese: a.titleJapanese ?? "", rating: a.score ?? 0, year: a.year ?? 0, episodes: a.episodes, type: (["TV","Movie","OVA"] as const).includes(a.type as any) ? a.type as any : "TV", status: a.status?.toLowerCase().includes("airing") ? "airing" : "finished", studio: a.studios[0] ?? "Unknown", genres: a.genres, synopsis: a.synopsis ?? "", image: a.imageUrl ?? "", tags: a.genres.map(g => g.toLowerCase().replace(/\s/g, "-")), category: "all", rank: i+1 }
+  return {
+    id: String(a.malId), title: a.title, titleJapanese: a.titleJapanese ?? "",
+    rating: a.score ?? 0, year: a.year ?? 0, episodes: a.episodes,
+    type: (["TV","Movie","OVA"] as const).includes(a.type as "TV"|"Movie"|"OVA") ? (a.type as "TV"|"Movie"|"OVA") : "TV",
+    status: a.status?.toLowerCase().includes("airing") ? "airing" : "finished",
+    studio: a.studios[0] ?? "Unknown", genres: a.genres, synopsis: a.synopsis ?? "",
+    image: a.imageUrl ?? "/assets/png/tanjiro.png",
+    tags: a.genres.map(g => g.toLowerCase().replace(/\s/g, "-")), category: "all", rank: i + 1,
+  }
 }
 
-type Collection = {
+type CollectionDef = {
   id: string
   name: string
   description: string
-  filter: (a: Anime) => boolean
+  emoji: string
   accent: string
-  bg: string
-  border: string
+  borderStyle: React.CSSProperties
+  params: Parameters<typeof useBrowseAnime>[0]
+  clientFilter?: (a: Anime) => boolean
 }
 
-const COLLECTIONS: Collection[] = [
+const COLLECTIONS: CollectionDef[] = [
   {
-    id: "psychological",
+    id: "mind-bending",
     name: "Mind-Bending Masterpieces",
     description: "Anime that rewires how you think about reality, morality, and what it means to be human.",
-    filter: a => a.genres.includes("Psychological") && a.rating >= 8.5,
-    accent: "text-purple-400", bg: "from-purple-900/40 to-purple-950/10", border: "border-purple-500/20",
+    emoji: "🧠",
+    accent: "text-purple-400",
+    borderStyle: { borderColor: "rgba(168,85,247,0.2)" },
+    params: { q: "Psychological", limit: 24 },
   },
   {
     id: "hidden-gems",
     name: "Hidden Gems",
     description: "Criminally underrated anime that deserve 10x more attention than they get.",
-    filter: a => a.rank > 8 && a.rating >= 8.6,
-    accent: "text-amber-400", bg: "from-amber-900/40 to-amber-950/10", border: "border-amber-500/20",
+    emoji: "💎",
+    accent: "text-amber-400",
+    borderStyle: { borderColor: "rgba(245,158,11,0.25)" },
+    params: { limit: 24 },
+    clientFilter: a => a.rating >= 8.5 && a.rank > 15,
   },
   {
-    id: "short-watch",
+    id: "binge-weekend",
     name: "Binge in a Weekend",
     description: "Complete series under 25 episodes. Maximum impact, minimum time investment.",
-    filter: a => (a.episodes ?? 999) <= 25 && a.rating >= 8.6,
-    accent: "text-emerald-400", bg: "from-emerald-900/40 to-emerald-950/10", border: "border-emerald-500/20",
+    emoji: "⚡",
+    accent: "text-emerald-400",
+    borderStyle: { borderColor: "rgba(16,185,129,0.2)" },
+    params: { limit: 24 },
+    clientFilter: a => (a.episodes ?? 999) <= 25 && a.rating >= 8.6,
   },
   {
     id: "dark-fantasy",
     name: "Dark Fantasy",
     description: "Brutal, beautiful, and unrelenting. For when you want your anime to hurt.",
-    filter: a => (a.genres.includes("Seinen") || a.genres.includes("Horror")) && a.rating >= 8.5,
-    accent: "text-rose-400", bg: "from-rose-900/40 to-rose-950/10", border: "border-rose-500/20",
+    emoji: "🐉",
+    accent: "text-rose-400",
+    borderStyle: { borderColor: "rgba(244,63,94,0.2)" },
+    params: { q: "Seinen", limit: 24 },
   },
   {
-    id: "scifi",
+    id: "sci-fi",
     name: "Sci-Fi & Cyberpunk",
     description: "Time travel, mechs, post-human futures, and the weight of technology on the soul.",
-    filter: a => a.genres.includes("Sci-Fi"),
-    accent: "text-sky-400", bg: "from-sky-900/40 to-sky-950/10", border: "border-sky-500/20",
+    emoji: "🚀",
+    accent: "text-sky-400",
+    borderStyle: { borderColor: "rgba(14,165,233,0.2)" },
+    params: { q: "Sci-Fi", limit: 24 },
   },
   {
     id: "emotional",
     name: "Emotional Devastators",
     description: "Warning: keep tissues nearby. These will break you, then rebuild you.",
-    filter: a => a.tags.some(t => ["emotional", "tragedy", "grief"].includes(t)),
-    accent: "text-indigo-400", bg: "from-indigo-900/40 to-indigo-950/10", border: "border-indigo-500/20",
+    emoji: "💔",
+    accent: "text-indigo-400",
+    borderStyle: { borderColor: "rgba(99,102,241,0.2)" },
+    params: { q: "Drama", limit: 24 },
+  },
+  {
+    id: "action-peak",
+    name: "Peak Action",
+    description: "The most hype, jaw-dropping action sequences in the medium. Pure adrenaline.",
+    emoji: "⚔️",
+    accent: "text-red-400",
+    borderStyle: { borderColor: "rgba(239,68,68,0.2)" },
+    params: { q: "Action", limit: 24 },
+    clientFilter: a => a.rating >= 8.0,
+  },
+  {
+    id: "romance",
+    name: "Romance That Hits Different",
+    description: "Love stories that will make you feel things you forgot existed.",
+    emoji: "🌸",
+    accent: "text-pink-400",
+    borderStyle: { borderColor: "rgba(236,72,153,0.2)" },
+    params: { q: "Romance", limit: 24 },
+  },
+  {
+    id: "airing-now",
+    name: "Airing Right Now",
+    description: "The best shows currently airing — ranked by community score.",
+    emoji: "📡",
+    accent: "text-green-400",
+    borderStyle: { borderColor: "rgba(34,197,94,0.25)" },
+    params: { status: "airing", limit: 24 },
   },
 ]
 
+function CollectionPanel({ col, onAnimeClick }: { col: CollectionDef; onAnimeClick: (a: Anime) => void }) {
+  const { data, isLoading, isError } = useBrowseAnime(col.params)
+  let anime = (data?.data ?? []).map(mapDTO)
+  if (col.clientFilter) anime = anime.filter(col.clientFilter)
+
+  return (
+    <div className="pt-4 pb-2">
+      {isLoading && (
+        <div className="flex items-center justify-center py-16">
+          <Loader2 size={24} className="animate-spin" style={{ color: "#f59e0b" }} />
+        </div>
+      )}
+      {isError && !isLoading && (
+        <p className="text-white/20 text-xs font-black uppercase tracking-widest py-10 text-center">
+          Failed to load collection
+        </p>
+      )}
+      {!isLoading && !isError && anime.length === 0 && (
+        <p className="text-white/15 text-xs font-black uppercase tracking-widest py-10 text-center">
+          No anime found for this collection yet
+        </p>
+      )}
+      {!isLoading && !isError && anime.length > 0 && (
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+          {anime.map((a, i) => (
+            <AnimeCard key={a.id} anime={a} index={i} onClick={onAnimeClick} />
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
 export default function CollectionsPage() {
   const [active, setActive] = useState<string | null>(null)
-  const [selectedAnime, setSelectedAnime] = useState<Anime | null>(null)
-  const { data: browseData } = useBrowseAnime({ limit: 20 })
-  const allAnime = (browseData?.data ?? []).map(mapDTO)
-
-  const activeCollection = COLLECTIONS.find(c => c.id === active)
-  const filtered = activeCollection ? allAnime.filter(activeCollection.filter) : []
+  const [selected, setSelected] = useState<Anime | null>(null)
 
   return (
     <div className="min-h-screen bg-[#020202] text-white pb-32">
       {/* Header */}
       <div className="max-w-7xl mx-auto px-6 pt-32 pb-12">
         <div className="flex items-center gap-3 mb-6">
-          <Layers size={20} className="text-indigo-400" />
-          <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-indigo-400/60">Curated Collections</p>
+          <SquaresFour size={18} weight="duotone" className="text-amber-400" />
+          <p className="text-[9px] font-mono uppercase tracking-[0.4em]" style={{ color: "rgba(245,158,11,0.6)" }}>
+            Curated Collections
+          </p>
         </div>
         <h1 className="text-6xl md:text-7xl font-black tracking-tighter uppercase italic text-white leading-none mb-4">
-          Collections<span className="text-indigo-500">.</span>
+          Collections<span style={{ color: "#f59e0b" }}>.</span>
         </h1>
-        <p className="text-white/35 text-lg max-w-xl">
-          Hand-picked anime grouped by mood, theme, and what they'll do to your soul.
+        <p className="text-white/35 text-lg max-w-xl leading-relaxed">
+          {COLLECTIONS.length} hand-picked collections — grouped by mood, theme, and what they'll do to your soul.
         </p>
+        {/* Gold divider */}
+        <div className="mt-8 h-px w-full"
+          style={{ background: "linear-gradient(90deg, rgba(245,158,11,0.5), rgba(245,158,11,0.2) 40%, transparent)" }} />
       </div>
 
-      {/* Collection grid */}
-      <div className="max-w-7xl mx-auto px-6 space-y-4">
+      {/* Collection list */}
+      <div className="max-w-7xl mx-auto px-6 space-y-3">
         {COLLECTIONS.map((col, i) => {
-          const items = allAnime.filter(col.filter).slice(0, 4)
           const isActive = active === col.id
-
           return (
-            <motion.div
-              key={col.id}
-              initial={{ opacity: 0, y: 16 }}
+            <motion.div key={col.id}
+              initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.06 }}
+              transition={{ delay: i * 0.05 }}
             >
-              {/* Collection header */}
+              {/* Header button */}
               <button
                 onClick={() => setActive(isActive ? null : col.id)}
-                className={`w-full text-left p-6 rounded-2xl border transition-all duration-300 flex items-center justify-between gap-4 ${
-                  isActive
-                    ? `bg-gradient-to-br ${col.bg} ${col.border}`
-                    : "bg-white/[0.02] border-white/8 hover:border-white/15 hover:bg-white/[0.04]"
-                }`}
+                className="w-full text-left p-6 rounded-2xl border transition-all duration-300 flex items-center justify-between gap-4 group"
+                style={{
+                  background: isActive
+                    ? "linear-gradient(160deg, rgba(245,158,11,0.08), rgba(245,158,11,0.03))"
+                    : "rgba(255,255,255,0.02)",
+                  ...col.borderStyle,
+                  ...(isActive ? {} : { borderColor: "rgba(255,255,255,0.07)" }),
+                }}
               >
-                <div className="flex-1">
-                  <div className="flex items-center gap-3 mb-1">
-                    <h2 className={`text-lg font-black ${isActive ? col.accent : "text-white/80"}`}>
-                      {col.name}
-                    </h2>
-                    <span className="text-[9px] font-black text-white/25 font-mono">
-                      {allAnime.filter(col.filter).length} anime
-                    </span>
+                <div className="flex items-center gap-4 flex-1 min-w-0">
+                  {/* Emoji badge */}
+                  <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl shrink-0"
+                    style={{
+                      background: isActive ? "rgba(245,158,11,0.15)" : "rgba(255,255,255,0.04)",
+                      border: isActive ? "1px solid rgba(245,158,11,0.25)" : "1px solid rgba(255,255,255,0.07)",
+                    }}>
+                    {col.emoji}
                   </div>
-                  <p className="text-sm text-white/40">{col.description}</p>
-                </div>
 
-                {/* Preview covers */}
-                <div className="flex -space-x-3 shrink-0 hidden sm:flex">
-                  {items.map((a, idx) => (
-                    <div key={a.id} className="relative h-10 w-8 rounded-lg overflow-hidden border-2 border-[#020202]" style={{ zIndex: 4 - idx }}>
-                      <Image src={a.image} alt={a.title} fill className="object-cover" sizes="32px" />
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-3 mb-0.5">
+                      <h2 className={`text-[15px] font-black ${isActive ? col.accent : "text-white/80 group-hover:text-white"} transition-colors`}>
+                        {col.name}
+                      </h2>
                     </div>
-                  ))}
+                    <p className="text-sm text-white/35 leading-snug line-clamp-1">{col.description}</p>
+                  </div>
                 </div>
 
-                <motion.div animate={{ rotate: isActive ? 90 : 0 }} transition={{ duration: 0.2 }}>
-                  <ChevronRight size={18} className={isActive ? col.accent : "text-white/20"} />
+                <motion.div animate={{ rotate: isActive ? 90 : 0 }} transition={{ duration: 0.2 }}
+                  className="shrink-0">
+                  <ChevronRight size={18} className={isActive ? "text-amber-400" : "text-white/20 group-hover:text-white/40"} />
                 </motion.div>
               </button>
 
-              {/* Expanded grid */}
+              {/* Expanded panel */}
               <AnimatePresence>
                 {isActive && (
                   <motion.div
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: "auto" }}
                     exit={{ opacity: 0, height: 0 }}
+                    transition={{ duration: 0.3, ease: [0.32, 0.72, 0, 1] }}
                     className="overflow-hidden"
                   >
-                    <div className="pt-4 pb-2 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                      {allAnime.filter(col.filter).map((a, idx) => (
-                        <AnimeCard key={a.id} anime={a} index={idx} onClick={setSelectedAnime} />
-                      ))}
-                    </div>
+                    <CollectionPanel col={col} onAnimeClick={setSelected} />
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -165,7 +245,7 @@ export default function CollectionsPage() {
         })}
       </div>
 
-      <AnimeModal isOpen={selectedAnime !== null} onClose={() => setSelectedAnime(null)} anime={selectedAnime} />
+      <AnimeModal isOpen={selected !== null} onClose={() => setSelected(null)} anime={selected} />
     </div>
   )
 }

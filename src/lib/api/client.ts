@@ -59,6 +59,14 @@ export async function api<T>(path: string, opts: ApiOptions = {}): Promise<T> {
 
   if (!res.ok) {
     const body = await res.json().catch(() => ({}))
+    // User-friendly rate limit messages (post-launch bot/abuse protection)
+    if (res.status === 429) {
+      const retryAfter = res.headers.get("Retry-After")
+      const msg = retryAfter
+        ? `Too many requests. Please wait ${retryAfter} seconds and try again.`
+        : body?.error?.message ?? "Too many requests. Please slow down."
+      throw new ApiError(429, "RATE_LIMITED", msg)
+    }
     throw new ApiError(
       res.status,
       body?.error?.code ?? "INTERNAL",

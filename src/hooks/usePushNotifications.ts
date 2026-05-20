@@ -5,13 +5,6 @@ import { useToast } from "@/stores/toast.store"
 
 const VAPID_PUBLIC_KEY = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY ?? ""
 
-function urlBase64ToUint8Array(base64String: string): Uint8Array {
-  const padding = "=".repeat((4 - (base64String.length % 4)) % 4)
-  const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/")
-  const rawData = window.atob(base64)
-  return new Uint8Array([...rawData].map(char => char.charCodeAt(0)))
-}
-
 export function usePushNotifications() {
   const { push } = useToast()
   const [permission, setPermission] = useState<NotificationPermission>(
@@ -44,7 +37,7 @@ export function usePushNotifications() {
           const registration = await navigator.serviceWorker.ready
           const subscription = await registration.pushManager.subscribe({
             userVisibleOnly: true,
-            applicationServerKey: urlBase64ToUint8Array(VAPID_PUBLIC_KEY),
+            applicationServerKey: VAPID_PUBLIC_KEY,  // Pass as string; browser handles encoding
           })
           // Send subscription to backend
           await fetch("/api/v1/notifications/push-subscribe", {

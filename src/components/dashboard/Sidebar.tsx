@@ -11,49 +11,61 @@ import {
 } from "lucide-react"
 import { useWatchlist } from "@/stores/watchlist.store"
 import { useUnreadCount } from "@/hooks/useNotificationsQuery"
+import { userPath } from "@/hooks/useUserPath"
 
-const NAV = [
+// Nav items use path-only strings; the Sidebar resolves them to /user/[slug]/[path] at render time
+const NAV_ITEMS = [
   {
     label: "My Space",
     items: [
-      { name: "Dashboard",    href: "/dashboard",  icon: LayoutGrid },
-      { name: "Watchlist",    href: "/watchlist",  icon: MonitorPlay },
-      { name: "Library",      href: "/readlist",   icon: Book       },
-      { name: "Streak",       href: "/streak",     icon: Activity   },
-      { name: "Achievements", href: "/achievements",icon: Trophy     },
-      { name: "Watch Stats",  href: "/stats",      icon: BarChart2  },
-      { name: "Manga",        href: "/manga",      icon: BookOpen   },
-      { name: "History",      href: "/history",    icon: History    },
+      { name: "Dashboard",    path: "dashboard",    icon: LayoutGrid  },
+      { name: "Watchlist",    path: "watchlist",    icon: MonitorPlay },
+      { name: "Library",      path: "readlist",     icon: Book        },
+      { name: "Streak",       path: "streak",       icon: Activity    },
+      { name: "Achievements", path: "achievements", icon: Trophy      },
+      { name: "Watch Stats",  path: "stats",        icon: BarChart2   },
+      { name: "Manga",        path: "manga",        icon: BookOpen    },
+      { name: "History",      path: "history",      icon: History     },
     ],
   },
   {
     label: "Account",
     items: [
-      { name: "Profile",       href: "/profile",       icon: User      },
-      { name: "Following",     href: "/following",     icon: Users     },
-      { name: "Notifications", href: "/notifications", icon: Bell, badge: true },
-      { name: "Settings",      href: "/me/settings/account", icon: Settings  },
+      { name: "Profile",       path: "profile",                   icon: User     },
+      { name: "Following",     path: "following",                 icon: Users    },
+      { name: "Notifications", path: "notifications",             icon: Bell, badge: true },
+      { name: "Settings",      path: "settings/account",          icon: Settings },
     ],
   },
 ]
 
 export default function Sidebar() {
-  const pathname  = usePathname()
-  const wlCount      = useWatchlist(s => s.count)
+  const pathname      = usePathname()
+  const wlCount       = useWatchlist(s => s.count)
   const { data: unreadData } = useUnreadCount()
-  const unreadCount  = unreadData?.count ?? 0
-  const user         = useAuthStore(s => s.user)
-  const rep       = user?.reputation ?? 0
-  const level     = Math.max(1, Math.floor(Math.sqrt(Math.max(0, rep) * 100 / 1000)))
-  const streak    = Math.min(365, Math.floor(rep / 10))
-  const grade     = level >= 10 ? "Grade IV" : level >= 7 ? "Grade III" : level >= 4 ? "Grade II" : "Grade I"
+  const unreadCount   = unreadData?.count ?? 0
+  const user          = useAuthStore(s => s.user)
+  const slug          = user?.slug ?? null
+  const rep           = user?.reputation ?? 0
+  const level         = Math.max(1, Math.floor(Math.sqrt(Math.max(0, rep) * 100 / 1000)))
+  const streak        = Math.min(365, Math.floor(rep / 10))
+  const grade         = level >= 10 ? "Grade IV" : level >= 7 ? "Grade III" : level >= 4 ? "Grade II" : "Grade I"
+
+  // Resolve all nav hrefs using the user's slug
+  const NAV = NAV_ITEMS.map(group => ({
+    ...group,
+    items: group.items.map(item => ({
+      ...item,
+      href: slug ? userPath(slug, item.path) : `/${item.path}`,
+    })),
+  }))
 
   return (
     <aside className="fixed left-0 top-0 h-screen w-64 bg-[#050505] border-r border-white/5 flex flex-col z-50">
 
       {/* Logo */}
       <div className="px-6 pt-7 pb-5">
-        <Link href="/dashboard" className="flex items-center gap-3 group">
+        <Link href={slug ? userPath(slug, "dashboard") : "/dashboard"} className="flex items-center gap-3 group">
           {/* Kaiveron K mark */}
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="36" height="36"
             className="group-hover:scale-110 transition-transform flex-shrink-0"
@@ -83,8 +95,9 @@ export default function Sidebar() {
             </p>
             <div className="space-y-0.5">
               {group.items.map(item => {
+                // Active check works for both /user/[slug]/path and legacy /path forms
                 const active = pathname === item.href ||
-                  (item.href !== "/dashboard" && pathname.startsWith(item.href + "/"))
+                  (item.href.length > 1 && pathname.startsWith(item.href + "/"))
                 return (
                   <Link
                     key={item.name}
@@ -138,7 +151,7 @@ export default function Sidebar() {
 
       {/* Streak footer */}
       <div className="px-4 pb-5 pt-3 border-t border-white/5">
-        <Link href="/streak" className="block group">
+        <Link href={slug ? userPath(slug, "streak") : "/streak"} className="block group">
           <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/8 space-y-3 group-hover:bg-white/[0.05] group-hover:border-indigo-500/25 transition-all">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2.5">

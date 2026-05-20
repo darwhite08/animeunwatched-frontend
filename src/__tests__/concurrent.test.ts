@@ -11,6 +11,7 @@ import type { Anime } from "@/lib/data/anime"
 
 const mockUser: User = {
   id: "u1", email: "u@x.com", username: "user1", displayName: "User",
+    slug: null,
   bio: null, avatarUrl: null, role: "USER", reputation: 0, createdAt: "2024-01-01T00:00:00Z"
 }
 

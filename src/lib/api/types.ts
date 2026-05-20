@@ -34,6 +34,8 @@ export interface User {
   id: string
   email: string
   username: string
+  /** URL-safe routing alias. Never use for data fetching — always use session id internally. */
+  slug: string | null
   displayName: string
   bio: string | null
   avatarUrl: string | null

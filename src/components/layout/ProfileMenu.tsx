@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { SquaresFour, User, BookmarkSimple, SignOut, Gear, PenNib } from "@phosphor-icons/react";
+import { useAuthStore } from "@/stores/auth.store";
+import { userPath } from "@/hooks/useUserPath";
 
 interface ProfileMenuProps {
   user: { name: string };
@@ -11,15 +13,17 @@ interface ProfileMenuProps {
   onLogout: () => void;
 }
 
-const LINKS = [
-  { href: "/dashboard",            icon: SquaresFour,   label: "Dashboard"  },
-  { href: "/profile",              icon: User,           label: "Profile"    },
-  { href: "/watchlist",            icon: BookmarkSimple, label: "Watchlist"  },
-  { href: "/creators/create/blog", icon: PenNib,         label: "Write Blog" },
-  { href: "/me/settings/account",   icon: Gear,           label: "Settings"   },
-]
-
 export default function ProfileMenu({ user, isOpen, onClose, onLogout }: ProfileMenuProps) {
+  const slug = useAuthStore(s => s.user?.slug) ?? null
+
+  const LINKS = [
+    { href: slug ? userPath(slug, "dashboard")       : "/dashboard",            icon: SquaresFour,   label: "Dashboard"  },
+    { href: slug ? userPath(slug, "profile")         : "/profile",              icon: User,           label: "Profile"    },
+    { href: slug ? userPath(slug, "watchlist")       : "/watchlist",            icon: BookmarkSimple, label: "Watchlist"  },
+    { href: "/creators/create/blog",                                             icon: PenNib,         label: "Write Blog" },
+    { href: slug ? userPath(slug, "settings/account") : "/me/settings/account", icon: Gear,           label: "Settings"   },
+  ]
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -38,7 +42,7 @@ export default function ProfileMenu({ user, isOpen, onClose, onLogout }: Profile
           {/* User label */}
           <div className="px-3 py-2 mb-1">
             <p className="text-[9px] font-black uppercase tracking-[0.3em]" style={{ color: "rgba(245,158,11,0.5)" }}>
-              Signed in as
+              {slug ? `@${slug}` : "Signed in as"}
             </p>
             <p className="text-[11px] font-black text-white/80 truncate mt-0.5">{user.name}</p>
           </div>
@@ -47,7 +51,7 @@ export default function ProfileMenu({ user, isOpen, onClose, onLogout }: Profile
           <div className="h-px mx-2 mb-1" style={{ background: "linear-gradient(90deg, transparent, rgba(245,158,11,0.3), transparent)" }} />
 
           {LINKS.map(({ href, icon: Icon, label }) => (
-            <Link key={href} href={href} onClick={onClose}
+            <Link key={label} href={href} onClick={onClose}
               className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-[10px] font-black text-white/50 uppercase tracking-widest hover:text-white hover:bg-white/[0.04] transition-all group"
             >
               <Icon size={14} weight="duotone" className="text-amber-400/60 group-hover:text-amber-400 transition-colors" />

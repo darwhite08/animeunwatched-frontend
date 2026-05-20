@@ -27,6 +27,7 @@ const mockUser: User = {
   id: "user-1",
   email: "test@example.com",
   username: "testuser",
+    slug: null,
   displayName: "Test User",
   bio: null,
   avatarUrl: null,

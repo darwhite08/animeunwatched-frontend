@@ -28,6 +28,12 @@ export const getUser = (username: string) =>
 export const updateMe = (body: { displayName?: string; bio?: string; avatarUrl?: string }) =>
   api<{ user: User }>("/users/me", { method: "PATCH", body: JSON.stringify(body) })
 
+export const updateSlug = (slug: string) =>
+  api<{ user: User }>("/users/me/slug", { method: "PATCH", body: JSON.stringify({ slug }) })
+
+export const checkSlugAvailable = (slug: string) =>
+  api<{ available: boolean; error?: string }>(`/users/slug-check?slug=${encodeURIComponent(slug)}`)
+
 export const follow = (username: string) =>
   api<void>(`/users/${username}/follow`, { method: "POST" })
 

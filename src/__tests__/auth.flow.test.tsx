@@ -13,6 +13,7 @@ const mockUser: User = {
   id: "test-user-1",
   email: "naruto@konoha.com",
   username: "naruto_uzumaki",
+    slug: null,
   displayName: "Naruto Uzumaki",
   bio: "Believe it!",
   avatarUrl: null,

@@ -9,6 +9,7 @@ const mockUser: User = {
   id: "user-1",
   email: "ash@example.com",
   username: "ash_ketchum",
+    slug: null,
   displayName: "Ash Ketchum",
   bio: null,
   avatarUrl: null,

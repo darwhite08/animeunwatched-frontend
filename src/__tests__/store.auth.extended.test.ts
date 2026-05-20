@@ -7,11 +7,13 @@ import type { User } from "@/lib/api/types"
 
 const mockUser1: User = {
   id: "u1", email: "u1@example.com", username: "user1", displayName: "User One",
+    slug: null,
   bio: "Bio 1", avatarUrl: null, role: "USER", reputation: 100, createdAt: "2024-01-01T00:00:00Z",
 }
 
 const mockUser2: User = {
   id: "u2", email: "u2@example.com", username: "user2", displayName: "User Two",
+    slug: null,
   bio: null, avatarUrl: "https://example.com/avatar.jpg", role: "MOD", reputation: 500, createdAt: "2024-01-02T00:00:00Z",
 }
 

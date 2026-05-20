@@ -193,8 +193,11 @@ export default function CinematicHero() {
           >
             <Link
               href="/register"
-              className="group inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-medium transition-colors duration-150"
-              style={{ boxShadow: "0 0 20px rgba(99,102,241,0.25)" }}
+              className="group inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-black uppercase tracking-widest transition-all duration-200 text-black"
+              style={{
+                background: "linear-gradient(135deg, #fbbf24, #f59e0b)",
+                boxShadow: "0 4px 24px rgba(245,158,11,0.4), 0 0 0 1px rgba(245,158,11,0.3)",
+              }}
             >
               Get started — it&apos;s free
               <ArrowRight size={13} className="group-hover:translate-x-0.5 transition-transform duration-150" />
@@ -215,13 +218,16 @@ export default function CinematicHero() {
             className="flex items-center pt-5 border-t border-white/[0.06]"
           >
             {[
-              { v: "12.4k", l: "Members" },
-              { v: "310+",  l: "Anime catalogued" },
-              { v: "4.2M",  l: "Episodes tracked" },
+              { v: "12.4k",  l: "Members" },
+              { v: "30,161", l: "Anime in archive" },
+              { v: "4.2M",   l: "Episodes tracked" },
             ].map(({ v, l }, i) => (
               <div key={l} className={`${i > 0 ? "pl-5 ml-5 border-l border-white/[0.06]" : ""}`}>
-                <p className="text-base font-semibold text-white tracking-tight">{v}</p>
-                <p className="text-[11px] text-white/25 mt-0.5">{l}</p>
+                <p className="text-base font-black tracking-tighter"
+                  style={{ background: "linear-gradient(135deg, #fbbf24, #f59e0b)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+                  {v}
+                </p>
+                <p className="text-[11px] text-white/30 mt-0.5">{l}</p>
               </div>
             ))}
           </motion.div>

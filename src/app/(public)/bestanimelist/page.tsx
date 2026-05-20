@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useMemo, useCallback } from "react"
+import React, { useState, useMemo, useCallback } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import BestAnimeListHeader from "@/components/bestanimelist/BestAnimeListHeader"
 import AnimeCard from "@/components/bestanimelist/AnimeCard"
@@ -37,6 +37,59 @@ function mapDTO(a: AnimeDTO, rank: number): Anime {
   }
 }
 
+/* ── Advanced filter constants ── */
+const DECADE_OPTIONS = [
+  { label: "1960s", start: "1960-01-01", end: "1969-12-31" },
+  { label: "1970s", start: "1970-01-01", end: "1979-12-31" },
+  { label: "1980s", start: "1980-01-01", end: "1989-12-31" },
+  { label: "1990s", start: "1990-01-01", end: "1999-12-31" },
+  { label: "2000s", start: "2000-01-01", end: "2009-12-31" },
+  { label: "2010s", start: "2010-01-01", end: "2019-12-31" },
+  { label: "2020s", start: "2020-01-01", end: "2029-12-31" },
+] as const
+
+const SCORE_OPTIONS = [
+  { label: "7+",   min: 7.0 },
+  { label: "8+",   min: 8.0 },
+  { label: "8.5+", min: 8.5 },
+  { label: "9+",   min: 9.0 },
+] as const
+
+const STATUS_OPTIONS = ["Airing", "Finished", "Upcoming"] as const
+const SEASON_OPTIONS = ["Winter", "Spring", "Summer", "Fall"] as const
+
+type EpisodeRange = "short" | "medium" | "long" | "movie"
+const EPISODE_OPTIONS: { label: string; key: EpisodeRange }[] = [
+  { label: "Short (<12)",  key: "short" },
+  { label: "Medium (12–26)", key: "medium" },
+  { label: "Long (>26)",   key: "long" },
+  { label: "Movies",       key: "movie" },
+]
+
+function episodeFilter(a: Anime, range: EpisodeRange): boolean {
+  if (range === "movie") return a.type === "Movie"
+  if (range === "short") return a.episodes !== undefined && a.episodes !== null && a.episodes > 0 && a.episodes < 12
+  if (range === "medium") return a.episodes !== undefined && a.episodes !== null && a.episodes >= 12 && a.episodes <= 26
+  if (range === "long") return a.episodes !== undefined && a.episodes !== null && a.episodes > 26
+  return true
+}
+
+/* ── Pill filter button ── */
+function FilterPill({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) {
+  return (
+    <button
+      onClick={onClick}
+      className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider border transition-all whitespace-nowrap ${
+        active
+          ? "bg-amber-500/20 border-amber-500/50 text-amber-400"
+          : "bg-white/5 border-white/10 text-white/40 hover:border-white/20 hover:text-white/60"
+      }`}
+    >
+      {children}
+    </button>
+  )
+}
+
 export default function BestAnimeListPage() {
   const [filterOpen, setFilterOpen] = useState(false)
   const [selectedAnime, setSelectedAnime] = useState<Anime | null>(null)
@@ -46,6 +99,13 @@ export default function BestAnimeListPage() {
   const [query, setQuery] = useState("")
   const [page, setPage] = useState(1)
   const LIMIT = 24
+
+  // Advanced filter state
+  const [selectedDecade, setSelectedDecade] = useState<typeof DECADE_OPTIONS[number]["label"] | "">("")
+  const [selectedScore, setSelectedScore] = useState<number | null>(null)
+  const [selectedStatus, setSelectedStatus] = useState<typeof STATUS_OPTIONS[number] | "">("")
+  const [selectedSeason, setSelectedSeason] = useState<typeof SEASON_OPTIONS[number] | "">("")
+  const [selectedEpisodeRange, setSelectedEpisodeRange] = useState<EpisodeRange | "">("")
 
   // Reset to page 1 when filters change
   const handleCategoryChange = useCallback((c: string) => { setCategory(c); setPage(1) }, [])
@@ -59,8 +119,15 @@ export default function BestAnimeListPage() {
     if (selectedType) params.type = selectedType
     // Category maps to API filters (handled server-side via Jikan)
     if (category === "new") params.type = params.type || "TV"
+    // Decade filter → start_date / end_date
+    if (selectedDecade) {
+      const decade = DECADE_OPTIONS.find(d => d.label === selectedDecade)
+      if (decade) { params.start_date = decade.start; params.end_date = decade.end }
+    }
+    // Status filter
+    if (selectedStatus) params.status = selectedStatus.toLowerCase()
     return params
-  }, [query, selectedType, category, page])
+  }, [query, selectedType, category, page, selectedDecade, selectedStatus])
 
   const { data, isLoading, isError } = useBrowseAnime(apiParams)
 
@@ -82,8 +149,12 @@ export default function BestAnimeListPage() {
         selectedGenres.every(g => a.genres.some(ag => ag.toLowerCase().includes(g.toLowerCase())))
       )
     }
+    // Client-side score filter
+    if (selectedScore !== null) results = results.filter(a => a.rating >= selectedScore)
+    // Client-side episode range filter
+    if (selectedEpisodeRange) results = results.filter(a => episodeFilter(a, selectedEpisodeRange))
     return results
-  }, [allAnime, category, selectedGenres])
+  }, [allAnime, category, selectedGenres, selectedScore, selectedEpisodeRange])
 
   const handleGenreToggle = useCallback((id: string) => {
     const labelMap: Record<string, string> = {
@@ -105,9 +176,16 @@ export default function BestAnimeListPage() {
     setSelectedType("")
     setCategory("all")
     setQuery("")
+    setSelectedDecade("")
+    setSelectedScore(null)
+    setSelectedStatus("")
+    setSelectedSeason("")
+    setSelectedEpisodeRange("")
   }, [])
 
-  const activeFilterCount = selectedGenres.length + (selectedType ? 1 : 0)
+  const advancedFilterCount = (selectedDecade ? 1 : 0) + (selectedScore !== null ? 1 : 0) +
+    (selectedStatus ? 1 : 0) + (selectedSeason ? 1 : 0) + (selectedEpisodeRange ? 1 : 0)
+  const activeFilterCount = selectedGenres.length + (selectedType ? 1 : 0) + advancedFilterCount
 
   return (
     <div className="min-h-screen bg-[#020202] pb-40">
@@ -115,7 +193,7 @@ export default function BestAnimeListPage() {
 
       <div className="max-w-7xl mx-auto px-6">
         {/* Toolbar */}
-        <div className="flex flex-wrap items-center justify-between gap-4 mb-10 py-4 border-b border-white/5">
+        <div className="flex flex-wrap items-center justify-between gap-4 mb-4 py-4 border-b border-white/5">
           <CategoryTabs active={category} onChange={handleCategoryChange} />
           <div className="flex items-center gap-3">
             <div className="relative group">
@@ -140,6 +218,72 @@ export default function BestAnimeListPage() {
               )}
             </button>
           </div>
+        </div>
+
+        {/* Advanced filter chips */}
+        <div className="flex flex-wrap items-center gap-2 mb-8 pb-4 border-b border-white/5">
+          {/* Decade */}
+          <span className="text-[9px] font-black text-white/20 uppercase tracking-widest mr-1">Era</span>
+          {DECADE_OPTIONS.map(d => (
+            <FilterPill key={d.label} active={selectedDecade === d.label}
+              onClick={() => { setSelectedDecade(prev => prev === d.label ? "" : d.label); setPage(1) }}>
+              {d.label}
+            </FilterPill>
+          ))}
+
+          <div className="w-px h-4 bg-white/10 mx-1" />
+
+          {/* Score */}
+          <span className="text-[9px] font-black text-white/20 uppercase tracking-widest mr-1">Score</span>
+          {SCORE_OPTIONS.map(s => (
+            <FilterPill key={s.label} active={selectedScore === s.min}
+              onClick={() => { setSelectedScore(prev => prev === s.min ? null : s.min) }}>
+              {s.label}
+            </FilterPill>
+          ))}
+
+          <div className="w-px h-4 bg-white/10 mx-1" />
+
+          {/* Status */}
+          <span className="text-[9px] font-black text-white/20 uppercase tracking-widest mr-1">Status</span>
+          {STATUS_OPTIONS.map(st => (
+            <FilterPill key={st} active={selectedStatus === st}
+              onClick={() => { setSelectedStatus(prev => prev === st ? "" : st); setPage(1) }}>
+              {st}
+            </FilterPill>
+          ))}
+
+          <div className="w-px h-4 bg-white/10 mx-1" />
+
+          {/* Season */}
+          <span className="text-[9px] font-black text-white/20 uppercase tracking-widest mr-1">Season</span>
+          {SEASON_OPTIONS.map(s => (
+            <FilterPill key={s} active={selectedSeason === s}
+              onClick={() => { setSelectedSeason(prev => prev === s ? "" : s) }}>
+              {s}
+            </FilterPill>
+          ))}
+
+          <div className="w-px h-4 bg-white/10 mx-1" />
+
+          {/* Episodes */}
+          <span className="text-[9px] font-black text-white/20 uppercase tracking-widest mr-1">Eps</span>
+          {EPISODE_OPTIONS.map(e => (
+            <FilterPill key={e.key} active={selectedEpisodeRange === e.key}
+              onClick={() => { setSelectedEpisodeRange(prev => prev === e.key ? "" : e.key) }}>
+              {e.label}
+            </FilterPill>
+          ))}
+
+          {advancedFilterCount > 0 && (
+            <>
+              <div className="w-px h-4 bg-white/10 mx-1" />
+              <button onClick={handleReset}
+                className="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider border border-rose-500/30 bg-rose-500/10 text-rose-400 hover:bg-rose-500/20 transition-all">
+                Clear all
+              </button>
+            </>
+          )}
         </div>
 
         {/* Loading */}

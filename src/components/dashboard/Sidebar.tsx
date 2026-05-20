@@ -7,7 +7,7 @@ import { useAuthStore } from "@/stores/auth.store"
 import {
   LayoutGrid, Book, MonitorPlay, Activity, BarChart2,
   User, Users, Bell, Settings, Flame, Zap, ChevronRight, Rss, Trophy,
-  BookOpen, History, Tag, Building2, Sparkles, Layers,
+  BookOpen, History, Tag,
 } from "lucide-react"
 import { useWatchlist } from "@/stores/watchlist.store"
 import { useUnreadCount } from "@/hooks/useNotificationsQuery"
@@ -16,33 +16,32 @@ const NAV = [
   {
     label: "My Space",
     items: [
-      { name: "Dashboard",     href: "/dashboard",      icon: LayoutGrid   },
-      { name: "My Feed",       href: "/feed",           icon: Rss          },
-      { name: "Watchlist",     href: "/watchlist",      icon: MonitorPlay  },
-      { name: "Library",       href: "/readlist",       icon: Book         },
-      { name: "Streak",        href: "/streak",         icon: Activity     },
-      { name: "Achievements",  href: "/achievements",   icon: Trophy       },
-      { name: "Watch Stats",   href: "/stats",          icon: BarChart2    },
-      { name: "Manga",         href: "/manga",          icon: BookOpen     },
-      { name: "History",       href: "/history",        icon: History      },
+      { name: "Dashboard",    href: "/dashboard",  icon: LayoutGrid },
+      { name: "Watchlist",    href: "/watchlist",  icon: MonitorPlay },
+      { name: "Library",      href: "/readlist",   icon: Book       },
+      { name: "Streak",       href: "/streak",     icon: Activity   },
+      { name: "Achievements", href: "/achievements",icon: Trophy     },
+      { name: "Watch Stats",  href: "/stats",      icon: BarChart2  },
+      { name: "Manga",        href: "/manga",      icon: BookOpen   },
+      { name: "History",      href: "/history",    icon: History    },
     ],
   },
   {
-    label: "Explore",
+    label: "Community",
     items: [
-      { name: "Genres",          href: "/genres",          icon: Tag       },
-      { name: "Studios",         href: "/studios",         icon: Building2 },
-      { name: "Recommendations", href: "/recommendations", icon: Sparkles  },
-      { name: "Collections",     href: "/collections",     icon: Layers    },
+      { name: "Feed",         href: "/feed",        icon: Rss       },
+      { name: "Community",    href: "/community",   icon: Users     },
+      { name: "Clubs",        href: "/clubs",       icon: Tag       },
+      { name: "Leaderboard",  href: "/leaderboard", icon: Zap       },
     ],
   },
   {
     label: "Account",
     items: [
-      { name: "Profile",       href: "/profile",        icon: User         },
-      { name: "Following",     href: "/following",      icon: Users        },
-      { name: "Notifications", href: "/notifications",  icon: Bell,  badge: true },
-      { name: "Settings",      href: "/settings",       icon: Settings     },
+      { name: "Profile",       href: "/profile",       icon: User      },
+      { name: "Following",     href: "/following",     icon: Users     },
+      { name: "Notifications", href: "/notifications", icon: Bell, badge: true },
+      { name: "Settings",      href: "/settings",      icon: Settings  },
     ],
   },
 ]

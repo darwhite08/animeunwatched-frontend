@@ -49,6 +49,23 @@ type Suggestion = {
   isFollowing: boolean
 }
 
+/* ── Avatar gradient palettes ── */
+const AVATAR_GRADIENTS = [
+  "from-amber-500 to-orange-600",
+  "from-indigo-500 to-violet-600",
+  "from-emerald-500 to-teal-600",
+  "from-rose-500 to-pink-600",
+  "from-sky-500 to-blue-600",
+  "from-purple-500 to-fuchsia-600",
+  "from-cyan-500 to-indigo-600",
+  "from-lime-500 to-green-600",
+] as const
+
+function avatarGradient(letter: string): string {
+  const idx = letter.charCodeAt(0) % AVATAR_GRADIENTS.length
+  return AVATAR_GRADIENTS[idx]
+}
+
 /* ── Mock data ── */
 const FEED_POSTS: FeedPost[] = [
   {
@@ -165,6 +182,14 @@ const FEED_POSTS: FeedPost[] = [
   },
 ]
 
+/* ── Trending mock for sidebar ── */
+const TRENDING_SIDEBAR = [
+  { title: "Frieren: Beyond Journey's End", score: 9.1, tag: "frieren" },
+  { title: "Chainsaw Man",                  score: 8.7, tag: "chainsaw-man" },
+  { title: "Jujutsu Kaisen",                score: 8.6, tag: "jjk" },
+  { title: "Vinland Saga",                  score: 9.0, tag: "vinland" },
+]
+
 const SUGGESTIONS: Suggestion[] = [
   {
     username: "otaku_arch",
@@ -255,6 +280,7 @@ export default function FeedPage() {
     )
   }
 
+  // Show API posts when available, fallback to mock data when loading is done and API returned nothing
   const visiblePosts = apiPosts
 
   const TAB_LABELS: { key: FeedTab; label: string }[] = [
@@ -355,9 +381,31 @@ export default function FeedPage() {
             </div>
           </motion.div>
 
+          {/* Loading skeleton */}
+          {isLoading && (
+            <div className="space-y-5">
+              {Array.from({ length: 4 }).map((_, i) => (
+                <div key={i} className="bg-zinc-900/60 border border-white/8 rounded-2xl p-6 space-y-3 animate-pulse" style={{ animationDelay: `${i * 100}ms` }}>
+                  <div className="flex items-center gap-3">
+                    <div className="h-10 w-10 rounded-xl bg-white/10" />
+                    <div className="space-y-1.5 flex-1">
+                      <div className="h-3 w-28 bg-white/10 rounded-full" />
+                      <div className="h-2 w-16 bg-white/5 rounded-full" />
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <div className="h-3 w-full bg-white/5 rounded-full" />
+                    <div className="h-3 w-5/6 bg-white/5 rounded-full" />
+                    <div className="h-3 w-4/5 bg-white/5 rounded-full" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
           {/* Posts */}
           <AnimatePresence mode="popLayout">
-            {visiblePosts.length === 0 && feedTab === "following" ? (
+            {!isLoading && visiblePosts.length === 0 && feedTab === "following" ? (
               <motion.div
                 key="empty-following"
                 initial={{ opacity: 0, y: 10 }}
@@ -383,14 +431,75 @@ export default function FeedPage() {
                   <Users size={14} /> Discover Shinobi
                 </Link>
               </motion.div>
+            ) : !isLoading && visiblePosts.length === 0 ? (
+              /* Fallback: show mock posts when API returns nothing */
+              FEED_POSTS.map((post, i) => {
+                const gradClass = avatarGradient(post.avatar)
+                return (
+                  <motion.article
+                    key={`mock-${post.id}`}
+                    layout
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: i * 0.05 }}
+                    className="bg-zinc-900/60 border border-white/[0.08] hover:border-amber-500/10 rounded-2xl p-6 space-y-4 transition-all duration-300"
+                  >
+                    <div className="flex items-start justify-between">
+                      <div className="flex items-center gap-3">
+                        <div className={`h-10 w-10 rounded-xl bg-gradient-to-br ${gradClass} flex items-center justify-center font-black text-sm text-white shrink-0`}>
+                          {post.avatar}
+                        </div>
+                        <div>
+                          <p className="text-sm font-black text-white">{post.author}</p>
+                          <p className="text-[10px] text-white/35 mt-0.5">{post.time}</p>
+                        </div>
+                      </div>
+                      <button className="p-1.5 text-white/20 hover:text-white/50 transition-colors">
+                        <MoreHorizontal size={15} />
+                      </button>
+                    </div>
+
+                    {post.anime && (
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-amber-500/8 border border-amber-500/15 text-[10px] font-bold text-amber-400">
+                        <Star size={9} fill="currentColor" /> {post.anime}
+                      </span>
+                    )}
+
+                    <p className="text-sm text-white/75 leading-relaxed">{post.content}</p>
+
+                    {post.tags.length > 0 && (
+                      <div className="flex flex-wrap gap-1.5">
+                        {post.tags.map(t => (
+                          <span key={t} className="text-[9px] px-2 py-0.5 rounded-full bg-white/5 border border-white/8 text-white/30 font-bold">
+                            #{t}
+                          </span>
+                        ))}
+                      </div>
+                    )}
+
+                    <div className="flex items-center gap-5 pt-1 border-t border-white/5">
+                      <button
+                        className="flex items-center gap-1.5 text-xs font-bold text-amber-400/80 hover:text-amber-400 transition-colors"
+                      >
+                        <Heart size={14} />
+                        {post.likes.toLocaleString()}
+                      </button>
+                      <button className="flex items-center gap-1.5 text-xs font-bold text-white/30 hover:text-indigo-400 transition-colors">
+                        <MessageSquare size={14} />
+                        {post.comments}
+                      </button>
+                      <button className="flex items-center gap-1.5 text-xs font-bold text-white/30 hover:text-white/60 transition-colors ml-auto">
+                        <Share2 size={13} />
+                      </button>
+                    </div>
+                  </motion.article>
+                )
+              })
             ) : (
-              isLoading ? (
-                <div className="flex justify-center py-16">
-                  <Loader2 size={24} className="animate-spin text-indigo-400" />
-                </div>
-              ) : visiblePosts.map((post, i) => {
+              visiblePosts.map((post, i) => {
                 const authorName = post.author?.displayName ?? post.author?.username ?? "?"
                 const liked = likedIds.has(post.id)
+                const gradClass = avatarGradient(authorName[0] ?? "A")
                 return (
                 <motion.article
                   key={post.id}
@@ -398,21 +507,21 @@ export default function FeedPage() {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.04 }}
-                  className="bg-zinc-900/60 border border-white/8 hover:border-white/15 rounded-2xl p-6 space-y-4 transition-colors"
+                  className="bg-zinc-900/60 border border-white/[0.08] hover:border-amber-500/10 rounded-2xl p-6 space-y-4 transition-all duration-300"
                 >
                   <div className="flex items-start justify-between">
                     <div className="flex items-center gap-3">
                       <Link href={`/u/${post.author?.username ?? ""}`}>
-                        <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center font-black text-sm hover:opacity-80 transition-opacity">
+                        <div className={`h-10 w-10 rounded-xl bg-gradient-to-br ${gradClass} flex items-center justify-center font-black text-sm text-white hover:opacity-80 transition-opacity shrink-0`}>
                           {authorName[0]?.toUpperCase()}
                         </div>
                       </Link>
                       <div>
                         <Link href={`/u/${post.author?.username ?? ""}`}
-                          className="text-sm font-black text-white hover:text-indigo-300 transition-colors">
+                          className="text-sm font-black text-white hover:text-amber-400 transition-colors">
                           {authorName}
                         </Link>
-                        <p className="text-[10px] text-white/30">{timeAgo(post.createdAt)}</p>
+                        <p className="text-[10px] text-white/35 mt-0.5">{timeAgo(post.createdAt)}</p>
                       </div>
                     </div>
                     <button className="p-1.5 text-white/20 hover:text-white/50 transition-colors">
@@ -422,8 +531,8 @@ export default function FeedPage() {
 
                   {post.anime && (
                     <Link href={`/anime/${post.anime.malId}`}
-                      className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-indigo-500/8 border border-indigo-500/15 text-[10px] font-bold text-indigo-400 hover:bg-indigo-500/15 transition-colors">
-                      <Star size={9} /> {post.anime.title}
+                      className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-amber-500/8 border border-amber-500/15 text-[10px] font-bold text-amber-400 hover:bg-amber-500/15 transition-colors">
+                      <Star size={9} fill="currentColor" /> {post.anime.title}
                     </Link>
                   )}
 
@@ -431,7 +540,7 @@ export default function FeedPage() {
 
                   <div className="flex items-center gap-5 pt-1 border-t border-white/5">
                     <button onClick={() => toggleLike(post.id)}
-                      className={`flex items-center gap-1.5 text-xs font-bold transition-colors ${liked ? "text-rose-400" : "text-white/30 hover:text-rose-400"}`}>
+                      className={`flex items-center gap-1.5 text-xs font-bold transition-colors ${liked ? "text-amber-400" : "text-white/30 hover:text-amber-400"}`}>
                       <Heart size={14} fill={liked ? "currentColor" : "none"} />
                       {(post._count?.likes ?? 0) + (liked ? 1 : 0)}
                     </button>
@@ -516,22 +625,25 @@ export default function FeedPage() {
           {/* Trending Anime */}
           <div className="p-5 rounded-2xl bg-white/[0.02] border border-white/8 space-y-4">
             <div className="flex items-center gap-2">
-              <TrendingUp size={14} className="text-violet-400" />
+              <TrendingUp size={14} className="text-amber-400" />
               <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40">
-                Trending Anime
+                Trending Now
               </h3>
             </div>
             <div className="space-y-3">
-              {(discoverData?.pages[0]?.data.slice(0,4) ?? []).map((post, i) => (
-                <motion.div key={post.id} initial={{ opacity: 0, x: 8 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.07 }}>
-                  <Link href={post.anime ? `/anime/${post.anime.malId}` : "/community"}
+              {TRENDING_SIDEBAR.map((item, i) => (
+                <motion.div key={item.tag} initial={{ opacity: 0, x: 8 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.07 }}>
+                  <Link href={`/bestanimelist?q=${encodeURIComponent(item.title)}`}
                     className="flex items-center gap-3 group">
-                    <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-indigo-500/30 to-violet-500/30 border border-white/8 flex items-center justify-center shrink-0 text-xs font-black">
-                      {(post.author?.displayName ?? "?")[0]}
+                    <div className="h-8 w-8 rounded-lg bg-amber-500/15 border border-amber-500/20 flex items-center justify-center shrink-0 text-[10px] font-black text-amber-400">
+                      {i + 1}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-xs font-black text-white/80 group-hover:text-white transition-colors truncate">{post.content.slice(0,50)}…</p>
-                      {post.anime && <p className="text-[9px] text-indigo-400/60 mt-0.5 truncate">{post.anime.title}</p>}
+                      <p className="text-xs font-black text-white/80 group-hover:text-amber-400 transition-colors truncate">{item.title}</p>
+                      <div className="flex items-center gap-1 mt-0.5">
+                        <Star size={8} className="text-amber-400" fill="currentColor" />
+                        <span className="text-[9px] text-amber-400/70 font-bold">{item.score}</span>
+                      </div>
                     </div>
                   </Link>
                 </motion.div>

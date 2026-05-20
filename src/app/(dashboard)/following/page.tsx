@@ -138,7 +138,7 @@ export default function FollowingPage() {
                 <button onClick={() => toggle(u)}
                   className={`shrink-0 flex items-center gap-1.5 px-3 py-2 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all ${
                     isF ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/20"
-                        : "bg-indigo-600 text-white hover:bg-indigo-500"
+                        : "bg-amber-500 text-black hover:bg-amber-400"
                   }`}
                 >
                   {isF ? <><Check size={11} /> Following</> : <><UserPlus size={11} /> Follow</>}

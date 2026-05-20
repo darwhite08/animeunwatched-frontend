@@ -172,7 +172,7 @@ function PollCard({ poll, index }: { poll: Poll; index: number }) {
                   initial={{ width: 0 }}
                   animate={{ width: `${pct}%` }}
                   transition={{ duration: 0.6, ease: "easeOut" }}
-                  className={`h-full rounded-full ${isWinner ? "bg-amber-500" : "bg-indigo-600"}`}
+                  className={`h-full rounded-full ${isWinner ? "bg-amber-500" : "bg-amber-500"}`}
                 />
               </div>
             </div>

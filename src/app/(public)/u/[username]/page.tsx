@@ -421,7 +421,7 @@ export default function UserProfilePage({
                   className={`flex items-center gap-2 px-7 py-3 rounded-2xl text-sm font-black uppercase tracking-widest transition-all duration-300 ${
                     following
                       ? "bg-white/8 border border-white/15 text-white/70 hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/20"
-                      : "bg-indigo-600 text-white hover:bg-indigo-500 shadow-[0_0_32px_rgba(99,102,241,0.35)] hover:-translate-y-0.5"
+                      : "bg-amber-500 text-black hover:bg-amber-400 shadow-[0_0_32px_rgba(99,102,241,0.35)] hover:-translate-y-0.5"
                   }`}
                 >
                   {following ? (

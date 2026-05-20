@@ -602,7 +602,7 @@ export default function FeedPage() {
                     className={`shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[9px] font-black uppercase tracking-wider transition-all ${
                       s.isFollowing
                         ? "bg-white/8 border border-white/15 text-white/50 hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/20"
-                        : "bg-indigo-600 text-white hover:bg-indigo-500"
+                        : "bg-amber-500 text-black hover:bg-amber-400"
                     }`}
                   >
                     {s.isFollowing ? (

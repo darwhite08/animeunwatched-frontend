@@ -243,7 +243,7 @@ function AnimeDetail({ anime, rawAnime }: { anime: Anime; rawAnime?: AnimeDTO })
               className={`flex items-center gap-2.5 px-6 py-3 rounded-2xl text-xs font-black uppercase tracking-widest transition-all ${
                 inList
                   ? "bg-emerald-600 text-white hover:bg-emerald-700"
-                  : "bg-indigo-600 text-white hover:bg-indigo-500 shadow-[0_0_24px_rgba(99,102,241,0.35)]"
+                  : "bg-amber-500 text-black hover:bg-amber-400 shadow-[0_0_24px_rgba(99,102,241,0.35)]"
               }`}
             >
               {inList ? <><Check size={14} /> In List</> : <><Plus size={14} /> Add to List</>}

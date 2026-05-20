@@ -23,7 +23,7 @@ export default function DashboardHeader() {
           />
         </div>
 
-        <button className="bg-indigo-600 px-4 py-2 rounded-xl hover:bg-indigo-500 transition flex items-center gap-2">
+        <button className="px-4 py-2 rounded-xl text-black flex items-center gap-2 transition-all hover:opacity-90" style={{background:"linear-gradient(135deg,#fbbf24,#f59e0b)"}}>
           <Plus size={16} />
           Add Anime
         </button>

@@ -36,7 +36,10 @@ export const GenreCard = () => {
     const total = entries.length
     for (const entry of entries) {
       for (const genre of entry.anime?.genres ?? []) {
-        counts[genre] = (counts[genre] ?? 0) + 1
+        // genres may be objects {name: string} or plain strings depending on API shape
+        const name = typeof genre === "string" ? genre : (genre as { name?: string }).name ?? String(genre)
+        if (!name || name === "[object Object]") continue
+        counts[name] = (counts[name] ?? 0) + 1
       }
     }
 
@@ -45,7 +48,7 @@ export const GenreCard = () => {
       .slice(0, 4)
       .map(([name, count]) => ({
         name,
-        percent: Math.round((count / total) * 100),
+        percent: Math.min(100, Math.round((count / total) * 100)),
         color: GENRE_COLORS[name] ?? "from-indigo-600 to-blue-500",
       }))
   }, [listData])
@@ -71,7 +74,7 @@ export const GenreCard = () => {
           <div key={genre.name} className="space-y-3">
             <div className="flex justify-between items-end">
               <span className="text-[11px] font-black uppercase tracking-widest text-white/70">{genre.name}</span>
-              <span className="text-[10px] font-medium text-white/20 italic">{genre.percent}% Saturation</span>
+              <span className="text-[10px] font-bold text-white/25">{genre.percent}%</span>
             </div>
             <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden p-[1px] border border-white/5">
               <motion.div

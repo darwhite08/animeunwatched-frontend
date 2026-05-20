@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation"
 import { useAuthStore } from "@/stores/auth.store"
 import {
   LayoutGrid, Book, MonitorPlay, Activity, BarChart2,
-  User, Users, Bell, Settings, Flame, Zap, ChevronRight, Rss, Trophy,
+  User, Users, Bell, Settings, Flame, Zap, ChevronRight, Trophy,
   BookOpen, History, Tag,
 } from "lucide-react"
 import { useWatchlist } from "@/stores/watchlist.store"
@@ -29,7 +29,6 @@ const NAV = [
   {
     label: "Community",
     items: [
-      { name: "Feed",         href: "/feed",        icon: Rss       },
       { name: "Community",    href: "/community",   icon: Users     },
       { name: "Clubs",        href: "/clubs",       icon: Tag       },
       { name: "Leaderboard",  href: "/leaderboard", icon: Zap       },

@@ -87,7 +87,7 @@ export default function CommunityReviewsPage() {
             </h1>
             <p className="text-white/35 text-sm mt-1">{MOCK.length} community reviews</p>
           </div>
-          <Link href="/rate" className="flex items-center gap-2 px-5 py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-xs font-black uppercase tracking-widest text-white transition-all">
+          <Link href="/rate" className="flex items-center gap-2 px-5 py-3 rounded-2xl bg-amber-500 hover:bg-amber-400 text-xs font-black uppercase tracking-widest text-white transition-all">
             <PenSquare size={13} /> Write a Review
           </Link>
         </div>

@@ -63,7 +63,7 @@ export default function BlogCommentsPage({ params }: { params: Promise<{ slug: s
           <div className="flex items-center justify-between border-t border-white/5 pt-3">
             <span className={`text-[10px] font-mono ${500-draft.length<50?"text-amber-400":"text-white/20"}`}>{500-draft.length}</span>
             <button onClick={submit} disabled={!draft.trim()}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 disabled:opacity-40 text-xs font-black uppercase tracking-wider text-white transition-all"
+              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 disabled:opacity-40 text-xs font-black uppercase tracking-wider text-white transition-all"
             >
               <Send size={12} /> Post
             </button>

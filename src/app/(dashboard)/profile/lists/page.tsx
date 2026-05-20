@@ -72,7 +72,7 @@ export default function MyListsPage() {
           <p className="text-white/35 text-sm mt-1">{lists.length} curated lists</p>
         </div>
         <button onClick={() => push("List creation coming soon!", "info")}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-xs font-black uppercase tracking-widest text-white transition-all mt-2"
+          className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-xs font-black uppercase tracking-widest text-white transition-all mt-2"
         >
           <Plus size={13} /> New List
         </button>

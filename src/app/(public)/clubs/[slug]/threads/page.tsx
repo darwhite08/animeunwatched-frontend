@@ -403,7 +403,7 @@ export default function ClubThreadsPage({
 
           <button
             onClick={handleNewThread}
-            className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-sm font-black uppercase tracking-widest text-white transition-all shadow-[0_0_32px_rgba(99,102,241,0.3)] hover:-translate-y-0.5 whitespace-nowrap self-start sm:self-auto"
+            className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-amber-500 hover:bg-amber-400 text-sm font-black uppercase tracking-widest text-white transition-all shadow-[0_0_32px_rgba(99,102,241,0.3)] hover:-translate-y-0.5 whitespace-nowrap self-start sm:self-auto"
           >
             <Plus size={14} /> New Thread
           </button>
@@ -421,7 +421,7 @@ export default function ClubThreadsPage({
               <div className="flex items-center justify-end gap-3 pt-1 border-t border-white/5">
                 <button onClick={() => setComposerOpen(false)} className="text-xs text-white/40 hover:text-white transition-colors">Cancel</button>
                 <button onClick={submitThread} disabled={createThread.isPending}
-                  className="flex items-center gap-2 px-5 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-xs font-black uppercase tracking-widest text-white transition-all">
+                  className="flex items-center gap-2 px-5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 disabled:opacity-50 text-xs font-black uppercase tracking-widest text-white transition-all">
                   Post Thread
                 </button>
               </div>

@@ -45,7 +45,7 @@ export default function WatchPartyPage() {
           >
             <button
               onClick={() => alert("Watch Party launches Q3 2026 — sign up for early access!")}
-              className="flex items-center gap-2 px-8 py-4 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-sm font-black uppercase tracking-widest text-white transition-all shadow-[0_0_30px_rgba(99,102,241,0.4)]"
+              className="flex items-center gap-2 px-8 py-4 rounded-2xl bg-amber-500 hover:bg-amber-400 text-sm font-black uppercase tracking-widest text-white transition-all shadow-[0_0_30px_rgba(99,102,241,0.4)]"
             >
               <Play size={14} /> Get Early Access
             </button>

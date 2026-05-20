@@ -259,7 +259,7 @@ export default function AboutPage() {
             </p>
             <Link
               href="/register"
-              className="inline-flex items-center gap-2.5 px-8 py-3.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-sm font-black uppercase tracking-widest text-white transition-all"
+              className="inline-flex items-center gap-2.5 px-8 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-sm font-black uppercase tracking-widest text-white transition-all"
             >
               Create Your Dojo Account <ArrowRight size={15} />
             </Link>

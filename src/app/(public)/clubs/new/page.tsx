@@ -323,7 +323,7 @@ export default function NewClubPage() {
             <button
               type="submit"
               disabled={submitting}
-              className="flex-1 py-3.5 rounded-2xl bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 text-sm font-black uppercase tracking-widest text-white transition-all shadow-[0_0_32px_rgba(99,102,241,0.3)] hover:-translate-y-0.5 disabled:translate-y-0"
+              className="flex-1 py-3.5 rounded-2xl bg-amber-500 hover:bg-amber-400 disabled:opacity-50 text-sm font-black uppercase tracking-widest text-white transition-all shadow-[0_0_32px_rgba(99,102,241,0.3)] hover:-translate-y-0.5 disabled:translate-y-0"
             >
               {submitting ? "Creating…" : "Create Club"}
             </button>

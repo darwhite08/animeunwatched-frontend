@@ -162,7 +162,7 @@ export default function UserReviewsPage({
           </div>
           <Link
             href="/rate"
-            className="flex items-center gap-2 px-5 py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-xs font-black uppercase tracking-widest text-white transition-all self-start sm:self-auto shadow-[0_0_20px_rgba(99,102,241,0.3)]"
+            className="flex items-center gap-2 px-5 py-3 rounded-2xl bg-amber-500 hover:bg-amber-400 text-xs font-black uppercase tracking-widest text-white transition-all self-start sm:self-auto shadow-[0_0_20px_rgba(99,102,241,0.3)]"
           >
             <PenSquare size={13} /> Write a Review
           </Link>
@@ -317,7 +317,7 @@ export default function UserReviewsPage({
           <p className="text-white/30 text-sm">Watched something great? Share your take.</p>
           <Link
             href="/rate"
-            className="flex items-center gap-2.5 px-7 py-3.5 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-xs font-black uppercase tracking-widest text-white transition-all shadow-[0_0_24px_rgba(99,102,241,0.3)]"
+            className="flex items-center gap-2.5 px-7 py-3.5 rounded-2xl bg-amber-500 hover:bg-amber-400 text-xs font-black uppercase tracking-widest text-white transition-all shadow-[0_0_24px_rgba(99,102,241,0.3)]"
           >
             <PenSquare size={14} /> Write a Review
           </Link>

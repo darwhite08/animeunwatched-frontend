@@ -87,7 +87,7 @@ export default function QuizPage() {
           <p className="text-3xl font-black text-white">{pct}%</p>
           <p className="text-[10px] text-white/30 uppercase tracking-widest mt-1">Accuracy</p>
         </div>
-        <button onClick={reset} className="w-full flex items-center justify-center gap-2 py-4 rounded-2xl bg-indigo-600 hover:bg-indigo-500 font-black text-xs uppercase tracking-widest text-white transition-all">
+        <button onClick={reset} className="w-full flex items-center justify-center gap-2 py-4 rounded-2xl bg-amber-500 hover:bg-amber-400 font-black text-xs uppercase tracking-widest text-white transition-all">
           <RotateCcw size={14} /> Try Again
         </button>
       </motion.div>
@@ -148,7 +148,7 @@ export default function QuizPage() {
             )}
 
             {hasAnswered && (
-              <button onClick={next} className="w-full flex items-center justify-center gap-2 py-4 rounded-2xl bg-indigo-600 hover:bg-indigo-500 font-black text-xs uppercase tracking-widest text-white transition-all">
+              <button onClick={next} className="w-full flex items-center justify-center gap-2 py-4 rounded-2xl bg-amber-500 hover:bg-amber-400 font-black text-xs uppercase tracking-widest text-white transition-all">
                 {idx + 1 >= questions.length ? "See Results" : "Next Question"} <ChevronRight size={14} />
               </button>
             )}

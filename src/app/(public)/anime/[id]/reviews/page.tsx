@@ -169,7 +169,7 @@ export default function AnimeReviewsPage({ params }: { params: Promise<{ id: str
           {/* Write review CTA */}
           <Link
             href="/rate"
-            className="flex items-center gap-2 px-4 py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-[10px] font-black uppercase tracking-widest text-white transition-all shrink-0 shadow-[0_0_20px_rgba(99,102,241,0.3)]"
+            className="flex items-center gap-2 px-4 py-3 rounded-2xl bg-amber-500 hover:bg-amber-400 text-[10px] font-black uppercase tracking-widest text-white transition-all shrink-0 shadow-[0_0_20px_rgba(99,102,241,0.3)]"
           >
             <PenSquare size={12} /> Write a Review
           </Link>
@@ -347,7 +347,7 @@ export default function AnimeReviewsPage({ params }: { params: Promise<{ id: str
           <p className="text-white/30 text-sm">Watched this anime? Share your take.</p>
           <Link
             href="/rate"
-            className="flex items-center gap-2.5 px-7 py-3.5 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-xs font-black uppercase tracking-widest text-white transition-all shadow-[0_0_24px_rgba(99,102,241,0.3)]"
+            className="flex items-center gap-2.5 px-7 py-3.5 rounded-2xl bg-amber-500 hover:bg-amber-400 text-xs font-black uppercase tracking-widest text-white transition-all shadow-[0_0_24px_rgba(99,102,241,0.3)]"
           >
             <PenSquare size={14} /> Write a Review
           </Link>

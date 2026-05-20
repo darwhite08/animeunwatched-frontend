@@ -238,7 +238,7 @@ export default function ContactPage() {
                 disabled={sending}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className="flex items-center gap-2.5 px-7 py-3.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-black uppercase tracking-widest text-white transition-all"
+                className="flex items-center gap-2.5 px-7 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-black uppercase tracking-widest text-white transition-all"
               >
                 {sending ? (
                   <>Sending…</>

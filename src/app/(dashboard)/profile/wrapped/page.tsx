@@ -214,7 +214,7 @@ export default function WrappedPage() {
               </div>
               <div className="space-y-3">
                 <button onClick={() => setShareOpen(true)}
-                  className="w-full flex items-center justify-center gap-2 py-4 rounded-2xl bg-indigo-600 hover:bg-indigo-500 font-black text-xs uppercase tracking-widest transition-all shadow-[0_0_30px_rgba(99,102,241,0.4)]"
+                  className="w-full flex items-center justify-center gap-2 py-4 rounded-2xl bg-amber-500 hover:bg-amber-400 font-black text-xs uppercase tracking-widest transition-all shadow-[0_0_30px_rgba(99,102,241,0.4)]"
                 >
                   <Share2 size={14} /> Share My {CURRENT_YEAR} Wrapped
                 </button>

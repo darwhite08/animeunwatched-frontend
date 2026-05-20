@@ -173,7 +173,7 @@ function FeaturedAnimeCard({ anime, index }: { anime: Anime; index: number }) {
           </div>
           <Link
             href="/threads/some-id"
-            className="mt-4 inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-[10px] font-black uppercase tracking-widest text-white transition-all w-fit"
+            className="mt-4 inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-[10px] font-black uppercase tracking-widest text-white transition-all w-fit"
           >
             Join Discussion <ArrowRight size={11} />
           </Link>
@@ -376,7 +376,7 @@ export default function AnimeDiscussionsPage() {
             </p>
             <Link
               href="/clubs"
-              className="inline-flex items-center gap-2 px-8 py-4 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-sm font-black uppercase tracking-widest text-white transition-all shadow-lg shadow-indigo-600/20 hover:shadow-indigo-500/30 active:scale-[0.98]"
+              className="inline-flex items-center gap-2 px-8 py-4 rounded-2xl bg-amber-500 hover:bg-amber-400 text-sm font-black uppercase tracking-widest text-white transition-all shadow-lg shadow-indigo-600/20 hover:shadow-indigo-500/30 active:scale-[0.98]"
             >
               Browse Clubs <ArrowRight size={15} />
             </Link>

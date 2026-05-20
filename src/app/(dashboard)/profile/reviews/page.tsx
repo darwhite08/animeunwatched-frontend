@@ -91,7 +91,7 @@ export default function MyReviewsPage() {
             My Reviews<span className="text-indigo-500">.</span>
           </h1>
         </div>
-        <Link href="/rate" className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-xs font-black uppercase tracking-widest text-white transition-all mt-2">
+        <Link href="/rate" className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-xs font-black uppercase tracking-widest text-white transition-all mt-2">
           <PenSquare size={13} /> Write Review
         </Link>
       </div>

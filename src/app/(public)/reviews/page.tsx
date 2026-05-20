@@ -100,7 +100,7 @@ export default function ReviewsPage() {
             <p className="text-white/35 text-sm">{reviews.length} community reviews</p>
           </div>
           <Link href="/rate"
-            className="flex items-center gap-2 px-5 py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-xs font-black uppercase tracking-widest text-white transition-all self-start sm:self-auto"
+            className="flex items-center gap-2 px-5 py-3 rounded-2xl bg-amber-500 hover:bg-amber-400 text-xs font-black uppercase tracking-widest text-white transition-all self-start sm:self-auto"
           >
             <PenSquare size={13} /> Write a Review
           </Link>

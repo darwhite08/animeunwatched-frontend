@@ -240,7 +240,7 @@ export default function RecommendationsPage() {
                   </p>
                   <Link
                     href="/ai-discover"
-                    className="flex items-center justify-between w-full px-5 py-3.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 transition-colors text-xs font-black uppercase tracking-widest text-white"
+                    className="flex items-center justify-between w-full px-5 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 transition-colors text-xs font-black uppercase tracking-widest text-white"
                   >
                     Ask Oracle
                     <ArrowRight size={13} />
@@ -301,7 +301,7 @@ export default function RecommendationsPage() {
               <div className="flex gap-3">
                 <Link
                   href={`/anime/${modalAnime.id}`}
-                  className="flex-1 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-xs font-black uppercase tracking-widest text-white text-center transition-colors"
+                  className="flex-1 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-xs font-black uppercase tracking-widest text-white text-center transition-colors"
                 >
                   View Details
                 </Link>

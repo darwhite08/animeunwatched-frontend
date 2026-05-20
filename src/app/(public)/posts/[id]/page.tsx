@@ -522,7 +522,7 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
                   <button
                     onClick={submitComment}
                     disabled={!commentText.trim()}
-                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 disabled:opacity-40 text-xs font-black uppercase tracking-widest text-white transition-all"
+                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 disabled:opacity-40 text-xs font-black uppercase tracking-widest text-white transition-all"
                   >
                     <Send size={12} /> Post Comment
                   </button>

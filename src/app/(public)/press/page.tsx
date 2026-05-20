@@ -104,7 +104,7 @@ export default function PressPage() {
             <p className="font-black text-white mb-1">Press Contact</p>
             <p className="text-sm text-white/50">For interviews, fact-checking, and media inquiries</p>
           </div>
-          <Link href="/contact" className="flex items-center gap-2 px-5 py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-xs font-black uppercase tracking-widest text-white transition-all shrink-0">
+          <Link href="/contact" className="flex items-center gap-2 px-5 py-3 rounded-2xl bg-amber-500 hover:bg-amber-400 text-xs font-black uppercase tracking-widest text-white transition-all shrink-0">
             <Mail size={13} /> Contact Us
           </Link>
         </div>

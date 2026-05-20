@@ -187,7 +187,7 @@ export default function StatsPage() {
 
       {/* CTA */}
       <div className="flex items-center justify-center gap-4">
-        <Link href="/watchlist" className="px-6 py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-xs font-black uppercase tracking-widest text-white transition-all">
+        <Link href="/watchlist" className="px-6 py-3 rounded-2xl bg-amber-500 hover:bg-amber-400 text-xs font-black uppercase tracking-widest text-white transition-all">
           View Watchlist
         </Link>
         <Link href="/profile/wrapped" className="px-6 py-3 rounded-2xl border border-white/10 bg-white/[0.03] text-xs font-black uppercase tracking-widest text-white/50 hover:text-white hover:bg-white/[0.06] transition-all">

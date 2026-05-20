@@ -347,7 +347,7 @@ export default function PublicListsPage() {
           </div>
           <Link
             href="/creators"
-            className="flex items-center gap-2 px-5 py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-xs font-black uppercase tracking-widest text-white transition-all shadow-[0_0_24px_rgba(99,102,241,0.3)] shrink-0 self-start sm:self-auto"
+            className="flex items-center gap-2 px-5 py-3 rounded-2xl bg-amber-500 hover:bg-amber-400 text-xs font-black uppercase tracking-widest text-white transition-all shadow-[0_0_24px_rgba(99,102,241,0.3)] shrink-0 self-start sm:self-auto"
           >
             <Plus size={13} /> Create a List
           </Link>

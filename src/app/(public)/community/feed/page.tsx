@@ -178,7 +178,7 @@ export default function PublicFeedPage() {
             </div>
             <Link
               href="/register"
-              className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-xs font-black uppercase tracking-widest text-white transition-all"
+              className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-xs font-black uppercase tracking-widest text-white transition-all"
             >
               Join Now
             </Link>
@@ -238,7 +238,7 @@ export default function PublicFeedPage() {
             </div>
             <Link
               href="/register"
-              className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-[11px] font-black uppercase tracking-widest text-white transition-all whitespace-nowrap"
+              className="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-[11px] font-black uppercase tracking-widest text-white transition-all whitespace-nowrap"
             >
               Sign Up Free
             </Link>
@@ -309,7 +309,7 @@ export default function PublicFeedPage() {
             <p className="text-[11px] text-white/40 leading-relaxed">
               Track what you watch, share your takes, join clubs, and discover hidden gems — all for free.
             </p>
-            <span className="inline-flex items-center justify-center px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-[11px] font-black uppercase tracking-widest text-white transition-all">
+            <span className="inline-flex items-center justify-center px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-[11px] font-black uppercase tracking-widest text-white transition-all">
               Get Started Free
             </span>
           </Link>

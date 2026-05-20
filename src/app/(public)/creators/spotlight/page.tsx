@@ -366,7 +366,7 @@ export default function CreatorSpotlightPage() {
           </div>
           <Link
             href="/creators"
-            className="flex items-center gap-2 px-7 py-4 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-[11px] font-black uppercase tracking-widest text-white transition-all whitespace-nowrap"
+            className="flex items-center gap-2 px-7 py-4 rounded-2xl bg-amber-500 hover:bg-amber-400 text-[11px] font-black uppercase tracking-widest text-white transition-all whitespace-nowrap"
           >
             Apply Now <ChevronRight size={14} />
           </Link>

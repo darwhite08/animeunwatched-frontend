@@ -373,7 +373,7 @@ export default function FeedPage() {
                 <button
                   onClick={submitPost}
                   disabled={!draft.trim()}
-                  className="flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 disabled:opacity-40 text-xs font-black uppercase tracking-wider text-white transition-all"
+                  className="flex items-center gap-2 px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 disabled:opacity-40 text-xs font-black uppercase tracking-wider text-white transition-all"
                 >
                   <Send size={12} /> Post
                 </button>
@@ -426,7 +426,7 @@ export default function FeedPage() {
                 </div>
                 <Link
                   href="/users"
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-sm font-black uppercase tracking-widest text-white transition-all"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-sm font-black uppercase tracking-widest text-white transition-all"
                 >
                   <Users size={14} /> Discover Shinobi
                 </Link>

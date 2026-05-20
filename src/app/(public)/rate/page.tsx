@@ -289,7 +289,7 @@ export default function RatePage() {
               <button
                 onClick={submitRating}
                 disabled={!rating}
-                className="w-full py-4 rounded-2xl bg-indigo-600 hover:bg-indigo-500 disabled:opacity-40 disabled:cursor-not-allowed font-black text-xs uppercase tracking-widest transition-all flex items-center justify-center gap-2"
+                className="w-full py-4 rounded-2xl bg-amber-500 hover:bg-amber-400 disabled:opacity-40 disabled:cursor-not-allowed font-black text-xs uppercase tracking-widest transition-all flex items-center justify-center gap-2"
               >
                 Next: Verify Your Watch <ChevronRight size={14} />
               </button>
@@ -336,7 +336,7 @@ export default function RatePage() {
               <button
                 onClick={submitVerify}
                 disabled={Object.keys(answers).length < questions.length}
-                className="w-full py-4 rounded-2xl bg-indigo-600 hover:bg-indigo-500 disabled:opacity-40 disabled:cursor-not-allowed font-black text-xs uppercase tracking-widest transition-all"
+                className="w-full py-4 rounded-2xl bg-amber-500 hover:bg-amber-400 disabled:opacity-40 disabled:cursor-not-allowed font-black text-xs uppercase tracking-widest transition-all"
               >
                 Submit Rating
               </button>

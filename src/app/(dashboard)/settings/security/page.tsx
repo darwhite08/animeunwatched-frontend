@@ -228,7 +228,7 @@ function PasswordChange() {
         <button
           onClick={handleSave}
           disabled={saving}
-          className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-xs font-black uppercase tracking-widest text-white transition-all disabled:opacity-50"
+          className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-xs font-black uppercase tracking-widest text-white transition-all disabled:opacity-50"
         >
           {saving ? <Loader2 size={13} className="animate-spin" /> : <Key size={13} />}
           {saving ? "Updating…" : "Update Password"}

@@ -401,7 +401,7 @@ export default function PollsPage() {
 
           <Link
             href="/creators/create/polls"
-            className="flex items-center gap-2 px-5 py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-xs font-black uppercase tracking-widest text-white transition-all shadow-[0_0_24px_rgba(99,102,241,0.3)] hover:-translate-y-0.5 shrink-0"
+            className="flex items-center gap-2 px-5 py-3 rounded-2xl bg-amber-500 hover:bg-amber-400 text-xs font-black uppercase tracking-widest text-white transition-all shadow-[0_0_24px_rgba(99,102,241,0.3)] hover:-translate-y-0.5 shrink-0"
           >
             <Plus size={13} /> Create Poll
           </Link>
@@ -512,7 +512,7 @@ export default function PollsPage() {
               </div>
               <Link
                 href="/creators/create/polls"
-                className="flex items-center justify-between w-full px-4 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 transition-all text-xs font-black uppercase tracking-widest text-white group"
+                className="flex items-center justify-between w-full px-4 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 transition-all text-xs font-black uppercase tracking-widest text-white group"
               >
                 Start Now
                 <ChevronRight size={13} className="group-hover:translate-x-0.5 transition-transform" />

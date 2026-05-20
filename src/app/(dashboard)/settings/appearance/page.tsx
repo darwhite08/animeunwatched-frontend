@@ -127,7 +127,7 @@ export default function AppearancePage() {
       </div>
 
       <motion.button whileHover={{ scale:1.01 }} whileTap={{ scale:0.98 }} onClick={save} disabled={saving}
-        className="w-full py-4 rounded-2xl bg-indigo-600 hover:bg-indigo-500 disabled:opacity-60 font-black text-xs uppercase tracking-widest text-white transition-all flex items-center justify-center gap-2"
+        className="w-full py-4 rounded-2xl bg-amber-500 hover:bg-amber-400 disabled:opacity-60 font-black text-xs uppercase tracking-widest text-white transition-all flex items-center justify-center gap-2"
       >
         {saving ? <><Loader2 size={14} className="animate-spin" /> Saving…</> : "Save Appearance"}
       </motion.button>

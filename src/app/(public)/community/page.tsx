@@ -146,7 +146,7 @@ export default function CommunityPage() {
             </p>
           </div>
           <button onClick={() => setComposing(c => !c)}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-xs font-black uppercase tracking-widest text-white transition-all">
+            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-xs font-black uppercase tracking-widest text-white transition-all">
             <Plus size={13} /> New Post
           </button>
         </div>
@@ -187,7 +187,7 @@ export default function CommunityPage() {
                     <div className="flex items-center gap-2">
                       <span className={`text-[10px] font-mono ${500 - draft.length < 50 ? "text-amber-400" : "text-white/20"}`}>{500 - draft.length}</span>
                       <button onClick={submitPost} disabled={!draft.trim() || createPost.isPending}
-                        className="flex items-center gap-2 px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 disabled:opacity-40 text-xs font-black uppercase tracking-wider text-white transition-all">
+                        className="flex items-center gap-2 px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 disabled:opacity-40 text-xs font-black uppercase tracking-wider text-white transition-all">
                         {createPost.isPending ? <Loader2 size={12} className="animate-spin" /> : <Send size={12} />}
                         Post
                       </button>

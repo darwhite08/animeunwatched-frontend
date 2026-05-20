@@ -63,27 +63,69 @@ type DropItem = { name: string; href: string; icon: React.ElementType; desc: str
 function NavDropdown({ items, onClose }: { items: DropItem[]; onClose: () => void }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 8, scale: 0.96 }}
-      animate={{ opacity: 1, y: 0,  scale: 1    }}
-      exit={{    opacity: 0, y: 6,  scale: 0.97 }}
-      transition={{ duration: 0.18, ease: [0.32, 0.72, 0, 1] }}
-      className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-56 bg-[#0a0a12]/97 border border-white/10 rounded-2xl shadow-[0_20px_60px_rgba(0,0,0,0.6)] backdrop-blur-2xl overflow-hidden z-50"
+      initial={{ opacity: 0, y: 10, scale: 0.95 }}
+      animate={{ opacity: 1, y: 0,  scale: 1     }}
+      exit={{    opacity: 0, y: 6,  scale: 0.97  }}
+      transition={{ duration: 0.2, ease: [0.32, 0.72, 0, 1] }}
+      className="absolute top-full left-1/2 -translate-x-1/2 mt-3 z-50"
+      style={{ minWidth: "240px" }}
     >
-      {items.map((item) => {
-        const Icon = item.icon;
-        return (
-          <Link key={item.href} href={item.href} onClick={onClose}
-            className="flex items-center gap-3 px-4 py-3 hover:bg-white/5 transition-colors group">
-            <span className="w-7 h-7 rounded-lg bg-white/5 border border-white/8 flex items-center justify-center text-white/40 group-hover:text-indigo-400 group-hover:border-indigo-500/30 group-hover:bg-indigo-500/10 transition-all shrink-0">
-              <Icon size={13} />
-            </span>
-            <div className="min-w-0">
-              <p className="text-[11px] font-black text-white/80 group-hover:text-white uppercase tracking-wider leading-none">{item.name}</p>
-              <p className="text-[9px] text-white/30 mt-0.5 truncate">{item.desc}</p>
-            </div>
-          </Link>
-        );
-      })}
+      {/* Gold top-border accent line */}
+      <div className="h-px w-full bg-gradient-to-r from-transparent via-amber-400/60 to-transparent mb-0" />
+
+      <div
+        className="rounded-2xl overflow-hidden border border-white/[0.07]"
+        style={{
+          background: "linear-gradient(160deg, rgba(12,10,22,0.98) 0%, rgba(8,7,18,0.99) 100%)",
+          boxShadow: "0 24px 80px rgba(0,0,0,0.7), 0 0 0 0.5px rgba(245,158,11,0.12) inset, 0 1px 0 rgba(245,158,11,0.15) inset",
+          backdropFilter: "blur(32px) saturate(180%)",
+        }}
+      >
+        {/* Subtle gold shimmer at top */}
+        <div className="h-px w-full bg-gradient-to-r from-transparent via-amber-400/30 to-transparent" />
+
+        <div className="p-1.5">
+          {items.map((item, i) => {
+            const Icon = item.icon;
+            return (
+              <Link key={item.href} href={item.href} onClick={onClose}
+                className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/[0.05] transition-all duration-150 group relative"
+              >
+                {/* Gold icon container */}
+                <div
+                  className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0 transition-all duration-200 group-hover:scale-110"
+                  style={{
+                    background: "linear-gradient(135deg, rgba(245,158,11,0.15) 0%, rgba(251,191,36,0.08) 100%)",
+                    border: "1px solid rgba(245,158,11,0.25)",
+                    boxShadow: "0 2px 8px rgba(245,158,11,0.1), inset 0 1px 0 rgba(245,158,11,0.2)",
+                  }}
+                >
+                  <Icon size={14} className="text-amber-400 group-hover:text-amber-300 transition-colors" />
+                </div>
+
+                <div className="min-w-0 flex-1">
+                  <p className="text-[11px] font-black text-white/75 group-hover:text-white uppercase tracking-widest leading-none transition-colors">
+                    {item.name}
+                  </p>
+                  <p className="text-[9px] text-white/25 group-hover:text-white/40 mt-0.5 truncate transition-colors">
+                    {item.desc}
+                  </p>
+                </div>
+
+                {/* Arrow indicator */}
+                <div className="text-white/0 group-hover:text-amber-400/60 transition-all translate-x-0 group-hover:translate-x-0.5 shrink-0">
+                  <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+                    <path d="M2 5h6M5.5 2.5L8 5l-2.5 2.5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </div>
+              </Link>
+            );
+          })}
+        </div>
+
+        {/* Bottom shimmer */}
+        <div className="h-px w-full bg-gradient-to-r from-transparent via-amber-400/10 to-transparent" />
+      </div>
     </motion.div>
   );
 }
@@ -328,10 +370,10 @@ export default function Navbar() {
                 ))}
               </div>
 
-              <MobileSection title="Anime" links={ANIME_LINKS} accentClass="text-indigo-400" onClose={() => setMobileMenuOpen(false)} />
-              <MobileSection title="Community" links={COMMUNITY_LINKS} accentClass="text-emerald-400" onClose={() => setMobileMenuOpen(false)} />
+              <MobileSection title="Anime" links={ANIME_LINKS} onClose={() => setMobileMenuOpen(false)} />
+              <MobileSection title="Community" links={COMMUNITY_LINKS} onClose={() => setMobileMenuOpen(false)} />
               {isAuthenticated && (
-                <MobileSection title="My List" links={MY_LINKS} accentClass="text-amber-400" onClose={() => setMobileMenuOpen(false)} />
+                <MobileSection title="My List" links={MY_LINKS} onClose={() => setMobileMenuOpen(false)} />
               )}
 
               <div className="border-t border-white/5 pt-3">
@@ -355,17 +397,27 @@ export default function Navbar() {
   );
 }
 
-function MobileSection({ title, links, accentClass, onClose }: { title: string; links: DropItem[]; accentClass: string; onClose: () => void }) {
+function MobileSection({ title, links, onClose }: { title: string; links: DropItem[]; accentClass?: string; onClose: () => void }) {
   return (
     <div>
-      <p className="text-[8px] font-black text-white/20 uppercase tracking-[0.3em] px-3 mb-1">{title}</p>
+      <p className="text-[8px] font-black text-amber-400/40 uppercase tracking-[0.4em] px-3 mb-1.5">{title}</p>
       {links.map(l => {
         const Icon = l.icon;
         return (
           <Link key={l.href} href={l.href} onClick={onClose}
-            className="flex items-center gap-3 px-3 py-3 rounded-xl text-xs font-bold text-white/50 hover:text-white hover:bg-white/5 transition-all">
-            <Icon size={14} className={accentClass} />
-            {l.name}
+            className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold text-white/50 hover:text-white hover:bg-white/[0.04] transition-all group">
+            <div className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 transition-all group-hover:scale-110"
+              style={{
+                background: "linear-gradient(135deg, rgba(245,158,11,0.12) 0%, rgba(251,191,36,0.06) 100%)",
+                border: "1px solid rgba(245,158,11,0.2)",
+              }}
+            >
+              <Icon size={13} className="text-amber-400/80 group-hover:text-amber-300 transition-colors" />
+            </div>
+            <div>
+              <p className="text-[11px] font-black uppercase tracking-wider leading-none">{l.name}</p>
+              <p className="text-[9px] text-white/25 mt-0.5">{l.desc}</p>
+            </div>
           </Link>
         );
       })}

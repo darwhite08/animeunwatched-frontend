@@ -1,7 +1,8 @@
 "use client"
 
 import { motion, AnimatePresence } from "framer-motion"
-import { X, Share2, Star, Clock, Monitor, Check, Plus, ArrowUpRight } from "lucide-react"
+import { X, Check, Plus } from "lucide-react"
+import { Star, Clock, Monitor, ShareNetwork, ArrowUpRight } from "@phosphor-icons/react"
 import Image from "next/image"
 import Link from "next/link"
 import type { Anime } from "@/lib/data/anime"
@@ -64,7 +65,11 @@ export default function AnimeModal({ isOpen, onClose, anime }: AnimeModalProps) 
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.92, y: 24 }}
             transition={{ type: "spring", damping: 26, stiffness: 260 }}
-            className="relative w-full max-w-5xl bg-[#0a0a0a] rounded-[2.5rem] border border-white/10 overflow-hidden shadow-[0_0_100px_rgba(79,70,229,0.2)]"
+            className="relative w-full max-w-5xl rounded-[2.5rem] border border-white/[0.08] overflow-hidden"
+            style={{
+              background: "linear-gradient(160deg, #0a0a14 0%, #070710 100%)",
+              boxShadow: "0 0 120px rgba(245,158,11,0.08), 0 0 60px rgba(99,102,241,0.12), 0 40px 80px rgba(0,0,0,0.8)",
+            }}
           >
             <div className="grid lg:grid-cols-2">
               {/* Left — Cover */}
@@ -79,8 +84,14 @@ export default function AnimeModal({ isOpen, onClose, anime }: AnimeModalProps) 
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-[#0a0a0a]" />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-transparent" />
 
-                {/* Rank badge */}
-                <div className="absolute top-6 left-6 px-3 py-1.5 bg-black/70 backdrop-blur-md border border-indigo-500/30 rounded-xl text-[10px] font-black text-indigo-400 uppercase italic">
+                {/* Rank badge — gold */}
+                <div className="absolute top-6 left-6 px-3 py-1.5 backdrop-blur-md rounded-xl text-[10px] font-black uppercase italic"
+                  style={{
+                    background: "rgba(245,158,11,0.15)",
+                    border: "1px solid rgba(245,158,11,0.35)",
+                    color: "#fbbf24",
+                    boxShadow: "0 2px 12px rgba(245,158,11,0.15)",
+                  }}>
                   #{anime.rank} Neural Ranked
                 </div>
               </div>
@@ -97,9 +108,10 @@ export default function AnimeModal({ isOpen, onClose, anime }: AnimeModalProps) 
                 <div className="space-y-5">
                   {/* Badges */}
                   <div className="flex flex-wrap items-center gap-2">
-                    <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400">
-                      <Star size={12} fill="currentColor" />
-                      <span className="text-xs font-black">{anime.rating.toFixed(1)}</span>
+                    <div className="flex items-center gap-1.5 px-3 py-1 rounded-full"
+                      style={{ background: "rgba(245,158,11,0.12)", border: "1px solid rgba(245,158,11,0.3)" }}>
+                      <Star size={12} weight="fill" className="text-amber-400" />
+                      <span className="text-xs font-black text-amber-300">{anime.rating.toFixed(1)}</span>
                     </div>
                     <span className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-wider border ${
                       anime.status === "airing"
@@ -158,8 +170,13 @@ export default function AnimeModal({ isOpen, onClose, anime }: AnimeModalProps) 
                     className={`flex-1 min-w-[140px] py-3.5 rounded-2xl font-black uppercase tracking-widest text-xs flex items-center justify-center gap-2.5 transition-all ${
                       inList
                         ? "bg-emerald-600 text-white hover:bg-emerald-700"
-                        : "bg-white text-black hover:bg-indigo-500 hover:text-white"
+                        : ""
                     }`}
+                    style={!inList ? {
+                      background: "linear-gradient(135deg, #f59e0b, #d97706)",
+                      color: "#000",
+                      boxShadow: "0 4px 20px rgba(245,158,11,0.35)",
+                    } : undefined}
                   >
                     {inList ? <><Check size={15} /> In Watchlist</> : <><Plus size={15} /> Add to List</>}
                   </button>
@@ -168,7 +185,7 @@ export default function AnimeModal({ isOpen, onClose, anime }: AnimeModalProps) 
                     href={`/anime/${anime.id}`}
                     className="flex items-center gap-2 px-4 py-3.5 rounded-2xl border border-white/10 bg-white/5 text-white/50 hover:bg-white/10 hover:text-white transition-all text-xs font-black uppercase tracking-widest"
                   >
-                    <ArrowUpRight size={14} /> Full Page
+                    <ArrowUpRight size={14} weight="bold" /> Full Page
                   </Link>
 
                   <button
@@ -176,7 +193,7 @@ export default function AnimeModal({ isOpen, onClose, anime }: AnimeModalProps) 
                     className="p-3.5 bg-white/5 border border-white/10 rounded-2xl text-white/50 hover:bg-white/10 hover:text-white transition-all"
                     title="Copy to clipboard"
                   >
-                    <Share2 size={18} />
+                    <ShareNetwork size={18} weight="duotone" />
                   </button>
                 </div>
               </div>

@@ -1,7 +1,8 @@
 "use client"
 
 import { motion, AnimatePresence } from "framer-motion"
-import { Search, Command, Zap, Star, ArrowRight, X, Clock } from "lucide-react"
+import { X } from "lucide-react"
+import { MagnifyingGlass, Lightning, Star, ArrowRight, Clock } from "@phosphor-icons/react"
 import { useEffect, useRef, useState, useCallback, useMemo } from "react"
 import type { Anime } from "@/lib/data/anime"
 import type { AnimeDTO } from "@/lib/api/types"
@@ -27,9 +28,9 @@ interface SearchModalProps {
 }
 
 const QUICK_ACTIONS = [
-  { icon: Zap, label: "AI Discover", href: "/ai-discover", cmd: "G + D" },
-  { icon: Star, label: "Best Anime List", href: "/bestanimelist", cmd: "G + T" },
-  { icon: Clock, label: "My Watchlist", href: "/watchlist", cmd: "G + W" },
+  { icon: Lightning, label: "AI Discover", href: "/ai-discover", cmd: "G + D" },
+  { icon: Star,      label: "Best Anime List", href: "/bestanimelist", cmd: "G + T" },
+  { icon: Clock,     label: "My Watchlist", href: "/watchlist", cmd: "G + W" },
 ]
 
 const RECENT = ["Frieren", "Chainsaw Man", "Solo Leveling", "Monster"]
@@ -110,7 +111,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
             >
               {/* Input */}
               <div className="flex items-center gap-4 px-6 py-4 border-b border-white/5">
-                <Search size={20} className={`shrink-0 transition-colors ${query ? "text-indigo-400" : "text-white/30"}`} />
+                <MagnifyingGlass size={20} weight="bold" className={`shrink-0 transition-colors ${query ? "text-amber-400" : "text-white/30"}`} />
                 <input
                   ref={inputRef}
                   value={query}
@@ -125,7 +126,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                   </button>
                 ) : (
                   <div className="flex items-center gap-1 px-2 py-1 rounded-md bg-white/5 border border-white/10 text-[9px] font-black text-white/20 uppercase tracking-tighter shrink-0">
-                    <Command size={9} /> K
+                    ⌘ K
                   </div>
                 )}
               </div>

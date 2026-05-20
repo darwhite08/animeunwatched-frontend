@@ -108,10 +108,11 @@ export default function PublicLeaderboardPage() {
           <div className="flex items-center gap-1 p-1 bg-white/[0.03] border border-white/8 rounded-2xl">
             {(["all-time","monthly","weekly"] as Period[]).map(p => (
               <button key={p} onClick={() => setPeriod(p)}
-                className={`relative px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition-all ${period === p ? "text-white" : "text-white/35 hover:text-white"}`}
+                className={`relative px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition-all ${period === p ? "text-black" : "text-white/35 hover:text-white"}`}
               >
                 {period === p && (
-                  <motion.div layoutId="period-bg" className="absolute inset-0 bg-indigo-600 rounded-xl" />
+                  <motion.div layoutId="period-bg" className="absolute inset-0 rounded-xl"
+                    style={{ background: "linear-gradient(135deg, #f59e0b, #d97706)" }} />
                 )}
                 <span className="relative z-10">{PERIOD_LABELS[p]}</span>
               </button>

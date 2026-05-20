@@ -125,14 +125,14 @@ function StepIdentity({
               className={[
                 "relative text-left rounded-2xl border p-4 transition-all duration-200 cursor-pointer group",
                 isSelected
-                  ? "border-indigo-500 bg-indigo-500/10 shadow-[0_0_20px_rgba(99,102,241,0.3)]"
+                  ? "border-amber-500 bg-amber-500/10 shadow-[0_0_20px_rgba(245,158,11,0.25)]"
                   : "border-zinc-800 bg-zinc-900/60 hover:border-zinc-600",
               ].join(" ")}
             >
               <div
                 className={[
                   "mb-3 transition-colors duration-200",
-                  isSelected ? "text-indigo-400" : "text-zinc-400 group-hover:text-zinc-300",
+                  isSelected ? "text-amber-400" : "text-zinc-400 group-hover:text-zinc-300",
                 ].join(" ")}
               >
                 {wt.icon}
@@ -151,7 +151,8 @@ function StepIdentity({
               {isSelected && (
                 <motion.div
                   layoutId="watcher-check"
-                  className="absolute top-3 right-3 w-5 h-5 rounded-full bg-indigo-500 flex items-center justify-center"
+                  className="absolute top-3 right-3 w-5 h-5 rounded-full flex items-center justify-center"
+                  style={{ background: "linear-gradient(135deg, #fbbf24, #f59e0b)" }}
                 >
                   <Check className="w-3 h-3 text-white" />
                 </motion.div>

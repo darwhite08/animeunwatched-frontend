@@ -127,7 +127,7 @@ export default function DashboardPage() {
 
           <div className="flex items-center gap-6 border-l border-white/10 pl-8">
             <HeaderMetric label="Reputation" value={String(rep)} icon={Zap}       color="text-amber-400"  />
-            <HeaderMetric label="Level"      value={String(level)} icon={TrendingUp} color="text-indigo-400" />
+            <HeaderMetric label="Level"      value={String(level)} icon={TrendingUp} color="text-amber-400" />
             <Link href="/notifications"
               className="p-3 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all">
               <Bell size={18} className="text-white/60" />

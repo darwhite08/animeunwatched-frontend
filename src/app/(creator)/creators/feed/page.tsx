@@ -96,7 +96,7 @@ export default function FeedPage() {
 
       {/* Stats row */}
       <div className="grid grid-cols-3 gap-4">
-        <StatCard icon={Eye} label="Total Views" value={totalViews.toLocaleString()} color="text-indigo-400" />
+        <StatCard icon={Eye} label="Total Views" value={totalViews.toLocaleString()} color="text-amber-400" />
         <StatCard icon={Heart} label="Total Likes" value={totalLikes.toLocaleString()} color="text-rose-400" />
         <StatCard icon={MessageCircle} label="Comments" value={ENHANCED_FEED.reduce((s, p) => s + p.comments, 0).toString()} color="text-amber-400" />
       </div>

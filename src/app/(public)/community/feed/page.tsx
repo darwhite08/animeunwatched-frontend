@@ -199,7 +199,7 @@ export default function PublicFeedPage() {
                 {feedTab === t && (
                   <motion.div
                     layoutId="public-feed-tab-line"
-                    className="absolute bottom-0 left-0 right-0 h-[2px] bg-indigo-500 rounded-full"
+                    className="absolute bottom-0 left-0 right-0 h-[2px] bg-amber-500 rounded-full"
                   />
                 )}
               </button>

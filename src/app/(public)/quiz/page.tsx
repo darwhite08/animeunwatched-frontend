@@ -108,7 +108,7 @@ export default function QuizPage() {
 
         {/* Progress */}
         <div className="h-1 bg-white/5 rounded-full overflow-hidden">
-          <motion.div animate={{ width: `${((idx+1)/questions.length)*100}%` }} className="h-full bg-indigo-500 rounded-full" />
+          <motion.div animate={{ width: `${((idx+1)/questions.length)*100}%` }} className="h-full bg-amber-500 rounded-full" />
         </div>
 
         {/* Question */}

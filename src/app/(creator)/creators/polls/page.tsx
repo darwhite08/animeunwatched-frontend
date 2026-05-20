@@ -97,7 +97,7 @@ export default function PollsPage() {
       {/* Stats row */}
       <div className="grid grid-cols-3 gap-4">
         <StatCard icon={Flame} label="Total Votes" value="7,400" color="text-orange-400" />
-        <StatCard icon={Users} label="Avg Participation" value="2.5k" color="text-indigo-400" />
+        <StatCard icon={Users} label="Avg Participation" value="2.5k" color="text-amber-400" />
         <StatCard icon={CheckCircle2} label="Polls Run" value="2" color="text-emerald-400" />
       </div>
 

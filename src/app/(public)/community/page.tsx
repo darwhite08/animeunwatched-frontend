@@ -158,7 +158,7 @@ export default function CommunityPage() {
                 feedTab === t ? "text-white" : "text-white/30 hover:text-white/60"
               }`}>
               {t}
-              {feedTab === t && <motion.div layoutId="feed-tab-line" className="absolute bottom-0 left-0 right-0 h-[2px] bg-indigo-500 rounded-full" />}
+              {feedTab === t && <motion.div layoutId="feed-tab-line" className="absolute bottom-0 left-0 right-0 h-[2px] bg-amber-500 rounded-full" />}
             </button>
           ))}
         </div>

@@ -79,7 +79,7 @@ const FALLBACK_META: CategoryMeta = {
   emoji: "📺",
   title: "Discover",
   description: "A curated selection from the Kaiveron catalogue.",
-  accentClass: "text-indigo-400",
+  accentClass: "text-amber-400",
   filter: () => true,
 }
 

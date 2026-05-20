@@ -130,7 +130,7 @@ export default function BlogListPage() {
 
       {/* Stats */}
       <div className="grid grid-cols-3 gap-4">
-        <StatCard icon={Eye} label="Total Views" value={totalViews.toLocaleString()} color="text-indigo-400" />
+        <StatCard icon={Eye} label="Total Views" value={totalViews.toLocaleString()} color="text-amber-400" />
         <StatCard icon={Heart} label="Total Likes" value={totalLikes.toLocaleString()} color="text-rose-400" />
         <StatCard icon={BarChart2} label="Published" value={String(published)} color="text-emerald-400" />
       </div>

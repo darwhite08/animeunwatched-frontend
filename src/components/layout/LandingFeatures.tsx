@@ -172,7 +172,7 @@ export default function LandingFeatures() {
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-px bg-gradient-to-r from-transparent via-emerald-500 to-transparent" />
           
           <StatItem label="Active Shinobi" value="12,402" color="text-emerald-500" />
-          <StatItem label="Archives Logged" value="1.2M" color="text-indigo-400" />
+          <StatItem label="Archives Logged" value="1.2M" color="text-amber-400" />
           <StatItem label="Oracle Precision" value="98.4%" color="text-sky-400" />
           <StatItem label="System Uptime" value="99.9%" color="text-orange-500" isStatus />
         </div>

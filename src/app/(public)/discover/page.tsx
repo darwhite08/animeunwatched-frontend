@@ -143,7 +143,7 @@ function TrendingCard({
             className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-300 ${
               inList
                 ? "bg-emerald-600 text-white hover:bg-emerald-700"
-                : "bg-white text-black hover:bg-indigo-500 hover:text-white"
+                : "bg-white text-black hover:bg-amber-500 hover:text-black"
             }`}
           >
             {inList ? <><Check size={12} /> In List</> : <><Plus size={12} /> Add to List</>}

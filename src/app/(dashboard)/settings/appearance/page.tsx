@@ -89,7 +89,7 @@ export default function AppearancePage() {
           {FONT_SIZES.map(s => (
             <button key={s} onClick={() => setFontSize(s)}
               className={`px-4 py-2.5 rounded-xl text-sm transition-all ${
-                fontSize === s ? "bg-indigo-600 text-white" : "bg-white/5 text-white/40 hover:bg-white/8 border border-white/5"
+                fontSize === s ? "bg-amber-500 text-black" : "bg-white/5 text-white/40 hover:bg-white/8 border border-white/5"
               }`}
             >{s}</button>
           ))}
@@ -103,7 +103,7 @@ export default function AppearancePage() {
           {CARD_STYLES.map(s => (
             <button key={s} onClick={() => setCardStyle(s)}
               className={`px-4 py-2.5 rounded-xl text-sm transition-all ${
-                cardStyle === s ? "bg-indigo-600 text-white" : "bg-white/5 text-white/40 hover:bg-white/8 border border-white/5"
+                cardStyle === s ? "bg-amber-500 text-black" : "bg-white/5 text-white/40 hover:bg-white/8 border border-white/5"
               }`}
             >{s}</button>
           ))}

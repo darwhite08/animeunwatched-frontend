@@ -97,7 +97,7 @@ export default function CommunityReviewsPage() {
           <SortAsc size={13} className="text-white/30" />
           {(["helpful","recent","highest","lowest"] as const).map(s => (
             <button key={s} onClick={() => setSort(s)}
-              className={`px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-wider transition-all capitalize ${sort===s?"bg-indigo-600 text-white":"bg-white/5 text-white/40 border border-white/5 hover:bg-white/8"}`}
+              className={`px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-wider transition-all capitalize ${sort===s?"bg-amber-500 text-black":"bg-white/5 text-white/40 border border-white/5 hover:bg-white/8"}`}
             >{s}</button>
           ))}
         </div>

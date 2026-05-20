@@ -177,7 +177,7 @@ export default function UserReviewsPage({
               onClick={() => setSort(s.id)}
               className={`px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-wider transition-all ${
                 sort === s.id
-                  ? "bg-indigo-600 text-white"
+                  ? "bg-amber-500 text-black"
                   : "bg-white/5 text-white/40 hover:bg-white/8 border border-white/5"
               }`}
             >

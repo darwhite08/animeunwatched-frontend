@@ -192,7 +192,7 @@ export default function AnimeReviewsPage({ params }: { params: Promise<{ id: str
                 onClick={() => setSort(s.id)}
                 className={`px-3 py-1.5 rounded-full text-[9px] font-black uppercase tracking-wider transition-all ${
                   sort === s.id
-                    ? "bg-indigo-600 text-white"
+                    ? "bg-amber-500 text-black"
                     : "bg-white/5 text-white/35 hover:bg-white/8 border border-white/5"
                 }`}
               >

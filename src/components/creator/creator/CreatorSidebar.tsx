@@ -202,7 +202,7 @@ export default function CreatorSidebar() {
               <div className="flex gap-2">
                 <button
                   onClick={handleCreateFolder}
-                  className="flex-1 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700 transition text-sm"
+                  className="flex-1 py-2 rounded-lg bg-amber-500 hover:bg-amber-400 transition text-sm"
                 >
                   Create
                 </button>
@@ -222,7 +222,7 @@ export default function CreatorSidebar() {
         <div className="border-t border-white/10 pt-4">
           <Link
             href="/creators/create"
-            className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 transition"
+            className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-amber-500 hover:bg-amber-400 transition"
           >
             <Plus size={16} />
             Create Content

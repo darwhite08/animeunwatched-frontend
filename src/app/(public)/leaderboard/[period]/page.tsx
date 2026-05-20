@@ -54,7 +54,7 @@ export default function PeriodLeaderboardPage({ params }: { params: Promise<{ pe
           {(["weekly","monthly","all-time"] as Period[]).map(pp => (
             <Link key={pp} href={`/leaderboard/${pp}`}
               className={`px-5 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${
-                pp===p ? "bg-indigo-600 text-white" : "bg-white/5 text-white/40 border border-white/5 hover:bg-white/8"
+                pp===p ? "bg-amber-500 text-black" : "bg-white/5 text-white/40 border border-white/5 hover:bg-white/8"
               }`}
             >{PERIOD_CONFIG[pp].label}</Link>
           ))}

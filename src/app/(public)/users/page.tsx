@@ -73,7 +73,7 @@ export default function UsersPage() {
           <div className="flex gap-2">
             {([["reputation","Reputation"],["anime","Archive"],["streak","Streak"]] as const).map(([key, label]) => (
               <button key={key} onClick={() => setSort(key)}
-                className={`px-4 py-3 rounded-2xl text-xs font-black uppercase tracking-widest transition-all ${sort === key ? "bg-indigo-600 text-white" : "bg-white/5 text-white/40 hover:bg-white/8 border border-white/5"}`}
+                className={`px-4 py-3 rounded-2xl text-xs font-black uppercase tracking-widest transition-all ${sort === key ? "bg-amber-500 text-black" : "bg-white/5 text-white/40 hover:bg-white/8 border border-white/5"}`}
               >{label}</button>
             ))}
           </div>

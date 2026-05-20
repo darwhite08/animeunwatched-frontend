@@ -96,7 +96,7 @@ export default function ActivityPage() {
       <div className="flex gap-2 flex-wrap items-center">
         <Filter size={13} className="text-white/30" />
         <button onClick={() => setFilter("all")}
-          className={`px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-wider transition-all ${filter==="all"?"bg-indigo-600 text-white":"bg-white/5 text-white/40 border border-white/5"}`}
+          className={`px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-wider transition-all ${filter==="all"?"bg-amber-500 text-black":"bg-white/5 text-white/40 border border-white/5"}`}
         >All</button>
         {ALL_TYPES.map(t => {
           const cfg = TYPE_CONFIG[t]

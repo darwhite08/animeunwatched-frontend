@@ -87,7 +87,7 @@ export default function FeedPage() {
 
         <Link
           href="/creators/create/feed"
-          className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 transition text-sm font-medium"
+          className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 transition text-sm font-medium"
         >
           <Plus size={15} />
           New Post

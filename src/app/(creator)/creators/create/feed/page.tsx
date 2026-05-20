@@ -191,7 +191,7 @@ export default function CreateFeedPage() {
           <button
             onClick={handleSubmit}
             disabled={!content.trim() || overLimit || createPost.isPending}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 disabled:opacity-40 disabled:cursor-not-allowed transition text-sm font-medium"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 disabled:opacity-40 disabled:cursor-not-allowed transition text-sm font-medium"
           >
             <Send size={14} />
             {createPost.isPending ? "Posting…" : "Post"}

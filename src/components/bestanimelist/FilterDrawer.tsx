@@ -84,7 +84,7 @@ export default function FilterDrawer({
             <div className="p-8 border-t border-white/5 flex gap-3">
               <button
                 onClick={() => { onClose() }}
-                className="flex-1 py-3.5 bg-indigo-600 hover:bg-indigo-700 rounded-xl text-[10px] font-black text-white uppercase tracking-widest transition-colors"
+                className="flex-1 py-3.5 bg-amber-500 hover:bg-amber-400 rounded-xl text-[10px] font-black text-white uppercase tracking-widest transition-colors"
               >
                 Show {resultCount} Results
               </button>

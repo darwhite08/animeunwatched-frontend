@@ -43,9 +43,7 @@ const COMMUNITY_LINKS = [
   { name: "Leaderboard", href: "/leaderboard", icon: Trophy,       desc: "Top users" },
 ];
 
-const MY_LINKS = [
-  { name: "Dashboard", href: "/dashboard", icon: MonitorPlay, desc: "Your personal hub" },
-];
+// MY_LINKS resolved at render time using user's slug (see Navbar component below)
 
 /* ── Homepage section themes ────────────────────────────────── */
 
@@ -150,6 +148,17 @@ export default function Navbar() {
 
   const storeUser       = useAuthStore(s => s.user);
   const isAuthenticated = useAuthStore(s => s.isAuthenticated);
+  const userSlug        = storeUser?.slug ?? null;
+
+  // MY LIST links resolved with real slug so /dashboard doesn't bounce through redirect
+  const MY_LINKS = [
+    {
+      name: "Dashboard",
+      href: userSlug ? `/user/${userSlug}/dashboard` : "/dashboard",
+      icon: MonitorPlay,
+      desc: "Your personal hub",
+    },
+  ];
 
   useEffect(() => {
     setIsHydrated(true);
@@ -186,7 +195,8 @@ export default function Navbar() {
 
   const isAnimePath     = ["/bestanimelist", "/ai-discover", "/seasonal", "/rankings", "/anime"].some(p => pathname.startsWith(p));
   const isCommunityPath = ["/community", "/clubs", "/blog", "/poll", "/leaderboard"].some(p => pathname.startsWith(p));
-  const isMyPath        = ["/watchlist", "/readlist", "/stats", "/streak"].some(p => pathname.startsWith(p));
+  const isMyPath        = (userSlug && pathname.startsWith(`/user/${userSlug}/`))
+    || ["/watchlist", "/readlist", "/stats", "/streak", "/dashboard"].some(p => pathname.startsWith(p));
 
   return (
     <header className="w-full flex flex-col items-center pt-3 px-5 pb-0">

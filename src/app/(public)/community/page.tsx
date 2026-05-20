@@ -290,38 +290,41 @@ export default function CommunityPage() {
 
   return (
     <div className="min-h-screen bg-[#020202] text-white pb-32">
-      {/* Page header — NOT sticky so posts are never cut */}
-      <div className="max-w-6xl mx-auto px-6 pt-8 pb-6 flex items-center justify-between gap-4">
-        <div>
-          <h1 className="text-2xl font-black tracking-tighter uppercase italic text-white">
-            Community<span style={{ color: "#f59e0b" }}>.</span>
-          </h1>
-          <p className="text-xs text-white/30 mt-0.5">
-            {posts.length > 0 ? `${posts.length}+ posts from the Shinobi` : "What the Shinobi are watching and saying"}
-          </p>
-        </div>
-        <button onClick={() => setComposing(c => !c)}
-          className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest text-black transition-all hover:scale-105 shrink-0"
-          style={{ background: "linear-gradient(135deg, #fbbf24, #f59e0b)", boxShadow: "0 4px 16px rgba(245,158,11,0.35)" }}>
-          <Plus size={13} /> New Post
-        </button>
+      {/* Page header — scrolls with page (New Post lives in sticky bar below) */}
+      <div className="max-w-6xl mx-auto px-6 pt-8 pb-4">
+        <h1 className="text-2xl font-black tracking-tighter uppercase italic text-white">
+          Community<span style={{ color: "#f59e0b" }}>.</span>
+        </h1>
+        <p className="text-xs text-white/30 mt-0.5">
+          {posts.length > 0 ? `${posts.length}+ posts from the Shinobi` : "What the Shinobi are watching and saying"}
+        </p>
       </div>
 
-      {/* Tabs — sticky only the tabs row, minimal height */}
+      {/* Sticky bar — tabs + New Post button always visible when scrolling */}
       <div className="sticky top-[72px] z-30 bg-[#020202]/95 backdrop-blur-xl border-b border-white/5">
-        <div className="max-w-6xl mx-auto px-6 flex items-center gap-1">
-          {(["trending", "following", "latest"] as FeedTab[]).map(t => (
-            <button key={t} onClick={() => setFeedTab(t)}
-              className={`relative px-5 py-3 text-[11px] font-black uppercase tracking-widest capitalize transition-colors ${
-                feedTab === t ? "text-white" : "text-white/30 hover:text-white/60"
-              }`}>
-              {t}
-              {feedTab === t && (
-                <motion.div layoutId="feed-tab-line"
-                  className="absolute bottom-0 left-0 right-0 h-[2px] bg-amber-500 rounded-full" />
-              )}
-            </button>
-          ))}
+        <div className="max-w-6xl mx-auto px-6 flex items-center justify-between gap-4">
+          {/* Tabs */}
+          <div className="flex items-center gap-1">
+            {(["trending", "following", "latest"] as FeedTab[]).map(t => (
+              <button key={t} onClick={() => setFeedTab(t)}
+                className={`relative px-4 py-3 text-[11px] font-black uppercase tracking-widest capitalize transition-colors ${
+                  feedTab === t ? "text-white" : "text-white/30 hover:text-white/60"
+                }`}>
+                {t}
+                {feedTab === t && (
+                  <motion.div layoutId="feed-tab-line"
+                    className="absolute bottom-0 left-0 right-0 h-[2px] bg-amber-500 rounded-full" />
+                )}
+              </button>
+            ))}
+          </div>
+
+          {/* New Post — always accessible regardless of scroll position */}
+          <button onClick={() => setComposing(c => !c)}
+            className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-[11px] font-black uppercase tracking-widest text-black transition-all hover:scale-105 shrink-0"
+            style={{ background: "linear-gradient(135deg, #fbbf24, #f59e0b)", boxShadow: "0 4px 12px rgba(245,158,11,0.3)" }}>
+            <Plus size={12} /> New Post
+          </button>
         </div>
       </div>
 

@@ -17,11 +17,19 @@ import TopAnimeCard from "@/components/dashboard/cards/TopAnimeCard"
 import RecentlyReviewedCard from "@/components/dashboard/cards/RecentlyReviewedCard"
 import QuickActionsCard from "@/components/dashboard/cards/QuickActionsCard"
 import DailyQuestCard from "@/components/dashboard/cards/DailyQuestCard"
+import AiringTodayCard from "@/components/dashboard/cards/AiringTodayCard"
 
 /* ── Streak card extracted as proper component (not IIFE — avoids render crash) ── */
 function StreakBento({ reputation }: { reputation: number }) {
-  const streak = Math.min(365, Math.floor(reputation / 10))
+  const user   = useAuthStore(s => s.user)
+  // Use real DB-backed streak if available, fall back to rep estimate
+  const streak = user?.streakDays ?? Math.min(365, Math.floor(reputation / 10))
   const pct    = Math.min(100, (streak % 30) / 30 * 100)
+
+  // Show "at risk" warning if last active was yesterday or earlier (not today)
+  const isAtRisk = user?.lastActiveAt
+    ? new Date().toDateString() !== new Date(user.lastActiveAt).toDateString()
+    : false
 
   return (
     <Link href="/streak">
@@ -38,16 +46,32 @@ function StreakBento({ reputation }: { reputation: number }) {
         </div>
         <div className="flex justify-between items-center mb-12 relative z-10">
           <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/30">Current Momentum</h4>
-          <div className="p-2 rounded-lg bg-orange-500/10 text-orange-500"><Flame size={20} /></div>
+          <div className="flex items-center gap-2">
+            {isAtRisk && streak > 0 && (
+              <motion.span
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="text-[8px] font-black uppercase tracking-widest px-2 py-0.5 rounded-full bg-red-500/15 border border-red-500/30 text-red-400"
+              >
+                At Risk!
+              </motion.span>
+            )}
+            <div className="p-2 rounded-lg bg-orange-500/10 text-orange-500"><Flame size={20} /></div>
+          </div>
         </div>
         <p className="text-8xl font-black tracking-tighter relative z-10 text-white">
           {streak}<span className="text-xl text-white/20 ml-2 italic font-medium">Days</span>
         </p>
-        <div className="mt-8 h-2 w-full bg-white/5 rounded-full overflow-hidden relative z-10">
+        {isAtRisk && streak > 0 && (
+          <p className="text-xs text-red-400/70 font-bold relative z-10 mt-2">
+            Log an episode today to keep your streak alive →
+          </p>
+        )}
+        <div className="mt-4 h-2 w-full bg-white/5 rounded-full overflow-hidden relative z-10">
           <motion.div
             initial={{ width: 0 }}
             animate={{ width: `${pct}%` }}
-            className="h-full bg-gradient-to-r from-orange-600 to-amber-400 shadow-[0_0_20px_rgba(249,115,22,0.4)]"
+            className={`h-full shadow-[0_0_20px_rgba(249,115,22,0.4)] ${isAtRisk ? "bg-gradient-to-r from-red-600 to-orange-500" : "bg-gradient-to-r from-orange-600 to-amber-400"}`}
           />
         </div>
       </motion.div>
@@ -208,6 +232,12 @@ export default function DashboardPage() {
       <div className="grid md:grid-cols-2 gap-6">
         <QuickActionsCard />
         <DailyQuestCard />
+      </div>
+
+      {/* ── AIRING SCHEDULE ── */}
+      <div className="grid md:grid-cols-2 gap-6">
+        <AiringTodayCard />
+        <FriendsActivityCard />
       </div>
     </div>
   )

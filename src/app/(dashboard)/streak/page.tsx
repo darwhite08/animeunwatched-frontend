@@ -24,10 +24,10 @@ export default function StreakPage() {
     const completed = entries.filter(e => e.status === "COMPLETED").length
     const watching = entries.filter(e => e.status === "WATCHING").length
     const totalEps = entries.reduce((sum, e) => sum + e.episodesSeen, 0)
-    // Estimate streak from reputation (10 rep = ~1 day active)
+    // Use real streak from DB; fallback to rep-estimate for legacy users
     const rep = user?.reputation ?? 0
-    const estStreak = Math.min(365, Math.floor(rep / 10))
-    const bestStreak = Math.min(365, Math.floor(rep / 6))
+    const estStreak = user?.streakDays ?? Math.min(365, Math.floor(rep / 10))
+    const bestStreak = user?.bestStreak ?? Math.min(365, Math.floor(rep / 6))
     return { estStreak, bestStreak, completed, watching, totalEps }
   }, [listData, user])
 

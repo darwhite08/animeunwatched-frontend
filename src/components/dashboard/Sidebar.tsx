@@ -48,7 +48,8 @@ export default function Sidebar() {
   const slug          = user?.slug ?? null
   const rep           = user?.reputation ?? 0
   const level         = Math.max(1, Math.floor(Math.sqrt(Math.max(0, rep) * 100 / 1000)))
-  const streak        = Math.min(365, Math.floor(rep / 10))
+  // Use real streak from database (falls back to rep-estimate for users without real data yet)
+  const streak        = user?.streakDays ?? Math.min(365, Math.floor(rep / 10))
   const grade         = level >= 10 ? "Grade IV" : level >= 7 ? "Grade III" : level >= 4 ? "Grade II" : "Grade I"
 
   // Resolve all nav hrefs using the user's slug

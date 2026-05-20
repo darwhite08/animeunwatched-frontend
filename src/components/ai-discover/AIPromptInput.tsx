@@ -52,7 +52,12 @@ export default function AIPromptInput({ onSearch }: AIPromptInputProps) {
     <div className="relative w-full max-w-3xl mx-auto group">
       <div className={`absolute -inset-1 bg-gradient-to-r from-indigo-500/20 via-purple-500/20 to-indigo-500/20 rounded-[2rem] blur-xl transition-opacity duration-500 ${isFocused ? "opacity-100" : "opacity-0"}`} />
 
-      <div className="relative bg-[#0a0a0a] border border-white/10 rounded-[1.8rem] p-2 backdrop-blur-3xl shadow-2xl">
+      <div className="relative rounded-[1.8rem] p-2 backdrop-blur-3xl"
+        style={{
+          background: "linear-gradient(160deg, #0c0c18 0%, #080810 100%)",
+          border: "1px solid rgba(245,158,11,0.18)",
+          boxShadow: "0 24px 80px rgba(0,0,0,0.6), 0 0 0 0.5px rgba(245,158,11,0.08) inset",
+        }}>
         {/* Terminal header */}
         <div className="flex items-center justify-between px-6 py-3 border-b border-white/5">
           <div className="flex items-center gap-3">
@@ -128,14 +133,15 @@ export default function AIPromptInput({ onSearch }: AIPromptInputProps) {
               whileTap={{ scale: 0.97 }}
               onClick={handleSubmit}
               disabled={loading || !prompt.trim()}
-              className="relative group/submit overflow-hidden px-8 py-3 bg-indigo-600 disabled:opacity-40 disabled:cursor-not-allowed rounded-xl transition-all"
+              className="relative group/submit overflow-hidden px-8 py-3 disabled:opacity-40 disabled:cursor-not-allowed rounded-xl transition-all font-black text-black text-xs uppercase tracking-widest"
+              style={{ background: "linear-gradient(135deg, #fbbf24, #f59e0b)", boxShadow: "0 4px 20px rgba(245,158,11,0.35)" }}
             >
               <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/15 to-transparent -translate-x-full group-hover/submit:animate-[shimmer_1.5s_infinite]" />
               <div className="relative z-10 flex items-center gap-2.5">
                 {loading ? (
-                  <><Loader2 className="w-4 h-4 animate-spin text-white" /><span className="text-xs font-black text-white uppercase tracking-widest italic">Analyzing…</span></>
+                  <><Loader2 className="w-4 h-4 animate-spin text-black" /><span className="text-xs font-black text-black uppercase tracking-widest italic">Analyzing…</span></>
                 ) : (
-                  <><Sparkles className="w-4 h-4 text-white" /><span className="text-xs font-black text-white uppercase tracking-widest italic">Execute Search</span></>
+                  <><Sparkles className="w-4 h-4 text-black" /><span className="text-xs font-black text-black uppercase tracking-widest italic">Execute Search</span></>
                 )}
               </div>
             </motion.button>

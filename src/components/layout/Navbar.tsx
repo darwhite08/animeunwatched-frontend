@@ -12,7 +12,7 @@ import {
 import {
   List, Robot, CalendarDots, Star, Tag, Buildings, SquaresFour,
   Lightning, Newspaper, UsersThree, BookOpenText, ChartBar, Trophy,
-  MonitorPlay, Sparkle, ArrowRight, House,
+  MonitorPlay, Sparkle, ArrowRight, House, CalendarCheck,
 } from "@phosphor-icons/react";
 import { useWatchlist } from "@/stores/watchlist.store";
 import { useAuthStore } from "@/stores/auth.store";
@@ -24,14 +24,15 @@ import ProfileMenu from "./ProfileMenu";
 /* ── Dropdown link data ─────────────────────────────────────── */
 
 const ANIME_LINKS = [
-  { name: "Browse All",       href: "/bestanimelist",    icon: List,         desc: "All 30,000+ anime" },
-  { name: "AI Discover",      href: "/ai-discover",      icon: Robot,        desc: "Neural recommendations" },
-  { name: "Seasonal",         href: "/seasonal",         icon: CalendarDots, desc: "Any year & season" },
-  { name: "Top Rated",        href: "/rankings",         icon: Star,         desc: "Community ranked" },
-  { name: "Genres",           href: "/genres",           icon: Tag,          desc: "Browse by genre" },
-  { name: "Studios",          href: "/studios",          icon: Buildings,    desc: "Browse by studio" },
-  { name: "Recommendations",  href: "/recommendations",  icon: Sparkle,      desc: "Picks for you" },
-  { name: "Collections",      href: "/collections",      icon: SquaresFour,  desc: "Curated lists" },
+  { name: "Browse All",       href: "/bestanimelist",    icon: List,          desc: "All 30,000+ anime" },
+  { name: "AI Discover",      href: "/ai-discover",      icon: Robot,         desc: "Neural recommendations" },
+  { name: "Seasonal",         href: "/seasonal",         icon: CalendarDots,  desc: "Any year & season" },
+  { name: "Calendar",         href: "/calendar",         icon: CalendarCheck, desc: "Airing schedule" },
+  { name: "Top Rated",        href: "/rankings",         icon: Star,          desc: "Community ranked" },
+  { name: "Genres",           href: "/genres",           icon: Tag,           desc: "Browse by genre" },
+  { name: "Studios",          href: "/studios",          icon: Buildings,     desc: "Browse by studio" },
+  { name: "Recommendations",  href: "/recommendations",  icon: Sparkle,       desc: "Picks for you" },
+  { name: "Collections",      href: "/collections",      icon: SquaresFour,   desc: "Curated lists" },
 ];
 
 const COMMUNITY_LINKS = [

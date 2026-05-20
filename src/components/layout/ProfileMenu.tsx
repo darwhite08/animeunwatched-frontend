@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { SquaresFour, User, BookmarkSimple, SignOut, Gear } from "@phosphor-icons/react";
+import { SquaresFour, User, BookmarkSimple, SignOut, Gear, PenNib } from "@phosphor-icons/react";
 
 interface ProfileMenuProps {
   user: { name: string };
@@ -12,10 +12,11 @@ interface ProfileMenuProps {
 }
 
 const LINKS = [
-  { href: "/dashboard", icon: SquaresFour, label: "Dashboard" },
-  { href: "/profile",   icon: User,         label: "Profile" },
-  { href: "/watchlist", icon: BookmarkSimple, label: "Watchlist" },
-  { href: "/settings",  icon: Gear,          label: "Settings" },
+  { href: "/dashboard",            icon: SquaresFour,   label: "Dashboard"  },
+  { href: "/profile",              icon: User,           label: "Profile"    },
+  { href: "/watchlist",            icon: BookmarkSimple, label: "Watchlist"  },
+  { href: "/creators/create/blog", icon: PenNib,         label: "Write Blog" },
+  { href: "/settings",             icon: Gear,           label: "Settings"   },
 ]
 
 export default function ProfileMenu({ user, isOpen, onClose, onLogout }: ProfileMenuProps) {

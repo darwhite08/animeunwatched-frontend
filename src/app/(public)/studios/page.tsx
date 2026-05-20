@@ -22,20 +22,28 @@ function mapDTO(a: AnimeDTO, i: number): Anime {
 }
 
 const STUDIOS = [
-  { name: "MAPPA",           known: "Jujutsu Kaisen, Chainsaw Man, AoT Final Season" },
-  { name: "Madhouse",        known: "Hunter x Hunter, Death Note, OPM S1" },
-  { name: "Bones",           known: "Fullmetal Alchemist, My Hero Academia" },
-  { name: "ufotable",        known: "Demon Slayer, Fate/Zero, Fate/UBW" },
-  { name: "Kyoto Animation", known: "Violet Evergarden, K-On!, Clannad" },
-  { name: "Trigger",         known: "Kill la Kill, Gurren Lagann, Promare" },
-  { name: "Wit Studio",      known: "Vinland Saga, AoT S1-3, Great Pretender" },
-  { name: "A-1 Pictures",    known: "SAO, Kaguya-sama, Your Lie in April" },
-  { name: "Shaft",           known: "Monogatari Series, Madoka, Nisekoi" },
-  { name: "Sunrise",         known: "Gundam, Code Geass, Cowboy Bebop" },
-  { name: "White Fox",       known: "Re:Zero, Steins;Gate, Goblin Slayer" },
-  { name: "Gainax",          known: "NGE, FLCL, Gurren Lagann (early)" },
-  { name: "J.C.Staff",       known: "Toradora, Food Wars, DanMachi" },
-  { name: "Production I.G",  known: "Ghost in the Shell, Haikyuu" },
+  { name: "MAPPA",            monogram: "MA", colors: ["#ef4444","#f97316"], known: "Jujutsu Kaisen, Chainsaw Man, AoT Final Season" },
+  { name: "Madhouse",         monogram: "MH", colors: ["#8b5cf6","#6366f1"], known: "Hunter x Hunter, Death Note, OPM S1" },
+  { name: "Bones",            monogram: "BO", colors: ["#f59e0b","#d97706"], known: "Fullmetal Alchemist, My Hero Academia, SK8 the Infinity" },
+  { name: "ufotable",         monogram: "UF", colors: ["#06b6d4","#0891b2"], known: "Demon Slayer, Fate/Zero, Fate/UBW, Tales of Zestiria" },
+  { name: "Kyoto Animation",  monogram: "KA", colors: ["#10b981","#059669"], known: "Violet Evergarden, K-On!, Clannad, Tamako Market" },
+  { name: "Trigger",          monogram: "TR", colors: ["#ec4899","#db2777"], known: "Kill la Kill, Promare, Little Witch Academia, Cyberpunk" },
+  { name: "Wit Studio",       monogram: "WS", colors: ["#64748b","#475569"], known: "Vinland Saga, AoT S1-3, Spy x Family, Great Pretender" },
+  { name: "A-1 Pictures",     monogram: "A1", colors: ["#6366f1","#4f46e5"], known: "SAO, Kaguya-sama, Your Lie in April, Fairy Tail" },
+  { name: "Shaft",            monogram: "SH", colors: ["#a855f7","#7c3aed"], known: "Monogatari Series, Madoka Magica, Nisekoi, 3-gatsu" },
+  { name: "Sunrise",          monogram: "SR", colors: ["#f97316","#ea580c"], known: "Gundam, Code Geass, Cowboy Bebop, Love Live!" },
+  { name: "White Fox",        monogram: "WF", colors: ["#e2e8f0","#94a3b8"], known: "Re:Zero, Steins;Gate, Goblin Slayer, Katanagatari" },
+  { name: "Gainax",           monogram: "GX", colors: ["#0ea5e9","#0284c7"], known: "Neon Genesis Evangelion, FLCL, Gurren Lagann, Gunbuster" },
+  { name: "J.C.Staff",        monogram: "JC", colors: ["#84cc16","#65a30d"], known: "Toradora, Food Wars, DanMachi, Shakugan no Shana" },
+  { name: "Production I.G",   monogram: "IG", colors: ["#14b8a6","#0d9488"], known: "Ghost in the Shell, Haikyuu!!, Attack on Titan, Eden of East" },
+  { name: "CloverWorks",      monogram: "CW", colors: ["#f43f5e","#e11d48"], known: "Oshi no Ko, The Promised Neverland S2, Spy x Family S2" },
+  { name: "David Production", monogram: "DP", colors: ["#fbbf24","#f59e0b"], known: "JoJo's Bizarre Adventure, Dr. Stone, Cells at Work!" },
+  { name: "OLM",              monogram: "OL", colors: ["#22d3ee","#06b6d4"], known: "Pokémon, Inazuma Eleven, Berserk (1997)" },
+  { name: "Doga Kobo",        monogram: "DK", colors: ["#fb7185","#f43f5e"], known: "Himouto Umaru-chan, Gabriel DropOut, Yuruyuri" },
+  { name: "Silver Link",      monogram: "SL", colors: ["#c0c0c0","#9ca3af"], known: "Non Non Biyori, Chivalry of a Failed Knight, Strike the Blood" },
+  { name: "Toei Animation",   monogram: "TA", colors: ["#ef4444","#b91c1c"], known: "Dragon Ball, One Piece, Sailor Moon, Digimon, Pretty Cure" },
+  { name: "Brain's Base",     monogram: "BB", colors: ["#7c3aed","#5b21b6"], known: "Durarara!!, Natsume's Book of Friends, Baccano!" },
+  { name: "Lerche",           monogram: "LE", colors: ["#2dd4bf","#14b8a6"], known: "Assassination Classroom, Danganronpa, Toilet-bound Hanako-kun" },
 ] as const
 
 type StudioName = typeof STUDIOS[number]["name"]
@@ -48,11 +56,17 @@ function StudioPanel({ studio, onAnimeClick }: { studio: StudioName; onAnimeClic
   const anime = (data?.data ?? []).map(mapDTO)
   const totalPages = data?.meta?.pages ?? 1
   const totalAnime = data?.meta?.total ?? 0
+  const s = STUDIOS.find(x => x.name === studio)!
 
   return (
     <div className="mt-4 p-6 rounded-2xl bg-white/[0.02] border border-white/5">
       <div className="flex items-center justify-between mb-6">
-        <h3 className="text-2xl font-black uppercase italic tracking-tight text-violet-400">{studio}</h3>
+        <div className="flex items-center gap-3">
+          <div style={{ width: 40, height: 40, borderRadius: 10, background: `linear-gradient(135deg, ${s.colors[0]}, ${s.colors[1]})`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+            <span style={{ color: "white", fontWeight: 900, fontSize: 13, fontStyle: "italic", letterSpacing: "-0.02em" }}>{s.monogram}</span>
+          </div>
+          <h3 className="text-2xl font-black uppercase italic tracking-tight text-white">{studio}</h3>
+        </div>
         {!isLoading && (
           <span className="text-[10px] font-black text-white/25 uppercase tracking-widest">
             {totalAnime.toLocaleString()} titles
@@ -146,14 +160,22 @@ export default function StudiosPage() {
                 >
                   <div className="p-5">
                     <div className="flex items-center justify-between mb-3">
-                      <h2 className="text-base font-black uppercase italic tracking-tight text-white">{s.name}</h2>
+                      <div className="flex items-center gap-3 min-w-0">
+                        <div style={{ width: 48, height: 48, borderRadius: 12, background: `linear-gradient(135deg, ${s.colors[0]}, ${s.colors[1]})`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                          <span style={{ color: "white", fontWeight: 900, fontSize: 14, fontStyle: "italic", letterSpacing: "-0.02em" }}>{s.monogram}</span>
+                        </div>
+                        <div className="min-w-0">
+                          <h2 className="text-base font-black uppercase italic tracking-tight text-white truncate">{s.name}</h2>
+                          <p className="text-[9px] font-black uppercase tracking-widest mt-0.5" style={{ color: s.colors[0] + "99" }}>Production Studio</p>
+                        </div>
+                      </div>
                       <motion.div animate={{ rotate: isOpen ? 180 : 0 }} transition={{ duration: 0.25 }}
                         className="text-white/20 shrink-0 ml-2">
                         <ChevronDown size={16} />
                       </motion.div>
                     </div>
-                    <p className="text-[10px] text-white/25 leading-relaxed">{s.known}</p>
-                    <div className="mt-3 flex items-center gap-1.5 text-violet-400/60">
+                    <p className="text-[10px] text-white/25 leading-relaxed pl-[60px]">{s.known}</p>
+                    <div className="mt-3 flex items-center gap-1.5 pl-[60px]" style={{ color: s.colors[0] + "99" }}>
                       <Building2 size={10} />
                       <span className="text-[9px] font-black uppercase tracking-widest">View Catalogue →</span>
                     </div>

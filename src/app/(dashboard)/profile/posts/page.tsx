@@ -73,7 +73,7 @@ export default function MyPostsPage() {
       <div className="grid grid-cols-3 gap-4">
         {[
           { icon:Heart,          label:"Total Likes",    value:totalLikes.toLocaleString(),    color:"text-rose-400"    },
-          { icon:Eye,            label:"Total Views",    value:totalViews.toLocaleString(),    color:"text-indigo-400"  },
+          { icon:Eye,            label:"Total Views",    value:totalViews.toLocaleString(),    color:"text-amber-400"  },
           { icon:MessageSquare,  label:"Comments",       value:totalComments.toLocaleString(), color:"text-blue-400"    },
         ].map(s => (
           <div key={s.label} className="p-4 rounded-2xl bg-white/[0.02] border border-white/8 text-center space-y-1">
@@ -93,7 +93,7 @@ export default function MyPostsPage() {
               className="p-5 rounded-2xl bg-white/[0.02] border border-white/8 hover:border-white/15 transition-colors space-y-3"
             >
               {p.anime && (
-                <span className="inline-flex items-center text-[9px] font-bold text-indigo-400 bg-indigo-500/8 border border-indigo-500/15 px-2.5 py-1 rounded-lg">
+                <span className="inline-flex items-center text-[9px] font-bold text-amber-400 bg-indigo-500/8 border border-indigo-500/15 px-2.5 py-1 rounded-lg">
                   {p.anime}
                 </span>
               )}
@@ -107,7 +107,7 @@ export default function MyPostsPage() {
                   <span>{p.time}</span>
                 </div>
                 <div className="flex gap-2">
-                  <button onClick={() => push("Post editing coming soon!", "info")} className="p-2 rounded-lg text-white/25 hover:text-indigo-400 hover:bg-white/5 transition-colors"><Edit2 size={13}/></button>
+                  <button onClick={() => push("Post editing coming soon!", "info")} className="p-2 rounded-lg text-white/25 hover:text-amber-400 hover:bg-white/5 transition-colors"><Edit2 size={13}/></button>
                   <button onClick={() => del(p.id)} className="p-2 rounded-lg text-white/25 hover:text-red-400 hover:bg-red-500/5 transition-colors"><Trash2 size={13}/></button>
                 </div>
               </div>

@@ -22,7 +22,7 @@ const TITLE_MAP: Record<number, { label: string; color: string }> = {
   1:  { label: "Legendary Shinobi", color: "text-amber-400"   },
   2:  { label: "Arch-Mage",         color: "text-slate-300"   },
   3:  { label: "Elite Jonin",       color: "text-amber-600"   },
-  4:  { label: "Shadow Watcher",    color: "text-indigo-400"  },
+  4:  { label: "Shadow Watcher",    color: "text-amber-400"  },
   5:  { label: "Binge Master",      color: "text-purple-400"  },
   6:  { label: "Neural Ranked",     color: "text-blue-400"    },
   7:  { label: "Veteran Otaku",     color: "text-teal-400"    },
@@ -96,7 +96,7 @@ export default function PublicLeaderboardPage() {
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div>
             <motion.div initial={{ opacity:0, x:-16 }} animate={{ opacity:1, x:0 }}
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-[9px] font-black uppercase tracking-[0.3em] text-indigo-400 mb-4"
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-[9px] font-black uppercase tracking-[0.3em] text-amber-400 mb-4"
             >
               <Trophy size={11} /> Global Hall of Fame
             </motion.div>
@@ -178,14 +178,14 @@ export default function PublicLeaderboardPage() {
                     isMe ? "border-indigo-500/30 bg-indigo-500/8" : "border-white/5 bg-white/[0.01] hover:bg-white/[0.03] hover:border-white/12"
                   }`}
                 >
-                  <span className={`text-sm font-black ${isMe ? "text-indigo-400" : "text-white/30"}`}>
+                  <span className={`text-sm font-black ${isMe ? "text-amber-400" : "text-white/30"}`}>
                     {user.rank > 100 ? `#${user.rank}` : user.rank}
                   </span>
                   <div className="flex items-center gap-3 min-w-0">
                     <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-600/40 to-violet-600/30 flex items-center justify-center font-black text-sm shrink-0">{user.name[0]}</div>
                     <div className="min-w-0">
                       <div className="flex items-center gap-2">
-                        <p className={`text-sm font-black truncate ${isMe ? "text-indigo-300" : "text-white/80"}`}>{user.name}{isMe && " (You)"}</p>
+                        <p className={`text-sm font-black truncate ${isMe ? "text-amber-300" : "text-white/80"}`}>{user.name}{isMe && " (You)"}</p>
                         <Icon size={11} className={title.color} />
                       </div>
                       <p className={`text-[9px] uppercase tracking-wider ${title.color} opacity-80`}>{title.label}</p>
@@ -216,7 +216,7 @@ export default function PublicLeaderboardPage() {
             { icon:Trophy,   label:"Your Standing",  value:"#812"   },
           ].map(({ icon:Icon, label, value }) => (
             <div key={label} className="flex items-center gap-4 p-5 rounded-2xl bg-white/[0.02] border border-white/8">
-              <Icon size={18} className="text-indigo-400 shrink-0" />
+              <Icon size={18} className="text-amber-400 shrink-0" />
               <div>
                 <p className="text-xl font-black tracking-tighter text-white">{value}</p>
                 <p className="text-[9px] text-white/25 uppercase tracking-[0.2em]">{label}</p>

@@ -101,7 +101,7 @@ export default function NowPlayingCard() {
             </button>
           </div>
           <Link href={`/anime/${NOW.id}`}
-            className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest text-indigo-400/60 hover:text-indigo-400 transition-colors"
+            className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest text-indigo-400/60 hover:text-amber-400 transition-colors"
           >
             Details <ExternalLink size={10} />
           </Link>

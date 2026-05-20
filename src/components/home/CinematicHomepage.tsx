@@ -70,7 +70,7 @@ function DiscoverySection() {
               className="text-[clamp(2rem,5vw,4.5rem)] font-bold tracking-tight text-white leading-tight"
             >
               Discover the<br />
-              <span className="text-indigo-400">undiscovered.</span>
+              <span className="text-amber-400">undiscovered.</span>
             </motion.h2>
           </div>
           <motion.p
@@ -208,7 +208,7 @@ function AIOracleSection() {
                 className="text-[clamp(2rem,4.2vw,3.8rem)] font-bold tracking-tight text-white leading-tight mb-5"
               >
                 Tell us how you<br />
-                <span className="text-indigo-400">want to feel.</span>
+                <span className="text-amber-400">want to feel.</span>
               </motion.h2>
               <motion.p
                 initial={{ opacity: 0 }}
@@ -262,7 +262,7 @@ function AIOracleSection() {
               {/* Header */}
               <div className="px-5 py-3.5 border-b border-white/[0.06] flex items-center justify-between bg-white/[0.01]">
                 <div className="flex items-center gap-2">
-                  <Sparkles size={12} className="text-indigo-400" />
+                  <Sparkles size={12} className="text-amber-400" />
                   <span className="text-[11px] font-semibold text-white/55">Neural Oracle</span>
                 </div>
                 <div className="flex items-center gap-1.5">
@@ -344,7 +344,7 @@ function AIOracleSection() {
                         </div>
 
                         <div className="text-right shrink-0">
-                          <p className="text-[13px] font-bold text-indigo-400">{match}%</p>
+                          <p className="text-[13px] font-bold text-amber-400">{match}%</p>
                           <p className="text-[8px] text-white/18">match</p>
                         </div>
                       </div>
@@ -353,7 +353,7 @@ function AIOracleSection() {
                 </AnimatePresence>
 
                 <div className="px-5 py-3.5 border-t border-white/[0.05] bg-white/[0.01]">
-                  <Link href="/ai-discover" className="text-[11px] text-indigo-400/60 hover:text-indigo-400 transition-colors font-medium inline-flex items-center gap-1">
+                  <Link href="/ai-discover" className="text-[11px] text-indigo-400/60 hover:text-amber-400 transition-colors font-medium inline-flex items-center gap-1">
                     Open AI discovery <ArrowRight size={11} />
                   </Link>
                 </div>
@@ -398,7 +398,7 @@ function CommunitySection() {
                 className="text-[clamp(2rem,4.5vw,4rem)] font-bold tracking-tight text-white leading-tight mb-5"
               >
                 Every episode<br />
-                <span className="text-indigo-400">builds your legacy.</span>
+                <span className="text-amber-400">builds your legacy.</span>
               </motion.h2>
               <motion.p
                 initial={{ opacity: 0 }}
@@ -416,7 +416,7 @@ function CommunitySection() {
                 { icon: Flame,  label: "Daily Streaks",    desc: "Watch daily to compound XP.",     color: "text-orange-400", bg: "bg-orange-500/[0.12]", border: "border-orange-500/[0.18]" },
                 { icon: Trophy, label: "Leaderboard",      desc: "Rank globally by season.",         color: "text-amber-400",  bg: "bg-amber-500/[0.12]",  border: "border-amber-500/[0.18]"  },
                 { icon: Star,   label: "Badges & Titles",  desc: "100+ achievements to unlock.",     color: "text-violet-400", bg: "bg-violet-500/[0.12]", border: "border-violet-500/[0.18]" },
-                { icon: Users,  label: "Social Feed",      desc: "Follow fans with similar taste.",  color: "text-indigo-400", bg: "bg-indigo-500/[0.12]", border: "border-indigo-500/[0.18]" },
+                { icon: Users,  label: "Social Feed",      desc: "Follow fans with similar taste.",  color: "text-amber-400", bg: "bg-indigo-500/[0.12]", border: "border-indigo-500/[0.18]" },
               ].map(({ icon: Icon, label, desc, color, bg, border }, i) => (
                 <motion.div
                   key={label}
@@ -554,7 +554,7 @@ function CommunitySection() {
                 ))}
               </div>
               <div className="px-5 py-3 border-t border-white/[0.05] bg-white/[0.01]">
-                <Link href="/leaderboard" className="text-[11px] text-indigo-400/60 hover:text-indigo-400 font-medium flex items-center gap-1 transition-colors">
+                <Link href="/leaderboard" className="text-[11px] text-indigo-400/60 hover:text-amber-400 font-medium flex items-center gap-1 transition-colors">
                   View full leaderboard <ArrowRight size={11} />
                 </Link>
               </div>
@@ -663,7 +663,7 @@ function ShowcaseSection() {
             className="text-[clamp(1.8rem,4vw,3.5rem)] font-bold tracking-tight text-white"
           >
             Everything you need,<br />
-            <span className="text-indigo-400">in one place.</span>
+            <span className="text-amber-400">in one place.</span>
           </motion.h2>
         </div>
 
@@ -694,7 +694,7 @@ function ShowcaseSection() {
               <Link
                 href={href}
                 className={`inline-flex items-center gap-1.5 text-[13px] font-medium transition-all ${
-                  accent === "indigo" ? "text-indigo-400/60 hover:text-indigo-400" :
+                  accent === "indigo" ? "text-indigo-400/60 hover:text-amber-400" :
                   accent === "amber" ? "text-amber-400/60 hover:text-amber-400" : "text-violet-400/60 hover:text-violet-400"
                 }`}
               >
@@ -741,7 +741,7 @@ function FinalCTASection() {
         {/* Platform badge */}
         <div className="flex justify-center mb-10">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.04] border border-white/[0.08]">
-            <Sparkles size={11} className="text-indigo-400" />
+            <Sparkles size={11} className="text-amber-400" />
             <span className="text-[11px] font-medium text-white/45">Kaiveron · Open Beta</span>
           </div>
         </div>
@@ -750,7 +750,7 @@ function FinalCTASection() {
         <div className="text-center mb-8">
           <h2 className="text-[clamp(2.2rem,6vw,5rem)] font-bold tracking-tight leading-tight text-white mb-4">
             Your anime archive,<br />
-            <span className="text-indigo-400">starting today.</span>
+            <span className="text-amber-400">starting today.</span>
           </h2>
           <p className="text-white/35 text-base max-w-md mx-auto leading-relaxed">
             The social platform built for serious anime fans. Track, rate, discover, and compete — all in one place.

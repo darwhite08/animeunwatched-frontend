@@ -35,7 +35,7 @@ export default function PrivacySettingsPage() {
   return (
     <div className="max-w-2xl mx-auto px-6 py-12 pb-32 space-y-8">
       <div className="flex items-center gap-3">
-        <Shield size={20} className="text-indigo-400" />
+        <Shield size={20} className="text-amber-400" />
         <div>
           <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-amber-400/60">Data Control</p>
           <h1 className="text-2xl font-black tracking-tighter uppercase italic text-white">Privacy</h1>

@@ -31,13 +31,13 @@ export default function StudioPage({ params }: { params: Promise<{ name: string 
   return (
     <div className="min-h-screen bg-[#020202] text-white pb-32">
       <div className="max-w-7xl mx-auto px-6 pt-32">
-        <Link href="/studios" className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-indigo-400/60 hover:text-indigo-400 transition-colors mb-6">
+        <Link href="/studios" className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-indigo-400/60 hover:text-amber-400 transition-colors mb-6">
           <ChevronLeft size={11}/> All Studios
         </Link>
 
         <div className="flex items-center gap-4 mb-4">
           <div className="w-14 h-14 rounded-2xl bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center">
-            <Building2 size={24} className="text-indigo-400" />
+            <Building2 size={24} className="text-amber-400" />
           </div>
           <div>
             <h1 className="text-4xl font-black tracking-tighter uppercase italic text-white">{studioName}<span style={{color:"#f59e0b"}}>.</span></h1>
@@ -82,7 +82,7 @@ export default function StudioPage({ params }: { params: Promise<{ name: string 
           <div className="py-20 text-center border border-dashed border-white/5 rounded-[3rem]">
             <Building2 size={32} className="mx-auto mb-3 text-white/15" />
             <p className="text-white/20 font-black uppercase tracking-widest text-sm">"{studioName}" not found in archive</p>
-            <Link href="/studios" className="mt-4 inline-block text-xs text-indigo-400 hover:underline font-black uppercase tracking-widest">Browse All Studios</Link>
+            <Link href="/studios" className="mt-4 inline-block text-xs text-amber-400 hover:underline font-black uppercase tracking-widest">Browse All Studios</Link>
           </div>
         )}
       </div>

@@ -265,7 +265,7 @@ function CommentCard({ comment, index }: { comment: Comment; index: number }) {
         {hasReplies && (
           <button
             onClick={() => setShowReplies(s => !s)}
-            className="flex items-center gap-1 text-[10px] font-bold text-white/25 hover:text-indigo-400 transition-colors"
+            className="flex items-center gap-1 text-[10px] font-bold text-white/25 hover:text-amber-400 transition-colors"
           >
             {showReplies ? <ChevronUp size={10} /> : <ChevronDown size={10} />}
             {comment.replies!.length} {comment.replies!.length === 1 ? "reply" : "replies"}
@@ -391,7 +391,7 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
     })
   }
 
-  if (isLoading) return <div className="min-h-screen bg-[#020202] flex items-center justify-center"><Loader2 size={24} className="animate-spin text-indigo-400" /></div>
+  if (isLoading) return <div className="min-h-screen bg-[#020202] flex items-center justify-center"><Loader2 size={24} className="animate-spin text-amber-400" /></div>
   if (isError && !POSTS[id]) return <div className="min-h-screen bg-[#020202] flex items-center justify-center text-white/30">Post not found</div>
 
   const share = async () => {
@@ -444,7 +444,7 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
               {post.anime && (
                 <Link
                   href="/bestanimelist"
-                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-indigo-500/8 border border-indigo-500/15 text-[10px] font-bold text-indigo-400 hover:bg-indigo-500/15 transition-colors"
+                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-indigo-500/8 border border-indigo-500/15 text-[10px] font-bold text-amber-400 hover:bg-indigo-500/15 transition-colors"
                 >
                   <Star size={9} /> {post.anime}
                 </Link>
@@ -463,7 +463,7 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
               {post.tags.length > 0 && (
                 <div className="flex flex-wrap gap-1.5">
                   {post.tags.map(tag => (
-                    <span key={tag} className="text-[9px] font-bold text-indigo-400/60 hover:text-indigo-400 cursor-pointer transition-colors">
+                    <span key={tag} className="text-[9px] font-bold text-indigo-400/60 hover:text-amber-400 cursor-pointer transition-colors">
                       #{tag}
                     </span>
                   ))}

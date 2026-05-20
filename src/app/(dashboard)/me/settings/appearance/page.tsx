@@ -40,7 +40,7 @@ export default function AppearancePage() {
   return (
     <div className="max-w-2xl mx-auto px-6 py-12 pb-32 space-y-8">
       <div className="flex items-center gap-3">
-        <Palette size={20} className="text-indigo-400" />
+        <Palette size={20} className="text-amber-400" />
         <div>
           <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-amber-400/60">Customization</p>
           <h1 className="text-2xl font-black tracking-tighter uppercase italic text-white">Appearance</h1>
@@ -57,7 +57,7 @@ export default function AppearancePage() {
                 theme === id ? "border-indigo-500/50 bg-indigo-500/10" : "border-white/8 bg-white/[0.02] hover:border-white/15"
               }`}
             >
-              <Icon size={20} className={theme === id ? "text-indigo-400" : "text-white/30"} />
+              <Icon size={20} className={theme === id ? "text-amber-400" : "text-white/30"} />
               <p className="font-bold text-sm mt-3 text-white">{label}</p>
               <p className="text-[10px] text-white/30 mt-0.5">{desc}</p>
             </button>

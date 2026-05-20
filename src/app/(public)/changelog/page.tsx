@@ -105,10 +105,10 @@ export default function ChangelogPage() {
       {/* Header */}
       <div className="border-b border-white/5 bg-black/30 backdrop-blur-md sticky top-[72px] z-30">
         <div className="max-w-3xl mx-auto px-6 py-6 flex items-center gap-3">
-          <Cpu size={16} className="text-indigo-400" />
+          <Cpu size={16} className="text-amber-400" />
           <div>
             <h1 className="text-xl font-black tracking-tighter uppercase italic text-white">
-              Changelog<span className="text-indigo-500"> — Neural Archive</span>
+              Changelog<span className="text-amber-500"> — Neural Archive</span>
             </h1>
             <p className="text-[10px] text-white/25 mt-0.5">Every release. Every feature. Full transparency.</p>
           </div>
@@ -147,7 +147,7 @@ export default function ChangelogPage() {
                 }`}>
                   {/* Top row */}
                   <div className="flex flex-wrap items-center gap-3">
-                    <span className="px-3 py-1 rounded-lg bg-indigo-600/15 border border-indigo-500/25 text-xs font-black text-indigo-400 font-mono tracking-wider">
+                    <span className="px-3 py-1 rounded-lg bg-indigo-600/15 border border-indigo-500/25 text-xs font-black text-amber-400 font-mono tracking-wider">
                       {release.version}
                     </span>
                     <span className={`px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest ${
@@ -173,7 +173,7 @@ export default function ChangelogPage() {
                   <ul className="space-y-2.5">
                     {release.features.map((feat) => (
                       <li key={feat} className="flex items-start gap-3">
-                        <CheckCircle2 size={13} className="text-indigo-400 shrink-0 mt-0.5" />
+                        <CheckCircle2 size={13} className="text-amber-400 shrink-0 mt-0.5" />
                         <span className="text-sm text-white/55 leading-snug">{feat}</span>
                       </li>
                     ))}

@@ -47,7 +47,7 @@ export default function MobileNav() {
                 <div className="relative">
                   <Icon
                     size={20}
-                    className={`transition-colors ${active ? "text-indigo-400" : "text-white/35"}`}
+                    className={`transition-colors ${active ? "text-amber-400" : "text-white/35"}`}
                   />
                   {/* Notification badge */}
                   {label === "Alerts" && unreadCount > 0 && (
@@ -58,7 +58,7 @@ export default function MobileNav() {
                 </div>
 
                 <span className={`text-[9px] font-black uppercase tracking-wider transition-colors ${
-                  active ? "text-indigo-400" : "text-white/25"
+                  active ? "text-amber-400" : "text-white/25"
                 }`}>
                   {label}
                 </span>

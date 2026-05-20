@@ -127,7 +127,7 @@ export default function Sidebar() {
                     {"badge" in item && item.badge && (
                       <span className="relative z-10 flex items-center gap-1">
                         {item.name === "Notifications" && unreadCount > 0 && (
-                          <span className="px-1.5 py-0.5 rounded-full bg-indigo-600/30 text-[8px] font-black text-indigo-400">
+                          <span className="px-1.5 py-0.5 rounded-full bg-indigo-600/30 text-[8px] font-black text-amber-400">
                             {unreadCount > 99 ? "99+" : unreadCount}
                           </span>
                         )}
@@ -144,7 +144,7 @@ export default function Sidebar() {
         {wlCount > 0 && (
           <div className="mx-3 p-3 rounded-xl bg-white/[0.03] border border-white/8 flex items-center justify-between">
             <span className="text-[11px] font-bold text-white/50">Watchlist items</span>
-            <span className="text-[11px] font-black text-indigo-400">{wlCount}</span>
+            <span className="text-[11px] font-black text-amber-400">{wlCount}</span>
           </div>
         )}
       </div>
@@ -163,7 +163,7 @@ export default function Sidebar() {
                   <p className="text-[9px] text-white/20 uppercase tracking-tighter mt-0.5">Flame {grade}</p>
                 </div>
               </div>
-              <ChevronRight size={12} className="text-white/20 group-hover:text-indigo-400 group-hover:translate-x-0.5 transition-all" />
+              <ChevronRight size={12} className="text-white/20 group-hover:text-amber-400 group-hover:translate-x-0.5 transition-all" />
             </div>
             <div>
               <div className="flex justify-between text-[8px] font-black uppercase tracking-widest text-white/20 mb-1">

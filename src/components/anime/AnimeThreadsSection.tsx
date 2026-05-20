@@ -121,7 +121,7 @@ export function AnimeThreadsSection({ animeId, animeTitle }: AnimeThreadsSection
         </h2>
         <button
           onClick={() => push("Coming soon! Join a club to start discussions.", "info")}
-          className="text-[10px] font-black uppercase tracking-widest text-indigo-400 hover:text-indigo-300 transition-colors flex items-center gap-1.5"
+          className="text-[10px] font-black uppercase tracking-widest text-amber-400 hover:text-amber-300 transition-colors flex items-center gap-1.5"
         >
           <MessageSquare size={11} /> Start Thread
         </button>
@@ -198,7 +198,7 @@ export function AnimeThreadsSection({ animeId, animeTitle }: AnimeThreadsSection
       {/* Footer link */}
       <Link
         href="/community"
-        className="mt-4 flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-indigo-400/70 hover:text-indigo-400 transition-colors"
+        className="mt-4 flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-indigo-400/70 hover:text-amber-400 transition-colors"
       >
         View All Discussions <ChevronRight size={11} />
       </Link>

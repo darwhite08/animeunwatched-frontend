@@ -13,7 +13,7 @@ const CONTENT_TYPES = [
     color:   "from-indigo-600/30 to-indigo-800/10",
     border:  "hover:border-indigo-500/50",
     glow:    "hover:shadow-[0_0_40px_rgba(99,102,241,0.15)]",
-    badge:   "text-indigo-400 bg-indigo-500/10 border-indigo-500/20",
+    badge:   "text-amber-400 bg-indigo-500/10 border-indigo-500/20",
     tag:     "Quick",
   },
   {
@@ -95,12 +95,12 @@ export default function CreateLandingPage() {
 
       {/* AI tip */}
       <div className="flex items-start gap-3 p-5 rounded-2xl bg-white/[0.02] border border-white/5">
-        <Sparkles size={16} className="text-indigo-400 shrink-0 mt-0.5" />
+        <Sparkles size={16} className="text-amber-400 shrink-0 mt-0.5" />
         <div>
           <p className="text-xs font-bold text-white/60">Tip — Generate with AI</p>
           <p className="text-xs text-white/30 mt-0.5">
             Inside the blog or feed editor, click{" "}
-            <span className="text-indigo-400">"Generate with AI"</span> to get a draft based on any anime title or topic.
+            <span className="text-amber-400">"Generate with AI"</span> to get a draft based on any anime title or topic.
           </p>
         </div>
       </div>

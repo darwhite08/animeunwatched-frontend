@@ -10,7 +10,7 @@ export const ProgressCard = () => (
     <div className="relative z-10 space-y-6">
       <div className="flex justify-between items-center">
         <div className="space-y-1">
-          <p className="text-[10px] font-black text-indigo-400 uppercase tracking-[0.2em]">Next Evolution</p>
+          <p className="text-[10px] font-black text-amber-400 uppercase tracking-[0.2em]">Next Evolution</p>
           <h4 className="text-xl font-black text-white italic">Elite Watcher</h4>
         </div>
         <Target className="text-white/20" size={24} />

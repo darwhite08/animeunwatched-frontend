@@ -68,7 +68,7 @@ export default function CreateBlogPage() {
           className={`rounded-xl px-4 py-3 text-sm border ${
             status === "published"
               ? "bg-emerald-600/20 border-emerald-500/30 text-emerald-400"
-              : "bg-indigo-600/20 border-indigo-500/30 text-indigo-400"
+              : "bg-indigo-600/20 border-indigo-500/30 text-amber-400"
           }`}
         >
           {status === "published" ? "Article published!" : "Draft saved."}

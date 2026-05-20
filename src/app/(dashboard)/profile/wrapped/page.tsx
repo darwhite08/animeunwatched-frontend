@@ -44,7 +44,7 @@ export default function WrappedPage() {
   const topAnime = (browseData?.data ?? []).map(mapDTO).filter(a => a.rating >= 8.8).slice(0, 5)
 
   const STAT_CARDS = [
-    { icon: Clock,     label: "Hours watched",   value: realStats.totalHrs.toLocaleString(),    color: "from-indigo-600/30 to-indigo-900/10",  text: "text-indigo-400" },
+    { icon: Clock,     label: "Hours watched",   value: realStats.totalHrs.toLocaleString(),    color: "from-indigo-600/30 to-indigo-900/10",  text: "text-amber-400" },
     { icon: BarChart2, label: "Episodes logged",  value: realStats.totalEps.toLocaleString(),    color: "from-violet-600/30 to-violet-900/10",  text: "text-violet-400" },
     { icon: Flame,     label: "Best streak",      value: `${realStats.bestStreak} days`,         color: "from-orange-600/30 to-orange-900/10",  text: "text-orange-400" },
     { icon: Star,      label: "Reviews written",  value: String(REVIEWS_WRITTEN),                color: "from-amber-600/30 to-amber-900/10",    text: "text-amber-400"  },

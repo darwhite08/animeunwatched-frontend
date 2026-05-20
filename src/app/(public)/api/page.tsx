@@ -31,7 +31,7 @@ const ENDPOINTS: Endpoint[] = [
 
 const METHOD_STYLE: Record<HttpMethod, { bg: string; text: string; border: string }> = {
   GET:    { bg: "bg-emerald-500/10", text: "text-emerald-400", border: "border-emerald-500/20" },
-  POST:   { bg: "bg-indigo-500/10",  text: "text-indigo-400",  border: "border-indigo-500/20"  },
+  POST:   { bg: "bg-indigo-500/10",  text: "text-amber-400",  border: "border-indigo-500/20"  },
   PATCH:  { bg: "bg-amber-500/10",   text: "text-amber-400",   border: "border-amber-500/20"   },
   DELETE: { bg: "bg-rose-500/10",    text: "text-rose-400",    border: "border-rose-500/20"    },
 }
@@ -122,9 +122,9 @@ export default function ApiDocsPage() {
             className="flex items-center gap-3 mb-6"
           >
             <div className="p-2 rounded-xl bg-indigo-500/10 border border-indigo-500/20">
-              <Code2 size={18} className="text-indigo-400" />
+              <Code2 size={18} className="text-amber-400" />
             </div>
-            <span className="px-3 py-1 rounded-full bg-indigo-600/15 border border-indigo-500/25 text-xs font-black font-mono text-indigo-400">
+            <span className="px-3 py-1 rounded-full bg-indigo-600/15 border border-indigo-500/25 text-xs font-black font-mono text-amber-400">
               v1.0.0
             </span>
           </motion.div>
@@ -135,7 +135,7 @@ export default function ApiDocsPage() {
             transition={{ delay: 0.05 }}
             className="text-5xl md:text-6xl font-black tracking-tighter uppercase italic leading-[0.95] text-white mb-5"
           >
-            Developer<span className="text-indigo-400"> API</span><span className="text-white">.</span>
+            Developer<span className="text-amber-400"> API</span><span className="text-white">.</span>
           </motion.h1>
 
           <motion.p
@@ -168,11 +168,11 @@ export default function ApiDocsPage() {
           </div>
 
           <p className="text-sm text-white/45 leading-relaxed mb-5">
-            Protected endpoints require a <span className="font-mono text-indigo-300 text-xs">Bearer</span> token
-            in the <span className="font-mono text-indigo-300 text-xs">Authorization</span> header.
-            Obtain a token via <span className="font-mono text-indigo-300 text-xs">POST /api/v1/auth/login</span>.
+            Protected endpoints require a <span className="font-mono text-amber-300 text-xs">Bearer</span> token
+            in the <span className="font-mono text-amber-300 text-xs">Authorization</span> header.
+            Obtain a token via <span className="font-mono text-amber-300 text-xs">POST /api/v1/auth/login</span>.
             Tokens expire in 15 minutes — your client should use the httpOnly refresh cookie
-            (<span className="font-mono text-indigo-300 text-xs">credentials: &quot;include&quot;</span>) to rotate automatically.
+            (<span className="font-mono text-amber-300 text-xs">credentials: &quot;include&quot;</span>) to rotate automatically.
           </p>
 
           <CodeBlock code={AUTH_EXAMPLE} label="Bearer auth example — JavaScript" />
@@ -186,7 +186,7 @@ export default function ApiDocsPage() {
         >
           <div className="flex items-center gap-3 mb-6">
             <div className="p-2 rounded-xl bg-indigo-500/10 border border-indigo-500/20">
-              <BookOpen size={16} className="text-indigo-400" />
+              <BookOpen size={16} className="text-amber-400" />
             </div>
             <h2 className="text-xl font-black tracking-tighter uppercase italic text-white">
               Endpoint Reference
@@ -251,7 +251,7 @@ export default function ApiDocsPage() {
         >
           <div className="flex items-center gap-4">
             <div className="p-2.5 rounded-xl bg-indigo-500/15 border border-indigo-500/25">
-              <ExternalLink size={16} className="text-indigo-400" />
+              <ExternalLink size={16} className="text-amber-400" />
             </div>
             <div>
               <p className="text-sm font-black text-white">Full OpenAPI Specification</p>

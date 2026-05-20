@@ -69,7 +69,7 @@ export default function WatchPartyPage() {
               className="p-6 rounded-2xl bg-white/[0.02] border border-white/8 hover:border-indigo-500/20 transition-all group space-y-3"
             >
               <div className="w-10 h-10 rounded-xl bg-indigo-600/15 border border-indigo-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
-                <Icon size={18} className="text-indigo-400" />
+                <Icon size={18} className="text-amber-400" />
               </div>
               <p className="font-black text-white">{title}</p>
               <p className="text-sm text-white/40 leading-relaxed">{desc}</p>

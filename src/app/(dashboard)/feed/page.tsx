@@ -484,7 +484,7 @@ export default function FeedPage() {
                         <Heart size={14} />
                         {post.likes.toLocaleString()}
                       </button>
-                      <button className="flex items-center gap-1.5 text-xs font-bold text-white/30 hover:text-indigo-400 transition-colors">
+                      <button className="flex items-center gap-1.5 text-xs font-bold text-white/30 hover:text-amber-400 transition-colors">
                         <MessageSquare size={14} />
                         {post.comments}
                       </button>
@@ -544,7 +544,7 @@ export default function FeedPage() {
                       <Heart size={14} fill={liked ? "currentColor" : "none"} />
                       {(post._count?.likes ?? 0) + (liked ? 1 : 0)}
                     </button>
-                    <button className="flex items-center gap-1.5 text-xs font-bold text-white/30 hover:text-indigo-400 transition-colors">
+                    <button className="flex items-center gap-1.5 text-xs font-bold text-white/30 hover:text-amber-400 transition-colors">
                       <MessageSquare size={14} />
                       {post._count?.comments ?? 0}
                     </button>
@@ -571,7 +571,7 @@ export default function FeedPage() {
           {/* Who to Follow */}
           <div className="p-5 rounded-2xl bg-white/[0.02] border border-white/8 space-y-4">
             <div className="flex items-center gap-2">
-              <UserPlus size={14} className="text-indigo-400" />
+              <UserPlus size={14} className="text-amber-400" />
               <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40">
                 Who to Follow
               </h3>
@@ -657,7 +657,7 @@ export default function FeedPage() {
             className="flex items-center gap-3 p-5 rounded-2xl bg-gradient-to-br from-indigo-600/15 to-violet-600/10 border border-indigo-500/20 hover:from-indigo-600/20 transition-all group"
           >
             <div className="h-10 w-10 rounded-xl bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center shrink-0">
-              <Users size={16} className="text-indigo-400" />
+              <Users size={16} className="text-amber-400" />
             </div>
             <div className="flex-1">
               <p className="text-sm font-bold text-white group-hover:text-amber-300 transition-colors">
@@ -669,7 +669,7 @@ export default function FeedPage() {
             </div>
             <ChevronRight
               size={14}
-              className="text-white/20 group-hover:text-indigo-400 group-hover:translate-x-0.5 transition-all"
+              className="text-white/20 group-hover:text-amber-400 group-hover:translate-x-0.5 transition-all"
             />
           </Link>
         </div>

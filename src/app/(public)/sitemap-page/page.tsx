@@ -20,7 +20,7 @@ interface SiteSection {
 const SECTIONS: SiteSection[] = [
   {
     title: "Discovery",
-    color: "text-indigo-400",
+    color: "text-amber-400",
     border: "border-indigo-500/20",
     links: [
       { label: "Home",          href: "/" },
@@ -101,7 +101,7 @@ export default function SitemapPage() {
             className="flex items-center gap-3 mb-6"
           >
             <div className="p-2 rounded-xl bg-indigo-500/10 border border-indigo-500/20">
-              <Map size={18} className="text-indigo-400" />
+              <Map size={18} className="text-amber-400" />
             </div>
             <span className="text-[10px] font-black uppercase tracking-[0.3em] text-indigo-400/70">
               Navigation
@@ -114,7 +114,7 @@ export default function SitemapPage() {
             transition={{ delay: 0.05 }}
             className="text-5xl md:text-7xl font-black tracking-tighter uppercase italic leading-[0.92] text-white mb-5"
           >
-            Site<span className="text-indigo-400"> Map</span><span className="text-white">.</span>
+            Site<span className="text-amber-400"> Map</span><span className="text-white">.</span>
           </motion.h1>
 
           <motion.p
@@ -157,7 +157,7 @@ export default function SitemapPage() {
                       href={link.href}
                       className="group flex items-center gap-2 py-1.5 text-sm text-white/40 hover:text-white transition-colors duration-150"
                     >
-                      <span className="opacity-0 group-hover:opacity-100 transition-opacity text-[10px] text-indigo-400">
+                      <span className="opacity-0 group-hover:opacity-100 transition-opacity text-[10px] text-amber-400">
                         →
                       </span>
                       <span className="group-hover:translate-x-0.5 transition-transform duration-150">

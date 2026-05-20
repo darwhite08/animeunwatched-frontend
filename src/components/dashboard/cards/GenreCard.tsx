@@ -64,7 +64,7 @@ export const GenreCard = () => {
     <div className="p-10 rounded-[2.5rem] border border-white/5 bg-[#0a0a0a] h-full flex flex-col justify-between group">
       <div className="flex justify-between items-center mb-10">
         <h4 className="text-xs font-black uppercase tracking-[0.3em] text-white/30 italic">Anime DNA</h4>
-        <div className="p-2 rounded-lg bg-indigo-500/10 text-indigo-400 group-hover:rotate-12 transition-transform">
+        <div className="p-2 rounded-lg bg-indigo-500/10 text-amber-400 group-hover:rotate-12 transition-transform">
           <Fingerprint size={20} />
         </div>
       </div>

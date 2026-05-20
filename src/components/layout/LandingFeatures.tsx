@@ -14,7 +14,7 @@ const FEATURES = [
     glow: "group-hover:shadow-[0_0_60px_-15px_rgba(99,102,241,0.4)]",
     border: "group-hover:border-indigo-500/50",
     gradient: "from-indigo-500/20 via-indigo-500/5 to-transparent",
-    iconColor: "text-indigo-400",
+    iconColor: "text-amber-400",
     span: "md:col-span-8",
   },
   {

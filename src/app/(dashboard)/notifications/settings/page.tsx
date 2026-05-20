@@ -36,7 +36,7 @@ const NOTIF_TYPES: {
     label: "New Follower",
     desc: "When someone starts following your profile",
     icon: UserPlus,
-    accent: "text-indigo-400",
+    accent: "text-amber-400",
   },
   {
     key: "postReply",
@@ -156,7 +156,7 @@ export default function NotificationDashboardSettingsPage() {
           Notifications
         </Link>
         <ChevronRight size={11} className="text-white/15" />
-        <span className="text-indigo-400">Settings</span>
+        <span className="text-amber-400">Settings</span>
       </nav>
 
       {/* Header */}
@@ -169,7 +169,7 @@ export default function NotificationDashboardSettingsPage() {
         </p>
         <h1 className="text-4xl font-black tracking-tighter text-white uppercase italic leading-none">
           Notification<br />
-          <span className="text-indigo-400">Settings</span>
+          <span className="text-amber-400">Settings</span>
           <span style={{color:"#f59e0b"}}>.</span>
         </h1>
         <p className="text-xs text-white/30 mt-2">
@@ -198,7 +198,7 @@ export default function NotificationDashboardSettingsPage() {
                 : "bg-white/[0.02] border-white/8 opacity-50"
             }`}
           >
-            <Icon size={16} className={`mx-auto mb-2 ${active ? "text-indigo-400" : "text-white/25"}`} />
+            <Icon size={16} className={`mx-auto mb-2 ${active ? "text-amber-400" : "text-white/25"}`} />
             <p className="text-xs font-black text-white">{label}</p>
             <p className="text-[9px] text-white/30 mt-0.5">{note}</p>
           </div>
@@ -256,7 +256,7 @@ export default function NotificationDashboardSettingsPage() {
                   : "bg-white/[0.02] border-white/8 hover:border-white/15"
               }`}
             >
-              <p className={`text-sm font-black ${digest === id ? "text-indigo-300" : "text-white"}`}>
+              <p className={`text-sm font-black ${digest === id ? "text-amber-300" : "text-white"}`}>
                 {label}
               </p>
               <p className="text-[10px] text-white/30 mt-0.5 leading-snug">{desc}</p>

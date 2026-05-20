@@ -23,7 +23,7 @@ export const RankingTable = () => {
             <div className="flex items-center gap-8">
               {/* Rank & Trend */}
               <div className="w-16 flex flex-col items-center">
-                <span className={`text-3xl font-black italic ${player.isUser ? 'text-indigo-400' : 'text-white/20'}`}>
+                <span className={`text-3xl font-black italic ${player.isUser ? 'text-amber-400' : 'text-white/20'}`}>
                   #{player.rank}
                 </span>
                 {player.trend === "up" && <TrendingUp size={12} className="text-emerald-500" />}
@@ -41,7 +41,7 @@ export const RankingTable = () => {
                     <p className={`text-xl font-bold tracking-tight ${player.isUser ? 'text-white' : 'text-white/80'}`}>
                       {player.name}
                     </p>
-                    {player.isUser && <ShieldCheck size={16} className="text-indigo-400" />}
+                    {player.isUser && <ShieldCheck size={16} className="text-amber-400" />}
                   </div>
                   <div className="flex gap-2">
                     {player.tags.map(tag => (

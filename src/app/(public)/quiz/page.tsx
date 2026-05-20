@@ -70,7 +70,7 @@ export default function QuizPage() {
     <div className="min-h-screen bg-[#020202] text-white flex items-center justify-center px-6">
       <motion.div initial={{ opacity:0, scale:0.9 }} animate={{ opacity:1, scale:1 }} className="max-w-md w-full text-center space-y-8">
         <div className="w-24 h-24 mx-auto rounded-[2rem] bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center">
-          <Trophy size={40} className="text-indigo-400" />
+          <Trophy size={40} className="text-amber-400" />
         </div>
         <div>
           <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-amber-400/60 mb-2">Quiz Complete</p>
@@ -100,7 +100,7 @@ export default function QuizPage() {
         {/* Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Brain size={18} className="text-indigo-400" />
+            <Brain size={18} className="text-amber-400" />
             <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-amber-400/60">Neural Quiz</p>
           </div>
           <span className="text-sm font-black text-white/40">{idx+1} / {questions.length}</span>

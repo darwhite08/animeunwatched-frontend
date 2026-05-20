@@ -42,11 +42,11 @@ export default function BlogCommentsPage({ params }: { params: Promise<{ slug: s
     <div className="min-h-screen bg-[#020202] text-white pb-32">
       <div className="max-w-2xl mx-auto px-6 pt-32 space-y-8">
         <div>
-          <Link href={`/blog/${slug}`} className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-indigo-400/60 hover:text-indigo-400 transition-colors mb-4">
+          <Link href={`/blog/${slug}`} className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-indigo-400/60 hover:text-amber-400 transition-colors mb-4">
             <ChevronLeft size={11} /> Back to Article
           </Link>
           <div className="flex items-center gap-2 mb-2">
-            <MessageSquare size={16} className="text-indigo-400" />
+            <MessageSquare size={16} className="text-amber-400" />
             <h1 className="text-2xl font-black tracking-tighter text-white">Comments</h1>
             <span className="text-white/30 text-sm font-mono">({comments.length})</span>
           </div>

@@ -349,7 +349,7 @@ export default function BadgeDetailPage({ params }: { params: Promise<{ id: stri
           >
             <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/8 space-y-5">
               <div className="flex items-center gap-2">
-                <Target size={14} className="text-indigo-400" />
+                <Target size={14} className="text-amber-400" />
                 <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40">
                   How to Earn This
                 </p>
@@ -358,7 +358,7 @@ export default function BadgeDetailPage({ params }: { params: Promise<{ id: stri
               <ol className="space-y-4">
                 {badge.steps.map((step, i) => (
                   <li key={i} className="flex items-start gap-3 text-sm text-white/55 leading-relaxed">
-                    <span className="shrink-0 mt-0.5 h-5 w-5 rounded-full bg-indigo-500/15 border border-indigo-500/25 flex items-center justify-center text-[9px] font-black text-indigo-400">
+                    <span className="shrink-0 mt-0.5 h-5 w-5 rounded-full bg-indigo-500/15 border border-indigo-500/25 flex items-center justify-center text-[9px] font-black text-amber-400">
                       {i + 1}
                     </span>
                     {step}

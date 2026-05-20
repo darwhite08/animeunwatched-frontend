@@ -350,7 +350,7 @@ export default function BlogReaderPage({ params }: { params: Promise<{ slug: str
 
         {/* Category */}
         <div className="absolute top-6 right-6">
-          <span className="px-3 py-1 rounded-full bg-black/50 backdrop-blur-md border border-white/10 text-[10px] font-black uppercase tracking-widest text-indigo-400">
+          <span className="px-3 py-1 rounded-full bg-black/50 backdrop-blur-md border border-white/10 text-[10px] font-black uppercase tracking-widest text-amber-400">
             {(meta as Record<string, unknown>).category as string ?? "Article"}
           </span>
         </div>
@@ -448,8 +448,8 @@ export default function BlogReaderPage({ params }: { params: Promise<{ slug: str
             onClick={() => { setBookmarked(b => !b); push(bookmarked ? "Removed bookmark" : "Bookmarked!", "success") }}
             className={`ml-auto flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all border ${
               bookmarked
-                ? "bg-indigo-500/15 border-indigo-500/25 text-indigo-400"
-                : "bg-white/[0.04] border-white/10 text-white/40 hover:text-indigo-400"
+                ? "bg-indigo-500/15 border-indigo-500/25 text-amber-400"
+                : "bg-white/[0.04] border-white/10 text-white/40 hover:text-amber-400"
             }`}
           >
             <Bookmark size={14} fill={bookmarked ? "currentColor" : "none"} />
@@ -476,7 +476,7 @@ export default function BlogReaderPage({ params }: { params: Promise<{ slug: str
                   </span>
                 </div>
                 <div className="p-4">
-                  <p className="text-sm font-black uppercase italic tracking-tight text-white group-hover:text-indigo-300 transition-colors line-clamp-2 leading-snug">
+                  <p className="text-sm font-black uppercase italic tracking-tight text-white group-hover:text-amber-300 transition-colors line-clamp-2 leading-snug">
                     {rp.title}
                   </p>
                   <p className="mt-1 text-[10px] text-white/30 flex items-center gap-1">

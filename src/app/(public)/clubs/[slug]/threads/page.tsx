@@ -253,7 +253,7 @@ function ThreadRow({ thread, index }: { thread: Thread; index: number }) {
         <div className="flex items-center shrink-0">
           <ChevronRight
             size={14}
-            className="text-white/20 group-hover:text-indigo-400 group-hover:translate-x-0.5 transition-all"
+            className="text-white/20 group-hover:text-amber-400 group-hover:translate-x-0.5 transition-all"
           />
         </div>
       </Link>
@@ -379,7 +379,7 @@ export default function ClubThreadsPage({
             {clubName}
           </Link>
           <ChevronRight size={10} className="text-white/15" />
-          <span className="text-indigo-400">Threads</span>
+          <span className="text-amber-400">Threads</span>
         </motion.nav>
 
         {/* Header */}

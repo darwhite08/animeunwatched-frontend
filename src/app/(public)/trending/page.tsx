@@ -99,7 +99,7 @@ export default function TrendingPage() {
         {/* ── Section 1: Trending Discussions ── */}
         <section>
           <div className="flex items-center gap-2 mb-6">
-            <MessageSquare size={14} className="text-indigo-400" />
+            <MessageSquare size={14} className="text-amber-400" />
             <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40">Trending Discussions</h2>
           </div>
 
@@ -172,7 +172,7 @@ export default function TrendingPage() {
                   <div className="flex-1 min-w-0 flex flex-col justify-center gap-2">
                     <div className="flex items-start justify-between gap-3">
                       <div className="min-w-0">
-                        <p className="text-sm font-black text-white group-hover:text-indigo-300 transition-colors truncate">{anime.title}</p>
+                        <p className="text-sm font-black text-white group-hover:text-amber-300 transition-colors truncate">{anime.title}</p>
                         <p className="text-[10px] text-white/30 mt-0.5">{anime.studios[0] ?? "Unknown"} · {anime.year}</p>
                       </div>
                       <span className="shrink-0 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-[10px] font-black text-emerald-400">

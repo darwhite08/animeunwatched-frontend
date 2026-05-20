@@ -192,7 +192,7 @@ function SearchContent() {
                     {u.name[0]}
                   </div>
                   <div className="flex-1">
-                    <p className="font-black text-white group-hover:text-indigo-300 transition-colors">{u.name}</p>
+                    <p className="font-black text-white group-hover:text-amber-300 transition-colors">{u.name}</p>
                     <p className="text-xs text-white/35 mt-0.5">{u.bio}</p>
                   </div>
                   <div className="text-right">

@@ -37,7 +37,7 @@ export const ActivityCard = () => {
         : Bookmark
       const statusColor = entry.status === "COMPLETED" ? "text-amber-400"
         : entry.status === "WATCHING" ? "text-emerald-400"
-        : "text-indigo-400"
+        : "text-amber-400"
       const statusBg = entry.status === "COMPLETED" ? "bg-amber-500/10"
         : entry.status === "WATCHING" ? "bg-emerald-500/10"
         : "bg-indigo-500/10"
@@ -66,7 +66,7 @@ export const ActivityCard = () => {
         <h4 className="text-xs font-black uppercase tracking-[0.28em] text-white/30 flex items-center gap-2">
           <Clock size={12} className="text-white/20" /> Recent Journey
         </h4>
-        <Link href="/watchlist" className="text-[9px] font-black uppercase tracking-widest text-indigo-400/60 hover:text-indigo-400 transition-colors flex items-center gap-1">
+        <Link href="/watchlist" className="text-[9px] font-black uppercase tracking-widest text-indigo-400/60 hover:text-amber-400 transition-colors flex items-center gap-1">
           All <ArrowRight size={10} />
         </Link>
       </div>

@@ -62,7 +62,7 @@ export default function AnimeCharactersPage({ params }: { params: Promise<{ id: 
         </div>
 
         <div className="flex items-center gap-3 mb-8">
-          <Users size={18} className="text-indigo-400" />
+          <Users size={18} className="text-amber-400" />
           <h1 className="text-3xl font-black tracking-tighter uppercase italic text-white">
             Characters<span style={{color:"#f59e0b"}}>.</span>
           </h1>
@@ -101,7 +101,7 @@ export default function AnimeCharactersPage({ params }: { params: Promise<{ id: 
 
         {/* Back link */}
         <div className="mt-10 flex justify-center">
-          <Link href={`/anime/${id}`} className="flex items-center gap-2 text-sm font-black uppercase tracking-widest text-indigo-400 hover:text-indigo-300 transition-colors">
+          <Link href={`/anime/${id}`} className="flex items-center gap-2 text-sm font-black uppercase tracking-widest text-amber-400 hover:text-amber-300 transition-colors">
             <ChevronLeft size={14} /> Back to {anime?.title ?? id}
           </Link>
         </div>

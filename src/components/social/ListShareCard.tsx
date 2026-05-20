@@ -54,7 +54,7 @@ export default function ListShareCard() {
 
         {/* Header bar */}
         <div className="relative z-10 flex items-center justify-between px-5 py-4 border-b border-zinc-800/80">
-          <span className="font-black uppercase tracking-widest text-indigo-400 text-sm">
+          <span className="font-black uppercase tracking-widest text-amber-400 text-sm">
             KAIVERON.
           </span>
           <span className="text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full bg-violet-500/20 text-violet-300 border border-violet-500/30">
@@ -121,7 +121,7 @@ export default function ListShareCard() {
         {/* Twitter / X */}
         <button
           onClick={handleTwitter}
-          className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-2xl border border-indigo-500/40 bg-indigo-500/10 text-indigo-300 hover:border-indigo-400 hover:bg-indigo-500/20 transition-all duration-200 group"
+          className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-2xl border border-indigo-500/40 bg-indigo-500/10 text-amber-300 hover:border-indigo-400 hover:bg-indigo-500/20 transition-all duration-200 group"
         >
           <Share2 className="w-4 h-4 transition-transform duration-200 group-hover:scale-110" />
           <span className="text-[10px] font-black uppercase tracking-widest">Share on Twitter</span>

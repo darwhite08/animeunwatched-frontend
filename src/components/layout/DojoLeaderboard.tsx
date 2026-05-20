@@ -67,7 +67,7 @@ export default function DojoLeaderboard() {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-indigo-500"></span>
             </span>
-            <span className="text-indigo-300 text-[10px] font-black uppercase tracking-[0.3em]">
+            <span className="text-amber-300 text-[10px] font-black uppercase tracking-[0.3em]">
               Global Server Rankings • Live
             </span>
           </div>
@@ -136,7 +136,7 @@ export default function DojoLeaderboard() {
                       {user.rank === 1 && <ShieldCheck size={14} className="text-amber-400" />}
                     </h4>
                     <p className="text-[10px] text-white/50 font-bold uppercase tracking-widest mt-0.5">
-                      LVL {user.level} <span className="text-white/20 mx-1">•</span> <span className="text-indigo-400">{user.title}</span>
+                      LVL {user.level} <span className="text-white/20 mx-1">•</span> <span className="text-amber-400">{user.title}</span>
                     </p>
                   </div>
                 </div>

@@ -36,8 +36,8 @@ export default function NeuralDiscovery() {
           >
             <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/10 to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
             <div className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse shadow-[0_0_12px_rgba(99,102,241,0.9)]" />
-            <span className="text-indigo-300 font-bold uppercase tracking-[0.3em] text-[10px] flex items-center gap-2">
-              <Cpu size={14} className="text-indigo-400" /> Neural Engine V4.0
+            <span className="text-amber-300 font-bold uppercase tracking-[0.3em] text-[10px] flex items-center gap-2">
+              <Cpu size={14} className="text-amber-400" /> Neural Engine V4.0
             </span>
           </motion.div>
 
@@ -86,8 +86,8 @@ export default function NeuralDiscovery() {
           
           {/* Top Meta Bar */}
           <div className="absolute -top-8 right-0 text-[10px] font-mono text-indigo-300/60 tracking-[0.2em] uppercase flex items-center gap-3 hidden md:flex">
-            <ScanEye size={14} className="text-indigo-400" />
-            <span>Pattern Recognition: <span className="text-indigo-400 font-bold">Active</span></span>
+            <ScanEye size={14} className="text-amber-400" />
+            <span>Pattern Recognition: <span className="text-amber-400 font-bold">Active</span></span>
           </div>
 
           {/* The Input Component wrapped in an elegant glass pane */}
@@ -98,7 +98,7 @@ export default function NeuralDiscovery() {
 
           {/* Bottom Meta Bar */}
           <div className="absolute -bottom-8 left-0 text-[10px] font-mono text-indigo-300/60 tracking-[0.2em] uppercase flex items-center gap-3 hidden md:flex">
-            <Activity size={14} className="text-indigo-400 animate-pulse" />
+            <Activity size={14} className="text-amber-400 animate-pulse" />
             <span>Syncing with Global Archives...</span>
           </div>
         </motion.div>

@@ -74,7 +74,7 @@ export default function NewBlogPage() {
           <AnimatePresence>
             {status !== "idle" && (
               <motion.div initial={{ opacity:0,x:10 }} animate={{ opacity:1,x:0 }} exit={{ opacity:0 }}
-                className={`text-sm font-bold px-4 py-2 rounded-xl border ${status==="published"?"bg-emerald-600/20 border-emerald-500/30 text-emerald-400":"bg-indigo-600/20 border-indigo-500/30 text-indigo-400"}`}
+                className={`text-sm font-bold px-4 py-2 rounded-xl border ${status==="published"?"bg-emerald-600/20 border-emerald-500/30 text-emerald-400":"bg-indigo-600/20 border-indigo-500/30 text-amber-400"}`}
               >
                 {status==="published" ? "✓ Published!" : "✓ Saved as draft"}
               </motion.div>

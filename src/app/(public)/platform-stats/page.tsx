@@ -41,7 +41,7 @@ const STAT_CONFIG = [
 ]
 
 const COLOR_MAP: Record<string, { bg: string; border: string; text: string; glow: string }> = {
-  indigo:  { bg: "bg-indigo-500/10",  border: "border-indigo-500/20",  text: "text-indigo-400",  glow: "bg-indigo-500" },
+  indigo:  { bg: "bg-indigo-500/10",  border: "border-indigo-500/20",  text: "text-amber-400",  glow: "bg-indigo-500" },
   violet:  { bg: "bg-violet-500/10",  border: "border-violet-500/20",  text: "text-violet-400",  glow: "bg-violet-500" },
   fuchsia: { bg: "bg-fuchsia-500/10", border: "border-fuchsia-500/20", text: "text-fuchsia-400", glow: "bg-fuchsia-500" },
   cyan:    { bg: "bg-cyan-500/10",    border: "border-cyan-500/20",    text: "text-cyan-400",    glow: "bg-cyan-500" },
@@ -159,7 +159,7 @@ export default function StatsPage() {
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-3 px-4 py-2 rounded-full border border-indigo-500/25 bg-indigo-500/8 text-indigo-400 mb-8"
+            className="inline-flex items-center gap-3 px-4 py-2 rounded-full border border-indigo-500/25 bg-indigo-500/8 text-amber-400 mb-8"
           >
             <LivePulse />
             <span className="text-[10px] font-black uppercase tracking-[0.3em]">Platform Stats</span>
@@ -171,7 +171,7 @@ export default function StatsPage() {
             transition={{ delay: 0.05 }}
             className="text-5xl md:text-7xl font-black tracking-tighter uppercase italic leading-[0.92] text-white"
           >
-            The Numbers<span className="text-indigo-400">.</span>
+            The Numbers<span className="text-amber-400">.</span>
           </motion.h1>
 
           <motion.p
@@ -306,7 +306,7 @@ export default function StatsPage() {
                   transition={{ delay: i * 0.08 }}
                   className="text-center space-y-3"
                 >
-                  <div className="mx-auto h-12 w-12 rounded-2xl bg-indigo-500/10 border border-indigo-500/15 flex items-center justify-center text-indigo-400">
+                  <div className="mx-auto h-12 w-12 rounded-2xl bg-indigo-500/10 border border-indigo-500/15 flex items-center justify-center text-amber-400">
                     <Icon size={20} />
                   </div>
                   <p className="text-4xl font-black tracking-tighter text-white">{s.value}</p>
@@ -329,7 +329,7 @@ export default function StatsPage() {
         </div>
         <button
           onClick={handleManualRefresh}
-          className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-indigo-400 hover:text-indigo-300 transition-colors"
+          className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-amber-400 hover:text-amber-300 transition-colors"
         >
           <RefreshCw size={11} className={statsQuery.isFetching ? "animate-spin" : ""} />
           Refresh

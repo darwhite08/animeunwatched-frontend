@@ -57,7 +57,7 @@ export const TopThree = () => {
                 <p className={`text-2xl font-black tracking-tighter ${user.pos === 1 ? 'text-white' : 'text-white/60'}`}>
                   {user.name}
                 </p>
-                <p className="text-xs font-black text-indigo-400 uppercase tracking-[0.2em]">{user.xp} XP</p>
+                <p className="text-xs font-black text-amber-400 uppercase tracking-[0.2em]">{user.xp} XP</p>
               </div>
 
               <div className={`px-6 py-2 rounded-2xl bg-black border border-white/10 font-black italic text-xl ${

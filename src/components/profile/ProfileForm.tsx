@@ -44,7 +44,7 @@ export default function ProfileForm() {
   }
 
   const STATS = [
-    { label: "Archives",     value: "124",          icon: Star,    color: "text-indigo-400" },
+    { label: "Archives",     value: "124",          icon: Star,    color: "text-amber-400" },
     { label: "On Watchlist", value: String(watchlistCount || 38), icon: Trophy, color: "text-amber-400"  },
     { label: "Streak",       value: "22 days",      icon: Flame,   color: "text-orange-500" },
     { label: "Global Rank",  value: "#812",         icon: Globe,   color: "text-blue-400"  },
@@ -69,7 +69,7 @@ export default function ProfileForm() {
         <div>
           <p className="text-xl font-black uppercase tracking-tighter text-white">{form.displayName}</p>
           <p className="text-sm text-white/40 font-mono mt-0.5">@{form.username}</p>
-          <button className="mt-2 flex items-center gap-1.5 text-[10px] font-black uppercase tracking-wider text-indigo-400 hover:text-indigo-300 transition-colors">
+          <button className="mt-2 flex items-center gap-1.5 text-[10px] font-black uppercase tracking-wider text-amber-400 hover:text-amber-300 transition-colors">
             <Upload size={11} /> Change avatar
           </button>
         </div>

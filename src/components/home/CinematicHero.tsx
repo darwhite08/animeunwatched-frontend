@@ -163,7 +163,7 @@ export default function CinematicHero() {
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ duration: 0.82, delay: 0.28 + i * 0.12, ease: [0.22, 1, 0.36, 1] }}
                   className={`font-bold tracking-tight leading-[1.06] text-[clamp(2.8rem,5.2vw,5rem)] ${
-                    i === 2 ? "text-indigo-400" : "text-white"
+                    i === 2 ? "text-amber-400" : "text-white"
                   }`}
                 >
                   {line}
@@ -286,7 +286,7 @@ export default function CinematicHero() {
                     style={{ backdropFilter: "blur(12px)" }}
                   >
                     <div className="flex items-center gap-1.5 mb-1.5">
-                      <Sparkles size={10} className="text-indigo-400 shrink-0" />
+                      <Sparkles size={10} className="text-amber-400 shrink-0" />
                       <span className="text-[10px] text-indigo-300/60 font-medium">AI Match</span>
                     </div>
                     <p className="text-[12px] font-semibold text-white">98% for you</p>

@@ -147,7 +147,7 @@ const TRENDING_TAGS = [
 ]
 
 const CATEGORY_CONFIG: Record<Poll["category"], { label: string; color: string }> = {
-  ranking:    { label: "Ranking",    color: "bg-indigo-500/10 text-indigo-400 border-indigo-500/20"    },
+  ranking:    { label: "Ranking",    color: "bg-indigo-500/10 text-amber-400 border-indigo-500/20"    },
   vs:         { label: "VS Battle",  color: "bg-red-500/10 text-red-400 border-red-500/20"             },
   prediction: { label: "Prediction", color: "bg-amber-500/10 text-amber-400 border-amber-500/20"       },
   opinion:    { label: "Opinion",    color: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20" },
@@ -278,7 +278,7 @@ function PollCard({ poll }: { poll: Poll }) {
                 <div className="relative z-10 flex items-center justify-between gap-3">
                   <div className="flex items-center gap-3 min-w-0">
                     {showBars && isSelected && (
-                      <CheckCircle2 size={14} className="text-indigo-400 shrink-0" />
+                      <CheckCircle2 size={14} className="text-amber-400 shrink-0" />
                     )}
                     {showBars && isWinner && poll.status === "ended" && (
                       <Crown size={13} className="text-amber-400 shrink-0" />
@@ -291,7 +291,7 @@ function PollCard({ poll }: { poll: Poll }) {
 
                   {showBars ? (
                     <span className={`text-sm font-black tracking-tighter shrink-0 ${
-                      isSelected ? "text-indigo-300" : isWinner && poll.status === "ended" ? "text-amber-300" : "text-white/40"
+                      isSelected ? "text-amber-300" : isWinner && poll.status === "ended" ? "text-amber-300" : "text-white/40"
                     }`}>
                       {pct}%
                     </span>
@@ -314,7 +314,7 @@ function PollCard({ poll }: { poll: Poll }) {
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
-              className="flex items-center justify-center gap-2 pt-2 text-[10px] font-black uppercase tracking-widest text-indigo-400"
+              className="flex items-center justify-center gap-2 pt-2 text-[10px] font-black uppercase tracking-widest text-amber-400"
             >
               <Zap size={11} fill="currentColor" />
               Vote Transmitted — Data Synced
@@ -383,11 +383,11 @@ export default function PollsPage() {
               </span>
             </div>
             <h1 className="text-4xl md:text-5xl font-black tracking-tighter uppercase italic text-white">
-              Community <span className="text-indigo-500">Polls</span>
+              Community <span className="text-amber-500">Polls</span>
             </h1>
             {/* Live vote ticker */}
             <div className="flex items-center gap-2 mt-2 text-[10px] text-white/30 font-mono">
-              <TrendingUp size={10} className="text-indigo-400" />
+              <TrendingUp size={10} className="text-amber-400" />
               <motion.span
                 key={liveVotes}
                 initial={{ opacity: 0, y: -6 }}
@@ -486,7 +486,7 @@ export default function PollsPage() {
                     <p className="text-[9px] text-white/25 mt-0.5">{voter.votes} votes cast</p>
                   </div>
                   <div className="text-right shrink-0">
-                    <p className="text-xs font-black text-indigo-400">#{voter.rank}</p>
+                    <p className="text-xs font-black text-amber-400">#{voter.rank}</p>
                   </div>
                 </div>
               ))}
@@ -502,7 +502,7 @@ export default function PollsPage() {
             <div className="absolute top-0 right-0 w-32 h-32 bg-indigo-500/10 blur-[60px] pointer-events-none" />
             <div className="relative z-10 space-y-3">
               <div className="h-11 w-11 rounded-2xl bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center">
-                <Vote size={18} className="text-indigo-400" />
+                <Vote size={18} className="text-amber-400" />
               </div>
               <div>
                 <p className="text-sm font-black text-white">Create a Poll</p>
@@ -523,7 +523,7 @@ export default function PollsPage() {
           {/* Trending Tags */}
           <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/8 space-y-4">
             <div className="flex items-center gap-2">
-              <Hash size={13} className="text-indigo-400" />
+              <Hash size={13} className="text-amber-400" />
               <h3 className="text-[9px] font-black uppercase tracking-[0.3em] text-white/35">
                 Trending Topics
               </h3>
@@ -535,7 +535,7 @@ export default function PollsPage() {
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: i * 0.04 }}
-                  className="px-3 py-1.5 rounded-full bg-white/5 border border-white/8 text-[9px] font-bold text-white/45 hover:text-indigo-400 hover:border-indigo-500/25 cursor-pointer transition-all"
+                  className="px-3 py-1.5 rounded-full bg-white/5 border border-white/8 text-[9px] font-bold text-white/45 hover:text-amber-400 hover:border-indigo-500/25 cursor-pointer transition-all"
                 >
                   {tag}
                 </motion.span>

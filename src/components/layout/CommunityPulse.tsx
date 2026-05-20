@@ -6,7 +6,7 @@ import { Activity, MessageSquare, Globe, Radio, Terminal, Flame, BookOpen, Arrow
 // Upgraded mock data to match the Cyberpunk/Neural lore
 const LIVE_STREAM = [
   { id: "LOG_892", user: "User_77", action: "Achieved 100-Day Streak", target: "System_Core", time: "0.02s ago", icon: Flame, color: "text-orange-500", bg: "bg-orange-500/10" },
-  { id: "LOG_891", user: "Otaku_Arch", action: "Archived Masterpiece", target: "'Monster'", time: "1.4s ago", icon: BookOpen, color: "text-indigo-400", bg: "bg-indigo-500/10" },
+  { id: "LOG_891", user: "Otaku_Arch", action: "Archived Masterpiece", target: "'Monster'", time: "1.4s ago", icon: BookOpen, color: "text-amber-400", bg: "bg-indigo-500/10" },
   { id: "LOG_890", user: "Shinobi_X", action: "Cast Global Vote", target: "'Studio MAPPA'", time: "3.2s ago", icon: ShieldAlert, color: "text-emerald-400", bg: "bg-emerald-500/10" },
   { id: "LOG_889", user: "Neural_Bot", action: "Oracle Engine Update", target: "Algorithm v4.2", time: "12.0s ago", icon: Terminal, color: "text-white/60", bg: "bg-white/5" },
 ];
@@ -66,7 +66,7 @@ export default function CommunityPulse() {
             
             <div className="flex items-center justify-between mb-12 relative z-10">
               <h3 className="text-sm font-black text-white/60 uppercase tracking-[0.3em]">Transmission_Log</h3>
-              <Activity size={18} className="text-indigo-500" />
+              <Activity size={18} className="text-amber-500" />
             </div>
 
             {/* Glowing Hardware Timeline */}
@@ -95,7 +95,7 @@ export default function CommunityPulse() {
                         <p className="text-sm font-medium text-white/40 leading-tight">
                           <span className="text-white font-bold">{event.user}</span> {event.action}
                         </p>
-                        <p className="text-sm font-black text-indigo-400 italic uppercase tracking-tighter mt-0.5">
+                        <p className="text-sm font-black text-amber-400 italic uppercase tracking-tighter mt-0.5">
                           {event.target}
                         </p>
                       </div>
@@ -138,7 +138,7 @@ export default function CommunityPulse() {
                 </p>
                 <div className="flex items-center justify-between border-t border-white/5 pt-4 mt-6">
                   <p className="text-[10px] font-black text-white/20 uppercase tracking-[0.3em]">Total Archives Logged</p>
-                  <p className="text-[10px] font-mono text-indigo-400 uppercase tracking-widest">+2.4% / HR</p>
+                  <p className="text-[10px] font-mono text-amber-400 uppercase tracking-widest">+2.4% / HR</p>
                 </div>
               </div>
             </motion.div>
@@ -170,7 +170,7 @@ export default function CommunityPulse() {
 
                  <button className="w-full flex items-center justify-between px-6 py-4 rounded-2xl bg-black/40 hover:bg-black/60 text-white font-black text-[10px] uppercase tracking-[0.3em] transition-all border border-white/10 group-hover:border-white/20">
                    <span>Enter Community</span>
-                   <ArrowRight size={16} className="text-indigo-400 group-hover:translate-x-1 transition-transform" />
+                   <ArrowRight size={16} className="text-amber-400 group-hover:translate-x-1 transition-transform" />
                  </button>
               </div>
             </motion.div>

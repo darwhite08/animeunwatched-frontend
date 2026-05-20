@@ -151,7 +151,7 @@ function ListCard({ list, onClick, allAnime }: ListCardProps) {
 
         {/* Info */}
         <div className="flex-1 min-w-0">
-          <h3 className="text-sm font-black uppercase italic tracking-tighter text-white leading-tight mb-1 line-clamp-2 group-hover:text-indigo-300 transition-colors">
+          <h3 className="text-sm font-black uppercase italic tracking-tighter text-white leading-tight mb-1 line-clamp-2 group-hover:text-amber-300 transition-colors">
             {list.title}
           </h3>
           <div className="flex items-center gap-2 text-[10px] text-white/35">
@@ -185,7 +185,7 @@ function ListCard({ list, onClick, allAnime }: ListCardProps) {
         <button className="flex items-center gap-1.5 text-[10px] font-black text-white/25 hover:text-rose-400 transition-colors">
           <Heart size={11} /> {list.likes.toLocaleString()}
         </button>
-        <span className="flex items-center gap-1 text-[10px] font-black uppercase tracking-widest text-indigo-400/50 group-hover:text-indigo-400 transition-colors">
+        <span className="flex items-center gap-1 text-[10px] font-black uppercase tracking-widest text-indigo-400/50 group-hover:text-amber-400 transition-colors">
           View List <ChevronRight size={11} />
         </span>
       </div>
@@ -301,7 +301,7 @@ function ListDetailModal({ list, onClose, onAnimeClick, allAnime }: ListModalPro
                     <span>{anime.year}</span>
                   </div>
                 </div>
-                <Check size={13} className="text-indigo-400/40 group-hover:text-indigo-400 shrink-0 transition-colors" />
+                <Check size={13} className="text-indigo-400/40 group-hover:text-amber-400 shrink-0 transition-colors" />
               </motion.div>
             ))}
 
@@ -333,7 +333,7 @@ export default function PublicListsPage() {
       {/* Header */}
       <div className="max-w-6xl mx-auto px-6 pt-32 pb-10">
         <div className="flex items-center gap-3 mb-4">
-          <List size={16} className="text-indigo-400" />
+          <List size={16} className="text-amber-400" />
           <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-amber-400/60">
             Curated by the Community
           </p>

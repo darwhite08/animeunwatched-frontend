@@ -9,7 +9,7 @@ export const StreakHeader = () => {
       <div className="space-y-2">
         <Link 
           href="/dashboard" 
-          className="flex items-center gap-2 text-white/40 hover:text-indigo-400 transition-colors text-xs font-black uppercase tracking-[0.2em] mb-4"
+          className="flex items-center gap-2 text-white/40 hover:text-amber-400 transition-colors text-xs font-black uppercase tracking-[0.2em] mb-4"
         >
           <ChevronLeft size={14} /> Back to Hub
         </Link>
@@ -22,7 +22,7 @@ export const StreakHeader = () => {
       </div>
 
       <div className="flex items-center gap-4 bg-white/[0.03] border border-white/5 p-4 rounded-3xl backdrop-blur-md">
-        <div className="h-12 w-12 rounded-2xl bg-indigo-600/20 flex items-center justify-center text-indigo-400">
+        <div className="h-12 w-12 rounded-2xl bg-indigo-600/20 flex items-center justify-center text-amber-400">
           <Award size={24} />
         </div>
         <div>

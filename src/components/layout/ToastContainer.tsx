@@ -32,7 +32,7 @@ const CONFIG: Record<ToastType, {
   },
   info: {
     icon: Info,
-    iconClass: "text-indigo-400",
+    iconClass: "text-amber-400",
     containerStyle: {
       background: "linear-gradient(135deg, rgba(99,102,241,0.13), rgba(79,70,229,0.06))",
       border: "1px solid rgba(99,102,241,0.32)",

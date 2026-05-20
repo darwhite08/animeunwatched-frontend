@@ -78,7 +78,7 @@ export default function DailyQuestCard() {
       {/* Header */}
       <div className="flex items-center justify-between relative z-10">
         <div className="flex items-center gap-2">
-          <Target size={15} className="text-indigo-400" />
+          <Target size={15} className="text-amber-400" />
           <h4 className="text-xs font-black uppercase tracking-[0.28em] text-white/40">Daily Quests</h4>
         </div>
         <div className="flex items-center gap-1.5 text-[9px] font-mono text-white/25">
@@ -91,7 +91,7 @@ export default function DailyQuestCard() {
       <div className="space-y-2 relative z-10">
         <div className="flex justify-between text-[9px] font-black uppercase tracking-wider">
           <span className="text-white/30">{done}/{QUESTS.length} Complete</span>
-          <span className="text-indigo-400 flex items-center gap-1">
+          <span className="text-amber-400 flex items-center gap-1">
             <Zap size={9} fill="currentColor" /> {earnedXp}/{totalXp} XP
           </span>
         </div>
@@ -115,7 +115,7 @@ export default function DailyQuestCard() {
               <Link href={q.href} className="flex items-center gap-3 group">
                 {complete
                   ? <CheckCircle2 size={16} className="text-emerald-400 shrink-0" fill="currentColor" />
-                  : <Circle size={16} className="text-white/20 shrink-0 group-hover:text-indigo-400 transition-colors" />
+                  : <Circle size={16} className="text-white/20 shrink-0 group-hover:text-amber-400 transition-colors" />
                 }
                 <span className={`text-sm font-bold flex-1 transition-colors ${complete ? "text-white/40 line-through" : "text-white/70 group-hover:text-white"}`}>
                   {q.label}

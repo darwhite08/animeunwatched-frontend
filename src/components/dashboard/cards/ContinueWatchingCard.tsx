@@ -37,10 +37,10 @@ export default function ContinueWatchingCard() {
 
       <div className="flex items-center justify-between relative z-10">
         <div className="flex items-center gap-2">
-          <MonitorPlay size={14} className="text-indigo-400" />
+          <MonitorPlay size={14} className="text-amber-400" />
           <h4 className="text-xs font-black uppercase tracking-[0.28em] text-white/30">Continue Watching</h4>
         </div>
-        <Link href="/watchlist" className="text-[9px] font-black uppercase tracking-widest text-indigo-400/60 hover:text-indigo-400 transition-colors flex items-center gap-1">
+        <Link href="/watchlist" className="text-[9px] font-black uppercase tracking-widest text-indigo-400/60 hover:text-amber-400 transition-colors flex items-center gap-1">
           All <ChevronRight size={10} />
         </Link>
       </div>
@@ -50,7 +50,7 @@ export default function ContinueWatchingCard() {
           <div className="py-6 text-center">
             <MonitorPlay size={20} className="mx-auto mb-2 text-white/10" />
             <p className="text-[10px] text-white/20 font-black uppercase tracking-widest">Nothing in progress</p>
-            <Link href="/bestanimelist" className="mt-2 block text-[9px] text-indigo-400 hover:text-indigo-300 font-black uppercase tracking-widest">
+            <Link href="/bestanimelist" className="mt-2 block text-[9px] text-amber-400 hover:text-amber-300 font-black uppercase tracking-widest">
               Browse Anime →
             </Link>
           </div>
@@ -73,7 +73,7 @@ export default function ContinueWatchingCard() {
               </div>
             </div>
             <button onClick={() => push(`Opening ${item.next}…`, "info")}
-              className="shrink-0 w-9 h-9 rounded-xl bg-indigo-600/10 border border-indigo-500/20 flex items-center justify-center text-indigo-400 hover:bg-indigo-600 hover:text-white hover:border-transparent transition-all opacity-0 group-hover:opacity-100">
+              className="shrink-0 w-9 h-9 rounded-xl bg-indigo-600/10 border border-indigo-500/20 flex items-center justify-center text-amber-400 hover:bg-indigo-600 hover:text-white hover:border-transparent transition-all opacity-0 group-hover:opacity-100">
               <Play size={13} fill="currentColor" />
             </button>
           </motion.div>

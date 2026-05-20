@@ -163,7 +163,7 @@ export default function PopularAnimePage() {
         <HorizontalSection
           title="Most Added to Lists"
           icon={<ListPlus size={18} />}
-          accent="text-indigo-400"
+          accent="text-amber-400"
           items={mostAdded}
           onSelect={setSelected}
           viewAllHref="/bestanimelist"

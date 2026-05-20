@@ -146,7 +146,7 @@ function AnimeDetail({ anime, rawAnime }: { anime: Anime; rawAnime?: AnimeDTO })
 
         {/* Rank chip */}
         <div className="absolute top-6 left-6 md:left-[max(1.5rem,calc((100vw-1280px)/2+1.5rem))]">
-          <span className="px-3 py-1 bg-black/60 backdrop-blur-md border border-indigo-500/30 rounded-full text-[10px] font-black text-indigo-400 uppercase tracking-widest">
+          <span className="px-3 py-1 bg-black/60 backdrop-blur-md border border-indigo-500/30 rounded-full text-[10px] font-black text-amber-400 uppercase tracking-widest">
             #{anime.rank} Neural Ranked
           </span>
         </div>
@@ -349,7 +349,7 @@ function AnimeDetail({ anime, rawAnime }: { anime: Anime; rawAnime?: AnimeDTO })
                 <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/30">Community Reviews</h2>
                 <button
                   onClick={() => setReviewOpen(true)}
-                  className="text-[10px] font-black uppercase tracking-widest text-indigo-400 hover:text-indigo-300 transition-colors flex items-center gap-1.5"
+                  className="text-[10px] font-black uppercase tracking-widest text-amber-400 hover:text-amber-300 transition-colors flex items-center gap-1.5"
                 >
                   <PenSquare size={11} /> Write a Review
                 </button>
@@ -482,12 +482,12 @@ function AnimeDetail({ anime, rawAnime }: { anime: Anime; rawAnime?: AnimeDTO })
               href="/ai-discover"
               className="flex items-center gap-3 p-5 rounded-2xl bg-indigo-600/10 border border-indigo-500/20 hover:bg-indigo-600/15 transition-colors group"
             >
-              <Sparkles size={16} className="text-indigo-400 shrink-0" />
+              <Sparkles size={16} className="text-amber-400 shrink-0" />
               <div>
                 <p className="text-sm font-bold text-white">Find Similar Anime</p>
                 <p className="text-[10px] text-white/35 mt-0.5">Use Neural Oracle to discover more</p>
               </div>
-              <ChevronLeft size={14} className="text-indigo-400/50 group-hover:text-indigo-400 rotate-180 ml-auto transition-all group-hover:translate-x-0.5" />
+              <ChevronLeft size={14} className="text-indigo-400/50 group-hover:text-amber-400 rotate-180 ml-auto transition-all group-hover:translate-x-0.5" />
             </Link>
           </div>
         </div>

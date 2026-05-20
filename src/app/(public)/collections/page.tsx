@@ -86,7 +86,7 @@ const COLLECTIONS: CollectionDef[] = [
     name: "Emotional Devastators",
     description: "Warning: keep tissues nearby. These will break you, then rebuild you.",
     emoji: "💔",
-    accent: "text-indigo-400",
+    accent: "text-amber-400",
     borderStyle: { borderColor: "rgba(99,102,241,0.2)" },
     params: { q: "Drama", limit: 24 },
   },

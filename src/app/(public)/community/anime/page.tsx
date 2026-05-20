@@ -160,7 +160,7 @@ function FeaturedAnimeCard({ anime, index }: { anime: Anime; index: number }) {
               <span className="flex items-center gap-1 text-[10px] font-black text-amber-400">
                 <Star size={10} fill="#f59e0b" /> {anime.rating.toFixed(1)}
               </span>
-              <span className="flex items-center gap-1 text-[10px] font-bold text-indigo-400">
+              <span className="flex items-center gap-1 text-[10px] font-bold text-amber-400">
                 <MessageSquare size={10} />
                 {threadCount} thread{threadCount !== 1 ? "s" : ""}
               </span>
@@ -218,7 +218,7 @@ function ThreadRow({
       {/* Content */}
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 mb-1">
-          <span className="text-[9px] font-black uppercase tracking-[0.3em] text-indigo-400">
+          <span className="text-[9px] font-black uppercase tracking-[0.3em] text-amber-400">
             {anime.title}
           </span>
           {thread.trending && (
@@ -284,7 +284,7 @@ export default function AnimeDiscussionsPage() {
             animate={{ opacity: 1, y: 0 }}
             className="space-y-5 max-w-2xl"
           >
-            <div className="flex items-center gap-2 text-indigo-400 text-[10px] font-black uppercase tracking-[0.4em]">
+            <div className="flex items-center gap-2 text-amber-400 text-[10px] font-black uppercase tracking-[0.4em]">
               <Users size={12} />
               Community · Anime Threads
             </div>
@@ -338,7 +338,7 @@ export default function AnimeDiscussionsPage() {
         <section>
           <div className="flex items-center justify-between mb-5">
             <div className="flex items-center gap-3">
-              <MessageSquare size={14} className="text-indigo-400" />
+              <MessageSquare size={14} className="text-amber-400" />
               <h2 className="text-[10px] font-black uppercase tracking-[0.4em] text-white/40">
                 All Threads
                 <span className="ml-2 text-white/20">({filteredThreads.length})</span>
@@ -366,7 +366,7 @@ export default function AnimeDiscussionsPage() {
           <div className="absolute inset-0 bg-gradient-to-br from-violet-600/8 via-transparent to-indigo-600/8 pointer-events-none" />
           <div className="relative z-10 max-w-md mx-auto space-y-5">
             <div className="w-14 h-14 rounded-2xl bg-indigo-600/20 border border-indigo-500/20 flex items-center justify-center mx-auto">
-              <MessageSquare size={22} className="text-indigo-400" />
+              <MessageSquare size={22} className="text-amber-400" />
             </div>
             <h3 className="text-3xl font-black uppercase italic tracking-tight text-white">
               Start a Discussion

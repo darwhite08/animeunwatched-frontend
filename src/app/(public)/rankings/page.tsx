@@ -83,7 +83,7 @@ export default function RankingsPage() {
               className={`p-4 rounded-2xl border text-left transition-all ${
                 cat === c.id ? "border-indigo-500/40 bg-indigo-500/10" : "border-white/8 bg-white/[0.02] hover:border-white/15"
               }`}>
-              <c.icon size={16} className={cat === c.id ? "text-indigo-400" : "text-white/30"} />
+              <c.icon size={16} className={cat === c.id ? "text-amber-400" : "text-white/30"} />
               <p className={`font-black text-sm mt-2 ${cat === c.id ? "text-white" : "text-white/60"}`}>{c.label}</p>
               <p className="text-[9px] text-white/25 mt-0.5 leading-tight">{c.desc}</p>
             </button>

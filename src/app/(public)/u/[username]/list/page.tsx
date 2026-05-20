@@ -41,7 +41,7 @@ function apiStatusToUI(s: string): WatchStatus {
 
 const STATUS_COLORS: Record<WatchStatus, string> = {
   "Watching":       "bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
-  "Completed":      "bg-indigo-500/20 text-indigo-400 border-indigo-500/30",
+  "Completed":      "bg-indigo-500/20 text-amber-400 border-indigo-500/30",
   "Plan to Watch":  "bg-amber-500/20 text-amber-400 border-amber-500/30",
   "On Hold":        "bg-rose-500/20 text-rose-400 border-rose-500/30",
 }
@@ -217,7 +217,7 @@ export default function UserListPage({
   const totalHours      = calcHours(LIST_DATA)
 
   const statCards = [
-    { label: "Total",     value: LIST_DATA.length,  icon: BarChart2,  color: "text-indigo-400" },
+    { label: "Total",     value: LIST_DATA.length,  icon: BarChart2,  color: "text-amber-400" },
     { label: "Watching",  value: watchingCount,      icon: PlayCircle, color: "text-emerald-400" },
     { label: "Completed", value: completedCount,     icon: CheckCircle2, color: "text-violet-400" },
     { label: "Hours",     value: totalHours,         icon: Clock,      color: "text-amber-400" },
@@ -252,7 +252,7 @@ export default function UserListPage({
           className="text-5xl md:text-7xl font-black tracking-tighter uppercase italic"
         >
           @{username}&apos;s<br />
-          <span className="text-indigo-400">Anime List</span>
+          <span className="text-amber-400">Anime List</span>
         </motion.h1>
 
         {/* Stat row */}

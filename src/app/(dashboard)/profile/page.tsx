@@ -182,7 +182,7 @@ function ActivityTab() {
           className="relative pl-20 group cursor-pointer"
         >
           <div className="absolute left-0 top-1/2 -translate-y-1/2 w-16 h-16 rounded-2xl bg-zinc-900 border border-white/5 flex items-center justify-center z-10 group-hover:border-indigo-500/50 transition-all shadow-xl">
-            <item.icon size={22} className="text-indigo-400" />
+            <item.icon size={22} className="text-amber-400" />
           </div>
           <div className="p-8 rounded-[2rem] bg-white/[0.02] border border-white/5 group-hover:bg-white/[0.04] transition-all flex justify-between items-center">
             <div>
@@ -238,7 +238,7 @@ function WatchlistTab() {
                   className={`px-2 py-0.5 rounded-md text-[8px] font-black uppercase tracking-widest ${
                     isWatching
                       ? "bg-emerald-500/25 text-emerald-400 border border-emerald-500/30"
-                      : "bg-indigo-500/25 text-indigo-400 border border-indigo-500/30"
+                      : "bg-indigo-500/25 text-amber-400 border border-indigo-500/30"
                   }`}
                 >
                   {isWatching ? "● Watching" : "✓ Completed"}
@@ -351,7 +351,7 @@ function BlogsTab() {
           <div className="h-32 bg-gradient-to-br from-indigo-600/30 via-purple-700/20 to-violet-900/30 relative">
             <div className="absolute inset-0 opacity-30 mix-blend-overlay bg-[url('https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/hero/bg-gradient-3.svg')] bg-cover" />
             <div className="absolute top-4 left-4">
-              <span className="px-2.5 py-1 rounded-lg bg-black/50 backdrop-blur-md border border-white/10 text-[8px] font-black uppercase tracking-widest text-indigo-400">
+              <span className="px-2.5 py-1 rounded-lg bg-black/50 backdrop-blur-md border border-white/10 text-[8px] font-black uppercase tracking-widest text-amber-400">
                 {blog.category}
               </span>
             </div>
@@ -359,7 +359,7 @@ function BlogsTab() {
 
           {/* Body */}
           <div className="flex-1 p-6 space-y-3 flex flex-col">
-            <h3 className="text-sm font-black text-white uppercase italic tracking-tight leading-tight line-clamp-2 group-hover:text-indigo-300 transition-colors">
+            <h3 className="text-sm font-black text-white uppercase italic tracking-tight leading-tight line-clamp-2 group-hover:text-amber-300 transition-colors">
               {blog.title}
             </h3>
             <p className="text-[11px] text-white/45 leading-relaxed line-clamp-3 flex-1">{blog.excerpt}</p>
@@ -396,7 +396,7 @@ export default function WorldClassProfile() {
   const authUser = useAuthStore(s => s.user)
 
   const stats = [
-    { label: "Archive",  value: String(authUser ? "..." : "0"),   icon: Bookmark,    color: "text-indigo-400", sub: "Anime cataloged" },
+    { label: "Archive",  value: String(authUser ? "..." : "0"),   icon: Bookmark,    color: "text-amber-400", sub: "Anime cataloged" },
     { label: "Momentum", value: "22",                              icon: Flame,        color: "text-orange-500", sub: "Day watch streak" },
     { label: "Standing", value: "812",                             icon: Globe,        color: "text-blue-400",   sub: "Global percentile" },
     { label: "Trust",    value: String(authUser?.reputation ?? 0), icon: ShieldCheck,  color: "text-emerald-400",sub: "Reputation score" },
@@ -445,7 +445,7 @@ export default function WorldClassProfile() {
                     {authUser?.displayName ?? authUser?.username ?? "Shinobi"}
                   </h1>
                   <div className="p-[1px] rounded-full bg-gradient-to-r from-indigo-500 to-purple-500">
-                    <span className="px-4 py-1 rounded-full bg-black text-indigo-400 text-[10px] font-black uppercase tracking-[0.2em] block">
+                    <span className="px-4 py-1 rounded-full bg-black text-amber-400 text-[10px] font-black uppercase tracking-[0.2em] block">
                       Elite Grade
                     </span>
                   </div>
@@ -594,7 +594,7 @@ export default function WorldClassProfile() {
                     1,420<span className="text-sm font-medium text-white/40 ml-1 italic">hours</span>
                   </p>
                 </div>
-                <Clock size={40} className="text-indigo-500 opacity-20" strokeWidth={1} />
+                <Clock size={40} className="text-amber-500 opacity-20" strokeWidth={1} />
               </div>
             </div>
           </div>

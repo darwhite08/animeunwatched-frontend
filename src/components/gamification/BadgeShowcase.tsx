@@ -151,13 +151,13 @@ const RARITY_CONFIG = {
   },
   rare: {
     label: "Rare",
-    color: "text-indigo-300",
+    color: "text-amber-300",
     borderEarned: "border-indigo-500/60",
     borderLocked: "border-indigo-800/30",
     glow: "hover:shadow-indigo-500/20",
     bg: "bg-indigo-500/10",
     bar: "bg-indigo-400",
-    pill: "bg-indigo-900/60 text-indigo-300",
+    pill: "bg-indigo-900/60 text-amber-300",
   },
   legendary: {
     label: "Legendary",
@@ -220,7 +220,7 @@ export default function BadgeShowcase() {
         {/* mini legend */}
         <div className="hidden sm:flex items-center gap-4 text-xs font-bold uppercase tracking-tighter">
           <span className="text-slate-400">Common</span>
-          <span className="text-indigo-400">Rare</span>
+          <span className="text-amber-400">Rare</span>
           <span className="text-amber-400">Legendary</span>
         </div>
       </div>

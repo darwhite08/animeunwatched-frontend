@@ -127,7 +127,7 @@ export default function RecommendationsPage() {
             className="flex items-center gap-3 mb-4"
           >
             <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-indigo-600/15 border border-indigo-500/20">
-              <Brain size={13} className="text-indigo-400" />
+              <Brain size={13} className="text-amber-400" />
               <span className="text-[9px] font-black uppercase tracking-[0.4em] text-amber-400">Neural Oracle</span>
             </div>
           </motion.div>
@@ -139,7 +139,7 @@ export default function RecommendationsPage() {
             className="text-5xl lg:text-7xl font-black tracking-tighter uppercase italic text-white leading-none mb-3"
           >
             What to Watch<br />
-            <span className="text-indigo-400">Next</span>
+            <span className="text-amber-400">Next</span>
           </motion.h1>
 
           <motion.p
@@ -218,7 +218,7 @@ export default function RecommendationsPage() {
                   <div key={anime.id} className="space-y-2">
                     {/* Match score badge */}
                     <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-600/10 border border-indigo-500/15 w-fit">
-                      <span className="text-[9px] font-black text-indigo-400 uppercase tracking-widest">
+                      <span className="text-[9px] font-black text-amber-400 uppercase tracking-widest">
                         <AnimatedCounter target={matchScore(anime, mode)} />% Match
                       </span>
                     </div>
@@ -241,7 +241,7 @@ export default function RecommendationsPage() {
                 <div className="relative z-10">
                   <div className="flex items-center gap-2 mb-4">
                     <div className="p-2 rounded-xl bg-indigo-600/20">
-                      <Brain size={16} className="text-indigo-400" />
+                      <Brain size={16} className="text-amber-400" />
                     </div>
                     <div>
                       <p className="text-xs font-black text-white">AI Oracle</p>
@@ -308,7 +308,7 @@ export default function RecommendationsPage() {
               onClick={e => e.stopPropagation()}
               className="bg-[#0a0a0a] border border-white/10 rounded-3xl p-6 max-w-md w-full"
             >
-              <p className="text-[9px] font-black uppercase tracking-[0.3em] text-indigo-400 mb-1">{modalAnime.studio}</p>
+              <p className="text-[9px] font-black uppercase tracking-[0.3em] text-amber-400 mb-1">{modalAnime.studio}</p>
               <h3 className="text-2xl font-black tracking-tighter uppercase italic text-white mb-2">{modalAnime.title}</h3>
               <p className="text-xs text-white/40 leading-relaxed mb-5">{modalAnime.synopsis.slice(0, 180)}…</p>
               <div className="flex gap-3">

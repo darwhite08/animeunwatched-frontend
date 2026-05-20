@@ -67,7 +67,7 @@ export default function AIResultsGrid({ results, hasSearched, query }: AIResults
             </div>
             <div className="text-right hidden md:block">
               <p className="text-[10px] font-black text-white/20 uppercase tracking-widest">Results Processed: 0.0042s</p>
-              <p className="text-lg font-black text-indigo-400 font-mono mt-1">{results.length} Matches</p>
+              <p className="text-lg font-black text-amber-400 font-mono mt-1">{results.length} Matches</p>
             </div>
           </div>
 
@@ -130,7 +130,7 @@ export default function AIResultsGrid({ results, hasSearched, query }: AIResults
 
                         <div className="relative z-10 flex items-end justify-between gap-3">
                           <div className="flex-1 min-w-0">
-                            <p className="text-[10px] font-bold text-indigo-400 tracking-widest uppercase mb-1">
+                            <p className="text-[10px] font-bold text-amber-400 tracking-widest uppercase mb-1">
                               {synchRate}% Synch Rate
                             </p>
                             <h3 className="text-lg font-black text-white uppercase italic leading-tight truncate">
@@ -141,7 +141,7 @@ export default function AIResultsGrid({ results, hasSearched, query }: AIResults
                             </p>
                           </div>
                           <div className="flex flex-col items-center gap-1 bg-black/50 backdrop-blur-md p-2 rounded-xl border border-white/10 shrink-0">
-                            <Star size={13} fill="#6366f1" className="text-indigo-500" />
+                            <Star size={13} fill="#6366f1" className="text-amber-500" />
                             <span className="text-[10px] font-black text-white">{anime.rating.toFixed(1)}</span>
                           </div>
                         </div>

@@ -39,7 +39,7 @@ export default function AnimeStaffPage({ params }: { params: Promise<{ id: strin
         </div>
 
         <div className="flex items-center gap-3">
-          <Users2 size={18} className="text-indigo-400" />
+          <Users2 size={18} className="text-amber-400" />
           <h1 className="text-3xl font-black tracking-tighter uppercase italic text-white">
             Staff<span style={{color:"#f59e0b"}}>.</span>
           </h1>
@@ -57,7 +57,7 @@ export default function AnimeStaffPage({ params }: { params: Promise<{ id: strin
             <motion.div key={s.role} initial={{ opacity:0, x:-8 }} animate={{ opacity:1, x:0 }} transition={{ delay: i*0.07 }}
               className="flex items-center gap-4 p-4 rounded-2xl bg-white/[0.02] border border-white/8 hover:border-white/15 transition-colors"
             >
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-600/30 to-violet-600/30 flex items-center justify-center font-black text-indigo-400 shrink-0">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-600/30 to-violet-600/30 flex items-center justify-center font-black text-amber-400 shrink-0">
                 {s.name[0]}
               </div>
               <div className="flex-1">
@@ -69,7 +69,7 @@ export default function AnimeStaffPage({ params }: { params: Promise<{ id: strin
           ))}
         </div>
 
-        <Link href={`/anime/${id}`} className="flex items-center gap-2 text-sm font-black uppercase tracking-widest text-indigo-400 hover:text-indigo-300 transition-colors justify-center mt-6">
+        <Link href={`/anime/${id}`} className="flex items-center gap-2 text-sm font-black uppercase tracking-widest text-amber-400 hover:text-amber-300 transition-colors justify-center mt-6">
           <ChevronLeft size={14} /> Back to {anime?.title ?? id}
         </Link>
       </div>

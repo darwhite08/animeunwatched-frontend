@@ -220,7 +220,7 @@ function BlogCard({ blog, index }: { blog: Blog; index: number }) {
           </span>
         </div>
 
-        <h3 className="font-semibold text-sm leading-snug line-clamp-2 group-hover:text-indigo-300 transition">
+        <h3 className="font-semibold text-sm leading-snug line-clamp-2 group-hover:text-amber-300 transition">
           {blog.title}
         </h3>
 

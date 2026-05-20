@@ -79,7 +79,7 @@ export const PollCard = ({ poll }: { poll: any }) => {
           <motion.p 
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-center text-[11px] font-bold text-indigo-400 uppercase tracking-widest pt-4"
+            className="text-center text-[11px] font-bold text-amber-400 uppercase tracking-widest pt-4"
           >
             Vote Transmitted • Data Synced
           </motion.p>

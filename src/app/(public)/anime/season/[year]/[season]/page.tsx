@@ -99,7 +99,7 @@ export default function SeasonPage({ params }: { params: Promise<{ year: string;
       </div>
 
       <div className="max-w-6xl mx-auto px-6 py-12">
-        {isLoading && <div className="flex justify-center py-16"><Loader2 size={24} className="animate-spin text-indigo-400" /></div>}
+        {isLoading && <div className="flex justify-center py-16"><Loader2 size={24} className="animate-spin text-amber-400" /></div>}
         {!isLoading && animeList.length > 0 && (
           <motion.div layout className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
             <AnimatePresence>
@@ -111,8 +111,8 @@ export default function SeasonPage({ params }: { params: Promise<{ year: string;
           <div className="py-24 text-center border border-dashed border-white/5 rounded-[3rem]">
             <p className="text-white/20 font-black uppercase tracking-widest text-sm">No anime for {seasonLower} {year}</p>
             <p className="text-white/15 text-xs mt-2">
-              Try <Link href={`/anime/season/${year - 1}/fall`} className="text-indigo-400 hover:underline">Fall {year - 1}</Link> or{" "}
-              <Link href="/bestanimelist" className="text-indigo-400 hover:underline">browse all</Link>
+              Try <Link href={`/anime/season/${year - 1}/fall`} className="text-amber-400 hover:underline">Fall {year - 1}</Link> or{" "}
+              <Link href="/bestanimelist" className="text-amber-400 hover:underline">browse all</Link>
             </p>
           </div>
         )}

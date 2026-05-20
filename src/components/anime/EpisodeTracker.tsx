@@ -107,7 +107,7 @@ export default function EpisodeTracker({ totalEpisodes, currentEpisode: initialE
         <button
           onClick={increment}
           disabled={isCompleted}
-          className="h-9 w-9 rounded-xl border border-indigo-500/30 bg-indigo-500/10 flex items-center justify-center text-indigo-400 hover:bg-indigo-500/20 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+          className="h-9 w-9 rounded-xl border border-indigo-500/30 bg-indigo-500/10 flex items-center justify-center text-amber-400 hover:bg-indigo-500/20 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
         >
           <Plus size={14} />
         </button>
@@ -117,7 +117,7 @@ export default function EpisodeTracker({ totalEpisodes, currentEpisode: initialE
       {current > 0 && !isCompleted && (
         <button
           onClick={markAll}
-          className="w-full text-center text-[10px] font-black uppercase tracking-widest text-white/25 hover:text-indigo-400 transition-colors pt-1"
+          className="w-full text-center text-[10px] font-black uppercase tracking-widest text-white/25 hover:text-amber-400 transition-colors pt-1"
         >
           Mark all complete
         </button>

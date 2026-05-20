@@ -136,7 +136,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                 {!query.trim() ? (
                   <>
                     {/* Quick actions */}
-                    <p className="px-4 py-2 text-[9px] font-black text-indigo-400 uppercase tracking-[0.2em]">Quick Navigate</p>
+                    <p className="px-4 py-2 text-[9px] font-black text-amber-400 uppercase tracking-[0.2em]">Quick Navigate</p>
                     <div className="space-y-0.5 mb-3">
                       {QUICK_ACTIONS.map((item, i) => (
                         <a
@@ -146,7 +146,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                           className={`group flex items-center justify-between px-4 py-3 rounded-xl hover:bg-white/5 cursor-pointer transition-all ${cursor === i ? "bg-white/5" : ""}`}
                         >
                           <div className="flex items-center gap-3 text-white/50 group-hover:text-white">
-                            <item.icon size={14} className="text-indigo-500/70 group-hover:text-indigo-400" />
+                            <item.icon size={14} className="text-indigo-500/70 group-hover:text-amber-400" />
                             <span className="text-sm font-bold uppercase tracking-tight">{item.label}</span>
                           </div>
                           <span className="text-[9px] font-mono text-white/10 group-hover:text-white/30">{item.cmd}</span>
@@ -164,12 +164,12 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                           className={`group w-full flex items-center justify-between px-4 py-3 rounded-xl hover:bg-indigo-600/10 transition-all border border-transparent hover:border-indigo-500/20 ${cursor === QUICK_ACTIONS.length + i ? "bg-indigo-600/10 border-indigo-500/20" : ""}`}
                         >
                           <div className="flex items-center gap-3">
-                            <div className="h-7 w-7 rounded-lg bg-white/5 flex items-center justify-center text-white/20 group-hover:text-indigo-400">
+                            <div className="h-7 w-7 rounded-lg bg-white/5 flex items-center justify-center text-white/20 group-hover:text-amber-400">
                               <ArrowRight size={12} />
                             </div>
                             <span className="text-sm font-bold uppercase tracking-tight text-white/40 group-hover:text-white transition-colors">{term}</span>
                           </div>
-                          <span className="text-[9px] font-black text-indigo-500 italic opacity-0 group-hover:opacity-100">Search</span>
+                          <span className="text-[9px] font-black text-amber-500 italic opacity-0 group-hover:opacity-100">Search</span>
                         </button>
                       ))}
                     </div>
@@ -199,7 +199,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                                   {anime.year} · {anime.type} · ★ {anime.rating}
                                 </p>
                               </div>
-                              <span className="text-[9px] font-black text-indigo-500 italic opacity-0 group-hover:opacity-100 shrink-0">Open</span>
+                              <span className="text-[9px] font-black text-amber-500 italic opacity-0 group-hover:opacity-100 shrink-0">Open</span>
                             </button>
                           ))}
                         </div>

@@ -5,7 +5,7 @@ export default function BlogCard({ status }: { status: string }) {
       <div className="h-40 bg-gradient-to-br from-indigo-600/30 to-purple-600/20" />
 
       <div className="p-5 space-y-3">
-        <span className="text-xs bg-indigo-600/20 text-indigo-400 px-3 py-1 rounded-full">
+        <span className="text-xs bg-indigo-600/20 text-amber-400 px-3 py-1 rounded-full">
           {status}
         </span>
 

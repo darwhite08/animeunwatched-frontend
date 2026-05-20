@@ -48,12 +48,12 @@ const COMMUNITY_LINKS = [
 /* ── Homepage section themes ────────────────────────────────── */
 
 const SECTION_THEMES = [
-  { bg: "rgba(5,5,20,0.90)",  border: "rgba(99,102,241,0.45)", glow: "0 0 60px rgba(99,102,241,0.18),0 2px 0 rgba(99,102,241,0.5)",  dotColor: "#6366f1", accent: "text-indigo-400",  label: "Ch.01 — Hero" },
+  { bg: "rgba(5,5,20,0.90)",  border: "rgba(99,102,241,0.45)", glow: "0 0 60px rgba(99,102,241,0.18),0 2px 0 rgba(99,102,241,0.5)",  dotColor: "#6366f1", accent: "text-amber-400",  label: "Ch.01 — Hero" },
   { bg: "rgba(15,10,5,0.90)", border: "rgba(245,158,11,0.45)", glow: "0 0 60px rgba(245,158,11,0.12),0 2px 0 rgba(245,158,11,0.5)",  dotColor: "#f59e0b", accent: "text-amber-400",   label: "Ch.02 — Discovery" },
   { bg: "rgba(8,5,20,0.92)",  border: "rgba(139,92,246,0.55)", glow: "0 0 80px rgba(139,92,246,0.22),0 2px 0 rgba(139,92,246,0.6)",  dotColor: "#8b5cf6", accent: "text-violet-400",  label: "Ch.03 — AI Oracle" },
   { bg: "rgba(2,12,8,0.92)",  border: "rgba(16,185,129,0.45)", glow: "0 0 60px rgba(16,185,129,0.15),0 2px 0 rgba(16,185,129,0.5)",  dotColor: "#10b981", accent: "text-emerald-400", label: "Ch.04 — Community" },
-  { bg: "rgba(5,2,18,0.94)",  border: "rgba(99,102,241,0.35)", glow: "0 0 50px rgba(99,102,241,0.15),0 2px 0 rgba(99,102,241,0.4)",  dotColor: "#4f46e5", accent: "text-indigo-300",  label: "Ch.05 — Showcase" },
-  { bg: "rgba(2,2,15,0.94)",  border: "rgba(99,102,241,0.70)", glow: "0 0 80px rgba(99,102,241,0.30),0 2px 0 rgba(99,102,241,0.8)",  dotColor: "#818cf8", accent: "text-indigo-300",  label: "Ch.06 — Begin" },
+  { bg: "rgba(5,2,18,0.94)",  border: "rgba(99,102,241,0.35)", glow: "0 0 50px rgba(99,102,241,0.15),0 2px 0 rgba(99,102,241,0.4)",  dotColor: "#4f46e5", accent: "text-amber-300",  label: "Ch.05 — Showcase" },
+  { bg: "rgba(2,2,15,0.94)",  border: "rgba(99,102,241,0.70)", glow: "0 0 80px rgba(99,102,241,0.30),0 2px 0 rgba(99,102,241,0.8)",  dotColor: "#818cf8", accent: "text-amber-300",  label: "Ch.06 — Begin" },
 ];
 
 /* ── Reusable dropdown panel ─────────────────────────────────── */

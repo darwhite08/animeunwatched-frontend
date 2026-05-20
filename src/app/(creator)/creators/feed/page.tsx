@@ -75,7 +75,7 @@ export default function FeedPage() {
       <div className="flex items-start justify-between gap-4">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center">
-            <Rss size={18} className="text-indigo-400" />
+            <Rss size={18} className="text-amber-400" />
           </div>
           <div>
             <h1 className="text-2xl font-semibold">
@@ -170,7 +170,7 @@ function FeedPostRow({ post, index }: { post: FeedPost; index: number }) {
             </span>
           )}
         </div>
-        <h3 className="font-medium text-sm truncate group-hover:text-indigo-300 transition">
+        <h3 className="font-medium text-sm truncate group-hover:text-amber-300 transition">
           {post.title}
         </h3>
       </div>

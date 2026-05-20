@@ -22,7 +22,7 @@ export default function ProfileBadgesPage() {
 
   const STATS = [
     { icon:Trophy, label:"Earned",    value:String(earnedBadges), color:"text-amber-400",  bg:"bg-amber-500/10"  },
-    { icon:Star,   label:"Total",     value:String(TOTAL_BADGES), color:"text-indigo-400", bg:"bg-indigo-500/10" },
+    { icon:Star,   label:"Total",     value:String(TOTAL_BADGES), color:"text-amber-400", bg:"bg-indigo-500/10" },
     { icon:Zap,    label:"XP Level",  value:`Lv. ${xpLevel}`,     color:"text-orange-400", bg:"bg-orange-500/10" },
     { icon:Flame,  label:"Reputation",value:String(reputation),   color:"text-violet-400", bg:"bg-violet-500/10" },
   ]

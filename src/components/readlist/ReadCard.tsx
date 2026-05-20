@@ -33,7 +33,7 @@ export const ReadCard = ({ manga }: { manga: any }) => {
         
         {/* Top Badges */}
         <div className="absolute top-6 inset-x-6 flex justify-between items-center z-20">
-          <div className="px-3 py-1 rounded-full bg-black/60 backdrop-blur-xl border border-white/10 text-[9px] font-black uppercase tracking-[0.2em] text-indigo-400">
+          <div className="px-3 py-1 rounded-full bg-black/60 backdrop-blur-xl border border-white/10 text-[9px] font-black uppercase tracking-[0.2em] text-amber-400">
             {category || "Archives"}
           </div>
           <button className="p-2 bg-black/40 backdrop-blur-md rounded-xl border border-white/10 text-white/20 hover:text-white transition-all">
@@ -55,7 +55,7 @@ export const ReadCard = ({ manga }: { manga: any }) => {
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-px bg-gradient-to-r from-transparent via-indigo-500/20 to-transparent" />
 
         <div className="space-y-1">
-          <h3 className="text-2xl font-black text-white tracking-tighter leading-tight group-hover:text-indigo-400 transition-colors">
+          <h3 className="text-2xl font-black text-white tracking-tighter leading-tight group-hover:text-amber-400 transition-colors">
             {title}
           </h3>
           <p className="text-[11px] font-bold text-white/20 uppercase tracking-[0.2em]">{author}</p>

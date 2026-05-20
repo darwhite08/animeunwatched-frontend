@@ -38,17 +38,17 @@ export default function ReadlistPage() {
           <motion.div 
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="text-indigo-400 font-black uppercase tracking-[0.4em] text-[10px]"
+            className="text-amber-400 font-black uppercase tracking-[0.4em] text-[10px]"
           >
             Archives Repository • Sync Active
           </motion.div>
           <h1 className="text-7xl md:text-8xl font-black tracking-tighter text-white leading-none">
-            Library<span className="text-indigo-500" style={{ textShadow: '0 0 25px rgba(99, 102, 241, 0.8)' }}>.</span>
+            Library<span className="text-amber-500" style={{ textShadow: '0 0 25px rgba(99, 102, 241, 0.8)' }}>.</span>
           </h1>
         </div>
 
         <div className="relative w-full lg:w-96 group">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-indigo-400 transition-colors" size={20} />
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-amber-400 transition-colors" size={20} />
           <input 
             type="text"
             placeholder="Search your chronicles..."

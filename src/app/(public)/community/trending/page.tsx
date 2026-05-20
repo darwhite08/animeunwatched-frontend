@@ -180,7 +180,7 @@ function PostCard({ post, index }: { post: TrendingPost; index: number }) {
 
       {/* Anime badge */}
       {post.anime && (
-        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-lg bg-indigo-500/8 border border-indigo-500/15 text-[9px] font-bold text-indigo-400">
+        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-lg bg-indigo-500/8 border border-indigo-500/15 text-[9px] font-bold text-amber-400">
           <Star size={8} /> {post.anime}
         </span>
       )}
@@ -210,7 +210,7 @@ function PostCard({ post, index }: { post: TrendingPost; index: number }) {
           <Heart size={13} fill={liked ? "currentColor" : "none"} />
           {liked ? post.likes + 1 : post.likes}
         </button>
-        <button className="flex items-center gap-1.5 text-xs font-bold text-white/30 hover:text-indigo-400 transition-colors">
+        <button className="flex items-center gap-1.5 text-xs font-bold text-white/30 hover:text-amber-400 transition-colors">
           <MessageSquare size={13} />
           {post.comments}
         </button>
@@ -246,7 +246,7 @@ export default function CommunityTrendingPage() {
         <nav className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-white/25 mb-8">
           <Link href="/community" className="hover:text-white/60 transition-colors">Community</Link>
           <ChevronRight size={11} className="text-white/15" />
-          <span className="text-indigo-400">Trending</span>
+          <span className="text-amber-400">Trending</span>
         </nav>
 
         {/* Header */}
@@ -261,7 +261,7 @@ export default function CommunityTrendingPage() {
           <div className="flex items-center gap-4 mb-2">
             <h1 className="text-5xl sm:text-6xl font-black tracking-tighter uppercase italic text-white leading-none">
               Trending<br />
-              <span className="text-indigo-400">Now</span>
+              <span className="text-amber-400">Now</span>
               <span style={{color:"#f59e0b"}}>.</span>
             </h1>
             {/* Live pulse */}
@@ -287,7 +287,7 @@ export default function CommunityTrendingPage() {
             </div>
             <Link
               href="/community/feed"
-              className="flex items-center gap-1 text-[10px] font-black uppercase tracking-widest text-indigo-400 hover:text-indigo-300 transition-colors"
+              className="flex items-center gap-1 text-[10px] font-black uppercase tracking-widest text-amber-400 hover:text-amber-300 transition-colors"
             >
               View All <ArrowUpRight size={11} />
             </Link>
@@ -305,7 +305,7 @@ export default function CommunityTrendingPage() {
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-3">
               <div className="h-8 w-8 rounded-xl bg-indigo-500/15 border border-indigo-500/20 flex items-center justify-center">
-                <TrendingUp size={15} className="text-indigo-400" />
+                <TrendingUp size={15} className="text-amber-400" />
               </div>
               <div>
                 <p className="text-[9px] font-black uppercase tracking-[0.3em] text-white/30">Section 02</p>
@@ -314,7 +314,7 @@ export default function CommunityTrendingPage() {
             </div>
             <Link
               href="/community/anime"
-              className="flex items-center gap-1 text-[10px] font-black uppercase tracking-widest text-indigo-400 hover:text-indigo-300 transition-colors"
+              className="flex items-center gap-1 text-[10px] font-black uppercase tracking-widest text-amber-400 hover:text-amber-300 transition-colors"
             >
               View All <ArrowUpRight size={11} />
             </Link>
@@ -343,7 +343,7 @@ export default function CommunityTrendingPage() {
                         {anime.title}
                       </p>
                       <div className="flex items-center gap-1.5">
-                        <MessageSquare size={10} className="text-indigo-400" />
+                        <MessageSquare size={10} className="text-amber-400" />
                         <span className="text-[10px] font-black text-white/60">
                           {DISCUSSION_COUNTS[i].toLocaleString()} posts
                         </span>
@@ -370,7 +370,7 @@ export default function CommunityTrendingPage() {
             </div>
             <Link
               href="/poll"
-              className="flex items-center gap-1 text-[10px] font-black uppercase tracking-widest text-indigo-400 hover:text-indigo-300 transition-colors"
+              className="flex items-center gap-1 text-[10px] font-black uppercase tracking-widest text-amber-400 hover:text-amber-300 transition-colors"
             >
               View All <ArrowUpRight size={11} />
             </Link>
@@ -427,7 +427,7 @@ export default function CommunityTrendingPage() {
           </div>
           <Link
             href="/trending"
-            className="flex items-center gap-2 px-6 py-3 rounded-xl bg-indigo-600/15 border border-indigo-500/25 text-[11px] font-black uppercase tracking-widest text-indigo-400 hover:bg-indigo-600/25 transition-all"
+            className="flex items-center gap-2 px-6 py-3 rounded-xl bg-indigo-600/15 border border-indigo-500/25 text-[11px] font-black uppercase tracking-widest text-amber-400 hover:bg-indigo-600/25 transition-all"
           >
             Full Trending <ArrowUpRight size={12} />
           </Link>

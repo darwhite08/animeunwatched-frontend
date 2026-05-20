@@ -15,7 +15,7 @@ const SECTIONS = [
   {
     group: "Profile",
     items: [
-      { href:"/settings/account",    icon:User,       label:"Account",           desc:"Name, username, email, bio",          color:"text-indigo-400", bg:"bg-indigo-500/10" },
+      { href:"/settings/account",    icon:User,       label:"Account",           desc:"Name, username, email, bio",          color:"text-amber-400", bg:"bg-indigo-500/10" },
       { href:"/settings/appearance", icon:Palette,    label:"Appearance",        desc:"Theme, accent color, text size",      color:"text-violet-400", bg:"bg-violet-500/10" },
     ]
   },

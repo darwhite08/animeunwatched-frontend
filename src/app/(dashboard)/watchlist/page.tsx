@@ -93,7 +93,7 @@ export default function WatchlistPage() {
       <header className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-8">
         <div className="space-y-3">
           <motion.p initial={{ opacity: 0, x: -16 }} animate={{ opacity: 1, x: 0 }}
-            className="flex items-center gap-2 text-indigo-400 font-black uppercase tracking-[0.4em] text-[10px]">
+            className="flex items-center gap-2 text-amber-400 font-black uppercase tracking-[0.4em] text-[10px]">
             <MonitorPlay size={13} /> Neural Transmission • Active
           </motion.p>
           <h1 className="text-6xl md:text-7xl font-black tracking-tighter text-white leading-none">
@@ -176,7 +176,7 @@ export default function WatchlistPage() {
       {isLoading && (
         <div className="flex items-center justify-center py-24">
           <div className="flex flex-col items-center gap-4">
-            <Loader2 size={28} className="animate-spin text-indigo-400" />
+            <Loader2 size={28} className="animate-spin text-amber-400" />
             <p className="text-white/30 text-xs font-black uppercase tracking-widest">Loading your archives…</p>
           </div>
         </div>
@@ -215,7 +215,7 @@ export default function WatchlistPage() {
               <MonitorPlay size={28} className="mx-auto mb-3 text-white/15" />
               <p className="text-white/20 font-black uppercase tracking-widest text-xs mb-4">Your archive is empty</p>
               <Link href="/bestanimelist"
-                className="text-xs text-indigo-400 hover:text-indigo-300 font-black uppercase tracking-widest">
+                className="text-xs text-amber-400 hover:text-amber-300 font-black uppercase tracking-widest">
                 Browse Anime →
               </Link>
             </div>
@@ -239,7 +239,7 @@ export default function WatchlistPage() {
                 {query ? `No anime matched "${query}"` : "No anime in this category"}
               </p>
               {query && (
-                <button onClick={() => setQuery("")} className="mt-4 text-xs text-indigo-400 hover:text-indigo-300 font-black uppercase tracking-widest transition-colors">
+                <button onClick={() => setQuery("")} className="mt-4 text-xs text-amber-400 hover:text-amber-300 font-black uppercase tracking-widest transition-colors">
                   Clear search
                 </button>
               )}

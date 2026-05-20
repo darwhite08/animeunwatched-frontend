@@ -37,7 +37,7 @@ const GENRES = [
   { name: "Sci-Fi",       gradient: "from-cyan-900/40 to-cyan-950/10",      border: "border-cyan-900/30",     accent: "text-cyan-400",     emoji: "🚀" },
   { name: "Slice of Life",gradient: "from-teal-900/40 to-teal-950/10",      border: "border-teal-900/30",     accent: "text-teal-400",     emoji: "🌿" },
   { name: "Sports",       gradient: "from-lime-900/40 to-lime-950/10",      border: "border-lime-900/30",     accent: "text-lime-400",     emoji: "🏆" },
-  { name: "Supernatural", gradient: "from-indigo-900/40 to-indigo-950/10",  border: "border-indigo-900/30",   accent: "text-indigo-400",   emoji: "👁️" },
+  { name: "Supernatural", gradient: "from-indigo-900/40 to-indigo-950/10",  border: "border-indigo-900/30",   accent: "text-amber-400",   emoji: "👁️" },
   { name: "Suspense",     gradient: "from-zinc-900/40 to-zinc-950/10",      border: "border-zinc-800/30",     accent: "text-zinc-300",     emoji: "🔪" },
   { name: "Ecchi",        gradient: "from-red-800/40 to-pink-950/10",       border: "border-red-800/30",      accent: "text-red-300",      emoji: "🔞" },
   { name: "Mecha",        gradient: "from-blue-900/40 to-blue-950/10",      border: "border-blue-900/30",     accent: "text-blue-400",     emoji: "🤖" },
@@ -50,7 +50,7 @@ const GENRES = [
   { name: "Seinen",       gradient: "from-blue-900/40 to-blue-950/10",      border: "border-blue-900/30",     accent: "text-blue-400",     emoji: "📖" },
   { name: "Shoujo",       gradient: "from-pink-900/40 to-rose-950/10",      border: "border-pink-900/30",     accent: "text-pink-400",     emoji: "🌷" },
   { name: "Shounen",      gradient: "from-orange-900/40 to-orange-950/10",  border: "border-orange-900/30",   accent: "text-orange-400",   emoji: "🔥" },
-  { name: "Space",        gradient: "from-indigo-950/50 to-blue-950/20",    border: "border-indigo-900/30",   accent: "text-indigo-300",   emoji: "🌌" },
+  { name: "Space",        gradient: "from-indigo-950/50 to-blue-950/20",    border: "border-indigo-900/30",   accent: "text-amber-300",   emoji: "🌌" },
   { name: "Vampire",      gradient: "from-red-900/50 to-zinc-950/30",       border: "border-red-900/30",      accent: "text-red-400",      emoji: "🧛" },
   { name: "Historical",   gradient: "from-amber-900/40 to-amber-950/10",    border: "border-amber-900/30",    accent: "text-amber-400",    emoji: "🏯" },
 ] as const
@@ -82,7 +82,7 @@ function GenrePanel({ genre, onAnimeClick }: { genre: GenreName; onAnimeClick: (
 
       {isLoading && (
         <div className="flex items-center justify-center py-16">
-          <Loader2 size={24} className="animate-spin text-indigo-400" />
+          <Loader2 size={24} className="animate-spin text-amber-400" />
         </div>
       )}
 
@@ -140,7 +140,7 @@ export default function GenresPage() {
       {/* Header */}
       <div className="max-w-7xl mx-auto px-6 pt-32 pb-14">
         <motion.p initial={{ opacity: 0, x: -16 }} animate={{ opacity: 1, x: 0 }}
-          className="flex items-center gap-2 text-indigo-400 font-black uppercase tracking-[0.4em] text-[10px] mb-4"
+          className="flex items-center gap-2 text-amber-400 font-black uppercase tracking-[0.4em] text-[10px] mb-4"
         >
           <Layers size={13} /> Browse By Category
         </motion.p>

@@ -89,7 +89,7 @@ function TrendingCard({
         />
         <div className="absolute inset-0 bg-gradient-to-r from-transparent to-[#0a0a0a]" />
         {/* Rank */}
-        <div className="absolute top-3 left-3 px-2 py-1 bg-black/70 backdrop-blur border border-indigo-500/30 rounded-lg text-[9px] font-black text-indigo-400 uppercase italic">
+        <div className="absolute top-3 left-3 px-2 py-1 bg-black/70 backdrop-blur border border-indigo-500/30 rounded-lg text-[9px] font-black text-amber-400 uppercase italic">
           #{anime.rank}
         </div>
         {anime.status === "airing" && (
@@ -156,7 +156,7 @@ function TrendingCard({
           </Link>
           <button
             onClick={() => onPreview(anime)}
-            className="flex items-center gap-1.5 px-4 py-2 rounded-xl border border-indigo-500/20 bg-indigo-500/5 text-indigo-400 hover:bg-indigo-500/10 transition-all text-[10px] font-black uppercase tracking-widest"
+            className="flex items-center gap-1.5 px-4 py-2 rounded-xl border border-indigo-500/20 bg-indigo-500/5 text-amber-400 hover:bg-indigo-500/10 transition-all text-[10px] font-black uppercase tracking-widest"
           >
             Quick Preview
           </button>
@@ -196,9 +196,9 @@ function StudioCard({
       <div className="relative">
         <div className="flex items-start justify-between gap-2 mb-2">
           <div className="h-10 w-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center">
-            <Film size={18} className={selected ? "text-indigo-400" : "text-white/30"} />
+            <Film size={18} className={selected ? "text-amber-400" : "text-white/30"} />
           </div>
-          <span className={`text-xs font-black px-2 py-0.5 rounded-full ${selected ? "bg-indigo-500/20 text-indigo-400" : "bg-white/5 text-white/30"}`}>
+          <span className={`text-xs font-black px-2 py-0.5 rounded-full ${selected ? "bg-indigo-500/20 text-amber-400" : "bg-white/5 text-white/30"}`}>
             {count} anime
           </span>
         </div>
@@ -252,7 +252,7 @@ export default function DiscoverPage() {
           animate={{ opacity: 1, y: 0 }}
           className="space-y-4"
         >
-          <p className="text-[10px] font-black uppercase tracking-[0.4em] text-indigo-500">
+          <p className="text-[10px] font-black uppercase tracking-[0.4em] text-amber-500">
             Catalogue
           </p>
           <h1 className="text-5xl sm:text-7xl font-black uppercase italic tracking-tighter text-white leading-none">
@@ -267,7 +267,7 @@ export default function DiscoverPage() {
         <section className="space-y-6">
           <div className="flex items-end justify-between">
             <div className="space-y-1">
-              <p className="text-[9px] font-black uppercase tracking-[0.4em] text-indigo-500">Section 01</p>
+              <p className="text-[9px] font-black uppercase tracking-[0.4em] text-amber-500">Section 01</p>
               <h2 className="text-2xl sm:text-3xl font-black uppercase italic tracking-tighter text-white">
                 Trending This Week
               </h2>

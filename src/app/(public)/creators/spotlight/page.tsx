@@ -231,11 +231,11 @@ function CreatorGridCard({ creator, index }: { creator: Creator; index: number }
           {creator.avatarLetter}
         </div>
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-black text-white uppercase italic tracking-tight truncate group-hover:text-indigo-300 transition-colors">
+          <p className="text-sm font-black text-white uppercase italic tracking-tight truncate group-hover:text-amber-300 transition-colors">
             {creator.displayName}
           </p>
           <p className="text-[10px] text-white/30 font-bold">@{creator.username}</p>
-          <span className="inline-block mt-1 px-2 py-0.5 rounded-full bg-indigo-500/10 border border-indigo-500/15 text-[9px] font-black text-indigo-400 uppercase tracking-wider">
+          <span className="inline-block mt-1 px-2 py-0.5 rounded-full bg-indigo-500/10 border border-indigo-500/15 text-[9px] font-black text-amber-400 uppercase tracking-wider">
             {creator.specialty}
           </span>
         </div>
@@ -261,7 +261,7 @@ function CreatorGridCard({ creator, index }: { creator: Creator; index: number }
       {/* Best article */}
       <Link
         href={`/blog/${creator.bestArticleSlug}`}
-        className="block text-[10px] text-indigo-400/70 hover:text-indigo-300 font-bold transition-colors line-clamp-2 leading-relaxed"
+        className="block text-[10px] text-indigo-400/70 hover:text-amber-300 font-bold transition-colors line-clamp-2 leading-relaxed"
       >
         → {creator.bestArticleTitle}
       </Link>
@@ -271,7 +271,7 @@ function CreatorGridCard({ creator, index }: { creator: Creator; index: number }
         <span className="text-[9px] text-white/15 font-bold">{creator.joinedMonth}</span>
         <Link
           href={`/u/${creator.username}`}
-          className="text-[9px] font-black uppercase tracking-widest text-white/25 hover:text-indigo-400 transition-colors flex items-center gap-1"
+          className="text-[9px] font-black uppercase tracking-widest text-white/25 hover:text-amber-400 transition-colors flex items-center gap-1"
         >
           Profile <ChevronRight size={9} />
         </Link>
@@ -336,7 +336,7 @@ export default function CreatorSpotlightPage() {
         {/* Creator grid */}
         <div className="space-y-4">
           <div className="flex items-center gap-3">
-            <Users size={14} className="text-indigo-400" />
+            <Users size={14} className="text-amber-400" />
             <h2 className="text-[10px] font-black uppercase tracking-[0.4em] text-white/30">
               Rising Creators
             </h2>
@@ -357,7 +357,7 @@ export default function CreatorSpotlightPage() {
         >
           <div className="space-y-2">
             <h3 className="text-2xl font-black uppercase italic tracking-tight text-white">
-              Become a Creator<span className="text-indigo-400">.</span>
+              Become a Creator<span className="text-amber-400">.</span>
             </h3>
             <p className="text-white/40 text-sm max-w-md leading-relaxed">
               Got hot takes, deep analyses, or hidden gems to share? Publish on Kaiveron

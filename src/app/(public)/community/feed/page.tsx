@@ -88,7 +88,7 @@ function PostCard({
       {post.anime && (
         <Link
           href="/bestanimelist"
-          className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-indigo-500/8 border border-indigo-500/15 text-[10px] font-bold text-indigo-400 hover:bg-indigo-500/15 transition-colors"
+          className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-indigo-500/8 border border-indigo-500/15 text-[10px] font-bold text-amber-400 hover:bg-indigo-500/15 transition-colors"
         >
           <Star size={9} /> {post.anime}
         </Link>
@@ -103,7 +103,7 @@ function PostCard({
           {post.tags.map((tag) => (
             <span
               key={tag}
-              className="text-[9px] font-bold text-indigo-400/60 hover:text-indigo-400 cursor-pointer transition-colors"
+              className="text-[9px] font-bold text-indigo-400/60 hover:text-amber-400 cursor-pointer transition-colors"
             >
               #{tag}
             </span>
@@ -122,7 +122,7 @@ function PostCard({
           <Heart size={14} fill={post.liked ? "currentColor" : "none"} />
           {post.likes}
         </button>
-        <button className="flex items-center gap-1.5 text-xs font-bold text-white/30 hover:text-indigo-400 transition-colors">
+        <button className="flex items-center gap-1.5 text-xs font-bold text-white/30 hover:text-amber-400 transition-colors">
           <MessageSquare size={14} />
           {post.comments}
         </button>
@@ -211,7 +211,7 @@ export default function PublicFeedPage() {
               className="relative flex items-center gap-1.5 px-5 py-3 text-[11px] font-black uppercase tracking-widest text-white/15 hover:text-white/30 transition-colors"
             >
               Following
-              <span className="ml-1 px-1.5 py-0.5 rounded-full bg-indigo-500/15 text-indigo-400 text-[8px] font-black uppercase tracking-wider">
+              <span className="ml-1 px-1.5 py-0.5 rounded-full bg-indigo-500/15 text-amber-400 text-[8px] font-black uppercase tracking-wider">
                 Login
               </span>
             </Link>
@@ -304,7 +304,7 @@ export default function PublicFeedPage() {
             className="flex flex-col gap-3 p-5 rounded-2xl bg-gradient-to-br from-indigo-600/15 to-violet-600/10 border border-indigo-500/20 hover:from-indigo-600/20 transition-all"
           >
             <p className="text-sm font-black text-white">
-              Join Kaiveron<span className="text-indigo-400">.</span>
+              Join Kaiveron<span className="text-amber-400">.</span>
             </p>
             <p className="text-[11px] text-white/40 leading-relaxed">
               Track what you watch, share your takes, join clubs, and discover hidden gems — all for free.

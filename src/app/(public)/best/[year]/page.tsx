@@ -94,8 +94,8 @@ function HeroCard({ anime, rank }: { anime: Anime; rank: number }) {
 const MEDAL_ICONS = [
   <Medal key="2" size={14} className="text-slate-300" />,
   <Medal key="3" size={14} className="text-amber-700" />,
-  <Award key="4" size={14} className="text-indigo-400" />,
-  <Award key="5" size={14} className="text-indigo-400" />,
+  <Award key="4" size={14} className="text-amber-400" />,
+  <Award key="5" size={14} className="text-amber-400" />,
 ]
 
 function RankedRow({ anime, rank, index }: { anime: Anime; rank: number; index: number }) {
@@ -183,7 +183,7 @@ export default function BestOfYearPage({ params }: { params: Promise<{ year: str
           <motion.p
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-[10px] font-black uppercase tracking-[0.5em] text-indigo-400 mb-4"
+            className="text-[10px] font-black uppercase tracking-[0.5em] text-amber-400 mb-4"
           >
             Kaiveron — Editorial
           </motion.p>
@@ -226,7 +226,7 @@ export default function BestOfYearPage({ params }: { params: Promise<{ year: str
             </p>
             <p className="text-white/15 text-xs">
               Try{" "}
-              <Link href={`/best/${year - 1}`} className="text-indigo-400 hover:text-indigo-300 underline transition-colors">
+              <Link href={`/best/${year - 1}`} className="text-amber-400 hover:text-amber-300 underline transition-colors">
                 {year - 1}
               </Link>{" "}
               instead.
@@ -277,7 +277,7 @@ export default function BestOfYearPage({ params }: { params: Promise<{ year: str
           </Link>
           <Link
             href="/best"
-            className="text-[10px] font-black uppercase tracking-[0.3em] text-indigo-400 hover:text-indigo-300 transition-colors"
+            className="text-[10px] font-black uppercase tracking-[0.3em] text-amber-400 hover:text-amber-300 transition-colors"
           >
             All Years
           </Link>

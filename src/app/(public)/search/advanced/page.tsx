@@ -98,7 +98,7 @@ function GenreChip({
       onClick={onToggle}
       className={`px-3 py-1.5 rounded-full border text-[10px] font-black uppercase tracking-wider transition-all ${
         selected
-          ? "bg-indigo-600/20 border-indigo-500/50 text-indigo-300"
+          ? "bg-indigo-600/20 border-indigo-500/50 text-amber-300"
           : "bg-white/[0.03] border-white/10 text-white/40 hover:border-white/20 hover:text-white/60"
       }`}
     >
@@ -285,7 +285,7 @@ function AdvancedSearchContent() {
         <div className="flex items-end justify-between gap-4 flex-wrap">
           <h1 className="text-5xl sm:text-6xl font-black tracking-tighter uppercase italic text-white leading-none">
             Advanced<br />
-            <span className="text-indigo-400">Search</span>
+            <span className="text-amber-400">Search</span>
             <span style={{color:"#f59e0b"}}>.</span>
           </h1>
           <Link
@@ -311,7 +311,7 @@ function AdvancedSearchContent() {
             onClick={() => setSearchType(id)}
             className={`flex items-center gap-2 px-5 py-2.5 rounded-xl border text-xs font-black uppercase tracking-widest transition-all ${
               searchType === id
-                ? "bg-indigo-600/20 border-indigo-500/40 text-indigo-300"
+                ? "bg-indigo-600/20 border-indigo-500/40 text-amber-300"
                 : "bg-white/[0.02] border-white/8 text-white/40 hover:border-white/20 hover:text-white/70"
             }`}
           >
@@ -334,7 +334,7 @@ function AdvancedSearchContent() {
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <SlidersHorizontal size={15} className="text-indigo-400" />
+                <SlidersHorizontal size={15} className="text-amber-400" />
                 <p className="text-sm font-black uppercase italic tracking-tighter text-white">Filters</p>
               </div>
               {hasActiveFilters && (
@@ -360,7 +360,7 @@ function AdvancedSearchContent() {
               <label className="text-[9px] font-black uppercase tracking-[0.3em] text-white/30">
                 Genres
                 {animeFilters.genres.length > 0 && (
-                  <span className="ml-2 text-indigo-400">{animeFilters.genres.length} selected</span>
+                  <span className="ml-2 text-amber-400">{animeFilters.genres.length} selected</span>
                 )}
               </label>
               <div className="flex flex-wrap gap-2">
@@ -444,7 +444,7 @@ function AdvancedSearchContent() {
             className="p-6 rounded-2xl bg-white/[0.02] border border-white/8 mb-8"
           >
             <div className="flex items-center gap-3 mb-4">
-              <SlidersHorizontal size={15} className="text-indigo-400" />
+              <SlidersHorizontal size={15} className="text-amber-400" />
               <p className="text-sm font-black uppercase italic tracking-tighter text-white">
                 {searchType.charAt(0).toUpperCase() + searchType.slice(1)} Filters
               </p>
@@ -459,7 +459,7 @@ function AdvancedSearchContent() {
               <div className="flex items-end">
                 <button
                   onClick={handleSaveSearch}
-                  className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-600/15 border border-indigo-500/25 text-xs font-black uppercase tracking-widest text-indigo-400 hover:bg-indigo-600/25 transition-all"
+                  className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-indigo-600/15 border border-indigo-500/25 text-xs font-black uppercase tracking-widest text-amber-400 hover:bg-indigo-600/25 transition-all"
                 >
                   <Save size={13} /> Save Search
                 </button>
@@ -492,7 +492,7 @@ function AdvancedSearchContent() {
                 <p className="text-white/25 text-sm font-black uppercase tracking-widest">No anime matched your filters</p>
                 <button
                   onClick={clearFilters}
-                  className="mt-4 text-[10px] font-black uppercase tracking-widest text-indigo-400 hover:text-indigo-300 transition-colors"
+                  className="mt-4 text-[10px] font-black uppercase tracking-widest text-amber-400 hover:text-amber-300 transition-colors"
                 >
                   Clear Filters →
                 </button>
@@ -518,7 +518,7 @@ function AdvancedSearchContent() {
                   {u.name[0]}
                 </div>
                 <div className="flex-1">
-                  <p className="font-black text-white group-hover:text-indigo-300 transition-colors">{u.name}</p>
+                  <p className="font-black text-white group-hover:text-amber-300 transition-colors">{u.name}</p>
                   <p className="text-xs text-white/35 mt-0.5">{u.bio}</p>
                 </div>
                 <div className="text-right">
@@ -569,7 +569,7 @@ function AdvancedSearchContent() {
               >
                 <div className="flex items-start justify-between gap-3 mb-2">
                   <p className="font-black text-white">{c.name}</p>
-                  <span className="text-[10px] font-black text-indigo-400 shrink-0">{c.members.toLocaleString()} members</span>
+                  <span className="text-[10px] font-black text-amber-400 shrink-0">{c.members.toLocaleString()} members</span>
                 </div>
                 <p className="text-xs text-white/40 leading-snug">{c.desc}</p>
               </motion.div>
@@ -615,7 +615,7 @@ function AdvancedSearchContent() {
               >
                 <div className="flex items-start justify-between gap-3 mb-2">
                   <div>
-                    <p className="text-[10px] font-black uppercase tracking-wider text-indigo-400 mb-0.5">{r.anime}</p>
+                    <p className="text-[10px] font-black uppercase tracking-wider text-amber-400 mb-0.5">{r.anime}</p>
                     <p className="text-sm text-white/70 italic line-clamp-2">{r.preview}</p>
                   </div>
                   <div className="flex items-center gap-1 shrink-0">

@@ -92,7 +92,7 @@ function CalendarGrid() {
   return (
     <div className="space-y-3">
       <div className="flex items-center gap-2">
-        <CalendarDays size={13} className="text-indigo-400" />
+        <CalendarDays size={13} className="text-amber-400" />
         <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/30">
           Last 30 Days
         </h3>
@@ -209,7 +209,7 @@ export default function WatchlistHistoryPage() {
 
       {/* Breadcrumb */}
       <nav className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-white/25">
-        <Link href="/watchlist" className="hover:text-indigo-400 transition-colors">
+        <Link href="/watchlist" className="hover:text-amber-400 transition-colors">
           Watchlist
         </Link>
         <ChevronRight size={11} className="text-white/15" />
@@ -221,7 +221,7 @@ export default function WatchlistHistoryPage() {
         <motion.p
           initial={{ opacity: 0, x: -16 }}
           animate={{ opacity: 1, x: 0 }}
-          className="flex items-center gap-2 text-indigo-400 font-black uppercase tracking-[0.4em] text-[10px]"
+          className="flex items-center gap-2 text-amber-400 font-black uppercase tracking-[0.4em] text-[10px]"
         >
           <MonitorPlay size={13} /> Episode Log
         </motion.p>
@@ -240,7 +240,7 @@ export default function WatchlistHistoryPage() {
         className="grid grid-cols-3 gap-3"
       >
         {[
-          { label: "This Week",  value: thisWeek,  icon: <TrendingUp size={14} />,  color: "text-indigo-400" },
+          { label: "This Week",  value: thisWeek,  icon: <TrendingUp size={14} />,  color: "text-amber-400" },
           { label: "This Month", value: thisMonth, icon: <CalendarDays size={14} />, color: "text-violet-400" },
           { label: "All Time",   value: total.toLocaleString(), icon: <MonitorPlay size={14} />, color: "text-amber-400" },
         ].map(({ label, value, icon, color }) => (
@@ -306,7 +306,7 @@ export default function WatchlistHistoryPage() {
       <div className="flex items-center gap-3 pt-4 border-t border-white/5">
         <Link
           href="/watchlist"
-          className="flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-white/30 hover:text-indigo-400 transition-colors"
+          className="flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-white/30 hover:text-amber-400 transition-colors"
         >
           ← Back to Watchlist
         </Link>

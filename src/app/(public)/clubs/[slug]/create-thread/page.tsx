@@ -71,7 +71,7 @@ function MarkdownPreview({ source }: { source: string }) {
         }
         if (line.startsWith("- ") || line.startsWith("* ")) {
           return (
-            <li key={i} className="ml-4 list-disc marker:text-indigo-500">
+            <li key={i} className="ml-4 list-disc marker:text-amber-500">
               {line.slice(2)}
             </li>
           )
@@ -143,9 +143,9 @@ export default function CreateThreadPage({
 
         {/* Breadcrumb */}
         <nav className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-white/30 flex-wrap">
-          <Link href="/clubs" className="hover:text-indigo-400 transition-colors">Clubs</Link>
+          <Link href="/clubs" className="hover:text-amber-400 transition-colors">Clubs</Link>
           <ChevronRight size={10} className="text-white/15" />
-          <Link href={`/clubs/${slug}`} className="hover:text-indigo-400 transition-colors">
+          <Link href={`/clubs/${slug}`} className="hover:text-amber-400 transition-colors">
             {name}
           </Link>
           <ChevronRight size={10} className="text-white/15" />
@@ -207,7 +207,7 @@ export default function CreateThreadPage({
               <button
                 type="button"
                 onClick={() => setPreview((p) => !p)}
-                className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest text-white/30 hover:text-indigo-400 transition-colors"
+                className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest text-white/30 hover:text-amber-400 transition-colors"
               >
                 {preview ? <EyeOff size={11} /> : <Eye size={11} />}
                 {preview ? "Edit" : "Preview"}
@@ -273,7 +273,7 @@ export default function CreateThreadPage({
                 {tags.map((tag) => (
                   <span
                     key={tag}
-                    className="px-2.5 py-0.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-[9px] font-bold text-indigo-400"
+                    className="px-2.5 py-0.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-[9px] font-bold text-amber-400"
                   >
                     #{tag}
                   </span>

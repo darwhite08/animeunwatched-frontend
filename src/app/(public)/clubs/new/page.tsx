@@ -269,7 +269,7 @@ export default function NewClubPage() {
                 />
               </div>
               {!getFieldError("slug") && form.slug && (
-                <p className="flex items-center gap-1.5 text-[10px] text-indigo-400">
+                <p className="flex items-center gap-1.5 text-[10px] text-amber-400">
                   <Sparkles size={9} />
                   Auto-generated from name — editable
                 </p>

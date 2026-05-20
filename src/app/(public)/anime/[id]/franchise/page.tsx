@@ -32,7 +32,7 @@ type FranchiseEntry = {
 
 /* ── Helpers ── */
 const TYPE_COLORS: Record<EntryType, string> = {
-  "Main Series": "bg-indigo-500/15 border-indigo-500/30 text-indigo-400",
+  "Main Series": "bg-indigo-500/15 border-indigo-500/30 text-amber-400",
   "Prequel":     "bg-violet-500/15 border-violet-500/30 text-violet-400",
   "Sequel":      "bg-blue-500/15  border-blue-500/30  text-blue-400",
   "Side Story":  "bg-amber-500/15 border-amber-500/30 text-amber-400",
@@ -151,7 +151,7 @@ function FranchiseRow({
             {entry.type}
           </span>
           {isCurrent && (
-            <span className="px-2.5 py-0.5 rounded-full bg-indigo-500/20 border border-indigo-500/40 text-[9px] font-black uppercase tracking-widest text-indigo-300 flex items-center gap-1">
+            <span className="px-2.5 py-0.5 rounded-full bg-indigo-500/20 border border-indigo-500/40 text-[9px] font-black uppercase tracking-widest text-amber-300 flex items-center gap-1">
               <CheckCircle2 size={9} /> Currently Viewing
             </span>
           )}
@@ -250,7 +250,7 @@ export default function FranchisePage({
             {anime?.title ?? id}
           </Link>
           <ChevronRight size={11} className="text-white/15" />
-          <span className="text-indigo-400">Franchise</span>
+          <span className="text-amber-400">Franchise</span>
         </nav>
 
         {/* Header */}
@@ -337,7 +337,7 @@ export default function FranchisePage({
         >
           <Link
             href={`/anime/${id}`}
-            className="inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-indigo-400 hover:text-indigo-300 transition-colors"
+            className="inline-flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-amber-400 hover:text-amber-300 transition-colors"
           >
             <ChevronRight size={12} className="rotate-180" />
             Back to {anime?.title ?? id}

@@ -32,7 +32,7 @@ const NOTIF_TYPES: {
   icon: typeof Bell
   accent: string
 }[] = [
-  { key: "newFollower",  label: "New Follower",         desc: "When someone starts following your profile",                    icon: UserPlus,     accent: "text-indigo-400" },
+  { key: "newFollower",  label: "New Follower",         desc: "When someone starts following your profile",                    icon: UserPlus,     accent: "text-amber-400" },
   { key: "postReply",    label: "Post Reply / Comment", desc: "When someone replies to one of your posts or reviews",          icon: MessageSquare, accent: "text-violet-400" },
   { key: "mention",      label: "Mention in Post",      desc: "When someone @mentions you in a post or thread",               icon: AtSign,       accent: "text-blue-400"   },
   { key: "pollResults",  label: "Poll Results",         desc: "When a poll you voted on closes and results are published",     icon: BarChart2,    accent: "text-amber-400"  },
@@ -190,7 +190,7 @@ export default function NotificationSettingsPage() {
               <div className="flex items-center justify-between mb-3">
                 <d.icon
                   size={16}
-                  className={delivery[d.id] && !d.disabled ? "text-indigo-400" : "text-white/25"}
+                  className={delivery[d.id] && !d.disabled ? "text-amber-400" : "text-white/25"}
                 />
                 <Toggle
                   checked={delivery[d.id]}

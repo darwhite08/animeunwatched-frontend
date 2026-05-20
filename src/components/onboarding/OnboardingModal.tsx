@@ -140,7 +140,7 @@ function StepIdentity({
               <p
                 className={[
                   "font-bold text-sm uppercase tracking-wide transition-colors",
-                  isSelected ? "text-indigo-300" : "text-white",
+                  isSelected ? "text-amber-300" : "text-white",
                 ].join(" ")}
               >
                 {wt.label}
@@ -303,7 +303,7 @@ function StepGenres({
               className={[
                 "px-5 py-2.5 rounded-full border font-bold uppercase text-sm tracking-wide transition-all duration-200 cursor-pointer",
                 isSelected
-                  ? "border-indigo-500 bg-indigo-500/20 text-indigo-300 shadow-[0_0_12px_rgba(99,102,241,0.25)]"
+                  ? "border-indigo-500 bg-indigo-500/20 text-amber-300 shadow-[0_0_12px_rgba(99,102,241,0.25)]"
                   : "border-zinc-700 bg-zinc-900/60 text-zinc-400 hover:border-zinc-500 hover:text-zinc-300",
               ].join(" ")}
             >
@@ -317,7 +317,7 @@ function StepGenres({
         <motion.p
           initial={{ opacity: 0, y: 4 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-xs text-indigo-400"
+          className="text-xs text-amber-400"
         >
           {selected.size} genre{selected.size > 1 ? "s" : ""} selected — taste confirmed.
         </motion.p>
@@ -346,7 +346,7 @@ function StepReady({
         <motion.p
           initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-indigo-400 text-sm font-bold uppercase tracking-widest mb-2"
+          className="text-amber-400 text-sm font-bold uppercase tracking-widest mb-2"
         >
           Identity unlocked
         </motion.p>

@@ -27,7 +27,7 @@ const FAQ_GROUPS: FAQGroup[] = [
   {
     title: "Getting Started",
     icon: Zap,
-    color: "text-indigo-400",
+    color: "text-amber-400",
     bg: "bg-indigo-500/10",
     border: "border-indigo-500/20",
     items: [
@@ -187,7 +187,7 @@ export default function HelpPage() {
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-indigo-500/25 bg-indigo-500/8 text-[10px] font-black uppercase tracking-[0.3em] text-indigo-400 mb-8"
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-indigo-500/25 bg-indigo-500/8 text-[10px] font-black uppercase tracking-[0.3em] text-amber-400 mb-8"
           >
             Help Center
           </motion.div>
@@ -199,7 +199,7 @@ export default function HelpPage() {
             className="text-5xl md:text-6xl font-black tracking-tighter uppercase italic leading-[0.92] text-white mb-6"
           >
             Got Questions?<br />
-            <span className="text-indigo-400">We Have Answers.</span>
+            <span className="text-amber-400">We Have Answers.</span>
           </motion.h1>
 
           <motion.p
@@ -251,7 +251,7 @@ export default function HelpPage() {
                 <p className="text-white/30 text-sm">No questions match &quot;{query}&quot;</p>
                 <button
                   onClick={() => setQuery("")}
-                  className="mt-4 text-indigo-400 text-xs font-black uppercase tracking-widest hover:text-indigo-300 transition-colors"
+                  className="mt-4 text-amber-400 text-xs font-black uppercase tracking-widest hover:text-amber-300 transition-colors"
                 >
                   Clear search
                 </button>
@@ -298,7 +298,7 @@ export default function HelpPage() {
                 className="rounded-[2rem] border border-indigo-500/20 bg-gradient-to-br from-indigo-600/10 via-violet-600/6 to-transparent p-8"
               >
                 <div className="h-12 w-12 rounded-2xl bg-indigo-500/15 flex items-center justify-center mb-6">
-                  <MessageSquare size={20} className="text-indigo-400" />
+                  <MessageSquare size={20} className="text-amber-400" />
                 </div>
                 <h3 className="text-xl font-black tracking-tighter uppercase italic text-white mb-2">
                   Contact Support

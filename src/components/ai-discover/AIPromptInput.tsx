@@ -67,7 +67,7 @@ export default function AIPromptInput({ onSearch }: AIPromptInputProps) {
               <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/30 border border-emerald-500/50" />
             </div>
             <div className="h-4 w-px bg-white/10 mx-2" />
-            <div className="flex items-center gap-2 text-indigo-400">
+            <div className="flex items-center gap-2 text-amber-400">
               <Terminal size={13} className="animate-pulse" />
               <span className="text-[10px] font-black uppercase tracking-[0.2em]">Neural_Query_Interface</span>
             </div>
@@ -111,7 +111,7 @@ export default function AIPromptInput({ onSearch }: AIPromptInputProps) {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.06 }}
                 onClick={() => setPrompt(text)}
-                className="group/btn relative px-3 py-1.5 text-[10px] font-bold rounded-lg border border-white/5 text-white/40 hover:text-indigo-400 hover:border-indigo-500/20 transition-all duration-300"
+                className="group/btn relative px-3 py-1.5 text-[10px] font-bold rounded-lg border border-white/5 text-white/40 hover:text-amber-400 hover:border-indigo-500/20 transition-all duration-300"
               >
                 <span className="relative z-10 uppercase tracking-wider">{text}</span>
               </motion.button>

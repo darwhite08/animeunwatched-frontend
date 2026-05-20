@@ -165,7 +165,7 @@ function ClubCard({
 
       <div className="p-5 space-y-4">
         {/* Name */}
-        <h3 className="text-base font-black uppercase italic tracking-tight text-white leading-snug group-hover:text-indigo-300 transition-colors">
+        <h3 className="text-base font-black uppercase italic tracking-tight text-white leading-snug group-hover:text-amber-300 transition-colors">
           {club.name}
         </h3>
 
@@ -357,7 +357,7 @@ export default function ClubsPage() {
                   setSearch("")
                   setActiveCategory("All")
                 }}
-                className="mt-2 px-5 py-2.5 rounded-xl bg-indigo-600/20 border border-indigo-500/20 text-xs font-black uppercase tracking-widest text-indigo-400 hover:bg-indigo-600/30 transition-all"
+                className="mt-2 px-5 py-2.5 rounded-xl bg-indigo-600/20 border border-indigo-500/20 text-xs font-black uppercase tracking-widest text-amber-400 hover:bg-indigo-600/30 transition-all"
               >
                 Clear filters
               </button>

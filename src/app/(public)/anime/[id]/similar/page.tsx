@@ -19,7 +19,7 @@ function mapDTO(a: AnimeDTO, i: number): Anime {
 /* ── Genre tag chip ── */
 function GenreChip({ genre }: { genre: string }) {
   return (
-    <span className="px-3 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-[10px] font-black uppercase tracking-widest text-indigo-400">
+    <span className="px-3 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-[10px] font-black uppercase tracking-widest text-amber-400">
       {genre}
     </span>
   )
@@ -69,7 +69,7 @@ export default function SimilarAnimePage({
             {anime.title}
           </Link>
           <ChevronRight size={11} className="text-white/15" />
-          <span className="text-indigo-400">Similar Anime</span>
+          <span className="text-amber-400">Similar Anime</span>
         </nav>
 
         {/* Anime mini-header */}
@@ -89,7 +89,7 @@ export default function SimilarAnimePage({
           </Link>
           <div className="flex-1 min-w-0">
             <Link href={`/anime/${anime.id}`}>
-              <h1 className="text-xl font-black uppercase italic tracking-tighter text-white hover:text-indigo-300 transition-colors leading-tight truncate">
+              <h1 className="text-xl font-black uppercase italic tracking-tighter text-white hover:text-amber-300 transition-colors leading-tight truncate">
                 {anime.title}
               </h1>
             </Link>
@@ -119,7 +119,7 @@ export default function SimilarAnimePage({
           </p>
           <h2 className="text-5xl font-black tracking-tighter uppercase italic text-white leading-none">
             Anime Similar to<br />
-            <span className="text-indigo-400">{anime.title}</span>
+            <span className="text-amber-400">{anime.title}</span>
             <span style={{color:"#f59e0b"}}>.</span>
           </h2>
           <p className="text-white/35 text-sm mt-3">
@@ -135,7 +135,7 @@ export default function SimilarAnimePage({
           className="flex items-center gap-3 flex-wrap mb-10"
         >
           <div className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-white/30">
-            <Layers size={13} className="text-indigo-400" />
+            <Layers size={13} className="text-amber-400" />
             Matching genres:
           </div>
           {anime.genres.map(g => (
@@ -171,7 +171,7 @@ export default function SimilarAnimePage({
             <p className="text-white/20 text-sm font-bold">No similar anime found with rating ≥ 7.5.</p>
             <Link
               href="/bestanimelist"
-              className="inline-flex items-center gap-2 mt-4 px-5 py-3 rounded-2xl bg-indigo-600/15 border border-indigo-500/20 text-[11px] font-black uppercase tracking-widest text-indigo-400 hover:bg-indigo-600/25 transition-all"
+              className="inline-flex items-center gap-2 mt-4 px-5 py-3 rounded-2xl bg-indigo-600/15 border border-indigo-500/20 text-[11px] font-black uppercase tracking-widest text-amber-400 hover:bg-indigo-600/25 transition-all"
             >
               Browse All Anime <ChevronRight size={12} />
             </Link>

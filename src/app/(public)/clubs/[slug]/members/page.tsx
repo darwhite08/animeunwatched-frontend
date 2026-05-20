@@ -91,7 +91,7 @@ function buildMembers(slug: string): Member[] {
 /* ── Styles ── */
 const ROLE_STYLES: Record<Role, string> = {
   ADMIN: "bg-amber-500/15 border-amber-500/30 text-amber-400",
-  MOD:   "bg-indigo-500/15 border-indigo-500/30 text-indigo-400",
+  MOD:   "bg-indigo-500/15 border-indigo-500/30 text-amber-400",
   USER:  "bg-white/5 border-white/10 text-white/40",
 }
 
@@ -152,7 +152,7 @@ function MemberCard({
           <span className="text-[8px] text-white/25 uppercase tracking-widest">Rep</span>
         </div>
         <div className="flex flex-col items-center gap-0.5">
-          <Tv2 size={10} className="text-indigo-400" />
+          <Tv2 size={10} className="text-amber-400" />
           <span className="text-[10px] font-black text-white/70">{member.animeCount}</span>
           <span className="text-[8px] text-white/25 uppercase tracking-widest">Anime</span>
         </div>
@@ -261,7 +261,7 @@ export default function ClubMembersPage({
             {clubName}
           </Link>
           <ChevronRight size={10} className="text-white/15" />
-          <span className="text-indigo-400">Members</span>
+          <span className="text-amber-400">Members</span>
         </motion.nav>
 
         {/* Header */}
@@ -305,7 +305,7 @@ export default function ClubMembersPage({
         >
           <StatBox label="Total"   value={members.length} accent="text-white" />
           <StatBox label="Admins"  value={admins}          accent="text-amber-400" />
-          <StatBox label="Mods"    value={mods}            accent="text-indigo-400" />
+          <StatBox label="Mods"    value={mods}            accent="text-amber-400" />
           <StatBox label="Regular" value={regulars}        accent="text-white/50" />
         </motion.div>
 
@@ -367,7 +367,7 @@ export default function ClubMembersPage({
               <p className="text-xs text-white/20">Try a different search</p>
               <button
                 onClick={() => setSearch("")}
-                className="mt-2 px-5 py-2.5 rounded-xl bg-indigo-600/20 border border-indigo-500/20 text-xs font-black uppercase tracking-widest text-indigo-400 hover:bg-indigo-600/30 transition-all"
+                className="mt-2 px-5 py-2.5 rounded-xl bg-indigo-600/20 border border-indigo-500/20 text-xs font-black uppercase tracking-widest text-amber-400 hover:bg-indigo-600/30 transition-all"
               >
                 Clear search
               </button>

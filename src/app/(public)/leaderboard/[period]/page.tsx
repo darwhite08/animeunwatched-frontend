@@ -39,7 +39,7 @@ export default function PeriodLeaderboardPage({ params }: { params: Promise<{ pe
     <div className="min-h-screen bg-[#020202] text-white pb-32">
       <div className="max-w-4xl mx-auto px-6 pt-32 space-y-10">
         <div>
-          <Link href="/leaderboard" className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-indigo-400/60 hover:text-indigo-400 transition-colors mb-4">
+          <Link href="/leaderboard" className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-indigo-400/60 hover:text-amber-400 transition-colors mb-4">
             <ChevronLeft size={11}/> Full Leaderboard
           </Link>
           <div className="flex items-center gap-3 mb-2">
@@ -71,7 +71,7 @@ export default function PeriodLeaderboardPage({ params }: { params: Promise<{ pe
                   {user.rank===1 && <motion.div animate={{ y:[0,-4,0] }} transition={{ duration:2.5,repeat:Infinity }} className="mb-2"><Crown size={18} className="text-amber-400" fill="currentColor"/></motion.div>}
                   <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center font-black text-xl mb-2">{user.name[0]}</div>
                   <p className="text-xs font-black text-white">{user.name}</p>
-                  <p className="text-[9px] text-indigo-400 font-mono mt-0.5">{user.xp} XP</p>
+                  <p className="text-[9px] text-amber-400 font-mono mt-0.5">{user.xp} XP</p>
                   <div className={`w-full mt-3 ${heights[ci]} bg-gradient-to-t ${user.rank===1?"from-amber-600/30 to-amber-500/10 border-amber-500/25":user.rank===2?"from-slate-600/30 to-slate-400/10 border-slate-500/25":"from-amber-800/30 to-amber-700/10 border-amber-700/25"} border border-b-0 rounded-t-xl flex items-center justify-center`}>
                     <span className="text-2xl font-black text-white/10">{emojis[ci]}</span>
                   </div>
@@ -93,7 +93,7 @@ export default function PeriodLeaderboardPage({ params }: { params: Promise<{ pe
                 <p className="text-sm font-black text-white/80">{u.name}</p>
                 <div className="flex items-center gap-3 text-[9px] text-white/25 mt-0.5">
                   <span className="flex items-center gap-1"><Flame size={9} className="text-orange-400"/>{u.streak}d streak</span>
-                  <span className="flex items-center gap-1"><Star size={9} className="text-indigo-400"/>{u.archived} archived</span>
+                  <span className="flex items-center gap-1"><Star size={9} className="text-amber-400"/>{u.archived} archived</span>
                 </div>
               </div>
               <span className="text-sm font-black text-white font-mono">{u.xp}</span>

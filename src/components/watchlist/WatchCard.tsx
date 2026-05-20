@@ -19,7 +19,7 @@ type WatchItem = {
 
 const STATUS_CONFIG: Record<string, { color: string; bg: string }> = {
   "Watching":      { color: "text-emerald-400", bg: "bg-emerald-500/10" },
-  "Plan to Watch": { color: "text-indigo-400",  bg: "bg-indigo-500/10"  },
+  "Plan to Watch": { color: "text-amber-400",  bg: "bg-indigo-500/10"  },
   "Completed":     { color: "text-amber-400",   bg: "bg-amber-500/10"   },
   "On Hold":       { color: "text-orange-400",  bg: "bg-orange-500/10"  },
   "Dropped":       { color: "text-red-400",     bg: "bg-red-500/10"     },
@@ -103,7 +103,7 @@ export const WatchCard = ({ anime, onRemove }: { anime: WatchItem; onRemove?: (i
         <div>
           <Link
             href={`/bestanimelist`}
-            className="text-xl font-black text-white tracking-tighter leading-tight hover:text-indigo-400 transition-colors line-clamp-2"
+            className="text-xl font-black text-white tracking-tighter leading-tight hover:text-amber-400 transition-colors line-clamp-2"
           >
             {anime.title}
           </Link>
@@ -135,7 +135,7 @@ export const WatchCard = ({ anime, onRemove }: { anime: WatchItem; onRemove?: (i
           </button>
           <button
             onClick={() => push(`Opening ${anime.title}…`, "info")}
-            className="h-11 w-11 flex items-center justify-center rounded-2xl bg-indigo-600/15 border border-indigo-500/25 text-indigo-400 hover:bg-indigo-600 hover:text-white transition-all"
+            className="h-11 w-11 flex items-center justify-center rounded-2xl bg-indigo-600/15 border border-indigo-500/25 text-amber-400 hover:bg-indigo-600 hover:text-white transition-all"
           >
             <Play size={15} fill="currentColor" />
           </button>

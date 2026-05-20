@@ -64,14 +64,14 @@ export default function SidebarLevelCard({
             {/* Header */}
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Sparkles className="h-4 w-4 text-indigo-400" />
+                <Sparkles className="h-4 w-4 text-amber-400" />
                 <span className="text-sm font-medium text-white">
                   Level {level}
                 </span>
               </div>
 
               {tier && (
-                <span className="text-[10px] uppercase tracking-wide px-2 py-1 rounded-full bg-indigo-600/20 text-indigo-400 border border-indigo-500/20">
+                <span className="text-[10px] uppercase tracking-wide px-2 py-1 rounded-full bg-indigo-600/20 text-amber-400 border border-indigo-500/20">
                   {tier}
                 </span>
               )}

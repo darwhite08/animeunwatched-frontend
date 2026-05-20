@@ -197,7 +197,7 @@ export default function BestAnimeListPage() {
           <CategoryTabs active={category} onChange={handleCategoryChange} />
           <div className="flex items-center gap-3">
             <div className="relative group">
-              <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/30 group-focus-within:text-indigo-400 transition-colors" />
+              <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/30 group-focus-within:text-amber-400 transition-colors" />
               <input value={query} onChange={e => handleQueryChange(e.target.value)}
                 placeholder="Search anime…"
                 className="pl-8 pr-8 py-2 bg-white/5 border border-white/10 rounded-full text-[11px] font-medium text-white placeholder:text-white/20 outline-none focus:border-indigo-500/50 w-44 focus:w-64 transition-all duration-300" />
@@ -209,7 +209,7 @@ export default function BestAnimeListPage() {
             </div>
             <button onClick={() => setFilterOpen(true)}
               className="flex items-center gap-2 px-5 py-2 bg-white/5 border border-white/10 rounded-full text-[10px] font-black text-white uppercase tracking-widest hover:bg-white/10 transition-all relative">
-              <ListFilter size={13} className="text-indigo-500" />
+              <ListFilter size={13} className="text-amber-500" />
               Refine
               {activeFilterCount > 0 && (
                 <span className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full text-[8px] font-black text-black flex items-center justify-center" style={{background:"linear-gradient(135deg,#fbbf24,#f59e0b)"}}>
@@ -299,7 +299,7 @@ export default function BestAnimeListPage() {
         {isError && !isLoading && (
           <div className="py-32 text-center">
             <p className="text-white/30 font-black uppercase tracking-widest text-xs mb-4">Failed to load archives</p>
-            <button onClick={handleReset} className="text-xs text-indigo-400 hover:text-indigo-300 font-black uppercase tracking-widest">
+            <button onClick={handleReset} className="text-xs text-amber-400 hover:text-amber-300 font-black uppercase tracking-widest">
               Try again
             </button>
           </div>
@@ -311,7 +311,7 @@ export default function BestAnimeListPage() {
             <p className="text-[10px] font-black text-white/30 uppercase tracking-widest">
               {filtered.length} result{filtered.length !== 1 ? "s" : ""}
             </p>
-            <button onClick={handleReset} className="text-[10px] font-black text-indigo-400 hover:text-indigo-300 uppercase tracking-widest">
+            <button onClick={handleReset} className="text-[10px] font-black text-amber-400 hover:text-amber-300 uppercase tracking-widest">
               Clear all
             </button>
           </motion.div>
@@ -333,7 +333,7 @@ export default function BestAnimeListPage() {
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
             className="py-32 text-center border border-dashed border-white/5 rounded-[3rem]">
             <p className="text-white/20 font-black uppercase tracking-widest text-xs">No archives match your query</p>
-            <button onClick={handleReset} className="mt-6 text-xs text-indigo-400 hover:text-indigo-300 font-black uppercase tracking-widest">Clear filters</button>
+            <button onClick={handleReset} className="mt-6 text-xs text-amber-400 hover:text-amber-300 font-black uppercase tracking-widest">Clear filters</button>
           </motion.div>
         )}
 

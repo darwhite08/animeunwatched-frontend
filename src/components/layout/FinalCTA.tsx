@@ -82,7 +82,7 @@ export default function FinalCTA() {
           <button className="relative flex items-center gap-6 px-10 py-6 bg-[#0a0a0a] border border-white/10 rounded-2xl overflow-hidden transition-all duration-500 group-hover:bg-white group-hover:border-transparent group-hover:shadow-[0_0_40px_rgba(99,102,241,0.4)]">
             
             {/* Left Icon Block */}
-            <div className="flex items-center justify-center text-indigo-500 group-hover:text-black transition-colors duration-500">
+            <div className="flex items-center justify-center text-amber-500 group-hover:text-black transition-colors duration-500">
                <Terminal size={24} />
             </div>
 

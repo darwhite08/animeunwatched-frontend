@@ -117,7 +117,7 @@ export default function AccountSettingsPage() {
           </div>
           <div className="space-y-2">
             <button onClick={() => push("Photo upload coming soon!", "info")}
-              className="block text-xs font-black uppercase tracking-widest text-indigo-400 hover:text-indigo-300 transition-colors"
+              className="block text-xs font-black uppercase tracking-widest text-amber-400 hover:text-amber-300 transition-colors"
             >Upload photo</button>
             <p className="text-[9px] text-white/25">JPG, PNG or GIF · Max 5MB</p>
           </div>

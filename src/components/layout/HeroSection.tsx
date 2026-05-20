@@ -126,9 +126,9 @@ export default function HeroSection() {
           {/* headline — 3 lines, staggered mask reveal */}
           <div className="space-y-[-4px]">
             {[
-              { text:"Track",    color:"text-white",   dot:"text-indigo-500", italic:false },
+              { text:"Track",    color:"text-white",   dot:"text-amber-500", italic:false },
               { text:"Rate",     color:"text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-violet-300 to-purple-400", dot:"text-violet-400", italic:true  },
-              { text:"Discover", color:"text-white/90", dot:"text-indigo-500", italic:false },
+              { text:"Discover", color:"text-white/90", dot:"text-amber-500", italic:false },
             ].map(({ text, color, dot, italic }, i) => (
               <div key={text} className="overflow-hidden leading-none">
                 <motion.h1

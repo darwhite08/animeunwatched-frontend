@@ -104,7 +104,7 @@ export default function RecentlyReviewedCard() {
         </div>
         <button
           onClick={() => push("Select an anime to review", "info")}
-          className="text-[9px] font-black uppercase tracking-widest text-indigo-400/60 hover:text-indigo-400 transition-colors"
+          className="text-[9px] font-black uppercase tracking-widest text-indigo-400/60 hover:text-amber-400 transition-colors"
         >
           Write Review
         </button>

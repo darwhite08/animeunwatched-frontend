@@ -43,7 +43,7 @@ function CardPreview({
     <div className="w-full rounded-2xl overflow-hidden border border-zinc-700/60 bg-[#0d0d0d] shadow-2xl select-none">
       {/* Top bar */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-zinc-800">
-        <span className="font-black uppercase tracking-widest text-indigo-400 text-sm">
+        <span className="font-black uppercase tracking-widest text-amber-400 text-sm">
           KAIVERON.
         </span>
         <span className="text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full bg-violet-500/20 text-violet-300 border border-violet-500/30">
@@ -112,7 +112,7 @@ function ShareButton({
           ? "border-zinc-800 bg-zinc-900/40 text-zinc-700 cursor-not-allowed"
           : muted
           ? "border-zinc-700/60 bg-zinc-900/60 text-zinc-400 hover:border-zinc-500 hover:text-zinc-200 hover:bg-zinc-800/60"
-          : "border-indigo-500/40 bg-indigo-500/10 text-indigo-300 hover:border-indigo-400 hover:bg-indigo-500/20",
+          : "border-indigo-500/40 bg-indigo-500/10 text-amber-300 hover:border-indigo-400 hover:bg-indigo-500/20",
       ].join(" ")}
     >
       <span className="transition-transform duration-200 group-hover:scale-110">

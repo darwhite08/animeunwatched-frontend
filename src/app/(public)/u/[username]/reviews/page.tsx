@@ -149,7 +149,7 @@ export default function UserReviewsPage({
             @{username}
           </Link>
           <ChevronRight size={11} className="text-white/15" />
-          <span className="text-indigo-400">Reviews</span>
+          <span className="text-amber-400">Reviews</span>
         </nav>
 
         {/* Header */}
@@ -219,7 +219,7 @@ export default function UserReviewsPage({
                     <div className="flex-1 min-w-0">
                       <Link
                         href={`/anime/${r.animeId}`}
-                        className="text-base font-black uppercase italic tracking-tighter text-white hover:text-indigo-300 transition-colors leading-tight truncate block"
+                        className="text-base font-black uppercase italic tracking-tighter text-white hover:text-amber-300 transition-colors leading-tight truncate block"
                       >
                         {anime?.title ?? r.animeId}
                       </Link>
@@ -282,7 +282,7 @@ export default function UserReviewsPage({
                                 return n
                               })
                             }
-                            className="text-[10px] font-black text-indigo-400 hover:text-indigo-300 mt-1.5 transition-colors"
+                            className="text-[10px] font-black text-amber-400 hover:text-amber-300 mt-1.5 transition-colors"
                           >
                             {isExpanded ? "Show less" : "Read more"}
                           </button>

@@ -69,7 +69,7 @@ export default function SeasonalPage() {
       {/* Header */}
       <div className="max-w-7xl mx-auto px-6 pt-32 pb-10">
         <div className="flex items-center gap-3 mb-4">
-          <CalendarDays size={16} className="text-indigo-400" />
+          <CalendarDays size={16} className="text-amber-400" />
           <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-amber-400/60">Seasonal Archive</p>
         </div>
         <h1 className="text-6xl font-black tracking-tighter uppercase italic text-white leading-none mb-3">
@@ -109,7 +109,7 @@ export default function SeasonalPage() {
                       {YEAR_LIST.map(y => (
                         <button key={y} onClick={() => { setYear(y); setYearOpen(false) }}
                           className={`w-full text-left px-4 py-2 text-sm font-bold transition-colors ${
-                            y === year ? "bg-indigo-600/20 text-indigo-400" : "text-white/60 hover:text-white hover:bg-white/5"
+                            y === year ? "bg-indigo-600/20 text-amber-400" : "text-white/60 hover:text-white hover:bg-white/5"
                           }`}
                         >
                           {y}
@@ -194,7 +194,7 @@ export default function SeasonalPage() {
               Could not load {season} {year}
             </p>
             <button onClick={() => refetch()}
-              className="text-xs text-indigo-400 hover:text-indigo-300 font-black uppercase tracking-widest">
+              className="text-xs text-amber-400 hover:text-amber-300 font-black uppercase tracking-widest">
               Retry
             </button>
           </div>

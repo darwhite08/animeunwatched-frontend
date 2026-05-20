@@ -56,7 +56,7 @@ function BlogCard({ post, index }: { post: BlogPost; index: number }) {
 
       {/* Body */}
       <div className="p-5 space-y-3">
-        <h2 className="text-sm font-black uppercase italic tracking-tight text-white leading-snug group-hover:text-indigo-300 transition-colors line-clamp-2">
+        <h2 className="text-sm font-black uppercase italic tracking-tight text-white leading-snug group-hover:text-amber-300 transition-colors line-clamp-2">
           {post.title}
         </h2>
         <p className="text-xs text-white/45 leading-relaxed line-clamp-2">{post.excerpt}</p>
@@ -119,7 +119,7 @@ export default function UserBlogPage({
             @{username}
           </Link>
           <ChevronRight size={11} className="text-white/15" />
-          <span className="text-indigo-400">Blog</span>
+          <span className="text-amber-400">Blog</span>
         </nav>
 
         {/* Header */}
@@ -142,7 +142,7 @@ export default function UserBlogPage({
           </div>
 
           <div className="flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-white/[0.02] border border-white/8 text-[10px] font-black uppercase tracking-widest text-white/30">
-            <User size={12} className="text-indigo-400" />
+            <User size={12} className="text-amber-400" />
             {username}
           </div>
         </motion.div>
@@ -187,7 +187,7 @@ export default function UserBlogPage({
             href={`/u/${username}`}
             className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-white/[0.04] border border-white/10 hover:border-indigo-500/30 hover:bg-white/[0.07] text-sm font-black uppercase tracking-widest text-white/60 hover:text-white transition-all"
           >
-            <PenSquare size={14} className="text-indigo-400" />
+            <PenSquare size={14} className="text-amber-400" />
             More articles by @{username}
             <ChevronRight size={14} />
           </Link>

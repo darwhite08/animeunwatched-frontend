@@ -174,7 +174,7 @@ function InlineReply({
       className="overflow-hidden mt-3"
     >
       <div className="p-4 rounded-xl bg-zinc-900/80 border border-indigo-500/20 space-y-3">
-        <p className="text-[10px] font-black uppercase tracking-widest text-indigo-400">
+        <p className="text-[10px] font-black uppercase tracking-widest text-amber-400">
           Replying to {authorName}
         </p>
         <textarea
@@ -453,7 +453,7 @@ export default function ThreadDetailPage({
                     onClick={() =>
                       setReplyingTo(replyingTo === reply.id ? null : reply.id)
                     }
-                    className="flex items-center gap-1.5 text-xs font-bold text-white/30 hover:text-indigo-400 transition-colors"
+                    className="flex items-center gap-1.5 text-xs font-bold text-white/30 hover:text-amber-400 transition-colors"
                   >
                     <Reply size={12} /> Reply
                   </button>

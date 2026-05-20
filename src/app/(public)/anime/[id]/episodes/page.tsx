@@ -155,7 +155,7 @@ export default function AnimeEpisodesPage({
             {anime?.title ?? id}
           </Link>
           <ChevronRight size={11} className="text-white/15" />
-          <span className="text-indigo-400">Episodes</span>
+          <span className="text-amber-400">Episodes</span>
         </nav>
 
         {/* Anime mini-header */}
@@ -176,13 +176,13 @@ export default function AnimeEpisodesPage({
 
           <div className="flex-1 min-w-0">
             <Link href={`/anime/${id}`}>
-              <h1 className="text-xl font-black uppercase italic tracking-tighter text-white hover:text-indigo-300 transition-colors leading-tight truncate">
+              <h1 className="text-xl font-black uppercase italic tracking-tighter text-white hover:text-amber-300 transition-colors leading-tight truncate">
                 {anime?.title ?? ""}
               </h1>
             </Link>
             <p className="text-[10px] text-white/30 mt-0.5 font-mono">{anime?.titleJapanese}</p>
             <div className="flex items-center gap-3 mt-2">
-              <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-[10px] font-black text-indigo-400">
+              <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-[10px] font-black text-amber-400">
                 <Tv size={11} />
                 {anime?.episodes == null ? "Ongoing" : `${anime.episodes} Episodes`}
               </div>
@@ -214,7 +214,7 @@ export default function AnimeEpisodesPage({
         >
           <div className="flex items-center justify-between text-[10px] font-black uppercase tracking-widest text-white/40">
             <span>Your Progress</span>
-            <span className="text-indigo-400">{watchedCount} / {totalCount} watched</span>
+            <span className="text-amber-400">{watchedCount} / {totalCount} watched</span>
           </div>
           <div className="h-2.5 w-full bg-white/5 rounded-full overflow-hidden border border-white/5">
             <motion.div
@@ -290,7 +290,7 @@ export default function AnimeEpisodesPage({
                 className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-[9px] font-black uppercase tracking-wider transition-all shrink-0 ${
                   ep.watched
                     ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/20 hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/20"
-                    : "bg-white/5 text-white/30 border border-white/8 hover:bg-indigo-500/15 hover:text-indigo-400 hover:border-indigo-500/25"
+                    : "bg-white/5 text-white/30 border border-white/8 hover:bg-indigo-500/15 hover:text-amber-400 hover:border-indigo-500/25"
                 }`}
               >
                 <Check size={11} className={ep.watched ? "" : "opacity-30"} />

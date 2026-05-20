@@ -184,7 +184,7 @@ export default function ReviewsPage() {
                       </p>
                       {r.body.length > TRUNCATE && (
                         <button onClick={() => setExpanded(s => { const n = new Set(s); isExpanded ? n.delete(r.id) : n.add(r.id); return n })}
-                          className="text-[10px] font-black text-indigo-400 hover:text-indigo-300 mt-1 transition-colors"
+                          className="text-[10px] font-black text-amber-400 hover:text-amber-300 mt-1 transition-colors"
                         >
                           {isExpanded ? "Show less" : "Read more"}
                         </button>

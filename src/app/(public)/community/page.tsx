@@ -71,7 +71,7 @@ function PostCard({ post }: { post: Post }) {
           </Link>
           <div>
             <Link href={`/u/${post.author?.username ?? ""}`}>
-              <p className="text-sm font-black text-white hover:text-indigo-300 transition-colors">{authorName}</p>
+              <p className="text-sm font-black text-white hover:text-amber-300 transition-colors">{authorName}</p>
             </Link>
             <p className="text-[10px] text-white/30">{timeAgo(post.createdAt)}</p>
           </div>
@@ -83,7 +83,7 @@ function PostCard({ post }: { post: Post }) {
 
       {post.anime && (
         <Link href={`/anime/${post.anime.malId}`}
-          className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-indigo-500/8 border border-indigo-500/15 text-[10px] font-bold text-indigo-400 hover:bg-indigo-500/15 transition-colors">
+          className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-indigo-500/8 border border-indigo-500/15 text-[10px] font-bold text-amber-400 hover:bg-indigo-500/15 transition-colors">
           <Star size={9} /> {post.anime.title}
         </Link>
       )}
@@ -96,7 +96,7 @@ function PostCard({ post }: { post: Post }) {
           <Heart size={14} fill={liked ? "currentColor" : "none"} />
           {likeCount}
         </button>
-        <button className="flex items-center gap-1.5 text-xs font-bold text-white/30 hover:text-indigo-400 transition-colors">
+        <button className="flex items-center gap-1.5 text-xs font-bold text-white/30 hover:text-amber-400 transition-colors">
           <MessageSquare size={14} />
           {post._count?.comments ?? 0}
         </button>
@@ -253,13 +253,13 @@ export default function CommunityPage() {
         <div className="space-y-6">
           <div className="p-5 rounded-2xl bg-white/[0.02] border border-white/8 space-y-4">
             <div className="flex items-center gap-2">
-              <TrendingUp size={14} className="text-indigo-400" />
+              <TrendingUp size={14} className="text-amber-400" />
               <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40">Trending Tags</h3>
             </div>
             <div className="flex flex-wrap gap-2">
               {TRENDING_TAGS.map((tag, i) => (
                 <motion.span key={tag} initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: i * 0.04 }}
-                  className="px-3 py-1.5 rounded-full bg-white/5 border border-white/8 text-[10px] font-bold text-white/50 hover:text-indigo-400 hover:border-indigo-500/25 cursor-pointer transition-all">
+                  className="px-3 py-1.5 rounded-full bg-white/5 border border-white/8 text-[10px] font-bold text-white/50 hover:text-amber-400 hover:border-indigo-500/25 cursor-pointer transition-all">
                   #{tag}
                 </motion.span>
               ))}
@@ -308,10 +308,10 @@ export default function CommunityPage() {
           <Link href="/creators"
             className="flex items-center gap-3 p-5 rounded-2xl bg-gradient-to-br from-indigo-600/15 to-violet-600/10 border border-indigo-500/20 hover:from-indigo-600/20 transition-all group">
             <div className="h-10 w-10 rounded-xl bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center shrink-0">
-              <Users size={16} className="text-indigo-400" />
+              <Users size={16} className="text-amber-400" />
             </div>
             <div>
-              <p className="text-sm font-bold text-white group-hover:text-indigo-300 transition-colors">Creator Studio</p>
+              <p className="text-sm font-bold text-white group-hover:text-amber-300 transition-colors">Creator Studio</p>
               <p className="text-[10px] text-white/35 mt-0.5">Publish blogs, polls, and feeds</p>
             </div>
           </Link>

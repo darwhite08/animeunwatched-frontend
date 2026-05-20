@@ -176,7 +176,7 @@ const MOCK_MEMBERS: MemberEntry[] = [
 
 const ROLE_STYLES: Record<MemberEntry["role"], string> = {
   ADMIN: "bg-amber-500/15 border-amber-500/30 text-amber-400",
-  MOD:   "bg-indigo-500/15 border-indigo-500/30 text-indigo-400",
+  MOD:   "bg-indigo-500/15 border-indigo-500/30 text-amber-400",
   USER:  "bg-white/5 border-white/10 text-white/40",
 }
 
@@ -380,7 +380,7 @@ export default function ClubDetailPage({
                     </div>
                     <ChevronRight
                       size={14}
-                      className="text-white/20 group-hover:text-indigo-400 group-hover:translate-x-0.5 transition-all shrink-0"
+                      className="text-white/20 group-hover:text-amber-400 group-hover:translate-x-0.5 transition-all shrink-0"
                     />
                   </Link>
                 </motion.div>
@@ -445,7 +445,7 @@ export default function ClubDetailPage({
               {/* Description */}
               <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/8 space-y-4">
                 <div className="flex items-center gap-2">
-                  <BookOpen size={14} className="text-indigo-400" />
+                  <BookOpen size={14} className="text-amber-400" />
                   <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40">
                     About
                   </h2>
@@ -464,7 +464,7 @@ export default function ClubDetailPage({
                 <ol className="space-y-3">
                   {club.rules.map((rule, i) => (
                     <li key={i} className="flex items-start gap-3 text-sm text-white/60">
-                      <span className="shrink-0 h-5 w-5 rounded-full bg-indigo-500/15 border border-indigo-500/25 flex items-center justify-center text-[9px] font-black text-indigo-400">
+                      <span className="shrink-0 h-5 w-5 rounded-full bg-indigo-500/15 border border-indigo-500/25 flex items-center justify-center text-[9px] font-black text-amber-400">
                         {i + 1}
                       </span>
                       {rule}

@@ -54,10 +54,10 @@ export default function PressPage() {
             {["Logo (SVG)", "Logo (PNG Dark)", "Logo (PNG Light)"].map(item => (
               <div key={item} className="p-5 rounded-2xl bg-white/[0.02] border border-white/8 flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <FileText size={16} className="text-indigo-400" />
+                  <FileText size={16} className="text-amber-400" />
                   <span className="text-sm font-bold text-white/70">{item}</span>
                 </div>
-                <button className="p-2 rounded-lg bg-indigo-600/10 text-indigo-400 hover:bg-indigo-600/20 transition-colors">
+                <button className="p-2 rounded-lg bg-indigo-600/10 text-amber-400 hover:bg-indigo-600/20 transition-colors">
                   <Download size={13} />
                 </button>
               </div>
@@ -91,7 +91,7 @@ export default function PressPage() {
             <div key={p.title} className="flex items-center gap-4 p-5 rounded-2xl bg-white/[0.02] border border-white/8 hover:border-white/15 transition-colors">
               <div className="shrink-0">
                 <p className="text-[9px] font-mono text-white/25 uppercase">{p.date}</p>
-                <span className="text-[8px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">{p.type}</span>
+                <span className="text-[8px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full bg-indigo-500/10 text-amber-400 border border-indigo-500/20">{p.type}</span>
               </div>
               <p className="text-sm font-bold text-white/70 flex-1">{p.title}</p>
             </div>

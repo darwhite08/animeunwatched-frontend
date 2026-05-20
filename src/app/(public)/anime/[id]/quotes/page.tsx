@@ -57,7 +57,7 @@ export default function AnimeQuotesPage({ params }: { params: Promise<{ id: stri
         </div>
 
         <div className="flex items-center gap-3">
-          <Quote size={20} className="text-indigo-400" />
+          <Quote size={20} className="text-amber-400" />
           <h1 className="text-3xl font-black tracking-tighter uppercase italic text-white">
             Memorable Quotes<span style={{color:"#f59e0b"}}>.</span>
           </h1>
@@ -93,7 +93,7 @@ export default function AnimeQuotesPage({ params }: { params: Promise<{ id: stri
           ))}
         </div>
 
-        <Link href={`/anime/${id}`} className="flex items-center gap-2 text-sm font-black uppercase tracking-widest text-indigo-400 hover:text-indigo-300 transition-colors justify-center">
+        <Link href={`/anime/${id}`} className="flex items-center gap-2 text-sm font-black uppercase tracking-widest text-amber-400 hover:text-amber-300 transition-colors justify-center">
           <ChevronLeft size={14} /> Back to {anime?.title ?? id}
         </Link>
       </div>

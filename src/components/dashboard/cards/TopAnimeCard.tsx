@@ -13,7 +13,7 @@ function mapDTO(a: AnimeDTO, i: number) {
 /* ── Score dot colour ── */
 function scoreColour(score: number) {
   if (score >= 9.5) return "text-amber-400"
-  if (score >= 9)   return "text-indigo-400"
+  if (score >= 9)   return "text-amber-400"
   return "text-white/60"
 }
 
@@ -43,7 +43,7 @@ export default function TopAnimeCard() {
         </div>
         <Link
           href="/rate"
-          className="flex items-center gap-1 text-[9px] font-black uppercase tracking-widest text-indigo-400/60 hover:text-indigo-400 transition-colors"
+          className="flex items-center gap-1 text-[9px] font-black uppercase tracking-widest text-indigo-400/60 hover:text-amber-400 transition-colors"
         >
           Rate Another <ChevronRight size={10} />
         </Link>

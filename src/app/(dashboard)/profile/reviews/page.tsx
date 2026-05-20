@@ -99,7 +99,7 @@ export default function MyReviewsPage() {
       {/* Stats */}
       <div className="grid grid-cols-3 gap-4">
         {[
-          { label: "Reviews", value: String(reviews.length), icon: PenSquare, color: "text-indigo-400" },
+          { label: "Reviews", value: String(reviews.length), icon: PenSquare, color: "text-amber-400" },
           { label: "Avg Score", value: avgScore + "/10", icon: Star, color: "text-amber-400" },
           { label: "Helpful", value: totalHelpful.toLocaleString(), icon: ThumbsUp, color: "text-emerald-400" },
         ].map(s => (
@@ -146,7 +146,7 @@ export default function MyReviewsPage() {
                   </div>
                 </div>
                 <div className="flex gap-2 shrink-0">
-                  <button onClick={() => push("Review editing coming soon!", "info")} className="p-2 rounded-lg text-white/25 hover:text-indigo-400 hover:bg-white/5 transition-colors">
+                  <button onClick={() => push("Review editing coming soon!", "info")} className="p-2 rounded-lg text-white/25 hover:text-amber-400 hover:bg-white/5 transition-colors">
                     <Edit2 size={13} />
                   </button>
                   <button onClick={() => deleteReview(r.id)} className="p-2 rounded-lg text-white/25 hover:text-red-400 hover:bg-red-500/5 transition-colors">
@@ -157,7 +157,7 @@ export default function MyReviewsPage() {
               <p className="text-sm text-white/60 leading-relaxed line-clamp-3">{r.body}</p>
               <div className="flex items-center justify-between pt-2 border-t border-white/5 text-[9px] text-white/25">
                 <span>{r.helpful} people found this helpful</span>
-                <Link href={`/anime/${r.anime.id}/reviews`} className="text-indigo-400/60 hover:text-indigo-400 transition-colors font-black uppercase tracking-widest">
+                <Link href={`/anime/${r.anime.id}/reviews`} className="text-indigo-400/60 hover:text-amber-400 transition-colors font-black uppercase tracking-widest">
                   View on Anime →
                 </Link>
               </div>

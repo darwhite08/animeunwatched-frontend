@@ -226,7 +226,7 @@ export default function AboutPage() {
                 transition={{ delay: i * 0.07 }}
                 className="flex items-center gap-5 p-5 rounded-2xl border border-white/5 bg-white/[0.02] hover:border-indigo-500/20 hover:bg-white/[0.035] transition-all group"
               >
-                <div className="p-2.5 rounded-xl bg-indigo-500/10 text-indigo-400 shrink-0 group-hover:bg-indigo-500/15 transition-colors">
+                <div className="p-2.5 rounded-xl bg-indigo-500/10 text-amber-400 shrink-0 group-hover:bg-indigo-500/15 transition-colors">
                   <item.icon size={18} />
                 </div>
                 <div>
@@ -252,7 +252,7 @@ export default function AboutPage() {
           </div>
           <div className="relative z-10">
             <h2 className="text-4xl font-black tracking-tighter uppercase italic text-white mb-4">
-              Join The Dojo<span className="text-indigo-400">.</span>
+              Join The Dojo<span className="text-amber-400">.</span>
             </h2>
             <p className="text-white/45 text-sm mb-8 max-w-lg mx-auto">
               12,400 Shinobi already archive their anime legacy here. Your list is waiting.

@@ -172,7 +172,7 @@ function ImportZone() {
         className="sr-only"
         onChange={handleFileChange}
       />
-      <Upload size={28} className={`mx-auto mb-3 transition-colors ${dragging ? "text-indigo-400" : "text-white/20"}`} />
+      <Upload size={28} className={`mx-auto mb-3 transition-colors ${dragging ? "text-amber-400" : "text-white/20"}`} />
       <p className="text-sm font-black uppercase italic tracking-tight text-white/60">
         Drop your export file here
       </p>
@@ -185,7 +185,7 @@ function ImportZone() {
           animate={{ opacity: 1 }}
           className="absolute inset-0 rounded-2xl bg-indigo-500/5 flex items-center justify-center"
         >
-          <p className="text-sm font-black uppercase italic tracking-widest text-indigo-400">
+          <p className="text-sm font-black uppercase italic tracking-widest text-amber-400">
             Drop to Import
           </p>
         </motion.div>
@@ -294,15 +294,15 @@ export default function ConnectedAccountsPage() {
             className="group flex items-center gap-4 p-5 rounded-2xl bg-white/[0.02] border border-white/8 hover:border-indigo-500/25 hover:bg-indigo-500/5 transition-all text-left"
           >
             <div className="h-10 w-10 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center shrink-0">
-              <FileJson size={16} className="text-indigo-400" />
+              <FileJson size={16} className="text-amber-400" />
             </div>
             <div>
-              <p className="text-sm font-black text-white group-hover:text-indigo-300 transition-colors">
+              <p className="text-sm font-black text-white group-hover:text-amber-300 transition-colors">
                 Export JSON
               </p>
               <p className="text-[10px] text-white/30 mt-0.5">Developer-friendly</p>
             </div>
-            <Download size={13} className="ml-auto text-white/20 group-hover:text-indigo-400 transition-colors" />
+            <Download size={13} className="ml-auto text-white/20 group-hover:text-amber-400 transition-colors" />
           </button>
         </div>
         <p className="text-[10px] text-white/20">

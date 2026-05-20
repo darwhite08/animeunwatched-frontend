@@ -120,7 +120,7 @@ export default function AnimeModal({ isOpen, onClose, anime }: AnimeModalProps) 
                     }`}>
                       {anime.status === "airing" ? "Airing" : "Completed"}
                     </span>
-                    <span className="px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-wider bg-indigo-500/10 border border-indigo-500/20 text-indigo-400">
+                    <span className="px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-wider bg-indigo-500/10 border border-indigo-500/20 text-amber-400">
                       {anime.type}
                     </span>
                   </div>

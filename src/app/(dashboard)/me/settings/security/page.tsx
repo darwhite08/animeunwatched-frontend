@@ -159,7 +159,7 @@ function ActiveSessions({
               >
                 <Icon
                   size={16}
-                  className={session.isCurrent ? "text-indigo-400" : "text-white/30"}
+                  className={session.isCurrent ? "text-amber-400" : "text-white/30"}
                 />
               </div>
 
@@ -244,7 +244,7 @@ function TwoFactor() {
     <Section title="Two-Factor Authentication">
       <div className="flex items-start gap-4 p-5 rounded-xl bg-indigo-500/5 border border-indigo-500/15">
         <div className="h-10 w-10 shrink-0 rounded-xl bg-indigo-500/15 flex items-center justify-center">
-          <Lock size={16} className="text-indigo-400" />
+          <Lock size={16} className="text-amber-400" />
         </div>
         <div>
           <p className="text-sm font-black text-white uppercase italic tracking-tighter">
@@ -253,7 +253,7 @@ function TwoFactor() {
           <p className="text-xs text-white/35 mt-1 leading-relaxed max-w-sm">
             Authenticator app and SMS-based two-factor authentication are in active development. You will receive a notification when it rolls out.
           </p>
-          <span className="mt-3 inline-block px-3 py-1 rounded-full bg-indigo-500/15 border border-indigo-500/25 text-[9px] font-black uppercase tracking-widest text-indigo-400">
+          <span className="mt-3 inline-block px-3 py-1 rounded-full bg-indigo-500/15 border border-indigo-500/25 text-[9px] font-black uppercase tracking-widest text-amber-400">
             Q3 2026
           </span>
         </div>
@@ -408,7 +408,7 @@ export default function SecuritySettingsPage() {
           Security<br />Settings
         </h1>
         <p className="text-xs text-white/30 mt-2 flex items-center gap-2">
-          <Shield size={11} className="text-indigo-400" />
+          <Shield size={11} className="text-amber-400" />
           Manage sessions, passwords, and account access.
         </p>
       </motion.div>

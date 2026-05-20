@@ -138,7 +138,7 @@ export default function AnimeReviewsPage({ params }: { params: Promise<{ id: str
             {anime.title}
           </Link>
           <ChevronRight size={11} className="text-white/15" />
-          <span className="text-indigo-400">Reviews</span>
+          <span className="text-amber-400">Reviews</span>
         </nav>
 
         {/* Anime mini header */}
@@ -152,7 +152,7 @@ export default function AnimeReviewsPage({ params }: { params: Promise<{ id: str
           </Link>
           <div className="flex-1 min-w-0">
             <Link href={`/anime/${anime.id}`}>
-              <h1 className="text-xl font-black uppercase italic tracking-tighter text-white hover:text-indigo-300 transition-colors leading-tight truncate">
+              <h1 className="text-xl font-black uppercase italic tracking-tighter text-white hover:text-amber-300 transition-colors leading-tight truncate">
                 {anime.title}
               </h1>
             </Link>
@@ -280,7 +280,7 @@ export default function AnimeReviewsPage({ params }: { params: Promise<{ id: str
                                 return n
                               })
                             }
-                            className="text-[10px] font-black text-indigo-400 hover:text-indigo-300 mt-1.5 transition-colors"
+                            className="text-[10px] font-black text-amber-400 hover:text-amber-300 mt-1.5 transition-colors"
                           >
                             {isExpanded ? "Show less" : "Read more"}
                           </button>

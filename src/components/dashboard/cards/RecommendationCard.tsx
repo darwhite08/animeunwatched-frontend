@@ -32,7 +32,7 @@ export default function RecommendationCard() {
       <div className="relative z-10 flex items-start justify-between mb-8">
         <div>
           <div className="flex items-center gap-2 mb-2">
-            <Sparkles size={14} className="text-indigo-400" />
+            <Sparkles size={14} className="text-amber-400" />
             <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/30">Neural Oracle</span>
           </div>
           <h3 className="text-xl font-black tracking-tighter text-white">Recommended for You</h3>
@@ -40,7 +40,7 @@ export default function RecommendationCard() {
         </div>
         <Link
           href="/ai-discover"
-          className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-indigo-400 hover:text-indigo-300 transition-colors"
+          className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-amber-400 hover:text-amber-300 transition-colors"
         >
           Discover All <ArrowRight size={11} />
         </Link>

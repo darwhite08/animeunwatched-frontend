@@ -50,7 +50,7 @@ export default function UsersPage() {
       {/* Header */}
       <div className="max-w-4xl mx-auto px-6 pt-32 pb-10">
         <motion.div initial={{ opacity:0, x:-16 }} animate={{ opacity:1, x:0 }}
-          className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-[10px] font-black uppercase tracking-[0.3em] text-indigo-400 mb-5"
+          className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-[10px] font-black uppercase tracking-[0.3em] text-amber-400 mb-5"
         >
           <Users size={11} /> Shinobi Directory
         </motion.div>
@@ -91,12 +91,12 @@ export default function UsersPage() {
                   {user.avatar}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="font-black text-white group-hover:text-indigo-300 transition-colors">{user.displayName}</p>
+                  <p className="font-black text-white group-hover:text-amber-300 transition-colors">{user.displayName}</p>
                   <p className="text-xs text-white/35">@{user.username} · Lv.{user.level} {user.title}</p>
                 </div>
                 <div className="hidden sm:flex items-center gap-6 text-xs text-white/30 shrink-0">
                   <span className="flex items-center gap-1"><Trophy size={11} className="text-amber-400" /> {user.reputation}</span>
-                  <span className="flex items-center gap-1"><Star size={11} className="text-indigo-400" /> {user.anime}</span>
+                  <span className="flex items-center gap-1"><Star size={11} className="text-amber-400" /> {user.anime}</span>
                   <span className="flex items-center gap-1"><Flame size={11} className="text-orange-400" /> {user.streak}d</span>
                 </div>
               </Link>

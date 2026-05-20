@@ -293,30 +293,30 @@ export default function CommunityPage() {
 
   return (
     <div className="min-h-screen bg-[#020202] text-white pb-32">
-      {/* Fully sticky header — compact so it doesn't eat into post space */}
-      <div className="sticky top-[72px] z-30 bg-[#020202]/96 backdrop-blur-xl border-b border-white/5">
-        {/* Title row */}
-        <div className="max-w-6xl mx-auto px-6 pt-4 pb-2 flex items-center justify-between gap-4">
-          <div>
-            <h1 className="text-xl font-black tracking-tighter uppercase italic text-white leading-tight">
-              Community<span style={{ color: "#f59e0b" }}>.</span>
-            </h1>
-            <p className="text-[10px] text-white/30 mt-0.5">
-              {posts.length > 0 ? `${posts.length}+ posts from the Shinobi` : "The Dojo"}
-            </p>
-          </div>
-          <button onClick={() => setComposing(c => !c)}
-            className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-[11px] font-black uppercase tracking-widest text-black transition-all hover:scale-105 shrink-0"
-            style={{ background: "linear-gradient(135deg, #fbbf24, #f59e0b)", boxShadow: "0 4px 12px rgba(245,158,11,0.3)" }}>
-            <Plus size={12} /> New Post
-          </button>
+      {/* Page header — scrolls naturally, never blocks post cards */}
+      <div className="max-w-6xl mx-auto px-6 pt-8 pb-3 flex items-start justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-black tracking-tighter uppercase italic text-white">
+            Community<span style={{ color: "#f59e0b" }}>.</span>
+          </h1>
+          <p className="text-xs text-white/35 mt-1">
+            {posts.length > 0 ? `${posts.length}+ posts from the Shinobi` : "The Dojo — share your thoughts"}
+          </p>
         </div>
+        {/* New Post visible on initial load; floating button handles scroll */}
+        <button onClick={() => setComposing(c => !c)}
+          className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest text-black transition-all hover:scale-105 shrink-0 mt-1"
+          style={{ background: "linear-gradient(135deg, #fbbf24, #f59e0b)", boxShadow: "0 4px 16px rgba(245,158,11,0.35)" }}>
+          <Plus size={13} /> New Post
+        </button>
+      </div>
 
-        {/* Tab row */}
-        <div className="max-w-6xl mx-auto px-6 flex items-center gap-1 pb-0">
+      {/* Tabs only — very thin sticky bar (~42px), won't cover card content */}
+      <div className="sticky top-[72px] z-30 bg-[#020202]/95 backdrop-blur-xl border-b border-white/[0.06]">
+        <div className="max-w-6xl mx-auto px-6 flex items-center gap-1">
           {(["trending", "following", "latest"] as FeedTab[]).map(t => (
             <button key={t} onClick={() => setFeedTab(t)}
-              className={`relative px-4 py-2.5 text-[11px] font-black uppercase tracking-widest capitalize transition-colors ${
+              className={`relative px-5 py-3 text-[11px] font-black uppercase tracking-widest capitalize transition-colors ${
                 feedTab === t ? "text-white" : "text-white/30 hover:text-white/60"
               }`}>
               {t}
@@ -329,8 +329,18 @@ export default function CommunityPage() {
         </div>
       </div>
 
-      {/* Content — pt-6 gives breathing room below the sticky header */}
-      <div className="max-w-6xl mx-auto px-6 pt-6 grid lg:grid-cols-3 gap-8">
+      {/* Floating New Post button — visible after scrolling past header */}
+      <motion.button
+        initial={{ opacity: 0, scale: 0.8 }}
+        animate={{ opacity: 1, scale: 1 }}
+        onClick={() => setComposing(c => !c)}
+        className="fixed bottom-8 right-8 z-40 flex items-center gap-2 px-5 py-3 rounded-2xl text-xs font-black uppercase tracking-widest text-black transition-all hover:scale-105 md:hidden"
+        style={{ background: "linear-gradient(135deg, #fbbf24, #f59e0b)", boxShadow: "0 8px 24px rgba(245,158,11,0.5)" }}
+      >
+        <Plus size={14} /> Post
+      </motion.button>
+
+      <div className="max-w-6xl mx-auto px-6 pt-5 grid lg:grid-cols-3 gap-8">
 
         {/* Feed */}
         <div className="lg:col-span-2 space-y-5">

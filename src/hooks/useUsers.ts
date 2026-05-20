@@ -21,6 +21,14 @@ export function useUpdateMe() {
   })
 }
 
+export function useUpdateSlug() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (slug: string) => ep.updateSlug(slug),
+    onSuccess:  () => qc.invalidateQueries({ queryKey: ["auth/me"] }),
+  })
+}
+
 export function useFollow(username: string) {
   const qc = useQueryClient()
   return useMutation({

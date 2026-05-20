@@ -90,12 +90,25 @@ function AnimatedCounter({ target }: { target: number }) {
   return <>{val}</>
 }
 
+// Per-mode API params — real server-side filtering, not client-side slice of 50
+const MODE_PARAMS: Record<ModeId, Parameters<typeof useBrowseAnime>[0]> = {
+  dna:      { q: "Psychological", limit: 9 },
+  gems:     { limit: 9 },                          // clientFilter: rating >= 8.5
+  similar:  { studio: "MAPPA", limit: 9 },
+  trending: { status: "airing", limit: 9 },
+}
+
+function useModeAnime(mode: ModeId) {
+  const { data, isLoading } = useBrowseAnime(MODE_PARAMS[mode])
+  let anime = (data?.data ?? []).map(mapDTO)
+  if (mode === "gems") anime = anime.filter(a => a.rating >= 8.5)
+  return { anime: anime.slice(0, 9), isLoading }
+}
+
 export default function RecommendationsPage() {
   const [mode, setMode] = useState<ModeId>("dna")
   const [modalAnime, setModalAnime] = useState<Anime | null>(null)
-  const { data: browseData } = useBrowseAnime({ limit: 50 })
-  const allAnime = (browseData?.data ?? []).map(mapDTO)
-  const results = getAnimeForMode(mode, allAnime)
+  const { anime: results, isLoading } = useModeAnime(mode)
 
   return (
     <div className="min-h-screen bg-[#020202] text-white">
@@ -184,7 +197,7 @@ export default function RecommendationsPage() {
           <div className="flex-1">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-[10px] font-black uppercase tracking-[0.4em] text-white/30">
-                {results.length} results · {MODES.find(m => m.id === mode)?.label}
+                {isLoading ? "Loading…" : `${results.length} results`} · {MODES.find(m => m.id === mode)?.label}
               </h2>
               <div className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-wider text-indigo-400/60">
                 <Sparkles size={10} />

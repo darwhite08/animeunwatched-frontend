@@ -219,7 +219,7 @@ export default function Navbar() {
             </svg>
           </div>
           <span className="text-lg font-black tracking-tight text-white uppercase italic hidden sm:block">
-            KAIVERON<span className="text-white/40">.</span>
+            KAIVERON<span style={{ color: "#f59e0b" }}>.</span>
           </span>
         </Link>
 

@@ -9,35 +9,41 @@ export default function NotFound() {
     <div className="min-h-screen bg-[#020202] text-white flex flex-col items-center justify-center px-6 relative overflow-hidden">
       {/* Background glows */}
       <motion.div
-        animate={{ scale: [1, 1.08, 1], opacity: [0.12, 0.22, 0.12] }}
+        animate={{ scale: [1, 1.08, 1], opacity: [0.08, 0.18, 0.08] }}
         transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute top-1/3 left-1/4 w-[500px] h-[500px] bg-indigo-600 blur-[160px] rounded-full pointer-events-none"
+        className="absolute top-1/3 left-1/4 w-[500px] h-[500px] blur-[160px] rounded-full pointer-events-none"
+        style={{ background: "rgba(245,158,11,0.12)" }}
       />
       <motion.div
-        animate={{ scale: [1, 1.12, 1], opacity: [0.08, 0.15, 0.08] }}
+        animate={{ scale: [1, 1.12, 1], opacity: [0.05, 0.12, 0.05] }}
         transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-        className="absolute bottom-1/3 right-1/4 w-[400px] h-[400px] bg-violet-700 blur-[130px] rounded-full pointer-events-none"
+        className="absolute bottom-1/3 right-1/4 w-[400px] h-[400px] blur-[130px] rounded-full pointer-events-none"
+        style={{ background: "rgba(99,102,241,0.10)" }}
       />
 
       {/* Grid */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff06_1px,transparent_1px),linear-gradient(to_bottom,#ffffff06_1px,transparent_1px)] bg-[size:52px_52px] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_50%,#000_20%,transparent_100%)] pointer-events-none" />
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:52px_52px] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_50%,#000_20%,transparent_100%)] pointer-events-none" />
 
       <div className="relative z-10 text-center max-w-lg">
-        {/* Eyebrow */}
         <motion.p
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-[9px] font-mono font-black uppercase tracking-[0.5em] text-indigo-400/60 mb-6"
+          className="text-[9px] font-mono font-black uppercase tracking-[0.5em] mb-6"
+          style={{ color: "rgba(245,158,11,0.6)" }}
         >
           Error 404 // Archive Not Found
         </motion.p>
 
-        {/* Giant 404 */}
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          className="text-[clamp(6rem,20vw,14rem)] font-black tracking-tighter leading-none uppercase italic text-transparent bg-clip-text bg-gradient-to-b from-white/80 to-white/10 mb-6"
+          className="text-[clamp(6rem,20vw,14rem)] font-black tracking-tighter leading-none uppercase italic mb-6"
+          style={{
+            backgroundImage: "linear-gradient(135deg, #fbbf24 0%, #f59e0b 30%, rgba(255,255,255,0.15) 100%)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+          }}
         >
           404
         </motion.div>
@@ -57,7 +63,7 @@ export default function NotFound() {
           transition={{ delay: 0.25 }}
           className="text-white/40 text-sm leading-relaxed mb-10"
         >
-          The page you're looking for has been moved, deleted, or never existed in the neural archives. Try going back or searching for what you need.
+          The page you're looking for has been moved, deleted, or never existed in the neural archives.
         </motion.p>
 
         <motion.div
@@ -66,17 +72,16 @@ export default function NotFound() {
           transition={{ delay: 0.35 }}
           className="flex flex-wrap items-center justify-center gap-3"
         >
-          <Link
-            href="/"
-            className="flex items-center gap-2.5 px-6 py-3.5 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-xs font-black uppercase tracking-widest text-white transition-all hover:-translate-y-0.5 shadow-[0_0_24px_rgba(99,102,241,0.35)]"
+          <Link href="/"
+            className="flex items-center gap-2.5 px-6 py-3.5 rounded-2xl text-xs font-black uppercase tracking-widest text-black transition-all hover:-translate-y-0.5"
+            style={{ background: "linear-gradient(135deg, #fbbf24, #f59e0b)", boxShadow: "0 4px 20px rgba(245,158,11,0.4)" }}
           >
             <Home size={13} /> Go Home
           </Link>
-          <Link
-            href="/search"
+          <Link href="/bestanimelist"
             className="flex items-center gap-2.5 px-6 py-3.5 rounded-2xl border border-white/10 bg-white/[0.04] text-xs font-black uppercase tracking-widest text-white/60 hover:text-white hover:bg-white/[0.08] transition-all hover:-translate-y-0.5"
           >
-            <Search size={13} /> Search Archives
+            <Search size={13} /> Browse Anime
           </Link>
           <button
             onClick={() => window.history.back()}

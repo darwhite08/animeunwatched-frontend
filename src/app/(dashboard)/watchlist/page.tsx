@@ -80,7 +80,7 @@ export default function WatchlistPage() {
         <h2 className="text-3xl font-black text-white tracking-tighter">Your Archives Await</h2>
         <p className="text-white/40 text-sm max-w-xs text-center">Sign in to track your anime journey, manage your watchlist, and sync across devices.</p>
         <Link href="/login"
-          className="flex items-center gap-2 px-8 py-4 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-white font-black text-sm uppercase tracking-widest transition-all">
+          className="flex items-center gap-2 px-8 py-4 rounded-2xl font-black text-sm uppercase tracking-widest transition-all text-black" style={{background:"linear-gradient(135deg,#fbbf24,#f59e0b)",boxShadow:"0 4px 20px rgba(245,158,11,0.35)"}}>
           <LogIn size={15} /> Sign In
         </Link>
       </div>
@@ -125,14 +125,16 @@ export default function WatchlistPage() {
       <AnimatePresence>
         {bannerVisible && (
           <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} className="overflow-hidden">
-            <div className="flex items-center justify-between gap-4 px-5 py-3.5 rounded-2xl bg-indigo-600/10 border border-indigo-500/25">
+            <div className="flex items-center justify-between gap-4 px-5 py-3.5 rounded-2xl"
+              style={{ background: "rgba(245,158,11,0.08)", border: "1px solid rgba(245,158,11,0.2)" }}>
               <div className="flex items-center gap-3 min-w-0">
-                <Share2 size={15} className="text-indigo-400 shrink-0" />
+                <Share2 size={15} className="text-amber-400 shrink-0" />
                 <p className="text-sm font-bold text-white/80 truncate">Share your anime list and grow the community ↗</p>
               </div>
               <div className="flex items-center gap-2 shrink-0">
                 <button onClick={() => setShareModalOpen(true)}
-                  className="px-4 py-1.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-[11px] font-black uppercase tracking-widest text-white transition-all">
+                  className="px-4 py-1.5 rounded-xl text-[11px] font-black uppercase tracking-widest text-black transition-all"
+                  style={{ background: "linear-gradient(135deg, #fbbf24, #f59e0b)" }}>
                   Share List
                 </button>
                 <button onClick={() => { localStorage.setItem(SHARE_KEY, "1"); setBannerVisible(false) }}
@@ -196,7 +198,7 @@ export default function WatchlistPage() {
               (COUNTS[t] > 0 || t === "All") && (
                 <button key={t} onClick={() => setTab(t)}
                   className={`relative flex items-center gap-2 px-5 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest whitespace-nowrap transition-all ${
-                    tab === t ? "bg-indigo-600 text-white shadow-[0_0_20px_rgba(79,70,229,0.3)]" : "bg-white/5 text-white/40 hover:bg-white/8 border border-white/5"
+                    tab === t ? "text-black shadow-[0_0_20px_rgba(245,158,11,0.3)]" : "bg-white/5 text-white/40 hover:bg-white/8 border border-white/5"
                   }`}>
                   {t}
                   {COUNTS[t] > 0 && (

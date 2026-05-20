@@ -287,7 +287,7 @@ export default function ClubDetailPage({
               className={`px-8 py-3 rounded-2xl text-sm font-black uppercase tracking-widest transition-all duration-300 ${
                 club.isJoined
                   ? "bg-white/8 border border-white/15 text-white/60 hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/20"
-                  : "bg-indigo-600 hover:bg-indigo-500 text-white shadow-[0_0_32px_rgba(99,102,241,0.4)] hover:-translate-y-0.5"
+                  : "bg-amber-500 hover:bg-amber-400 text-black shadow-[0_0_32px_rgba(99,102,241,0.4)] hover:-translate-y-0.5"
               }`}
             >
               {club.isJoined ? "Leave Club" : "Join Club"}

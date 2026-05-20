@@ -193,7 +193,7 @@ function ClubCard({
             className={`flex-1 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-200 ${
               club.isJoined
                 ? "bg-white/8 border border-white/10 text-white/50 hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/20"
-                : "bg-indigo-600 hover:bg-indigo-500 text-white shadow-[0_0_20px_rgba(99,102,241,0.25)]"
+                : "text-black shadow-[0_0_20px_rgba(245,158,11,0.3)]" // gold
             }`}
           >
             {club.isJoined ? "Joined" : "Join Club"}
@@ -272,7 +272,7 @@ export default function ClubsPage() {
               </div>
               <Link
                 href="/clubs/new"
-                className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-sm font-black uppercase tracking-widest text-white transition-all shadow-[0_0_32px_rgba(99,102,241,0.3)] hover:-translate-y-0.5"
+                className="flex items-center gap-2 px-6 py-3 rounded-2xl text-sm font-black uppercase tracking-widest text-black transition-all hover:-translate-y-0.5" style={{background:"linear-gradient(135deg,#fbbf24,#f59e0b)",boxShadow:"0 0 32px rgba(245,158,11,0.35)"}}
               >
                 <Plus size={14} /> Create Club
               </Link>
@@ -309,7 +309,7 @@ export default function ClubsPage() {
                 onClick={() => setActiveCategory(cat)}
                 className={`px-4 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all ${
                   activeCategory === cat
-                    ? "bg-indigo-600 text-white shadow-[0_0_16px_rgba(99,102,241,0.3)]"
+                    ? "text-black shadow-[0_0_16px_rgba(245,158,11,0.3)]"
                     : "bg-white/[0.03] border border-white/8 text-white/40 hover:text-white/70 hover:border-white/15"
                 }`}
               >

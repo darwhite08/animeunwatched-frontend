@@ -341,7 +341,7 @@ export default function CreateThreadPage({
               disabled={!canSubmit}
               className={`flex items-center gap-2 px-8 py-3.5 rounded-2xl text-sm font-black uppercase tracking-widest transition-all ${
                 canSubmit
-                  ? "bg-indigo-600 hover:bg-indigo-500 text-white shadow-[0_0_32px_rgba(99,102,241,0.35)]"
+                  ? "bg-amber-500 hover:bg-amber-400 text-black shadow-[0_0_32px_rgba(99,102,241,0.35)]"
                   : "bg-white/5 border border-white/10 text-white/25 cursor-not-allowed"
               }`}
             >

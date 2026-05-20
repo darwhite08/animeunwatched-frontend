@@ -169,7 +169,7 @@ function MemberCard({
         className={`w-full py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-200 ${
           member.isFollowed
             ? "bg-white/8 border border-white/10 text-white/40 hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/20"
-            : "bg-indigo-600 hover:bg-indigo-500 text-white shadow-[0_0_16px_rgba(99,102,241,0.25)]"
+            : "bg-amber-500 hover:bg-amber-400 text-black shadow-[0_0_16px_rgba(99,102,241,0.25)]"
         }`}
       >
         {member.isFollowed ? "Following" : "Follow"}
@@ -288,7 +288,7 @@ export default function ClubMembersPage({
             className={`flex items-center gap-2 px-6 py-3 rounded-2xl text-sm font-black uppercase tracking-widest transition-all duration-300 whitespace-nowrap ${
               isJoined
                 ? "bg-white/8 border border-white/15 text-white/60 hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/20"
-                : "bg-indigo-600 hover:bg-indigo-500 text-white shadow-[0_0_32px_rgba(99,102,241,0.3)] hover:-translate-y-0.5"
+                : "bg-amber-500 hover:bg-amber-400 text-black shadow-[0_0_32px_rgba(99,102,241,0.3)] hover:-translate-y-0.5"
             }`}
           >
             <UserPlus size={14} />

@@ -1,18 +1,25 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect, useCallback } from "react"
 import { motion } from "framer-motion"
-import { User, Camera, Trash2, Download, Loader2, CheckCircle2 } from "lucide-react"
+import { User, Camera, Trash2, Download, Loader2, CheckCircle2, Link2, AlertCircle } from "lucide-react"
 import { useToast } from "@/stores/toast.store"
 import { useAuthStore } from "@/stores/auth.store"
 import { useUpdateMe } from "@/hooks/useUsers"
+import { useMutation } from "@tanstack/react-query"
+import { updateSlug, checkSlugAvailable } from "@/lib/api/endpoints"
+import { validateSlug, generateSlug } from "@/lib/utils/slug"
+import { useRouter } from "next/navigation"
 
 export default function AccountSettingsPage() {
-  const { push } = useToast()
-  const storeUser = useAuthStore(s => s.user)
-  const updateMe = useUpdateMe()
-  const [saving, setSaving] = useState(false)
-  const [saved, setSaved] = useState(false)
+  const { push }    = useToast()
+  const router      = useRouter()
+  const storeUser   = useAuthStore(s => s.user)
+  const setUser     = useAuthStore(s => s.setUser)
+  const updateMe    = useUpdateMe()
+
+  const [saving, setSaving]   = useState(false)
+  const [saved, setSaved]     = useState(false)
   const [deleting, setDeleting] = useState(false)
   const [form, setForm] = useState({
     displayName: storeUser?.displayName ?? "",
@@ -21,6 +28,47 @@ export default function AccountSettingsPage() {
     bio:         storeUser?.bio         ?? "Anime enjoyer. Tracking every frame.",
     avatarUrl:   storeUser?.avatarUrl   ?? "",
   })
+
+  // Slug change state
+  const [slugInput,     setSlugInput]     = useState(storeUser?.slug ?? "")
+  const [slugStatus,    setSlugStatus]    = useState<"idle" | "checking" | "available" | "taken" | "invalid">("idle")
+  const [slugError,     setSlugError]     = useState<string | null>(null)
+  const [slugSaving,    setSlugSaving]    = useState(false)
+  const slugChanged = slugInput !== (storeUser?.slug ?? "")
+
+  // Debounced availability check
+  useEffect(() => {
+    if (!slugChanged || !slugInput) { setSlugStatus("idle"); setSlugError(null); return }
+    const err = validateSlug(slugInput)
+    if (err) { setSlugStatus("invalid"); setSlugError(err); return }
+
+    setSlugStatus("checking")
+    const timer = setTimeout(async () => {
+      try {
+        const res = await checkSlugAvailable(slugInput)
+        setSlugStatus(res.available ? "available" : "taken")
+        setSlugError(res.available ? null : "Already taken — try another")
+      } catch {
+        setSlugStatus("idle")
+      }
+    }, 400)
+    return () => clearTimeout(timer)
+  }, [slugInput, slugChanged])
+
+  const saveSlug = async () => {
+    if (slugStatus !== "available" || !slugChanged) return
+    setSlugSaving(true)
+    try {
+      const res = await updateSlug(slugInput)
+      if (storeUser) setUser({ ...storeUser, slug: res.user.slug })
+      push("URL updated! Redirecting…", "success")
+      setTimeout(() => router.replace(`/user/${res.user.slug}/settings/account`), 800)
+    } catch {
+      push("Failed to update URL slug. Try again.", "error")
+    } finally {
+      setSlugSaving(false)
+    }
+  }
 
   const set = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
     setForm(f => ({ ...f, [k]: e.target.value }))
@@ -108,6 +156,75 @@ export default function AccountSettingsPage() {
             : saved  ? <><CheckCircle2 size={13} /> Saved!</>
             : "Save Changes"}
           </motion.button>
+        </div>
+      </div>
+
+      {/* Profile URL Slug */}
+      <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/8 space-y-4"
+        style={{ borderColor: slugStatus === "available" ? "rgba(245,158,11,0.25)" : undefined }}>
+        <div className="flex items-center justify-between">
+          <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/35 flex items-center gap-2">
+            <Link2 size={11} /> Profile URL Slug
+          </p>
+          <span className="text-[9px] font-mono text-white/20">
+            kaiveron.app/user/<span className="text-amber-400/60">{storeUser?.slug ?? "…"}</span>/dashboard
+          </span>
+        </div>
+
+        <p className="text-[11px] text-white/35 leading-relaxed">
+          Your personal URL identifier. Lowercase letters, numbers, and hyphens only (3–50 chars).
+          Changing it updates all your profile links.
+        </p>
+
+        <div className="space-y-2">
+          <div className="relative">
+            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-[11px] font-mono text-white/20 pointer-events-none select-none">
+              /user/
+            </div>
+            <input
+              value={slugInput}
+              onChange={e => setSlugInput(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ""))}
+              placeholder={storeUser?.slug ?? "your-slug"}
+              maxLength={50}
+              className="w-full rounded-2xl border px-4 pl-14 py-3 text-sm font-mono text-white placeholder:text-white/20 outline-none transition-colors bg-black/30"
+              style={{
+                borderColor: slugStatus === "available" ? "rgba(245,158,11,0.4)"
+                  : slugStatus === "taken" || slugStatus === "invalid" ? "rgba(239,68,68,0.4)"
+                  : "rgba(255,255,255,0.1)",
+              }}
+            />
+            {/* Status indicator */}
+            <div className="absolute right-4 top-1/2 -translate-y-1/2">
+              {slugStatus === "checking" && <Loader2 size={14} className="animate-spin text-white/30" />}
+              {slugStatus === "available" && <CheckCircle2 size={14} className="text-amber-400" />}
+              {(slugStatus === "taken" || slugStatus === "invalid") && <AlertCircle size={14} className="text-red-400" />}
+            </div>
+          </div>
+
+          {/* Feedback text */}
+          {slugError && (
+            <p className="text-[10px] text-red-400 font-bold">{slugError}</p>
+          )}
+          {slugStatus === "available" && slugChanged && (
+            <p className="text-[10px] text-amber-400 font-bold">✓ Available</p>
+          )}
+          {!slugChanged && storeUser?.slug && (
+            <p className="text-[10px] text-white/20 font-mono">Current: /user/{storeUser.slug}/dashboard</p>
+          )}
+        </div>
+
+        <div className="flex items-center justify-between">
+          <p className="text-[9px] text-white/20">⚠ Old links won&apos;t redirect — update bookmarks after changing</p>
+          <button
+            onClick={saveSlug}
+            disabled={slugStatus !== "available" || !slugChanged || slugSaving}
+            className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all disabled:opacity-30 disabled:cursor-not-allowed text-black"
+            style={slugStatus === "available" && slugChanged
+              ? { background: "linear-gradient(135deg, #fbbf24, #f59e0b)", boxShadow: "0 4px 16px rgba(245,158,11,0.35)" }
+              : { background: "rgba(255,255,255,0.08)" }}
+          >
+            {slugSaving ? <><Loader2 size={12} className="animate-spin" /> Saving…</> : "Update URL"}
+          </button>
         </div>
       </div>
 

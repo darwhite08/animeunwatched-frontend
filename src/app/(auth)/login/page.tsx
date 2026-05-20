@@ -325,7 +325,7 @@ export default function LoginPage() {
                 whileTap={{ scale: 0.98 }}
                 type="submit"
                 disabled={isDisabled}
-                className="w-full h-12 rounded-xl bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all font-bold text-sm text-white flex items-center justify-center gap-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-[0_0_30px_rgba(99,102,241,0.25)]"
+                className="w-full h-12 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed transition-all font-bold text-sm text-black flex items-center justify-center gap-2 focus:outline-none" style={{background:"linear-gradient(135deg,#fbbf24,#f59e0b)",boxShadow:"0 0 30px rgba(245,158,11,0.35)"}}
               >
                 {isSubmitting
                   ? <><Loader2 size={15} className="animate-spin" /> Signing in...</>

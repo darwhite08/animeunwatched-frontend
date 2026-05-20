@@ -161,11 +161,12 @@ export default function RegisterPage() {
       >
         {/* Logo */}
         <div className="flex items-center justify-center gap-2.5 mb-8">
-          <div className="h-9 w-9 rounded-xl bg-indigo-600 flex items-center justify-center shadow-[0_0_20px_rgba(79,70,229,0.4)]">
-            <Sparkles size={18} className="text-white" />
+          <div className="h-9 w-9 rounded-xl flex items-center justify-center"
+            style={{ background: "linear-gradient(135deg, #fbbf24, #f59e0b)", boxShadow: "0 0 20px rgba(245,158,11,0.4)" }}>
+            <Sparkles size={18} className="text-black" />
           </div>
           <span className="text-xl font-black tracking-tighter uppercase italic text-white">
-            UNWATCHED<span className="text-indigo-500">.</span>
+            KAIVERON<span style={{ color: "#f59e0b" }}>.</span>
           </span>
         </div>
 
@@ -314,7 +315,7 @@ export default function RegisterPage() {
               whileTap={{ scale: 0.98 }}
               type="submit"
               disabled={isDisabled}
-              className="w-full h-12 rounded-2xl bg-indigo-600 hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all font-black text-[11px] uppercase tracking-widest text-white shadow-[0_0_30px_rgba(99,102,241,0.3)] flex items-center justify-center gap-2"
+              className="w-full h-12 rounded-2xl disabled:opacity-50 disabled:cursor-not-allowed transition-all font-black text-[11px] uppercase tracking-widest text-black flex items-center justify-center gap-2" style={{background:"linear-gradient(135deg,#fbbf24,#f59e0b)",boxShadow:"0 0 30px rgba(245,158,11,0.35)"}}
             >
               {isSubmitting
                 ? <><Loader2 size={15} className="animate-spin" /> Creating Account…</>

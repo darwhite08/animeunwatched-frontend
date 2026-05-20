@@ -55,10 +55,10 @@ const NAV_COLS = [
 ]
 
 const STATS = [
-  { value: "12.4k", label: "Active Shinobi" },
-  { value: "1.2M+", label: "Archives Logged" },
-  { value: "98.4%", label: "Oracle Accuracy" },
-  { value: "24",    label: "Anime in Index"  },
+  { value: "12.4k",  label: "Active Shinobi" },
+  { value: "1.2M+",  label: "Archives Logged" },
+  { value: "30,161", label: "Anime in Index"  },
+  { value: "98.4%",  label: "Oracle Accuracy" },
 ]
 
 export default function Footer() {
@@ -66,16 +66,22 @@ export default function Footer() {
 
   return (
     <footer className="relative mt-auto border-t border-white/5 bg-[#050505] overflow-hidden">
-      {/* Background glow */}
-      <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-indigo-600/6 blur-[120px] rounded-full pointer-events-none" />
+      {/* Background glows */}
+      <div className="absolute bottom-0 left-1/4 w-[400px] h-[200px] blur-[100px] rounded-full pointer-events-none"
+        style={{ background: "rgba(245,158,11,0.05)" }} />
+      <div className="absolute bottom-0 right-1/4 w-[500px] h-[250px] blur-[120px] rounded-full pointer-events-none"
+        style={{ background: "rgba(99,102,241,0.05)" }} />
 
       {/* Stats strip */}
       <div className="border-b border-white/5">
         <div className="max-w-7xl mx-auto px-6 py-5 grid grid-cols-2 md:grid-cols-4 gap-6">
           {STATS.map(({ value, label }) => (
             <div key={label} className="text-center">
-              <p className="text-xl md:text-2xl font-black tracking-tighter text-white">{value}</p>
-              <p className="text-[9px] font-black uppercase tracking-[0.3em] text-white/20 mt-0.5">{label}</p>
+              <p className="text-xl md:text-2xl font-black tracking-tighter"
+                style={{ background: "linear-gradient(135deg, #fbbf24, #f59e0b)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+                {value}
+              </p>
+              <p className="text-[9px] font-black uppercase tracking-[0.3em] text-white/25 mt-0.5">{label}</p>
             </div>
           ))}
         </div>

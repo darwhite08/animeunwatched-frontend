@@ -278,7 +278,7 @@ export default function NotificationDashboardSettingsPage() {
           className={`flex items-center gap-2 px-7 py-3.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all disabled:opacity-60 ${
             saved
               ? "bg-emerald-600/15 border border-emerald-500/30 text-emerald-400 cursor-default"
-              : "bg-indigo-600 hover:bg-indigo-500 text-white"
+              : "bg-amber-500 hover:bg-amber-400 text-black"
           }`}
         >
           {saved ? (

@@ -355,7 +355,7 @@ export default function HistoryPage() {
 
         <Link
           href="/watchlist"
-          className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-500 text-white font-black text-[10px] uppercase tracking-widest transition-all whitespace-nowrap"
+          className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-amber-500 hover:bg-amber-400 text-black font-black text-[10px] uppercase tracking-widest transition-all whitespace-nowrap"
         >
           Continue Watching <ArrowRight size={13} />
         </Link>

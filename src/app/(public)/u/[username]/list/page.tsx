@@ -140,7 +140,7 @@ function ListCard({ entry, index, onAdd }: ListCardProps) {
         <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
           <button
             onClick={() => onAdd(anime.title)}
-            className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-[10px] font-black uppercase tracking-widest transition-colors shadow-lg"
+            className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-black text-[10px] font-black uppercase tracking-widest transition-colors shadow-lg"
           >
             <Plus size={12} />
             Add to My List

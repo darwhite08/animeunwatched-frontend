@@ -99,7 +99,7 @@ export default function AccountSettingsPage() {
         <div className="flex justify-end">
           <motion.button whileHover={{ scale:1.02 }} whileTap={{ scale:0.97 }} onClick={save} disabled={saving}
             className={`flex items-center gap-2 px-6 py-3 rounded-2xl text-xs font-black uppercase tracking-widest transition-all ${
-              saved ? "bg-emerald-600 text-white" : "bg-indigo-600 hover:bg-indigo-500 text-white"
+              saved ? "bg-emerald-600 text-white" : "bg-amber-500 hover:bg-amber-400 text-black"
             } disabled:opacity-60`}
           >
             {saving ? <><Loader2 size={13} className="animate-spin" /> Saving…</>

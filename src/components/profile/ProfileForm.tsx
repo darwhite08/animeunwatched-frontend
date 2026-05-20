@@ -118,7 +118,7 @@ export default function ProfileForm() {
             className={`flex items-center gap-2.5 px-7 py-3.5 rounded-2xl font-black text-[11px] uppercase tracking-widest transition-all ${
               saved
                 ? "bg-emerald-600 text-white"
-                : "bg-indigo-600 hover:bg-indigo-500 text-white shadow-[0_0_24px_rgba(99,102,241,0.3)]"
+                : "bg-amber-500 hover:bg-amber-400 text-black shadow-[0_0_24px_rgba(99,102,241,0.3)]"
             } disabled:opacity-60 disabled:cursor-not-allowed`}
           >
             {saving ? (

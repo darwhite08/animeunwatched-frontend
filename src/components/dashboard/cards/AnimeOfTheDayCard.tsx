@@ -165,7 +165,7 @@ export default function AnimeOfTheDayCard() {
               className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${
                 inList
                   ? "bg-emerald-600 hover:bg-emerald-500 text-white"
-                  : "bg-indigo-600 hover:bg-indigo-500 text-white"
+                  : "bg-amber-500 hover:bg-amber-400 text-black"
               }`}
             >
               {inList ? <Check size={13} /> : <Plus size={13} />}

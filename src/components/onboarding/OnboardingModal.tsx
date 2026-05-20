@@ -631,7 +631,7 @@ export default function OnboardingModal({
                   className={[
                     "flex items-center gap-2 px-5 py-2 rounded-xl font-black uppercase tracking-wide text-sm transition-all duration-200",
                     canProceed()
-                      ? "bg-indigo-600 hover:bg-indigo-500 text-white shadow-[0_0_16px_rgba(99,102,241,0.3)]"
+                      ? "bg-amber-500 hover:bg-amber-400 text-black shadow-[0_0_16px_rgba(99,102,241,0.3)]"
                       : "bg-zinc-800 text-zinc-600 cursor-not-allowed",
                   ].join(" ")}
                 >

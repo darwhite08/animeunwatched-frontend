@@ -70,7 +70,7 @@ export default function AuthCallbackPage() {
           </div>
         </div>
         <p className="text-white/70 text-sm">{error}</p>
-        <a href="/login" className="inline-block px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-sm font-medium transition-colors">
+        <a href="/login" className="inline-block px-6 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-black text-sm font-medium transition-colors">
           Back to login
         </a>
       </div>

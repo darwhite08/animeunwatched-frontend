@@ -114,7 +114,7 @@ function IntegrationCard({ integration }: { integration: Integration }) {
             ? "border border-red-500/20 text-red-400 hover:bg-red-500/8 bg-transparent"
             : isConnecting
             ? "bg-indigo-600/50 text-white/60 cursor-wait"
-            : "bg-indigo-600 hover:bg-indigo-500 text-white shadow-[0_0_16px_rgba(99,102,241,0.25)]"
+            : "bg-amber-500 hover:bg-amber-400 text-black shadow-[0_0_16px_rgba(99,102,241,0.25)]"
         }`}
       >
         {isConnecting ? (

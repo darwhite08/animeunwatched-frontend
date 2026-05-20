@@ -28,6 +28,7 @@ const STATIC_ROUTES: MetadataRoute.Sitemap = [
   { url: `${BASE}/poll`,                    changeFrequency: "daily",   priority: 0.6 },
   { url: `${BASE}/login`,                   changeFrequency: "yearly",  priority: 0.4 },
   { url: `${BASE}/register`,               changeFrequency: "yearly",  priority: 0.5 },
+  { url: `${BASE}/users`,                   changeFrequency: "daily",   priority: 0.6 },
 ]
 
 // Well-known high-traffic anime MAL IDs — generate static anime detail pages
@@ -49,14 +50,24 @@ const FEATURED_ANIME_IDS = [
 
 async function fetchTopAnimeIds(): Promise<number[]> {
   try {
-    // Try to fetch from backend; fall back to featured list on failure
-    const res = await fetch(`${process.env.API_BASE ?? "http://localhost:4000"}/api/v1/anime?limit=100&sort=score`, {
-      next: { revalidate: 3600 },
-    })
-    if (!res.ok) throw new Error("Backend unavailable")
-    const data = await res.json() as { data?: Array<{ malId: number }> }
-    const ids = (data.data ?? []).map((a) => a.malId).filter(Boolean)
-    return ids.length > 0 ? ids : FEATURED_ANIME_IDS
+    // Fetch top 500 by score for maximum SEO coverage
+    const pages = await Promise.allSettled([
+      fetch(`${process.env.API_BASE ?? "http://localhost:4000"}/api/v1/anime?limit=100&sort=score`, { next: { revalidate: 3600 } }),
+      fetch(`${process.env.API_BASE ?? "http://localhost:4000"}/api/v1/anime?limit=100&sort=score&page=2`, { next: { revalidate: 3600 } }),
+      fetch(`${process.env.API_BASE ?? "http://localhost:4000"}/api/v1/anime?limit=100&sort=score&page=3`, { next: { revalidate: 3600 } }),
+      fetch(`${process.env.API_BASE ?? "http://localhost:4000"}/api/v1/anime?limit=100&sort=score&page=4`, { next: { revalidate: 3600 } }),
+      fetch(`${process.env.API_BASE ?? "http://localhost:4000"}/api/v1/anime?limit=100&sort=score&page=5`, { next: { revalidate: 3600 } }),
+    ])
+    const ids: number[] = []
+    for (const result of pages) {
+      if (result.status === "fulfilled" && result.value.ok) {
+        const data = await result.value.json() as { data?: Array<{ malId: number }> }
+        ids.push(...(data.data ?? []).map((a) => a.malId).filter(Boolean))
+      }
+    }
+    // Merge with featured list to ensure key anime are always indexed
+    const all = [...new Set([...ids, ...FEATURED_ANIME_IDS])]
+    return all.length > 0 ? all : FEATURED_ANIME_IDS
   } catch {
     return FEATURED_ANIME_IDS
   }

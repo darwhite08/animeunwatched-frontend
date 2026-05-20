@@ -619,8 +619,8 @@ export default function WorldClassProfile() {
         isOpen={shareOpen}
         onClose={() => setShareOpen(false)}
         title="My Anime Profile"
-        subtitle={`${authUser?.username ?? "shinobi"} · Level ${Math.max(1, Math.floor(Math.sqrt((authUser?.reputation ?? 0) * 100 / 1000)))} Shinobi`}
-        url={`https://kaiveron.app/u/${authUser?.username ?? "shinobi"}`}
+        subtitle={`${authUser?.displayName ?? authUser?.username ?? "Shinobi"} · Kaiveron Shinobi`}
+        url={`https://kaiveron.app/share/${authUser?.username ?? "shinobi"}`}
         type="profile"
       />
     </div>

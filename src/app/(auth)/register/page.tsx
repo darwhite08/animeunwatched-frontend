@@ -160,14 +160,27 @@ export default function RegisterPage() {
         className="w-full max-w-md"
       >
         {/* Logo */}
-        <div className="flex items-center justify-center gap-2.5 mb-8">
-          <div className="h-9 w-9 rounded-xl flex items-center justify-center"
-            style={{ background: "linear-gradient(135deg, #fbbf24, #f59e0b)", boxShadow: "0 0 20px rgba(245,158,11,0.4)" }}>
-            <Sparkles size={18} className="text-black" />
+        <div className="flex flex-col items-center gap-3 mb-8">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="52" height="52"
+            style={{ filter: "drop-shadow(0 0 16px rgba(245,158,11,0.4))" }}>
+            <defs>
+              <linearGradient id="registerKGold" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#fbbf24"/>
+                <stop offset="100%" stopColor="#f59e0b"/>
+              </linearGradient>
+            </defs>
+            <rect width="100" height="100" rx="22" fill="#0A0F1E"/>
+            <path d="M 30 28 L 40 28 L 40 46 L 47 46 L 54 28 L 64 28 L 53 50 L 50 50 L 60 72 L 50 72 L 44 60 L 40 60 L 40 72 L 30 72 Z"
+              fill="url(#registerKGold)"/>
+          </svg>
+          <div className="text-center">
+            <span className="text-xl font-black tracking-tighter uppercase italic text-white">
+              KAIVERON<span style={{ color: "#f59e0b" }}>.</span>
+            </span>
+            <p className="text-[10px] font-black uppercase tracking-[0.35em] text-white/25 mt-0.5">
+              Neural Anime Archive
+            </p>
           </div>
-          <span className="text-xl font-black tracking-tighter uppercase italic text-white">
-            KAIVERON<span style={{ color: "#f59e0b" }}>.</span>
-          </span>
         </div>
 
         <div className="border border-white/10 bg-white/[0.03] backdrop-blur-xl rounded-3xl p-8 shadow-[0_0_60px_rgba(99,102,241,0.1)]">

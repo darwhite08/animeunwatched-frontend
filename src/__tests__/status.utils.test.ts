@@ -13,6 +13,7 @@ function getStatusLabel(status: WatchStatus): string {
     COMPLETED:     "Completed",
     ON_HOLD:       "On Hold",
     DROPPED:       "Dropped",
+    REWATCHING:    "Rewatching",
   }
   return labels[status]
 }
@@ -55,6 +56,7 @@ function getStatusColor(status: WatchStatus): string {
     COMPLETED:     "text-emerald-400",
     ON_HOLD:       "text-yellow-400",
     DROPPED:       "text-red-400",
+    REWATCHING:    "text-cyan-400",
   }
   return colors[status]
 }
@@ -89,6 +91,7 @@ function getStatusOrder(status: WatchStatus): number {
     ON_HOLD:       3,
     DROPPED:       4,
     COMPLETED:     5,
+    REWATCHING:    2,
   }
   return order[status]
 }

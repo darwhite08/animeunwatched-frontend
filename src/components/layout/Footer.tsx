@@ -43,6 +43,7 @@ const NAV_COLS = [
   {
     title: "Company",
     links: [
+      { label: "Pricing",       href: "/pricing" },
       { label: "About",         href: "/about" },
       { label: "Changelog",     href: "/changelog" },
       { label: "Roadmap",       href: "/roadmap" },

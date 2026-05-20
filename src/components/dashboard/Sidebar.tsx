@@ -65,12 +65,20 @@ export default function Sidebar() {
       <div className="px-6 pt-7 pb-5">
         <Link href="/dashboard" className="flex items-center gap-3 group">
           {/* Kaiveron K mark */}
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="36" height="36" className="group-hover:scale-110 transition-transform flex-shrink-0">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="36" height="36"
+            className="group-hover:scale-110 transition-transform flex-shrink-0"
+            style={{ filter: "drop-shadow(0 0 10px rgba(245,158,11,0.25))" }}>
+            <defs>
+              <linearGradient id="sidebarKGold" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#fbbf24"/>
+                <stop offset="100%" stopColor="#d97706"/>
+              </linearGradient>
+            </defs>
             <rect width="100" height="100" rx="18" fill="#0A0F1E"/>
-            <path d="M 30 28 L 40 28 L 40 46 L 47 46 L 54 28 L 64 28 L 53 50 L 50 50 L 60 72 L 50 72 L 44 60 L 40 60 L 40 72 L 30 72 Z" fill="#F4F2EC"/>
+            <path d="M 30 28 L 40 28 L 40 46 L 47 46 L 54 28 L 64 28 L 53 50 L 50 50 L 60 72 L 50 72 L 44 60 L 40 60 L 40 72 L 30 72 Z" fill="url(#sidebarKGold)"/>
           </svg>
           <span className="text-lg font-black tracking-tight text-white uppercase italic">
-            KAIVERON<span style={{color:"#6366f1"}}>.</span>
+            KAIVERON<span style={{ color: "#f59e0b" }}>.</span>
           </span>
         </Link>
       </div>
@@ -79,7 +87,8 @@ export default function Sidebar() {
       <div className="flex-1 overflow-y-auto px-3 space-y-5 pb-4 scrollbar-hide">
         {NAV.map(group => (
           <div key={group.label}>
-            <p className="px-3 mb-1.5 text-[9px] font-black uppercase tracking-[0.4em] text-white/20">
+            <p className="px-3 mb-1.5 text-[9px] font-black uppercase tracking-[0.4em]"
+              style={{ color: "rgba(245,158,11,0.35)" }}>
               {group.label}
             </p>
             <div className="space-y-0.5">
@@ -97,14 +106,18 @@ export default function Sidebar() {
                     {active && (
                       <motion.div
                         layoutId="sidebar-pill"
-                        className="absolute inset-0 bg-indigo-600/10 border border-indigo-500/20 rounded-xl"
+                        className="absolute inset-0 rounded-xl"
+                        style={{
+                          background: "linear-gradient(135deg, rgba(245,158,11,0.1), rgba(245,158,11,0.05))",
+                          border: "1px solid rgba(245,158,11,0.2)",
+                        }}
                         transition={{ type: "spring", stiffness: 320, damping: 30 }}
                       />
                     )}
                     <div className="flex items-center gap-3 relative z-10">
                       <item.icon
                         size={15}
-                        className={active ? "text-indigo-400" : "group-hover:text-indigo-400 transition-colors"}
+                        className={active ? "text-amber-400" : "group-hover:text-amber-400/70 transition-colors"}
                       />
                       <span className="text-[13px] font-bold">{item.name}</span>
                     </div>

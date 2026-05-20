@@ -93,6 +93,7 @@ export interface Post {
   author: Pick<User, "id" | "username" | "displayName" | "avatarUrl">
   anime?: Pick<AnimeDTO, "id" | "malId" | "title" | "imageUrl"> | null
   _count?: { likes: number; comments: number }
+  isLikedByMe?: boolean
   liked?: boolean
 }
 

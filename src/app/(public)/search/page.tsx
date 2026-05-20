@@ -82,7 +82,7 @@ function SearchContent() {
             <Search
               size={18}
               className={`absolute left-5 top-1/2 -translate-y-1/2 transition-colors ${
-                query ? "text-indigo-400" : "text-white/25"
+                query ? "text-amber-400" : "text-white/25"
               }`}
             />
             <input
@@ -120,7 +120,7 @@ function SearchContent() {
               {tab === t.id && (
                 <motion.div
                   layoutId="search-tab-underline"
-                  className="absolute bottom-0 left-0 right-0 h-[2px] bg-indigo-500 rounded-full"
+                  className="absolute bottom-0 left-0 right-0 h-[2px] rounded-full" style={{background:"#f59e0b"}}
                 />
               )}
             </button>
@@ -133,7 +133,7 @@ function SearchContent() {
             <motion.div key="anime" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
               {searchLoading && searchQ.length >= 2 && (
                 <div className="flex items-center justify-center py-16">
-                  <Loader2 size={24} className="animate-spin text-indigo-400" />
+                  <Loader2 size={24} className="animate-spin text-amber-400" />
                 </div>
               )}
               {!searchLoading && animeResults.length > 0 ? (

@@ -170,6 +170,20 @@ export const sendEncryptedMessage = (conversationId: string, ciphertext: string,
 export const markConversationRead = (conversationId: string) =>
   api<{ conversationId: string; readAt: string }>(`/chat/conversations/${conversationId}/read`, { method: "PATCH" })
 
+/* ── Polls ── */
+export const listPolls = (page = 1, limit = 20) =>
+  api<Paginated<{ id: string; question: string; options: { id: string; text: string; votes: number }[]; totalVotes: number; createdAt: string; myVote?: string | null }>>(`/polls?page=${page}&limit=${limit}`)
+
+export const createPoll = (body: { question: string; options: string[]; endsAt?: string }) =>
+  api<{ poll: unknown }>("/polls", { method: "POST", body: JSON.stringify(body) })
+
+export const votePoll = (pollId: string, optionId: string) =>
+  api<{ poll: unknown }>(`/polls/${pollId}/vote`, { method: "POST", body: JSON.stringify({ optionId }) })
+
+/* ── Blogs ── */
+export const listBlogs = (page = 1, limit = 20, author?: string) =>
+  api<Paginated<{ id: string; slug: string; title: string; body: string; coverImage?: string | null; author: { username: string; displayName: string; avatarUrl?: string | null }; createdAt: string; _count?: { likes: number } }>>(`/blogs${author ? `?author=${author}&` : "?"}page=${page}&limit=${limit}`)
+
 /* ── Search ── */
 export const search = (
   q: string,

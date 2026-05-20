@@ -20,7 +20,8 @@ import Link from "next/link"
 import Image from "next/image"
 import { useToast } from "@/stores/toast.store"
 import { useAuthStore } from "@/stores/auth.store"
-import { useFeed, useDiscover, useCreatePost } from "@/hooks/usePosts"
+import { useFeed, useDiscover, useCreatePost, useLikePost } from "@/hooks/usePosts"
+import { useBrowseAnime } from "@/hooks/useAnime"
 import type { Post } from "@/lib/api/types"
 import { Loader2 } from "lucide-react"
 
@@ -66,155 +67,84 @@ function avatarGradient(letter: string): string {
   return AVATAR_GRADIENTS[idx]
 }
 
-/* ── Mock data ── */
-const FEED_POSTS: FeedPost[] = [
-  {
-    id: 1,
-    author: "Otaku_Arch",
-    avatar: "O",
-    time: "4m ago",
-    content:
-      "Frieren's power scaling episode just broke my brain. The concept of mana concealment being the TRUE skill ceiling is one of the most thoughtful magic system reveals I've ever seen. 🤯",
-    anime: "Frieren: Beyond Journey's End",
-    likes: 312,
-    comments: 48,
-    liked: false,
-    tags: ["power-scaling", "frieren", "magic-system"],
-    isFollowing: true,
-  },
-  {
-    id: 2,
-    author: "ShadowWatcher",
-    avatar: "S",
-    time: "22m ago",
-    content:
-      "Controversial take: Chainsaw Man's anime actually elevated the manga. MAPPA's cinematographic direction in the final arc is something no adaptation has done before. Fight me.",
-    anime: "Chainsaw Man",
-    likes: 184,
-    comments: 93,
-    liked: true,
-    tags: ["chainsaw-man", "hot-take", "animation"],
-    isFollowing: true,
-  },
-  {
-    id: 3,
-    author: "NeuralBot_X",
-    avatar: "N",
-    time: "1h ago",
-    content:
-      "Just finished Monster for the first time. Why did nobody tell me this exists?? Absolutely floored. 74 episodes and not a single bad one. Johan is the greatest villain in anime history — no debate.",
-    anime: "Monster",
-    likes: 427,
-    comments: 62,
-    liked: false,
-    tags: ["monster", "underrated", "villain"],
-    isFollowing: false,
-  },
-  {
-    id: 4,
-    author: "VoidSeeker",
-    avatar: "V",
-    time: "3h ago",
-    content:
-      "The way Your Lie in April uses color theory to signal emotional states is graduate-level filmmaking. I've watched the piano duet scene 11 times and I'm not okay.",
-    anime: "Your Lie in April",
-    likes: 256,
-    comments: 34,
-    liked: false,
-    tags: ["your-lie-in-april", "cinematography", "emotional"],
-    isFollowing: true,
-  },
-  {
-    id: 5,
-    author: "Cipher_Ronin",
-    avatar: "C",
-    time: "5h ago",
-    content:
-      "Solo Leveling Season 2 trailer just dropped and the power gap between Jinwoo and everyone else looks absolutely insane. Monarch arc is going to go crazy if they animate it right.",
-    anime: "Solo Leveling",
-    likes: 891,
-    comments: 147,
-    liked: true,
-    tags: ["solo-leveling", "hype", "season-2"],
-    isFollowing: false,
-  },
-  {
-    id: 6,
-    author: "PixelSamurai",
-    avatar: "P",
-    time: "7h ago",
-    content:
-      "Dungeon Meshi just proved that a cooking-focused fantasy can be peak anime. Laios's infectious enthusiasm for monster cuisine somehow made me care more about the lore than any exposition dump ever could.",
-    anime: "Dungeon Meshi",
-    likes: 344,
-    comments: 58,
-    liked: false,
-    tags: ["dungeon-meshi", "delicious-in-dungeon", "slice-of-life"],
-    isFollowing: true,
-  },
-  {
-    id: 7,
-    author: "ArcaneKomachi",
-    avatar: "A",
-    time: "10h ago",
-    content:
-      "Rewatching Steins;Gate for the 4th time. Every rewatch I notice another subtle time-loop clue planted in the first episode. The writers were playing 4D chess with us the whole time.",
-    anime: "Steins;Gate",
-    likes: 511,
-    comments: 76,
-    liked: false,
-    tags: ["steins-gate", "rewatch", "foreshadowing"],
-    isFollowing: true,
-  },
-  {
-    id: 8,
-    author: "MirrorMirr",
-    avatar: "M",
-    time: "14h ago",
-    content:
-      "Hot take: The Promised Neverland Season 1 finale is still the single best cliffhanger in anime history and I won't be taking questions.",
-    anime: "The Promised Neverland",
-    likes: 189,
-    comments: 112,
-    liked: false,
-    tags: ["promised-neverland", "thriller", "hot-take"],
-    isFollowing: false,
-  },
-]
+/* ── RealPostCard — uses real useLikePost API ── */
+function RealPostCard({ post, index }: { post: Post; index: number }) {
+  const { push } = useToast()
+  const isAuthenticated = useAuthStore(s => s.isAuthenticated)
+  const [liked, setLiked] = useState(post.isLikedByMe ?? false)
+  const [likeCount, setLikeCount] = useState(post._count?.likes ?? 0)
+  const likePost = useLikePost(post.id)
 
-/* ── Trending mock for sidebar ── */
-const TRENDING_SIDEBAR = [
-  { title: "Frieren: Beyond Journey's End", score: 9.1, tag: "frieren" },
-  { title: "Chainsaw Man",                  score: 8.7, tag: "chainsaw-man" },
-  { title: "Jujutsu Kaisen",                score: 8.6, tag: "jjk" },
-  { title: "Vinland Saga",                  score: 9.0, tag: "vinland" },
-]
+  const handleLike = () => {
+    if (!isAuthenticated) { push("Sign in to like posts", "info"); return }
+    likePost.mutate(
+      { like: !liked },
+      {
+        onSuccess: () => { setLiked(l => !l); setLikeCount(c => liked ? c - 1 : c + 1) },
+        onError: () => push("Could not update like", "error"),
+      }
+    )
+  }
 
-const SUGGESTIONS: Suggestion[] = [
-  {
-    username: "otaku_arch",
-    avatar: "O",
-    grade: "Crimson Shinobi",
-    followers: 1840,
-    isFollowing: false,
-  },
-  {
-    username: "voidseeker",
-    avatar: "V",
-    grade: "Iron Shinobi",
-    followers: 612,
-    isFollowing: false,
-  },
-  {
-    username: "cipher_ronin",
-    avatar: "C",
-    grade: "Gold Shinobi",
-    followers: 3201,
-    isFollowing: false,
-  },
-]
+  const authorName = post.author?.displayName ?? post.author?.username ?? "?"
+  const gradClass = avatarGradient(authorName[0] ?? "A")
 
-// TRENDING_ANIME loaded from API in component
+  return (
+    <motion.article key={post.id} layout
+      initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: index * 0.04 }}
+      className="bg-zinc-900/60 border border-white/[0.08] hover:border-amber-500/10 rounded-2xl p-6 space-y-4 transition-all duration-300"
+    >
+      <div className="flex items-start justify-between">
+        <div className="flex items-center gap-3">
+          <Link href={`/u/${post.author?.username ?? ""}`}>
+            <div className={`h-10 w-10 rounded-xl bg-gradient-to-br ${gradClass} flex items-center justify-center font-black text-sm text-white hover:opacity-80 transition-opacity shrink-0`}>
+              {authorName[0]?.toUpperCase()}
+            </div>
+          </Link>
+          <div>
+            <Link href={`/u/${post.author?.username ?? ""}`}
+              className="text-sm font-black text-white hover:text-amber-400 transition-colors">
+              {authorName}
+            </Link>
+            <p className="text-[10px] text-white/35 mt-0.5">{timeAgo(post.createdAt)}</p>
+          </div>
+        </div>
+        <button className="p-1.5 text-white/20 hover:text-white/50 transition-colors">
+          <MoreHorizontal size={15} />
+        </button>
+      </div>
+
+      {post.anime && (
+        <Link href={`/anime/${post.anime.malId}`}
+          className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-amber-500/8 border border-amber-500/15 text-[10px] font-bold text-amber-400 hover:bg-amber-500/15 transition-colors">
+          <Star size={9} fill="currentColor" /> {post.anime.title}
+        </Link>
+      )}
+
+      <p className="text-sm text-white/75 leading-relaxed">{post.content}</p>
+
+      <div className="flex items-center gap-5 pt-1 border-t border-white/5">
+        <button onClick={handleLike} disabled={likePost.isPending}
+          className={`flex items-center gap-1.5 text-xs font-bold transition-colors ${liked ? "text-rose-400" : "text-white/30 hover:text-rose-400"}`}>
+          <Heart size={14} fill={liked ? "currentColor" : "none"} />
+          {likeCount > 0 && likeCount}
+        </button>
+        <button className="flex items-center gap-1.5 text-xs font-bold text-white/30 hover:text-amber-400 transition-colors">
+          <MessageSquare size={14} />
+          {post._count?.comments ?? 0}
+        </button>
+        <button onClick={() => {
+          const url = `${window.location.origin}/posts/${post.id}`
+          navigator.clipboard.writeText(url).catch(() => {})
+          push("Link copied!", "success")
+        }} className="flex items-center gap-1.5 text-xs font-bold text-white/30 hover:text-white/60 transition-colors ml-auto">
+          <Share2 size={13} />
+        </button>
+      </div>
+    </motion.article>
+  )
+}
 
 /* ── Page ── */
 function timeAgo(iso: string) {
@@ -230,10 +160,12 @@ export default function FeedPage() {
   const { user } = useAuthStore()
   const [feedTab, setFeedTab] = useState<FeedTab>("foryou")
   const [draft, setDraft] = useState("")
-  const [suggestions, setSuggestions] = useState<Suggestion[]>(SUGGESTIONS)
+  const [suggestions, setSuggestions] = useState<Suggestion[]>([])
 
   const { data: feedData, isLoading: feedLoading } = useFeed()
   const { data: discoverData, isLoading: discoverLoading } = useDiscover()
+  const { data: trendingData } = useBrowseAnime({ limit: 4 })
+  const trendingAnime = trendingData?.data ?? []
   const createPostMut = useCreatePost()
 
   const isLoading = feedTab === "following" ? feedLoading : discoverLoading
@@ -432,135 +364,26 @@ export default function FeedPage() {
                 </Link>
               </motion.div>
             ) : !isLoading && visiblePosts.length === 0 ? (
-              /* Fallback: show mock posts when API returns nothing */
-              FEED_POSTS.map((post, i) => {
-                const gradClass = avatarGradient(post.avatar)
-                return (
-                  <motion.article
-                    key={`mock-${post.id}`}
-                    layout
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: i * 0.05 }}
-                    className="bg-zinc-900/60 border border-white/[0.08] hover:border-amber-500/10 rounded-2xl p-6 space-y-4 transition-all duration-300"
-                  >
-                    <div className="flex items-start justify-between">
-                      <div className="flex items-center gap-3">
-                        <div className={`h-10 w-10 rounded-xl bg-gradient-to-br ${gradClass} flex items-center justify-center font-black text-sm text-white shrink-0`}>
-                          {post.avatar}
-                        </div>
-                        <div>
-                          <p className="text-sm font-black text-white">{post.author}</p>
-                          <p className="text-[10px] text-white/35 mt-0.5">{post.time}</p>
-                        </div>
-                      </div>
-                      <button className="p-1.5 text-white/20 hover:text-white/50 transition-colors">
-                        <MoreHorizontal size={15} />
-                      </button>
-                    </div>
-
-                    {post.anime && (
-                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-amber-500/8 border border-amber-500/15 text-[10px] font-bold text-amber-400">
-                        <Star size={9} fill="currentColor" /> {post.anime}
-                      </span>
-                    )}
-
-                    <p className="text-sm text-white/75 leading-relaxed">{post.content}</p>
-
-                    {post.tags.length > 0 && (
-                      <div className="flex flex-wrap gap-1.5">
-                        {post.tags.map(t => (
-                          <span key={t} className="text-[9px] px-2 py-0.5 rounded-full bg-white/5 border border-white/8 text-white/30 font-bold">
-                            #{t}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-
-                    <div className="flex items-center gap-5 pt-1 border-t border-white/5">
-                      <button
-                        className="flex items-center gap-1.5 text-xs font-bold text-amber-400/80 hover:text-amber-400 transition-colors"
-                      >
-                        <Heart size={14} />
-                        {post.likes.toLocaleString()}
-                      </button>
-                      <button className="flex items-center gap-1.5 text-xs font-bold text-white/30 hover:text-amber-400 transition-colors">
-                        <MessageSquare size={14} />
-                        {post.comments}
-                      </button>
-                      <button className="flex items-center gap-1.5 text-xs font-bold text-white/30 hover:text-white/60 transition-colors ml-auto">
-                        <Share2 size={13} />
-                      </button>
-                    </div>
-                  </motion.article>
-                )
-              })
+              /* Empty state — no posts yet */
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+                className="py-20 text-center border border-dashed border-white/5 rounded-2xl space-y-4">
+                <MessageSquare size={28} className="mx-auto text-white/15" />
+                <div>
+                  <p className="text-white/40 font-black uppercase tracking-widest text-sm">No posts yet</p>
+                  <p className="text-white/20 text-xs mt-1">
+                    {feedTab === "following" ? "Follow Shinobi to see their posts here" : "Be first to post something!"}
+                  </p>
+                </div>
+                <Link href="/community"
+                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest text-black transition-all"
+                  style={{ background: "linear-gradient(135deg,#fbbf24,#f59e0b)" }}>
+                  <Users size={13} /> Visit Community
+                </Link>
+              </motion.div>
             ) : (
-              visiblePosts.map((post, i) => {
-                const authorName = post.author?.displayName ?? post.author?.username ?? "?"
-                const liked = likedIds.has(post.id)
-                const gradClass = avatarGradient(authorName[0] ?? "A")
-                return (
-                <motion.article
-                  key={post.id}
-                  layout
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.04 }}
-                  className="bg-zinc-900/60 border border-white/[0.08] hover:border-amber-500/10 rounded-2xl p-6 space-y-4 transition-all duration-300"
-                >
-                  <div className="flex items-start justify-between">
-                    <div className="flex items-center gap-3">
-                      <Link href={`/u/${post.author?.username ?? ""}`}>
-                        <div className={`h-10 w-10 rounded-xl bg-gradient-to-br ${gradClass} flex items-center justify-center font-black text-sm text-white hover:opacity-80 transition-opacity shrink-0`}>
-                          {authorName[0]?.toUpperCase()}
-                        </div>
-                      </Link>
-                      <div>
-                        <Link href={`/u/${post.author?.username ?? ""}`}
-                          className="text-sm font-black text-white hover:text-amber-400 transition-colors">
-                          {authorName}
-                        </Link>
-                        <p className="text-[10px] text-white/35 mt-0.5">{timeAgo(post.createdAt)}</p>
-                      </div>
-                    </div>
-                    <button className="p-1.5 text-white/20 hover:text-white/50 transition-colors">
-                      <MoreHorizontal size={15} />
-                    </button>
-                  </div>
-
-                  {post.anime && (
-                    <Link href={`/anime/${post.anime.malId}`}
-                      className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-amber-500/8 border border-amber-500/15 text-[10px] font-bold text-amber-400 hover:bg-amber-500/15 transition-colors">
-                      <Star size={9} fill="currentColor" /> {post.anime.title}
-                    </Link>
-                  )}
-
-                  <p className="text-sm text-white/75 leading-relaxed">{post.content}</p>
-
-                  <div className="flex items-center gap-5 pt-1 border-t border-white/5">
-                    <button onClick={() => toggleLike(post.id)}
-                      className={`flex items-center gap-1.5 text-xs font-bold transition-colors ${liked ? "text-amber-400" : "text-white/30 hover:text-amber-400"}`}>
-                      <Heart size={14} fill={liked ? "currentColor" : "none"} />
-                      {(post._count?.likes ?? 0) + (liked ? 1 : 0)}
-                    </button>
-                    <button className="flex items-center gap-1.5 text-xs font-bold text-white/30 hover:text-amber-400 transition-colors">
-                      <MessageSquare size={14} />
-                      {post._count?.comments ?? 0}
-                    </button>
-                    <button
-                      onClick={() => {
-                        const url = `${window.location.origin}/posts/${post.id}`
-                        navigator.clipboard.writeText(url).catch(() => {})
-                        push("Post link copied to clipboard!", "success")
-                      }}
-                      className="flex items-center gap-1.5 text-xs font-bold text-white/30 hover:text-white/60 transition-colors ml-auto"
-                    >
-                      <Share2 size={13} />
-                    </button>
-                  </div>
-                </motion.article>
-              )})
+              visiblePosts.map((post, i) => (
+                <RealPostCard key={post.id} post={post} index={i} />
+              ))
             )}
           </AnimatePresence>
         </div>
@@ -631,9 +454,9 @@ export default function FeedPage() {
               </h3>
             </div>
             <div className="space-y-3">
-              {TRENDING_SIDEBAR.map((item, i) => (
-                <motion.div key={item.tag} initial={{ opacity: 0, x: 8 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.07 }}>
-                  <Link href={`/bestanimelist?q=${encodeURIComponent(item.title)}`}
+              {trendingAnime.slice(0, 4).map((item, i) => (
+                <motion.div key={item.id} initial={{ opacity: 0, x: 8 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.07 }}>
+                  <Link href={`/anime/${item.malId}`}
                     className="flex items-center gap-3 group">
                     <div className="h-8 w-8 rounded-lg bg-amber-500/15 border border-amber-500/20 flex items-center justify-center shrink-0 text-[10px] font-black text-amber-400">
                       {i + 1}
@@ -642,7 +465,7 @@ export default function FeedPage() {
                       <p className="text-xs font-black text-white/80 group-hover:text-amber-400 transition-colors truncate">{item.title}</p>
                       <div className="flex items-center gap-1 mt-0.5">
                         <Star size={8} className="text-amber-400" fill="currentColor" />
-                        <span className="text-[9px] text-amber-400/70 font-bold">{item.score}</span>
+                        <span className="text-[9px] text-amber-400/70 font-bold">{(item.score ?? 0).toFixed(1)}</span>
                       </div>
                     </div>
                   </Link>

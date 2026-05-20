@@ -145,7 +145,7 @@ function PostCard({ post }: { post: Post }) {
             </Link>
             <div>
               <Link href={`/u/${post.author?.username ?? ""}`}>
-                <p className="text-sm font-black text-white hover:text-amber-300 transition-colors leading-tight">{authorName}</p>
+                <p className="text-[15px] font-black text-white hover:text-amber-300 transition-colors leading-tight">{authorName}</p>
               </Link>
               <p className="text-[10px] text-white/30 mt-0.5">{timeAgo(post.createdAt)}</p>
             </div>
@@ -164,7 +164,7 @@ function PostCard({ post }: { post: Post }) {
         )}
 
         {/* Content */}
-        <p className="text-[13px] text-white/80 leading-relaxed">{post.content}</p>
+        <p className="text-[15px] text-white/85 leading-relaxed">{post.content}</p>
 
         {/* Actions */}
         <div className="flex items-center gap-1 pt-1 border-t border-white/5">
@@ -340,7 +340,7 @@ export default function CommunityPage() {
         <Plus size={14} /> Post
       </motion.button>
 
-      <div className="max-w-6xl mx-auto px-6 pt-5 grid lg:grid-cols-3 gap-8">
+      <div className="max-w-6xl mx-auto px-6 pt-6 grid lg:grid-cols-3 gap-8">
 
         {/* Feed */}
         <div className="lg:col-span-2 space-y-5">

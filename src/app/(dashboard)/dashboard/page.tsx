@@ -12,6 +12,7 @@ import WrappedBanner from "@/components/ui/WrappedBanner"
 import { useAuthStore } from "@/stores/auth.store"
 import NowPlayingCard from "@/components/dashboard/cards/NowPlayingCard"
 import AnimeOfTheDayCard from "@/components/dashboard/cards/AnimeOfTheDayCard"
+import FriendsActivityCard from "@/components/dashboard/cards/FriendsActivityCard"
 import TopAnimeCard from "@/components/dashboard/cards/TopAnimeCard"
 import RecentlyReviewedCard from "@/components/dashboard/cards/RecentlyReviewedCard"
 import QuickActionsCard from "@/components/dashboard/cards/QuickActionsCard"
@@ -179,6 +180,7 @@ export default function DashboardPage() {
           <XPCard xp={rep * 100} reputation={rep} />
           <NowPlayingCard />
           <AnimeOfTheDayCard />
+          <FriendsActivityCard />
         </div>
       </div>
 

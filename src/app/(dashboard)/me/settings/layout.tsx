@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import {
-  User, Bell, Palette, Shield, CreditCard, Link2, Lock, Settings,
+  User, Bell, Palette, Shield, CreditCard, Link2, Lock, Settings, Download,
 } from "lucide-react"
 import { motion } from "framer-motion"
 
@@ -15,6 +15,7 @@ const NAV = [
   { href: "/me/settings/security",      icon: Lock,       label: "Security"      },
   { href: "/me/settings/billing",       icon: CreditCard, label: "Billing"       },
   { href: "/me/settings/connected",     icon: Link2,      label: "Connected"     },
+  { href: "/me/import",                 icon: Download,   label: "Import List"   },
 ]
 
 export default function MeSettingsLayout({ children }: { children: React.ReactNode }) {

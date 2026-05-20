@@ -1,5 +1,6 @@
 import "./globals.css"
 import PageLoader from "@/components/ui/PageLoader"
+import CookieConsent from "@/components/ui/CookieConsent"
 import ToastContainer from "@/components/layout/ToastContainer"
 import BackToTop from "@/components/ui/BackToTop"
 import KeyboardShortcutsOverlay from "@/components/ui/KeyboardShortcutsOverlay"
@@ -58,6 +59,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <BackToTop />
                 <KeyboardShortcutsOverlay />
                 <MobileNav />
+                <CookieConsent />
               </KeyboardShortcuts>
             </LenisProvider>
           </SessionProvider>

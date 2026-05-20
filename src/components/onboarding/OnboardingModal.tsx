@@ -526,11 +526,18 @@ export default function OnboardingModal({
     selectedAnimeMap.forEach((anime) => {
       addToWatchlist(anime)
     })
-    toast("🎌 Archive initialized! Your watch begins now.", "success")
+    // Mark onboarding complete so this user never sees it again
+    if (typeof window !== "undefined") {
+      localStorage.setItem("aw_onboarded", "1")
+    }
+    toast("Archive initialized! Your watch begins now.", "success")
     onComplete()
   }
 
   const handleSkip = () => {
+    if (typeof window !== "undefined") {
+      localStorage.setItem("aw_onboarded", "1")
+    }
     onComplete()
   }
 

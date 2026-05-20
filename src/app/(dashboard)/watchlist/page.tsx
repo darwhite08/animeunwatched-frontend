@@ -210,16 +210,57 @@ export default function WatchlistPage() {
             ))}
           </nav>
 
-          {/* Empty state */}
+          {/* Empty state — first-time user onboarding moment */}
           {items.length === 0 && (
-            <div className="py-24 text-center border border-dashed border-white/5 rounded-[3rem]">
-              <MonitorPlay size={28} className="mx-auto mb-3 text-white/15" />
-              <p className="text-white/20 font-black uppercase tracking-widest text-xs mb-4">Your archive is empty</p>
-              <Link href="/bestanimelist"
-                className="text-xs text-amber-400 hover:text-amber-300 font-black uppercase tracking-widest">
-                Browse Anime →
-              </Link>
-            </div>
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="py-20 flex flex-col items-center text-center gap-6"
+            >
+              {/* Visual */}
+              <div className="relative">
+                <div className="h-28 w-28 rounded-[2rem] bg-white/[0.03] border border-white/8 flex items-center justify-center">
+                  <MonitorPlay size={36} className="text-white/15" />
+                </div>
+                <div className="absolute -bottom-2 -right-2 h-8 w-8 rounded-xl flex items-center justify-center text-black text-xs font-black" style={{ background: "linear-gradient(135deg, #fbbf24, #f59e0b)" }}>
+                  <Plus size={14} />
+                </div>
+              </div>
+
+              <div className="max-w-xs space-y-2">
+                <p className="text-xl font-black uppercase italic tracking-tight text-white">Start your archive</p>
+                <p className="text-sm text-white/35 leading-relaxed">
+                  Track anime you&apos;re watching, completed, or planning. Your list = your anime identity.
+                </p>
+              </div>
+
+              <div className="flex flex-col sm:flex-row items-center gap-3">
+                <Link href="/bestanimelist"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl text-sm font-black uppercase tracking-widest text-black transition-all hover:-translate-y-0.5"
+                  style={{ background: "linear-gradient(135deg, #fbbf24, #f59e0b)", boxShadow: "0 4px 20px rgba(245,158,11,0.3)" }}
+                >
+                  <MonitorPlay size={14} /> Browse Anime
+                </Link>
+                <Link href="/ai-discover"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl text-sm font-black uppercase tracking-widest border border-white/10 text-white/50 hover:text-white hover:border-white/20 transition-all"
+                >
+                  AI Discover
+                </Link>
+              </div>
+
+              <div className="flex items-center gap-8 pt-2 text-center">
+                {[
+                  { label: "Track progress", sub: "Episode by episode" },
+                  { label: "Rate & review", sub: "Share your opinions" },
+                  { label: "Compare lists", sub: "With your friends" },
+                ].map(({ label, sub }) => (
+                  <div key={label} className="space-y-0.5">
+                    <p className="text-[10px] font-black uppercase tracking-widest text-white/40">{label}</p>
+                    <p className="text-[9px] text-white/20">{sub}</p>
+                  </div>
+                ))}
+              </div>
+            </motion.div>
           )}
 
           {/* Grid */}

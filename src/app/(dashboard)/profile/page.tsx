@@ -209,7 +209,18 @@ function WatchlistTab() {
   }))
   if (isLoading) return <div className="text-white/30 text-sm py-10 text-center">Loading…</div>
   if (!authUser) return <div className="text-white/30 text-sm py-10 text-center">Sign in to see your watchlist</div>
-  if (watchlistAnime.length === 0) return <div className="text-white/30 text-sm py-10 text-center">No entries in your list yet</div>
+  if (watchlistAnime.length === 0) return (
+    <div className="py-16 text-center flex flex-col items-center gap-4">
+      <div className="h-16 w-16 rounded-2xl bg-white/[0.03] border border-white/8 flex items-center justify-center">
+        <span className="text-2xl">📺</span>
+      </div>
+      <div className="space-y-1">
+        <p className="text-sm font-black uppercase tracking-widest text-white/30">No anime tracked yet</p>
+        <p className="text-xs text-white/20">Add anime to your watchlist to start building your profile.</p>
+      </div>
+      <a href="/bestanimelist" className="text-xs font-black uppercase tracking-widest text-amber-400 hover:text-amber-300 transition-colors">Browse Anime →</a>
+    </div>
+  )
   return (
     <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
       {watchlistAnime.map((anime, i) => {

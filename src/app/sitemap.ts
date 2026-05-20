@@ -1,0 +1,84 @@
+import type { MetadataRoute } from "next"
+
+const BASE = "https://kaiveron.app"
+
+// Static public routes — always indexed
+const STATIC_ROUTES: MetadataRoute.Sitemap = [
+  { url: BASE,                              changeFrequency: "daily",   priority: 1.0 },
+  { url: `${BASE}/bestanimelist`,           changeFrequency: "daily",   priority: 0.9 },
+  { url: `${BASE}/ai-discover`,             changeFrequency: "weekly",  priority: 0.9 },
+  { url: `${BASE}/mood`,                    changeFrequency: "weekly",  priority: 0.85 },
+  { url: `${BASE}/calendar`,               changeFrequency: "daily",   priority: 0.85 },
+  { url: `${BASE}/genres`,                  changeFrequency: "monthly", priority: 0.8 },
+  { url: `${BASE}/studios`,                 changeFrequency: "monthly", priority: 0.8 },
+  { url: `${BASE}/collections`,             changeFrequency: "weekly",  priority: 0.75 },
+  { url: `${BASE}/community`,              changeFrequency: "hourly",  priority: 0.8 },
+  { url: `${BASE}/community/feed`,          changeFrequency: "hourly",  priority: 0.75 },
+  { url: `${BASE}/community/anime`,         changeFrequency: "daily",   priority: 0.7 },
+  { url: `${BASE}/clubs`,                   changeFrequency: "daily",   priority: 0.8 },
+  { url: `${BASE}/blogs`,                   changeFrequency: "daily",   priority: 0.75 },
+  { url: `${BASE}/reviews`,                 changeFrequency: "daily",   priority: 0.75 },
+  { url: `${BASE}/leaderboard`,             changeFrequency: "daily",   priority: 0.7 },
+  { url: `${BASE}/discover`,               changeFrequency: "daily",   priority: 0.75 },
+  { url: `${BASE}/pricing`,                 changeFrequency: "monthly", priority: 0.7 },
+  { url: `${BASE}/about`,                   changeFrequency: "monthly", priority: 0.6 },
+  { url: `${BASE}/help`,                    changeFrequency: "weekly",  priority: 0.6 },
+  { url: `${BASE}/roadmap`,                 changeFrequency: "monthly", priority: 0.5 },
+  { url: `${BASE}/changelog`,              changeFrequency: "weekly",  priority: 0.5 },
+  { url: `${BASE}/poll`,                    changeFrequency: "daily",   priority: 0.6 },
+  { url: `${BASE}/login`,                   changeFrequency: "yearly",  priority: 0.4 },
+  { url: `${BASE}/register`,               changeFrequency: "yearly",  priority: 0.5 },
+]
+
+// Well-known high-traffic anime MAL IDs — generate static anime detail pages
+// These pages have structured data and are the primary SEO target
+const FEATURED_ANIME_IDS = [
+  // All-time greats (guaranteed traffic)
+  5114, 11061, 9253, 28977, 38000, 16498, 1535, 25777, 20, 19,
+  // Top seasonal (ongoing traffic)
+  52991, 54492, 51009, 50265, 48583, 40748,
+  // Popular classics
+  1, 6, 21, 22, 30, 31, 121, 199, 235, 245,
+  // Franchise entries
+  269, 1735, 1818, 2001, 4181, 5114, 6547, 7647, 9756, 10620,
+  // Isekai staples
+  36462, 34566, 31240, 28735, 32182, 40010, 40028,
+  // Shonen staples
+  11061, 16498, 13767, 17265, 20507, 20583,
+]
+
+async function fetchTopAnimeIds(): Promise<number[]> {
+  try {
+    // Try to fetch from backend; fall back to featured list on failure
+    const res = await fetch(`${process.env.API_BASE ?? "http://localhost:4000"}/api/v1/anime?limit=100&sort=score`, {
+      next: { revalidate: 3600 },
+    })
+    if (!res.ok) throw new Error("Backend unavailable")
+    const data = await res.json() as { data?: Array<{ malId: number }> }
+    const ids = (data.data ?? []).map((a) => a.malId).filter(Boolean)
+    return ids.length > 0 ? ids : FEATURED_ANIME_IDS
+  } catch {
+    return FEATURED_ANIME_IDS
+  }
+}
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const animeIds = await fetchTopAnimeIds()
+
+  const animeRoutes: MetadataRoute.Sitemap = animeIds.map((malId) => ({
+    url:             `${BASE}/anime/${malId}`,
+    changeFrequency: "weekly",
+    priority:        0.8,
+    lastModified:    new Date(),
+  }))
+
+  // Episode discussion pages for top anime
+  const discussRoutes: MetadataRoute.Sitemap = animeIds.slice(0, 20).map((malId) => ({
+    url:             `${BASE}/anime/${malId}/discuss`,
+    changeFrequency: "daily",
+    priority:        0.6,
+    lastModified:    new Date(),
+  }))
+
+  return [...STATIC_ROUTES, ...animeRoutes, ...discussRoutes]
+}

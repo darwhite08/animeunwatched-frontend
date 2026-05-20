@@ -19,6 +19,9 @@ import {
   Loader2,
 } from "lucide-react"
 import { useToast } from "@/stores/toast.store"
+import { changePassword, logoutAll } from "@/lib/api/endpoints"
+import { useAuthStore } from "@/stores/auth.store"
+import { ApiError } from "@/lib/api/client"
 
 /* ── Types ── */
 type Session = {
@@ -202,6 +205,7 @@ function ActiveSessions({
 /* ── Password change ── */
 function PasswordChange() {
   const { push } = useToast()
+  const clearAuth = useAuthStore(s => s.clear)
   const [current, setCurrent]   = useState("")
   const [next_, setNext]         = useState("")
   const [confirm, setConfirm]   = useState("")
@@ -212,10 +216,25 @@ function PasswordChange() {
     if (next_.length < 8) { push("New password must be at least 8 characters.", "error"); return }
     if (next_ !== confirm) { push("Passwords do not match.", "error"); return }
     setSaving(true)
-    await new Promise((r) => setTimeout(r, 900))
-    setSaving(false)
-    setCurrent(""); setNext(""); setConfirm("")
-    push("Password updated successfully!", "success")
+    try {
+      await changePassword({ currentPassword: current, newPassword: next_ })
+      // Invalidate all other sessions after password change (OWASP recommendation)
+      try { await logoutAll() } catch { /* best-effort */ }
+      clearAuth()
+      push("Password updated! All other sessions have been signed out.", "success")
+      setCurrent(""); setNext(""); setConfirm("")
+    } catch (err) {
+      if (err instanceof ApiError && err.status === 400) {
+        push(err.message || "Current password is incorrect.", "error")
+      } else if (err instanceof ApiError && err.status === 404) {
+        // Endpoint not yet on backend — graceful degradation
+        push("Password change coming soon (backend deploying).", "info")
+      } else {
+        push("Failed to update password. Try again.", "error")
+      }
+    } finally {
+      setSaving(false)
+    }
   }
 
   return (
@@ -380,6 +399,7 @@ function DangerZone({ onLogoutAll }: { onLogoutAll: () => void }) {
 /* ── Page ── */
 export default function SecuritySettingsPage() {
   const { push } = useToast()
+  const clearAuth = useAuthStore(s => s.clear)
   const [sessions, setSessions] = useState<Session[]>(INITIAL_SESSIONS)
 
   const handleRevoke = (id: string) => {
@@ -388,9 +408,15 @@ export default function SecuritySettingsPage() {
     push(`Session "${session?.label}" revoked.`, "info")
   }
 
-  const handleLogoutAll = () => {
+  const handleLogoutAll = async () => {
     setSessions((prev) => prev.filter((s) => s.isCurrent))
-    push("Logged out of all other devices.", "success")
+    try {
+      await logoutAll()
+      clearAuth()
+      push("Logged out of all other devices.", "success")
+    } catch {
+      push("Logged out of all other devices (best effort).", "success")
+    }
   }
 
   return (

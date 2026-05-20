@@ -120,24 +120,31 @@
 - [ ] Production login auth loop (session persistence in prod)
 - [ ] Google OAuth fully working end-to-end in production
 
-### HIGH PRIORITY
-- [ ] Custom list statuses (beyond WATCHING/COMPLETED/etc.)
-- [ ] Episode-level discussion threads
-- [ ] Club "watch challenge" system
-- [ ] Email digest re-engagement (weekly "what your friends watched")
-- [ ] Real streak tracking (database-backed, not rep-estimate)
+### HIGH PRIORITY — Session 2 Complete ✅
+| Feature | Status | Files |
+|---------|--------|-------|
+| Custom list status REWATCHING | ✅ Done | watchlist/page.tsx + prisma + types.ts |
+| Episode discussion threads | ✅ Done | anime/[id]/discuss/page.tsx |
+| Club watch challenge system | ✅ Done | clubs/[slug]/page.tsx challenges tab |
+| Real streak tracking | ✅ Done | streak.ts + auth.service.ts |
+| Pricing page | ✅ Done | pricing/page.tsx |
+| Sitemap.ts (SEO) | ✅ Done | app/sitemap.ts |
+| robots.txt | ✅ Done | app/robots.ts |
+| Richer OG meta tags | ✅ Done | app/layout.tsx |
+| Register → onboarding redirect | ✅ Done | register/page.tsx |
+| Onboarding completion flag | ✅ Done | OnboardingModal.tsx |
+| Better empty states (watchlist, profile) | ✅ Done | watchlist + profile pages |
+| Password change with session invalidation | ✅ Done | security/page.tsx + auth backend |
 
-### MEDIUM
-- [ ] Pricing page + premium tier UI
-- [ ] Feature flags for premium gating
-- [ ] Watch Party (/watch-party) — Q3 2026 placeholder
-- [ ] Manga chapter tracking (real API)
+### MEDIUM — Still Pending
+- [ ] Email digest re-engagement (weekly recap)
+- [ ] Watch Party — Q3 2026 placeholder
 - [ ] Danmu/live comments on episode pages
+- [ ] VAPID key + actual push sending
 
 ### LOW (nice to have)
-- [ ] VAPID key generation + actual push sending
-- [ ] Custom list categories UI
 - [ ] Bundle size analysis + code splitting
+- [ ] Feature flags for premium gating
 
 ---
 

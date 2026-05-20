@@ -39,7 +39,9 @@ export default function RegisterPage() {
     setUser(user)
     connectSocket(accessToken)
     qc.invalidateQueries({ queryKey: ["auth/me"] })
-    router.push("/dashboard")
+    // New users go through onboarding (existing users skip via localStorage flag)
+    const hasOnboarded = typeof window !== "undefined" && localStorage.getItem("aw_onboarded")
+    router.push(hasOnboarded ? "/dashboard" : "/onboarding")
   }
 
   const handleGoogleRegister = () => {
@@ -82,7 +84,7 @@ export default function RegisterPage() {
         password:    form.password,
       },
       {
-        onSuccess: () => router.push("/dashboard"),
+        onSuccess: () => router.push("/onboarding"),
         onError: (err) => {
           if (err instanceof ApiError) {
             if (err.code === "CONFLICT") {

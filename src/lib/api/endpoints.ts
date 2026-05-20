@@ -19,6 +19,11 @@ export const refresh = () => api<RefreshResponse>("/auth/refresh", { method: "PO
 
 export const logout = () => api<void>("/auth/logout", { method: "POST" })
 
+export const logoutAll = () => api<void>("/auth/logout-all", { method: "POST" })
+
+export const changePassword = (body: { currentPassword: string; newPassword: string }) =>
+  api<void>("/auth/change-password", { method: "POST", body: JSON.stringify(body) })
+
 export const me = () => api<{ user: User }>("/auth/me")
 
 /* ── Users ── */

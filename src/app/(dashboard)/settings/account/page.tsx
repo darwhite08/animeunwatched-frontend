@@ -47,10 +47,12 @@ export default function AccountSettingsPage() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto px-6 py-12 pb-32 space-y-8">
+    <div className="space-y-6">
       <div>
-        <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-indigo-400/60 mb-2">Account</p>
-        <h1 className="text-3xl font-black tracking-tighter uppercase italic text-white">Account Settings</h1>
+        <p className="text-[9px] font-mono uppercase tracking-[0.4em] mb-1" style={{ color: "rgba(245,158,11,0.5)" }}>
+          Account
+        </p>
+        <h2 className="text-2xl font-black tracking-tighter uppercase italic text-white">Profile & Account</h2>
       </div>
 
       {/* Avatar */}

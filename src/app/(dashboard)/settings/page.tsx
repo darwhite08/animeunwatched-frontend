@@ -1,5 +1,7 @@
 "use client"
 
+import { useEffect } from "react"
+import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { motion } from "framer-motion"
 import {
@@ -19,7 +21,11 @@ const TABS: { id: Tab; label: string; icon: typeof User }[] = [
 ]
 
 export default function SettingsPage() {
+  const router = useRouter()
   const [activeTab, setActiveTab] = useState<Tab>("account")
+
+  // Redirect /settings → /settings/account
+  useEffect(() => { router.replace("/settings/account") }, [router])
 
   return (
     <div className="max-w-4xl mx-auto px-6 py-12 space-y-10 pb-32">

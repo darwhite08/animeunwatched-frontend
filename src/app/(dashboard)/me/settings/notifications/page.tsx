@@ -7,6 +7,7 @@ import {
   BarChart2, Tv2, Calendar, Trash2, CheckCircle2, AlertTriangle,
 } from "lucide-react"
 import { useToast } from "@/stores/toast.store"
+import { usePushNotifications } from "@/hooks/usePushNotifications"
 
 /* ── Types ── */
 type DeliveryId = "app" | "email" | "push"
@@ -22,7 +23,7 @@ type NotifKey =
 const DELIVERY: { id: DeliveryId; label: string; icon: typeof Bell; desc: string; disabled?: boolean }[] = [
   { id: "app",   label: "In-App",          icon: Bell,       desc: "Real-time notifications inside the platform" },
   { id: "email", label: "Email",           icon: Mail,       desc: "Delivered to your registered email address" },
-  { id: "push",  label: "Push",            icon: Smartphone, desc: "Browser push notifications", disabled: true },
+  { id: "push",  label: "Push",            icon: Smartphone, desc: "Browser push notifications" },
 ]
 
 const NOTIF_TYPES: {
@@ -142,6 +143,8 @@ export default function NotificationSettingsPage() {
     push("Test notification fired successfully!", "success")
   }
 
+  const { permission: pushPermission, subscribing: pushSubscribing, isSupported: pushSupported, requestPermission: requestPush } = usePushNotifications()
+
   const handleUnsubscribeAll = () => {
     setDelivery({ app: true, email: false, push: false })
     setNotifs({
@@ -170,6 +173,33 @@ export default function NotificationSettingsPage() {
           Control exactly when and how Kaiveron reaches you.
         </p>
       </div>
+
+      {/* Push notification permission CTA */}
+      {pushSupported && pushPermission !== "granted" && (
+        <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
+          className="flex items-center justify-between gap-4 p-4 rounded-2xl"
+          style={{ background: "rgba(245,158,11,0.08)", border: "1px solid rgba(245,158,11,0.2)" }}>
+          <div className="flex items-center gap-3">
+            <Bell size={16} className="text-amber-400 shrink-0" />
+            <div>
+              <p className="text-sm font-black text-white">Enable push notifications</p>
+              <p className="text-[10px] text-white/40">Get notified about new episodes, followers, and replies</p>
+            </div>
+          </div>
+          <button onClick={requestPush} disabled={pushSubscribing}
+            className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-[11px] font-black uppercase tracking-widest text-black shrink-0 transition-all disabled:opacity-60"
+            style={{ background: "linear-gradient(135deg, #fbbf24, #f59e0b)" }}>
+            {pushSubscribing ? "Enabling…" : "Enable"}
+          </button>
+        </motion.div>
+      )}
+
+      {pushSupported && pushPermission === "granted" && (
+        <div className="flex items-center gap-3 px-4 py-3 rounded-2xl bg-emerald-500/8 border border-emerald-500/20">
+          <CheckCircle2 size={14} className="text-emerald-400 shrink-0" />
+          <p className="text-[11px] text-emerald-400 font-black">Push notifications are active</p>
+        </div>
+      )}
 
       {/* Delivery methods */}
       <section>

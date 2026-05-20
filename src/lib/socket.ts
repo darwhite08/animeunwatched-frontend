@@ -3,14 +3,18 @@
 import { io, type Socket } from "socket.io-client"
 import { useAuthStore } from "@/stores/auth.store"
 
-// Socket.IO connects directly to the backend on port 4000 (always HTTP).
-// The backend is HTTP — Chrome allows ws:// from https:// pages to localhost as a special exception.
-// For LAN IP (phone), Chrome also allows mixed WebSockets in dev when the user clicks "proceed"
-// on the self-signed cert warning.
+// Socket URL resolution:
+// - Server-side (SSR): use NEXT_PUBLIC_SOCKET_URL env var
+// - localhost / LAN IP: connect directly to port 4000 (dev mode)
+// - Any other host (production Vercel): use NEXT_PUBLIC_SOCKET_URL env var (Render backend)
 function getSocketUrl(): string {
-  if (typeof window === "undefined") return process.env.NEXT_PUBLIC_SOCKET_URL ?? "http://localhost:4000"
+  const envUrl = process.env.NEXT_PUBLIC_SOCKET_URL
+  if (typeof window === "undefined") return envUrl ?? "http://localhost:4000"
   const host = window.location.hostname
-  return `http://${host}:4000`
+  const isLocal = host === "localhost" || /^192\.168\.|^10\.|^172\.(1[6-9]|2\d|3[01])\./.test(host)
+  if (isLocal) return `http://${host}:4000`
+  // Production: use env var (Render backend supports WebSockets on standard port)
+  return envUrl ?? "http://localhost:4000"
 }
 const SOCKET_URL = getSocketUrl()
 

@@ -268,7 +268,8 @@ function SaveButton({ saving, onClick, label = "Save Changes" }: { saving: boole
       <button
         onClick={onClick}
         disabled={saving}
-        className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-xs font-black uppercase tracking-widest text-white transition-all disabled:opacity-50"
+        className="flex items-center gap-2 px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest text-black transition-all disabled:opacity-50"
+        style={{ background: "linear-gradient(135deg, #fbbf24, #f59e0b)", boxShadow: "0 4px 14px rgba(245,158,11,0.3)" }}
       >
         {saving ? <Loader2 size={13} className="animate-spin" /> : <Save size={13} />}
         {saving ? "Saving…" : label}

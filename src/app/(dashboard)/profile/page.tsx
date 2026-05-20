@@ -472,7 +472,8 @@ export default function WorldClassProfile() {
           {/* ACTION HUB */}
           <div className="flex flex-col gap-3">
             <div className="flex gap-4">
-              <button className="h-14 px-10 rounded-2xl bg-indigo-600 text-white font-bold hover:bg-indigo-500 transition-all shadow-[0_10px_40px_rgba(79,70,229,0.3)] hover:-translate-y-1">
+              <button className="h-14 px-10 rounded-2xl text-black font-bold transition-all hover:-translate-y-1"
+                style={{ background: "linear-gradient(135deg, #fbbf24, #f59e0b)", boxShadow: "0 10px 40px rgba(245,158,11,0.35)" }}>
                 Customize Hub
               </button>
               <button
@@ -538,7 +539,8 @@ export default function WorldClassProfile() {
               {activeTab === tab && (
                 <motion.div
                   layoutId="tab-indicator"
-                  className="absolute inset-0 bg-indigo-600 rounded-xl shadow-[0_4px_20px_rgba(99,102,241,0.35)]"
+                  className="absolute inset-0 rounded-xl"
+                  style={{ background: "linear-gradient(135deg, #f59e0b, #fbbf24)", boxShadow: "0 4px 20px rgba(245,158,11,0.35)" }}
                   transition={{ type: "spring", stiffness: 380, damping: 36 }}
                 />
               )}

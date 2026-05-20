@@ -104,9 +104,9 @@ export default function WatchlistPage() {
 
         <div className="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
           <div className="relative group flex-1 sm:w-72">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-indigo-400 transition-colors" size={16} />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-amber-400 transition-colors" size={16} />
             <input type="text" placeholder="Search watchlist…"
-              className="w-full pl-11 pr-10 py-3.5 rounded-2xl bg-white/[0.03] border border-white/10 text-white placeholder:text-white/20 focus:outline-none focus:border-indigo-500/40 transition-all text-sm"
+              className="w-full pl-11 pr-10 py-3.5 rounded-2xl bg-white/[0.03] border border-white/10 text-white placeholder:text-white/20 focus:outline-none focus:border-amber-500/40 transition-all text-sm"
               value={query} onChange={e => setQuery(e.target.value)} />
             {query && (
               <button onClick={() => setQuery("")} className="absolute right-4 top-1/2 -translate-y-1/2 text-white/30 hover:text-white transition-colors">
@@ -115,7 +115,7 @@ export default function WatchlistPage() {
             )}
           </div>
           <button onClick={() => push("Use the Browse page to add anime to your list!", "info")}
-            className="flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl bg-white text-black font-black text-[11px] uppercase tracking-widest hover:bg-indigo-50 transition-all active:scale-95">
+            className="flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl font-black text-[11px] uppercase tracking-widest transition-all active:scale-95 text-black" style={{background:"linear-gradient(135deg,#fbbf24,#f59e0b)"}}>
             <Plus size={15} /> Add Anime
           </button>
         </div>
@@ -202,7 +202,7 @@ export default function WatchlistPage() {
                   }`}>
                   {t}
                   {COUNTS[t] > 0 && (
-                    <span className={`text-[8px] font-black ${tab === t ? "text-indigo-200" : "text-white/20"}`}>{COUNTS[t]}</span>
+                    <span className={`text-[8px] font-black ${tab === t ? "text-black/60" : "text-white/20"}`}>{COUNTS[t]}</span>
                   )}
                 </button>
               )

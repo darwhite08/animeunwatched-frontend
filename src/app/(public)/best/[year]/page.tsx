@@ -276,7 +276,7 @@ export default function BestOfYearPage({ params }: { params: Promise<{ year: str
             <ChevronLeft size={14} /> Best of {year - 1}
           </Link>
           <Link
-            href="/best"
+            href="/bestanimelist"
             className="text-[10px] font-black uppercase tracking-[0.3em] text-amber-400 hover:text-amber-300 transition-colors"
           >
             All Years

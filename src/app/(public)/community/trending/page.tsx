@@ -426,7 +426,7 @@ export default function CommunityTrendingPage() {
             <p className="text-sm text-white/50 mt-0.5">See the full trending board with live rankings.</p>
           </div>
           <Link
-            href="/trending"
+            href="/community/trending"
             className="flex items-center gap-2 px-6 py-3 rounded-xl bg-amber-600/15 border border-amber-500/25 text-[11px] font-black uppercase tracking-widest text-amber-400 hover:bg-amber-600/25 transition-all"
           >
             Full Trending <ArrowUpRight size={12} />

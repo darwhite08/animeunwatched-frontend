@@ -18,6 +18,7 @@ import RecentlyReviewedCard from "@/components/dashboard/cards/RecentlyReviewedC
 import QuickActionsCard from "@/components/dashboard/cards/QuickActionsCard"
 import DailyQuestCard from "@/components/dashboard/cards/DailyQuestCard"
 import AiringTodayCard from "@/components/dashboard/cards/AiringTodayCard"
+import InviteFriendsCard from "@/components/dashboard/cards/InviteFriendsCard"
 
 /* ── Streak card extracted as proper component (not IIFE — avoids render crash) ── */
 function StreakBento({ reputation }: { reputation: number }) {
@@ -234,10 +235,12 @@ export default function DashboardPage() {
         <DailyQuestCard />
       </div>
 
-      {/* ── AIRING SCHEDULE ── */}
-      <div className="grid md:grid-cols-2 gap-6">
-        <AiringTodayCard />
-        <FriendsActivityCard />
+      {/* ── AIRING SCHEDULE + INVITE ── */}
+      <div className="grid md:grid-cols-3 gap-6">
+        <div className="md:col-span-2">
+          <AiringTodayCard />
+        </div>
+        <InviteFriendsCard />
       </div>
     </div>
   )

@@ -9,6 +9,7 @@ import { useToast } from "@/stores/toast.store"
 import ListShareCard from "@/components/social/ListShareCard"
 import { useUserList } from "@/hooks/useLists"
 import { useAuthStore } from "@/stores/auth.store"
+import { useLiveUserList } from "@/hooks/useRealtime"
 import type { WatchStatus } from "@/lib/api/types"
 
 const SHARE_KEY = "aw_share_dismissed"
@@ -41,6 +42,8 @@ export default function WatchlistPage() {
   }, [])
 
   const { data, isLoading, isError } = useUserList(user?.username ?? "", undefined)
+  // Realtime: any list change from another tab/device syncs this list instantly
+  useLiveUserList()
 
   const items: WatchItem[] = useMemo(() => {
     if (!data?.data) return []

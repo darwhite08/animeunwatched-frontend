@@ -5,6 +5,7 @@ import { lazy, Suspense } from "react"
 import { Zap, Crown, Flame, TrendingUp, Bell, Star, Users } from "lucide-react"
 import Link from "next/link"
 import { useAuthStore } from "@/stores/auth.store"
+import { useLiveUserList } from "@/hooks/useRealtime"
 import WrappedBanner from "@/components/ui/WrappedBanner"
 // Above-fold cards — eagerly loaded (visible immediately on page open)
 import { WatchStatsCard } from "@/components/dashboard/cards/WatchStatsCard"
@@ -122,6 +123,8 @@ export default function DashboardPage() {
   const sessionReady = useAuthStore(s => s.sessionReady)
   const rep   = user?.reputation ?? 0
   const level = Math.max(1, Math.floor(Math.sqrt(rep * 100 / 1000)))
+  // Realtime: stats cards refresh when the user updates their list anywhere
+  useLiveUserList()
   const grade = level >= 10 ? "Grade IV" : level >= 7 ? "Grade III" : level >= 4 ? "Grade II" : "Grade I"
 
   // Show skeleton while session is bootstrapping — prevents black flash

@@ -23,8 +23,9 @@ import { useAuthStore } from "@/stores/auth.store"
 import { useFeed, useDiscover, useCreatePost, useLikePost } from "@/hooks/usePosts"
 import { useBrowseAnime } from "@/hooks/useAnime"
 import { useLeaderboard } from "@/hooks/useLeaderboard"
-import { useLiveFeed } from "@/hooks/useRealtime"
+import { useLiveFeed, useQueuedPosts } from "@/hooks/useRealtime"
 import { useLiveTime } from "@/hooks/useLiveTime"
+import { NewPostsBanner } from "@/components/feed/NewPostsBanner"
 
 // Renders an auto-updating relative timestamp ("just now" → "1m ago" → ...)
 function LiveTime({ iso }: { iso: string }) { return <>{useLiveTime(iso)}</> }
@@ -168,8 +169,30 @@ export default function FeedPage() {
   const [draft, setDraft] = useState("")
   const [suggestions, setSuggestions] = useState<Suggestion[]>([])
 
-  // Realtime: prepend new posts, update like/comment counts live
-  useLiveFeed()
+  // Realtime: buffer new posts in a queue when the user has scrolled past the top.
+  // We only auto-prepend if the user is near the top — otherwise we show a
+  // floating "↑ N new posts" banner that flushes on click (WhatsApp/Twitter style).
+  const queryKeys = [["posts/discover"] as const, ["posts/feed"] as const]
+  const { queueLength, enqueue, flush } = useQueuedPosts(queryKeys)
+  useLiveFeed({
+    onQueue: (post) => {
+      // If the user is at the very top, prepend immediately. Otherwise queue.
+      if (typeof window !== "undefined" && window.scrollY < 240) {
+        // Drain via flush AFTER buffering, so order is preserved
+        enqueue(post)
+        flush()
+      } else {
+        enqueue(post)
+      }
+    },
+  })
+
+  const handleFlushAndScrollUp = () => {
+    flush()
+    if (typeof window !== "undefined") {
+      window.scrollTo({ top: 0, behavior: "smooth" })
+    }
+  }
 
   const { data: feedData, isLoading: feedLoading } = useFeed()
   const { data: discoverData, isLoading: discoverLoading } = useDiscover()
@@ -239,6 +262,9 @@ export default function FeedPage() {
 
   return (
     <div className="min-h-screen bg-[#020202] text-white pb-32">
+
+      {/* Live "↑ N new posts" floating banner */}
+      <NewPostsBanner count={queueLength} onClick={handleFlushAndScrollUp} />
 
       {/* ── Sticky header ── */}
       <div className="border-b border-white/5 bg-black/50 backdrop-blur-md sticky top-[72px] z-30">

@@ -19,6 +19,7 @@ import { useAuthStore } from "@/stores/auth.store";
 import { disconnectSocket } from "@/lib/socket";
 import { logout } from "@/lib/api/endpoints";
 import NotificationBell from "@/components/notifications/NotificationBell";
+import { OnlineCountBadge } from "@/components/ui/OnlineCountBadge";
 import SearchModal from "./SearchModal";
 import ProfileMenu from "./ProfileMenu";
 
@@ -301,6 +302,11 @@ export default function Navbar() {
             <span className="hidden xl:block text-[10px] font-black text-white/25 tracking-widest">⌘K</span>
           </button>
 
+          {isHydrated && isAuthenticated && (
+            <span className="hidden md:inline-flex">
+              <OnlineCountBadge compact />
+            </span>
+          )}
           {isHydrated && isAuthenticated && <NotificationBell />}
           {isHydrated && isAuthenticated && (
             <Link href="/chat" title="Messages"

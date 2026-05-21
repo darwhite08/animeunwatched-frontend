@@ -25,7 +25,19 @@ export function getSocket(): Socket | null {
   return socket
 }
 
+export function forceReconnect(): void {
+  if (!socket) return
+  if (socket.connected) return
+  socket.connect()
+}
+
 export function connectSocket(accessToken: string): Socket {
+  // If socket exists but is exhausted/disconnected, destroy and recreate
+  if (socket && !socket.connected) {
+    socket.removeAllListeners()
+    socket.disconnect()
+    socket = null
+  }
   if (socket?.connected) return socket
 
   socket = io(SOCKET_URL, {
@@ -37,8 +49,10 @@ export function connectSocket(accessToken: string): Socket {
     transports: ["polling", "websocket"],
     autoConnect: true,
     reconnection: true,
-    reconnectionAttempts: 5,
-    reconnectionDelay: 2000,
+    reconnectionAttempts: Infinity, // never give up — Render cold starts can take 30s
+    reconnectionDelay: 3000,
+    reconnectionDelayMax: 10000,
+    timeout: 20000,
   })
 
   socket.on("connect", () => {

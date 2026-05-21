@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useRef, useCallback, useEffect } from "react"
-import { getSocket } from "@/lib/socket"
+import { getSocket, forceReconnect } from "@/lib/socket"
 
 /* ── STUN + TURN servers ─────────────────────────────────────────────────── */
 const ICE_CONFIG: RTCConfiguration = {
@@ -108,8 +108,12 @@ export function useWebRTC() {
     // NOTE: We do NOT check navigator.mediaDevices here — on some browsers/configs
     // it may be undefined even on localhost. We let getMedia() handle it gracefully.
     const s = getSocket()
-    if (!s) return "Not connected to server. Please refresh the page."
-    if (!s.connected) return "Connecting to server… please wait a moment and try again."
+    if (!s) return "SOCKET_NULL"
+    if (!s.connected) {
+      // Attempt to reconnect before failing — Render cold starts can take 30s
+      forceReconnect()
+      return "SOCKET_RECONNECTING"
+    }
     return null
   }
 

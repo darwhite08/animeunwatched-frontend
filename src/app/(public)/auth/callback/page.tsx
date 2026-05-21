@@ -12,9 +12,10 @@ import type { User } from "@/lib/api/types"
 export default function AuthCallbackPage() {
   const router       = useRouter()
   const params       = useSearchParams()
-  const setAccess    = useAuthStore(s => s.setAccess)
-  const setUser      = useAuthStore(s => s.setUser)
-  const qc           = useQueryClient()
+  const setAccess      = useAuthStore(s => s.setAccess)
+  const setUser        = useAuthStore(s => s.setUser)
+  const setSessionReady = useAuthStore(s => s.setSessionReady)
+  const qc             = useQueryClient()
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
@@ -47,11 +48,16 @@ export default function AuthCallbackPage() {
         // 3. Connect real-time socket
         connectSocket(accessToken!)
 
-        // 4. Invalidate any stale auth queries
+        // 4. Mark session as ready BEFORE navigating so the dashboard
+        //    layout doesn't see sessionReady=false and redirect to /login
+        setSessionReady()
+
+        // 5. Invalidate any stale auth queries
         await qc.invalidateQueries({ queryKey: ["auth/me"] })
 
-        // 5. Navigate to dashboard
-        router.replace("/dashboard")
+        // 6. Navigate — use the slug-prefixed dashboard if slug is available
+        const dest = user.slug ? `/user/${user.slug}/dashboard` : "/dashboard"
+        router.replace(dest)
       } catch {
         setError("Failed to complete sign-in. Please try again.")
       }

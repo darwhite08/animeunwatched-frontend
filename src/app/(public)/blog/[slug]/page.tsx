@@ -4,11 +4,14 @@ import { use, useState } from "react"
 import { motion } from "framer-motion"
 import {
   Heart, Share2, Bookmark, ChevronLeft, Clock, User, Eye,
-  MessageSquare,
+  MessageSquare, Send, Loader2,
 } from "lucide-react"
 import Link from "next/link"
 import { useToast } from "@/stores/toast.store"
 import { useBlog } from "@/hooks/useBlogs"
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
+import { api } from "@/lib/api/client"
+import { useAuthStore } from "@/stores/auth.store"
 
 /* ── Types ── */
 type BlogMeta = {
@@ -280,6 +283,78 @@ function ArticleBody({ apiContent }: { apiContent?: string }) {
   )
 }
 
+/* ── Blog Comments (real API) ── */
+function BlogComments({ slug }: { slug: string }) {
+  const { push } = useToast()
+  const isAuth = useAuthStore(s => s.isAuthenticated)
+  const qc = useQueryClient()
+  const [draft, setDraft] = useState("")
+
+  const { data, isLoading } = useQuery({
+    queryKey: ["blog-comments", slug],
+    queryFn:  () => api<{ data: Array<{ id: string; content: string; createdAt: string; author: { username: string; displayName: string; avatarUrl: string | null } }> }>(`/blogs/${slug}/comments`),
+    staleTime: 60_000,
+  })
+
+  const createMut = useMutation({
+    mutationFn: (content: string) => api(`/blogs/${slug}/comments`, { method: "POST", body: JSON.stringify({ content }) }),
+    onSuccess: () => { setDraft(""); qc.invalidateQueries({ queryKey: ["blog-comments", slug] }); push("Comment posted!", "success") },
+    onError: () => push("Failed to post comment", "error"),
+  })
+
+  const comments = data?.data ?? []
+
+  return (
+    <div className="space-y-5">
+      <div className="flex items-center justify-between">
+        <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/30">
+          Comments ({isLoading ? "…" : comments.length})
+        </h3>
+        <MessageSquare size={13} className="text-white/20" />
+      </div>
+
+      {/* Comment composer */}
+      {isAuth && (
+        <div className="flex gap-3">
+          <textarea value={draft} onChange={e => setDraft(e.target.value)}
+            placeholder="Share your thoughts…" rows={2} maxLength={1000}
+            className="flex-1 px-4 py-3 rounded-xl bg-white/[0.03] border border-white/8 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-amber-500/30 resize-none transition-all" />
+          <button onClick={() => draft.trim() && createMut.mutate(draft.trim())}
+            disabled={!draft.trim() || createMut.isPending}
+            className="p-3 rounded-xl text-black transition-all disabled:opacity-40 hover:scale-105"
+            style={{ background: "linear-gradient(135deg,#fbbf24,#f59e0b)" }}>
+            {createMut.isPending ? <Loader2 size={16} className="animate-spin" /> : <Send size={16} />}
+          </button>
+        </div>
+      )}
+
+      {isLoading ? (
+        <div className="flex justify-center py-8"><Loader2 size={20} className="animate-spin text-amber-400" /></div>
+      ) : comments.length === 0 ? (
+        <p className="text-center py-8 text-xs text-white/20">No comments yet. Be the first!</p>
+      ) : (
+        <div className="space-y-4">
+          {comments.map((c, i) => (
+            <motion.div key={c.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.04 }}
+              className="p-5 rounded-2xl bg-white/[0.02] border border-white/8 space-y-3">
+              <div className="flex items-center gap-3">
+                <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-xs font-black shrink-0">
+                  {(c.author.displayName || c.author.username)[0]?.toUpperCase()}
+                </div>
+                <div>
+                  <p className="text-xs font-black text-white">{c.author.displayName || c.author.username}</p>
+                  <p className="text-[9px] text-white/25">{new Date(c.createdAt).toLocaleDateString()}</p>
+                </div>
+              </div>
+              <p className="text-sm text-white/55 leading-relaxed">{c.content}</p>
+            </motion.div>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
 /* ── Page ── */
 export default function BlogReaderPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = use(params)
@@ -488,47 +563,8 @@ export default function BlogReaderPage({ params }: { params: Promise<{ slug: str
           </div>
         </div>
 
-        {/* Comments */}
-        <div className="space-y-5">
-          <div className="flex items-center justify-between">
-            <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/30">
-              Comments ({MOCK_COMMENTS.length})
-            </h3>
-            <MessageSquare size={13} className="text-white/20" />
-          </div>
-
-          <div className="space-y-4">
-            {MOCK_COMMENTS.map((comment, i) => (
-              <motion.div
-                key={comment.id}
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 + i * 0.06 }}
-                className="p-5 rounded-2xl bg-white/[0.02] border border-white/8 space-y-3"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-xs font-black shrink-0">
-                    {comment.avatar}
-                  </div>
-                  <div>
-                    <p className="text-xs font-black text-white">{comment.author}</p>
-                    <p className="text-[9px] text-white/25">{comment.time}</p>
-                  </div>
-                </div>
-                <p className="text-sm text-white/55 leading-relaxed">{comment.body}</p>
-                <button
-                  onClick={() => toggleCommentLike(comment.id)}
-                  className={`flex items-center gap-1.5 text-[10px] font-bold transition-colors ${
-                    commentLikes[comment.id] ? "text-rose-400" : "text-white/25 hover:text-rose-400"
-                  }`}
-                >
-                  <Heart size={10} fill={commentLikes[comment.id] ? "currentColor" : "none"} />
-                  {comment.likes + (commentLikes[comment.id] ? 1 : 0)} helpful
-                </button>
-              </motion.div>
-            ))}
-          </div>
-        </div>
+        {/* Comments — real API */}
+        <BlogComments slug={slug} />
 
       </div>
     </div>

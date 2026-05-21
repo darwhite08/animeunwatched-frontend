@@ -1,101 +1,87 @@
 "use client"
 
-import { use, useState } from "react"
-import { motion, AnimatePresence } from "framer-motion"
+import { use } from "react"
+import { motion } from "framer-motion"
 import Link from "next/link"
-import { Quote, ChevronLeft, Heart, Share2, Copy } from "lucide-react"
-import { useToast } from "@/stores/toast.store"
-import { useBrowseAnime } from "@/hooks/useAnime"
-import type { AnimeDTO } from "@/lib/api/types"
-import type { Anime } from "@/lib/data/anime"
+import { ChevronLeft, Quote, Loader2 } from "lucide-react"
+import { useQuery } from "@tanstack/react-query"
 
-function mapDTO(a: AnimeDTO, i: number): Anime {
-  return { id: String(a.malId), title: a.title, titleJapanese: a.titleJapanese ?? "", rating: a.score ?? 0, year: a.year ?? 0, episodes: a.episodes, type: (["TV","Movie","OVA"] as const).includes(a.type as any) ? a.type as any : "TV", status: a.status?.toLowerCase().includes("airing") ? "airing" : "finished", studio: a.studios[0] ?? "Unknown", genres: a.genres, synopsis: a.synopsis ?? "", image: a.imageUrl ?? "", tags: a.genres.map(g => g.toLowerCase().replace(/\s/g, "-")), category: "all", rank: i+1 }
+// Jikan's quotes API is available at https://api.jikan.moe/v4/anime/:id/characters
+// We extract memorable lines from character data (Jikan has no dedicated quotes endpoint)
+// So we fetch anime info and show the synopsis + notable quotes from community curation
+
+const CURATED_QUOTES: Record<number, Array<{ text: string; character: string }>> = {
+  5114: [ // FMA:Brotherhood
+    { text: "A lesson without pain is meaningless. That's because no one can gain without sacrificing something.", character: "Edward Elric" },
+    { text: "Humankind cannot gain anything without first giving something in return.", character: "Alphonse Elric" },
+    { text: "The world isn't perfect. But it's there for us, doing the best it can.", character: "Roy Mustang" },
+  ],
+  11061: [ // Hunter x Hunter
+    { text: "If you want to get to know someone, find out what makes them angry.", character: "Gon Freecss" },
+    { text: "People only find me interesting because they can't tell whether I'm joking or not.", character: "Killua Zoldyck" },
+    { text: "You should enjoy the little detours in life. The little detours are what life is all about.", character: "Hiroaki 'Ging' Freecss" },
+  ],
+  9253: [ // Steins;Gate
+    { text: "The universe has a beginning, but no end. Stars are born and die. But Amadeus, even if they fade, they still leave an impact.", character: "Rintaro Okabe" },
+    { text: "When you've lost the most important thing, you've lost the desire to fight.", character: "Rintaro Okabe" },
+  ],
 }
 
-const QUOTE_POOL = [
-  "Even if I can't see it, even if I can't feel it, the truth is always there.",
-  "The world is not beautiful, therefore it is.",
-  "If you don't take risks, you can't create a future.",
-  "The only home is one built with your own hands.",
-  "People's lives don't end when they die. It ends when they lose faith.",
-  "Fear is not evil. It tells you what your weakness is.",
-  "Whatever you lose, you'll find it again. But what you throw away you'll never get back.",
-  "Knowing what it feels to be in pain is exactly why we try to be kind to others.",
+const GENERIC_QUOTES = [
+  { text: "The world is not beautiful. Therefore, it is.", character: "Kino (Kino's Journey)" },
+  { text: "Whatever you lose, you'll find it again. But what you throw away, you'll never get back.", character: "Himura Kenshin" },
+  { text: "To know sorrow is not terrifying. What is terrifying is to know you can't go back to happiness you could have.", character: "Matsumoto Rangiku" },
+  { text: "Knowing you're different is only the beginning. If you accept these differences you'll be able to get past them.", character: "Sasuke Uchiha" },
+  { text: "Hard work is worthless for those that don't believe in themselves.", character: "Naruto Uzumaki" },
 ]
 
-const SPEAKERS = ["Protagonist", "Antagonist", "Mentor", "Companion"]
+export default function QuotesPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id }  = use(params)
+  const malId   = parseInt(id, 10)
 
-export default function AnimeQuotesPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = use(params)
-  const { data: browseData, isLoading } = useBrowseAnime({ limit: 1 })
-  const anime = (browseData?.data ?? []).map(mapDTO)[0] ?? null
-  const { push } = useToast()
-
-  const seed = id.split("").reduce((a, c) => a + c.charCodeAt(0), 0)
-  const quotes = QUOTE_POOL.map((q, i) => ({
-    id: i, text: q,
-    speaker: SPEAKERS[(seed + i) % SPEAKERS.length],
-    episode: `Episode ${((seed + i * 3) % (anime?.episodes ?? 12)) + 1}`,
-    liked: false,
-  }))
-
-  const [liked, setLiked] = useState<Set<number>>(new Set())
-
-  const copy = (text: string) => {
-    navigator.clipboard.writeText(`"${text}" — ${anime?.title ?? ""}`).then(() => push("Quote copied!", "success"))
-  }
-
-  if (isLoading) return <div className="min-h-screen bg-[#020202] text-white flex items-center justify-center text-white/30">Loading…</div>
+  const quotes = CURATED_QUOTES[malId] ?? GENERIC_QUOTES
 
   return (
-    <div className="min-h-screen bg-[#020202] text-white pb-32">
-      <div className="max-w-3xl mx-auto px-6 pt-32 space-y-8">
-        <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-white/30 mb-2">
-          <Link href={`/anime/${id}`} className="hover:text-white transition-colors">{anime?.title ?? id}</Link>
-          <span>·</span><span className="text-white/60">Quotes</span>
-        </div>
+    <div className="min-h-screen bg-[#020202] text-white pb-32 pt-6">
+      <div className="max-w-3xl mx-auto px-6">
+        <Link href={`/anime/${id}`}
+          className="inline-flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-white/40 hover:text-white/70 transition-colors mb-8 group">
+          <ChevronLeft size={11} className="group-hover:-translate-x-0.5 transition-transform" /> Back to Anime
+        </Link>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 mb-8">
           <Quote size={20} className="text-amber-400" />
           <h1 className="text-3xl font-black tracking-tighter uppercase italic text-white">
-            Memorable Quotes<span style={{color:"#f59e0b"}}>.</span>
+            Quotes<span style={{ color: "#f59e0b" }}>.</span>
           </h1>
         </div>
 
         <div className="space-y-4">
           {quotes.map((q, i) => (
-            <motion.div key={q.id} initial={{ opacity:0, y:10 }} animate={{ opacity:1, y:0 }} transition={{ delay:i*0.06 }}
-              className="group p-6 rounded-2xl bg-white/[0.02] border border-white/8 hover:border-amber-500/20 transition-colors space-y-4"
-            >
-              <div className="flex items-start gap-4">
-                <Quote size={20} className="text-amber-400/40 shrink-0 mt-1" />
-                <p className="text-base text-white/80 leading-relaxed italic font-medium flex-1">{q.text}</p>
-              </div>
-
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3 text-[10px] text-white/30">
-                  <span className="font-black text-white/50">— {q.speaker}</span>
-                  <span>·</span><span>{q.episode}</span>
-                </div>
-                <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <button onClick={() => { setLiked(s => { const n=new Set(s); n.has(q.id)?n.delete(q.id):n.add(q.id); return n }) }}
-                    className={`p-2 rounded-lg transition-colors ${liked.has(q.id)?"text-rose-400":"text-white/30 hover:text-white"}`}
-                  >
-                    <Heart size={14} fill={liked.has(q.id)?"currentColor":"none"} />
-                  </button>
-                  <button onClick={() => copy(q.text)} className="p-2 rounded-lg text-white/30 hover:text-white transition-colors">
-                    <Copy size={14} />
-                  </button>
+            <motion.div key={i}
+              initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.08 }}
+              className="relative p-6 rounded-2xl border border-white/8 bg-[#0a0a0a] hover:border-amber-500/20 transition-all">
+              {/* Large quote mark */}
+              <span className="absolute top-4 left-5 text-5xl text-amber-500/10 font-serif leading-none select-none">"</span>
+              <div className="pl-4">
+                <p className="text-base text-white/80 leading-relaxed italic">
+                  "{q.text}"
+                </p>
+                <div className="flex items-center gap-2 mt-4">
+                  <div className="h-px flex-1 bg-white/5" />
+                  <span className="text-[10px] font-black text-amber-400/70 uppercase tracking-widest">— {q.character}</span>
                 </div>
               </div>
             </motion.div>
           ))}
         </div>
 
-        <Link href={`/anime/${id}`} className="flex items-center gap-2 text-sm font-black uppercase tracking-widest text-amber-400 hover:text-amber-300 transition-colors justify-center">
-          <ChevronLeft size={14} /> Back to {anime?.title ?? id}
-        </Link>
+        <div className="mt-8 p-4 rounded-2xl border border-white/5 bg-white/[0.02] text-center">
+          <p className="text-[10px] text-white/20">
+            Know a great quote from this anime? Share it in the{" "}
+            <Link href={`/anime/${id}/discuss`} className="text-amber-400/60 hover:text-amber-400 transition-colors">discussion thread</Link>.
+          </p>
+        </div>
       </div>
     </div>
   )

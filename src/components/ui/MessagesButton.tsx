@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 import { MessageSquare } from "lucide-react"
 import { useAuthStore } from "@/stores/auth.store"
 import { useQuery } from "@tanstack/react-query"
@@ -21,9 +22,13 @@ function useUnreadDMs() {
 
 export default function MessagesButton() {
   const isAuth = useAuthStore(s => s.isAuthenticated)
+  const pathname = usePathname()
   const { data: unread = 0 } = useUnreadDMs()
 
+  // Hide the floating Messages button when already inside the chat view —
+  // user is already in messages, the button is redundant noise
   if (!isAuth) return null
+  if (pathname?.startsWith("/chat")) return null
 
   return (
     <Link href="/chat">

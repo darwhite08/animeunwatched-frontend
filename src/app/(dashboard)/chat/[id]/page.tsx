@@ -437,7 +437,27 @@ function MsgRow({ m, isMine, text, authorSrc, authorName }: { m:GM; isMine:boole
 
   const isDecrypting = text === undefined
   const isError      = text?.startsWith("⚠")
-  const parts        = (!isDecrypting && !isError && text) ? parseParts(text) : null
+  // Call-summary messages are rendered as a distinct centered line, not a bubble.
+  // Format: "📞 Audio call · 2:34" or "📞 Video call · Missed"
+  const isCallSummary = !isDecrypting && !isError && text?.startsWith("📞 ")
+  const parts        = (!isDecrypting && !isError && !isCallSummary && text) ? parseParts(text) : null
+
+  // Centered call summary row — Instagram/iMessage style
+  if (isCallSummary && text) {
+    const isMissed = text.includes("Missed")
+    const labelColor = isMissed ? "oklch(0.70 0.18 25)" : "var(--ink-3)" // red-ish for missed
+    return (
+      <div style={{ padding:"6px 24px", display:"flex", justifyContent:"center" }}>
+        <div style={{ display:"inline-flex", alignItems:"center", gap:8, padding:"6px 14px", borderRadius:999, background:"var(--bg-2)", border:"1px solid var(--line)", fontSize:12, color:labelColor }}>
+          <svg width={12} height={12} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.99 10.86 19.79 19.79 0 0 1 1.93 2.18 2 2 0 0 1 3.9 0H6.9a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 7.91a16 16 0 0 0 6.13 6.13l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92Z"/>
+          </svg>
+          <span style={{ fontWeight:600 }}>{text.replace("📞 ", "")}</span>
+          <span className="mono" style={{ fontSize:10.5, color:"var(--ink-4)", marginLeft:4 }}>{ts(m.createdAt)}</span>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div style={{ display:"grid", gridTemplateColumns:"52px minmax(0,1fr)", padding:`${m.isGroupStart?"10px":"2px"} 24px`, position:"relative", animation:"msg-in 240ms cubic-bezier(0.22,1,0.36,1) both" }}
@@ -597,6 +617,37 @@ export default function ConversationPage() {
       webrtc.hangUp() // clears callError so the "Try calling" buttons appear
     }
   }, [micPerm, webrtc.callError]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  // After a call ends, post an encrypted "📞 Audio call · 2:34" or "Missed" message
+  // into the conversation so both users see it in the chat history.
+  // Only the caller posts (asInitiator) — prevents duplicate entries.
+  useEffect(() => {
+    const summary = webrtc.lastCallEnded
+    if (!summary || !summary.asInitiator) return
+    if (!sharedKeyRef.current && isE2EAvailable) return // wait for crypto
+
+    const fmtDuration = (s: number) => {
+      const m = Math.floor(s / 60)
+      const r = s % 60
+      return `${m}:${r.toString().padStart(2, "0")}`
+    }
+
+    const label = summary.callType === "video" ? "Video call" : "Audio call"
+    const detail = summary.status === "missed" ? "Missed" : fmtDuration(summary.duration)
+    const text = `📞 ${label} · ${detail}`
+
+    // Acknowledge immediately so a re-render won't fire again
+    webrtc.consumeLastCallEnded()
+
+    void (async () => {
+      try {
+        const { ciphertext, iv } = await encryptMessage(sharedKeyRef.current, text)
+        sendMutation.mutate({ ciphertext, iv })
+      } catch {
+        /* silent — call already ended, summary post is best-effort */
+      }
+    })()
+  }, [webrtc.lastCallEnded, webrtc, sendMutation])
 
   const scrollToBottom = useCallback((behavior: ScrollBehavior = "smooth") => {
     const el = scrollRef.current; if (!el) return
@@ -799,6 +850,14 @@ export default function ConversationPage() {
 
         {/* Header */}
         <div style={{ height:60, flexShrink:0, padding:"0 16px", display:"flex", alignItems:"center", gap:12, borderBottom:"1px solid var(--line)", background:"var(--bg-0)", position:"relative" }}>
+          {/* Back arrow — Instagram-web style. Exits the conversation and goes to dashboard. */}
+          <Link href="/dashboard" title="Back to dashboard"
+            style={{ width:30, height:30, borderRadius:"var(--r-sm)", display:"grid", placeItems:"center", color:"var(--ink-3)", background:"transparent", textDecoration:"none", flexShrink:0, transition:"background 120ms,color 120ms" }}
+            onMouseEnter={e=>Object.assign((e.currentTarget as HTMLElement).style,{background:"var(--bg-2)",color:"var(--ink)"})}
+            onMouseLeave={e=>Object.assign((e.currentTarget as HTMLElement).style,{background:"transparent",color:"var(--ink-3)"})}
+          >
+            <svg width={18} height={18} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+          </Link>
           {other && (
             <>
               <Avatar name={other.displayName} src={other.avatarUrl} size={34} showStatus online />

@@ -22,6 +22,19 @@ const ICE_CONFIG: RTCConfiguration = {
 export type CallType   = "audio" | "video"
 export type CallStatus = "idle" | "calling" | "incoming" | "active" | "ended"
 
+/**
+ * Summary of a call after it ends. Chat page consumes this to post a
+ * "📞 Audio call · 2:34" or "📞 Video call · Missed" message into the
+ * conversation. Only the caller (asInitiator = true) should send.
+ */
+export interface CallSummary {
+  callType:    CallType
+  status:      "answered" | "missed"
+  duration:    number    // seconds, 0 if missed
+  asInitiator: boolean   // local user was the caller
+  endedAt:     number    // for de-duplication in useEffect deps
+}
+
 /** Convert internal error codes to user-facing messages */
 function resolveMediaError(raw: string, type: CallType): string {
   if (raw === "NO_MEDIA_API") {
@@ -63,6 +76,13 @@ export function useWebRTC() {
   const [isSpeakerOff, setIsSpeakerOff] = useState(false)
   const [duration,     setDuration]     = useState(0)
   const [callError,    setCallError]    = useState<string | null>(null)
+  // Set when a call ends so the chat page can post a summary message
+  const [lastCallEnded, setLastCallEnded] = useState<CallSummary | null>(null)
+
+  // Lifecycle tracking for call summaries
+  const callStartTimeRef = useRef<number | null>(null)
+  const wasInitiatorRef  = useRef<boolean>(false)
+  const callTypeForSummaryRef = useRef<CallType>("audio")
 
   const pcRef           = useRef<RTCPeerConnection | null>(null)
   const localStream     = useRef<MediaStream | null>(null)
@@ -268,6 +288,24 @@ export function useWebRTC() {
     if (remotePeer && status !== "idle") {
       getSocket()?.emit("call:end", { to: remotePeer })
     }
+
+    // Build call summary for the chat page to post — only if WE initiated the call.
+    // The recipient's "missed call" entry is sent by the caller, so we avoid duplicates.
+    if (wasInitiatorRef.current && (status === "calling" || status === "active")) {
+      const startedAt = callStartTimeRef.current
+      const wasAnswered = startedAt !== null
+      setLastCallEnded({
+        callType:    callTypeForSummaryRef.current,
+        status:      wasAnswered ? "answered" : "missed",
+        duration:    wasAnswered ? Math.max(0, Math.floor((Date.now() - startedAt) / 1000)) : 0,
+        asInitiator: true,
+        endedAt:     Date.now(),
+      })
+    }
+    // Reset tracking refs for the next call
+    callStartTimeRef.current = null
+    wasInitiatorRef.current  = false
+
     if (ringTimeoutRef.current) { clearTimeout(ringTimeoutRef.current); ringTimeoutRef.current = null }
     pcRef.current?.close()
     pcRef.current = null
@@ -285,6 +323,13 @@ export function useWebRTC() {
     setIsCamOff(false)
     setCallError(null)
   }, [remotePeer, status, stopTimer])
+
+  // Mark start time when the call actually connects (active)
+  useEffect(() => {
+    if (status === "active" && callStartTimeRef.current === null) {
+      callStartTimeRef.current = Date.now()
+    }
+  }, [status])
 
   // Always keep ref current so socket handlers use latest version
   useEffect(() => { hangUpRef.current = hangUp }, [hangUp])
@@ -309,6 +354,10 @@ export function useWebRTC() {
     setStatus("calling")
     setCallType(type)
     setRemotePeer(toUserId)
+    // Track this call as initiated by the local user so hangUp() can write the summary
+    wasInitiatorRef.current = true
+    callTypeForSummaryRef.current = type
+    callStartTimeRef.current = null
 
     try {
       // Get media — this shows browser permission dialog
@@ -523,6 +572,10 @@ export function useWebRTC() {
     }
   }, [startTimer])
 
+  // Allows the chat page to acknowledge a call summary it has already posted,
+  // preventing duplicate messages if the page re-renders.
+  const consumeLastCallEnded = useCallback(() => setLastCallEnded(null), [])
+
   return {
     status, callType, remotePeer, incoming, callError,
     isMuted, isCamOff, isSpeakerOff, duration,
@@ -530,6 +583,7 @@ export function useWebRTC() {
     call, accept, reject, hangUp,
     toggleMute, toggleCamera, toggleSpeaker,
     onVideoElemsReady,
+    lastCallEnded, consumeLastCallEnded,
   }
 }
 

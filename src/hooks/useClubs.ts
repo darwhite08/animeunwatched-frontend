@@ -49,3 +49,20 @@ export function useCreateClub() {
     onSuccess: () => qc.invalidateQueries({ queryKey: clubsKey }),
   })
 }
+
+type ClubMember = {
+  userId: string
+  clubId: string
+  role: "USER" | "MOD" | "ADMIN"
+  joinedAt: string
+  user: { id: string; username: string; displayName: string; avatarUrl: string | null; reputation: number }
+}
+
+export function useClubMembers(slug: string, page = 1) {
+  return useQuery({
+    queryKey: ["club-members", slug, page],
+    queryFn: () => api<{ data: ClubMember[]; meta: { total: number } }>(`/clubs/${slug}/members?page=${page}&limit=12`),
+    enabled: !!slug,
+    staleTime: 60_000,
+  })
+}

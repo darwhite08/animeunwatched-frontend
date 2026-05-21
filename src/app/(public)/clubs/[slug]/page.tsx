@@ -23,7 +23,7 @@ import {
   X,
 } from "lucide-react"
 import { useToast } from "@/stores/toast.store"
-import { useClub, useJoinClub } from "@/hooks/useClubs"
+import { useClub, useJoinClub, useClubMembers } from "@/hooks/useClubs"
 import { useClubThreads, useCreateClubThread, useCreateReply } from "@/hooks/useThreads"
 import { useAuthStore } from "@/stores/auth.store"
 
@@ -504,6 +504,7 @@ export default function ClubDetailPage({
   )
   const challenges: Challenge[] = realChallenges.length > 0 ? realChallenges : MOCK_CHALLENGES
 
+  const { data: membersData } = useClubMembers(slug)
   const joinMut = useJoinClub(slug)
 
   const apiClub = clubData?.club
@@ -776,38 +777,38 @@ export default function ClubDetailPage({
               exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.3 }}
             >
-              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/25 mb-6">
-                {club.memberCount.toLocaleString()} members total — showing core team
-              </p>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                {MOCK_MEMBERS.map((member, i) => {
-                  const RoleIcon = ROLE_ICONS[member.role]
-                  return (
-                    <motion.div
-                      key={member.id}
-                      initial={{ opacity: 0, scale: 0.95 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ delay: i * 0.06 }}
-                      className="p-5 rounded-2xl bg-white/[0.02] border border-white/8 hover:border-white/15 transition-all flex flex-col items-center gap-3 text-center group"
-                    >
-                      <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center font-black text-xl text-white group-hover:scale-105 transition-transform">
-                        {member.avatar}
-                      </div>
-                      <div className="space-y-1">
-                        <p className="text-sm font-black text-white">{member.username}</p>
-                        <span
-                          className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full border text-[9px] font-black uppercase tracking-wider ${
-                            ROLE_STYLES[member.role]
-                          }`}
-                        >
-                          <RoleIcon size={8} />
-                          {member.role}
-                        </span>
-                      </div>
-                    </motion.div>
-                  )
-                })}
-              </div>
+              {(() => {
+                const apiMembers = membersData?.data ?? []
+                const displayMembers = apiMembers.length > 0
+                  ? apiMembers.map(m => ({ id: m.userId, username: m.user.username, avatar: (m.user.displayName || m.user.username)[0]?.toUpperCase() ?? "?", role: m.role as "USER" | "MOD" | "ADMIN" }))
+                  : MOCK_MEMBERS
+                return (
+                  <>
+                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/25 mb-6">
+                      {club.memberCount.toLocaleString()} members total — showing {displayMembers.length}
+                    </p>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                      {displayMembers.map((member, i) => {
+                        const RoleIcon = ROLE_ICONS[member.role]
+                        return (
+                          <motion.div key={member.id} initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: i * 0.06 }}
+                            className="p-5 rounded-2xl bg-white/[0.02] border border-white/8 hover:border-white/15 transition-all flex flex-col items-center gap-3 text-center group">
+                            <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center font-black text-xl text-white group-hover:scale-105 transition-transform">
+                              {member.avatar}
+                            </div>
+                            <div className="space-y-1">
+                              <p className="text-sm font-black text-white">{member.username}</p>
+                              <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full border text-[9px] font-black uppercase tracking-wider ${ROLE_STYLES[member.role]}`}>
+                                <RoleIcon size={8} />{member.role}
+                              </span>
+                            </div>
+                          </motion.div>
+                        )
+                      })}
+                    </div>
+                  </>
+                )
+              })()}
             </motion.div>
           )}
 

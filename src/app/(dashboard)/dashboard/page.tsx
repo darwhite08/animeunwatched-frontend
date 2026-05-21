@@ -1,24 +1,32 @@
 "use client"
 
 import { motion } from "framer-motion"
+import { lazy, Suspense } from "react"
 import { Zap, Crown, Flame, TrendingUp, Bell, Star, Users } from "lucide-react"
 import Link from "next/link"
-import { WatchStatsCard } from "@/components/dashboard/cards/WatchStatsCard"
-import { GenreCard } from "@/components/dashboard/cards/GenreCard"
-import { ActivityCard } from "@/components/dashboard/cards/ActivityCard"
-import ContinueWatchingCard from "@/components/dashboard/cards/ContinueWatchingCard"
-import XPCard from "@/components/dashboard/cards/XPCard"
-import WrappedBanner from "@/components/ui/WrappedBanner"
 import { useAuthStore } from "@/stores/auth.store"
-import NowPlayingCard from "@/components/dashboard/cards/NowPlayingCard"
-import AnimeOfTheDayCard from "@/components/dashboard/cards/AnimeOfTheDayCard"
-import FriendsActivityCard from "@/components/dashboard/cards/FriendsActivityCard"
-import TopAnimeCard from "@/components/dashboard/cards/TopAnimeCard"
-import RecentlyReviewedCard from "@/components/dashboard/cards/RecentlyReviewedCard"
-import QuickActionsCard from "@/components/dashboard/cards/QuickActionsCard"
-import DailyQuestCard from "@/components/dashboard/cards/DailyQuestCard"
-import AiringTodayCard from "@/components/dashboard/cards/AiringTodayCard"
-import InviteFriendsCard from "@/components/dashboard/cards/InviteFriendsCard"
+import WrappedBanner from "@/components/ui/WrappedBanner"
+// Above-fold cards — eagerly loaded (visible immediately on page open)
+import { WatchStatsCard } from "@/components/dashboard/cards/WatchStatsCard"
+import ContinueWatchingCard from "@/components/dashboard/cards/ContinueWatchingCard"
+import { GenreCard } from "@/components/dashboard/cards/GenreCard"
+
+// Below-fold cards — lazily loaded so they don't block first paint
+const ActivityCard        = lazy(() => import("@/components/dashboard/cards/ActivityCard").then(m => ({ default: m.ActivityCard })))
+const XPCard              = lazy(() => import("@/components/dashboard/cards/XPCard"))
+const NowPlayingCard      = lazy(() => import("@/components/dashboard/cards/NowPlayingCard"))
+const AnimeOfTheDayCard   = lazy(() => import("@/components/dashboard/cards/AnimeOfTheDayCard"))
+const FriendsActivityCard = lazy(() => import("@/components/dashboard/cards/FriendsActivityCard"))
+const TopAnimeCard        = lazy(() => import("@/components/dashboard/cards/TopAnimeCard"))
+const RecentlyReviewedCard = lazy(() => import("@/components/dashboard/cards/RecentlyReviewedCard"))
+const QuickActionsCard    = lazy(() => import("@/components/dashboard/cards/QuickActionsCard"))
+const DailyQuestCard      = lazy(() => import("@/components/dashboard/cards/DailyQuestCard"))
+const AiringTodayCard     = lazy(() => import("@/components/dashboard/cards/AiringTodayCard"))
+const InviteFriendsCard   = lazy(() => import("@/components/dashboard/cards/InviteFriendsCard"))
+
+function CardSkeleton({ h = "h-48" }: { h?: string }) {
+  return <div className={`${h} rounded-[2.5rem] bg-white/[0.02] border border-white/5 animate-pulse`} />
+}
 
 /* ── Streak card extracted as proper component (not IIFE — avoids render crash) ── */
 function StreakBento({ reputation }: { reputation: number }) {
@@ -201,11 +209,11 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          <ActivityCard />
-          <XPCard xp={rep * 100} reputation={rep} />
-          <NowPlayingCard />
-          <AnimeOfTheDayCard />
-          <FriendsActivityCard />
+          <Suspense fallback={<CardSkeleton />}><ActivityCard /></Suspense>
+          <Suspense fallback={<CardSkeleton h="h-32" />}><XPCard xp={rep * 100} reputation={rep} /></Suspense>
+          <Suspense fallback={<CardSkeleton />}><NowPlayingCard /></Suspense>
+          <Suspense fallback={<CardSkeleton h="h-64" />}><AnimeOfTheDayCard /></Suspense>
+          <Suspense fallback={<CardSkeleton />}><FriendsActivityCard /></Suspense>
         </div>
       </div>
 
@@ -214,8 +222,8 @@ export default function DashboardPage() {
 
       {/* ── PERSONAL STATS ── */}
       <div className="grid md:grid-cols-2 gap-6">
-        <TopAnimeCard />
-        <RecentlyReviewedCard />
+        <Suspense fallback={<CardSkeleton />}><TopAnimeCard /></Suspense>
+        <Suspense fallback={<CardSkeleton />}><RecentlyReviewedCard /></Suspense>
       </div>
 
       {/* ── QUICK ACCESS ── */}
@@ -231,16 +239,16 @@ export default function DashboardPage() {
 
       {/* ── QUICK ACTIONS + DAILY QUESTS ── */}
       <div className="grid md:grid-cols-2 gap-6">
-        <QuickActionsCard />
-        <DailyQuestCard />
+        <Suspense fallback={<CardSkeleton />}><QuickActionsCard /></Suspense>
+        <Suspense fallback={<CardSkeleton />}><DailyQuestCard /></Suspense>
       </div>
 
       {/* ── AIRING SCHEDULE + INVITE ── */}
       <div className="grid md:grid-cols-3 gap-6">
         <div className="md:col-span-2">
-          <AiringTodayCard />
+          <Suspense fallback={<CardSkeleton h="h-64" />}><AiringTodayCard /></Suspense>
         </div>
-        <InviteFriendsCard />
+        <Suspense fallback={<CardSkeleton h="h-48" />}><InviteFriendsCard /></Suspense>
       </div>
     </div>
   )

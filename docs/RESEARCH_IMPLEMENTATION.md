@@ -136,8 +136,32 @@
 | Better empty states (watchlist, profile) | ✅ Done | watchlist + profile pages |
 | Password change with session invalidation | ✅ Done | security/page.tsx + auth backend |
 
+### Session 3 Additions ✅
+| Feature | Status | Impact |
+|---------|--------|--------|
+| Sitemap.ts 500+ anime pages | ✅ Done | SEO |
+| anime/[id]/layout.tsx OG metadata | ✅ Done | Social sharing |
+| u/[username]/layout.tsx OG metadata | ✅ Done | Viral profile sharing |
+| /share/[username] profile card | ✅ Done | K-factor viral loop |
+| Register → /onboarding redirect | ✅ Done | Day-1 retention |
+| Onboarding localStorage flag | ✅ Done | No repeat flows |
+| Better watchlist empty state | ✅ Done | Day-1 retention |
+| Streak "At Risk" indicator | ✅ Done | Day-7 retention |
+| Streak updates on list + post activity | ✅ Done | More accurate streaks |
+| AiringTodayCard on dashboard | ✅ Done | Daily re-engagement |
+| Password change with session invalidation | ✅ Done | OWASP security |
+| POST /auth/change-password endpoint | ✅ Done | Security |
+| POST /webhooks/cron/weekly-digest | ✅ Done | Retention emails |
+| POST /webhooks/cron/streak-reminders | ✅ Done | Re-engagement |
+| GET /anime/:malId/user-stats | ✅ Done | Social proof |
+| Anime social proof on detail page | ✅ Done | Conversion |
+| Genre filter in anime browse | ✅ Done | Bug fix |
+| useClubMembers hook + real members | ✅ Done | Real data |
+| Loading skeletons (anime, clubs, profile, calendar) | ✅ Done | Perceived perf |
+| Kaiveron branded email templates | ✅ Done | Brand |
+| More keyboard shortcuts (g+m, g+k, g+e, g+f) | ✅ Done | Power users |
+
 ### MEDIUM — Still Pending
-- [ ] Email digest re-engagement (weekly recap)
 - [ ] Watch Party — Q3 2026 placeholder
 - [ ] Danmu/live comments on episode pages
 - [ ] VAPID key + actual push sending

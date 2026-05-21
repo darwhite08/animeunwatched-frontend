@@ -6,6 +6,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { AnimatePresence, motion } from "framer-motion"
 import { useMessages, useSendMessage, useMarkRead, useChatSocket, useTypingIndicator, useDeleteMessage } from "@/hooks/useChat"
+import { usePresence } from "@/hooks/useRealtime"
 import { useAuthStore } from "@/stores/auth.store"
 import { getOrCreateKeyPair, getSharedKey, encryptMessage, decryptMessage, isE2EAvailable } from "@/lib/e2e-crypto"
 import { useUserList } from "@/hooks/useLists"
@@ -427,6 +428,30 @@ function FileCard({ name, size, isImage, isMine }: { name:string; size?:string; 
 }
 
 /* ─── Message row ────────────────────────────────────────────────────────── */
+// Header sub-component — uses real presence so the green dot + "Active now"
+// reflects whether the other user actually has a live socket connection.
+function ChatHeaderUser({ other }: { other: { id: string; username: string; displayName: string; avatarUrl: string | null } }) {
+  const isOnline = usePresence(other.id)
+  return (
+    <>
+      <Avatar name={other.displayName} src={other.avatarUrl} size={34} showStatus online={isOnline} />
+      <div style={{ minWidth:0 }}>
+        <div style={{ fontSize:14, fontWeight:600, color:"var(--ink)", display:"flex", alignItems:"center", gap:6 }}>
+          {other.displayName}
+          <span style={{ display:"inline-flex", alignItems:"center", gap:4, padding:"3px 7px", fontSize:10, fontWeight:600, borderRadius:999, color:"oklch(0.85 0.12 162)", background:"oklch(0.30 0.10 162/0.20)", border:"1px solid oklch(0.50 0.12 162/0.30)", flexShrink:0 }}>
+            <svg width={8} height={8} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
+            E2E
+          </span>
+        </div>
+        <div style={{ fontSize:11.5, color:"var(--ink-3)", marginTop:1, display:"flex", alignItems:"center", gap:6 }}>
+          <div style={{ width:6, height:6, background: isOnline ? "oklch(0.78 0.16 145)" : "oklch(0.55 0 0)", borderRadius:"50%" }}/>
+          {isOnline ? `Active now · @${other.username}` : `Offline · @${other.username}`}
+        </div>
+      </div>
+    </>
+  )
+}
+
 function MsgRow({ m, isMine, text, authorSrc, authorName, onDelete }: { m:GM; isMine:boolean; text?:string; authorSrc?:string|null; authorName:string; onDelete?: (id: string, scope: "me" | "everyone") => void }) {
   const [hover, setHover] = useState(false)
   const [reacted, setReacted] = useState<string|null>(null)
@@ -927,24 +952,7 @@ export default function ConversationPage() {
           >
             <svg width={18} height={18} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
           </Link>
-          {other && (
-            <>
-              <Avatar name={other.displayName} src={other.avatarUrl} size={34} showStatus online />
-              <div style={{ minWidth:0 }}>
-                <div style={{ fontSize:14, fontWeight:600, color:"var(--ink)", display:"flex", alignItems:"center", gap:6 }}>
-                  {other.displayName}
-                  <span style={{ display:"inline-flex", alignItems:"center", gap:4, padding:"3px 7px", fontSize:10, fontWeight:600, borderRadius:999, color:"oklch(0.85 0.12 162)", background:"oklch(0.30 0.10 162/0.20)", border:"1px solid oklch(0.50 0.12 162/0.30)", flexShrink:0 }}>
-                    <svg width={8} height={8} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
-                    E2E
-                  </span>
-                </div>
-                <div style={{ fontSize:11.5, color:"var(--ink-3)", marginTop:1, display:"flex", alignItems:"center", gap:6 }}>
-                  <div style={{ width:6, height:6, background:"oklch(0.78 0.16 145)", borderRadius:"50%" }}/>
-                  Active now · @{other.username}
-                </div>
-              </div>
-            </>
-          )}
+          {other && <ChatHeaderUser other={other} />}
 
           {/* Actions */}
           <div style={{ marginLeft:"auto", display:"flex", alignItems:"center", gap:2, flexShrink:0 }}>

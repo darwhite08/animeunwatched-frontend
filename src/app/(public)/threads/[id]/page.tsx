@@ -2,6 +2,7 @@
 
 import { use, useState } from "react"
 import { useThread, useReplies, useCreateReply } from "@/hooks/useThreads"
+import { useLiveThread } from "@/hooks/useRealtime"
 import { useAuthStore } from "@/stores/auth.store"
 import { motion, AnimatePresence } from "framer-motion"
 import Link from "next/link"
@@ -219,6 +220,8 @@ export default function ThreadDetailPage({
   const { data: threadData } = useThread(id)
   const { data: repliesData } = useReplies(id)
   const createReplyMut = useCreateReply(id)
+  // Realtime: new replies appear instantly without refresh
+  useLiveThread(id)
 
   // Merge real data with mock fallback
   const apiThread = threadData?.thread

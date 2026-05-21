@@ -23,6 +23,7 @@ import { useAuthStore } from "@/stores/auth.store"
 import { useFeed, useDiscover, useCreatePost, useLikePost } from "@/hooks/usePosts"
 import { useBrowseAnime } from "@/hooks/useAnime"
 import { useLeaderboard } from "@/hooks/useLeaderboard"
+import { useLiveFeed } from "@/hooks/useRealtime"
 import type { Post } from "@/lib/api/types"
 import { Loader2 } from "lucide-react"
 
@@ -162,6 +163,9 @@ export default function FeedPage() {
   const [feedTab, setFeedTab] = useState<FeedTab>("foryou")
   const [draft, setDraft] = useState("")
   const [suggestions, setSuggestions] = useState<Suggestion[]>([])
+
+  // Realtime: prepend new posts, update like/comment counts live
+  useLiveFeed()
 
   const { data: feedData, isLoading: feedLoading } = useFeed()
   const { data: discoverData, isLoading: discoverLoading } = useDiscover()

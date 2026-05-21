@@ -4,6 +4,7 @@ import { use, useState } from "react"
 import { notFound } from "next/navigation"
 import type { Anime } from "@/lib/data/anime"
 import { useAnime } from "@/hooks/useAnime"
+import { useLiveAnime } from "@/hooks/useRealtime"
 import { useWatchlist } from "@/stores/watchlist.store"
 import { useToast } from "@/stores/toast.store"
 import type { AnimeDTO } from "@/lib/api/types"
@@ -81,6 +82,8 @@ function AnimeDetail({ anime, rawAnime }: { anime: Anime; rawAnime?: AnimeDTO })
   const { push } = useToast()
   const { data: reviewsData } = useAnimeReviews(anime.id)
   const malId = parseInt(anime.id, 10)
+  // Realtime: live updates for "X watching" counter + new reviews
+  useLiveAnime(isNaN(malId) ? null : malId)
   const { data: similarData } = useQuery({
     queryKey: ["anime-similar", anime.id],
     queryFn: () => api<{ data: AnimeDTO[] }>(`/anime/${malId}/similar?limit=4`),

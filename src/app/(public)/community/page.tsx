@@ -12,6 +12,7 @@ import { useToast } from "@/stores/toast.store"
 import TrendingWidget from "@/components/social/TrendingWidget"
 import WatchlistPreviewWidget from "@/components/social/WatchlistPreviewWidget"
 import { useDiscover, useCreatePost, useLikePost, useComments, useCreateComment } from "@/hooks/usePosts"
+import { useLiveFeed } from "@/hooks/useRealtime"
 import { useAuthStore } from "@/stores/auth.store"
 import type { Post, PostComment } from "@/lib/api/types"
 
@@ -301,6 +302,9 @@ export default function CommunityPage() {
   const [composing, setComposing] = useState(false)
   const [draft, setDraft] = useState("")
   const [isSpoiler, setIsSpoiler] = useState(false)
+
+  // Realtime: new posts prepend, like/comment counts update without refresh
+  useLiveFeed()
 
   const { data, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage } = useDiscover()
   const createPost = useCreatePost()

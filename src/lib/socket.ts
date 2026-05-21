@@ -4,17 +4,18 @@ import { io, type Socket } from "socket.io-client"
 import { useAuthStore } from "@/stores/auth.store"
 
 // Socket URL resolution:
-// - Server-side (SSR): use NEXT_PUBLIC_SOCKET_URL env var
 // - localhost / LAN IP: connect directly to port 4000 (dev mode)
-// - Any other host (production Vercel): use NEXT_PUBLIC_SOCKET_URL env var (Render backend)
+// - Any other host (production Vercel): use NEXT_PUBLIC_SOCKET_URL → hard-coded Render URL
+const RENDER_BACKEND = "https://kaiveron-backend.onrender.com"
+
 function getSocketUrl(): string {
   const envUrl = process.env.NEXT_PUBLIC_SOCKET_URL
-  if (typeof window === "undefined") return envUrl ?? "http://localhost:4000"
+  if (typeof window === "undefined") return envUrl ?? RENDER_BACKEND
   const host = window.location.hostname
   const isLocal = host === "localhost" || /^192\.168\.|^10\.|^172\.(1[6-9]|2\d|3[01])\./.test(host)
   if (isLocal) return `http://${host}:4000`
-  // Production: use env var (Render backend supports WebSockets on standard port)
-  return envUrl ?? "http://localhost:4000"
+  // Production: prefer env var, fall back to hard-coded Render URL (never localhost)
+  return envUrl ?? RENDER_BACKEND
 }
 const SOCKET_URL = getSocketUrl()
 
@@ -30,8 +31,14 @@ export function connectSocket(accessToken: string): Socket {
   socket = io(SOCKET_URL, {
     path: "/socket/v1",
     auth: { token: accessToken },
-    transports: ["websocket"],
+    // polling first, then upgrade to websocket — required for Render's proxy layer.
+    // websocket-only mode fails silently on Render free tier because their load
+    // balancer needs the HTTP handshake (polling) to establish the upgrade.
+    transports: ["polling", "websocket"],
     autoConnect: true,
+    reconnection: true,
+    reconnectionAttempts: 5,
+    reconnectionDelay: 2000,
   })
 
   socket.on("connect", () => {

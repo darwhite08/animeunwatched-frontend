@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 import Link from "next/link"
-import { Crown, Check, Zap, Star, Shield, Users, Bot, Palette, Download } from "lucide-react"
+import { Crown, Check, Star, Shield, Users } from "lucide-react"
 
 export const metadata: Metadata = {
   title: "Pricing — Kaiveron",
@@ -104,13 +104,13 @@ export default function PricingPage() {
             <p className="text-sm text-white/35 mt-1">or ₹3,499/year (save 27%)</p>
           </div>
 
-          <button
+          <a
+            href="mailto:kaiveron@gmail.com?subject=Pro Waitlist"
             className="block w-full py-3.5 rounded-2xl text-center text-xs font-black uppercase tracking-widest text-black transition-all hover:scale-[1.02]"
             style={{ background: "linear-gradient(135deg, #fbbf24, #f59e0b)", boxShadow: "0 4px 20px rgba(245,158,11,0.35)" }}
-            onClick={() => alert("Pro launch coming soon — join the waitlist at kaiveron@gmail.com")}
           >
-            <Crown size={13} className="inline mr-2" /> Upgrade to Pro
-          </button>
+            <Crown size={13} className="inline mr-2" /> Join Pro Waitlist
+          </a>
 
           <div className="space-y-3">
             {PRO_FEATURES.map(f => (

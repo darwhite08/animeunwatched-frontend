@@ -193,14 +193,18 @@ export default function WatchlistPage() {
       {/* Content */}
       {!isLoading && !isError && (
         <>
-          {/* Tabs */}
-          <nav className="flex gap-2 overflow-x-auto pb-2 no-scrollbar border-b border-white/5">
+          {/* Status filter tabs */}
+          <nav className="flex gap-2 overflow-x-auto pb-3 no-scrollbar border-b border-white/5">
             {TABS.map(t => (
               (COUNTS[t] > 0 || t === "All") && (
                 <button key={t} onClick={() => setTab(t)}
                   className={`relative flex items-center gap-2 px-5 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest whitespace-nowrap transition-all ${
-                    tab === t ? "text-black shadow-[0_0_20px_rgba(245,158,11,0.3)]" : "bg-white/5 text-white/40 hover:bg-white/8 border border-white/5"
-                  }`}>
+                    tab === t
+                      ? "text-black shadow-[0_0_20px_rgba(245,158,11,0.3)]"
+                      : "bg-white/5 text-white/40 hover:bg-white/8 border border-white/5"
+                  }`}
+                  style={tab === t ? { background: "linear-gradient(135deg,#fbbf24,#f59e0b)" } : undefined}
+                >
                   {t}
                   {COUNTS[t] > 0 && (
                     <span className={`text-[8px] font-black ${tab === t ? "text-black/60" : "text-white/20"}`}>{COUNTS[t]}</span>

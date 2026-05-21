@@ -193,7 +193,9 @@ export default function DashboardPage() {
         </div>
       </header>
 
-      {/* ── BENTO GRID ── */}
+      {/* ── BENTO GRID ──
+          Balanced two-column layout: LEFT carries the data-heavy cards,
+          RIGHT carries the visually striking promo + media cards. */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
 
         {/* LEFT 8-col */}
@@ -204,10 +206,17 @@ export default function DashboardPage() {
             <StreakBento reputation={rep} />
             <GenreCard />
           </div>
+
+          <div className="grid md:grid-cols-2 gap-6">
+            <Suspense fallback={<CardSkeleton />}><ActivityCard /></Suspense>
+            <Suspense fallback={<CardSkeleton h="h-32" />}><XPCard xp={rep * 100} reputation={rep} /></Suspense>
+          </div>
+
+          <Suspense fallback={<CardSkeleton />}><NowPlayingCard /></Suspense>
         </div>
 
         {/* RIGHT 4-col */}
-        <div className="lg:col-span-4 space-y-6 flex flex-col">
+        <div className="lg:col-span-4 space-y-6">
           {/* Prime Grade CTA */}
           <div className="p-8 rounded-[2.5rem] text-black relative overflow-hidden group"
             style={{
@@ -232,9 +241,6 @@ export default function DashboardPage() {
             </div>
           </div>
 
-          <Suspense fallback={<CardSkeleton />}><ActivityCard /></Suspense>
-          <Suspense fallback={<CardSkeleton h="h-32" />}><XPCard xp={rep * 100} reputation={rep} /></Suspense>
-          <Suspense fallback={<CardSkeleton />}><NowPlayingCard /></Suspense>
           <Suspense fallback={<CardSkeleton h="h-64" />}><AnimeOfTheDayCard /></Suspense>
           <Suspense fallback={<CardSkeleton />}><FriendsActivityCard /></Suspense>
         </div>

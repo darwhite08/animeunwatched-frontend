@@ -86,6 +86,12 @@ function AnimeDetail({ anime, rawAnime }: { anime: Anime; rawAnime?: AnimeDTO })
     queryFn: () => api<{ data: AnimeDTO[] }>(`/anime/${malId}/similar?limit=4`),
     enabled: !isNaN(malId),
   })
+  const { data: userStats } = useQuery({
+    queryKey: ["anime-user-stats", anime.id],
+    queryFn: () => api<{ watching: number; completed: number; planToWatch: number; total: number }>(`/anime/${malId}/user-stats`),
+    enabled: !isNaN(malId),
+    staleTime: 120_000,
+  })
   const relatedAnime = similarData?.data ?? []
   const inList = has(anime.id)
   const [reviewOpen, setReviewOpen] = useState(false)
@@ -278,6 +284,25 @@ function AnimeDetail({ anime, rawAnime }: { anime: Anime; rawAnime?: AnimeDTO })
 
           {/* LEFT — main info */}
           <div className="lg:col-span-2 space-y-10">
+
+            {/* Social proof — user stats */}
+            {userStats && userStats.total > 0 && (
+              <div className="flex flex-wrap items-center gap-4 p-4 rounded-2xl bg-white/[0.02] border border-white/5">
+                <span className="text-[9px] font-black uppercase tracking-[0.3em] text-white/25">On Kaiveron</span>
+                {userStats.watching > 0 && (
+                  <span className="flex items-center gap-1.5 text-xs font-bold text-emerald-400">
+                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                    {userStats.watching} watching
+                  </span>
+                )}
+                {userStats.completed > 0 && (
+                  <span className="text-xs font-bold text-white/40">{userStats.completed} completed</span>
+                )}
+                {userStats.planToWatch > 0 && (
+                  <span className="text-xs font-bold text-white/30">{userStats.planToWatch} planning</span>
+                )}
+              </div>
+            )}
 
             {/* Genres */}
             <div className="flex flex-wrap gap-2">

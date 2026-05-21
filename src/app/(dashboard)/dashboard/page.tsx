@@ -118,10 +118,33 @@ function QuickCard({ href, icon: Icon, label, color, iconColor }: {
 
 /* ── Main page ── */
 export default function DashboardPage() {
-  const user = useAuthStore(s => s.user)
+  const user        = useAuthStore(s => s.user)
+  const sessionReady = useAuthStore(s => s.sessionReady)
   const rep   = user?.reputation ?? 0
   const level = Math.max(1, Math.floor(Math.sqrt(rep * 100 / 1000)))
   const grade = level >= 10 ? "Grade IV" : level >= 7 ? "Grade III" : level >= 4 ? "Grade II" : "Grade I"
+
+  // Show skeleton while session is bootstrapping — prevents black flash
+  if (!sessionReady) {
+    return (
+      <div className="max-w-[1400px] mx-auto px-6 py-10 space-y-8 pb-32">
+        <div className="h-40 rounded-[2.5rem] bg-white/[0.02] border border-white/5 animate-pulse" />
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          <div className="lg:col-span-8 space-y-6">
+            <div className="h-40 rounded-[2.5rem] bg-white/[0.02] border border-white/5 animate-pulse" />
+            <div className="grid md:grid-cols-2 gap-6">
+              <div className="h-64 rounded-[2.5rem] bg-white/[0.02] border border-white/5 animate-pulse" />
+              <div className="h-64 rounded-[2.5rem] bg-white/[0.02] border border-white/5 animate-pulse" />
+            </div>
+          </div>
+          <div className="lg:col-span-4 space-y-6">
+            <div className="h-80 rounded-[2.5rem] bg-white/[0.02] border border-white/5 animate-pulse" />
+            <div className="h-48 rounded-[2.5rem] bg-white/[0.02] border border-white/5 animate-pulse" />
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="max-w-[1400px] mx-auto px-6 py-10 space-y-8 pb-32">

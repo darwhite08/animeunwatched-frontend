@@ -4,12 +4,12 @@ import { QueryProvider } from "@/providers/QueryProvider"
 import { KeyboardShortcuts } from "@/providers/KeyboardShortcuts"
 import { SessionProvider } from "@/components/layout/SessionProvider"
 import { LenisProvider } from "@/providers/LenisProvider"
+import { ThemeProvider } from "@/providers/ThemeProvider"
 // PageLoader and ToastContainer are critical — always eagerly loaded
 import PageLoader from "@/components/ui/PageLoader"
 import ToastContainer from "@/components/layout/ToastContainer"
 
 // Non-critical UI — lazy-loaded so they don't block the first paint
-const BackToTop            = lazy(() => import("@/components/ui/BackToTop"))
 const KeyboardShortcutsOverlay = lazy(() => import("@/components/ui/KeyboardShortcutsOverlay"))
 const MobileNav            = lazy(() => import("@/components/layout/MobileNav"))
 const CookieConsent        = lazy(() => import("@/components/ui/CookieConsent"))
@@ -86,6 +86,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* Critical: renders immediately on every page */}
         <PageLoader />
         <QueryProvider>
+          <ThemeProvider>
           <SessionProvider>
             <LenisProvider>
               <KeyboardShortcuts>
@@ -98,9 +99,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   Suspense fallback is null — these components have no visible loading state.
                   This removes ~40kB from the initial JS bundle.
                 */}
-                <Suspense fallback={null}>
-                  <BackToTop />
-                </Suspense>
                 <Suspense fallback={null}>
                   <KeyboardShortcutsOverlay />
                 </Suspense>
@@ -116,6 +114,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               </KeyboardShortcuts>
             </LenisProvider>
           </SessionProvider>
+          </ThemeProvider>
         </QueryProvider>
       </body>
     </html>

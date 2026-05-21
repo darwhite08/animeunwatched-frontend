@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { SquaresFour, User, BookmarkSimple, SignOut, Gear, PenNib } from "@phosphor-icons/react";
+import { SquaresFour, User, BookmarkSimple, SignOut, Gear, PenNib, PaintBrush } from "@phosphor-icons/react";
 import { useAuthStore } from "@/stores/auth.store";
 import { userPath } from "@/hooks/useUserPath";
 
@@ -21,7 +21,8 @@ export default function ProfileMenu({ user, isOpen, onClose, onLogout }: Profile
     { href: slug ? userPath(slug, "profile")         : "/profile",              icon: User,           label: "Profile"    },
     { href: slug ? userPath(slug, "watchlist")       : "/watchlist",            icon: BookmarkSimple, label: "Watchlist"  },
     { href: "/creators/create/blog",                                             icon: PenNib,         label: "Write Blog" },
-    { href: slug ? userPath(slug, "settings/account") : "/me/settings/account", icon: Gear,           label: "Settings"   },
+    { href: slug ? userPath(slug, "settings/account")    : "/me/settings/account",    icon: Gear,         label: "Settings"    },
+    { href: slug ? userPath(slug, "settings/appearance") : "/me/settings/appearance", icon: PaintBrush,   label: "Appearance"  },
   ]
 
   return (

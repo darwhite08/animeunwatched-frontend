@@ -4,6 +4,7 @@ import { useEffect } from "react"
 import { useRouter, usePathname } from "next/navigation"
 
 const ROUTES: Record<string, string> = {
+  // Navigation (g + key)
   "g h": "/",
   "g d": "/dashboard",
   "g w": "/watchlist",
@@ -13,6 +14,13 @@ const ROUTES: Record<string, string> = {
   "g l": "/leaderboard",
   "g s": "/streak",
   "g n": "/notifications",
+  "g p": "/profile",
+  "g m": "/mood",
+  "g k": "/clubs",
+  "g r": "/reviews",
+  "g f": "/feed",
+  "g i": "/me/import",
+  "g e": "/calendar",
 }
 
 export function KeyboardShortcuts({ children }: { children: React.ReactNode }) {

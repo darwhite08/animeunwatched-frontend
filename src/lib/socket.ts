@@ -65,6 +65,20 @@ export function connectSocket(accessToken: string): Socket {
 
   socket.on("connect_error", (err) => {
     console.warn("[Socket] error:", err.message)
+    // If the server rejects our token, the access token is stale/invalid.
+    // Force a full page reload — SessionProvider will try to refresh the token;
+    // if the refresh cookie is also invalid (JWT secret rotated), the user is
+    // redirected to /login with a fresh session.
+    if (err.message === "unauthorized" || err.message === "jwt expired" || err.message === "invalid signature") {
+      console.warn("[Socket] Auth failed — reloading to refresh session")
+      socket?.removeAllListeners()
+      socket?.disconnect()
+      socket = null
+      // Small delay so we don't reload mid-render
+      setTimeout(() => {
+        if (typeof window !== "undefined") window.location.reload()
+      }, 1500)
+    }
   })
 
   return socket

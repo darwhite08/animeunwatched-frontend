@@ -150,6 +150,20 @@ export function useChatSocket(conversationId: string | null) {
 
         // Always refresh conversation list (unread badge / last-message preview)
         qc.invalidateQueries({ queryKey: ["chat", "conversations"] })
+
+        // Notification sound — only when the user ISN'T currently viewing the
+        // conversation that received the message. If they're already looking
+        // at the chat, the message slides in visually and a beep would be noise.
+        // Backend only emits chat.message to the recipient socket, so we don't
+        // need to filter out the user's own outgoing messages.
+        const viewing      = typeof window !== "undefined" && window.location.pathname === `/chat/${msg.conversationId}`
+        if (!viewing && typeof window !== "undefined") {
+          try {
+            const audio = new Audio("/sounds/new-message.mp3")
+            audio.volume = 0.5
+            void audio.play().catch(() => {})
+          } catch { /* autoplay blocked — silent fallback */ }
+        }
       }
 
       const onRead = ({ conversationId: cid, readAt }: { conversationId: string; readAt: string }) => {

@@ -17,6 +17,7 @@ import {
 import { useWatchlist } from "@/stores/watchlist.store";
 import { useAuthStore } from "@/stores/auth.store";
 import { disconnectSocket } from "@/lib/socket";
+import { logout } from "@/lib/api/endpoints";
 import NotificationBell from "@/components/notifications/NotificationBell";
 import SearchModal from "./SearchModal";
 import ProfileMenu from "./ProfileMenu";
@@ -341,11 +342,14 @@ export default function Navbar() {
                 user={{ name: storeUser.displayName ?? storeUser.username }}
                 isOpen={profileOpen}
                 onClose={() => setProfileOpen(false)}
-                onLogout={() => {
-                  fetch(`/api/v1/auth/logout`, { method: "POST", credentials: "include" }).catch(() => {})
+                onLogout={async () => {
+                  // Call logout with Bearer token (requireAuth) + cookie (credentials)
+                  // Best-effort: clear client state even if the API call fails
+                  try { await logout() } catch { /* ignore — still clear client */ }
                   disconnectSocket()
                   useAuthStore.getState().clear()
                   setProfileOpen(false)
+                  // Hard redirect clears any in-memory state and re-bootstraps cleanly
                   if (typeof window !== "undefined") window.location.href = "/"
                 }}
               />

@@ -5,28 +5,58 @@ import { useNotificationsQuery, useUnreadCount, useMarkRead, useMarkAllRead } fr
 import { getSocket } from "@/lib/socket"
 import { useQueryClient } from "@tanstack/react-query"
 import { useAuthStore } from "@/stores/auth.store"
+import { useToast } from "@/stores/toast.store"
+
+type NotifPayload = { message?: string; title?: string; link?: string; [k: string]: unknown }
 
 export const useNotifications = () => {
   const qc = useQueryClient()
   const isAuthenticated = useAuthStore(s => s.isAuthenticated)
+  const { push } = useToast()
 
   const { data: notifData } = useNotificationsQuery()
   const { data: unreadData } = useUnreadCount()
   const markReadMut = useMarkRead()
   const markAllMut  = useMarkAllRead()
 
-  // Real-time: socket.io "notification.new" event
+  // Real-time: socket.io "notification.new" event — invalidate cache + play
+  // sound + show toast so users SEE/HEAR new activity even without checking
+  // the bell.
   useEffect(() => {
     if (!isAuthenticated) return
-    const socket = getSocket()
-    if (!socket) return
-    const handler = () => {
-      qc.invalidateQueries({ queryKey: ["notifications"] })
-      qc.invalidateQueries({ queryKey: ["notifications/unread"] })
+    let retry: ReturnType<typeof setTimeout> | null = null
+    let cleanup: (() => void) | null = null
+
+    const attach = () => {
+      const socket = getSocket()
+      if (!socket) { retry = setTimeout(attach, 600); return }
+
+      const handler = (payload: { type: string; payload: NotifPayload } | undefined) => {
+        // 1. Force a refetch — notification list + unread count get fresh data
+        qc.invalidateQueries({ queryKey: ["notifications"] })
+        qc.invalidateQueries({ queryKey: ["notifications/unread"] })
+
+        // 2. Notification sound — same file used by chat new-message
+        if (typeof window !== "undefined") {
+          try {
+            const audio = new Audio("/sounds/new-message.mp3")
+            audio.volume = 0.4
+            void audio.play().catch(() => {})
+          } catch { /* autoplay blocked */ }
+        }
+
+        // 3. Toast preview so a user not looking at the bell still notices
+        const msg = payload?.payload?.message ?? payload?.payload?.title ?? "New notification"
+        push(typeof msg === "string" ? msg.slice(0, 100) : "New notification", "info")
+      }
+
+      socket.on("notification.new", handler)
+      cleanup = () => socket.off("notification.new", handler)
     }
-    socket.on("notification.new", handler)
-    return () => { socket.off("notification.new", handler) }
-  }, [isAuthenticated, qc])
+
+    attach()
+    return () => { if (retry) clearTimeout(retry); cleanup?.() }
+  }, [isAuthenticated, qc, push])
 
   const notifications = (notifData?.data ?? []).map(n => ({
     id: n.id,

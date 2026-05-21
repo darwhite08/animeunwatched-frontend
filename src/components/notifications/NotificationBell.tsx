@@ -10,6 +10,19 @@ export default function NotificationBell() {
   const [isOpen, setIsOpen] = useState(false);
   const { notifications, unreadCount, markAllAsRead, clearAll } = useNotifications();
   const bellRef = useRef<HTMLDivElement>(null);
+  // Track previous count so we can punch the bell when a new one arrives
+  const prevCountRef = useRef(unreadCount);
+  const [shake, setShake] = useState(false);
+
+  useEffect(() => {
+    if (unreadCount > prevCountRef.current) {
+      setShake(true);
+      const t = setTimeout(() => setShake(false), 800);
+      prevCountRef.current = unreadCount;
+      return () => clearTimeout(t);
+    }
+    prevCountRef.current = unreadCount;
+  }, [unreadCount]);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -21,19 +34,20 @@ export default function NotificationBell() {
 
   return (
     <div className="relative" ref={bellRef}>
-      <button
+      <motion.button
         onClick={() => setIsOpen(!isOpen)}
-        className="relative p-2.5 rounded-full bg-white/5 border border-white/5 text-white/40 hover:text-white hover:bg-amber-500/10 transition-all group"
+        animate={shake ? { rotate: [0, -18, 18, -14, 14, -8, 8, 0] } : { rotate: 0 }}
+        transition={{ duration: 0.8 }}
+        className="relative p-2.5 rounded-full bg-white/5 border border-white/5 text-white/40 hover:text-white hover:bg-amber-500/10 transition-colors group"
       >
-        <Bell size={18} className={unreadCount > 0 ? "animate-bounce" : ""} />
-        
+        <Bell size={18} className={unreadCount > 0 ? "text-amber-400" : ""} />
+
         {unreadCount > 0 && (
-          <span className="absolute top-2 right-2 flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+          <span className="absolute -top-0.5 -right-0.5 min-w-[16px] h-[16px] px-1 rounded-full bg-amber-500 text-black text-[9px] font-black flex items-center justify-center leading-none shadow-[0_0_8px_rgba(245,158,11,0.6)]">
+            {unreadCount > 9 ? "9+" : unreadCount}
           </span>
         )}
-      </button>
+      </motion.button>
 
       <AnimatePresence>
         {isOpen && (

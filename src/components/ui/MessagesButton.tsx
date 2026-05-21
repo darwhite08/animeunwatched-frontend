@@ -3,13 +3,35 @@
 import { motion } from "framer-motion"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { useEffect } from "react"
 import { MessageSquare } from "lucide-react"
 import { useAuthStore } from "@/stores/auth.store"
-import { useQuery } from "@tanstack/react-query"
+import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { api } from "@/lib/api/client"
+import { getSocket } from "@/lib/socket"
 
 function useUnreadDMs() {
   const isAuth = useAuthStore(s => s.isAuthenticated)
+  const qc = useQueryClient()
+
+  // Real-time: refresh DM count on every chat.message socket event so the
+  // badge updates the instant a message arrives — no polling delay.
+  useEffect(() => {
+    if (!isAuth) return
+    let retry: ReturnType<typeof setTimeout> | null = null
+    let cleanup: (() => void) | null = null
+    const attach = () => {
+      const s = getSocket()
+      if (!s) { retry = setTimeout(attach, 600); return }
+      const refresh = () => qc.invalidateQueries({ queryKey: ["dm-unread-count"] })
+      s.on("chat.message", refresh)
+      s.on("chat.read",    refresh)
+      cleanup = () => { s.off("chat.message", refresh); s.off("chat.read", refresh) }
+    }
+    attach()
+    return () => { if (retry) clearTimeout(retry); cleanup?.() }
+  }, [isAuth, qc])
+
   return useQuery({
     queryKey: ["dm-unread-count"],
     queryFn: () => api<{ conversations: Array<{ unreadCount?: number }> }>("/chat/conversations"),

@@ -27,6 +27,20 @@ import { useToast } from "@/stores/toast.store"
 import { useUserProfile, useFollow } from "@/hooks/useUsers"
 import { useUserList } from "@/hooks/useLists"
 import { useAuthStore } from "@/stores/auth.store"
+import { usePresence } from "@/hooks/useRealtime"
+import { PresenceDot } from "@/components/ui/PresenceDot"
+
+// Inline label next to @username on profile pages — shows green-dot Active /
+// grey dot Offline based on the user's real socket connection state.
+function PresenceLabel({ userId }: { userId: string }) {
+  const online = usePresence(userId)
+  return (
+    <span className="inline-flex items-center gap-1.5 text-[10px] uppercase tracking-widest font-black text-white/30">
+      <PresenceDot userId={userId} size={6} showOffline />
+      {online ? "Active now" : "Offline"}
+    </span>
+  )
+}
 
 /* ─────────────────────────────────────────────
    Types
@@ -397,7 +411,10 @@ export default function UserProfilePage({
                 <h1 className="text-5xl md:text-7xl font-black tracking-tighter uppercase italic text-white leading-none">
                   {user.displayName}
                 </h1>
-                <p className="text-white/40 text-sm font-mono">@{user.username}</p>
+                <p className="text-white/40 text-sm font-mono flex items-center gap-2">
+                  @{user.username}
+                  {realUser?.id && <PresenceLabel userId={realUser.id} />}
+                </p>
               </motion.div>
 
               <motion.p

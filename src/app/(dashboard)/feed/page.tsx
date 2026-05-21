@@ -24,6 +24,10 @@ import { useFeed, useDiscover, useCreatePost, useLikePost } from "@/hooks/usePos
 import { useBrowseAnime } from "@/hooks/useAnime"
 import { useLeaderboard } from "@/hooks/useLeaderboard"
 import { useLiveFeed } from "@/hooks/useRealtime"
+import { useLiveTime } from "@/hooks/useLiveTime"
+
+// Renders an auto-updating relative timestamp ("just now" → "1m ago" → ...)
+function LiveTime({ iso }: { iso: string }) { return <>{useLiveTime(iso)}</> }
 import type { Post } from "@/lib/api/types"
 import { Loader2 } from "lucide-react"
 
@@ -109,7 +113,7 @@ function RealPostCard({ post, index }: { post: Post; index: number }) {
               className="text-sm font-black text-white hover:text-amber-400 transition-colors">
               {authorName}
             </Link>
-            <p className="text-[10px] text-white/35 mt-0.5">{timeAgo(post.createdAt)}</p>
+            <p className="text-[10px] text-white/35 mt-0.5"><LiveTime iso={post.createdAt} /></p>
           </div>
         </div>
         <button className="p-1.5 text-white/20 hover:text-white/50 transition-colors">

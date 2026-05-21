@@ -6,10 +6,11 @@ import { Users, ChevronRight, Zap } from "lucide-react"
 import { useAuthStore } from "@/stores/auth.store"
 import { useQuery } from "@tanstack/react-query"
 import { api } from "@/lib/api/client"
+import { PresenceDot } from "@/components/ui/PresenceDot"
 import type { User } from "@/lib/api/types"
 
 interface FriendActivity {
-  user: Pick<User, "username" | "displayName" | "avatarUrl">
+  user: Pick<User, "id" | "username" | "displayName" | "avatarUrl">
   anime: { title: string; malId: number; imageUrl?: string | null }
   status: string
   updatedAt: string
@@ -94,8 +95,13 @@ export default function FriendsActivityCard() {
           return (
             <motion.div key={i} initial={{ opacity: 0, x: 12 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.07 }}>
               <Link href={`/anime/${a.anime.malId}`} className="flex items-center gap-3.5 group/item cursor-pointer">
-                <div className={`h-8 w-8 rounded-xl bg-gradient-to-br ${grad(name)} flex items-center justify-center shrink-0 text-[11px] font-black group-hover/item:scale-110 transition-transform`}>
-                  {name[0]?.toUpperCase()}
+                <div className="relative shrink-0">
+                  <div className={`h-8 w-8 rounded-xl bg-gradient-to-br ${grad(name)} flex items-center justify-center text-[11px] font-black group-hover/item:scale-110 transition-transform`}>
+                    {name[0]?.toUpperCase()}
+                  </div>
+                  <span className="absolute -bottom-0.5 -right-0.5">
+                    <PresenceDot userId={a.user.id} size={9} />
+                  </span>
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-[11px] font-bold text-white/80 group-hover/item:text-white transition-colors leading-tight">

@@ -9,6 +9,7 @@ import { QueryProvider } from "@/providers/QueryProvider"
 import { KeyboardShortcuts } from "@/providers/KeyboardShortcuts"
 import { SessionProvider } from "@/components/layout/SessionProvider"
 import { LenisProvider } from "@/providers/LenisProvider"
+import FeedbackButton from "@/components/ui/FeedbackButton"
 
 export const viewport = {
   themeColor: "#f59e0b",
@@ -85,6 +86,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <KeyboardShortcutsOverlay />
                 <MobileNav />
                 <CookieConsent />
+                <FeedbackButton />
               </KeyboardShortcuts>
             </LenisProvider>
           </SessionProvider>

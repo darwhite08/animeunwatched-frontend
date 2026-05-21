@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
@@ -28,6 +28,20 @@ export default function RegisterPage() {
 
   const [form, setForm] = useState({ username: "", email: "", password: "" })
   const [showPass, setShowPass] = useState(false)
+  const [refBy, setRefBy] = useState<string | null>(null)
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    const ref = params.get("ref")
+    if (ref) {
+      setRefBy(ref)
+      // Persist so it survives OAuth redirects
+      sessionStorage.setItem("aw_ref", ref)
+    } else {
+      const stored = sessionStorage.getItem("aw_ref")
+      if (stored) setRefBy(stored)
+    }
+  }, [])
   const [oauthLoading, setOauthLoading] = useState<"google" | "apple" | null>(null)
   const [error, setError] = useState("")
 
@@ -82,7 +96,8 @@ export default function RegisterPage() {
         username:    form.username.trim(),
         displayName: form.username.trim(),
         password:    form.password,
-      },
+        ...(refBy ? { referredBy: refBy } : {}),
+      } as Parameters<typeof register.mutate>[0],
       {
         onSuccess: () => router.push("/onboarding"),
         onError: (err) => {
@@ -184,6 +199,15 @@ export default function RegisterPage() {
             </p>
           </div>
         </div>
+
+        {refBy && (
+          <div className="mb-4 px-4 py-3 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-center">
+            <p className="text-xs font-black text-emerald-400 uppercase tracking-widest">
+              Invited by <span className="text-emerald-300">@{refBy}</span>
+            </p>
+            <p className="text-[10px] text-emerald-400/60 mt-0.5">You both get bonus XP when you join!</p>
+          </div>
+        )}
 
         <div className="border border-white/10 bg-white/[0.03] backdrop-blur-xl rounded-3xl p-8 shadow-[0_0_60px_rgba(99,102,241,0.1)]">
           <div className="text-center mb-8">

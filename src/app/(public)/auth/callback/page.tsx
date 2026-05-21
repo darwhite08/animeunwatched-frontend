@@ -45,17 +45,29 @@ export default function AuthCallbackPage() {
         const { user } = await api<{ user: User }>("/auth/me")
         setUser(user)
 
-        // 3. Connect real-time socket
+        // 3. Session handoff — issue a refresh cookie ON the Vercel domain.
+        // Google's callback set the cookie on the Render backend's domain,
+        // which Vercel-proxied refresh calls cannot reach. We mint a new
+        // refresh token here through the Vercel proxy so the Set-Cookie
+        // response lands on animeunwatched-frontend-delta.vercel.app —
+        // making the session persist across page refreshes.
+        try {
+          await api("/auth/oauth-handoff", { method: "POST" })
+        } catch {
+          // Non-fatal: user can still use this session, just won't persist on refresh
+        }
+
+        // 4. Connect real-time socket
         connectSocket(accessToken!)
 
-        // 4. Mark session as ready BEFORE navigating so the dashboard
+        // 5. Mark session as ready BEFORE navigating so the dashboard
         //    layout doesn't see sessionReady=false and redirect to /login
         setSessionReady()
 
-        // 5. Invalidate any stale auth queries
+        // 6. Invalidate any stale auth queries
         await qc.invalidateQueries({ queryKey: ["auth/me"] })
 
-        // 6. Navigate — use the slug-prefixed dashboard if slug is available
+        // 7. Navigate — use the slug-prefixed dashboard if slug is available
         const dest = user.slug ? `/user/${user.slug}/dashboard` : "/dashboard"
         router.replace(dest)
       } catch {

@@ -22,6 +22,7 @@ import { useToast } from "@/stores/toast.store"
 import { useAuthStore } from "@/stores/auth.store"
 import { useFeed, useDiscover, useCreatePost, useLikePost } from "@/hooks/usePosts"
 import { useBrowseAnime } from "@/hooks/useAnime"
+import { useLeaderboard } from "@/hooks/useLeaderboard"
 import type { Post } from "@/lib/api/types"
 import { Loader2 } from "lucide-react"
 
@@ -165,6 +166,13 @@ export default function FeedPage() {
   const { data: feedData, isLoading: feedLoading } = useFeed()
   const { data: discoverData, isLoading: discoverLoading } = useDiscover()
   const { data: trendingData } = useBrowseAnime({ limit: 4 })
+  const { data: lbData } = useLeaderboard(8)
+
+  // Seed suggestions from leaderboard data — exclude self
+  const leaderboardSuggestions = (lbData?.data ?? [])
+    .filter(u => u.username !== user?.username)
+    .slice(0, 5)
+    .map(u => ({ username: u.username, avatar: u.displayName[0]?.toUpperCase() ?? "?", followers: u.reputation, isFollowing: false }))
   const trendingAnime = trendingData?.data ?? []
   const createPostMut = useCreatePost()
 
@@ -400,7 +408,7 @@ export default function FeedPage() {
               </h3>
             </div>
             <div className="space-y-3">
-              {suggestions.map((s) => (
+              {(suggestions.length > 0 ? suggestions : leaderboardSuggestions).map((s) => (
                 <motion.div
                   key={s.username}
                   layout

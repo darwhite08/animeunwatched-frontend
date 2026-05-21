@@ -90,6 +90,46 @@ export function useSendMessage(conversationId: string) {
   })
 }
 
+export function useDeleteMessage(conversationId: string) {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: async ({ messageId, scope }: { messageId: string; scope: "me" | "everyone" }) => {
+      const { api } = await import("@/lib/api/client")
+      return api(`/chat/conversations/${conversationId}/messages/${messageId}?scope=${scope}`, {
+        method: "DELETE",
+      })
+    },
+    onSuccess: (_data, { messageId, scope }) => {
+      qc.setQueryData<MsgCache>(
+        ["chat", "messages", conversationId],
+        old => {
+          if (!old) return old
+          if (scope === "me") {
+            // Remove entirely from this client
+            return {
+              ...old,
+              pages: old.pages.map(p => ({ ...p, messages: p.messages.filter(m => m.id !== messageId) })),
+            }
+          }
+          // scope === "everyone" — mark as deleted tombstone
+          return {
+            ...old,
+            pages: old.pages.map(p => ({
+              ...p,
+              messages: p.messages.map(m =>
+                m.id === messageId
+                  ? { ...m, deletedAt: new Date().toISOString(), ciphertext: "", iv: "" }
+                  : m
+              ),
+            })),
+          }
+        },
+      )
+      qc.invalidateQueries({ queryKey: ["chat", "conversations"] })
+    },
+  })
+}
+
 export function useMarkRead(conversationId: string) {
   const qc = useQueryClient()
   return useMutation({
@@ -186,12 +226,35 @@ export function useChatSocket(conversationId: string | null) {
         qc.invalidateQueries({ queryKey: ["chat", "conversations"] })
       }
 
+      const onDeleted = ({ conversationId: cid, messageId }: { conversationId: string; messageId: string; scope: string }) => {
+        qc.setQueryData<MsgCache>(
+          ["chat", "messages", cid],
+          old => {
+            if (!old) return old
+            return {
+              ...old,
+              pages: old.pages.map(p => ({
+                ...p,
+                messages: p.messages.map(m =>
+                  m.id === messageId
+                    ? { ...m, deletedAt: new Date().toISOString(), ciphertext: "", iv: "" }
+                    : m
+                ),
+              })),
+            }
+          },
+        )
+        qc.invalidateQueries({ queryKey: ["chat", "conversations"] })
+      }
+
       socket.on("chat.message", onMessage)
       socket.on("chat.read",    onRead)
+      socket.on("chat.deleted", onDeleted)
 
       cleanup = () => {
         socket.off("chat.message", onMessage)
         socket.off("chat.read",    onRead)
+        socket.off("chat.deleted", onDeleted)
       }
     }
 

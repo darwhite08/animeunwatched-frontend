@@ -5,7 +5,7 @@ import { useParams } from "next/navigation"
 import Image from "next/image"
 import Link from "next/link"
 import { AnimatePresence, motion } from "framer-motion"
-import { useMessages, useSendMessage, useMarkRead, useChatSocket, useTypingIndicator } from "@/hooks/useChat"
+import { useMessages, useSendMessage, useMarkRead, useChatSocket, useTypingIndicator, useDeleteMessage } from "@/hooks/useChat"
 import { useAuthStore } from "@/stores/auth.store"
 import { getOrCreateKeyPair, getSharedKey, encryptMessage, decryptMessage, isE2EAvailable } from "@/lib/e2e-crypto"
 import { useUserList } from "@/hooks/useLists"
@@ -427,9 +427,17 @@ function FileCard({ name, size, isImage, isMine }: { name:string; size?:string; 
 }
 
 /* ─── Message row ────────────────────────────────────────────────────────── */
-function MsgRow({ m, isMine, text, authorSrc, authorName }: { m:GM; isMine:boolean; text?:string; authorSrc?:string|null; authorName:string }) {
+function MsgRow({ m, isMine, text, authorSrc, authorName, onDelete }: { m:GM; isMine:boolean; text?:string; authorSrc?:string|null; authorName:string; onDelete?: (id: string, scope: "me" | "everyone") => void }) {
   const [hover, setHover] = useState(false)
   const [reacted, setReacted] = useState<string|null>(null)
+  const [menuOpen, setMenuOpen] = useState(false)
+
+  // WhatsApp "delete for everyone" is sender-only, within 24h of sending
+  const ageMs = Date.now() - new Date(m.createdAt).getTime()
+  const canDeleteForEveryone = isMine && ageMs < 24 * 60 * 60 * 1000 && !m.deletedAt
+
+  // Render tombstone for "delete for everyone" messages
+  const isDeleted = !!m.deletedAt
 
   const bubble: React.CSSProperties = isMine
     ? { background:"linear-gradient(180deg,oklch(0.62 0.18 282),oklch(0.55 0.17 280))", color:"#F8F7FF", borderTopRightRadius:4, boxShadow:"0 6px 22px oklch(0.45 0.18 282/0.30),inset 0 1px 0 rgba(255,255,255,0.10)" }
@@ -442,17 +450,32 @@ function MsgRow({ m, isMine, text, authorSrc, authorName }: { m:GM; isMine:boole
   const isCallSummary = !isDecrypting && !isError && text?.startsWith("📞 ")
   const parts        = (!isDecrypting && !isError && !isCallSummary && text) ? parseParts(text) : null
 
-  // Centered call summary row — Instagram/iMessage style
+  // Centered call summary row — WhatsApp/iMessage style.
+  // Asymmetric copy: caller (isMine) doesn't see "Missed" — they see "No answer"
+  // since they were the one calling. Recipient sees "Missed audio call".
   if (isCallSummary && text) {
     const isMissed = text.includes("Missed")
+    const isVideo  = text.includes("Video")
     const labelColor = isMissed ? "oklch(0.70 0.18 25)" : "var(--ink-3)" // red-ish for missed
+
+    // Build the display text based on perspective
+    let displayText: string
+    if (isMissed) {
+      displayText = isMine
+        ? (isVideo ? "No answer · Video call" : "No answer · Audio call")
+        : (isVideo ? "Missed video call"        : "Missed audio call")
+    } else {
+      // Answered call — strip emoji + show "Audio call · 2:34"
+      displayText = text.replace("📞 ", "")
+    }
+
     return (
       <div style={{ padding:"6px 24px", display:"flex", justifyContent:"center" }}>
         <div style={{ display:"inline-flex", alignItems:"center", gap:8, padding:"6px 14px", borderRadius:999, background:"var(--bg-2)", border:"1px solid var(--line)", fontSize:12, color:labelColor }}>
           <svg width={12} height={12} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
             <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.99 10.86 19.79 19.79 0 0 1 1.93 2.18 2 2 0 0 1 3.9 0H6.9a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 7.91a16 16 0 0 0 6.13 6.13l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92Z"/>
           </svg>
-          <span style={{ fontWeight:600 }}>{text.replace("📞 ", "")}</span>
+          <span style={{ fontWeight:600 }}>{displayText}</span>
           <span className="mono" style={{ fontSize:10.5, color:"var(--ink-4)", marginLeft:4 }}>{ts(m.createdAt)}</span>
         </div>
       </div>
@@ -478,8 +501,17 @@ function MsgRow({ m, isMine, text, authorSrc, authorName }: { m:GM; isMine:boole
         )}
 
         {/* Bubble — renders file cards OR text bubble */}
-        <div style={{ maxWidth:"min(620px,94%)", position:"relative", display:"flex", flexDirection:"column", gap:4, alignItems:isMine?"flex-end":"flex-start" }}>
-          {isDecrypting ? (
+        <div style={{ maxWidth:"min(620px,94%)", position:"relative", display:"flex", flexDirection:"column", gap:4, alignItems:isMine?"flex-end":"flex-start" }}
+          onContextMenu={(e) => { if (onDelete && !isDeleted) { e.preventDefault(); setMenuOpen(true) } }}>
+          {isDeleted ? (
+            // Tombstone for messages deleted "for everyone" — visible to BOTH users
+            <div style={{ ...bubble, display:"inline-flex", alignItems:"center", gap:6, padding:"8px 13px 9px", borderRadius:14, fontStyle:"italic", opacity:0.6 }}>
+              <svg width={12} height={12} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round">
+                <path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/>
+              </svg>
+              <span style={{ fontSize:13 }}>{isMine ? "You deleted this message" : "This message was deleted"}</span>
+            </div>
+          ) : isDecrypting ? (
             <div style={{ ...bubble, display:"inline-block", padding:"8px 13px 9px", borderRadius:14 }}>
               <span style={{ color:"var(--ink-4)", fontSize:13, display:"flex", alignItems:"center", gap:6 }}>
                 🔒 <span style={{ opacity:0.6 }}>Encrypted — open this chat to read</span>
@@ -501,6 +533,36 @@ function MsgRow({ m, isMine, text, authorSrc, authorName }: { m:GM; isMine:boole
               )
             })
           ) : null}
+
+          {/* Delete menu (right-click) — WhatsApp-style */}
+          {menuOpen && onDelete && !isDeleted && (
+            <>
+              <div onClick={() => setMenuOpen(false)} style={{ position:"fixed", inset:0, zIndex:50 }} />
+              <div style={{
+                position: "absolute", top: "100%", marginTop: 4,
+                ...(isMine ? { right: 0 } : { left: 0 }),
+                zIndex: 51, background: "var(--bg-2)", border: "1px solid var(--line)",
+                borderRadius: 12, padding: 4, minWidth: 180, boxShadow: "0 8px 32px rgba(0,0,0,0.6)",
+              } as React.CSSProperties}>
+                <button onClick={() => { onDelete(m.id, "me"); setMenuOpen(false) }}
+                  style={{ width:"100%", textAlign:"left", padding:"8px 12px", background:"transparent", border:"none", color:"var(--ink)", fontSize:13, cursor:"pointer", borderRadius:8, display:"flex", alignItems:"center", gap:8 }}
+                  onMouseEnter={e => (e.currentTarget.style.background = "var(--bg-3)")}
+                  onMouseLeave={e => (e.currentTarget.style.background = "transparent")}>
+                  <svg width={13} height={13} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                  Delete for me
+                </button>
+                {canDeleteForEveryone && (
+                  <button onClick={() => { onDelete(m.id, "everyone"); setMenuOpen(false) }}
+                    style={{ width:"100%", textAlign:"left", padding:"8px 12px", background:"transparent", border:"none", color:"oklch(0.70 0.18 25)", fontSize:13, cursor:"pointer", borderRadius:8, display:"flex", alignItems:"center", gap:8 }}
+                    onMouseEnter={e => (e.currentTarget.style.background = "oklch(0.30 0.10 25 / 0.18)")}
+                    onMouseLeave={e => (e.currentTarget.style.background = "transparent")}>
+                    <svg width={13} height={13} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/></svg>
+                  Delete for everyone
+                  </button>
+                )}
+              </div>
+            </>
+          )}
 
           {/* Reactions */}
           {reacted && (
@@ -605,6 +667,13 @@ export default function ConversationPage() {
 
   const sendMutation = useSendMessage(conversationId)
   const markReadMut  = useMarkRead(conversationId)
+  const deleteMut    = useDeleteMessage(conversationId)
+
+  const handleDeleteMessage = useCallback((id: string, scope: "me" | "everyone") => {
+    deleteMut.mutate({ messageId: id, scope }, {
+      onError: () => push("Failed to delete message.", "error"),
+    })
+  }, [deleteMut, push])
   const webrtc       = useWebRTC()
   const { otherTyping, emitTyping, stopTyping } = useTypingIndicator(
     conversationId,
@@ -936,8 +1005,13 @@ export default function ConversationPage() {
           </div>
         )}
 
-        {/* Messages */}
-        <div ref={scrollRef} style={{ flex:1, overflowY:"auto", paddingTop:16, paddingBottom:8, minHeight:0 }}>
+        {/* Messages — data-lenis-prevent tells the global Lenis smooth-scroll
+            wrapper to NOT hijack wheel events here, otherwise two-finger
+            trackpad scroll just bounces the whole page instead of scrolling
+            the chat. overscrollBehavior:contain stops scroll chaining too. */}
+        <div ref={scrollRef}
+          data-lenis-prevent="true"
+          style={{ flex:1, overflowY:"auto", overscrollBehavior:"contain", paddingTop:16, paddingBottom:8, minHeight:0 }}>
           {hasNextPage && (
             <div style={{ display:"flex", justifyContent:"center", paddingBottom:12 }}>
               <button onClick={()=>{ prevScrollH.current=scrollRef.current?.scrollHeight??0; fetchNextPage() }} disabled={isFetchingNextPage}
@@ -972,6 +1046,7 @@ export default function ConversationPage() {
                   text={decrypted[msg.id]}
                   authorSrc={isMine ? me?.avatarUrl : other?.avatarUrl}
                   authorName={isMine ? (me?.displayName??"You") : (other?.displayName??"Them")}
+                  onDelete={handleDeleteMessage}
                 />
               </div>
             )

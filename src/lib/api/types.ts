@@ -9,6 +9,7 @@ export interface DirectMessage {
   iv:             string        // AES-GCM IV, base64
   createdAt:      string
   readAt:         string | null
+  deletedAt?:     string | null  // "Delete for everyone" tombstone
   decryptedText?: string        // populated client-side after decryption
 }
 

@@ -27,7 +27,7 @@ const USERS: User[] = [
 export default function UsersPage() {
   const [query, setQuery] = useState("")
   const [sort, setSort] = useState<"reputation" | "anime" | "streak">("reputation")
-  const { data: lbData } = useLeaderboard(20)
+  const { data: lbData } = useLeaderboard(100)
 
   const apiUsers: User[] = (lbData?.data ?? []).map(u => ({
     id: u.username, username: u.username, displayName: u.displayName,

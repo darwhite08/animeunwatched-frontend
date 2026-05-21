@@ -3,108 +3,77 @@
 import { use } from "react"
 import { motion } from "framer-motion"
 import Link from "next/link"
-import Image from "next/image"
-import { Users, ChevronLeft, Star } from "lucide-react"
-import { useBrowseAnime } from "@/hooks/useAnime"
-import type { AnimeDTO } from "@/lib/api/types"
-import type { Anime } from "@/lib/data/anime"
+import { Users, ChevronLeft, Star, Loader2 } from "lucide-react"
+import { useQuery } from "@tanstack/react-query"
+import { api } from "@/lib/api/client"
 
-function mapDTO(a: AnimeDTO, i: number): Anime {
-  return { id: String(a.malId), title: a.title, titleJapanese: a.titleJapanese ?? "", rating: a.score ?? 0, year: a.year ?? 0, episodes: a.episodes, type: (["TV","Movie","OVA"] as const).includes(a.type as any) ? a.type as any : "TV", status: a.status?.toLowerCase().includes("airing") ? "airing" : "finished", studio: a.studios[0] ?? "Unknown", genres: a.genres, synopsis: a.synopsis ?? "", image: a.imageUrl ?? "", tags: a.genres.map(g => g.toLowerCase().replace(/\s/g, "-")), category: "all", rank: i+1 }
+interface JikanCharacter {
+  character: { mal_id: number; name: string; images: { jpg: { image_url: string } } }
+  role: string
+  voice_actors: Array<{ person: { name: string }; language: string }>
+  favorites: number
 }
 
-// Mock character data seeded by anime
-const getCharacters = (animeId: string) => {
-  const seed = animeId.split("").reduce((a, c) => a + c.charCodeAt(0), 0)
-  const names = [
-    ["Protagonist A", "Main character", "9.2"],
-    ["Antagonist B", "Primary villain", "8.8"],
-    ["Support C",    "Loyal companion", "7.5"],
-    ["Mentor D",     "Wise guide",      "8.1"],
-    ["Rival E",      "Complex rival",   "7.9"],
-    ["Hidden F",     "Mystery figure",  "8.4"],
-  ]
-  return names.map(([name, role, score], i) => ({
-    id: `${animeId}-char-${i}`,
-    name,
-    role,
-    score,
-    voiceActor: ["Hiroshi Kamiya", "Yuki Kaji", "Miyuki Sawashiro", "Daisuke Ono", "Kana Hanazawa", "Takuya Eguchi"][i % 6],
-    gradient: ["from-indigo-600 to-violet-600", "from-red-600 to-rose-600", "from-emerald-600 to-teal-600", "from-amber-600 to-orange-600", "from-blue-600 to-cyan-600", "from-purple-600 to-pink-600"][i],
-  }))
-}
+export default function CharactersPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id }  = use(params)
+  const malId   = parseInt(id, 10)
 
-export default function AnimeCharactersPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = use(params)
-  const { data: browseData, isLoading } = useBrowseAnime({ limit: 1 })
-  const anime = (browseData?.data ?? []).map(mapDTO)[0] ?? null
+  const { data, isLoading } = useQuery({
+    queryKey: ["anime-characters", id],
+    queryFn:  () => api<{ data: JikanCharacter[] }>(`/anime/${malId}/characters`),
+    staleTime: 60 * 60_000,
+    enabled:   !isNaN(malId),
+  })
 
-  const chars = getCharacters(id)
-
-  if (isLoading) return <div className="min-h-screen bg-[#020202] text-white flex items-center justify-center text-white/30">Loading…</div>
+  const characters = data?.data ?? []
 
   return (
-    <div className="min-h-screen bg-[#020202] text-white pb-32">
-      {/* Mini hero */}
-      <div className="relative h-40 overflow-hidden">
-        <Image src={anime?.image ?? ""} alt={anime?.title ?? ""} fill className="object-cover brightness-[0.2] blur-sm" />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#020202]" />
-      </div>
-
-      <div className="max-w-5xl mx-auto px-6 -mt-6">
-        {/* Breadcrumb */}
-        <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-white/30 mb-6">
-          <Link href="/bestanimelist" className="hover:text-white transition-colors">Archive</Link>
-          <span>·</span>
-          <Link href={`/anime/${id}`} className="hover:text-white transition-colors truncate max-w-[200px]">{anime?.title ?? id}</Link>
-          <span>·</span>
-          <span className="text-white/60">Characters</span>
-        </div>
-
+    <div className="min-h-screen bg-[#020202] text-white pb-32 pt-6">
+      <div className="max-w-6xl mx-auto px-6">
+        <Link href={`/anime/${id}`}
+          className="inline-flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-white/40 hover:text-white/70 transition-colors mb-8 group">
+          <ChevronLeft size={11} className="group-hover:-translate-x-0.5 transition-transform" /> Back to Anime
+        </Link>
         <div className="flex items-center gap-3 mb-8">
-          <Users size={18} className="text-amber-400" />
-          <h1 className="text-3xl font-black tracking-tighter uppercase italic text-white">
-            Characters<span style={{color:"#f59e0b"}}>.</span>
-          </h1>
-          <span className="text-sm text-white/30 font-mono">{chars.length} shown</span>
+          <Users size={20} className="text-amber-400" />
+          <h1 className="text-3xl font-black tracking-tighter uppercase italic text-white">Characters<span style={{ color: "#f59e0b" }}>.</span></h1>
+          {!isLoading && <span className="text-sm text-white/30">{characters.length} total</span>}
         </div>
 
-        {/* Characters grid */}
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-5">
-          {chars.map((char, i) => (
-            <motion.div key={char.id} initial={{ opacity:0, y:12 }} animate={{ opacity:1, y:0 }} transition={{ delay: i*0.07 }}
-              className="p-5 rounded-2xl bg-white/[0.02] border border-white/8 hover:border-white/15 transition-colors space-y-4"
-            >
-              {/* Avatar */}
-              <div className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${char.gradient} flex items-center justify-center text-2xl font-black text-white`}>
-                {char.name[0]}
-              </div>
-
-              <div>
-                <p className="font-black text-white">{char.name}</p>
-                <p className="text-[10px] text-white/40 uppercase tracking-wider mt-0.5">{char.role}</p>
-              </div>
-
-              <div className="space-y-1 text-[10px] text-white/30">
-                <div className="flex justify-between">
-                  <span>Popularity</span>
-                  <span className="flex items-center gap-1"><Star size={9} className="text-amber-400" fill="currentColor" />{char.score}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span>Voice Actor</span>
-                  <span className="text-white/50 font-bold">{char.voiceActor}</span>
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-
-        {/* Back link */}
-        <div className="mt-10 flex justify-center">
-          <Link href={`/anime/${id}`} className="flex items-center gap-2 text-sm font-black uppercase tracking-widest text-amber-400 hover:text-amber-300 transition-colors">
-            <ChevronLeft size={14} /> Back to {anime?.title ?? id}
-          </Link>
-        </div>
+        {isLoading ? (
+          <div className="flex items-center justify-center py-24"><Loader2 size={28} className="animate-spin text-amber-400" /></div>
+        ) : characters.length === 0 ? (
+          <p className="text-center py-24 text-white/30 text-sm">No character data available for this anime.</p>
+        ) : (
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
+            {characters.map((c, i) => {
+              const va = c.voice_actors.find(v => v.language === "Japanese")
+              return (
+                <motion.div key={c.character.mal_id}
+                  initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.025 }}
+                  className="group rounded-2xl overflow-hidden border border-white/8 bg-[#0a0a0a] hover:border-amber-500/25 transition-all">
+                  <div className="relative aspect-[3/4] bg-white/5">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={c.character.images.jpg.image_url} alt={c.character.name}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      onError={(e) => { (e.target as HTMLImageElement).style.display = "none" }} />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                    <span className="absolute bottom-2 left-2 text-[8px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded-md bg-amber-500/20 text-amber-400 border border-amber-500/30">{c.role}</span>
+                  </div>
+                  <div className="p-3 space-y-1">
+                    <p className="text-xs font-black text-white leading-tight">{c.character.name}</p>
+                    {va && <p className="text-[9px] text-white/35 truncate">CV: {va.person.name}</p>}
+                    {c.favorites > 0 && (
+                      <div className="flex items-center gap-1 text-[9px] text-amber-400/60">
+                        <Star size={8} className="fill-amber-400/60" />{c.favorites.toLocaleString()}
+                      </div>
+                    )}
+                  </div>
+                </motion.div>
+              )
+            })}
+          </div>
+        )}
       </div>
     </div>
   )

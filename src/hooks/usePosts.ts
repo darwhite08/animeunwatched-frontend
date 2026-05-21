@@ -78,3 +78,13 @@ export function useCreateComment(postId: string) {
     onSuccess:  () => qc.invalidateQueries({ queryKey: commentsKey(postId) }),
   })
 }
+
+export function useUserPosts(username: string, page = 1) {
+  const { api } = require("@/lib/api/client")
+  return useQuery({
+    queryKey:  ["user-posts", username, page],
+    queryFn:   () => api(`/users/${username}/posts?page=${page}&limit=20`),
+    enabled:   !!username,
+    staleTime: 60_000,
+  })
+}

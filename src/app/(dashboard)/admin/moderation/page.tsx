@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect } from "react"
 import { useQuery } from "@tanstack/react-query"
 import { api } from "@/lib/api/client"
 import { motion, AnimatePresence } from "framer-motion"
@@ -136,8 +136,13 @@ export default function ModerationPage() {
     }))
   , [adminData])
   const { push } = useToast()
-  const [reports, setReports] = useState<Report[]>(() => apiReports.length > 0 ? apiReports : MOCK_REPORTS)
+  const [reports, setReports] = useState<Report[]>(MOCK_REPORTS)
   const [activeFilter, setActiveFilter] = useState<FilterTab>("all")
+
+  // Sync real API data when it arrives (useState initializer only runs on mount)
+  useEffect(() => {
+    if (apiReports.length > 0) setReports(apiReports)
+  }, [apiReports])
 
   const open      = reports.filter(r => r.status === "open").length
   const resolved  = reports.filter(r => r.status === "resolved").length

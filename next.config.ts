@@ -1,21 +1,29 @@
 import type { NextConfig } from "next";
 import { withSentryConfig } from "@sentry/nextjs";
 
+const RENDER_BACKEND = "https://kaiveron-backend.onrender.com"
+
 const securityHeaders = [
   { key: "X-DNS-Prefetch-Control",  value: "on" },
   { key: "X-Frame-Options",         value: "SAMEORIGIN" },
   { key: "X-Content-Type-Options",  value: "nosniff" },
   { key: "Referrer-Policy",         value: "strict-origin-when-cross-origin" },
-  { key: "Permissions-Policy",      value: "camera=(), microphone=(), geolocation=()" },
+  // camera=(self) and microphone=(self): allow only the same origin (the Vercel app)
+  // Required for WebRTC audio/video calls — empty () would block them entirely
+  { key: "Permissions-Policy",      value: "camera=(self), microphone=(self), geolocation=()" },
   {
     key: "Content-Security-Policy",
     value: [
       "default-src 'self'",
-      "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://accounts.google.com https://apis.google.com",
-      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+      // Apple Sign In SDK + Google
+      "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://accounts.google.com https://apis.google.com https://appleid.cdn-apple.com",
+      // Google Accounts CSS needed for Sign In button styling
+      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://accounts.google.com",
       "font-src 'self' https://fonts.gstatic.com data:",
       "img-src 'self' data: blob: https://cdn.myanimelist.net https://myanimelist.net https://images.unsplash.com https://img.anisearch.com https://cdn.noitatnemucod.net https://img1.ak.crunchyroll.com https://encrypted-tbn0.gstatic.com https://s4.anilist.co https://media.kitsu.app https://lh3.googleusercontent.com https://lh4.googleusercontent.com https://lh5.googleusercontent.com https://lh6.googleusercontent.com https://avatars.githubusercontent.com",
-      "connect-src 'self' http://localhost:4000 http://192.168.31.167:4000 https://*.up.railway.app https://api.jikan.moe https://accounts.google.com wss: ws:",
+      // Render backend (HTTPS for polling, wss/ws for WebSocket upgrade)
+      // Removed: https://*.up.railway.app (old Railway URL, backend is now on Render)
+      `connect-src 'self' http://localhost:4000 http://192.168.31.167:4000 ${RENDER_BACKEND} https://api.jikan.moe https://accounts.google.com https://sentry.io https://*.sentry.io wss: ws:`,
       "frame-src 'self' https://accounts.google.com https://www.youtube.com https://youtube.com",
       "object-src 'none'",
       "base-uri 'self'",

@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react"
 import { useAuthStore } from "@/stores/auth.store"
 import { connectSocket, disconnectSocket, updateSocketToken } from "@/lib/socket"
+import { RealtimeListeners } from "./RealtimeListeners"
 
 const BASE = ""
 
@@ -60,5 +61,10 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
     return unsub
   }, [])
 
-  return <>{children}</>
+  return (
+    <>
+      <RealtimeListeners />
+      {children}
+    </>
+  )
 }

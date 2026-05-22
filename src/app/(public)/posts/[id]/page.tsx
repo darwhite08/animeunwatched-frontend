@@ -2,6 +2,7 @@
 
 import { use, useState, useMemo } from "react"
 import { usePost, useLikePost, useCreateComment, useComments } from "@/hooks/usePosts"
+import { useLivePost } from "@/hooks/useRealtime"
 import { useAuthStore } from "@/stores/auth.store"
 import { Loader2 } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
@@ -330,6 +331,9 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
 
   const { data: postData, isLoading, isError } = usePost(id)
   const { data: commentsData } = useComments(id)
+
+  // Realtime: comments arriving from other viewers show up instantly
+  useLivePost(id)
   const likeMut = useLikePost(id)
   const commentMut = useCreateComment(id)
 

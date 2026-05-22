@@ -274,6 +274,42 @@ export function useLiveAnime(malId: number | null) {
   }, [malId, qc])
 }
 
+// ── Live follower count + new follower toast ─────────────────────────────────
+
+export type FollowNewPayload = { followerId: string }
+
+export function useLiveFollows(onNewFollower?: (p: FollowNewPayload) => void) {
+  const qc = useQueryClient()
+  const isAuth = useAuthStore(s => s.isAuthenticated)
+  const cbRef = useRef(onNewFollower)
+  useEffect(() => { cbRef.current = onNewFollower }, [onNewFollower])
+
+  useEffect(() => {
+    if (!isAuth) return
+    let cleanup: (() => void) | null = null
+
+    const attach = () => {
+      const s = getSocket()
+      if (!s) { retry = setTimeout(attach, 600); return }
+
+      const onFollow = (p: FollowNewPayload) => {
+        // Invalidate the user's profile + followers list so counts tick up
+        qc.invalidateQueries({ queryKey: ["me"] })
+        qc.invalidateQueries({ queryKey: ["followers"] })
+        qc.invalidateQueries({ queryKey: ["user-profile"] })
+        cbRef.current?.(p)
+      }
+
+      s.on("follow.new", onFollow)
+      cleanup = () => { s.off("follow.new", onFollow) }
+    }
+
+    let retry: ReturnType<typeof setTimeout> | null = null
+    attach()
+    return () => { if (retry) clearTimeout(retry); cleanup?.() }
+  }, [isAuth, qc])
+}
+
 // ── Live user-list sync (your own watchlist across tabs/devices) ─────────────
 
 export function useLiveUserList() {
@@ -305,6 +341,35 @@ export function useLiveUserList() {
     attach()
     return () => { if (retry) clearTimeout(retry); cleanup?.() }
   }, [isAuth, qc])
+}
+
+// ── Live post detail (comments arriving while viewing a post) ────────────────
+
+export function useLivePost(postId: string | null) {
+  const qc = useQueryClient()
+  useRoomMembership(postId ? `post:${postId}` : null)
+
+  useEffect(() => {
+    if (!postId) return
+    let cleanup: (() => void) | null = null
+
+    const attach = () => {
+      const s = getSocket()
+      if (!s) { retry = setTimeout(attach, 600); return }
+
+      const onComment = () => {
+        qc.invalidateQueries({ queryKey: ["comments", postId] })
+        qc.invalidateQueries({ queryKey: ["post", postId] })
+      }
+
+      s.on("post.comment.new", onComment)
+      cleanup = () => { s.off("post.comment.new", onComment) }
+    }
+
+    let retry: ReturnType<typeof setTimeout> | null = null
+    attach()
+    return () => { if (retry) clearTimeout(retry); cleanup?.() }
+  }, [postId, qc])
 }
 
 // ── Live thread (club discussions, anime discuss) ────────────────────────────

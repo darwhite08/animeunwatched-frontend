@@ -463,65 +463,86 @@ function CommunitySection() {
   const animeTotalApprox = discoverPosts?.meta?.total ?? 30161
 
   return (
-    <section className="min-h-screen py-24 bg-[#08080f] relative z-[2] overflow-hidden flex items-center">
+    <section className="min-h-screen py-28 bg-[#06060d] relative z-[2] overflow-hidden flex items-center">
       <div className="absolute inset-0 pointer-events-none" style={{
-        background: "radial-gradient(ellipse 50% 55% at 85% 50%, rgba(79,70,229,0.05) 0%, transparent 60%)",
+        background: "radial-gradient(ellipse 60% 70% at 88% 50%, rgba(245,158,11,0.05) 0%, transparent 60%), radial-gradient(ellipse 40% 50% at 8% 30%, rgba(99,102,241,0.04) 0%, transparent 55%)",
+      }} />
+      <div className="absolute inset-0 opacity-[0.025] pointer-events-none" style={{
+        backgroundImage: "linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)",
+        backgroundSize: "44px 44px",
+        maskImage: "radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 80%)",
       }} />
 
-      <div className="max-w-7xl mx-auto px-6 w-full">
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
+      <div className="max-w-7xl mx-auto px-6 w-full relative">
+        <div className="grid lg:grid-cols-[1fr_1.05fr] gap-16 lg:gap-20 items-center">
 
           {/* Left */}
-          <div className="space-y-8">
+          <div className="space-y-12">
             <div>
-              <motion.p
+              <motion.div
                 initial={{ opacity: 0, y: 8 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="text-[11px] font-medium uppercase tracking-[0.25em] text-amber-400/60 mb-4"
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-amber-500/15 bg-amber-500/[0.04] mb-7"
               >
-                Community
-              </motion.p>
+                <span className="relative inline-flex h-1.5 w-1.5">
+                  <motion.span animate={{ opacity: [0.5, 1, 0.5] }} transition={{ duration: 1.8, repeat: Infinity }} className="absolute inset-0 rounded-full bg-amber-400" />
+                </span>
+                <span className="text-[10px] font-bold uppercase tracking-[0.28em] text-amber-300/80">Community</span>
+              </motion.div>
               <motion.h2
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="text-[clamp(2rem,4.5vw,4rem)] font-bold tracking-tight text-white leading-tight mb-5"
+                className="text-[clamp(2.4rem,4.6vw,4rem)] font-black tracking-[-0.025em] text-white leading-[1.02] mb-6"
               >
                 Every episode<br />
-                <span className="text-amber-400">builds your legacy.</span>
+                <span
+                  className="italic"
+                  style={{
+                    backgroundImage: "linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #fde68a 100%)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                  }}
+                >
+                  builds your legacy.
+                </span>
               </motion.h2>
               <motion.p
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
-                className="text-white/35 text-base leading-relaxed max-w-md"
+                className="text-white/45 text-[15px] leading-relaxed max-w-[42ch]"
               >
-                Earn XP for every episode you watch. Build streaks, unlock titles, and compete on a global leaderboard that rewards dedication — not just activity.
+                Earn XP for every episode you watch. Build streaks, unlock titles,
+                and compete on a global leaderboard that rewards dedication —
+                not just activity.
               </motion.p>
             </div>
 
             {/* Feature grid */}
             <div className="grid grid-cols-2 gap-3">
               {[
-                { icon: Flame,  label: "Daily Streaks",    desc: "Watch daily to compound XP.",     color: "text-orange-400", bg: "bg-orange-500/[0.12]", border: "border-orange-500/[0.18]" },
-                { icon: Trophy, label: "Leaderboard",      desc: "Rank globally by season.",         color: "text-amber-400",  bg: "bg-amber-500/[0.12]",  border: "border-amber-500/[0.18]"  },
-                { icon: Star,   label: "Badges & Titles",  desc: "100+ achievements to unlock.",     color: "text-violet-400", bg: "bg-violet-500/[0.12]", border: "border-violet-500/[0.18]" },
-                { icon: Users,  label: "Social Feed",      desc: "Follow fans with similar taste.",  color: "text-amber-400", bg: "bg-amber-500/[0.12]", border: "border-amber-500/[0.18]" },
-              ].map(({ icon: Icon, label, desc, color, bg, border }, i) => (
+                { icon: Flame,  label: "Daily Streaks",   desc: "Watch daily to compound XP.",    iconColor: "text-orange-400",  iconBg: "from-orange-500/20 to-orange-600/5",  ring: "border-orange-500/20" },
+                { icon: Trophy, label: "Leaderboard",     desc: "Rank globally by season.",       iconColor: "text-amber-400",   iconBg: "from-amber-500/20 to-amber-600/5",    ring: "border-amber-500/20"  },
+                { icon: Star,   label: "Badges & Titles", desc: "100+ achievements to unlock.",   iconColor: "text-violet-400",  iconBg: "from-violet-500/20 to-violet-600/5",  ring: "border-violet-500/20" },
+                { icon: Users,  label: "Social Feed",     desc: "Follow fans with similar taste.", iconColor: "text-emerald-400", iconBg: "from-emerald-500/20 to-emerald-600/5", ring: "border-emerald-500/20" },
+              ].map(({ icon: Icon, label, desc, iconColor, iconBg, ring }, i) => (
                 <motion.div
                   key={label}
                   initial={{ opacity: 0, y: 12 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.07 }}
-                  className={`p-4 rounded-xl bg-white/[0.04] border ${border} hover:bg-white/[0.06] transition-all`}
+                  whileHover={{ y: -2 }}
+                  className="group relative p-5 rounded-2xl bg-gradient-to-b from-white/[0.04] to-white/[0.015] border border-white/[0.07] hover:border-white/[0.14] transition-colors overflow-hidden"
                 >
-                  <div className={`w-8 h-8 rounded-lg ${bg} border ${border} flex items-center justify-center mb-3`}>
-                    <Icon size={14} className={color} />
+                  <div className="absolute -top-px left-3 right-3 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent" />
+                  <div className={`w-9 h-9 rounded-xl bg-gradient-to-br ${iconBg} border ${ring} flex items-center justify-center mb-3.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]`}>
+                    <Icon size={14} className={iconColor} />
                   </div>
-                  <p className="text-[13px] font-semibold text-white/85 mb-1">{label}</p>
-                  <p className="text-[11px] text-white/40 leading-relaxed">{desc}</p>
+                  <p className="text-[13px] font-bold text-white/90 mb-1 tracking-[-0.005em]">{label}</p>
+                  <p className="text-[11px] text-white/40 leading-snug">{desc}</p>
                 </motion.div>
               ))}
             </div>
@@ -531,16 +552,16 @@ function CommunitySection() {
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
-              className="flex items-center pt-6 border-t border-white/[0.06]"
+              className="grid grid-cols-3 pt-7 border-t border-white/[0.06]"
             >
               {[
-                { v: "4.2M",                              l: "Episodes tracked"     },
-                { v: `${animeTotalApprox}+`,               l: "Anime catalogued"     },
+                { v: "4.2M",                              l: "Episodes tracked"      },
+                { v: `${animeTotalApprox.toLocaleString()}+`, l: "Anime catalogued"  },
                 { v: "8.4",                               l: "Avg community rating"  },
               ].map(({ v, l }, i) => (
-                <div key={l} className={`${i > 0 ? "pl-5 ml-5 border-l border-white/[0.06]" : ""}`}>
-                  <p className="text-base font-bold text-white tracking-tight">{v}</p>
-                  <p className="text-[11px] text-white/25 mt-0.5">{l}</p>
+                <div key={l} className={`${i > 0 ? "pl-6 border-l border-white/[0.05]" : ""}`}>
+                  <p className="text-[22px] font-black text-white tracking-[-0.02em] leading-none tabular-nums">{v}</p>
+                  <p className="text-[10px] font-medium uppercase tracking-[0.15em] text-white/30 mt-2">{l}</p>
                 </div>
               ))}
             </motion.div>
@@ -552,14 +573,20 @@ function CommunitySection() {
               className="flex gap-3"
             >
               <Link href="/leaderboard"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-black uppercase tracking-wide text-black transition-all" style={{background:"linear-gradient(135deg,#fbbf24,#f59e0b)",boxShadow:"0 4px 20px rgba(245,158,11,0.35)"}}
+                className="group inline-flex items-center gap-2.5 px-6 py-3 rounded-xl text-[12px] font-black uppercase tracking-[0.18em] text-black transition-all hover:-translate-y-0.5"
+                style={{
+                  background: "linear-gradient(135deg,#fbbf24,#f59e0b)",
+                  boxShadow: "0 8px 28px rgba(245,158,11,0.35), inset 0 1px 0 rgba(255,255,255,0.4)",
+                }}
               >
-                <Trophy size={13} /> View leaderboard
+                <Trophy size={13} className="group-hover:rotate-[-6deg] transition-transform" />
+                View Leaderboard
+                <ArrowRight size={12} className="group-hover:translate-x-0.5 transition-transform" />
               </Link>
               <Link href="/register"
-                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-white/[0.1] text-sm font-medium text-white/45 hover:text-white hover:bg-white/[0.05] transition-all"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-white/[0.1] text-[12px] font-bold uppercase tracking-[0.18em] text-white/55 hover:text-white hover:border-white/20 hover:bg-white/[0.04] transition-all"
               >
-                Join free
+                Join Free
               </Link>
             </motion.div>
           </div>
@@ -570,85 +597,116 @@ function CommunitySection() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.55 }}
-            className="space-y-3"
+            className="relative space-y-3"
           >
+            {/* Glow halo */}
+            <div className="absolute -inset-px rounded-[20px] pointer-events-none" style={{
+              background: "linear-gradient(135deg, rgba(245,158,11,0.18), rgba(255,255,255,0.02) 35%, rgba(99,102,241,0.10))",
+              filter: "blur(2px)",
+            }} />
+
             {/* Top fan spotlight */}
-            <div className="flex items-center gap-4 p-4 rounded-2xl bg-gradient-to-r from-amber-500/[0.08] to-orange-500/[0.04] border border-amber-500/[0.14]">
+            <div className="relative flex items-center gap-4 p-5 rounded-2xl bg-gradient-to-r from-amber-500/[0.10] via-amber-500/[0.04] to-transparent border border-amber-500/[0.18] overflow-hidden">
+              <div className="absolute -right-10 -top-10 w-32 h-32 rounded-full bg-amber-500/8 blur-3xl pointer-events-none" />
               <div className="relative shrink-0">
-                <div className="w-12 h-12 rounded-full bg-gradient-to-br from-amber-400/25 to-orange-500/15 border border-amber-400/20 flex items-center justify-center text-base font-bold text-amber-300">
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-400/30 to-orange-500/15 border border-amber-400/25 flex items-center justify-center text-lg font-black text-amber-200 shadow-[0_0_20px_rgba(245,158,11,0.25)]">
                   O
                 </div>
-                <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-amber-500 border-2 border-[#08080f] flex items-center justify-center">
-                  <span className="text-[8px] font-black text-white">1</span>
+                <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 border-2 border-[#06060d] flex items-center justify-center shadow-md">
+                  <span className="text-[8.5px] font-black text-black">1</span>
                 </div>
               </div>
-              <div className="flex-1 min-w-0">
+              <div className="flex-1 min-w-0 relative">
                 <div className="flex items-center gap-2">
-                  <p className="text-sm font-semibold text-white">Otaku_Arch</p>
-                  <span className="text-[9px] px-1.5 py-0.5 rounded-md bg-amber-500/15 border border-amber-500/20 text-amber-400/80 font-medium">Legendary</span>
+                  <p className="text-[15px] font-bold text-white tracking-[-0.01em]">Otaku_Arch</p>
+                  <span className="text-[8.5px] px-1.5 py-0.5 rounded-md bg-amber-500/15 border border-amber-500/25 text-amber-300/90 font-bold uppercase tracking-[0.1em]">Legendary</span>
                 </div>
-                <p className="text-[11px] text-white/35 mt-0.5">42-day streak · 1.2M XP this season</p>
+                <p className="text-[11.5px] text-white/45 mt-1 font-medium">42-day streak · 1.2M XP this season</p>
               </div>
-              <div className="text-right shrink-0">
-                <p className="text-sm font-bold text-orange-400">🔥 42</p>
-                <p className="text-[9px] text-white/20">day streak</p>
+              <div className="text-right shrink-0 relative">
+                <div className="flex items-baseline gap-1 justify-end">
+                  <Flame size={14} className="text-orange-400" fill="currentColor" />
+                  <p className="text-[22px] font-black text-orange-300 leading-none tabular-nums" style={{
+                    backgroundImage: "linear-gradient(135deg, #fb923c, #f97316)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                  }}>42</p>
+                </div>
+                <p className="text-[9px] text-white/30 font-medium uppercase tracking-[0.14em] mt-1">day streak</p>
               </div>
             </div>
 
             {/* Leaderboard */}
-            <div className="rounded-2xl bg-white/[0.025] border border-white/[0.08] overflow-hidden" style={{ boxShadow: "0 20px 40px rgba(0,0,0,0.4)" }}>
-              <div className="px-5 py-3.5 border-b border-white/[0.06] flex items-center justify-between bg-white/[0.01]">
-                <span className="text-[11px] font-semibold text-white/50">Top fans this week</span>
-                <Trophy size={12} className="text-amber-400/50" />
+            <div className="relative rounded-2xl bg-gradient-to-b from-[#0d0d18]/95 to-[#08080f]/95 border border-white/[0.08] overflow-hidden backdrop-blur-xl"
+              style={{ boxShadow: "0 50px 100px -20px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.02) inset" }}
+            >
+              <div className="px-6 py-4 border-b border-white/[0.06] flex items-center justify-between bg-gradient-to-b from-white/[0.02] to-transparent">
+                <span className="text-[11px] font-bold text-white/60 uppercase tracking-[0.18em]">Top fans this week</span>
+                <div className="h-7 w-7 rounded-lg bg-amber-500/10 border border-amber-500/15 flex items-center justify-center">
+                  <Trophy size={12} className="text-amber-400" />
+                </div>
               </div>
               <div className="divide-y divide-white/[0.04]">
                 {[
-                  { rank: 1, name: "Otaku_Arch",    title: "Legendary",   xp: "1.2M", pct: 88, streak: 42, accent: "bg-amber-500/55"   },
-                  { rank: 2, name: "ShadowWatcher", title: "Arch-Mage",   xp: "840K", pct: 70, streak: 31, accent: "bg-amber-500/50"  },
-                  { rank: 3, name: "Void_Seeker",   title: "Elite Jonin", xp: "620K", pct: 55, streak: 22, accent: "bg-amber-500/40"  },
-                  { rank: 4, name: "NightOwl_88",   title: "Jonin",       xp: "410K", pct: 40, streak: 17, accent: "bg-amber-500/30"  },
-                ].map(({ rank, name, title, xp, pct, streak, accent }, i) => (
+                  { rank: 1, name: "Otaku_Arch",    title: "Legendary",   xp: "1.2M", pct: 88, streak: 42 },
+                  { rank: 2, name: "ShadowWatcher", title: "Arch-Mage",   xp: "840K", pct: 70, streak: 31 },
+                  { rank: 3, name: "Void_Seeker",   title: "Elite Jonin", xp: "620K", pct: 55, streak: 22 },
+                  { rank: 4, name: "NightOwl_88",   title: "Jonin",       xp: "410K", pct: 40, streak: 17 },
+                ].map(({ rank, name, title, xp, pct, streak }, i) => (
                   <motion.div
                     key={name}
                     initial={{ opacity: 0, x: 10 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: i * 0.06 }}
-                    className="flex items-center gap-3.5 px-5 py-3.5 hover:bg-white/[0.02] transition-colors cursor-pointer"
+                    className="group flex items-center gap-3.5 px-6 py-4 hover:bg-white/[0.02] transition-colors cursor-pointer relative"
                   >
-                    <span className={`text-[12px] font-bold w-4 text-center shrink-0 ${
-                      rank === 1 ? "text-amber-400" : rank === 2 ? "text-white/50" : "text-white/25"
+                    <span className={`text-[12px] font-black w-4 text-center shrink-0 tabular-nums ${
+                      rank === 1 ? "text-amber-400" : rank === 2 ? "text-white/55" : rank === 3 ? "text-amber-600/70" : "text-white/25"
                     }`}>{rank}</span>
 
-                    <div className="w-8 h-8 rounded-xl bg-white/[0.07] border border-white/[0.07] flex items-center justify-center text-[11px] font-bold text-white/60 shrink-0">
+                    <div className={`relative w-9 h-9 rounded-xl border flex items-center justify-center text-[11px] font-black shrink-0 ${
+                      rank === 1 ? "bg-gradient-to-br from-amber-500/20 to-amber-600/5 border-amber-500/20 text-amber-300" : "bg-white/[0.04] border-white/[0.08] text-white/55"
+                    }`}>
                       {name[0]}
                     </div>
 
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1.5">
-                        <p className="text-[12px] font-semibold text-white/80">{name}</p>
-                        <span className="text-[8px] text-white/25 bg-white/[0.06] px-1.5 py-0.5 rounded shrink-0">{title}</span>
+                        <p className="text-[12.5px] font-bold text-white/85 group-hover:text-amber-200 transition-colors tracking-[-0.005em]">{name}</p>
+                        <span className="text-[8px] font-bold uppercase tracking-[0.1em] text-white/35 bg-white/[0.05] border border-white/[0.06] px-1.5 py-0.5 rounded shrink-0">{title}</span>
                       </div>
                       <div className="flex items-center gap-2">
                         <div className="flex-1 h-1 bg-white/[0.05] rounded-full overflow-hidden">
-                          <div className={`h-full rounded-full ${accent}`} style={{ width: `${pct}%` }} />
+                          <motion.div
+                            initial={{ width: 0 }}
+                            whileInView={{ width: `${pct}%` }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.8, delay: i * 0.08, ease: "easeOut" }}
+                            className="h-full rounded-full"
+                            style={{ background: "linear-gradient(90deg, #fbbf24, #f59e0b)" }}
+                          />
                         </div>
-                        <span className="text-[9px] text-white/20 font-mono shrink-0">{xp}</span>
+                        <span className="text-[9.5px] text-white/30 font-bold shrink-0 tabular-nums">{xp}</span>
                       </div>
                     </div>
 
                     <div className="text-right shrink-0 ml-1">
-                      <p className="text-[11px] font-semibold text-orange-400/80">{streak}d</p>
-                      <p className="text-[8px] text-white/15 mt-0.5">streak</p>
+                      <p className="text-[12px] font-bold text-orange-400/85 tabular-nums">{streak}d</p>
+                      <p className="text-[8px] text-white/20 font-medium uppercase tracking-[0.12em] mt-0.5">streak</p>
                     </div>
                   </motion.div>
                 ))}
               </div>
-              <div className="px-5 py-3 border-t border-white/[0.05] bg-white/[0.01]">
-                <Link href="/leaderboard" className="text-[11px] text-amber-400/60 hover:text-amber-400 font-medium flex items-center gap-1 transition-colors">
-                  View full leaderboard <ArrowRight size={11} />
-                </Link>
-              </div>
+              <Link
+                href="/leaderboard"
+                className="group flex items-center justify-between px-6 py-4 border-t border-white/[0.06] bg-white/[0.015] hover:bg-white/[0.03] transition-colors"
+              >
+                <span className="text-[11px] font-bold text-amber-400/80 group-hover:text-amber-300 transition-colors uppercase tracking-[0.18em]">
+                  View Full Leaderboard
+                </span>
+                <ArrowRight size={12} className="text-amber-400/60 group-hover:text-amber-300 group-hover:translate-x-0.5 transition-all" />
+              </Link>
             </div>
           </motion.div>
         </div>
@@ -743,22 +801,61 @@ function ShowcaseSection() {
   ]
 
   return (
-    <section className="py-28 bg-[#08080f] relative z-[2]">
-      <div className="max-w-7xl mx-auto px-6 w-full">
+    <section className="py-32 bg-[#06060d] relative z-[2] overflow-hidden">
+      {/* Ambient backdrop */}
+      <div className="absolute inset-0 pointer-events-none" style={{
+        background: "radial-gradient(ellipse 50% 50% at 50% 30%, rgba(245,158,11,0.04) 0%, transparent 60%)",
+      }} />
+      <div className="absolute inset-0 opacity-[0.02] pointer-events-none" style={{
+        backgroundImage: "linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)",
+        backgroundSize: "44px 44px",
+        maskImage: "radial-gradient(ellipse 70% 70% at 50% 50%, black 30%, transparent 80%)",
+      }} />
 
-        <div className="mb-14">
+      <div className="max-w-7xl mx-auto px-6 w-full relative">
+
+        <div className="mb-16 max-w-3xl">
+          <motion.div
+            initial={{ opacity: 0, y: 8 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-amber-500/15 bg-amber-500/[0.04] mb-7"
+          >
+            <span className="relative inline-flex h-1.5 w-1.5">
+              <motion.span animate={{ opacity: [0.5, 1, 0.5] }} transition={{ duration: 1.8, repeat: Infinity }} className="absolute inset-0 rounded-full bg-amber-400" />
+            </span>
+            <span className="text-[10px] font-bold uppercase tracking-[0.28em] text-amber-300/80">Platform</span>
+          </motion.div>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-[clamp(1.8rem,4vw,3.5rem)] font-bold tracking-tight text-white"
+            className="text-[clamp(2.4rem,4.6vw,4rem)] font-black tracking-[-0.025em] text-white leading-[1.02] mb-5"
           >
             Everything you need,<br />
-            <span className="text-amber-400">in one place.</span>
+            <span
+              className="italic"
+              style={{
+                backgroundImage: "linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #fde68a 100%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+            >
+              in one place.
+            </span>
           </motion.h2>
+          <motion.p
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="text-white/45 text-[15px] leading-relaxed max-w-[52ch]"
+          >
+            Three studios in one platform — built for serious fans who treat
+            anime as identity, not entertainment.
+          </motion.p>
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-4">
+        <div className="grid lg:grid-cols-3 gap-5">
           {FEATURES.map(({ tag, title, desc, href, accent, preview }, i) => (
             <motion.div
               key={tag}
@@ -766,31 +863,64 @@ function ShowcaseSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
-              className="group relative p-6 rounded-2xl bg-white/[0.03] border border-white/[0.07] hover:border-white/[0.12] hover:bg-white/[0.045] transition-all duration-300 flex flex-col gap-6"
+              whileHover={{ y: -4 }}
+              className="group relative rounded-2xl overflow-hidden"
             >
-              <div>
-                <span className={`inline-block text-[10px] font-semibold uppercase tracking-[0.15em] mb-3 px-2.5 py-1 rounded-md ${
-                  accent === "indigo" ? "text-amber-300/80 bg-amber-500/10" :
-                  accent === "amber" ? "text-amber-300/80 bg-amber-500/10" : "text-violet-300/80 bg-violet-500/10"
-                }`}>{tag}</span>
-                <h3 className="text-[15px] font-semibold text-white leading-snug mb-2.5">{title}</h3>
-                <p className="text-[13px] text-white/35 leading-relaxed">{desc}</p>
-              </div>
+              {/* Border halo */}
+              <div className="absolute -inset-px rounded-[18px] pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{
+                background: `linear-gradient(135deg, ${
+                  accent === "indigo" ? "rgba(99,102,241,0.25)" :
+                  accent === "amber" ? "rgba(245,158,11,0.30)" : "rgba(139,92,246,0.25)"
+                }, rgba(255,255,255,0.02) 40%, transparent)`,
+                filter: "blur(2px)",
+              }} />
 
-              {/* Mock preview */}
-              <div className="flex-1 p-4 rounded-xl bg-black/20 border border-white/[0.05]">
-                {preview}
-              </div>
-
-              <Link
-                href={href}
-                className={`inline-flex items-center gap-1.5 text-[13px] font-medium transition-all ${
-                  accent === "indigo" ? "text-amber-400/60 hover:text-amber-400" :
-                  accent === "amber" ? "text-amber-400/60 hover:text-amber-400" : "text-violet-400/60 hover:text-violet-400"
-                }`}
+              <div className="relative h-full p-7 rounded-2xl bg-gradient-to-b from-[#0d0d18]/95 to-[#08080f]/95 border border-white/[0.08] backdrop-blur-xl transition-colors group-hover:border-white/[0.14] flex flex-col gap-6"
+                style={{ boxShadow: "0 30px 60px -20px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.02) inset" }}
               >
-                Explore <ArrowRight size={12} />
-              </Link>
+                {/* Top edge accent */}
+                <div className="absolute -top-px left-4 right-4 h-px" style={{
+                  background: `linear-gradient(90deg, transparent, ${
+                    accent === "indigo" ? "rgba(99,102,241,0.4)" :
+                    accent === "amber" ? "rgba(245,158,11,0.5)" : "rgba(139,92,246,0.4)"
+                  }, transparent)`,
+                }} />
+
+                <div>
+                  <div className="flex items-center gap-2 mb-4">
+                    <span className={`inline-flex items-center gap-1.5 text-[9.5px] font-black uppercase tracking-[0.22em] px-2.5 py-1.5 rounded-md border ${
+                      accent === "indigo" ? "text-indigo-300/90 bg-indigo-500/10 border-indigo-500/20" :
+                      accent === "amber" ? "text-amber-300/90 bg-amber-500/10 border-amber-500/20" :
+                      "text-violet-300/90 bg-violet-500/10 border-violet-500/20"
+                    }`}>
+                      <span className={`w-1 h-1 rounded-full ${
+                        accent === "indigo" ? "bg-indigo-400" :
+                        accent === "amber" ? "bg-amber-400" : "bg-violet-400"
+                      }`} />
+                      {tag}
+                    </span>
+                    <span className="text-[10px] font-mono text-white/15 tabular-nums">0{i + 1}</span>
+                  </div>
+                  <h3 className="text-[18px] font-bold text-white leading-tight mb-3 tracking-[-0.015em]">{title}</h3>
+                  <p className="text-[13px] text-white/45 leading-relaxed">{desc}</p>
+                </div>
+
+                {/* Mock preview */}
+                <div className="flex-1 p-4 rounded-xl bg-black/30 border border-white/[0.05] backdrop-blur-sm">
+                  {preview}
+                </div>
+
+                <Link
+                  href={href}
+                  className={`group/link inline-flex items-center gap-1.5 text-[11px] font-black uppercase tracking-[0.22em] transition-all ${
+                    accent === "indigo" ? "text-indigo-300/80 hover:text-indigo-200" :
+                    accent === "amber" ? "text-amber-300/80 hover:text-amber-200" :
+                    "text-violet-300/80 hover:text-violet-200"
+                  }`}
+                >
+                  Explore <ArrowRight size={11} className="group-hover/link:translate-x-1 transition-transform" />
+                </Link>
+              </div>
             </motion.div>
           ))}
         </div>

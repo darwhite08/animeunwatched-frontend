@@ -133,32 +133,6 @@ const FALLBACK_META: BlogMeta = {
   excerpt: "",
 }
 
-const MOCK_COMMENTS: Comment[] = [
-  {
-    id: 1,
-    author: "ShadowWatcher",
-    avatar: "S",
-    time: "2 days ago",
-    body: "This is exactly the kind of analysis I've been waiting for someone to write. The point about restraint being the real power of the series resonates deeply — every flashback hits harder because we know how the story ends.",
-    likes: 34,
-  },
-  {
-    id: 2,
-    author: "NeuralBot_X",
-    avatar: "N",
-    time: "3 days ago",
-    body: "Counterpoint: the pacing in the second cour slows too much for new viewers. But I do agree that for those who stick with it, the payoff is unmatched in recent memory.",
-    likes: 18,
-  },
-  {
-    id: 3,
-    author: "VoidSeeker",
-    avatar: "V",
-    time: "5 days ago",
-    body: "I wept during the Himmel retrospective. The writing understands mortality better than most live-action dramas ever will. Incredible piece — sharing with everyone I know.",
-    likes: 61,
-  },
-]
 
 const RELATED_POSTS: RelatedPost[] = [
   {

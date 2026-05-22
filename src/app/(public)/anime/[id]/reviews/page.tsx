@@ -313,34 +313,7 @@ export default function AnimeReviewsPage({ params }: { params: Promise<{ id: str
           </AnimatePresence>
         </div>
 
-        {/* Pagination stub */}
-        <div className="flex items-center justify-center gap-3 mt-10">
-          <button
-            disabled
-            className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-white/[0.02] border border-white/5 text-[10px] font-black uppercase tracking-widest text-white/20 cursor-not-allowed"
-          >
-            <ChevronLeft size={12} /> Prev
-          </button>
-
-          {[1, 2, 3].map(p => (
-            <button
-              key={p}
-              className={`h-9 w-9 rounded-xl text-[10px] font-black transition-all ${
-                p === 1
-                  ? "bg-amber-500 text-black shadow-[0_0_16px_rgba(245,158,11,0.4)]"
-                  : "bg-white/[0.02] border border-white/5 text-white/30 hover:bg-white/5 hover:text-white/60"
-              }`}
-            >
-              {p}
-            </button>
-          ))}
-
-          <button className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-white/[0.02] border border-white/5 text-[10px] font-black uppercase tracking-widest text-white/35 hover:text-white hover:bg-white/5 transition-all">
-            Next <ChevronRightIcon size={12} />
-          </button>
-        </div>
-
-        <p className="text-center text-[9px] text-white/15 mt-3 font-mono">Page 1 of 3 · {reviews.length} reviews shown</p>
+        <p className="text-center text-[9px] text-white/15 mt-10 font-mono">{reviews.length} {reviews.length === 1 ? "review" : "reviews"} shown</p>
 
         {/* Write review CTA footer */}
         <div className="mt-12 flex flex-col items-center gap-3 text-center">

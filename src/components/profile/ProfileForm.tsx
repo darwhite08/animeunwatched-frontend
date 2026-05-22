@@ -62,14 +62,23 @@ export default function ProfileForm() {
           <div className="h-20 w-20 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-2xl font-black shadow-[0_0_20px_rgba(99,102,241,0.3)]">
             {form.displayName[0]}
           </div>
-          <button className="absolute inset-0 rounded-2xl bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+          <button
+            type="button"
+            onClick={() => push("Avatar upload coming soon", "info")}
+            aria-label="Change avatar"
+            className="absolute inset-0 rounded-2xl bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
+          >
             <Upload size={16} className="text-white" />
           </button>
         </div>
         <div>
           <p className="text-xl font-black uppercase tracking-tighter text-white">{form.displayName}</p>
           <p className="text-sm text-white/40 font-mono mt-0.5">@{form.username}</p>
-          <button className="mt-2 flex items-center gap-1.5 text-[10px] font-black uppercase tracking-wider text-amber-400 hover:text-amber-300 transition-colors">
+          <button
+            type="button"
+            onClick={() => push("Avatar upload coming soon", "info")}
+            className="mt-2 flex items-center gap-1.5 text-[10px] font-black uppercase tracking-wider text-amber-400 hover:text-amber-300 transition-colors"
+          >
             <Upload size={11} /> Change avatar
           </button>
         </div>

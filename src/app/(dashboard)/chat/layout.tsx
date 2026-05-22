@@ -103,6 +103,8 @@ function convTime(iso:string) {
 
 /* ─── Community Rail (far-left icon strip) ─────────────────────────────────── */
 function CommunityRail({ activeCommunity, onSelect }: { activeCommunity:string|null; onSelect:(id:string|null)=>void }) {
+  const { push: rpush } = useToast()
+  const railSoon = (label: string) => () => rpush(`${label} is coming with the next release`, "info")
   const { data: clubData } = useClubs()
   const { data: notifData } = useNotificationsQuery()
   const unreadCount = notifData?.data?.filter(n=>!n.read).length ?? 0
@@ -139,7 +141,10 @@ function CommunityRail({ activeCommunity, onSelect }: { activeCommunity:string|n
       })}
 
       {/* Add community */}
-      <button style={{ width:38, height:38, borderRadius:18, background:"var(--bg-2)", border:"2px dashed var(--line-strong)", display:"grid", placeItems:"center", cursor:"pointer", color:"var(--mint)", transition:"all 200ms" }}
+      <button
+        onClick={railSoon("Creating new communities")}
+        title="Create community (coming soon)"
+        style={{ width:38, height:38, borderRadius:18, background:"var(--bg-2)", border:"2px dashed var(--line-strong)", display:"grid", placeItems:"center", cursor:"pointer", color:"var(--mint)", transition:"all 200ms" }}
         onMouseEnter={e=>{(e.currentTarget as HTMLElement).style.borderRadius="14px";(e.currentTarget as HTMLElement).style.background="var(--bg-3)"}}
         onMouseLeave={e=>{(e.currentTarget as HTMLElement).style.borderRadius="18px";(e.currentTarget as HTMLElement).style.background="var(--bg-2)"}}>
         <svg width={16} height={16} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round"><path d="M12 5v14M5 12h14"/></svg>
@@ -147,7 +152,11 @@ function CommunityRail({ activeCommunity, onSelect }: { activeCommunity:string|n
 
       {/* Search at bottom */}
       <div style={{ marginTop:"auto" }}>
-        <button style={{ width:38, height:38, borderRadius:18, background:"var(--bg-2)", border:"1px solid var(--line)", display:"grid", placeItems:"center", cursor:"pointer", color:"var(--ink-4)", transition:"all 150ms" }}>
+        <button
+          onClick={railSoon("Community search")}
+          title="Search communities (coming soon)"
+          style={{ width:38, height:38, borderRadius:18, background:"var(--bg-2)", border:"1px solid var(--line)", display:"grid", placeItems:"center", cursor:"pointer", color:"var(--ink-4)", transition:"all 150ms" }}
+        >
           <svg width={15} height={15} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
         </button>
       </div>

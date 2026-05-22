@@ -25,7 +25,7 @@ const STATUS_CONFIG: Record<string, { color: string; bg: string }> = {
   "Dropped":       { color: "text-red-400",     bg: "bg-red-500/10"     },
 }
 
-export const WatchCard = ({ anime, onRemove }: { anime: WatchItem; onRemove?: (id: string | number) => void }) => {
+export const WatchCard = ({ anime, onRemove, onEdit }: { anime: WatchItem; onRemove?: (id: string | number) => void; onEdit?: () => void }) => {
   const { push } = useToast()
   const [menuOpen, setMenuOpen] = useState(false)
   const statusStyle = STATUS_CONFIG[anime.status] ?? { color: "text-white/40", bg: "bg-white/5" }
@@ -82,7 +82,11 @@ export const WatchCard = ({ anime, onRemove }: { anime: WatchItem; onRemove?: (i
                 <button onClick={handleMarkDone} className="flex items-center gap-2 w-full px-4 py-3 text-xs font-bold text-white/60 hover:bg-white/5 hover:text-emerald-400 transition-colors">
                   <Check size={13} /> Mark Done
                 </button>
-                <button className="flex items-center gap-2 w-full px-4 py-3 text-xs font-bold text-white/60 hover:bg-white/5 transition-colors">
+                <button
+                  type="button"
+                  onClick={() => { onEdit?.(); setMenuOpen(false) }}
+                  className="flex items-center gap-2 w-full px-4 py-3 text-xs font-bold text-white/60 hover:bg-white/5 transition-colors"
+                >
                   <Edit2 size={13} /> Edit Entry
                 </button>
                 <button
@@ -130,9 +134,14 @@ export const WatchCard = ({ anime, onRemove }: { anime: WatchItem; onRemove?: (i
 
         {/* Actions */}
         <div className="flex gap-3 mt-auto">
-          <button className="flex-1 flex items-center justify-center gap-2 py-3 rounded-2xl bg-white/5 border border-white/8 text-white/50 text-[10px] font-black uppercase tracking-widest hover:bg-white hover:text-black hover:border-white transition-all duration-300">
+          <a
+            href={`https://www.google.com/search?q=${encodeURIComponent(`${anime.title} watch on ${anime.platform}`)}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex-1 flex items-center justify-center gap-2 py-3 rounded-2xl bg-white/5 border border-white/8 text-white/50 text-[10px] font-black uppercase tracking-widest hover:bg-white hover:text-black hover:border-white transition-all duration-300"
+          >
             <ExternalLink size={12} /> {anime.platform}
-          </button>
+          </a>
           <button
             onClick={() => push(`Opening ${anime.title}…`, "info")}
             className="h-11 w-11 flex items-center justify-center rounded-2xl bg-amber-600/15 border border-amber-500/25 text-amber-400 hover:bg-amber-600 hover:text-white transition-all"

@@ -304,7 +304,11 @@ function ContextRail({ conv, onClose, sharedFiles }: { conv: ConversationDetail;
           <div style={{ fontSize:12.5, fontWeight:600, color:"var(--ink)" }}>Voice sync available</div>
           <div style={{ fontSize:10.5, color:"var(--ink-3)" }}>Drop in any time</div>
         </div>
-        <button style={{ height:28, padding:"0 12px", borderRadius:7, background:"oklch(0.65 0.18 145)", color:"#0a0c12", border:"none", cursor:"pointer", fontSize:11.5, fontWeight:700, fontFamily:"inherit", display:"inline-flex", alignItems:"center", gap:5 }}>
+        <button
+          type="button"
+          onClick={() => push("Group voice rooms are coming with the next release", "info")}
+          style={{ height:28, padding:"0 12px", borderRadius:7, background:"oklch(0.65 0.18 145)", color:"#0a0c12", border:"none", cursor:"pointer", fontSize:11.5, fontWeight:700, fontFamily:"inherit", display:"inline-flex", alignItems:"center", gap:5 }}
+        >
           <svg width={11} height={11} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.99 10.86 19.79 19.79 0 0 1 1.93 2.18 2 2 0 0 1 3.9 0H6.9a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 7.91a16 16 0 0 0 6.13 6.13l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92Z"/></svg>
           Join
         </button>
@@ -1169,7 +1173,12 @@ export default function ConversationPage() {
               ))}
 
               {/* Ask AI */}
-              <button style={{ height:28, marginLeft:4, padding:"0 10px 0 8px", borderRadius:7, display:"inline-flex", alignItems:"center", gap:5, background:"var(--indigo-soft)", color:"var(--indigo)", border:"1px solid var(--indigo-ring)", cursor:"pointer", fontSize:11.5, fontWeight:600, fontFamily:"inherit" }}>
+              <button
+                type="button"
+                onClick={() => { setInput(p => p + (p.endsWith(" ") || p.length === 0 ? "/ai " : " /ai ")); inputRef.current?.focus() }}
+                title="Prefix your message with /ai to ask the AI"
+                style={{ height:28, marginLeft:4, padding:"0 10px 0 8px", borderRadius:7, display:"inline-flex", alignItems:"center", gap:5, background:"var(--indigo-soft)", color:"var(--indigo)", border:"1px solid var(--indigo-ring)", cursor:"pointer", fontSize:11.5, fontWeight:600, fontFamily:"inherit" }}
+              >
                 <svg width={11} height={11} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M5.6 18.4l2.8-2.8M15.6 8.4l2.8-2.8"/></svg>
                 Ask AI
               </button>

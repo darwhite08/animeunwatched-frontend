@@ -64,10 +64,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <head>
-        {/* PWA: register service worker after page load — non-blocking */}
+        {/* PWA: register service worker after page load — non-blocking.
+            Skip on localhost so a stopped dev server doesn't get hijacked
+            by the SW into the offline fallback (and aggressively unregister
+            any stale SW that may have been installed from a prior visit). */}
         <script
           dangerouslySetInnerHTML={{
-            __html: `if('serviceWorker'in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('/sw.js').catch(function(){});})}`,
+            __html: `if('serviceWorker'in navigator){var h=location.hostname;if(h==='localhost'||h==='127.0.0.1'){navigator.serviceWorker.getRegistrations().then(function(rs){rs.forEach(function(r){r.unregister()})});if(window.caches){caches.keys().then(function(ks){ks.forEach(function(k){caches.delete(k)})})}}else{window.addEventListener('load',function(){navigator.serviceWorker.register('/sw.js').catch(function(){})})}}`,
           }}
         />
         {/* Preconnect to font CDNs before the stylesheet request fires */}

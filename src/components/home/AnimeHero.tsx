@@ -53,7 +53,16 @@ function SocialRail() {
     <div className="hidden md:flex absolute left-3 lg:left-6 top-1/2 -translate-y-1/2 z-30 flex-col items-center gap-5 fade-in-left" style={{ animationDelay:"0.6s" }}>
       <span className="w-px h-12 bg-white/40" />
       {icons.map(({ k }) => (
-        <a key={k} href="#" className="group w-9 h-9 rounded-full bg-white/0 hover:bg-white/15 transition flex items-center justify-center text-white/85 hover:text-white">
+        <a
+          key={k}
+          href={k === "tw" ? "https://twitter.com/intent/follow?screen_name=kaiveron"
+              : k === "ig" ? "https://instagram.com/kaiveron"
+              : "https://youtube.com/@kaiveron"}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={k === "tw" ? "Twitter" : k === "ig" ? "Instagram" : "YouTube"}
+          className="group w-9 h-9 rounded-full bg-white/0 hover:bg-white/15 transition flex items-center justify-center text-white/85 hover:text-white"
+        >
           <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
             {k==="tw" && <path d="M19 5.5c-.6.3-1.3.5-2 .6.7-.4 1.3-1.1 1.6-1.9-.7.4-1.5.7-2.3.9C15.6 4.4 14.7 4 13.7 4c-1.9 0-3.5 1.6-3.5 3.5 0 .3 0 .5.1.8C7.3 8.1 4.7 6.7 3 4.7c-.3.5-.5 1.1-.5 1.8 0 1.2.6 2.3 1.6 2.9-.6 0-1.1-.2-1.6-.4 0 1.7 1.2 3.1 2.8 3.4-.3.1-.6.1-.9.1-.2 0-.5 0-.7-.1.5 1.4 1.8 2.4 3.3 2.4-1.2 1-2.8 1.5-4.5 1.5H2c1.5 1 3.4 1.6 5.3 1.6 6.4 0 9.9-5.3 9.9-9.9v-.5c.7-.5 1.3-1.1 1.8-1.8z"/>}
             {k==="ig" && <><rect x="3" y="3" width="18" height="18" rx="5" ry="5" fill="none" stroke="currentColor" strokeWidth="2"/><circle cx="12" cy="12" r="4" fill="none" stroke="currentColor" strokeWidth="2"/><circle cx="17.5" cy="6.5" r="1.2"/></>}

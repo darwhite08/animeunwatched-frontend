@@ -182,71 +182,111 @@ function AIOracleSection() {
   }, [PROMPTS.length])
 
   return (
-    <section className="min-h-screen py-24 relative z-[2] overflow-hidden bg-[#06060f] flex items-center">
+    <section className="min-h-screen py-28 relative z-[2] overflow-hidden bg-[#050509] flex items-center">
+      {/* Ambient backdrop */}
       <div className="absolute inset-0 pointer-events-none" style={{
-        background: "radial-gradient(ellipse 50% 60% at 72% 50%, rgba(79,70,229,0.07) 0%, transparent 60%)",
+        background: "radial-gradient(ellipse 60% 70% at 78% 50%, rgba(245,158,11,0.06) 0%, transparent 60%), radial-gradient(ellipse 40% 50% at 10% 30%, rgba(99,102,241,0.04) 0%, transparent 55%)",
+      }} />
+      {/* Subtle grid */}
+      <div className="absolute inset-0 opacity-[0.025] pointer-events-none" style={{
+        backgroundImage: "linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)",
+        backgroundSize: "44px 44px",
+        maskImage: "radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 80%)",
       }} />
 
-      <div className="max-w-7xl mx-auto px-6 w-full">
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
+      <div className="max-w-7xl mx-auto px-6 w-full relative">
+        <div className="grid lg:grid-cols-[1fr_1.05fr] gap-16 lg:gap-20 items-center">
 
           {/* ── LEFT ── */}
-          <div className="space-y-10">
+          <div className="space-y-12">
             <div>
-              <motion.p
+              <motion.div
                 initial={{ opacity: 0, y: 8 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="text-[11px] font-medium uppercase tracking-[0.25em] text-amber-400/60 mb-4"
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-amber-500/15 bg-amber-500/[0.04] mb-7"
               >
-                AI Discovery
-              </motion.p>
+                <span className="relative inline-flex h-1.5 w-1.5">
+                  <motion.span animate={{ opacity: [0.5, 1, 0.5] }} transition={{ duration: 1.8, repeat: Infinity }} className="absolute inset-0 rounded-full bg-amber-400" />
+                </span>
+                <span className="text-[10px] font-bold uppercase tracking-[0.28em] text-amber-300/80">AI Discovery</span>
+              </motion.div>
               <motion.h2
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="text-[clamp(2rem,4.2vw,3.8rem)] font-bold tracking-tight text-white leading-tight mb-5"
+                className="text-[clamp(2.4rem,4.4vw,4rem)] font-black tracking-[-0.025em] text-white leading-[1.02] mb-6"
               >
                 Tell us how you<br />
-                <span className="text-amber-400">want to feel.</span>
+                <span
+                  className="italic"
+                  style={{
+                    backgroundImage: "linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #fde68a 100%)",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                  }}
+                >
+                  want to feel.
+                </span>
               </motion.h2>
               <motion.p
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
-                className="text-white/35 text-base leading-relaxed max-w-[40ch]"
+                className="text-white/45 text-[15px] leading-relaxed max-w-[42ch]"
               >
-                Forget genre tags. Our AI matches anime to your mood — a vibe, a feeling, a moment you're chasing.
+                Forget genre tags. Our AI matches anime to your mood — a vibe,
+                a feeling, the exact moment you&apos;re chasing.
               </motion.p>
             </div>
 
             {/* Example prompts */}
-            <div className="space-y-2">
-              <p className="text-[10px] font-medium uppercase tracking-[0.2em] text-white/20 mb-3">Try asking for</p>
-              {PROMPTS.map((p, i) => (
-                <motion.button
-                  key={i}
-                  initial={{ opacity: 0, x: -10 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.07 }}
-                  onClick={() => setActive(i)}
-                  className={`w-full text-left px-4 py-3 rounded-xl border transition-all flex items-center gap-3 ${
-                    active === i
-                      ? "bg-amber-600/10 border-amber-500/30 text-white/80"
-                      : "bg-white/[0.02] border-white/[0.06] text-white/35 hover:bg-white/[0.04] hover:border-white/[0.1] hover:text-white/55"
-                  }`}
-                >
-                  <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${active === i ? "bg-amber-400" : "bg-white/15"}`} />
-                  <span className="text-[13px] font-medium">&ldquo;{p.full}&rdquo;</span>
-                </motion.button>
-              ))}
+            <div>
+              <div className="flex items-center gap-3 mb-4">
+                <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-white/30">Try asking for</p>
+                <span className="h-px flex-1 bg-gradient-to-r from-white/8 to-transparent" />
+              </div>
+              <div className="space-y-2">
+                {PROMPTS.map((p, i) => (
+                  <motion.button
+                    key={i}
+                    initial={{ opacity: 0, x: -10 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: i * 0.07 }}
+                    onClick={() => setActive(i)}
+                    className={`group w-full text-left pl-4 pr-5 py-3.5 rounded-xl border transition-all flex items-center gap-3.5 relative overflow-hidden ${
+                      active === i
+                        ? "border-amber-500/30 bg-gradient-to-r from-amber-500/[0.06] to-transparent text-white/90"
+                        : "border-white/[0.06] bg-white/[0.015] text-white/40 hover:border-white/[0.12] hover:bg-white/[0.03] hover:text-white/70"
+                    }`}
+                  >
+                    {/* Active indicator bar */}
+                    {active === i && (
+                      <motion.span
+                        layoutId="prompt-bar"
+                        className="absolute left-0 top-2 bottom-2 w-[3px] rounded-full bg-amber-400"
+                      />
+                    )}
+                    <span className={`w-1.5 h-1.5 rounded-full shrink-0 transition-all ${
+                      active === i ? "bg-amber-400 shadow-[0_0_8px_rgba(245,158,11,0.6)]" : "bg-white/15 group-hover:bg-white/30"
+                    }`} />
+                    <span className="text-[13px] font-medium leading-snug">&ldquo;{p.full}&rdquo;</span>
+                  </motion.button>
+                ))}
+              </div>
             </div>
 
             <Link href="/ai-discover"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-black uppercase tracking-wide text-black transition-all" style={{background:"linear-gradient(135deg,#fbbf24,#f59e0b)",boxShadow:"0 4px 20px rgba(245,158,11,0.35)"}}
+              className="group inline-flex items-center gap-2.5 px-6 py-3 rounded-xl text-[12px] font-black uppercase tracking-[0.18em] text-black transition-all hover:-translate-y-0.5"
+              style={{
+                background: "linear-gradient(135deg,#fbbf24,#f59e0b)",
+                boxShadow: "0 8px 28px rgba(245,158,11,0.35), inset 0 1px 0 rgba(255,255,255,0.4)",
+              }}
             >
-              <Sparkles size={13} /> Try AI discovery
+              <Sparkles size={13} className="group-hover:rotate-12 transition-transform" />
+              Try AI Discovery
+              <ArrowRight size={12} className="group-hover:translate-x-0.5 transition-transform" />
             </Link>
           </div>
 
@@ -256,48 +296,71 @@ function AIOracleSection() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.15 }}
+            className="relative"
           >
-            <div className="rounded-2xl bg-white/[0.025] border border-white/[0.08] overflow-hidden" style={{ boxShadow: "0 40px 80px rgba(0,0,0,0.55)" }}>
+            {/* Glow halo */}
+            <div className="absolute -inset-px rounded-[20px] pointer-events-none" style={{
+              background: "linear-gradient(135deg, rgba(245,158,11,0.18), rgba(255,255,255,0.02) 35%, rgba(99,102,241,0.10))",
+              filter: "blur(2px)",
+            }} />
+
+            <div className="relative rounded-[18px] bg-gradient-to-b from-[#0d0d18]/95 to-[#08080f]/95 border border-white/[0.08] overflow-hidden backdrop-blur-xl"
+              style={{ boxShadow: "0 50px 100px -20px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.02) inset" }}
+            >
 
               {/* Header */}
-              <div className="px-5 py-3.5 border-b border-white/[0.06] flex items-center justify-between bg-white/[0.01]">
-                <div className="flex items-center gap-2">
-                  <Sparkles size={12} className="text-amber-400" />
-                  <span className="text-[11px] font-semibold text-white/55">Neural Oracle</span>
+              <div className="px-6 py-4 border-b border-white/[0.06] flex items-center justify-between bg-gradient-to-b from-white/[0.02] to-transparent">
+                <div className="flex items-center gap-2.5">
+                  <div className="relative h-7 w-7 rounded-lg bg-gradient-to-br from-amber-500/20 to-amber-600/10 border border-amber-500/20 flex items-center justify-center">
+                    <Sparkles size={12} className="text-amber-400" />
+                  </div>
+                  <div className="flex flex-col leading-none">
+                    <span className="text-[11.5px] font-bold text-white/85">Neural Oracle</span>
+                    <span className="text-[8.5px] font-medium uppercase tracking-[0.2em] text-white/30 mt-0.5">v2.4 · matching engine</span>
+                  </div>
                 </div>
-                <div className="flex items-center gap-1.5">
-                  <motion.span animate={{ opacity: [0.4, 1, 0.4] }} transition={{ duration: 2, repeat: Infinity }} className="w-1.5 h-1.5 rounded-full bg-emerald-400 inline-block" />
-                  <span className="text-[9px] text-emerald-400/70 font-medium">Live</span>
+                <div className="flex items-center gap-1.5 px-2 py-1 rounded-full border border-emerald-500/15 bg-emerald-500/[0.06]">
+                  <span className="relative inline-flex h-1.5 w-1.5">
+                    <motion.span animate={{ opacity: [0.4, 1, 0.4], scale: [0.8, 1.2, 0.8] }} transition={{ duration: 1.8, repeat: Infinity }} className="absolute inset-0 rounded-full bg-emerald-400" />
+                  </span>
+                  <span className="text-[9px] text-emerald-300/85 font-bold uppercase tracking-[0.15em]">Live</span>
                 </div>
               </div>
 
               {/* Active prompt */}
-              <div className="px-5 pt-5 pb-4">
-                <p className="text-[9px] font-medium uppercase tracking-[0.18em] text-white/20 mb-2.5">Searching for</p>
+              <div className="px-6 pt-5 pb-5 relative">
+                <p className="text-[9.5px] font-bold uppercase tracking-[0.22em] text-white/25 mb-3">Searching for</p>
                 <AnimatePresence mode="wait">
-                  <motion.p
+                  <motion.div
                     key={active}
-                    initial={{ opacity: 0, y: 5 }}
+                    initial={{ opacity: 0, y: 6 }}
                     animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -5 }}
-                    transition={{ duration: 0.25 }}
-                    className="text-[16px] font-semibold text-white/90 leading-snug"
+                    exit={{ opacity: 0, y: -6 }}
+                    transition={{ duration: 0.28 }}
+                    className="flex items-start gap-2"
                   >
-                    &ldquo;{PROMPTS[active].full}&rdquo;
-                  </motion.p>
+                    <p className="text-[15.5px] font-semibold text-white/95 leading-snug tracking-[-0.01em]">
+                      &ldquo;{PROMPTS[active].full}&rdquo;
+                    </p>
+                    <motion.span
+                      animate={{ opacity: [1, 0, 1] }}
+                      transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                      className="inline-block w-[2px] h-[18px] bg-amber-400 mt-[3px] shrink-0"
+                    />
+                  </motion.div>
                 </AnimatePresence>
               </div>
 
               {/* Quick-select pills */}
-              <div className="px-5 pb-5 flex flex-wrap gap-1.5">
+              <div className="px-6 pb-5 flex flex-wrap gap-1.5">
                 {PROMPTS.map((p, i) => (
                   <button
                     key={i}
                     onClick={() => setActive(i)}
-                    className={`px-3 py-1.5 rounded-lg text-[11px] font-medium transition-all ${
+                    className={`px-3 py-1.5 rounded-lg text-[10.5px] font-bold uppercase tracking-[0.04em] transition-all ${
                       active === i
-                        ? "bg-amber-500 text-black"
-                        : "bg-white/[0.03] text-white/30 border border-white/[0.07] hover:bg-white/[0.06] hover:text-white/55"
+                        ? "bg-amber-500 text-black shadow-[0_2px_12px_rgba(245,158,11,0.35)]"
+                        : "bg-white/[0.025] text-white/40 border border-white/[0.07] hover:bg-white/[0.06] hover:text-white/70 hover:border-white/[0.12]"
                     }`}
                   >
                     {p.short}
@@ -307,9 +370,9 @@ function AIOracleSection() {
 
               {/* Results */}
               <div className="border-t border-white/[0.06]">
-                <div className="px-5 py-3 flex items-center justify-between bg-white/[0.01]">
-                  <p className="text-[10px] font-medium uppercase tracking-[0.15em] text-white/20">Top matches</p>
-                  <span className="text-[9px] text-amber-400/50 font-medium">3 results</span>
+                <div className="px-6 py-3 flex items-center justify-between bg-white/[0.015]">
+                  <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/30">Top Matches</p>
+                  <span className="text-[9.5px] text-amber-400/70 font-bold tabular-nums">3 results</span>
                 </div>
                 <AnimatePresence mode="wait">
                   <motion.div
@@ -320,43 +383,71 @@ function AIOracleSection() {
                     transition={{ duration: 0.2 }}
                   >
                     {PROMPTS[active].results.map(({ title, score, genre, match, grad }, i) => (
-                      <div
+                      <motion.div
                         key={title}
-                        className="flex items-center gap-4 px-5 py-3.5 hover:bg-white/[0.02] transition-colors cursor-pointer border-t border-white/[0.04]"
+                        initial={{ opacity: 0, x: -8 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: i * 0.06 }}
+                        className="group flex items-center gap-4 px-6 py-4 hover:bg-white/[0.025] transition-colors cursor-pointer border-t border-white/[0.04] relative"
                       >
+                        {/* Rank index */}
+                        <span className="text-[9px] font-bold tabular-nums text-white/20 w-3 shrink-0">{String(i + 1).padStart(2, "0")}</span>
+
                         {/* Poster thumbnail */}
-                        <div className={`w-9 h-[52px] rounded-lg shrink-0 bg-gradient-to-b ${grad} border border-white/[0.08] overflow-hidden relative`}>
-                          <div className="absolute inset-0 flex items-end justify-start p-1">
-                            <span className="text-[7px] font-bold text-white/30 leading-none">{title.slice(0, 3).toUpperCase()}</span>
+                        <div className={`relative w-10 h-14 rounded-md shrink-0 bg-gradient-to-b ${grad} border border-white/[0.1] overflow-hidden`}>
+                          {/* Subtle film-grain shimmer */}
+                          <div className="absolute inset-0 opacity-50" style={{
+                            background: "linear-gradient(115deg, transparent 30%, rgba(255,255,255,0.08) 45%, transparent 60%)",
+                          }} />
+                          <div className="absolute inset-x-0 bottom-0 p-1 bg-gradient-to-t from-black/60 to-transparent">
+                            <span className="text-[7.5px] font-black text-white/55 leading-none tracking-tight">{title.slice(0, 3).toUpperCase()}</span>
                           </div>
                         </div>
 
                         <div className="flex-1 min-w-0">
-                          <p className="text-[13px] font-semibold text-white/80 truncate mb-0.5">{title}</p>
+                          <p className="text-[13.5px] font-bold text-white/90 truncate mb-1 group-hover:text-amber-200 transition-colors">{title}</p>
                           <div className="flex items-center gap-2">
-                            <div className="flex items-center gap-0.5">
-                              <Star size={8} className="fill-amber-400/70 text-amber-400/70" />
-                              <span className="text-[9px] text-white/35 font-medium">{score}</span>
+                            <div className="flex items-center gap-1">
+                              <Star size={9} className="fill-amber-400 text-amber-400" />
+                              <span className="text-[10px] text-white/55 font-semibold tabular-nums">{score}</span>
                             </div>
-                            <span className="text-[7px] text-white/12">·</span>
-                            <span className="text-[9px] text-white/25">{genre}</span>
+                            <span className="text-[6px] text-white/15">●</span>
+                            <span className="text-[10px] text-white/35 font-medium">{genre}</span>
                           </div>
                         </div>
 
-                        <div className="text-right shrink-0">
-                          <p className="text-[13px] font-bold text-amber-400">{match}%</p>
-                          <p className="text-[8px] text-white/18">match</p>
+                        <div className="text-right shrink-0 flex flex-col items-end">
+                          <p className="text-[16px] font-black text-amber-400 leading-none tabular-nums" style={{
+                            backgroundImage: "linear-gradient(135deg, #fbbf24, #f59e0b)",
+                            WebkitBackgroundClip: "text",
+                            WebkitTextFillColor: "transparent",
+                          }}>{match}<span className="text-[10px]">%</span></p>
+                          <div className="mt-1.5 h-[3px] w-12 rounded-full bg-white/[0.06] overflow-hidden">
+                            <motion.div
+                              initial={{ width: 0 }}
+                              animate={{ width: `${match}%` }}
+                              transition={{ duration: 0.8, delay: i * 0.08, ease: "easeOut" }}
+                              className="h-full rounded-full"
+                              style={{ background: "linear-gradient(90deg, #fbbf24, #f59e0b)" }}
+                            />
+                          </div>
                         </div>
-                      </div>
+                      </motion.div>
                     ))}
                   </motion.div>
                 </AnimatePresence>
 
-                <div className="px-5 py-3.5 border-t border-white/[0.05] bg-white/[0.01]">
-                  <Link href="/ai-discover" className="text-[11px] text-amber-400/60 hover:text-amber-400 transition-colors font-medium inline-flex items-center gap-1">
-                    Open AI discovery <ArrowRight size={11} />
-                  </Link>
-                </div>
+                <Link
+                  href="/ai-discover"
+                  className="group flex items-center justify-between px-6 py-4 border-t border-white/[0.06] bg-white/[0.015] hover:bg-white/[0.03] transition-colors"
+                >
+                  <span className="text-[11px] font-bold text-amber-400/80 group-hover:text-amber-300 transition-colors uppercase tracking-[0.18em]">
+                    Open AI Discovery
+                  </span>
+                  <span className="flex items-center gap-1 text-amber-400/60 group-hover:text-amber-300 transition-all group-hover:translate-x-0.5">
+                    <ArrowRight size={12} />
+                  </span>
+                </Link>
               </div>
             </div>
           </motion.div>

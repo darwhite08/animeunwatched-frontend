@@ -148,10 +148,13 @@ function RealPostCard({ post, index }: { post: Post; index: number }) {
           <Heart size={14} fill={liked ? "currentColor" : "none"} />
           {likeCount > 0 && likeCount}
         </button>
-        <button className="flex items-center gap-1.5 text-xs font-bold text-white/30 hover:text-amber-400 transition-colors">
+        <Link
+          href={`/posts/${post.id}#comments`}
+          className="flex items-center gap-1.5 text-xs font-bold text-white/30 hover:text-amber-400 transition-colors"
+        >
           <MessageSquare size={14} />
           {post._count?.comments ?? 0}
-        </button>
+        </Link>
         <button onClick={() => {
           const url = `${window.location.origin}/posts/${post.id}`
           navigator.clipboard.writeText(url).catch(() => {})

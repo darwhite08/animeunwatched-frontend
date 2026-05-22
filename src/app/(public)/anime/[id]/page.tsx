@@ -418,9 +418,9 @@ function AnimeDetail({ anime, rawAnime }: { anime: Anime; rawAnime?: AnimeDTO })
                         </div>
                       </div>
                       <p className="text-sm text-white/55 leading-relaxed">{r.body}</p>
-                      <button className="flex items-center gap-1.5 text-[10px] text-white/25 hover:text-white/50 transition-colors">
+                      <span className="flex items-center gap-1.5 text-[10px] text-white/25">
                         <Heart size={11} /> {r.likes} helpful
-                      </button>
+                      </span>
                     </motion.div>
                   ))
                 })()}

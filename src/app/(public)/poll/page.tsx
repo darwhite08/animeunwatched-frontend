@@ -492,9 +492,12 @@ export default function PollsPage() {
               ))}
             </div>
 
-            <button className="w-full text-center text-[9px] font-black uppercase tracking-widest text-white/25 hover:text-white/50 transition-colors pt-2 border-t border-white/5">
+            <Link
+              href="/leaderboard"
+              className="w-full block text-center text-[9px] font-black uppercase tracking-widest text-white/25 hover:text-white/50 transition-colors pt-2 border-t border-white/5"
+            >
               Full Leaderboard →
-            </button>
+            </Link>
           </div>
 
           {/* Create a Poll CTA */}

@@ -111,7 +111,12 @@ export default function AccountSettingsPage() {
             <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-2xl font-black shadow-[0_0_20px_rgba(99,102,241,0.3)]">
               {form.displayName[0]}
             </div>
-            <button className="absolute inset-0 rounded-2xl bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+            <button
+              type="button"
+              onClick={() => push("Photo upload coming soon!", "info")}
+              aria-label="Change profile photo"
+              className="absolute inset-0 rounded-2xl bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
+            >
               <Camera size={18} className="text-white" />
             </button>
           </div>

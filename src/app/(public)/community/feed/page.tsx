@@ -121,10 +121,13 @@ function PostCard({
           <Heart size={14} fill={post.liked ? "currentColor" : "none"} />
           {post.likes}
         </button>
-        <button className="flex items-center gap-1.5 text-xs font-bold text-white/30 hover:text-amber-400 transition-colors">
+        <Link
+          href={`/posts/${post.id}#comments`}
+          className="flex items-center gap-1.5 text-xs font-bold text-white/30 hover:text-amber-400 transition-colors"
+        >
           <MessageSquare size={14} />
           {post.comments}
-        </button>
+        </Link>
         <button
           onClick={() => onShare(post)}
           className="flex items-center gap-1.5 text-xs font-bold text-white/30 hover:text-white/60 transition-colors ml-auto"

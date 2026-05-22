@@ -240,9 +240,12 @@ export default function DashboardPage() {
               <p className="text-black/60 text-sm font-medium leading-relaxed mb-6">
                 Access the neural archives, verified chronicles, and legendary status badges.
               </p>
-              <button className="w-full py-4 rounded-2xl bg-black/15 text-black font-black uppercase tracking-widest text-[11px] hover:bg-black/25 transition-all border border-black/10">
+              <Link
+                href="/me/settings/billing"
+                className="w-full py-4 rounded-2xl bg-black/15 text-black font-black uppercase tracking-widest text-[11px] hover:bg-black/25 transition-all border border-black/10 flex items-center justify-center"
+              >
                 Upgrade Identity
-              </button>
+              </Link>
             </div>
           </div>
 

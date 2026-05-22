@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Link from "next/link";
 import { Trophy, ShieldCheck, Crown, Zap, Activity, Swords } from "lucide-react";
 
 // Mock data to give distinct visual identities to the top 3
@@ -85,12 +86,12 @@ export default function DojoLeaderboard() {
           </p>
 
           {/* High-End Cyber Button */}
-          <button className="group relative px-8 py-4 bg-white text-black font-black uppercase text-[11px] tracking-[0.3em] overflow-hidden rounded-sm transition-all hover:scale-105 active:scale-95">
+          <Link href="/leaderboard" className="group relative inline-block px-8 py-4 bg-white text-black font-black uppercase text-[11px] tracking-[0.3em] overflow-hidden rounded-sm transition-all hover:scale-105 active:scale-95">
             <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-indigo-500 to-purple-500 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-in-out" />
             <span className="relative z-10 group-hover:text-white transition-colors duration-500 flex items-center gap-2">
               <Trophy size={14} /> Ascend The Ranks
             </span>
-          </button>
+          </Link>
         </motion.div>
 
         {/* RIGHT COLUMN: THE LEADERBOARD CARDS */}

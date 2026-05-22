@@ -182,9 +182,9 @@ function ListCard({ list, onClick, allAnime }: ListCardProps) {
 
       {/* Footer */}
       <div className="flex items-center justify-between pt-1 border-t border-white/5">
-        <button className="flex items-center gap-1.5 text-[10px] font-black text-white/25 hover:text-rose-400 transition-colors">
+        <span className="flex items-center gap-1.5 text-[10px] font-black text-white/25">
           <Heart size={11} /> {list.likes.toLocaleString()}
-        </button>
+        </span>
         <span className="flex items-center gap-1 text-[10px] font-black uppercase tracking-widest text-amber-400/50 group-hover:text-amber-400 transition-colors">
           View List <ChevronRight size={11} />
         </span>

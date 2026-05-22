@@ -575,9 +575,9 @@ export default function UserProfilePage({
               <h2 className="text-3xl font-black tracking-tighter uppercase italic">
                 Chronicles
               </h2>
-              <button className="group flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-white/30 hover:text-white transition-colors">
+              <Link href={`/u/${username}/posts`} className="group flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-white/30 hover:text-white transition-colors">
                 Full Log <ChevronRight size={13} className="group-hover:translate-x-0.5 transition-transform" />
-              </button>
+              </Link>
             </div>
 
             <div className="relative space-y-3">
@@ -648,10 +648,10 @@ export default function UserProfilePage({
                         <Heart size={13} fill={liked ? "currentColor" : "none"} />
                         {liked ? post.likes + 1 : post.likes}
                       </button>
-                      <button className="flex items-center gap-1.5 text-xs font-bold text-white/30 hover:text-amber-400 transition-colors">
+                      <span className="flex items-center gap-1.5 text-xs font-bold text-white/30">
                         <MessageSquare size={13} />
                         {post.comments}
-                      </button>
+                      </span>
                       <span className="ml-auto text-[9px] font-black text-white/20 uppercase tracking-widest">
                         {post.time}
                       </span>

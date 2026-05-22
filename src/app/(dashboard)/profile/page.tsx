@@ -443,9 +443,13 @@ export default function WorldClassProfile() {
                   />
                 </div>
               </motion.div>
-              <button className="absolute -bottom-2 -right-2 p-4 bg-white text-black rounded-2xl shadow-2xl hover:scale-110 transition-transform active:scale-95">
+              <Link
+                href="/me/settings/account"
+                title="Change avatar"
+                className="absolute -bottom-2 -right-2 p-4 bg-white text-black rounded-2xl shadow-2xl hover:scale-110 transition-transform active:scale-95"
+              >
                 <Camera size={20} fill="black" />
-              </button>
+              </Link>
             </div>
 
             {/* IDENTITY STACK */}
@@ -494,9 +498,13 @@ export default function WorldClassProfile() {
                 <Share2 size={18} />
                 Share Profile
               </button>
-              <button className="h-14 w-14 flex items-center justify-center rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all backdrop-blur-md">
+              <Link
+                href="/me/settings"
+                title="Settings"
+                className="h-14 w-14 flex items-center justify-center rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all backdrop-blur-md"
+              >
                 <Settings size={20} className="text-white/60" />
-              </button>
+              </Link>
             </div>
             <Link
               href="/profile/wrapped"

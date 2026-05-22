@@ -210,10 +210,13 @@ function PostCard({ post, index }: { post: TrendingPost; index: number }) {
           <Heart size={13} fill={liked ? "currentColor" : "none"} />
           {liked ? post.likes + 1 : post.likes}
         </button>
-        <button className="flex items-center gap-1.5 text-xs font-bold text-white/30 hover:text-amber-400 transition-colors">
+        <Link
+          href={`/posts/${post.id}#comments`}
+          className="flex items-center gap-1.5 text-xs font-bold text-white/30 hover:text-amber-400 transition-colors"
+        >
           <MessageSquare size={13} />
           {post.comments}
-        </button>
+        </Link>
       </div>
     </motion.article>
   )

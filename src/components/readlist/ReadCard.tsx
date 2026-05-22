@@ -3,11 +3,14 @@
 import { motion } from "framer-motion"
 import Image from "next/image"
 import { MoreVertical, Play, BookOpen } from "lucide-react"
+import { useToast } from "@/stores/toast.store"
 
 // We deconstruct 'manga' because the parent page passes 'manga={manga}'
 export const ReadCard = ({ manga }: { manga: any }) => {
+  const { push } = useToast()
   // Destructure for cleaner code
   const { title, author, progress, status, image, category } = manga;
+  const soon = () => push("Manga reading is coming with the next release", "info")
 
   return (
     <motion.div 
@@ -36,7 +39,12 @@ export const ReadCard = ({ manga }: { manga: any }) => {
           <div className="px-3 py-1 rounded-full bg-black/60 backdrop-blur-xl border border-white/10 text-[9px] font-black uppercase tracking-[0.2em] text-amber-400">
             {category || "Archives"}
           </div>
-          <button className="p-2 bg-black/40 backdrop-blur-md rounded-xl border border-white/10 text-white/20 hover:text-white transition-all">
+          <button
+            type="button"
+            onClick={soon}
+            aria-label="Manga options (coming soon)"
+            className="p-2 bg-black/40 backdrop-blur-md rounded-xl border border-white/10 text-white/20 hover:text-white transition-all"
+          >
             <MoreVertical size={16} />
           </button>
         </div>
@@ -78,7 +86,11 @@ export const ReadCard = ({ manga }: { manga: any }) => {
         </div>
 
         {/* ACTION BUTTON */}
-        <button className="w-full py-5 rounded-2xl bg-white/5 border border-white/10 text-[10px] font-black uppercase tracking-[0.3em] text-white/60 hover:bg-white hover:text-black hover:border-white transition-all flex items-center justify-center gap-3">
+        <button
+          type="button"
+          onClick={soon}
+          className="w-full py-5 rounded-2xl bg-white/5 border border-white/10 text-[10px] font-black uppercase tracking-[0.3em] text-white/60 hover:bg-white hover:text-black hover:border-white transition-all flex items-center justify-center gap-3"
+        >
           <Play size={14} fill="currentColor" /> Resume Chapter
         </button>
       </div>

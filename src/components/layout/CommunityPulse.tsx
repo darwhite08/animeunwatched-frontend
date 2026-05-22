@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Link from "next/link";
 import { Activity, MessageSquare, Globe, Radio, Terminal, Flame, BookOpen, ArrowRight, ShieldAlert } from "lucide-react";
 
 // Upgraded mock data to match the Cyberpunk/Neural lore
@@ -168,10 +169,10 @@ export default function CommunityPulse() {
                    </p>
                  </div>
 
-                 <button className="w-full flex items-center justify-between px-6 py-4 rounded-2xl bg-black/40 hover:bg-black/60 text-white font-black text-[10px] uppercase tracking-[0.3em] transition-all border border-white/10 group-hover:border-white/20">
+                 <Link href="/community" className="w-full flex items-center justify-between px-6 py-4 rounded-2xl bg-black/40 hover:bg-black/60 text-white font-black text-[10px] uppercase tracking-[0.3em] transition-all border border-white/10 group-hover:border-white/20">
                    <span>Enter Community</span>
                    <ArrowRight size={16} className="text-amber-400 group-hover:translate-x-1 transition-transform" />
-                 </button>
+                 </Link>
               </div>
             </motion.div>
 

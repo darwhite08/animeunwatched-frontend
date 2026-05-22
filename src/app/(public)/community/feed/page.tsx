@@ -80,7 +80,7 @@ function PostCard({
             <p className="text-[10px] text-white/30">{post.time}</p>
           </div>
         </div>
-        <PostMenu postId={post.id} />
+        <PostMenu postId={String(post.id)} />
       </div>
 
       {/* Anime badge */}

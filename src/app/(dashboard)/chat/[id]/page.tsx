@@ -264,6 +264,7 @@ function ContextRail({ conv, onClose, sharedFiles }: { conv: ConversationDetail;
   const { data: listData } = useUserList(conv.otherUser.username)
   const watching  = (listData?.data??[]).filter(e=>e.status==="WATCHING").slice(0,5)
   const completed = (listData?.data??[]).filter(e=>e.status==="COMPLETED").length
+  const { push } = useToast()
   return (
     <motion.div initial={{ x:24, opacity:0 }} animate={{ x:0, opacity:1 }} exit={{ x:24, opacity:0 }}
       transition={{ duration:0.2 }}

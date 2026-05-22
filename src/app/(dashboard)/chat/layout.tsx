@@ -9,6 +9,7 @@ import { useConversations, useStartConversation, useChatSocket } from "@/hooks/u
 import { useAuthStore } from "@/stores/auth.store"
 import { useClubs } from "@/hooks/useClubs"
 import { useNotificationsQuery } from "@/hooks/useNotificationsQuery"
+import { useToast } from "@/stores/toast.store"
 import * as ep from "@/lib/api/endpoints"
 import type { User } from "@/lib/api/types"
 import { format, isToday, isYesterday } from "date-fns"
@@ -214,6 +215,8 @@ export default function ChatLayout({ children }: { children: React.ReactNode }) 
 
   const { data: conversations=[], isLoading } = useConversations()
   const { data: clubData } = useClubs()
+  const { push } = useToast()
+  const channelSoon = () => push("Community channels are coming with the next release", "info")
   const clubs = clubData?.data ?? []
   useChatSocket(activeId ?? null)
 
@@ -295,24 +298,24 @@ export default function ChatLayout({ children }: { children: React.ReactNode }) 
               <>
                 <CatHeader label="General"/>
                 <div style={{ display:"flex", flexDirection:"column", gap:1 }}>
-                  <ChannelItem name="announcements" active={false} onClick={()=>{}} />
-                  <ChannelItem name="general"       active={false} onClick={()=>{}} />
-                  <ChannelItem name="random"        active={false} onClick={()=>{}} />
+                  <ChannelItem name="announcements" active={false} onClick={channelSoon} />
+                  <ChannelItem name="general"       active={false} onClick={channelSoon} />
+                  <ChannelItem name="random"        active={false} onClick={channelSoon} />
                 </div>
 
-                <CatHeader label="Community" onAdd={()=>{}}/>
+                <CatHeader label="Community" onAdd={channelSoon}/>
                 <div style={{ display:"flex", flexDirection:"column", gap:1 }}>
-                  <ChannelItem name={activeClub.name.toLowerCase().replace(/\s/g,"-")} locked dot active onClick={()=>{}}/>
-                  <ChannelItem name="discussions" locked badge={3} onClick={()=>{}}/>
-                  <ChannelItem name="reviews"     locked onClick={()=>{}}/>
-                  <ChannelItem name="spoilers"    locked onClick={()=>{}}/>
+                  <ChannelItem name={activeClub.name.toLowerCase().replace(/\s/g,"-")} locked dot active onClick={channelSoon}/>
+                  <ChannelItem name="discussions" locked badge={3} onClick={channelSoon}/>
+                  <ChannelItem name="reviews"     locked onClick={channelSoon}/>
+                  <ChannelItem name="spoilers"    locked onClick={channelSoon}/>
                 </div>
 
-                <CatHeader label="Watch Parties" onAdd={()=>{}}/>
+                <CatHeader label="Watch Parties" onAdd={channelSoon}/>
                 <div style={{ display:"flex", flexDirection:"column", gap:1 }}>
                   {watchParties.map(wp=>(
                     <div key={wp.id}>
-                      <ChannelItem name={wp.name} kind="voice" active={false} onClick={()=>{}}/>
+                      <ChannelItem name={wp.name} kind="voice" active={false} onClick={channelSoon}/>
                       {wp.participants.map(p=>(
                         <VoiceParticipant key={p.name} name={p.name} hue={p.hue}/>
                       ))}

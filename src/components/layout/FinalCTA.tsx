@@ -2,10 +2,14 @@
 
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
+import Link from "next/link";
 import { ArrowRight, Terminal, Crosshair, Cpu } from "lucide-react";
+import { useAuthStore } from "@/stores/auth.store";
 
 export default function FinalCTA() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const isAuthenticated = useAuthStore(s => s.isAuthenticated);
+  const ctaHref = isAuthenticated ? "/dashboard" : "/login";
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start end", "end end"]
@@ -79,7 +83,7 @@ export default function FinalCTA() {
           {/* Outer Rotating Glow */}
           <div className="absolute -inset-1 bg-gradient-to-r from-indigo-600 via-purple-500 to-indigo-600 rounded-2xl blur opacity-30 group-hover:opacity-100 transition duration-1000 group-hover:duration-200 animate-[spin_4s_linear_infinite]" style={{ animationPlayState: 'paused' }} />
           
-          <button className="relative flex items-center gap-6 px-10 py-6 bg-[#0a0a0a] border border-white/10 rounded-2xl overflow-hidden transition-all duration-500 group-hover:bg-white group-hover:border-transparent group-hover:shadow-[0_0_40px_rgba(99,102,241,0.4)]">
+          <Link href={ctaHref} className="relative flex items-center gap-6 px-10 py-6 bg-[#0a0a0a] border border-white/10 rounded-2xl overflow-hidden transition-all duration-500 group-hover:bg-white group-hover:border-transparent group-hover:shadow-[0_0_40px_rgba(99,102,241,0.4)]">
             
             {/* Left Icon Block */}
             <div className="flex items-center justify-center text-amber-500 group-hover:text-black transition-colors duration-500">
@@ -103,7 +107,7 @@ export default function FinalCTA() {
             
             {/* Shimmer Line */}
             <div className="absolute inset-0 w-[200%] h-full bg-gradient-to-r from-transparent via-white/10 to-transparent -translate-x-[100%] group-hover:animate-[shimmer_2s_infinite]" />
-          </button>
+          </Link>
         </div>
 
         {/* Post-Action Status HUD */}

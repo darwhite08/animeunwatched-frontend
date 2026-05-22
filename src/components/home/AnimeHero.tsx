@@ -141,7 +141,17 @@ function TopNav() {
           <span>JOIN THE CREW</span>
           <AnchorIcon size={14} />
         </Link>
-        <button className="w-10 h-10 rounded-md hover:bg-white/10 flex flex-col items-center justify-center gap-1.5">
+        <button
+          type="button"
+          aria-label="Open menu"
+          onClick={() => {
+            const nav = document.querySelector("nav[aria-label='Main navigation'], header nav, header button[aria-label*='menu']")
+            ;(nav as HTMLElement | null)?.click?.()
+            // Fallback: scroll to top so the global nav is visible
+            if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" })
+          }}
+          className="w-10 h-10 rounded-md hover:bg-white/10 flex flex-col items-center justify-center gap-1.5"
+        >
           <span className="w-6 h-0.5 bg-white" /><span className="w-6 h-0.5 bg-white" /><span className="w-6 h-0.5 bg-white" />
         </button>
       </div>
@@ -243,16 +253,19 @@ export default function AnimeHero() {
                 </span>
               </Link>
 
-              <button className="group flex items-center gap-3 text-white transition hover:translate-x-0.5">
+              <Link
+                href="/ai-discover"
+                className="group flex items-center gap-3 text-white transition hover:translate-x-0.5"
+              >
                 <span className="relative w-12 h-12 rounded-full border-2 border-white/85 flex items-center justify-center group-hover:border-[#f7c33d] group-hover:bg-white/10 transition">
                   <svg width="14" height="16" viewBox="0 0 14 16" fill="white" className="ml-0.5">
                     <polygon points="0,0 14,8 0,16" />
                   </svg>
                 </span>
                 <span className="font-display text-[13px] tracking-[0.32em] border-b-2 border-white/70 pb-0.5 group-hover:text-[#f7c33d] group-hover:border-[#f7c33d] transition">
-                  WATCH TRAILER
+                  EXPLORE
                 </span>
-              </button>
+              </Link>
             </div>
 
           </div>
@@ -263,7 +276,16 @@ export default function AnimeHero() {
       <div className="absolute left-0 right-0 bottom-0 h-[22%] sm:h-[24%] ocean z-[15] pointer-events-none" />
 
       {/* Scroll down */}
-      <button className="absolute left-1/2 -translate-x-1/2 bottom-5 z-30 flex flex-col items-center gap-1.5 text-white fade-in-up" style={{ animationDelay:"1.3s" }}>
+      <button
+        type="button"
+        onClick={() => {
+          if (typeof window === "undefined") return
+          window.scrollBy({ top: window.innerHeight * 0.9, behavior: "smooth" })
+        }}
+        aria-label="Scroll down"
+        className="absolute left-1/2 -translate-x-1/2 bottom-5 z-30 flex flex-col items-center gap-1.5 text-white fade-in-up"
+        style={{ animationDelay:"1.3s" }}
+      >
         <span className="font-display text-[12px] tracking-[0.45em]">SCROLL DOWN</span>
         <span className="scroll-bounce">
           <svg width="22" height="14" viewBox="0 0 22 14" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">

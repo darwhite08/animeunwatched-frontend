@@ -1,8 +1,21 @@
 "use client"
 
+import { useState } from "react"
+import { useRouter } from "next/navigation"
+import Link from "next/link"
 import { Search, Plus } from "lucide-react"
 
 export default function DashboardHeader() {
+  const router = useRouter()
+  const [query, setQuery] = useState("")
+
+  const submit = (e: React.FormEvent) => {
+    e.preventDefault()
+    const q = query.trim()
+    if (!q) return
+    router.push(`/search?q=${encodeURIComponent(q)}`)
+  }
+
   return (
     <div className="flex items-center justify-between">
       <div>
@@ -15,18 +28,24 @@ export default function DashboardHeader() {
       </div>
 
       <div className="flex items-center gap-4">
-        <div className="relative">
+        <form onSubmit={submit} className="relative">
           <Search className="absolute left-3 top-3 text-white/40" size={16} />
           <input
+            value={query}
+            onChange={e => setQuery(e.target.value)}
             placeholder="Search anime..."
             className="bg-neutral-900 border border-white/10 rounded-xl pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-600"
           />
-        </div>
+        </form>
 
-        <button className="px-4 py-2 rounded-xl text-black flex items-center gap-2 transition-all hover:opacity-90" style={{background:"linear-gradient(135deg,#fbbf24,#f59e0b)"}}>
+        <Link
+          href="/bestanimelist"
+          className="px-4 py-2 rounded-xl text-black flex items-center gap-2 transition-all hover:opacity-90"
+          style={{ background: "linear-gradient(135deg,#fbbf24,#f59e0b)" }}
+        >
           <Plus size={16} />
           Add Anime
-        </button>
+        </Link>
       </div>
     </div>
   )

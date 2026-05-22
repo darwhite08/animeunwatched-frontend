@@ -102,7 +102,7 @@ export const getDiscover = (cursor?: string) =>
 export const getPost = (id: string) =>
   api<{ post: Post; liked: boolean }>(`/posts/${id}`)
 
-export const createPost = (body: { content: string; animeId?: string }) =>
+export const createPost = (body: { content: string; animeId?: string; imageUrl?: string }) =>
   api<{ post: Post }>("/posts", { method: "POST", body: JSON.stringify(body) })
 
 export const deletePost = (id: string) =>
@@ -219,6 +219,27 @@ export const discoverQuiz = (answers: {
     "/discovery/quiz",
     { method: "POST", body: JSON.stringify({ answers, limit }) },
   )
+
+/* ── Uploads (R2 presigned PUT) ── */
+export type UploadIntent = {
+  uploadUrl: string
+  publicUrl: string
+  key: string
+  expiresIn: number
+  contentType: string
+}
+
+export const presignAvatarUpload = (contentType: string, size?: number) =>
+  api<UploadIntent>("/uploads/avatar", {
+    method: "POST",
+    body: JSON.stringify({ contentType, size }),
+  })
+
+export const presignPostImageUpload = (contentType: string, size?: number) =>
+  api<UploadIntent>("/uploads/post-image", {
+    method: "POST",
+    body: JSON.stringify({ contentType, size }),
+  })
 
 /* ── Search ── */
 export const search = (

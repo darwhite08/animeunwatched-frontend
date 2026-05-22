@@ -13,6 +13,8 @@ import TrendingWidget from "@/components/social/TrendingWidget"
 import WatchlistPreviewWidget from "@/components/social/WatchlistPreviewWidget"
 import { useDiscover, useCreatePost, useLikePost, useComments, useCreateComment } from "@/hooks/usePosts"
 import { useLiveFeed } from "@/hooks/useRealtime"
+import { useImageUpload } from "@/hooks/useImageUpload"
+import NextImage from "next/image"
 import { PostMenu } from "@/components/ui/PostMenu"
 import { useAuthStore } from "@/stores/auth.store"
 import type { Post, PostComment } from "@/lib/api/types"
@@ -193,6 +195,20 @@ function PostCard({ post }: { post: Post }) {
           return <p className="text-[15px] text-white/85 leading-relaxed">{post.content}</p>
         })()}
 
+        {/* Image attachment */}
+        {post.imageUrl && (
+          <a href={post.imageUrl} target="_blank" rel="noopener noreferrer" className="block rounded-2xl overflow-hidden border border-white/8 max-w-[520px] hover:border-white/15 transition-colors">
+            <NextImage
+              src={post.imageUrl}
+              alt="Post attachment"
+              width={520}
+              height={520}
+              unoptimized
+              className="w-full h-auto object-cover max-h-[520px]"
+            />
+          </a>
+        )}
+
         {/* Actions */}
         <div className="flex items-center gap-1 pt-1 border-t border-white/5">
           {/* Like */}
@@ -301,6 +317,9 @@ export default function CommunityPage() {
   const [composing, setComposing] = useState(false)
   const [draft, setDraft] = useState("")
   const [isSpoiler, setIsSpoiler] = useState(false)
+  const [attachedImage, setAttachedImage] = useState<string | null>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  const { upload, isUploading, error: uploadError, progress } = useImageUpload("post")
 
   // Realtime: new posts prepend, like/comment counts update without refresh
   useLiveFeed()
@@ -310,19 +329,32 @@ export default function CommunityPage() {
 
   const posts: Post[] = data?.pages.flatMap(p => p.data) ?? []
 
+  const handleImagePick = useCallback(async (file: File) => {
+    try {
+      const { publicUrl } = await upload(file)
+      setAttachedImage(publicUrl)
+    } catch {
+      // useImageUpload sets `error` — toast it
+      if (uploadError) push(uploadError, "error")
+    }
+  }, [upload, uploadError, push])
+
   const submitPost = useCallback(() => {
-    if (!draft.trim()) return
+    if (!draft.trim() && !attachedImage) return
     if (!isAuthenticated) { push("Sign in to post", "info"); return }
     // Wrap spoiler content in [spoiler] tags for the backend to handle
     const content = isSpoiler ? `[spoiler]${draft}[/spoiler]` : draft
     createPost.mutate(
-      { content },
+      { content: content || " ", imageUrl: attachedImage ?? undefined },
       {
-        onSuccess: () => { setDraft(""); setComposing(false); setIsSpoiler(false); push("Post published!", "success") },
-        onError:   () => push("Failed to post. Try again.", "error"),
+        onSuccess: () => {
+          setDraft(""); setComposing(false); setIsSpoiler(false); setAttachedImage(null)
+          push("Post published!", "success")
+        },
+        onError: () => push("Failed to post. Try again.", "error"),
       }
     )
-  }, [draft, isAuthenticated, createPost, push, isSpoiler])
+  }, [draft, attachedImage, isAuthenticated, createPost, push, isSpoiler])
 
   return (
     <div className="min-h-screen bg-[#020202] text-white pb-32">
@@ -387,6 +419,38 @@ export default function CommunityPage() {
                     placeholder={isAuthenticated ? "Share a theory, hot take, or reaction…" : "Sign in to post…"}
                     rows={4} autoFocus disabled={!isAuthenticated}
                     className="w-full bg-transparent text-sm text-white placeholder:text-white/25 resize-none outline-none leading-relaxed disabled:opacity-40" />
+
+                  {/* Attached image preview */}
+                  {attachedImage && (
+                    <div className="relative inline-block rounded-xl overflow-hidden border border-white/10 group">
+                      <NextImage
+                        src={attachedImage}
+                        alt="Attached"
+                        width={200}
+                        height={200}
+                        unoptimized
+                        className="max-h-48 w-auto object-cover"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setAttachedImage(null)}
+                        className="absolute top-1.5 right-1.5 w-6 h-6 rounded-full bg-black/70 backdrop-blur-sm text-white/80 hover:text-white hover:bg-black/90 flex items-center justify-center text-[14px] leading-none transition-colors"
+                        aria-label="Remove image"
+                      >×</button>
+                    </div>
+                  )}
+                  {isUploading && (
+                    <div className="flex items-center gap-2 text-[11px] text-amber-400">
+                      <div className="flex-1 h-1 bg-white/5 rounded-full overflow-hidden">
+                        <div className="h-full bg-amber-500 transition-all" style={{ width: `${progress}%` }} />
+                      </div>
+                      <span className="tabular-nums">{progress}%</span>
+                    </div>
+                  )}
+                  {uploadError && !isUploading && (
+                    <p className="text-[11px] text-rose-400">{uploadError}</p>
+                  )}
+
                   <div className="flex items-center justify-between border-t border-white/5 pt-3">
                     <div className="flex gap-2">
                       <button
@@ -399,11 +463,30 @@ export default function CommunityPage() {
                         title="Add a hashtag (#)"
                         onClick={() => setDraft(d => d + (d.endsWith(" ") || d.length === 0 ? "#" : " #"))}
                         className="p-1.5 text-white/30 hover:text-amber-300 transition-colors"><Hash size={15} /></button>
+                      <input
+                        ref={fileInputRef}
+                        type="file"
+                        accept="image/jpeg,image/png,image/webp,image/gif"
+                        onChange={e => {
+                          const f = e.target.files?.[0]
+                          if (f) handleImagePick(f)
+                          e.target.value = ""
+                        }}
+                        className="hidden"
+                      />
                       <button
                         type="button"
-                        title="Image attachments coming soon"
-                        onClick={() => push("Image uploads are coming in the next release", "info")}
-                        className="p-1.5 text-white/20 cursor-not-allowed"><ImageIcon size={15} /></button>
+                        title={isUploading ? `Uploading ${progress}%…` : "Attach an image"}
+                        disabled={isUploading || !!attachedImage}
+                        onClick={() => fileInputRef.current?.click()}
+                        className={`p-1.5 transition-colors ${
+                          isUploading
+                            ? "text-amber-400 animate-pulse"
+                            : attachedImage
+                            ? "text-emerald-400"
+                            : "text-white/30 hover:text-amber-300"
+                        }`}
+                      ><ImageIcon size={15} /></button>
                       {/* Spoiler toggle */}
                       <button onClick={() => setIsSpoiler(s => !s)}
                         title="Mark as spoiler"

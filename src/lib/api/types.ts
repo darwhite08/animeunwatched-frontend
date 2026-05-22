@@ -103,6 +103,7 @@ export interface Post {
   authorId: string
   content: string
   animeId: string | null
+  imageUrl: string | null
   createdAt: string
   updatedAt: string
   deletedAt: string | null

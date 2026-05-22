@@ -20,10 +20,10 @@ const securityHeaders = [
       // Google Accounts CSS needed for Sign In button styling
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://accounts.google.com",
       "font-src 'self' https://fonts.gstatic.com data:",
-      "img-src 'self' data: blob: https://cdn.myanimelist.net https://myanimelist.net https://images.unsplash.com https://img.anisearch.com https://cdn.noitatnemucod.net https://img1.ak.crunchyroll.com https://encrypted-tbn0.gstatic.com https://s4.anilist.co https://media.kitsu.app https://lh3.googleusercontent.com https://lh4.googleusercontent.com https://lh5.googleusercontent.com https://lh6.googleusercontent.com https://avatars.githubusercontent.com",
+      "img-src 'self' data: blob: https://cdn.myanimelist.net https://myanimelist.net https://images.unsplash.com https://img.anisearch.com https://cdn.noitatnemucod.net https://img1.ak.crunchyroll.com https://encrypted-tbn0.gstatic.com https://s4.anilist.co https://media.kitsu.app https://lh3.googleusercontent.com https://lh4.googleusercontent.com https://lh5.googleusercontent.com https://lh6.googleusercontent.com https://avatars.githubusercontent.com https://*.r2.dev https://*.r2.cloudflarestorage.com",
       // Render backend (HTTPS for polling, wss/ws for WebSocket upgrade)
       // Removed: https://*.up.railway.app (old Railway URL, backend is now on Render)
-      `connect-src 'self' http://localhost:4000 http://192.168.31.167:4000 ${RENDER_BACKEND} https://api.jikan.moe https://accounts.google.com https://sentry.io https://*.sentry.io wss: ws:`,
+      `connect-src 'self' http://localhost:4000 http://192.168.31.167:4000 ${RENDER_BACKEND} https://api.jikan.moe https://accounts.google.com https://sentry.io https://*.sentry.io https://*.r2.cloudflarestorage.com https://*.r2.dev wss: ws:`,
       "frame-src 'self' https://accounts.google.com https://www.youtube.com https://youtube.com",
       "object-src 'none'",
       "base-uri 'self'",
@@ -49,6 +49,10 @@ const nextConfig: NextConfig = {
       { protocol: "https", hostname: "lh5.googleusercontent.com",    pathname: "**" },
       { protocol: "https", hostname: "lh6.googleusercontent.com",    pathname: "**" },
       { protocol: "https", hostname: "avatars.githubusercontent.com", pathname: "**" },
+      // Cloudflare R2 — user-uploaded images (post attachments, avatars).
+      // Matches both pub-*.r2.dev defaults and custom CDN domains via wildcards.
+      { protocol: "https", hostname: "*.r2.dev",                       pathname: "**" },
+      { protocol: "https", hostname: "*.r2.cloudflarestorage.com",     pathname: "**" },
     ],
     formats: ["image/avif", "image/webp"],
     minimumCacheTTL: 86400,

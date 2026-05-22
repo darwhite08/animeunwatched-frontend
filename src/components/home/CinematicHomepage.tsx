@@ -6,7 +6,7 @@ import { motion, useScroll, useTransform, AnimatePresence, useMotionValue, useSp
 import Link from "next/link"
 import Image from "next/image"
 import { ArrowRight, Zap, Star, Users, Flame, Trophy, Play, ChevronDown, Sparkles, Command } from "lucide-react"
-import { useBrowseAnime } from "@/hooks/useAnime"
+import { useBrowseAnime, useAnime } from "@/hooks/useAnime"
 import type { AnimeDTO } from "@/lib/api/types"
 import { AnimatedCounterText } from "@/components/ui/AnimatedCounter"
 import CinematicHero from "@/components/home/CinematicHero"
@@ -150,28 +150,109 @@ function DiscoverySection() {
   )
 }
 
+/* ─── AI result row with real anime poster ─── */
+function AIResultRow({
+  title, malId, score, genre, match, grad, index,
+}: {
+  title: string
+  malId: number
+  score: number
+  genre: string
+  match: number
+  grad: string
+  index: number
+}) {
+  const { data } = useAnime(malId)
+  const imageUrl = data?.anime?.imageUrl
+  const [imgErr, setImgErr] = useState(false)
+  const showImage = !!imageUrl && !imgErr
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, x: -8 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ delay: index * 0.06 }}
+      className="group flex items-center gap-4 px-6 py-4 hover:bg-white/[0.025] transition-colors cursor-pointer border-t border-white/[0.04] relative"
+    >
+      <span className="text-[9px] font-bold tabular-nums text-white/20 w-3 shrink-0">{String(index + 1).padStart(2, "0")}</span>
+
+      {/* Poster thumbnail — real anime cover with gradient fallback */}
+      <div className={`relative w-10 h-14 rounded-md shrink-0 ${showImage ? "bg-black/40" : `bg-gradient-to-b ${grad}`} border border-white/[0.1] overflow-hidden`}>
+        {showImage && (
+          <Image
+            src={imageUrl}
+            alt={title}
+            fill
+            sizes="40px"
+            className="object-cover"
+            onError={() => setImgErr(true)}
+            unoptimized
+          />
+        )}
+        <div className="absolute inset-0 opacity-50 pointer-events-none" style={{
+          background: "linear-gradient(115deg, transparent 30%, rgba(255,255,255,0.08) 45%, transparent 60%)",
+        }} />
+        {!showImage && (
+          <div className="absolute inset-x-0 bottom-0 p-1 bg-gradient-to-t from-black/60 to-transparent">
+            <span className="text-[7.5px] font-black text-white/55 leading-none tracking-tight">{title.slice(0, 3).toUpperCase()}</span>
+          </div>
+        )}
+      </div>
+
+      <div className="flex-1 min-w-0">
+        <p className="text-[13.5px] font-bold text-white/90 truncate mb-1 group-hover:text-amber-200 transition-colors">{title}</p>
+        <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1">
+            <Star size={9} className="fill-amber-400 text-amber-400" />
+            <span className="text-[10px] text-white/55 font-semibold tabular-nums">{score}</span>
+          </div>
+          <span className="text-[6px] text-white/15">●</span>
+          <span className="text-[10px] text-white/35 font-medium">{genre}</span>
+        </div>
+      </div>
+
+      <div className="text-right shrink-0 flex flex-col items-end">
+        <p className="text-[16px] font-black leading-none tabular-nums" style={{
+          backgroundImage: "linear-gradient(135deg, #fbbf24, #f59e0b)",
+          WebkitBackgroundClip: "text",
+          WebkitTextFillColor: "transparent",
+        }}>{match}<span className="text-[10px]">%</span></p>
+        <div className="mt-1.5 h-[3px] w-12 rounded-full bg-white/[0.06] overflow-hidden">
+          <motion.div
+            initial={{ width: 0 }}
+            animate={{ width: `${match}%` }}
+            transition={{ duration: 0.8, delay: index * 0.08, ease: "easeOut" }}
+            className="h-full rounded-full"
+            style={{ background: "linear-gradient(90deg, #fbbf24, #f59e0b)" }}
+          />
+        </div>
+      </div>
+    </motion.div>
+  )
+}
+
 /* ─── SECTION 2: AI ORACLE ─── */
 function AIOracleSection() {
   const PROMPTS = [
     { short: "Psychological thriller", full: "A slow-burn psychological thriller with no happy ending",  results: [
-      { title: "Monster",                score: 9.1, genre: "Psychological", match: 98, grad: "from-slate-800 to-indigo-950"   },
-      { title: "Paranoia Agent",         score: 8.8, genre: "Thriller",      match: 95, grad: "from-violet-950 to-slate-900"  },
-      { title: "Serial Experiments Lain",score: 8.5, genre: "Sci-Fi",        match: 91, grad: "from-blue-950 to-slate-900"    },
+      { title: "Monster",                 malId: 19,    score: 9.1, genre: "Psychological", match: 98, grad: "from-slate-800 to-indigo-950"   },
+      { title: "Paranoia Agent",          malId: 323,   score: 8.8, genre: "Thriller",      match: 95, grad: "from-violet-950 to-slate-900"  },
+      { title: "Serial Experiments Lain", malId: 339,   score: 8.5, genre: "Sci-Fi",        match: 91, grad: "from-blue-950 to-slate-900"    },
     ]},
     { short: "Hidden power MC",        full: "Overpowered MC who hides their strength from everyone",    results: [
-      { title: "One Punch Man",          score: 8.7, genre: "Action",        match: 97, grad: "from-yellow-950 to-slate-900"  },
-      { title: "Mob Psycho 100",         score: 9.0, genre: "Supernatural",  match: 94, grad: "from-indigo-950 to-slate-900"  },
-      { title: "The Irregular at Magic", score: 7.5, genre: "Fantasy",       match: 88, grad: "from-emerald-950 to-slate-900" },
+      { title: "One Punch Man",           malId: 30276, score: 8.7, genre: "Action",        match: 97, grad: "from-yellow-950 to-slate-900"  },
+      { title: "Mob Psycho 100",          malId: 32182, score: 9.0, genre: "Supernatural",  match: 94, grad: "from-indigo-950 to-slate-900"  },
+      { title: "The Irregular at Magic",  malId: 20785, score: 7.5, genre: "Fantasy",       match: 88, grad: "from-emerald-950 to-slate-900" },
     ]},
     { short: "Forgotten 2000s gems",   full: "Hidden gems from the 2000s that nobody talks about",       results: [
-      { title: "Haibane Renmei",         score: 8.1, genre: "Slice of Life", match: 96, grad: "from-amber-950 to-slate-900"   },
-      { title: "Kino's Journey",         score: 8.0, genre: "Adventure",     match: 93, grad: "from-teal-950 to-slate-900"    },
-      { title: "Texhnolyze",             score: 8.1, genre: "Sci-Fi Noir",   match: 89, grad: "from-gray-900 to-slate-950"    },
+      { title: "Haibane Renmei",          malId: 387,   score: 8.1, genre: "Slice of Life", match: 96, grad: "from-amber-950 to-slate-900"   },
+      { title: "Kino's Journey",          malId: 543,   score: 8.0, genre: "Adventure",     match: 93, grad: "from-teal-950 to-slate-900"    },
+      { title: "Texhnolyze",              malId: 22,    score: 8.1, genre: "Sci-Fi Noir",   match: 89, grad: "from-gray-900 to-slate-950"    },
     ]},
     { short: "Romance gut-punch",      full: "Romance that hits like a truck in the last episode",       results: [
-      { title: "Clannad: After Story",   score: 9.0, genre: "Drama",         match: 99, grad: "from-rose-950 to-slate-900"    },
-      { title: "Anohana",                score: 8.7, genre: "Drama",         match: 95, grad: "from-pink-950 to-slate-900"    },
-      { title: "Your Lie in April",      score: 8.7, genre: "Music / Drama", match: 93, grad: "from-orange-950 to-slate-900"  },
+      { title: "Clannad: After Story",    malId: 4181,  score: 9.0, genre: "Drama",         match: 99, grad: "from-rose-950 to-slate-900"    },
+      { title: "Anohana",                 malId: 9989,  score: 8.7, genre: "Drama",         match: 95, grad: "from-pink-950 to-slate-900"    },
+      { title: "Your Lie in April",       malId: 23273, score: 8.7, genre: "Music / Drama", match: 93, grad: "from-orange-950 to-slate-900"  },
     ]},
   ]
   const [active, setActive] = useState(0)
@@ -382,57 +463,8 @@ function AIOracleSection() {
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.2 }}
                   >
-                    {PROMPTS[active].results.map(({ title, score, genre, match, grad }, i) => (
-                      <motion.div
-                        key={title}
-                        initial={{ opacity: 0, x: -8 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: i * 0.06 }}
-                        className="group flex items-center gap-4 px-6 py-4 hover:bg-white/[0.025] transition-colors cursor-pointer border-t border-white/[0.04] relative"
-                      >
-                        {/* Rank index */}
-                        <span className="text-[9px] font-bold tabular-nums text-white/20 w-3 shrink-0">{String(i + 1).padStart(2, "0")}</span>
-
-                        {/* Poster thumbnail */}
-                        <div className={`relative w-10 h-14 rounded-md shrink-0 bg-gradient-to-b ${grad} border border-white/[0.1] overflow-hidden`}>
-                          {/* Subtle film-grain shimmer */}
-                          <div className="absolute inset-0 opacity-50" style={{
-                            background: "linear-gradient(115deg, transparent 30%, rgba(255,255,255,0.08) 45%, transparent 60%)",
-                          }} />
-                          <div className="absolute inset-x-0 bottom-0 p-1 bg-gradient-to-t from-black/60 to-transparent">
-                            <span className="text-[7.5px] font-black text-white/55 leading-none tracking-tight">{title.slice(0, 3).toUpperCase()}</span>
-                          </div>
-                        </div>
-
-                        <div className="flex-1 min-w-0">
-                          <p className="text-[13.5px] font-bold text-white/90 truncate mb-1 group-hover:text-amber-200 transition-colors">{title}</p>
-                          <div className="flex items-center gap-2">
-                            <div className="flex items-center gap-1">
-                              <Star size={9} className="fill-amber-400 text-amber-400" />
-                              <span className="text-[10px] text-white/55 font-semibold tabular-nums">{score}</span>
-                            </div>
-                            <span className="text-[6px] text-white/15">●</span>
-                            <span className="text-[10px] text-white/35 font-medium">{genre}</span>
-                          </div>
-                        </div>
-
-                        <div className="text-right shrink-0 flex flex-col items-end">
-                          <p className="text-[16px] font-black text-amber-400 leading-none tabular-nums" style={{
-                            backgroundImage: "linear-gradient(135deg, #fbbf24, #f59e0b)",
-                            WebkitBackgroundClip: "text",
-                            WebkitTextFillColor: "transparent",
-                          }}>{match}<span className="text-[10px]">%</span></p>
-                          <div className="mt-1.5 h-[3px] w-12 rounded-full bg-white/[0.06] overflow-hidden">
-                            <motion.div
-                              initial={{ width: 0 }}
-                              animate={{ width: `${match}%` }}
-                              transition={{ duration: 0.8, delay: i * 0.08, ease: "easeOut" }}
-                              className="h-full rounded-full"
-                              style={{ background: "linear-gradient(90deg, #fbbf24, #f59e0b)" }}
-                            />
-                          </div>
-                        </div>
-                      </motion.div>
+                    {PROMPTS[active].results.map((result, i) => (
+                      <AIResultRow key={result.title} {...result} index={i} />
                     ))}
                   </motion.div>
                 </AnimatePresence>

@@ -2,7 +2,7 @@
  * /api/version route handler tests — env fallback + shape of returned payload.
  */
 import { describe, it, expect, beforeEach, afterEach } from "vitest"
-import { GET } from "@/app/api/version/route"
+import { GET } from "@/app/(public)/api/version/route"
 
 const originalSha = process.env.VERCEL_GIT_COMMIT_SHA
 const originalRef = process.env.VERCEL_GIT_COMMIT_REF

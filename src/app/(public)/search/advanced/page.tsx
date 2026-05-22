@@ -211,6 +211,7 @@ function AdvancedSearchContent() {
   const { push } = useToast()
 
   const [searchType, setSearchType] = useState<SearchType>("anime")
+  const [keyword, setKeyword] = useState("")
   const [animeFilters, setAnimeFilters] = useState<AnimeFilters>({
     title:     "",
     genres:    [],
@@ -452,9 +453,9 @@ function AdvancedSearchContent() {
             <div className="grid sm:grid-cols-2 gap-4">
               <InputField
                 label="Keyword"
-                value=""
+                value={keyword}
                 placeholder={`Search ${searchType}…`}
-                onChange={() => {}}
+                onChange={setKeyword}
               />
               <div className="flex items-end">
                 <button

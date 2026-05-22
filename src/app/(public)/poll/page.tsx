@@ -350,7 +350,8 @@ export default function PollsPage() {
     trending: p.totalVotes > 50,
   })), [pollsApiData])
 
-  const displayPolls = apiPolls.length > 0 ? apiPolls : POLLS
+  const displayPolls = apiPolls
+  void POLLS
 
   const filteredPolls = displayPolls.filter((p) => {
     if (activeTab === "all")      return true

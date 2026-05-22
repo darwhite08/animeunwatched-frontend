@@ -162,8 +162,13 @@ function AIResultRow({
   grad: string
   index: number
 }) {
-  const { data } = useAnime(malId)
-  const imageUrl = data?.anime?.imageUrl
+  // useAnime is fire-and-forget — if the backend is down the query stays
+  // in pending state and we just show the gradient fallback. We never read
+  // an error field, so a failed fetch can't crash the component.
+  const query = useAnime(malId)
+  const imageUrl = query.data && "anime" in query.data && query.data.anime
+    ? query.data.anime.imageUrl
+    : null
   const [imgErr, setImgErr] = useState(false)
   const showImage = !!imageUrl && !imgErr
 

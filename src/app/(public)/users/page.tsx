@@ -5,6 +5,7 @@ import { motion } from "framer-motion"
 import Link from "next/link"
 import { Users, Search, Trophy, Flame, Star, TrendingUp } from "lucide-react"
 import { useLeaderboard } from "@/hooks/useLeaderboard"
+import { PresenceDot } from "@/components/ui/PresenceDot"
 
 type User = {
   id: string; username: string; displayName: string
@@ -30,7 +31,7 @@ export default function UsersPage() {
   const { data: lbData } = useLeaderboard(100)
 
   const apiUsers: User[] = (lbData?.data ?? []).map(u => ({
-    id: u.username, username: u.username, displayName: u.displayName,
+    id: u.id ?? u.username, username: u.username, displayName: u.displayName,
     reputation: u.reputation, level: u.level,
     title: u.level >= 10 ? "Legendary" : u.level >= 7 ? "Kage" : u.level >= 5 ? "Elite Jonin" : u.level >= 3 ? "Jonin" : "Shinobi",
     anime: u.archived, streak: 0, avatar: u.displayName[0]?.toUpperCase() ?? "?",
@@ -87,8 +88,13 @@ export default function UsersPage() {
                 className="flex items-center gap-4 p-4 rounded-2xl bg-white/[0.02] border border-white/8 hover:border-amber-500/20 hover:bg-white/[0.04] transition-all group"
               >
                 <span className="text-sm font-black text-white/20 w-6 shrink-0">#{i+1}</span>
-                <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-lg font-black shrink-0 group-hover:scale-105 transition-transform">
-                  {user.avatar}
+                <div className="relative shrink-0">
+                  <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-lg font-black group-hover:scale-105 transition-transform">
+                    {user.avatar}
+                  </div>
+                  <span className="absolute -bottom-0.5 -right-0.5">
+                    <PresenceDot userId={user.id} size={11} />
+                  </span>
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="font-black text-white group-hover:text-amber-300 transition-colors">{user.displayName}</p>

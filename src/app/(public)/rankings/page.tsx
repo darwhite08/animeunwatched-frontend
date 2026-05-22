@@ -70,11 +70,11 @@ export default function RankingsPage() {
   return (
     <div className="min-h-screen bg-[#020202] text-white pb-32">
       <div className="max-w-7xl mx-auto px-6 pt-32 pb-10">
-        <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-amber-400/60 mb-3">Neural Rankings</p>
+        <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-amber-400/60 mb-3">Neural Leaderboard</p>
         <h1 className="text-6xl font-black tracking-tighter uppercase italic text-white leading-none mb-2">
-          Rankings<span style={{color:"#f59e0b"}}>.</span>
+          Leaderboard<span style={{color:"#f59e0b"}}>.</span>
         </h1>
-        <p className="text-white/35 text-sm mb-10">Ranked by community credibility-weighted scores</p>
+        <p className="text-white/35 text-sm mb-10">Top anime by community credibility-weighted scores</p>
 
         {/* Category tabs */}
         <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-10">

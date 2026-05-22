@@ -6,6 +6,7 @@ import { Zap, Crown, Flame, TrendingUp, Bell, Star, Users } from "lucide-react"
 import Link from "next/link"
 import { useAuthStore } from "@/stores/auth.store"
 import { useLiveUserList } from "@/hooks/useRealtime"
+import { ActivityTicker } from "@/components/dashboard/ActivityTicker"
 import WrappedBanner from "@/components/ui/WrappedBanner"
 // Above-fold cards — eagerly loaded (visible immediately on page open)
 import { WatchStatsCard } from "@/components/dashboard/cards/WatchStatsCard"
@@ -152,6 +153,7 @@ export default function DashboardPage() {
   return (
     <div className="max-w-[1400px] mx-auto px-6 py-10 space-y-8 pb-32">
       <WrappedBanner />
+      <ActivityTicker />
 
       {/* ── HEADER ── */}
       <header className="relative overflow-hidden rounded-[2.5rem] border p-10 shadow-2xl"

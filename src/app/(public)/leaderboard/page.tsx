@@ -9,6 +9,7 @@ import {
 import { TiltCard } from "@/components/ui/TiltCard"
 import { useLeaderboard } from "@/hooks/useLeaderboard"
 import { useAuthStore } from "@/stores/auth.store"
+import { PresenceDot } from "@/components/ui/PresenceDot"
 
 type Period = "all-time" | "monthly" | "weekly"
 
@@ -37,7 +38,7 @@ const ICON_MAP: Record<number, typeof Crown> = {
 }
 
 type User = {
-  rank: number; name: string; xp: string; xpNum: number
+  rank: number; id?: string; name: string; xp: string; xpNum: number
   level: number; streak: number; archived: number
   trend: "up" | "down" | "same"; trendVal: number
   isMe: boolean
@@ -76,6 +77,7 @@ export default function PublicLeaderboardPage() {
   // Merge real data with mock, real data takes priority
   const realUsers: User[] = (lbData?.data ?? []).map((u, i) => ({
     rank: i + 1,
+    id: u.id,
     name: u.username,
     xp: u.xp >= 1_000_000 ? `${(u.xp/1_000_000).toFixed(2)}M` : u.xp >= 1000 ? `${(u.xp/1000).toFixed(0)}K` : String(u.xp),
     xpNum: u.xp,
@@ -142,6 +144,11 @@ export default function PublicLeaderboardPage() {
                     <div className={`absolute -bottom-2 -right-2 w-6 h-6 rounded-lg bg-gradient-to-br ${grad} flex items-center justify-center`}>
                       <Icon size={12} className="text-black" />
                     </div>
+                    {user.id && (
+                      <span className="absolute -top-1 -right-1">
+                        <PresenceDot userId={user.id} size={10} />
+                      </span>
+                    )}
                   </div>
                   <p className="text-sm font-black text-white">{user.name}</p>
                   <p className={`text-[9px] font-black uppercase tracking-wider ${title.color} mt-0.5`}>{title.label}</p>
@@ -182,7 +189,14 @@ export default function PublicLeaderboardPage() {
                     {user.rank > 100 ? `#${user.rank}` : user.rank}
                   </span>
                   <div className="flex items-center gap-3 min-w-0">
-                    <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-600/40 to-violet-600/30 flex items-center justify-center font-black text-sm shrink-0">{user.name[0]}</div>
+                    <div className="relative shrink-0">
+                      <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-600/40 to-violet-600/30 flex items-center justify-center font-black text-sm">{user.name[0]}</div>
+                      {user.id && (
+                        <span className="absolute -bottom-0.5 -right-0.5">
+                          <PresenceDot userId={user.id} size={9} />
+                        </span>
+                      )}
+                    </div>
                     <div className="min-w-0">
                       <div className="flex items-center gap-2">
                         <p className={`text-sm font-black truncate ${isMe ? "text-amber-300" : "text-white/80"}`}>{user.name}{isMe && " (You)"}</p>

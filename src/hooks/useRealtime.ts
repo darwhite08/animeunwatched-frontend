@@ -372,6 +372,45 @@ export function useLivePost(postId: string | null) {
   }, [postId, qc])
 }
 
+// ── Live platform activity (drives the dashboard ticker) ─────────────────────
+
+export type PlatformActivity = {
+  kind: "watched" | "rated" | "reviewed" | "posted" | "followed"
+  actor: { id: string; username: string; displayName: string; avatarUrl: string | null }
+  target?: { kind: "anime" | "user" | "post"; label: string; malId?: number; username?: string; id?: string }
+  status?: string | null
+  score?: number | null
+  at: number
+}
+
+/** Subscribes to live activity events. Returns a rolling buffer of the most recent ones. */
+export function useLivePlatformActivity(maxItems: number = 8): PlatformActivity[] {
+  const [items, setItems] = useState<PlatformActivity[]>([])
+  const isAuth = useAuthStore(s => s.isAuthenticated)
+
+  useEffect(() => {
+    if (!isAuth) return
+    let cleanup: (() => void) | null = null
+
+    const attach = () => {
+      const s = getSocket()
+      if (!s) { retry = setTimeout(attach, 600); return }
+
+      const onActivity = (a: PlatformActivity) => {
+        setItems(prev => [a, ...prev].slice(0, maxItems))
+      }
+      s.on("activity.new", onActivity)
+      cleanup = () => { s.off("activity.new", onActivity) }
+    }
+
+    let retry: ReturnType<typeof setTimeout> | null = null
+    attach()
+    return () => { if (retry) clearTimeout(retry); cleanup?.() }
+  }, [isAuth, maxItems])
+
+  return items
+}
+
 // ── Live thread (club discussions, anime discuss) ────────────────────────────
 
 export function useLiveThread(threadId: string | null) {

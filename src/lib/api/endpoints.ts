@@ -24,6 +24,12 @@ export const logoutAll = () => api<void>("/auth/logout-all", { method: "POST" })
 export const changePassword = (body: { currentPassword: string; newPassword: string }) =>
   api<void>("/auth/change-password", { method: "POST", body: JSON.stringify(body) })
 
+export const deleteAccount = (body: { password?: string } = {}) =>
+  api<void>("/auth/delete-account", { method: "POST", body: JSON.stringify(body) })
+
+export const exportMyData = () =>
+  api<unknown>("/users/me/export")
+
 export const me = () => api<{ user: User }>("/auth/me")
 
 /* ── Users ── */

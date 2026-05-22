@@ -1,14 +1,15 @@
 "use client"
 
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect, useRef } from "react"
 import { motion } from "framer-motion"
-import { User, Camera, Trash2, Download, Loader2, CheckCircle2, Link2, AlertCircle } from "lucide-react"
+import NextImage from "next/image"
+import { Camera, Trash2, Download, Loader2, CheckCircle2, Link2, AlertCircle, Lock } from "lucide-react"
 import { useToast } from "@/stores/toast.store"
 import { useAuthStore } from "@/stores/auth.store"
 import { useUpdateMe } from "@/hooks/useUsers"
-import { useMutation } from "@tanstack/react-query"
-import { updateSlug, checkSlugAvailable } from "@/lib/api/endpoints"
-import { validateSlug, generateSlug } from "@/lib/utils/slug"
+import { useImageUpload } from "@/hooks/useImageUpload"
+import { updateSlug, checkSlugAvailable, exportMyData, deleteAccount } from "@/lib/api/endpoints"
+import { validateSlug } from "@/lib/utils/slug"
 import { useRouter } from "next/navigation"
 
 export default function AccountSettingsPage() {
@@ -16,18 +17,28 @@ export default function AccountSettingsPage() {
   const router      = useRouter()
   const storeUser   = useAuthStore(s => s.user)
   const setUser     = useAuthStore(s => s.setUser)
+  const clearAuth   = useAuthStore(s => s.clear)
   const updateMe    = useUpdateMe()
 
   const [saving, setSaving]   = useState(false)
   const [saved, setSaved]     = useState(false)
-  const [deleting, setDeleting] = useState(false)
   const [form, setForm] = useState({
     displayName: storeUser?.displayName ?? "",
-    username:    storeUser?.username    ?? "",
-    email:       storeUser?.email       ?? "",
-    bio:         storeUser?.bio         ?? "Anime enjoyer. Tracking every frame.",
+    bio:         storeUser?.bio         ?? "",
     avatarUrl:   storeUser?.avatarUrl   ?? "",
   })
+
+  // Avatar upload
+  const { upload: uploadAvatar, isUploading: avatarUploading, error: avatarError, progress: avatarProgress } = useImageUpload("avatar")
+  const fileRef = useRef<HTMLInputElement>(null)
+
+  // Data export
+  const [exporting, setExporting] = useState(false)
+
+  // Account deletion (2-step + password)
+  const [deleteOpen, setDeleteOpen] = useState(false)
+  const [deletePassword, setDeletePassword] = useState("")
+  const [deleting, setDeleting] = useState(false)
 
   // Slug change state
   const [slugInput,     setSlugInput]     = useState(storeUser?.slug ?? "")
@@ -78,20 +89,67 @@ export default function AccountSettingsPage() {
     updateMe.mutate(
       { displayName: form.displayName, bio: form.bio, avatarUrl: form.avatarUrl || undefined },
       {
-        onSuccess: () => { setSaving(false); setSaved(true); push("Account saved!", "success"); setTimeout(() => setSaved(false), 3000) },
-        onError:   () => { setSaving(false); push("Save failed. Try again.", "error") },
+        onSuccess: ({ user }) => {
+          setSaving(false); setSaved(true)
+          if (storeUser) setUser({ ...storeUser, ...user })
+          push("Account saved!", "success")
+          setTimeout(() => setSaved(false), 3000)
+        },
+        onError: () => { setSaving(false); push("Save failed. Try again.", "error") },
       }
     )
   }
 
-  const exportData = () => {
-    push("Your data export will be emailed to you within 24 hours.", "info")
+  // Avatar: pick file → R2 upload → updateMe with new URL
+  const onAvatarPick = async (file: File) => {
+    try {
+      const { publicUrl } = await uploadAvatar(file)
+      setForm(f => ({ ...f, avatarUrl: publicUrl }))
+      // Persist immediately so the new avatar shows across the app
+      updateMe.mutate({ avatarUrl: publicUrl }, {
+        onSuccess: ({ user }) => {
+          if (storeUser) setUser({ ...storeUser, ...user })
+          push("Profile photo updated", "success")
+        },
+        onError: () => push("Saved upload but couldn't update profile — try again", "error"),
+      })
+    } catch {
+      // useImageUpload sets `error` — surface it
+      if (avatarError) push(avatarError, "error")
+    }
   }
 
-  const deleteAccount = () => {
-    if (!deleting) { setDeleting(true); return }
-    push("Account deletion requires email confirmation. Check your inbox.", "info")
-    setDeleting(false)
+  const exportData = async () => {
+    setExporting(true)
+    try {
+      const data = await exportMyData()
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" })
+      const url  = URL.createObjectURL(blob)
+      const a    = document.createElement("a")
+      a.href = url
+      a.download = `kaiveron-export-${new Date().toISOString().split("T")[0]}.json`
+      document.body.appendChild(a); a.click(); a.remove()
+      URL.revokeObjectURL(url)
+      push("Your data was downloaded as a JSON file.", "success")
+    } catch {
+      push("Couldn't export your data. Try again.", "error")
+    } finally {
+      setExporting(false)
+    }
+  }
+
+  const confirmDelete = async () => {
+    setDeleting(true)
+    try {
+      await deleteAccount({ password: deletePassword || undefined })
+      push("Account deleted. Goodbye 🥲", "success")
+      clearAuth()
+      router.replace("/")
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "Could not delete account"
+      push(msg, "error")
+      setDeleting(false)
+    }
   }
 
   return (
@@ -106,25 +164,41 @@ export default function AccountSettingsPage() {
       {/* Avatar */}
       <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/8 space-y-4">
         <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/35">Profile Photo</p>
+        <input
+          ref={fileRef}
+          type="file"
+          accept="image/jpeg,image/png,image/webp,image/gif"
+          className="hidden"
+          onChange={e => { const f = e.target.files?.[0]; if (f) onAvatarPick(f); e.target.value = "" }}
+        />
         <div className="flex items-center gap-5">
           <div className="relative group">
-            <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-2xl font-black shadow-[0_0_20px_rgba(99,102,241,0.3)]">
-              {form.displayName[0]}
+            <div className="w-20 h-20 rounded-2xl overflow-hidden bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-2xl font-black shadow-[0_0_20px_rgba(99,102,241,0.3)]">
+              {form.avatarUrl ? (
+                <NextImage src={form.avatarUrl} alt={form.displayName} width={80} height={80} unoptimized className="w-full h-full object-cover" />
+              ) : (
+                form.displayName[0]?.toUpperCase() ?? "?"
+              )}
             </div>
             <button
               type="button"
-              onClick={() => push("Photo upload coming soon!", "info")}
+              onClick={() => fileRef.current?.click()}
+              disabled={avatarUploading}
               aria-label="Change profile photo"
-              className="absolute inset-0 rounded-2xl bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
+              className="absolute inset-0 rounded-2xl bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center disabled:cursor-not-allowed"
             >
-              <Camera size={18} className="text-white" />
+              {avatarUploading ? <Loader2 size={18} className="text-white animate-spin" /> : <Camera size={18} className="text-white" />}
             </button>
           </div>
           <div className="space-y-2">
-            <button onClick={() => push("Photo upload coming soon!", "info")}
-              className="block text-xs font-black uppercase tracking-widest text-amber-400 hover:text-amber-300 transition-colors"
-            >Upload photo</button>
-            <p className="text-[9px] text-white/25">JPG, PNG or GIF · Max 5MB</p>
+            <button
+              type="button"
+              onClick={() => fileRef.current?.click()}
+              disabled={avatarUploading}
+              className="block text-xs font-black uppercase tracking-widest text-amber-400 hover:text-amber-300 transition-colors disabled:opacity-50"
+            >{avatarUploading ? `Uploading ${avatarProgress}%…` : "Upload photo"}</button>
+            <p className="text-[9px] text-white/25">JPG, PNG, WebP, or GIF · Max 5MB</p>
+            {avatarError && <p className="text-[10px] text-rose-400">{avatarError}</p>}
           </div>
         </div>
       </div>
@@ -132,18 +206,30 @@ export default function AccountSettingsPage() {
       {/* Profile */}
       <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/8 space-y-5">
         <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/35">Profile</p>
-        {([
-          { k:"displayName", label:"Display Name", type:"text", placeholder:"Your name" },
-          { k:"username",    label:"Username",     type:"text", placeholder:"@handle"   },
-          { k:"email",       label:"Email",        type:"email",placeholder:"you@example.com" },
-        ] as const).map(({ k, label, type, placeholder }) => (
-          <div key={k}>
-            <label className="block text-[10px] font-black uppercase tracking-[0.2em] text-white/35 mb-1.5">{label}</label>
-            <input type={type} value={form[k]} onChange={set(k)} placeholder={placeholder}
-              className="w-full rounded-2xl bg-black/30 border border-white/10 px-4 py-3 text-sm text-white placeholder:text-white/20 outline-none focus:border-amber-500/40 transition-colors"
-            />
-          </div>
-        ))}
+        <div>
+          <label className="block text-[10px] font-black uppercase tracking-[0.2em] text-white/35 mb-1.5">Display Name</label>
+          <input type="text" value={form.displayName} onChange={set("displayName")} placeholder="Your name" maxLength={60}
+            className="w-full rounded-2xl bg-black/30 border border-white/10 px-4 py-3 text-sm text-white placeholder:text-white/20 outline-none focus:border-amber-500/40 transition-colors"
+          />
+        </div>
+        <div>
+          <label className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-[0.2em] text-white/35 mb-1.5">
+            Username <Lock size={9} className="text-white/25" />
+          </label>
+          <input type="text" value={storeUser?.username ?? ""} disabled
+            className="w-full rounded-2xl bg-black/40 border border-white/5 px-4 py-3 text-sm text-white/40 cursor-not-allowed"
+          />
+          <p className="text-[9px] text-white/20 mt-1">Username is permanent. Need to change it? Use a custom URL slug below.</p>
+        </div>
+        <div>
+          <label className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-[0.2em] text-white/35 mb-1.5">
+            Email <Lock size={9} className="text-white/25" />
+          </label>
+          <input type="email" value={storeUser?.email ?? ""} disabled
+            className="w-full rounded-2xl bg-black/40 border border-white/5 px-4 py-3 text-sm text-white/40 cursor-not-allowed"
+          />
+          <p className="text-[9px] text-white/20 mt-1">Email change isn&apos;t available yet — coming with the next release.</p>
+        </div>
         <div>
           <label className="block text-[10px] font-black uppercase tracking-[0.2em] text-white/35 mb-1.5">Bio</label>
           <textarea value={form.bio} onChange={set("bio")} rows={3} maxLength={200}
@@ -241,10 +327,11 @@ export default function AccountSettingsPage() {
             <p className="text-sm font-bold text-white/70">Export all data</p>
             <p className="text-[10px] text-white/30 mt-0.5">Watchlist, reviews, posts — everything</p>
           </div>
-          <button onClick={exportData}
-            className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-white/10 bg-white/5 text-xs font-black uppercase tracking-wider text-white/50 hover:text-white hover:bg-white/8 transition-all"
+          <button onClick={exportData} disabled={exporting}
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-white/10 bg-white/5 text-xs font-black uppercase tracking-wider text-white/50 hover:text-white hover:bg-white/8 transition-all disabled:opacity-50"
           >
-            <Download size={13} /> Export
+            {exporting ? <Loader2 size={13} className="animate-spin" /> : <Download size={13} />}
+            {exporting ? "Preparing…" : "Export"}
           </button>
         </div>
       </div>
@@ -254,18 +341,74 @@ export default function AccountSettingsPage() {
         <p className="text-[10px] font-black uppercase tracking-[0.3em] text-red-400/70">Danger Zone</p>
         <div className="flex items-center justify-between">
           <div>
-            <p className="text-sm font-bold text-white">{deleting ? "Are you sure? Click again to confirm." : "Delete Account"}</p>
+            <p className="text-sm font-bold text-white">Delete Account</p>
             <p className="text-[10px] text-white/30 mt-0.5">Permanently removes all your data. Irreversible.</p>
           </div>
-          <button onClick={deleteAccount}
-            className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all ${
-              deleting ? "bg-red-600 text-white border-transparent" : "border border-red-500/30 text-red-400 hover:bg-red-500/10"
-            }`}
+          <button onClick={() => setDeleteOpen(true)}
+            className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all border border-red-500/30 text-red-400 hover:bg-red-500/10"
           >
-            <Trash2 size={13} /> {deleting ? "Confirm Delete" : "Delete"}
+            <Trash2 size={13} /> Delete
           </button>
         </div>
       </div>
+
+      {/* Delete confirmation modal */}
+      {deleteOpen && (
+        <div
+          className="fixed inset-0 z-[200] flex items-center justify-center p-6 bg-black/70 backdrop-blur-sm"
+          onClick={() => !deleting && setDeleteOpen(false)}
+        >
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95, y: 12 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            onClick={e => e.stopPropagation()}
+            className="w-full max-w-md rounded-3xl border border-red-500/25 bg-[#0a0a0a] p-7 shadow-2xl space-y-5"
+          >
+            <div className="flex items-start gap-3">
+              <div className="h-10 w-10 rounded-2xl bg-red-500/15 border border-red-500/25 flex items-center justify-center flex-shrink-0">
+                <AlertCircle size={20} className="text-red-400" />
+              </div>
+              <div>
+                <h3 className="text-base font-black uppercase tracking-tight text-white">Delete your account?</h3>
+                <p className="text-[12px] text-white/55 mt-1 leading-relaxed">
+                  Your profile, posts, watchlist, reviews, and DMs will be permanently erased.
+                  This cannot be undone.
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-[10px] font-black uppercase tracking-[0.18em] text-white/35 mb-1.5">
+                Confirm with your password
+              </label>
+              <input
+                type="password"
+                value={deletePassword}
+                onChange={e => setDeletePassword(e.target.value)}
+                placeholder="Leave blank if you signed in with Google"
+                className="w-full rounded-2xl bg-black/40 border border-white/10 px-4 py-3 text-sm text-white placeholder:text-white/20 outline-none focus:border-red-500/40 transition-colors"
+                autoFocus
+              />
+            </div>
+
+            <div className="flex justify-end gap-2 pt-2">
+              <button
+                onClick={() => { setDeleteOpen(false); setDeletePassword("") }}
+                disabled={deleting}
+                className="px-4 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider text-white/55 hover:text-white hover:bg-white/5 transition-all disabled:opacity-50"
+              >Cancel</button>
+              <button
+                onClick={confirmDelete}
+                disabled={deleting}
+                className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider bg-red-600 hover:bg-red-500 text-white transition-all disabled:opacity-60"
+              >
+                {deleting ? <Loader2 size={13} className="animate-spin" /> : <Trash2 size={13} />}
+                {deleting ? "Deleting…" : "Yes, delete forever"}
+              </button>
+            </div>
+          </motion.div>
+        </div>
+      )}
     </div>
   )
 }

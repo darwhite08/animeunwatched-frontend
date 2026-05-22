@@ -7,7 +7,7 @@ import Link from "next/link"
 import { AnimatePresence, motion } from "framer-motion"
 import { useConversations, useStartConversation, useChatSocket } from "@/hooks/useChat"
 import { useAuthStore } from "@/stores/auth.store"
-import { useClubs, useCreateClub } from "@/hooks/useClubs"
+import { useClubs, useCreateClub, useSearchClubs } from "@/hooks/useClubs"
 import { useNotificationsQuery } from "@/hooks/useNotificationsQuery"
 import { useToast } from "@/stores/toast.store"
 import * as ep from "@/lib/api/endpoints"
@@ -337,6 +337,11 @@ export default function ChatLayout({ children }: { children: React.ReactNode }) 
     c.otherUser.username.toLowerCase().includes(search.toLowerCase())
   )
 
+  // Community search — only fires when the user types something
+  const { data: communitySearchData, isFetching: communitySearchLoading } = useSearchClubs(search)
+  const communityMatches = (communitySearchData?.data ?? []).slice(0, 6)
+  const searchActive = search.trim().length >= 1
+
   const activeClub = clubs.find(c=>c.slug===activeCom)
 
   // Simulated voice room data (watch parties)
@@ -451,6 +456,47 @@ export default function ChatLayout({ children }: { children: React.ReactNode }) 
                     </div>
                   ))}
                 </div>
+
+                {/* Community search results — only when user is searching */}
+                {searchActive && (
+                  <>
+                    <CatHeader label="Communities" />
+                    <div style={{ display:"flex", flexDirection:"column", gap:1, marginBottom:6 }}>
+                      {communitySearchLoading && communityMatches.length === 0 && (
+                        <p style={{ textAlign:"center", color:"var(--ink-4)", fontSize:11, padding:"10px 12px" }}>Searching…</p>
+                      )}
+                      {!communitySearchLoading && communityMatches.length === 0 && (
+                        <p style={{ textAlign:"center", color:"var(--ink-4)", fontSize:11, padding:"10px 12px" }}>No communities match &ldquo;{search}&rdquo;.</p>
+                      )}
+                      {communityMatches.map(club => {
+                        const hue = (club.slug.charCodeAt(0) * 13) % 360
+                        const letter = club.name[0]?.toUpperCase() ?? "#"
+                        return (
+                          <Link key={club.id} href={`/clubs/${club.slug}`} style={{ textDecoration:"none" }}>
+                            <div style={{ display:"flex", alignItems:"center", gap:10, padding:"8px 9px", borderRadius:"var(--r-md)", cursor:"pointer", transition:"background 100ms" }}
+                              onMouseEnter={e=>{(e.currentTarget as HTMLDivElement).style.background="rgba(255,255,255,0.03)"}}
+                              onMouseLeave={e=>{(e.currentTarget as HTMLDivElement).style.background="transparent"}}>
+                              <div style={{ width:32, height:32, borderRadius:10, background:`linear-gradient(135deg,oklch(0.65 0.18 ${hue}),oklch(0.50 0.20 ${hue+30}))`, display:"grid", placeItems:"center", color:"rgba(255,255,255,0.95)", fontWeight:700, fontSize:13, boxShadow:"inset 0 1px 0 rgba(255,255,255,0.16)", flexShrink:0 }}>
+                                {letter}
+                              </div>
+                              <div style={{ flex:1, minWidth:0 }}>
+                                <div style={{ fontSize:13, fontWeight:500, color:"var(--ink)", overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{club.name}</div>
+                                <div style={{ fontSize:11.5, color:"var(--ink-4)", marginTop:1, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>
+                                  {club._count?.members ?? 0} {(club._count?.members ?? 0) === 1 ? "member" : "members"} · /{club.slug}
+                                </div>
+                              </div>
+                            </div>
+                          </Link>
+                        )
+                      })}
+                      <Link href={`/clubs?q=${encodeURIComponent(search)}`} style={{ textDecoration:"none" }}>
+                        <div style={{ display:"flex", alignItems:"center", gap:6, padding:"6px 11px", color:"var(--indigo)", fontSize:11.5, fontWeight:600, cursor:"pointer" }}>
+                          Browse all communities →
+                        </div>
+                      </Link>
+                    </div>
+                  </>
+                )}
 
                 <CatHeader label="Direct messages" onAdd={()=>setShowNew(true)}/>
                 <div style={{ display:"flex", flexDirection:"column", gap:1 }}>

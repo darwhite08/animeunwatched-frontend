@@ -15,10 +15,22 @@ type Club = {
 export const clubsKey = ["clubs"] as const
 export const clubKey  = (slug: string) => ["club", slug] as const
 
-export function useClubs(page = 1) {
+export function useClubs(page = 1, q?: string) {
+  const query = q?.trim() ?? ""
   return useQuery({
-    queryKey: [...clubsKey, page],
-    queryFn:  () => api<Paginated<Club>>(`/clubs?page=${page}`),
+    queryKey: [...clubsKey, page, query],
+    queryFn:  () => api<Paginated<Club>>(`/clubs?page=${page}${query ? `&q=${encodeURIComponent(query)}` : ""}`),
+    staleTime: query ? 30_000 : 60_000,
+  })
+}
+
+export function useSearchClubs(q: string) {
+  const query = q.trim()
+  return useQuery({
+    queryKey: [...clubsKey, "search", query],
+    queryFn:  () => api<Paginated<Club>>(`/clubs?limit=8&q=${encodeURIComponent(query)}`),
+    enabled:  query.length >= 1,
+    staleTime: 30_000,
   })
 }
 

@@ -286,8 +286,8 @@ export default function Navbar() {
             </div>
           )}
 
-          <Link href="/rankings"
-            className={`whitespace-nowrap flex items-center gap-1.5 px-4 py-2 text-[10px] font-black uppercase tracking-widest rounded-full transition-all ${pathname.startsWith("/rankings") ? "text-white bg-white/10" : "text-white/40 hover:text-white hover:bg-white/5"}`}>
+          <Link href="/leaderboard"
+            className={`whitespace-nowrap flex items-center gap-1.5 px-4 py-2 text-[10px] font-black uppercase tracking-widest rounded-full transition-all ${pathname.startsWith("/leaderboard") ? "text-white bg-white/10" : "text-white/40 hover:text-white hover:bg-white/5"}`}>
             <TrendingUp size={11} />
             Leaderboard
           </Link>
@@ -386,7 +386,7 @@ export default function Navbar() {
 
               <div>
                 <p className="text-[8px] font-black text-white/20 uppercase tracking-[0.3em] px-3 mb-1">Navigate</p>
-                {[{ name: "Home", href: "/" }, { name: "Leaderboard", href: "/rankings" }].map(l => (
+                {[{ name: "Home", href: "/" }, { name: "Leaderboard", href: "/leaderboard" }].map(l => (
                   <Link key={l.href} href={l.href} onClick={() => setMobileMenuOpen(false)}
                     className={`flex items-center px-3 py-3 rounded-xl text-xs font-bold transition-all ${pathname === l.href ? "text-white bg-white/8" : "text-white/50 hover:text-white hover:bg-white/5"}`}>
                     {l.name}

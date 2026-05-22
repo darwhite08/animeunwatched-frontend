@@ -2,10 +2,7 @@
 
 import { useState, useRef, useCallback, useEffect } from "react"
 import { getSocket, forceReconnect } from "@/lib/socket"
-
-// Ringtone file paths — served from public/sounds
-const RINGTONE_INCOMING = "/sounds/incoming-call.mp3"
-const RINGTONE_OUTGOING = "/sounds/outgoing-call.mp3"
+import { playSound, stopSound } from "@/lib/audio/notifications"
 
 /* ── STUN + TURN servers ─────────────────────────────────────────────────── */
 const ICE_CONFIG: RTCConfiguration = {
@@ -93,48 +90,31 @@ export function useWebRTC() {
   const pendingICE      = useRef<RTCIceCandidateInit[]>([])
   const ringTimeoutRef  = useRef<ReturnType<typeof setTimeout> | null>(null)
   const hangUpRef       = useRef<() => void>(() => {})
-  // Active ringtone (incoming or outgoing). Single ref shared by both flows so
-  // we never have two ringtones playing at once.
-  const ringtoneRef     = useRef<HTMLAudioElement | null>(null)
-
-  /* ── Ringtone control ──────────────────────────────────────────────────── */
-  const stopRingtone = useCallback(() => {
-    const audio = ringtoneRef.current
-    if (audio) {
-      audio.pause()
-      audio.currentTime = 0
-      ringtoneRef.current = null
-    }
-  }, [])
-
-  const playRingtone = useCallback((kind: "incoming" | "outgoing") => {
-    if (typeof window === "undefined") return
-    // Always stop any prior ringtone before starting a new one
-    stopRingtone()
-    const audio = new Audio(kind === "incoming" ? RINGTONE_INCOMING : RINGTONE_OUTGOING)
-    audio.loop = true
-    audio.volume = kind === "incoming" ? 0.9 : 0.6
-    // Browser autoplay policy: play() returns a Promise that rejects if blocked.
-    // Swallow the error — call UI still works without sound.
-    audio.play().catch(() => {})
-    ringtoneRef.current = audio
-  }, [stopRingtone])
 
   /* ── Ringtone driver ───────────────────────────────────────────────────── */
-  // Centralised: ringtones follow call state automatically.
-  //   incoming + idle-ish  → play incoming ringtone (Window to the Garden)
-  //   calling (outbound)   → play outgoing ringback (phone ring)
+  // Centralised: ringtones follow call state automatically. Backed by the
+  // shared audio pool (lib/audio/notifications.ts), which keeps the audio
+  // elements unlocked across the app's lifetime — otherwise the browser's
+  // autoplay policy silently rejects play() on the socket-driven ringtone.
+  //   incoming + idle-ish  → play incoming ringtone
+  //   calling (outbound)   → play outgoing ringback
   //   active / ended / idle → silence
   useEffect(() => {
     if (incoming && status !== "active") {
-      playRingtone("incoming")
+      stopSound("outgoing-call")
+      playSound("incoming-call", { loop: true })
     } else if (status === "calling") {
-      playRingtone("outgoing")
+      stopSound("incoming-call")
+      playSound("outgoing-call", { loop: true })
     } else {
-      stopRingtone()
+      stopSound("incoming-call")
+      stopSound("outgoing-call")
     }
-    return () => { stopRingtone() }
-  }, [status, incoming, playRingtone, stopRingtone])
+    return () => {
+      stopSound("incoming-call")
+      stopSound("outgoing-call")
+    }
+  }, [status, incoming])
 
   /* ── Timer ─────────────────────────────────────────────────────────────── */
   const startTimer = useCallback(() => {

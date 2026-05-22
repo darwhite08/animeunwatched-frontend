@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react"
 import { useAuthStore } from "@/stores/auth.store"
 import { connectSocket, disconnectSocket, updateSocketToken } from "@/lib/socket"
+import { preloadNotificationAudio } from "@/lib/audio/notifications"
 import { RealtimeListeners } from "./RealtimeListeners"
 
 const BASE = ""
@@ -10,6 +11,13 @@ const BASE = ""
 export function SessionProvider({ children }: { children: React.ReactNode }) {
   const { setAccess, setUser, setSessionReady, clear } = useAuthStore()
   const bootstrapped = useRef(false)
+
+  // Preload notification sounds + arm the gesture-unlock listener so the
+  // browser's autoplay policy doesn't silence ringtones / chimes the first
+  // time a socket event tries to play one.
+  useEffect(() => {
+    preloadNotificationAudio()
+  }, [])
 
   // Bootstrap session from refresh cookie on page load.
   // setSessionReady() is called in every code path so layouts can reliably

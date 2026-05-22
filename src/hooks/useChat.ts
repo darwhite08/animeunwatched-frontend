@@ -5,6 +5,7 @@ import { useEffect, useRef, useState, useCallback } from "react"
 import { useAuthStore } from "@/stores/auth.store"
 import * as ep from "@/lib/api/endpoints"
 import { getSocket } from "@/lib/socket"
+import { playSound } from "@/lib/audio/notifications"
 import type { DirectMessage } from "@/lib/api/types"
 
 // ── Conversations ─────────────────────────────────────────────────────────────
@@ -196,13 +197,9 @@ export function useChatSocket(conversationId: string | null) {
         // at the chat, the message slides in visually and a beep would be noise.
         // Backend only emits chat.message to the recipient socket, so we don't
         // need to filter out the user's own outgoing messages.
-        const viewing      = typeof window !== "undefined" && window.location.pathname === `/chat/${msg.conversationId}`
-        if (!viewing && typeof window !== "undefined") {
-          try {
-            const audio = new Audio("/sounds/new-message.mp3")
-            audio.volume = 0.5
-            void audio.play().catch(() => {})
-          } catch { /* autoplay blocked — silent fallback */ }
+        const viewing = typeof window !== "undefined" && window.location.pathname === `/chat/${msg.conversationId}`
+        if (!viewing) {
+          playSound("new-message")
         }
       }
 

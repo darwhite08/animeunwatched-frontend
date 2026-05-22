@@ -136,12 +136,13 @@ export default function ModerationPage() {
     }))
   , [adminData])
   const { push } = useToast()
-  const [reports, setReports] = useState<Report[]>(MOCK_REPORTS)
+  const [reports, setReports] = useState<Report[]>([])
   const [activeFilter, setActiveFilter] = useState<FilterTab>("all")
+  void MOCK_REPORTS
 
-  // Sync real API data when it arrives (useState initializer only runs on mount)
+  // Sync real API data when it arrives
   useEffect(() => {
-    if (apiReports.length > 0) setReports(apiReports)
+    setReports(apiReports)
   }, [apiReports])
 
   const open      = reports.filter(r => r.status === "open").length

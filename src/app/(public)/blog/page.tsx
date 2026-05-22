@@ -223,7 +223,8 @@ export default function BlogListingPage() {
     category: "Deep Dive" as const, likes: 0, views: 0,
   })), [blogsData])
 
-  const allBlogs = apiBlogs.length > 0 ? apiBlogs : BLOGS
+  const allBlogs = apiBlogs
+  void BLOGS
 
   const filtered =
     activeCategory === "All"

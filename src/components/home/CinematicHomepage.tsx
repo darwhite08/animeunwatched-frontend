@@ -162,10 +162,13 @@ function AIResultRow({
   grad: string
   index: number
 }) {
-  // useAnime is fire-and-forget — if the backend is down the query stays
-  // in pending state and we just show the gradient fallback. We never read
-  // an error field, so a failed fetch can't crash the component.
-  const query = useAnime(malId)
+  // Defer query to after client mount — keeps SSR pure (no network) and
+  // avoids "Internal Server Error" from a server-side fetch that can't
+  // resolve relative URLs or reach the backend.
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => { setMounted(true) }, [])
+
+  const query = useAnime(mounted ? malId : 0) // 0 → enabled:false in useAnime
   const imageUrl = query.data && "anime" in query.data && query.data.anime
     ? query.data.anime.imageUrl
     : null

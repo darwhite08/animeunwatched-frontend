@@ -179,14 +179,18 @@ function AIResultRow({
       {/* Poster thumbnail — real anime cover with gradient fallback */}
       <div className={`relative w-10 h-14 rounded-md shrink-0 ${showImage ? "bg-black/40" : `bg-gradient-to-b ${grad}`} border border-white/[0.1] overflow-hidden`}>
         {showImage && (
-          <Image
+          // Plain <img> intentionally — bypasses next/image domain validation
+          // since the URL host is dynamic (Jikan can return cdn.myanimelist.net,
+          // cdn.noitatnemucod.net, etc. depending on the catalog provider).
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
             src={imageUrl}
             alt={title}
-            fill
-            sizes="40px"
-            className="object-cover"
+            loading="lazy"
+            decoding="async"
+            referrerPolicy="no-referrer"
+            className="absolute inset-0 w-full h-full object-cover"
             onError={() => setImgErr(true)}
-            unoptimized
           />
         )}
         <div className="absolute inset-0 opacity-50 pointer-events-none" style={{

@@ -3,7 +3,8 @@
 import { useState, useMemo } from "react"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
-import { useFeed } from "@/hooks/usePosts"
+import { useFeed, useDeletePost } from "@/hooks/usePosts"
+import { useToast } from "@/stores/toast.store"
 import { useAuthStore } from "@/stores/auth.store"
 import { motion, AnimatePresence } from "framer-motion"
 import { Rss, Plus, Eye, Heart, MessageCircle, MoreHorizontal, Search, Trash2, Edit2, Clock } from "lucide-react"
@@ -55,7 +56,8 @@ export default function FeedPage() {
     }))
   }, [feedData, user])
 
-  const displayFeed = apiFeedPosts.length > 0 ? apiFeedPosts : ENHANCED_FEED
+  const displayFeed = apiFeedPosts
+  void ENHANCED_FEED
 
   const visible = useMemo(() => {
     return displayFeed.filter(item => {
@@ -150,6 +152,16 @@ export default function FeedPage() {
 function FeedPostRow({ post, index }: { post: FeedPost; index: number }) {
   const { label, cls } = STATUS_CONFIG[post.status]
   const [menuOpen, setMenuOpen] = useState(false)
+  const deletePost = useDeletePost(post.id)
+  const { push } = useToast()
+
+  const onDelete = () => {
+    if (!confirm("Delete this post? This cannot be undone.")) return
+    deletePost.mutate(undefined, {
+      onSuccess: () => push("Post deleted", "success"),
+      onError:   () => push("Could not delete post", "error"),
+    })
+  }
 
   return (
     <motion.div
@@ -205,7 +217,13 @@ function FeedPostRow({ post, index }: { post: FeedPost; index: number }) {
         >
           <Edit2 size={14} />
         </Link>
-        <button className="p-2 rounded-lg text-white/40 hover:text-red-400 hover:bg-white/5 transition">
+        <button
+          type="button"
+          onClick={onDelete}
+          disabled={deletePost.isPending}
+          title="Delete post"
+          className="p-2 rounded-lg text-white/40 hover:text-red-400 hover:bg-white/5 transition disabled:opacity-50"
+        >
           <Trash2 size={14} />
         </button>
       </div>

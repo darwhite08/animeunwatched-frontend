@@ -386,10 +386,18 @@ function AnimeDetail({ anime, rawAnime }: { anime: Anime; rawAnime?: AnimeDTO })
               <div className="space-y-4">
                 {(() => {
                   const apiRevs = reviewsData?.data ?? []
-                  const reviews = apiRevs.length > 0 ? apiRevs.map(r => ({
+                  const reviews = apiRevs.map(r => ({
                     id: r.id, user: r.author?.displayName ?? r.author?.username ?? "?",
                     score: r.score, body: r.body, date: new Date(r.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }), likes: r._count?.likes ?? 0,
-                  })) : MOCK_REVIEWS
+                  }))
+                  void MOCK_REVIEWS
+                  if (reviews.length === 0) {
+                    return (
+                      <div className="text-center py-10 text-white/30 text-sm border border-dashed border-white/8 rounded-2xl">
+                        No reviews yet. Be the first to write one.
+                      </div>
+                    )
+                  }
                   return reviews.map((r, i) => (
                     <motion.div key={r.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 + i * 0.06 }}
                       className="p-5 rounded-2xl bg-white/[0.02] border border-white/8 space-y-3">

@@ -3,7 +3,8 @@
 import { useState, useMemo } from "react"
 import Link from "next/link"
 import { motion, AnimatePresence } from "framer-motion"
-import { useBlogs } from "@/hooks/useBlogs"
+import { useBlogs, useDeleteBlog } from "@/hooks/useBlogs"
+import { useToast } from "@/stores/toast.store"
 import { FileText, Plus, Search, Eye, Heart, BarChart2, Clock, Edit2, Trash2, MoreHorizontal } from "lucide-react"
 
 type BlogStatus = "published" | "draft" | "under_review"
@@ -91,7 +92,8 @@ export default function BlogListPage() {
     publishedAt: b.publishedAt ? new Date(b.publishedAt).toLocaleDateString() : "",
   }))
 
-  const allBlogs = apiBlogs.length > 0 ? apiBlogs : MOCK_BLOGS
+  const allBlogs = apiBlogs
+  void MOCK_BLOGS
 
   const visible = useMemo(() => {
     return allBlogs.filter(b => {
@@ -183,6 +185,18 @@ export default function BlogListPage() {
 
 function BlogCard({ blog, index }: { blog: Blog; index: number }) {
   const { label, cls } = STATUS_CONFIG[blog.status]
+  const deleteMut = useDeleteBlog(blog.slug ?? blog.id)
+  const { push } = useToast()
+
+  const onDelete = (e: React.MouseEvent) => {
+    e.preventDefault()
+    e.stopPropagation()
+    if (!confirm(`Delete "${blog.title}"? This cannot be undone.`)) return
+    deleteMut.mutate(undefined, {
+      onSuccess: () => push("Article deleted", "success"),
+      onError:   () => push("Could not delete article", "error"),
+    })
+  }
 
   return (
     <motion.div
@@ -205,7 +219,13 @@ function BlogCard({ blog, index }: { blog: Blog; index: number }) {
           >
             <Edit2 size={13} />
           </Link>
-          <button className="p-2 rounded-lg bg-black/60 backdrop-blur-sm text-white/70 hover:text-red-400 transition">
+          <button
+            type="button"
+            onClick={onDelete}
+            disabled={deleteMut.isPending}
+            title="Delete article"
+            className="p-2 rounded-lg bg-black/60 backdrop-blur-sm text-white/70 hover:text-red-400 transition disabled:opacity-50"
+          >
             <Trash2 size={13} />
           </button>
         </div>

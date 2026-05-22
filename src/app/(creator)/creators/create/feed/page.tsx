@@ -180,10 +180,20 @@ export default function CreateFeedPage() {
         {/* Actions */}
         <div className="flex items-center justify-between pt-2 border-t border-white/5">
           <div className="flex gap-3">
-            <button className="p-2 rounded-lg text-white/40 hover:text-white hover:bg-white/5 transition">
+            <button
+              type="button"
+              title="Image uploads coming soon"
+              onClick={() => push("Image uploads coming in the next release", "info")}
+              className="p-2 rounded-lg text-white/30 cursor-not-allowed transition"
+            >
               <ImagePlus size={16} />
             </button>
-            <button className="p-2 rounded-lg text-white/40 hover:text-white hover:bg-white/5 transition">
+            <button
+              type="button"
+              title="Mention a user (@)"
+              onClick={() => setContent(c => c + (c.endsWith(" ") || c.length === 0 ? "@" : " @"))}
+              className="p-2 rounded-lg text-white/40 hover:text-amber-300 hover:bg-white/5 transition"
+            >
               <AtSign size={16} />
             </button>
           </div>

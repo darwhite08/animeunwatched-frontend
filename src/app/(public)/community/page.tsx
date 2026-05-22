@@ -13,6 +13,7 @@ import TrendingWidget from "@/components/social/TrendingWidget"
 import WatchlistPreviewWidget from "@/components/social/WatchlistPreviewWidget"
 import { useDiscover, useCreatePost, useLikePost, useComments, useCreateComment } from "@/hooks/usePosts"
 import { useLiveFeed } from "@/hooks/useRealtime"
+import { PostMenu } from "@/components/ui/PostMenu"
 import { useAuthStore } from "@/stores/auth.store"
 import type { Post, PostComment } from "@/lib/api/types"
 
@@ -171,9 +172,7 @@ function PostCard({ post }: { post: Post }) {
               <p className="text-[10px] text-white/30 mt-0.5">{timeAgo(post.createdAt)}</p>
             </div>
           </div>
-          <button className="p-1.5 text-white/20 hover:text-white/50 transition-colors rounded-lg hover:bg-white/5">
-            <MoreHorizontal size={15} />
-          </button>
+          <PostMenu postId={post.id} />
         </div>
 
         {/* Anime tag */}
@@ -390,9 +389,21 @@ export default function CommunityPage() {
                     className="w-full bg-transparent text-sm text-white placeholder:text-white/25 resize-none outline-none leading-relaxed disabled:opacity-40" />
                   <div className="flex items-center justify-between border-t border-white/5 pt-3">
                     <div className="flex gap-2">
-                      {[AtSign, Hash, ImageIcon].map((Icon, i) => (
-                        <button key={i} className="p-1.5 text-white/30 hover:text-white transition-colors"><Icon size={15} /></button>
-                      ))}
+                      <button
+                        type="button"
+                        title="Mention a user (@)"
+                        onClick={() => setDraft(d => d + (d.endsWith(" ") || d.length === 0 ? "@" : " @"))}
+                        className="p-1.5 text-white/30 hover:text-amber-300 transition-colors"><AtSign size={15} /></button>
+                      <button
+                        type="button"
+                        title="Add a hashtag (#)"
+                        onClick={() => setDraft(d => d + (d.endsWith(" ") || d.length === 0 ? "#" : " #"))}
+                        className="p-1.5 text-white/30 hover:text-amber-300 transition-colors"><Hash size={15} /></button>
+                      <button
+                        type="button"
+                        title="Image attachments coming soon"
+                        onClick={() => push("Image uploads are coming in the next release", "info")}
+                        className="p-1.5 text-white/20 cursor-not-allowed"><ImageIcon size={15} /></button>
                       {/* Spoiler toggle */}
                       <button onClick={() => setIsSpoiler(s => !s)}
                         title="Mark as spoiler"

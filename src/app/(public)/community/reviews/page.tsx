@@ -55,11 +55,11 @@ export default function CommunityReviewsPage() {
     hasSpoilers: r.hasSpoilers,
   }))
 
-  const MOCK = apiReviews.length > 0 ? apiReviews : (browseData?.data ?? []).map(mapDTO).slice(0, 8).map((anime, i) => ({
-    id: i + 1, anime, author: MOCK_AUTHORS[i] ?? "Anon", score: MOCK_SCORES[i] ?? 9,
-    body: MOCK_BODIES[i] ?? "", helpful: MOCK_HELPFUL[i] ?? 0, helpedByMe: MOCK_HELPED_BY_ME[i] ?? false,
-    date: (MOCK_DATES[i] ?? "1m") + " ago", hasSpoilers: MOCK_HAS_SPOILERS[i] ?? false,
-  }))
+  // Show only real reviews. Empty state handled below.
+  const MOCK = apiReviews
+  // Suppress unused-var warnings — kept for future re-introduction during launch demos
+  void browseData; void MOCK_AUTHORS; void MOCK_SCORES; void MOCK_BODIES;
+  void MOCK_HELPFUL; void MOCK_HELPED_BY_ME; void MOCK_DATES; void MOCK_HAS_SPOILERS;
   const [sort, setSort] = useState<"helpful"|"recent"|"highest"|"lowest">("helpful")
   const [helpedBy, setHelpedBy] = useState<Set<number>>(new Set(MOCK.filter(r=>r.helpedByMe).map(r=>r.id)))
   const [revealed, setRevealed] = useState<Set<number>>(new Set())
@@ -103,6 +103,12 @@ export default function CommunityReviewsPage() {
         </div>
 
         {/* Reviews */}
+        {sorted.length === 0 && (
+          <div className="text-center py-20 border border-dashed border-white/8 rounded-2xl text-white/35">
+            <p className="text-xs uppercase tracking-[0.3em] font-black">No reviews yet</p>
+            <p className="text-[11px] mt-2 text-white/25">Be the first to write one from an anime page.</p>
+          </div>
+        )}
         <div className="grid md:grid-cols-2 gap-5">
           {sorted.map((r, i) => (
             <motion.div key={r.id} initial={{ opacity:0, y:8 }} animate={{ opacity:1, y:0 }} transition={{ delay:i*0.04 }}

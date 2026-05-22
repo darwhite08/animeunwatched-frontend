@@ -12,6 +12,7 @@ import {
 } from "lucide-react"
 import Link from "next/link"
 import { useToast } from "@/stores/toast.store"
+import { PostMenu } from "@/components/ui/PostMenu"
 
 /* ── Types ── */
 type PostDetail = {
@@ -116,88 +117,6 @@ const FALLBACK_POST: PostDetail = {
   liked: false,
   tags: [],
 }
-
-const MOCK_COMMENTS: Comment[] = [
-  {
-    id: 1,
-    author: "VoidSeeker",
-    avatar: "V",
-    avatarColor: "from-violet-500 to-purple-600",
-    time: "1 hour ago",
-    body: "Couldn't agree more. The mana concealment reveal completely reframes your understanding of every interaction Frieren had in the first half of the season. Genius writing.",
-    likes: 24,
-    replies: [
-      {
-        id: 11,
-        author: "Cipher_Ronin",
-        avatar: "C",
-        avatarColor: "from-amber-500 to-orange-600",
-        time: "45 min ago",
-        body: "Exactly — the Serie exam recontextualizes every seemingly casual Frieren moment. When you rewatch you see the quiet menace in her eyes.",
-        likes: 9,
-      },
-      {
-        id: 12,
-        author: "Otaku_Arch",
-        avatar: "O",
-        avatarColor: "from-indigo-500 to-violet-600",
-        time: "30 min ago",
-        body: "The OP himself agreeing with the replies. Love this community.",
-        likes: 14,
-      },
-    ],
-  },
-  {
-    id: 2,
-    author: "Cipher_Ronin",
-    avatar: "C",
-    avatarColor: "from-amber-500 to-orange-600",
-    time: "2 hours ago",
-    body: "The Serie exam arc had me rewinding every frame of Frieren's fights. What looked casual suddenly looked terrifying in retrospect.",
-    likes: 17,
-    replies: [
-      {
-        id: 21,
-        author: "SakuraFrame",
-        avatar: "S",
-        avatarColor: "from-pink-500 to-rose-600",
-        time: "1h 30m ago",
-        body: "Same. That scene where she just... doesn't move, and the enemy loses anyway. Chilling.",
-        likes: 6,
-      },
-    ],
-  },
-  {
-    id: 3,
-    author: "AnimationNerd",
-    avatar: "A",
-    avatarColor: "from-teal-500 to-emerald-600",
-    time: "2 hours ago",
-    body: "I'd actually argue Frieren's power is even more interesting because it inverts typical shonen logic. Strength is *hiding*, not showing.",
-    likes: 31,
-    replies: [],
-  },
-  {
-    id: 4,
-    author: "SakuraFrame",
-    avatar: "S",
-    avatarColor: "from-pink-500 to-rose-600",
-    time: "3 hours ago",
-    body: "This post sent me back to rewatch the exam arc. You're absolutely right — every quiet moment is loaded with menace we couldn't see the first time.",
-    likes: 12,
-    replies: [],
-  },
-  {
-    id: 5,
-    author: "GriffinSeer",
-    avatar: "G",
-    avatarColor: "from-lime-500 to-green-600",
-    time: "4 hours ago",
-    body: "The comparison to Geto's curtain technique in JJK is interesting too. Both systems privilege concealment over brute output. Different vibes, same philosophical axis.",
-    likes: 8,
-    replies: [],
-  },
-]
 
 const RELATED_BY_AUTHOR: Record<string, RelatedPost[]> = {
   "1": [
@@ -374,7 +293,7 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
     likes: 0, liked: false, replies: [],
   }))
 
-  const visibleComments = apiComments.length > 0 ? apiComments : MOCK_COMMENTS
+  const visibleComments = apiComments
 
   const relatedPosts = RELATED_BY_AUTHOR[id] ?? FALLBACK_RELATED
 
@@ -439,9 +358,7 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
                     <p className="text-[10px] text-white/30">{post.time}</p>
                   </div>
                 </div>
-                <button className="p-1.5 text-white/20 hover:text-white/50 transition-colors">
-                  <MoreHorizontal size={15} />
-                </button>
+                <PostMenu postId={String(post.id)} />
               </div>
 
               {/* Anime badge */}
@@ -505,9 +422,15 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
               </h2>
 
               <div className="space-y-3">
-                {visibleComments.map((comment, i) => (
-                  <CommentCard key={comment.id} comment={comment} index={i} />
-                ))}
+                {visibleComments.length === 0 ? (
+                  <div className="text-center py-10 text-white/30 text-sm border border-dashed border-white/8 rounded-2xl">
+                    Be the first to comment.
+                  </div>
+                ) : (
+                  visibleComments.map((comment, i) => (
+                    <CommentCard key={comment.id} comment={comment} index={i} />
+                  ))
+                )}
               </div>
 
               {/* Add comment */}

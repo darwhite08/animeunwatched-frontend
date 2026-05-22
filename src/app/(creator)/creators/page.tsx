@@ -107,7 +107,7 @@ export default function BlogPage() {
           {/* ===== POLL SECTION ===== */}
           <SectionHeader
             title="Your Polls"
-            href="/creator/polls"
+            href="/creators/polls"
           />
 
           <div className="grid md:grid-cols-3 gap-6">

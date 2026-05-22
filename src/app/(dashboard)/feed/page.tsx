@@ -20,7 +20,8 @@ import Link from "next/link"
 import Image from "next/image"
 import { useToast } from "@/stores/toast.store"
 import { useAuthStore } from "@/stores/auth.store"
-import { useFeed, useDiscover, useCreatePost, useLikePost } from "@/hooks/usePosts"
+import { useFeed, useDiscover, useCreatePost, useLikePost, useDeletePost } from "@/hooks/usePosts"
+import { PostMenu } from "@/components/ui/PostMenu"
 import { useBrowseAnime } from "@/hooks/useAnime"
 import { useLeaderboard } from "@/hooks/useLeaderboard"
 import { useLiveFeed, useQueuedPosts } from "@/hooks/useRealtime"
@@ -78,9 +79,11 @@ function avatarGradient(letter: string): string {
 function RealPostCard({ post, index }: { post: Post; index: number }) {
   const { push } = useToast()
   const isAuthenticated = useAuthStore(s => s.isAuthenticated)
+  const me = useAuthStore(s => s.user)
   const [liked, setLiked] = useState(post.isLikedByMe ?? false)
   const [likeCount, setLikeCount] = useState(post._count?.likes ?? 0)
   const likePost = useLikePost(post.id)
+  const deletePost = useDeletePost(post.id)
 
   const handleLike = () => {
     if (!isAuthenticated) { push("Sign in to like posts", "info"); return }
@@ -117,9 +120,17 @@ function RealPostCard({ post, index }: { post: Post; index: number }) {
             <p className="text-[10px] text-white/35 mt-0.5"><LiveTime iso={post.createdAt} /></p>
           </div>
         </div>
-        <button className="p-1.5 text-white/20 hover:text-white/50 transition-colors">
-          <MoreHorizontal size={15} />
-        </button>
+        <PostMenu
+          postId={post.id}
+          isOwner={!!me && post.author?.id === me.id}
+          onDelete={() => {
+            if (!confirm("Delete this post? This cannot be undone.")) return
+            deletePost.mutate(undefined, {
+              onSuccess: () => push("Post deleted", "success"),
+              onError:   () => push("Could not delete post", "error"),
+            })
+          }}
+        />
       </div>
 
       {post.anime && (

@@ -52,15 +52,19 @@ export default function PressPage() {
           <h2 className="text-xl font-black uppercase tracking-tight text-white">Brand Assets</h2>
           <div className="grid md:grid-cols-3 gap-4">
             {["Logo (SVG)", "Logo (PNG Dark)", "Logo (PNG Light)"].map(item => (
-              <div key={item} className="p-5 rounded-2xl bg-white/[0.02] border border-white/8 flex items-center justify-between">
+              <a
+                key={item}
+                href="mailto:press@kaiveron.com?subject=Brand%20Assets%20Request"
+                className="p-5 rounded-2xl bg-white/[0.02] border border-white/8 flex items-center justify-between hover:border-amber-500/30 hover:bg-white/[0.04] transition-colors"
+              >
                 <div className="flex items-center gap-3">
                   <FileText size={16} className="text-amber-400" />
                   <span className="text-sm font-bold text-white/70">{item}</span>
                 </div>
-                <button className="p-2 rounded-lg bg-amber-600/10 text-amber-400 hover:bg-amber-600/20 transition-colors">
+                <span className="p-2 rounded-lg bg-amber-600/10 text-amber-400 hover:bg-amber-600/20 transition-colors">
                   <Download size={13} />
-                </button>
-              </div>
+                </span>
+              </a>
             ))}
           </div>
           <div className="p-5 rounded-2xl bg-white/[0.02] border border-white/8 space-y-3">

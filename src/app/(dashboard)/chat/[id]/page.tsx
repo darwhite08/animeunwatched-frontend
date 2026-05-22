@@ -344,7 +344,12 @@ function ContextRail({ conv, onClose, sharedFiles }: { conv: ConversationDetail;
         <div style={{ padding:"14px" }}>
           <div style={{ display:"flex", alignItems:"center", justifyContent:"space-between", marginBottom:8 }}>
             <span style={{ fontSize:11, fontWeight:600, color:"var(--ink-4)", textTransform:"uppercase", letterSpacing:"0.10em" }}>Tasks</span>
-            <button style={{ fontSize:11.5, color:"var(--indigo)", fontWeight:500, background:"none", border:"none", cursor:"pointer", fontFamily:"inherit" }}>+ New</button>
+            <button
+              type="button"
+              onClick={() => push("Task creation is coming with the next chat release", "info")}
+              title="Coming soon"
+              style={{ fontSize:11.5, color:"var(--indigo)", fontWeight:500, background:"none", border:"none", cursor:"pointer", fontFamily:"inherit" }}
+            >+ New</button>
           </div>
           <div style={{ display:"flex", flexDirection:"column", gap:1 }}>
             {DEMO_TASKS.map(t=><TaskCard key={t.id} task={t}/>)}
@@ -964,7 +969,7 @@ export default function ConversationPage() {
             {[
               { id:"audio", title: micPerm==="denied" ? "🚫 Mic blocked — click for help" : "Voice call", onClick:()=>initiateCall("audio"), d:"M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.99 10.86 19.79 19.79 0 0 1 1.93 2.18 2 2 0 0 1 3.9 0H6.9a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 7.91a16 16 0 0 0 6.13 6.13l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92Z", isCall: true },
               { id:"video", title: micPerm==="denied" ? "🚫 Mic blocked — click for help" : "Video call", onClick:()=>initiateCall("video"), d:"M15 10l4.553-2.069A1 1 0 0 1 21 8.82v6.361a1 1 0 0 1-1.447.894L15 14M3 8a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z", isCall: true },
-              { id:"search", title:"Search", onClick:()=>{}, d:"M11 11c0-3.87 2.13-7 7-7m-7 7a7 7 0 1 1 0-14 7 7 0 0 1 0 14Z", isCall: false },
+              { id:"search", title:"Message search coming soon", onClick:()=>push("Message search is coming in the next release", "info"), d:"M11 11c0-3.87 2.13-7 7-7m-7 7a7 7 0 1 1 0-14 7 7 0 0 1 0 14Z", isCall: false },
             ].map(({ id, title, onClick, d, isCall }) => {
               const inCall = webrtc.status !== "idle"
               const disabled = isCall && inCall

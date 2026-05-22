@@ -17,6 +17,7 @@ import WatchlistPreviewWidget from "@/components/social/WatchlistPreviewWidget"
 import ShareCard from "@/components/ui/ShareCard"
 import { useDiscover } from "@/hooks/usePosts"
 import type { Post as PostDTO } from "@/lib/api/types"
+import { PostMenu } from "@/components/ui/PostMenu"
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -79,9 +80,7 @@ function PostCard({
             <p className="text-[10px] text-white/30">{post.time}</p>
           </div>
         </div>
-        <button className="p-1.5 text-white/20 hover:text-white/50 transition-colors">
-          <MoreHorizontal size={15} />
-        </button>
+        <PostMenu postId={post.id} />
       </div>
 
       {/* Anime badge */}

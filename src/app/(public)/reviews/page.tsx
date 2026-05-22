@@ -58,7 +58,8 @@ export default function ReviewsPage() {
     excerpt: r.body.slice(0, 200),
   }))
 
-  const baseReviews = apiReviews.length > 0 ? apiReviews : MOCK_REVIEWS
+  const baseReviews = apiReviews
+  void MOCK_REVIEWS
   const [helpOverrides, setHelpOverrides] = useState<Record<number, { helpful: number; helpedByMe: boolean }>>({})
   const reviews = baseReviews.map(r => helpOverrides[r.id] ? { ...r, ...helpOverrides[r.id] } : r)
 
@@ -120,6 +121,14 @@ export default function ReviewsPage() {
       </div>
 
       {/* Reviews grid */}
+      {sorted.length === 0 && (
+        <div className="max-w-5xl mx-auto px-6">
+          <div className="text-center py-20 border border-dashed border-white/8 rounded-2xl text-white/35">
+            <p className="text-xs uppercase tracking-[0.3em] font-black">No reviews yet</p>
+            <p className="text-[11px] mt-2 text-white/25">Visit an anime detail page to write the first one.</p>
+          </div>
+        </div>
+      )}
       <div className="max-w-5xl mx-auto px-6 grid md:grid-cols-2 gap-5">
         <AnimatePresence mode="popLayout">
           {sorted.map((r, i) => {

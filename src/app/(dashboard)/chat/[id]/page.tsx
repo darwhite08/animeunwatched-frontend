@@ -66,13 +66,23 @@ function useDecrypt(msgs: DirectMessage[], key: CryptoKey | null) {
 }
 
 /* ─── Message grouping ───────────────────────────────────────────────────── */
-type GM = DirectMessage & { isGroupStart: boolean; dayBreak: boolean }
+type GM = DirectMessage & { isGroupStart: boolean; isGroupEnd: boolean; dayBreak: boolean }
 function groupMsgs(msgs: DirectMessage[]): GM[] {
-  return msgs.map((m, i) => ({
-    ...m,
-    isGroupStart: !msgs[i-1] || msgs[i-1].senderId !== m.senderId,
-    dayBreak: !msgs[i-1] || dayLabel(msgs[i-1].createdAt) !== dayLabel(m.createdAt),
-  }))
+  // Same-sender messages within 5 minutes belong to the same group.
+  const GAP = 5 * 60 * 1000
+  return msgs.map((m, i) => {
+    const prev = msgs[i - 1]
+    const next = msgs[i + 1]
+    const tCur  = new Date(m.createdAt).getTime()
+    const tPrev = prev ? new Date(prev.createdAt).getTime() : 0
+    const tNext = next ? new Date(next.createdAt).getTime() : 0
+    return {
+      ...m,
+      isGroupStart: !prev || prev.senderId !== m.senderId || tCur - tPrev > GAP,
+      isGroupEnd:   !next || next.senderId !== m.senderId || tNext - tCur > GAP,
+      dayBreak:     !prev || dayLabel(prev.createdAt) !== dayLabel(m.createdAt),
+    }
+  })
 }
 
 /* ─── Emoji picker ───────────────────────────────────────────────────────── */
@@ -518,7 +528,15 @@ function MsgRow({ m, isMine, text, authorSrc, authorName, onDelete }: { m:GM; is
   }
 
   return (
-    <div style={{ display:"grid", gridTemplateColumns:"52px minmax(0,1fr)", padding:`${m.isGroupStart?"10px":"2px"} 24px`, position:"relative", animation:"msg-in 240ms cubic-bezier(0.22,1,0.36,1) both" }}
+    <div style={{
+        display:"grid",
+        gridTemplateColumns:"52px minmax(0,1fr)",
+        paddingTop:    m.isGroupStart ? 10 : 1,
+        paddingBottom: m.isGroupEnd   ? 4  : 1,
+        paddingLeft:24, paddingRight:24,
+        position:"relative",
+        animation:"msg-in 240ms cubic-bezier(0.22,1,0.36,1) both",
+      }}
       onMouseEnter={()=>setHover(true)} onMouseLeave={()=>setHover(false)}>
 
       {/* Avatar col */}
@@ -608,11 +626,14 @@ function MsgRow({ m, isMine, text, authorSrc, authorName, onDelete }: { m:GM; is
             </div>
           )}
 
-          {/* Timestamp + read receipt */}
-          <div style={{ display:"flex", alignItems:"center", gap:5, flexDirection:isMine?"row-reverse":"row" }}>
-            <span className="mono" style={{ fontSize:10.5, color:"var(--ink-4)" }}>{ts(m.createdAt)}</span>
-            {isMine && <span className="mono" style={{ fontSize:10.5, color:m.readAt?"var(--indigo)":"var(--ink-4)" }}>{m.readAt?"✓✓":"✓"}</span>}
-          </div>
+          {/* Timestamp + read receipt — only on the LAST message of a group
+              (iMessage / WhatsApp style). Mid-group messages stay clean. */}
+          {m.isGroupEnd && (
+            <div style={{ display:"flex", alignItems:"center", gap:5, flexDirection:isMine?"row-reverse":"row" }}>
+              <span className="mono" style={{ fontSize:10.5, color:"var(--ink-4)" }}>{ts(m.createdAt)}</span>
+              {isMine && <span className="mono" style={{ fontSize:10.5, color:m.readAt?"var(--indigo)":"var(--ink-4)" }}>{m.readAt?"✓✓":"✓"}</span>}
+            </div>
+          )}
         </div>
       </div>
 

@@ -1,12 +1,14 @@
 "use client"
 
 import { useState, useCallback, useMemo } from "react"
+import { useQuery } from "@tanstack/react-query"
 import AIDiscoverHero from "@/components/ai-discover/AIDiscoverHero"
 import AIPromptInput from "@/components/ai-discover/AIPromptInput"
 import AIResultsGrid from "@/components/ai-discover/AIResultsGrid"
 import type { Anime } from "@/lib/data/anime"
 import type { AnimeDTO } from "@/lib/api/types"
-import { useSearchAnimeApi, useBrowseAnime } from "@/hooks/useAnime"
+import { useBrowseAnime } from "@/hooks/useAnime"
+import { discoverAI } from "@/lib/api/endpoints"
 
 function mapToAnime(a: AnimeDTO, i: number): Anime {
   return {
@@ -24,13 +26,19 @@ export default function AIDiscoverPage() {
   const [hasSearched, setHasSearched] = useState(false)
   const [lastQuery, setLastQuery] = useState("")
 
-  const { data: searchData } = useSearchAnimeApi(lastQuery)
+  // Wire to the new AI discovery endpoint
+  const { data: aiData, isFetching } = useQuery({
+    queryKey: ["discovery/ai", lastQuery],
+    queryFn:  () => discoverAI(lastQuery, 18),
+    enabled:  hasSearched && lastQuery.length >= 3,
+    staleTime: 5 * 60_000,
+  })
   const { data: browseData } = useBrowseAnime({ limit: 12 })
 
   const results: Anime[] = useMemo(() => {
-    if (hasSearched && lastQuery && searchData?.data) return searchData.data.map(mapToAnime)
+    if (hasSearched && aiData?.data) return aiData.data.map((r, i) => mapToAnime(r.anime, i))
     return (browseData?.data ?? []).slice(0, 12).map(mapToAnime)
-  }, [hasSearched, lastQuery, searchData, browseData])
+  }, [hasSearched, aiData, browseData])
 
   const handleSearch = useCallback((prompt: string) => {
     setLastQuery(prompt)
@@ -39,6 +47,7 @@ export default function AIDiscoverPage() {
       document.getElementById("ai-results")?.scrollIntoView({ behavior: "smooth", block: "start" })
     }, 300)
   }, [])
+  void isFetching
 
   return (
     <main className="min-h-screen flex flex-col bg-black text-white w-full">

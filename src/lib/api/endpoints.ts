@@ -189,6 +189,37 @@ export const votePoll = (pollId: string, optionId: string) =>
 export const listBlogs = (page = 1, limit = 20, author?: string) =>
   api<Paginated<{ id: string; slug: string; title: string; body: string; coverImage?: string | null; author: { username: string; displayName: string; avatarUrl?: string | null }; createdAt: string; _count?: { likes: number } }>>(`/blogs${author ? `?author=${author}&` : "?"}page=${page}&limit=${limit}`)
 
+/* ── Discovery (AI / Mood / Quiz) ── */
+type DiscoveryAnimeMatch = { anime: AnimeDTO; match: number }
+type DiscoveryResponse<E = unknown> = { data: DiscoveryAnimeMatch[]; meta: { count: number } } & E
+
+export const discoverAI = (prompt: string, limit = 12) =>
+  api<DiscoveryResponse<{ prompt: string; extractedGenres: string[] }>>(
+    "/discovery/ai",
+    { method: "POST", body: JSON.stringify({ prompt, limit }) },
+  )
+
+export const discoverMood = (
+  mood: "uplifting" | "melancholic" | "intense" | "cozy" | "thrilling" | "romantic" | "thought-provoking" | "epic" | "lighthearted" | "dark",
+  opts: { energy?: "low" | "medium" | "high"; depth?: "light" | "deep"; limit?: number } = {},
+) =>
+  api<DiscoveryResponse<{ mood: string; energy: string | null; depth: string | null }>>(
+    "/discovery/mood",
+    { method: "POST", body: JSON.stringify({ mood, ...opts }) },
+  )
+
+export const discoverQuiz = (answers: {
+  favoriteGenre?: string
+  preferredLength?: "movie" | "short" | "medium" | "long"
+  tone?: "serious" | "funny" | "mixed"
+  era?: "classic" | "modern" | "any"
+  pacing?: "slow-burn" | "fast-paced" | "balanced"
+}, limit = 12) =>
+  api<DiscoveryResponse<{ answers: typeof answers }>>(
+    "/discovery/quiz",
+    { method: "POST", body: JSON.stringify({ answers, limit }) },
+  )
+
 /* ── Search ── */
 export const search = (
   q: string,

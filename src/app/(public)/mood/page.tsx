@@ -6,9 +6,23 @@ import { Sparkles, Zap, Heart, Brain, Flame, Laugh, Ghost, Sword, Coffee, Sun } 
 import Link from "next/link"
 import AnimeCard from "@/components/bestanimelist/AnimeCard"
 import AnimeModal from "@/components/bestanimelist/AnimeModal"
-import { useBrowseAnime } from "@/hooks/useAnime"
+import { useQuery } from "@tanstack/react-query"
+import { discoverMood } from "@/lib/api/endpoints"
 import type { Anime } from "@/lib/data/anime"
 import type { AnimeDTO } from "@/lib/api/types"
+
+// Frontend mood id → backend mood enum
+const MOOD_MAP: Record<string, "uplifting" | "melancholic" | "intense" | "cozy" | "thrilling" | "romantic" | "thought-provoking" | "epic" | "lighthearted" | "dark"> = {
+  "hype":      "intense",
+  "emotional": "melancholic",
+  "mind":      "thought-provoking",
+  "cozy":      "cozy",
+  "dark":      "dark",
+  "fun":       "lighthearted",
+  "romance":   "romantic",
+  "adventure": "epic",
+  "fight":     "thrilling",
+}
 
 function mapDTO(a: AnimeDTO, i: number): Anime {
   return {
@@ -129,13 +143,19 @@ export default function MoodPage() {
   const [selectedAnime, setSelectedAnime] = useState<Anime | null>(null)
 
   const mood = MOODS.find(m => m.id === selected)
+  const backendMood = selected ? MOOD_MAP[selected] : null
 
-  const { data, isLoading } = useBrowseAnime({
-    ...(mood?.params ?? {}),
-    limit: 12,
+  const { data, isLoading } = useQuery({
+    queryKey: ["discovery/mood", backendMood],
+    queryFn:  () => backendMood ? discoverMood(backendMood, { limit: 12 }) : Promise.resolve(null),
+    enabled:  !!backendMood,
+    staleTime: 5 * 60_000,
   })
 
-  const anime = useMemo(() => (data?.data ?? []).map(mapDTO), [data])
+  const anime = useMemo<Anime[]>(() => {
+    if (!data?.data) return []
+    return data.data.map((r, i) => mapDTO(r.anime, i))
+  }, [data])
 
   return (
     <div className="min-h-screen bg-[#020202] text-white pb-40">

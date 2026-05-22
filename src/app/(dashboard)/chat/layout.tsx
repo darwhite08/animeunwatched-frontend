@@ -7,7 +7,7 @@ import Link from "next/link"
 import { AnimatePresence, motion } from "framer-motion"
 import { useConversations, useStartConversation, useChatSocket } from "@/hooks/useChat"
 import { useAuthStore } from "@/stores/auth.store"
-import { useClubs } from "@/hooks/useClubs"
+import { useClubs, useCreateClub } from "@/hooks/useClubs"
 import { useNotificationsQuery } from "@/hooks/useNotificationsQuery"
 import { useToast } from "@/stores/toast.store"
 import * as ep from "@/lib/api/endpoints"
@@ -101,10 +101,104 @@ function convTime(iso:string) {
   return format(d,"MMM d")
 }
 
+/* ─── Quick "Create Community" modal ───────────────────────────────────────── */
+function NewCommunityModal({ onClose, onCreated }: { onClose:()=>void; onCreated:(slug:string)=>void }) {
+  const { push } = useToast()
+  const [name, setName] = useState("")
+  const [description, setDescription] = useState("")
+  const createMut = useCreateClub()
+  const ref = useRef<HTMLInputElement>(null)
+  useEffect(()=>{ ref.current?.focus() },[])
+
+  // Derive a URL-safe slug from the name as the user types
+  const slug = name.toLowerCase().trim()
+    .replace(/[^a-z0-9\s-]/g, "")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-")
+    .slice(0, 40)
+
+  const canSubmit = name.trim().length >= 3 && slug.length >= 3 && !createMut.isPending
+
+  async function submit(e: React.FormEvent) {
+    e.preventDefault()
+    if (!canSubmit) return
+    try {
+      const { club } = await createMut.mutateAsync({
+        name: name.trim(),
+        slug,
+        description: description.trim() || undefined,
+      })
+      push(`Community "${club.name}" created`, "success")
+      onCreated(club.slug)
+      onClose()
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "Could not create community"
+      push(msg, "error")
+    }
+  }
+
+  return (
+    <motion.div initial={{opacity:0}} animate={{opacity:1}} exit={{opacity:0}}
+      style={{ position:"fixed", inset:0, background:"rgba(0,0,0,0.7)", backdropFilter:"blur(4px)", zIndex:300, display:"flex", alignItems:"center", justifyContent:"center", padding:16 }}
+      onClick={onClose}
+    >
+      <motion.form initial={{scale:0.94,y:12}} animate={{scale:1,y:0}} exit={{scale:0.94,y:12}}
+        onClick={e=>e.stopPropagation()} onSubmit={submit}
+        style={{ width:"100%", maxWidth:460, background:"var(--bg-1)", border:"1px solid var(--line-strong)", borderRadius:"var(--r-xl)", overflow:"hidden", boxShadow:"0 32px 80px rgba(0,0,0,0.8)" }}
+      >
+        <div style={{ padding:"16px 20px", borderBottom:"1px solid var(--line)", display:"flex", alignItems:"center", justifyContent:"space-between" }}>
+          <div>
+            <div style={{ fontSize:14, fontWeight:700, color:"var(--ink)" }}>Create a community</div>
+            <div style={{ fontSize:11.5, color:"var(--ink-4)", marginTop:2 }}>Start a public club anyone can join.</div>
+          </div>
+          <button type="button" onClick={onClose} style={{ background:"none", border:"none", color:"var(--ink-4)", cursor:"pointer", fontSize:18, lineHeight:1, padding:2 }}>✕</button>
+        </div>
+
+        <div style={{ padding:"18px 20px", display:"flex", flexDirection:"column", gap:14 }}>
+          <label style={{ display:"flex", flexDirection:"column", gap:6 }}>
+            <span style={{ fontSize:11, fontWeight:600, color:"var(--ink-3)", textTransform:"uppercase", letterSpacing:"0.08em" }}>Name</span>
+            <input ref={ref} value={name} onChange={e=>setName(e.target.value)} maxLength={50}
+              placeholder="Demon Slayer Fans" autoComplete="off"
+              style={{ background:"var(--bg-2)", border:"1px solid var(--line-strong)", borderRadius:8, padding:"10px 12px", fontSize:13.5, color:"var(--ink)", outline:"none" }}
+              onFocus={e=>(e.currentTarget.style.borderColor="var(--indigo)")}
+              onBlur={e=>(e.currentTarget.style.borderColor="var(--line-strong)")}
+            />
+          </label>
+
+          {slug.length >= 1 && (
+            <div style={{ fontSize:11, color:"var(--ink-4)" }}>
+              URL: <span style={{ color:"var(--ink-3)", fontFamily:"monospace" }}>/clubs/{slug}</span>
+            </div>
+          )}
+
+          <label style={{ display:"flex", flexDirection:"column", gap:6 }}>
+            <span style={{ fontSize:11, fontWeight:600, color:"var(--ink-3)", textTransform:"uppercase", letterSpacing:"0.08em" }}>Description <span style={{ opacity:0.5, textTransform:"none", letterSpacing:0 }}>· optional</span></span>
+            <textarea value={description} onChange={e=>setDescription(e.target.value)} maxLength={280} rows={3}
+              placeholder="What's this community about?"
+              style={{ background:"var(--bg-2)", border:"1px solid var(--line-strong)", borderRadius:8, padding:"10px 12px", fontSize:13.5, color:"var(--ink)", outline:"none", resize:"vertical", fontFamily:"inherit" }}
+              onFocus={e=>(e.currentTarget.style.borderColor="var(--indigo)")}
+              onBlur={e=>(e.currentTarget.style.borderColor="var(--line-strong)")}
+            />
+          </label>
+        </div>
+
+        <div style={{ padding:"14px 20px", borderTop:"1px solid var(--line)", display:"flex", justifyContent:"flex-end", gap:8, background:"var(--bg-0)" }}>
+          <button type="button" onClick={onClose}
+            style={{ background:"none", border:"1px solid var(--line-strong)", color:"var(--ink-3)", padding:"8px 14px", borderRadius:8, fontSize:12.5, fontWeight:600, cursor:"pointer", fontFamily:"inherit" }}
+          >Cancel</button>
+          <button type="submit" disabled={!canSubmit}
+            style={{ background:canSubmit?"var(--indigo)":"var(--bg-3)", color:canSubmit?"#fff":"var(--ink-4)", border:"none", padding:"8px 16px", borderRadius:8, fontSize:12.5, fontWeight:600, cursor:canSubmit?"pointer":"not-allowed", fontFamily:"inherit", boxShadow:canSubmit?"0 4px 14px oklch(0.45 0.18 282/0.35)":"none", transition:"all 150ms" }}
+          >{createMut.isPending ? "Creating…" : "Create"}</button>
+        </div>
+      </motion.form>
+    </motion.div>
+  )
+}
+
 /* ─── Community Rail (far-left icon strip) ─────────────────────────────────── */
 function CommunityRail({ activeCommunity, onSelect }: { activeCommunity:string|null; onSelect:(id:string|null)=>void }) {
-  const { push: rpush } = useToast()
-  const railSoon = (label: string) => () => rpush(`${label} is coming with the next release`, "info")
+  const router = useRouter()
+  const [showNewCommunity, setShowNewCommunity] = useState(false)
   const { data: clubData } = useClubs()
   const { data: notifData } = useNotificationsQuery()
   const unreadCount = notifData?.data?.filter(n=>!n.read).length ?? 0
@@ -142,8 +236,8 @@ function CommunityRail({ activeCommunity, onSelect }: { activeCommunity:string|n
 
       {/* Add community */}
       <button
-        onClick={railSoon("Creating new communities")}
-        title="Create community (coming soon)"
+        onClick={() => setShowNewCommunity(true)}
+        title="Create community"
         style={{ width:38, height:38, borderRadius:18, background:"var(--bg-2)", border:"2px dashed var(--line-strong)", display:"grid", placeItems:"center", cursor:"pointer", color:"var(--mint)", transition:"all 200ms" }}
         onMouseEnter={e=>{(e.currentTarget as HTMLElement).style.borderRadius="14px";(e.currentTarget as HTMLElement).style.background="var(--bg-3)"}}
         onMouseLeave={e=>{(e.currentTarget as HTMLElement).style.borderRadius="18px";(e.currentTarget as HTMLElement).style.background="var(--bg-2)"}}>
@@ -153,13 +247,22 @@ function CommunityRail({ activeCommunity, onSelect }: { activeCommunity:string|n
       {/* Search at bottom */}
       <div style={{ marginTop:"auto" }}>
         <button
-          onClick={railSoon("Community search")}
-          title="Search communities (coming soon)"
+          onClick={() => router.push("/clubs")}
+          title="Browse all communities"
           style={{ width:38, height:38, borderRadius:18, background:"var(--bg-2)", border:"1px solid var(--line)", display:"grid", placeItems:"center", cursor:"pointer", color:"var(--ink-4)", transition:"all 150ms" }}
         >
           <svg width={15} height={15} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
         </button>
       </div>
+
+      <AnimatePresence>
+        {showNewCommunity && (
+          <NewCommunityModal
+            onClose={() => setShowNewCommunity(false)}
+            onCreated={(slug) => { onSelect(slug); router.push(`/clubs/${slug}`) }}
+          />
+        )}
+      </AnimatePresence>
     </div>
   )
 }

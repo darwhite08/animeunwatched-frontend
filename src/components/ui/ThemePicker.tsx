@@ -17,7 +17,7 @@ export default function ThemePicker() {
     <div className="space-y-6">
       {/* ── Mode ── */}
       <div className="space-y-3">
-        <p className="text-[9px] font-black uppercase tracking-[0.3em] text-white/30">Display Mode</p>
+        <p className="text-[9px] font-black uppercase tracking-[0.3em] text-subtle">Display Mode</p>
         <div className="grid grid-cols-3 gap-3">
           {MODES.map(({ id, label, icon: Icon, desc }) => {
             const active = mode === id
@@ -27,19 +27,19 @@ export default function ThemePicker() {
                 onClick={() => setMode(id)}
                 className={`relative p-4 rounded-2xl border text-left transition-all space-y-2 ${
                   active
-                    ? "border-amber-500/50 bg-amber-500/8"
-                    : "border-white/8 bg-white/[0.02] hover:border-white/15"
+                    ? "border-accent/60 bg-accent-soft"
+                    : "border-border bg-surface hover:border-border-hover"
                 }`}
               >
                 {active && (
                   <motion.div
                     layoutId="theme-mode-active"
-                    className="absolute inset-0 rounded-2xl border-2 border-amber-500/60"
+                    className="absolute inset-0 rounded-2xl border-2 border-accent"
                   />
                 )}
-                <Icon size={18} weight="bold" className={active ? "text-amber-400" : "text-white/35"} />
-                <p className={`text-xs font-black ${active ? "text-amber-300" : "text-white/60"}`}>{label}</p>
-                <p className="text-[9px] text-white/25 leading-tight">{desc}</p>
+                <Icon size={18} weight="bold" className={active ? "text-accent" : "text-muted"} />
+                <p className={`text-xs font-black ${active ? "text-accent-bright" : "text-foreground/70"}`}>{label}</p>
+                <p className="text-[9px] text-subtle leading-tight">{desc}</p>
               </button>
             )
           })}
@@ -48,7 +48,7 @@ export default function ThemePicker() {
 
       {/* ── Accent colour ── */}
       <div className="space-y-3">
-        <p className="text-[9px] font-black uppercase tracking-[0.3em] text-white/30">Accent Colour</p>
+        <p className="text-[9px] font-black uppercase tracking-[0.3em] text-subtle">Accent Colour</p>
         <div className="flex flex-wrap gap-3">
           {(Object.entries(ACCENT_MAP) as [AccentColor, { hex: string; name: string }][]).map(([id, { hex, name }]) => {
             const active = accent === id
@@ -57,18 +57,23 @@ export default function ThemePicker() {
                 key={id}
                 onClick={() => setAccent(id)}
                 title={name}
-                className="flex items-center gap-2 px-3 py-2 rounded-xl border transition-all"
-                style={{
-                  borderColor: active ? hex : "rgba(255,255,255,0.1)",
-                  background:  active ? `${hex}15` : "rgba(255,255,255,0.02)",
-                }}
+                className={`flex items-center gap-2 px-3 py-2 rounded-xl border transition-all ${
+                  active ? "" : "border-border bg-surface"
+                }`}
+                style={
+                  active
+                    ? { borderColor: hex, background: `${hex}15` }
+                    : undefined
+                }
               >
                 <span
                   className="h-4 w-4 rounded-full shrink-0"
                   style={{ background: hex, boxShadow: active ? `0 0 8px ${hex}80` : "none" }}
                 />
-                <span className="text-[10px] font-black uppercase tracking-widest"
-                  style={{ color: active ? hex : "rgba(255,255,255,0.4)" }}>
+                <span
+                  className={`text-[10px] font-black uppercase tracking-widest ${active ? "" : "text-muted"}`}
+                  style={active ? { color: hex } : undefined}
+                >
                   {name}
                 </span>
               </button>

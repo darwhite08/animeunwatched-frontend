@@ -85,7 +85,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           rel="stylesheet"
         />
       </head>
-      <body className="bg-black text-white antialiased">
+      <body className="bg-background text-foreground antialiased">
         {/* Critical: renders immediately on every page */}
         <PageLoader />
         <QueryProvider>

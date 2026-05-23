@@ -1,29 +1,100 @@
 @import "tailwindcss";
 
-/* ── Kaiveron Premium Palette CSS Variables ── */
+/* ── Semantic design tokens (Tailwind v4 @theme integration) ──────────────
+ *
+ *   Use these utilities in new / migrated components:
+ *
+ *     bg-background       page bg            (was: bg-black, bg-[#020202])
+ *     bg-surface          card / panel bg    (was: bg-white/[0.02], bg-[#0a0a0a])
+ *     bg-surface-2        raised panel bg    (was: bg-[#111120])
+ *     text-foreground     primary text       (was: text-white)
+ *     text-muted          secondary text     (was: text-white/50, text-white/60)
+ *     text-subtle         tertiary text      (was: text-white/30, text-white/20)
+ *     border-border       default border     (was: border-white/8, border-white/10)
+ *     text-accent         accent text        (was: text-amber-400, text-[#f59e0b])
+ *     bg-accent           accent fill        (was: bg-amber-500, bg-[#f59e0b])
+ *     bg-accent-bright    brighter accent    (was: bg-amber-400, bg-[#fbbf24])
+ *
+ *   The values below flip when <html> gains a `.theme-dim` / `.theme-light` /
+ *   `.accent-violet` / etc. class. Source of truth: ThemeProvider.tsx.
+ * ─────────────────────────────────────────────────────────────────────── */
+@theme {
+  --color-background:    var(--app-bg);
+  --color-surface:       var(--app-surface);
+  --color-surface-2:     var(--app-surface-2);
+  --color-foreground:    var(--app-fg);
+  --color-muted:         var(--app-muted);
+  --color-subtle:        var(--app-subtle);
+  --color-border:        var(--app-border);
+  --color-border-hover:  var(--app-border-hover);
+  --color-accent:        var(--app-accent);
+  --color-accent-bright: var(--app-accent-bright);
+  --color-accent-soft:   var(--app-accent-soft);
+}
+
+/* ── Default theme: dark + amber ── */
 :root {
-  /* Core */
-  --k-bg:           #05050f;
-  --k-surface:      #0d0d1a;
-  --k-surface-2:    #111120;
-  /* Brand */
+  --app-bg:            #020202;
+  --app-surface:       #0a0a0a;
+  --app-surface-2:     #111120;
+  --app-fg:            #ffffff;
+  --app-muted:         rgba(255,255,255,0.55);
+  --app-subtle:        rgba(255,255,255,0.30);
+  --app-border:        rgba(255,255,255,0.08);
+  --app-border-hover:  rgba(255,255,255,0.15);
+  --app-accent:        #f59e0b;
+  --app-accent-bright: #fbbf24;
+  --app-accent-soft:   rgba(245,158,11,0.12);
+
+  /* Legacy Kaiveron palette — alias to the new tokens so existing .k-* utilities flip too */
+  --k-bg:           var(--app-bg);
+  --k-surface:      var(--app-surface);
+  --k-surface-2:    var(--app-surface-2);
   --k-indigo:       #6366f1;
   --k-indigo-dim:   rgba(99,102,241,0.12);
   --k-indigo-border:rgba(99,102,241,0.25);
-  /* Premium gold */
-  --k-gold:         #f59e0b;
-  --k-gold-bright:  #fbbf24;
-  --k-gold-dim:     rgba(245,158,11,0.12);
+  --k-gold:         var(--app-accent);
+  --k-gold-bright:  var(--app-accent-bright);
+  --k-gold-dim:     var(--app-accent-soft);
   --k-gold-border:  rgba(245,158,11,0.28);
   --k-gold-glow:    0 0 20px rgba(245,158,11,0.18);
-  /* Text */
-  --k-text:         rgba(255,255,255,0.85);
-  --k-text-muted:   rgba(255,255,255,0.40);
-  --k-text-subtle:  rgba(255,255,255,0.20);
-  /* Borders */
-  --k-border:       rgba(255,255,255,0.07);
-  --k-border-hover: rgba(255,255,255,0.15);
+  --k-text:         var(--app-fg);
+  --k-text-muted:   var(--app-muted);
+  --k-text-subtle:  var(--app-subtle);
+  --k-border:       var(--app-border);
+  --k-border-hover: var(--app-border-hover);
 }
+
+/* ── Display modes ── */
+.theme-dim {
+  --app-bg:            #0d1117;
+  --app-surface:       #161b22;
+  --app-surface-2:     #1e252e;
+  --app-fg:            #e6edf3;
+  --app-muted:         rgba(230,237,243,0.55);
+  --app-subtle:        rgba(230,237,243,0.30);
+  --app-border:        rgba(230,237,243,0.10);
+  --app-border-hover:  rgba(230,237,243,0.20);
+}
+
+.theme-light {
+  --app-bg:            #f8f9fa;
+  --app-surface:       #ffffff;
+  --app-surface-2:     #f1f3f5;
+  --app-fg:            #0d1117;
+  --app-muted:         rgba(13,17,23,0.62);
+  --app-subtle:        rgba(13,17,23,0.38);
+  --app-border:        rgba(0,0,0,0.08);
+  --app-border-hover:  rgba(0,0,0,0.15);
+}
+
+/* ── Accent palettes ── */
+.accent-amber   { --app-accent: #f59e0b; --app-accent-bright: #fbbf24; --app-accent-soft: rgba(245,158,11,0.12); }
+.accent-violet  { --app-accent: #8b5cf6; --app-accent-bright: #a78bfa; --app-accent-soft: rgba(139, 92,246,0.12); }
+.accent-emerald { --app-accent: #10b981; --app-accent-bright: #34d399; --app-accent-soft: rgba( 16,185,129,0.12); }
+.accent-rose    { --app-accent: #f43f5e; --app-accent-bright: #fb7185; --app-accent-soft: rgba(244, 63, 94,0.12); }
+.accent-sky     { --app-accent: #0ea5e9; --app-accent-bright: #38bdf8; --app-accent-soft: rgba( 14,165,233,0.12); }
+.accent-orange  { --app-accent: #f97316; --app-accent-bright: #fb923c; --app-accent-soft: rgba(249,115, 22,0.12); }
 
 /* Gold shimmer utility */
 .k-gold-shimmer {

@@ -26,18 +26,17 @@ export default function MeSettingsLayout({ children }: { children: React.ReactNo
       {/* Header */}
       <div className="mb-10">
         <div className="flex items-center gap-2 mb-3">
-          <Settings size={14} className="text-amber-400" />
-          <p className="text-[9px] font-mono font-black uppercase tracking-[0.4em]"
-            style={{ color: "rgba(245,158,11,0.6)" }}>
+          <Settings size={14} className="text-accent" />
+          <p className="text-[9px] font-mono font-black uppercase tracking-[0.4em] text-accent/60">
             me / settings
           </p>
         </div>
-        <h1 className="text-4xl font-black tracking-tighter text-white uppercase italic">
-          Settings<span style={{ color: "#f59e0b" }}>.</span>
+        <h1 className="text-4xl font-black tracking-tighter text-foreground uppercase italic">
+          Settings<span className="text-accent">.</span>
         </h1>
-        {/* Gold divider */}
+        {/* Accent divider */}
         <div className="mt-6 h-px"
-          style={{ background: "linear-gradient(90deg, rgba(245,158,11,0.5), rgba(245,158,11,0.2) 40%, transparent)" }} />
+          style={{ background: "linear-gradient(90deg, color-mix(in srgb, var(--app-accent) 50%, transparent), color-mix(in srgb, var(--app-accent) 20%, transparent) 40%, transparent)" }} />
       </div>
 
       <div className="flex flex-col lg:flex-row gap-8">
@@ -48,21 +47,21 @@ export default function MeSettingsLayout({ children }: { children: React.ReactNo
             return (
               <Link key={item.href} href={item.href}
                 className={`relative flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition-all ${
-                  active ? "text-white" : "text-white/40 hover:text-white hover:bg-white/[0.03]"
+                  active ? "text-foreground" : "text-muted hover:text-foreground hover:bg-foreground/5"
                 }`}
               >
                 {active && (
                   <motion.div layoutId="me-settings-pill"
-                    className="absolute inset-0 rounded-xl"
+                    className="absolute inset-0 rounded-xl border border-accent/25"
                     style={{
-                      background: "linear-gradient(135deg, rgba(245,158,11,0.1), rgba(245,158,11,0.05))",
-                      border: "1px solid rgba(245,158,11,0.2)",
+                      background:
+                        "linear-gradient(135deg, color-mix(in srgb, var(--app-accent) 10%, transparent), color-mix(in srgb, var(--app-accent) 5%, transparent))",
                     }}
                     transition={{ type: "spring", stiffness: 320, damping: 30 }}
                   />
                 )}
                 <item.icon size={15}
-                  className={`relative z-10 transition-colors ${active ? "text-amber-400" : ""}`}
+                  className={`relative z-10 transition-colors ${active ? "text-accent" : ""}`}
                 />
                 <span className="relative z-10">{item.label}</span>
               </Link>

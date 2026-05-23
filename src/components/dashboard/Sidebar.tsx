@@ -62,7 +62,7 @@ export default function Sidebar() {
   }))
 
   return (
-    <aside className="fixed left-0 top-0 h-screen w-64 bg-[#050505] border-r border-white/5 flex flex-col z-50">
+    <aside className="fixed left-0 top-0 h-screen w-64 bg-surface border-r border-border flex flex-col z-50">
 
       {/* Logo */}
       <div className="px-6 pt-7 pb-5">
@@ -70,18 +70,18 @@ export default function Sidebar() {
           {/* Kaiveron K mark */}
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="36" height="36"
             className="group-hover:scale-110 transition-transform flex-shrink-0"
-            style={{ filter: "drop-shadow(0 0 10px rgba(245,158,11,0.25))" }}>
+            style={{ filter: "drop-shadow(0 0 10px color-mix(in srgb, var(--app-accent) 25%, transparent))" }}>
             <defs>
               <linearGradient id="sidebarKGold" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#fbbf24"/>
-                <stop offset="100%" stopColor="#d97706"/>
+                <stop offset="0%" stopColor="var(--app-accent-bright)"/>
+                <stop offset="100%" stopColor="var(--app-accent)"/>
               </linearGradient>
             </defs>
             <rect width="100" height="100" rx="18" fill="#0A0F1E"/>
             <path d="M 30 28 L 40 28 L 40 46 L 47 46 L 54 28 L 64 28 L 53 50 L 50 50 L 60 72 L 50 72 L 44 60 L 40 60 L 40 72 L 30 72 Z" fill="url(#sidebarKGold)"/>
           </svg>
-          <span className="text-lg font-black tracking-tight text-white uppercase italic">
-            KAIVERON<span style={{ color: "#f59e0b" }}>.</span>
+          <span className="text-lg font-black tracking-tight text-foreground uppercase italic">
+            KAIVERON<span className="text-accent">.</span>
           </span>
         </Link>
       </div>
@@ -90,8 +90,7 @@ export default function Sidebar() {
       <div className="flex-1 overflow-y-auto px-3 space-y-5 pb-4 scrollbar-hide">
         {NAV.map(group => (
           <div key={group.label}>
-            <p className="px-3 mb-1.5 text-[9px] font-black uppercase tracking-[0.4em]"
-              style={{ color: "rgba(245,158,11,0.35)" }}>
+            <p className="px-3 mb-1.5 text-[9px] font-black uppercase tracking-[0.4em] text-accent/40">
               {group.label}
             </p>
             <div className="space-y-0.5">
@@ -104,16 +103,16 @@ export default function Sidebar() {
                     key={item.name}
                     href={item.href}
                     className={`relative flex items-center justify-between px-3 py-2.5 rounded-xl transition-all group ${
-                      active ? "text-white" : "text-white/40 hover:text-white hover:bg-white/[0.03]"
+                      active ? "text-foreground" : "text-muted hover:text-foreground hover:bg-foreground/5"
                     }`}
                   >
                     {active && (
                       <motion.div
                         layoutId="sidebar-pill"
-                        className="absolute inset-0 rounded-xl"
+                        className="absolute inset-0 rounded-xl border border-accent/25"
                         style={{
-                          background: "linear-gradient(135deg, rgba(245,158,11,0.1), rgba(245,158,11,0.05))",
-                          border: "1px solid rgba(245,158,11,0.2)",
+                          background:
+                            "linear-gradient(135deg, color-mix(in srgb, var(--app-accent) 10%, transparent), color-mix(in srgb, var(--app-accent) 5%, transparent))",
                         }}
                         transition={{ type: "spring", stiffness: 320, damping: 30 }}
                       />
@@ -121,14 +120,14 @@ export default function Sidebar() {
                     <div className="flex items-center gap-3 relative z-10">
                       <item.icon
                         size={15}
-                        className={active ? "text-amber-400" : "group-hover:text-amber-400/70 transition-colors"}
+                        className={active ? "text-accent" : "group-hover:text-accent/70 transition-colors"}
                       />
                       <span className="text-[13px] font-bold">{item.name}</span>
                     </div>
                     {"badge" in item && item.badge && (
                       <span className="relative z-10 flex items-center gap-1">
                         {item.name === "Notifications" && unreadCount > 0 && (
-                          <span className="px-1.5 py-0.5 rounded-full bg-amber-600/30 text-[8px] font-black text-amber-400">
+                          <span className="px-1.5 py-0.5 rounded-full bg-accent/30 text-[8px] font-black text-accent">
                             {unreadCount > 99 ? "99+" : unreadCount}
                           </span>
                         )}
@@ -143,34 +142,34 @@ export default function Sidebar() {
 
         {/* Watchlist count chip */}
         {wlCount > 0 && (
-          <div className="mx-3 p-3 rounded-xl bg-white/[0.03] border border-white/8 flex items-center justify-between">
-            <span className="text-[11px] font-bold text-white/50">Watchlist items</span>
-            <span className="text-[11px] font-black text-amber-400">{wlCount}</span>
+          <div className="mx-3 p-3 rounded-xl bg-surface-2 border border-border flex items-center justify-between">
+            <span className="text-[11px] font-bold text-muted">Watchlist items</span>
+            <span className="text-[11px] font-black text-accent">{wlCount}</span>
           </div>
         )}
       </div>
 
       {/* Streak footer */}
-      <div className="px-4 pb-5 pt-3 border-t border-white/5">
+      <div className="px-4 pb-5 pt-3 border-t border-border">
         <Link href={slug ? userPath(slug, "streak") : "/streak"} className="block group">
-          <div className="p-4 rounded-2xl bg-white/[0.03] border border-white/8 space-y-3 group-hover:bg-white/[0.05] group-hover:border-amber-500/25 transition-all">
+          <div className="p-4 rounded-2xl bg-surface-2 border border-border space-y-3 group-hover:bg-foreground/5 group-hover:border-accent/25 transition-all">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2.5">
                 <div className="p-1.5 rounded-lg bg-orange-500/10 text-orange-500">
                   <Flame size={14} fill="currentColor" className="animate-pulse" />
                 </div>
                 <div>
-                  <p className="text-xs font-black text-white leading-none">{streak} Day Streak</p>
-                  <p className="text-[9px] text-white/20 uppercase tracking-tighter mt-0.5">Flame {grade}</p>
+                  <p className="text-xs font-black text-foreground leading-none">{streak} Day Streak</p>
+                  <p className="text-[9px] text-subtle uppercase tracking-tighter mt-0.5">Flame {grade}</p>
                 </div>
               </div>
-              <ChevronRight size={12} className="text-white/20 group-hover:text-amber-400 group-hover:translate-x-0.5 transition-all" />
+              <ChevronRight size={12} className="text-subtle group-hover:text-accent group-hover:translate-x-0.5 transition-all" />
             </div>
             <div>
-              <div className="flex justify-between text-[8px] font-black uppercase tracking-widest text-white/20 mb-1">
+              <div className="flex justify-between text-[8px] font-black uppercase tracking-widest text-subtle mb-1">
                 <span>Daily Goal</span><span>80%</span>
               </div>
-              <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden">
+              <div className="h-1 w-full bg-foreground/5 rounded-full overflow-hidden">
                 <motion.div
                   initial={{ width: 0 }}
                   animate={{ width: "80%" }}

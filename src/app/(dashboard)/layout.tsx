@@ -53,7 +53,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   // Still loading session — show the Kaiveron loader
   if (!sessionReady) {
     return (
-      <div className="min-h-screen bg-[#020202] flex items-center justify-center">
+      <div className="min-h-screen bg-background flex items-center justify-center">
         <KLoader />
       </div>
     )
@@ -73,8 +73,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   // Has slug → show spinner while the redirect fires
   if (user.slug) {
     return (
-      <div className="min-h-screen bg-[#020202] flex items-center justify-center">
-        <div className="w-6 h-6 rounded-full border-2 border-amber-500/20 border-t-amber-500 animate-spin" />
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="w-6 h-6 rounded-full border-2 border-accent/20 border-t-accent animate-spin" />
       </div>
     )
   }
@@ -85,7 +85,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 
 function DashShell({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex min-h-screen bg-[#020202] text-white">
+    <div className="flex min-h-screen bg-background text-foreground">
       <Sidebar />
       <main className="flex-1 ml-64 min-h-screen">
         {children}
@@ -113,7 +113,7 @@ function KLoader() {
             fill="url(#loaderKGoldDash)" />
         </svg>
       </motion.div>
-      <div className="w-6 h-6 rounded-full border-2 border-amber-500/20 border-t-amber-500 animate-spin" />
+      <div className="w-6 h-6 rounded-full border-2 border-accent/20 border-t-accent animate-spin" />
     </div>
   )
 }

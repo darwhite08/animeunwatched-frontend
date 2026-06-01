@@ -61,7 +61,7 @@ export default function LandingFeatures() {
       
       {/* 1. BACKGROUND ARCHITECTURE */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_80%_at_50%_50%,#000_20%,transparent_100%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(color-mix(in srgb, var(--app-fg) 3%, transparent)_1px,transparent_1px),linear-gradient(90deg,color-mix(in srgb, var(--app-fg) 3%, transparent)_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_80%_at_50%_50%,#000_20%,transparent_100%)]" />
         <div className="absolute top-1/4 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent" />
         <div className="absolute top-3/4 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-white/10 to-transparent" />
       </div>

@@ -98,7 +98,7 @@ export default function ReviewComposer({ isOpen, onClose, animeTitle, animeId }:
                       size={22}
                       className="transition-colors duration-150"
                       fill={display && n <= display ? "var(--app-accent)" : "none"}
-                      stroke={display && n <= display ? "var(--app-accent)" : "rgba(255,255,255,0.2)"}
+                      stroke={display && n <= display ? "var(--app-accent)" : "color-mix(in srgb, var(--app-fg) 20%, transparent)"}
                     />
                   </button>
                 ))}

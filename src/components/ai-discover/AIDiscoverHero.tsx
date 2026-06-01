@@ -40,7 +40,7 @@ export default function AIDiscoverHero() {
         >
           Find Your Next{" "}
           <span className="italic" style={{
-            backgroundImage: "linear-gradient(135deg, var(--app-accent-bright) 0%, var(--app-accent) 40%, #ffffff 100%)",
+            backgroundImage: "linear-gradient(135deg, var(--app-accent-bright) 0%, var(--app-accent) 40%, var(--app-fg) 100%)",
             WebkitBackgroundClip: "text",
             WebkitTextFillColor: "transparent",
           }}>
@@ -68,7 +68,7 @@ export default function AIDiscoverHero() {
           {["Mood-based search", "Genre matching", "Hidden gems", "Studio filtering", "Era selection"].map((chip, i) => (
             <span key={chip}
               className="px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest text-subtle"
-              style={{ border: "1px solid rgba(255,255,255,0.07)", background: "rgba(255,255,255,0.03)" }}>
+              style={{ border: "1px solid color-mix(in srgb, var(--app-fg) 7%, transparent)", background: "color-mix(in srgb, var(--app-fg) 3%, transparent)" }}>
               {chip}
             </span>
           ))}

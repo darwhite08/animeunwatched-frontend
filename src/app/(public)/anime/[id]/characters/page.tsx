@@ -65,7 +65,7 @@ export default function CharactersPage({ params }: { params: Promise<{ id: strin
                     {va && <p className="text-[9px] text-subtle truncate">CV: {va.person.name}</p>}
                     {c.favorites > 0 && (
                       <div className="flex items-center gap-1 text-[9px] text-accent-bright/60">
-                        <Star size={8} className="fill-amber-400/60" />{c.favorites.toLocaleString()}
+                        <Star size={8} className="fill-accent-bright/60" />{c.favorites.toLocaleString()}
                       </div>
                     )}
                   </div>

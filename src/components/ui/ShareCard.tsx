@@ -69,7 +69,7 @@ function CardPreview({
           <div className="flex items-center gap-1.5">
             {rating !== undefined ? (
               <>
-                <Star className="w-3.5 h-3.5 text-accent-bright fill-amber-400" />
+                <Star className="w-3.5 h-3.5 text-accent-bright fill-accent-bright" />
                 <span className="text-accent-bright font-bold text-sm">{rating}/10</span>
               </>
             ) : (

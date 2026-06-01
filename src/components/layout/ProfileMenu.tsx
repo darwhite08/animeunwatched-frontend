@@ -36,7 +36,7 @@ export default function ProfileMenu({ user, isOpen, onClose, onLogout }: Profile
           className="absolute right-0 mt-3 w-52 rounded-2xl p-1.5 backdrop-blur-2xl z-50"
           style={{
             background: "linear-gradient(160deg, rgba(12,10,22,0.98), rgba(8,7,18,0.99))",
-            border: "1px solid rgba(255,255,255,0.07)",
+            border: "1px solid color-mix(in srgb, var(--app-fg) 7%, transparent)",
             boxShadow: "0 20px 60px rgba(0,0,0,0.7), 0 0 0 0.5px color-mix(in srgb, var(--app-accent) 10%, transparent) inset",
           }}
         >
@@ -60,7 +60,7 @@ export default function ProfileMenu({ user, isOpen, onClose, onLogout }: Profile
             </Link>
           ))}
 
-          <div className="h-px mx-2 my-1" style={{ background: "rgba(255,255,255,0.05)" }} />
+          <div className="h-px mx-2 my-1" style={{ background: "color-mix(in srgb, var(--app-fg) 5%, transparent)" }} />
 
           <button onClick={onLogout}
             className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-[10px] font-black text-red-400/50 uppercase tracking-widest hover:bg-red-500/8 hover:text-red-400 transition-all group"

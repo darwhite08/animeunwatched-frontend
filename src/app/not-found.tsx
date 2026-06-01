@@ -40,7 +40,7 @@ export default function NotFound() {
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           className="text-[clamp(6rem,20vw,14rem)] font-black tracking-tighter leading-none uppercase italic mb-6"
           style={{
-            backgroundImage: "linear-gradient(135deg, var(--app-accent-bright) 0%, var(--app-accent) 30%, rgba(255,255,255,0.15) 100%)",
+            backgroundImage: "linear-gradient(135deg, var(--app-accent-bright) 0%, var(--app-accent) 30%, color-mix(in srgb, var(--app-fg) 15%, transparent) 100%)",
             WebkitBackgroundClip: "text",
             WebkitTextFillColor: "transparent",
           }}

@@ -57,6 +57,12 @@ RULES = [
     (rf'{NO_LEFT}bg-amber-(?:500|600|700){NO_RIGHT}',                 'bg-accent',          'bg-amber-500/600 → bg-accent'),
     (rf'{NO_LEFT}border-amber-(?:300|400|500|600|700){NO_RIGHT}',     'border-accent',      'border-amber-N → border-accent'),
 
+    # ── fill / stroke (SVG icons) → accent ──────────────────────────────
+    (rf'{NO_LEFT}fill-amber-(?:300|400){NO_RIGHT}',                   'fill-accent-bright', 'fill-amber-300/400 → fill-accent-bright'),
+    (rf'{NO_LEFT}fill-amber-(?:500|600|700){NO_RIGHT}',               'fill-accent',        'fill-amber-500/600 → fill-accent'),
+    (rf'{NO_LEFT}stroke-amber-(?:300|400){NO_RIGHT}',                 'stroke-accent-bright','stroke-amber-300/400 → stroke-accent-bright'),
+    (rf'{NO_LEFT}stroke-amber-(?:500|600|700){NO_RIGHT}',             'stroke-accent',      'stroke-amber-500/600 → stroke-accent'),
+
     # ── ring / outline / divide → accent ────────────────────────────────
     (rf'{NO_LEFT}ring-amber-(?:400|500|600)(?:/(\d+))?{NO_RIGHT}',    r'ring-accent\g<0>',  'placeholder-keep-suffix'),  # handled below
     # (the ring rule above is too clever; do it explicitly:)

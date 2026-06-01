@@ -59,7 +59,7 @@ function HeroCard({ anime, rank }: { anime: Anime; rank: number }) {
 
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-1.5">
-              <Star size={16} className="text-accent-bright fill-amber-400" />
+              <Star size={16} className="text-accent-bright fill-accent-bright" />
               <span className="text-accent-bright font-black text-lg">{anime.rating}</span>
               <span className="text-subtle text-sm">/10</span>
             </div>
@@ -126,7 +126,7 @@ function RankedRow({ anime, rank, index }: { anime: Anime; rank: number; index: 
 
       {/* Rating */}
       <div className="flex items-center gap-1 shrink-0">
-        <Star size={12} className="text-accent-bright fill-amber-400" />
+        <Star size={12} className="text-accent-bright fill-accent-bright" />
         <span className="text-accent-bright font-black text-sm">{anime.rating}</span>
       </div>
 
@@ -151,7 +151,7 @@ function AnimeGridCard({ anime, index }: { anime: Anime; index: number }) {
         <div className="absolute bottom-2 left-3 right-3">
           <p className="text-xs font-black uppercase italic text-foreground leading-tight truncate">{anime.title}</p>
           <div className="flex items-center gap-1 mt-0.5">
-            <Star size={9} className="text-accent-bright fill-amber-400" />
+            <Star size={9} className="text-accent-bright fill-accent-bright" />
             <span className="text-accent-bright font-black text-[10px]">{anime.rating}</span>
           </div>
         </div>

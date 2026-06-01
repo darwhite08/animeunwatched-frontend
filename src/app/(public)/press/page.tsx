@@ -74,7 +74,7 @@ export default function PressPage() {
                 { color: "#4f46e5", name: "Indigo 600", hex: "#4f46e5" },
                 { color: "#7c3aed", name: "Violet 600", hex: "#7c3aed" },
                 { color: "#020202", name: "Neural Black", hex: "#020202" },
-                { color: "#ffffff", name: "Pure White", hex: "#ffffff" },
+                { color: "var(--app-fg)", name: "Pure White", hex: "var(--app-fg)" },
               ].map(c => (
                 <div key={c.name} className="flex items-center gap-2">
                   <div className="w-8 h-8 rounded-lg border border-border" style={{ backgroundColor: c.color }} />

@@ -65,7 +65,7 @@ function YearCard({ year, index, allAnime }: { year: number; index: number; allA
                 </p>
                 <div className="flex items-center gap-2 mt-1.5">
                   <div className="flex items-center gap-1">
-                    <Star size={10} className="text-accent-bright fill-amber-400" />
+                    <Star size={10} className="text-accent-bright fill-accent-bright" />
                     <span className="text-accent-bright font-black text-[10px]">{top.rating}</span>
                   </div>
                   <span className="text-subtle text-[9px]">·</span>

@@ -154,7 +154,7 @@ function ClubCard({
       <div
         className={`h-24 w-full bg-gradient-to-br ${club.coverGradient} relative overflow-hidden`}
       >
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(255,255,255,0.06),transparent_60%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,color-mix(in srgb, var(--app-fg) 6%, transparent),transparent_60%)]" />
         <div className="absolute bottom-3 left-4">
           <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-black/40 backdrop-blur border border-border text-[9px] font-black uppercase tracking-widest text-muted">
             <Icon size={9} />

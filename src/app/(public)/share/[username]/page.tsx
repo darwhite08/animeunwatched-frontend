@@ -168,7 +168,7 @@ export default function ShareProfilePage({ params }: { params: Promise<{ usernam
                       <span className="text-[9px] font-black" style={{ color }}>{i + 1}</span>
                       <span className="flex-1 text-muted truncate font-medium">{a.title}</span>
                       <span className="flex items-center gap-0.5 text-[10px] font-black text-accent-bright">
-                        <Star size={9} className="fill-amber-400" /> {a.score}/10
+                        <Star size={9} className="fill-accent-bright" /> {a.score}/10
                       </span>
                     </div>
                   ))}

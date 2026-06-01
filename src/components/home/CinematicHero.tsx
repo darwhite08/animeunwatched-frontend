@@ -74,7 +74,7 @@ function PosterCard({ title, image, score, genre, bgIdx, delay, w, h }: CardProp
       <div className="absolute inset-0 bg-gradient-to-t from-black/88 via-transparent to-transparent" />
 
       <div className="absolute top-2 right-2 flex items-center gap-0.5 px-1.5 py-0.5 rounded-md bg-black/55 backdrop-blur-sm border border-white/[0.08]">
-        <Star size={7} className="fill-amber-400 text-accent-bright" />
+        <Star size={7} className="fill-accent-bright text-accent-bright" />
         <span className="text-[9px] font-semibold text-foreground">{score.toFixed(1)}</span>
       </div>
 
@@ -125,7 +125,7 @@ export default function CinematicHero() {
           background: "radial-gradient(ellipse 60% 55% at -8% -8%, rgba(79,70,229,0.11) 0%, transparent 50%)",
         }} />
         <div className="absolute inset-0 opacity-[0.022]" style={{
-          backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.9) 1px, transparent 1px)",
+          backgroundImage: "radial-gradient(circle, color-mix(in srgb, var(--app-fg) 90%, transparent) 1px, transparent 1px)",
           backgroundSize: "44px 44px",
         }} />
         <div className="absolute bottom-0 inset-x-0 h-40 bg-gradient-to-t from-[#06060f] to-transparent" />

@@ -561,7 +561,7 @@ export default function ClubDetailPage({
         className={`relative overflow-hidden bg-gradient-to-br ${club.coverGradient}`}
         style={{ minHeight: "260px" }}
       >
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(255,255,255,0.05),transparent_60%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,color-mix(in srgb, var(--app-fg) 5%, transparent),transparent_60%)]" />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/30 to-[#020202]" />
 
         <div className="relative z-10 max-w-6xl mx-auto px-6 pt-10 pb-16">

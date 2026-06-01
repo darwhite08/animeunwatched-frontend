@@ -34,6 +34,10 @@ def repl_rgba_accent(m: re.Match) -> str:
 def repl_rgba_bright(m: re.Match) -> str:
     return f'color-mix(in srgb, var(--app-accent-bright) {alpha_pct(m.group(1))}%, transparent)'
 
+def repl_rgba_fg(m: re.Match) -> str:
+    """rgba(255,255,255,A) → foreground tint that flips in light theme."""
+    return f'color-mix(in srgb, var(--app-fg) {alpha_pct(m.group(1))}%, transparent)'
+
 # Each rule: (compiled pattern, repl callable-or-string, label)
 RULES = [
     # Hex literals — case-insensitive
@@ -43,6 +47,11 @@ RULES = [
     # rgba with the literal amber RGB triples
     (re.compile(r'rgba\(\s*245\s*,\s*158\s*,\s*11\s*,\s*([0-9.]+)\s*\)'), repl_rgba_accent, 'rgba(245,158,11,A) → color-mix accent'),
     (re.compile(r'rgba\(\s*251\s*,\s*191\s*,\s*36\s*,\s*([0-9.]+)\s*\)'), repl_rgba_bright, 'rgba(251,191,36,A) → color-mix accent-bright'),
+
+    # White → foreground-tint (flips in light theme; black overlays/shadows left alone)
+    (re.compile(r'rgba\(\s*255\s*,\s*255\s*,\s*255\s*,\s*([0-9.]+)\s*\)'), repl_rgba_fg, 'rgba(255,255,255,A) → color-mix fg-tint'),
+    (re.compile(r'#[fF]{6}\b'),  'var(--app-fg)', '#ffffff → var(--app-fg)'),
+    (re.compile(r'#[fF]{3}(?![\dA-Fa-f])'), 'var(--app-fg)', '#fff → var(--app-fg)'),
 ]
 
 def should_skip(path: Path) -> bool:

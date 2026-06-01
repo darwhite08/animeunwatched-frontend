@@ -31,7 +31,7 @@ export function PresenceDot({
         width:        size,
         height:       size,
         borderRadius: "50%",
-        background:   online ? "#10b981" : "rgba(255,255,255,0.2)",
+        background:   online ? "#10b981" : "color-mix(in srgb, var(--app-fg) 20%, transparent)",
         boxShadow:    online ? "0 0 8px rgba(16,185,129,0.6)" : "none",
         flexShrink:   0,
       }}

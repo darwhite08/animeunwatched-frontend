@@ -265,7 +265,7 @@ export default function StatsPage() {
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
                   {/* Score overlay */}
                   <div className="absolute bottom-2 left-2 flex items-center gap-1">
-                    <Star size={9} className="text-accent-bright fill-amber-400" />
+                    <Star size={9} className="text-accent-bright fill-accent-bright" />
                     <span className="text-[10px] font-black text-foreground">{anime.score.toFixed(1)}</span>
                   </div>
                 </div>

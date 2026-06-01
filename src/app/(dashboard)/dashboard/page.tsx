@@ -179,7 +179,7 @@ export default function DashboardPage() {
             <h1 className="text-5xl lg:text-6xl font-black tracking-tighter text-foreground leading-none">
               Welcome,{" "}
               <span className="italic" style={{
-                backgroundImage: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent), #ffffff)",
+                backgroundImage: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent), var(--app-fg))",
                 WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
               }}>
                 {user?.displayName ?? "Shinobi"}

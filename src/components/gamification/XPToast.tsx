@@ -51,7 +51,7 @@ export default function XPToast({ fromLevel, toLevel, newTitle, onDismiss }: XPT
             <motion.div
               className="absolute inset-0 pointer-events-none"
               style={{
-                background: "linear-gradient(105deg, transparent 40%, rgba(255,255,255,0.15) 50%, transparent 60%)",
+                background: "linear-gradient(105deg, transparent 40%, color-mix(in srgb, var(--app-fg) 15%, transparent) 50%, transparent 60%)",
               }}
               animate={{ x: ["-100%", "200%"] }}
               transition={{ duration: 2, repeat: Infinity, ease: "linear" }}

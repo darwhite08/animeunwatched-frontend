@@ -153,7 +153,7 @@ function FeaturedCard({ creator }: { creator: Creator }) {
             {creator.avatarLetter}
           </div>
           <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-accent/15 border border-accent/20">
-            <Star size={10} className="text-accent-bright fill-amber-400" />
+            <Star size={10} className="text-accent-bright fill-accent-bright" />
             <span className="text-accent-bright text-[10px] font-black uppercase tracking-widest">
               Creator of the Month
             </span>
@@ -325,7 +325,7 @@ export default function CreatorSpotlightPage() {
         {/* Featured creator */}
         <div className="space-y-4">
           <div className="flex items-center gap-3">
-            <Star size={14} className="text-accent-bright fill-amber-400" />
+            <Star size={14} className="text-accent-bright fill-accent-bright" />
             <h2 className="text-[10px] font-black uppercase tracking-[0.4em] text-subtle">
               Featured Creator
             </h2>

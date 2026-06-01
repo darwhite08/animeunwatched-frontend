@@ -202,7 +202,7 @@ function AIResultRow({
           />
         )}
         <div className="absolute inset-0 opacity-50 pointer-events-none" style={{
-          background: "linear-gradient(115deg, transparent 30%, rgba(255,255,255,0.08) 45%, transparent 60%)",
+          background: "linear-gradient(115deg, transparent 30%, color-mix(in srgb, var(--app-fg) 8%, transparent) 45%, transparent 60%)",
         }} />
         {!showImage && (
           <div className="absolute inset-x-0 bottom-0 p-1 bg-gradient-to-t from-black/60 to-transparent">
@@ -215,7 +215,7 @@ function AIResultRow({
         <p className="text-[13.5px] font-bold text-white/90 truncate mb-1 group-hover:text-amber-200 transition-colors">{title}</p>
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-1">
-            <Star size={9} className="fill-amber-400 text-accent-bright" />
+            <Star size={9} className="fill-accent-bright text-accent-bright" />
             <span className="text-[10px] text-muted font-semibold tabular-nums">{score}</span>
           </div>
           <span className="text-[6px] text-subtle">●</span>
@@ -282,7 +282,7 @@ function AIOracleSection() {
       }} />
       {/* Subtle grid */}
       <div className="absolute inset-0 opacity-[0.025] pointer-events-none" style={{
-        backgroundImage: "linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)",
+        backgroundImage: "linear-gradient(color-mix(in srgb, var(--app-fg) 50%, transparent) 1px, transparent 1px), linear-gradient(90deg, color-mix(in srgb, var(--app-fg) 50%, transparent) 1px, transparent 1px)",
         backgroundSize: "44px 44px",
         maskImage: "radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 80%)",
       }} />
@@ -374,7 +374,7 @@ function AIOracleSection() {
               className="group inline-flex items-center gap-2.5 px-6 py-3 rounded-xl text-[12px] font-black uppercase tracking-[0.18em] text-black transition-all hover:-translate-y-0.5"
               style={{
                 background: "linear-gradient(135deg,var(--app-accent-bright),var(--app-accent))",
-                boxShadow: "0 8px 28px color-mix(in srgb, var(--app-accent) 35%, transparent), inset 0 1px 0 rgba(255,255,255,0.4)",
+                boxShadow: "0 8px 28px color-mix(in srgb, var(--app-accent) 35%, transparent), inset 0 1px 0 color-mix(in srgb, var(--app-fg) 40%, transparent)",
               }}
             >
               <Sparkles size={13} className="group-hover:rotate-12 transition-transform" />
@@ -393,12 +393,12 @@ function AIOracleSection() {
           >
             {/* Glow halo */}
             <div className="absolute -inset-px rounded-[20px] pointer-events-none" style={{
-              background: "linear-gradient(135deg, color-mix(in srgb, var(--app-accent) 18%, transparent), rgba(255,255,255,0.02) 35%, rgba(99,102,241,0.10))",
+              background: "linear-gradient(135deg, color-mix(in srgb, var(--app-accent) 18%, transparent), color-mix(in srgb, var(--app-fg) 2%, transparent) 35%, rgba(99,102,241,0.10))",
               filter: "blur(2px)",
             }} />
 
             <div className="relative rounded-[18px] bg-gradient-to-b from-[#0d0d18]/95 to-[#08080f]/95 border border-white/[0.08] overflow-hidden backdrop-blur-xl"
-              style={{ boxShadow: "0 50px 100px -20px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.02) inset" }}
+              style={{ boxShadow: "0 50px 100px -20px rgba(0,0,0,0.7), 0 0 0 1px color-mix(in srgb, var(--app-fg) 2%, transparent) inset" }}
             >
 
               {/* Header */}
@@ -512,7 +512,7 @@ function CommunitySection() {
         background: "radial-gradient(ellipse 60% 70% at 88% 50%, color-mix(in srgb, var(--app-accent) 5%, transparent) 0%, transparent 60%), radial-gradient(ellipse 40% 50% at 8% 30%, rgba(99,102,241,0.04) 0%, transparent 55%)",
       }} />
       <div className="absolute inset-0 opacity-[0.025] pointer-events-none" style={{
-        backgroundImage: "linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)",
+        backgroundImage: "linear-gradient(color-mix(in srgb, var(--app-fg) 50%, transparent) 1px, transparent 1px), linear-gradient(90deg, color-mix(in srgb, var(--app-fg) 50%, transparent) 1px, transparent 1px)",
         backgroundSize: "44px 44px",
         maskImage: "radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 80%)",
       }} />
@@ -582,7 +582,7 @@ function CommunitySection() {
                   className="group relative p-5 rounded-2xl bg-gradient-to-b from-white/[0.04] to-white/[0.015] border border-white/[0.07] hover:border-white/[0.14] transition-colors overflow-hidden"
                 >
                   <div className="absolute -top-px left-3 right-3 h-px bg-gradient-to-r from-transparent via-white/15 to-transparent" />
-                  <div className={`w-9 h-9 rounded-xl bg-gradient-to-br ${iconBg} border ${ring} flex items-center justify-center mb-3.5 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]`}>
+                  <div className={`w-9 h-9 rounded-xl bg-gradient-to-br ${iconBg} border ${ring} flex items-center justify-center mb-3.5 shadow-[inset_0_1px_0_color-mix(in srgb, var(--app-fg) 6%, transparent)]`}>
                     <Icon size={14} className={iconColor} />
                   </div>
                   <p className="text-[13px] font-bold text-white/90 mb-1 tracking-[-0.005em]">{label}</p>
@@ -620,7 +620,7 @@ function CommunitySection() {
                 className="group inline-flex items-center gap-2.5 px-6 py-3 rounded-xl text-[12px] font-black uppercase tracking-[0.18em] text-black transition-all hover:-translate-y-0.5"
                 style={{
                   background: "linear-gradient(135deg,var(--app-accent-bright),var(--app-accent))",
-                  boxShadow: "0 8px 28px color-mix(in srgb, var(--app-accent) 35%, transparent), inset 0 1px 0 rgba(255,255,255,0.4)",
+                  boxShadow: "0 8px 28px color-mix(in srgb, var(--app-accent) 35%, transparent), inset 0 1px 0 color-mix(in srgb, var(--app-fg) 40%, transparent)",
                 }}
               >
                 <Trophy size={13} className="group-hover:rotate-[-6deg] transition-transform" />
@@ -645,7 +645,7 @@ function CommunitySection() {
           >
             {/* Glow halo */}
             <div className="absolute -inset-px rounded-[20px] pointer-events-none" style={{
-              background: "linear-gradient(135deg, color-mix(in srgb, var(--app-accent) 18%, transparent), rgba(255,255,255,0.02) 35%, rgba(99,102,241,0.10))",
+              background: "linear-gradient(135deg, color-mix(in srgb, var(--app-accent) 18%, transparent), color-mix(in srgb, var(--app-fg) 2%, transparent) 35%, rgba(99,102,241,0.10))",
               filter: "blur(2px)",
             }} />
 
@@ -682,7 +682,7 @@ function CommunitySection() {
 
             {/* Leaderboard */}
             <div className="relative rounded-2xl bg-gradient-to-b from-[#0d0d18]/95 to-[#08080f]/95 border border-white/[0.08] overflow-hidden backdrop-blur-xl"
-              style={{ boxShadow: "0 50px 100px -20px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.02) inset" }}
+              style={{ boxShadow: "0 50px 100px -20px rgba(0,0,0,0.7), 0 0 0 1px color-mix(in srgb, var(--app-fg) 2%, transparent) inset" }}
             >
               <div className="px-6 py-4 border-b border-white/[0.06] flex items-center justify-between bg-gradient-to-b from-white/[0.02] to-transparent">
                 <span className="text-[11px] font-bold text-muted uppercase tracking-[0.18em]">Top fans this week</span>
@@ -851,7 +851,7 @@ function ShowcaseSection() {
         background: "radial-gradient(ellipse 50% 50% at 50% 30%, color-mix(in srgb, var(--app-accent) 4%, transparent) 0%, transparent 60%)",
       }} />
       <div className="absolute inset-0 opacity-[0.02] pointer-events-none" style={{
-        backgroundImage: "linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)",
+        backgroundImage: "linear-gradient(color-mix(in srgb, var(--app-fg) 50%, transparent) 1px, transparent 1px), linear-gradient(90deg, color-mix(in srgb, var(--app-fg) 50%, transparent) 1px, transparent 1px)",
         backgroundSize: "44px 44px",
         maskImage: "radial-gradient(ellipse 70% 70% at 50% 50%, black 30%, transparent 80%)",
       }} />
@@ -915,12 +915,12 @@ function ShowcaseSection() {
                 background: `linear-gradient(135deg, ${
                   accent === "indigo" ? "rgba(99,102,241,0.25)" :
                   accent === "amber" ? "color-mix(in srgb, var(--app-accent) 30%, transparent)" : "rgba(139,92,246,0.25)"
-                }, rgba(255,255,255,0.02) 40%, transparent)`,
+                }, color-mix(in srgb, var(--app-fg) 2%, transparent) 40%, transparent)`,
                 filter: "blur(2px)",
               }} />
 
               <div className="relative h-full p-7 rounded-2xl bg-gradient-to-b from-[#0d0d18]/95 to-[#08080f]/95 border border-white/[0.08] backdrop-blur-xl transition-colors group-hover:border-white/[0.14] flex flex-col gap-6"
-                style={{ boxShadow: "0 30px 60px -20px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.02) inset" }}
+                style={{ boxShadow: "0 30px 60px -20px rgba(0,0,0,0.55), 0 0 0 1px color-mix(in srgb, var(--app-fg) 2%, transparent) inset" }}
               >
                 {/* Top edge accent */}
                 <div className="absolute -top-px left-4 right-4 h-px" style={{
@@ -999,7 +999,7 @@ function FinalCTASection() {
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-accent blur-[180px] rounded-full pointer-events-none"
       />
       {/* Dot grid */}
-      <div className="absolute inset-0 opacity-[0.025] pointer-events-none" style={{ backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.8) 1px, transparent 1px)", backgroundSize: "40px 40px" }} />
+      <div className="absolute inset-0 opacity-[0.025] pointer-events-none" style={{ backgroundImage: "radial-gradient(circle, color-mix(in srgb, var(--app-fg) 80%, transparent) 1px, transparent 1px)", backgroundSize: "40px 40px" }} />
 
       <motion.div style={{ scale, opacity }} className="relative z-10 w-full max-w-3xl mx-auto px-6">
 
@@ -1142,7 +1142,7 @@ function ScrollProgressBar() {
             <motion.div
               animate={{
                 width: chapter === i ? 16 : 4,
-                backgroundColor: chapter === i ? "rgba(99,102,241,0.8)" : "rgba(255,255,255,0.12)",
+                backgroundColor: chapter === i ? "rgba(99,102,241,0.8)" : "color-mix(in srgb, var(--app-fg) 12%, transparent)",
               }}
               className="h-1 rounded-full"
             />

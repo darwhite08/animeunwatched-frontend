@@ -135,8 +135,8 @@ function AIResponseBubble({ body, payload }: { body:string; payload:AIPayload })
   return (
     <div>
       <div style={{ display:"flex", alignItems:"center", gap:8, marginBottom:8 }}>
-        <div style={{ width:22, height:22, borderRadius:6, background:"linear-gradient(135deg,oklch(0.7 0.18 282),oklch(0.55 0.18 250))", display:"grid", placeItems:"center", boxShadow:"inset 0 1px 0 rgba(255,255,255,0.2),0 4px 12px oklch(0.4 0.18 282/0.5)" }}>
-          <svg width={12} height={12} viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth={2} strokeLinecap="round"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M5.6 18.4l2.8-2.8M15.6 8.4l2.8-2.8"/></svg>
+        <div style={{ width:22, height:22, borderRadius:6, background:"linear-gradient(135deg,oklch(0.7 0.18 282),oklch(0.55 0.18 250))", display:"grid", placeItems:"center", boxShadow:"inset 0 1px 0 color-mix(in srgb, var(--app-fg) 20%, transparent),0 4px 12px oklch(0.4 0.18 282/0.5)" }}>
+          <svg width={12} height={12} viewBox="0 0 24 24" fill="none" stroke="var(--app-fg)" strokeWidth={2} strokeLinecap="round"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M5.6 18.4l2.8-2.8M15.6 8.4l2.8-2.8"/></svg>
         </div>
         <span style={{ fontSize:12, fontWeight:600, color:"var(--ink)" }}>Drift AI</span>
         <span className="mono" style={{ fontSize:10, color:"var(--ink-4)" }}>· AI Oracle</span>
@@ -150,7 +150,7 @@ function AIResponseBubble({ body, payload }: { body:string; payload:AIPayload })
             .replace(/>/g, "&gt;")
             .replace(/"/g, "&quot;")
             .replace(/'/g, "&#039;")
-            .replace(/\*\*(.+?)\*\*/g, "<strong style='font-weight:600;color:#fff'>$1</strong>")
+            .replace(/\*\*(.+?)\*\*/g, "<strong style='font-weight:600;color:var(--app-fg)'>$1</strong>")
         }} />
       {payload.rows && (
         <div style={{ background:"rgba(0,0,0,0.20)", border:"1px solid var(--line)", borderRadius:10, overflow:"hidden" }}>
@@ -180,13 +180,13 @@ function AIResponseBubble({ body, payload }: { body:string; payload:AIPayload })
 interface ThreadStubData { count:number; lastReply:string; avatarNames:string[] }
 function ThreadStub({ thread }: { thread:ThreadStubData }) {
   return (
-    <div style={{ marginTop:6, display:"inline-flex", alignItems:"center", gap:8, padding:"5px 10px 5px 6px", background:"rgba(255,255,255,0.025)", border:"1px solid var(--line)", borderRadius:10, fontSize:12, cursor:"pointer", transition:"background 120ms" }}
-      onMouseEnter={e=>(e.currentTarget.style.background="rgba(255,255,255,0.05)")}
-      onMouseLeave={e=>(e.currentTarget.style.background="rgba(255,255,255,0.025)")}>
+    <div style={{ marginTop:6, display:"inline-flex", alignItems:"center", gap:8, padding:"5px 10px 5px 6px", background:"color-mix(in srgb, var(--app-fg) 2.5%, transparent)", border:"1px solid var(--line)", borderRadius:10, fontSize:12, cursor:"pointer", transition:"background 120ms" }}
+      onMouseEnter={e=>(e.currentTarget.style.background="color-mix(in srgb, var(--app-fg) 5%, transparent)")}
+      onMouseLeave={e=>(e.currentTarget.style.background="color-mix(in srgb, var(--app-fg) 2.5%, transparent)")}>
       <div style={{ display:"flex" }}>
         {thread.avatarNames.slice(0,3).map((n,i)=>(
           <div key={n} style={{ marginLeft:i===0?0:-8, boxShadow:"0 0 0 2px var(--bg-0)", borderRadius:"50%" }}>
-            <div style={{ width:20, height:20, borderRadius:"50%", background:`linear-gradient(135deg,oklch(0.72 0.16 ${(i*60+200)%360}),oklch(0.55 0.18 ${(i*60+230)%360}))`, display:"grid", placeItems:"center", fontSize:8, fontWeight:700, color:"rgba(255,255,255,0.9)" }}>{n[0]}</div>
+            <div style={{ width:20, height:20, borderRadius:"50%", background:`linear-gradient(135deg,oklch(0.72 0.16 ${(i*60+200)%360}),oklch(0.55 0.18 ${(i*60+230)%360}))`, display:"grid", placeItems:"center", fontSize:8, fontWeight:700, color:"color-mix(in srgb, var(--app-fg) 90%, transparent)" }}>{n[0]}</div>
           </div>
         ))}
       </div>
@@ -383,8 +383,8 @@ function ContextRail({ conv, onClose, sharedFiles }: { conv: ConversationDetail;
                 onMouseLeave={ev=>(ev.currentTarget.style.background="transparent")}>
                 <div style={{ width:30, height:36, borderRadius:4, background:`linear-gradient(160deg,oklch(0.65 0.18 ${f.isImage?282:145}),oklch(0.50 0.20 ${f.isImage?302:165}))`, display:"grid", placeItems:"center", flexShrink:0 }}>
                   {f.isImage
-                    ? <svg width={13} height={13} viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.9)" strokeWidth={2} strokeLinecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="1.6"/><path d="m21 15-5-5L5 21"/></svg>
-                    : <span style={{ fontSize:7, fontWeight:700, color:"#fff", letterSpacing:"0.05em" }}>{f.ext}</span>
+                    ? <svg width={13} height={13} viewBox="0 0 24 24" fill="none" stroke="color-mix(in srgb, var(--app-fg) 90%, transparent)" strokeWidth={2} strokeLinecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="1.6"/><path d="m21 15-5-5L5 21"/></svg>
+                    : <span style={{ fontSize:7, fontWeight:700, color:"var(--app-fg)", letterSpacing:"0.05em" }}>{f.ext}</span>
                   }
                 </div>
                 <div style={{ flex:1, minWidth:0 }}>
@@ -433,9 +433,9 @@ function FileCard({ name, size, isImage, isMine }: { name:string; size?:string; 
       onMouseEnter={e=>(e.currentTarget.style.background="var(--bg-3)")}
       onMouseLeave={e=>(e.currentTarget.style.background="var(--bg-2)")}>
       {/* Gradient file icon */}
-      <div style={{ width:36, height:44, borderRadius:4, background:`linear-gradient(160deg,oklch(0.65 0.18 ${hue}),oklch(0.50 0.20 ${hue+20}))`, display:"grid", placeItems:"center", color:"#fff", fontSize:9, fontWeight:700, letterSpacing:"0.05em", flexShrink:0, boxShadow:"inset 0 1px 0 rgba(255,255,255,0.15)", position:"relative" }}>
+      <div style={{ width:36, height:44, borderRadius:4, background:`linear-gradient(160deg,oklch(0.65 0.18 ${hue}),oklch(0.50 0.20 ${hue+20}))`, display:"grid", placeItems:"center", color:"var(--app-fg)", fontSize:9, fontWeight:700, letterSpacing:"0.05em", flexShrink:0, boxShadow:"inset 0 1px 0 color-mix(in srgb, var(--app-fg) 15%, transparent)", position:"relative" }}>
         {isImage
-          ? <svg width={16} height={16} viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.9)" strokeWidth={1.8} strokeLinecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="1.6"/><path d="m21 15-5-5L5 21"/></svg>
+          ? <svg width={16} height={16} viewBox="0 0 24 24" fill="none" stroke="color-mix(in srgb, var(--app-fg) 90%, transparent)" strokeWidth={1.8} strokeLinecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="1.6"/><path d="m21 15-5-5L5 21"/></svg>
           : ext
         }
       </div>
@@ -485,7 +485,7 @@ function MsgRow({ m, isMine, text, authorSrc, authorName, onDelete }: { m:GM; is
   const isDeleted = !!m.deletedAt
 
   const bubble: React.CSSProperties = isMine
-    ? { background:"linear-gradient(180deg,oklch(0.62 0.18 282),oklch(0.55 0.17 280))", color:"#F8F7FF", borderTopRightRadius:4, boxShadow:"0 6px 22px oklch(0.45 0.18 282/0.30),inset 0 1px 0 rgba(255,255,255,0.10)" }
+    ? { background:"linear-gradient(180deg,oklch(0.62 0.18 282),oklch(0.55 0.17 280))", color:"#F8F7FF", borderTopRightRadius:4, boxShadow:"0 6px 22px oklch(0.45 0.18 282/0.30),inset 0 1px 0 color-mix(in srgb, var(--app-fg) 10%, transparent)" }
     : { background:"var(--bg-2)", border:"1px solid var(--line)", borderTopLeftRadius:4 }
 
   const isDecrypting = text === undefined
@@ -643,7 +643,7 @@ function MsgRow({ m, isMine, text, authorSrc, authorName, onDelete }: { m:GM; is
           {["👍","❤️","😂","🔥","👏","😮"].map(e=>(
             <button key={e} onClick={()=>setReacted(e)}
               style={{ fontSize:14, padding:"4px 6px", border:"none", cursor:"pointer", background:"transparent", borderRadius:8, transition:"background 80ms, transform 80ms", lineHeight:1 }}
-              onMouseEnter={ev=>{ev.currentTarget.style.background="rgba(255,255,255,0.08)";ev.currentTarget.style.transform="scale(1.2)"}}
+              onMouseEnter={ev=>{ev.currentTarget.style.background="color-mix(in srgb, var(--app-fg) 8%, transparent)";ev.currentTarget.style.transform="scale(1.2)"}}
               onMouseLeave={ev=>{ev.currentTarget.style.background="transparent";ev.currentTarget.style.transform="scale(1)"}}>
               {e}
             </button>
@@ -655,7 +655,7 @@ function MsgRow({ m, isMine, text, authorSrc, authorName, onDelete }: { m:GM; is
           ].map(({ title, d, dots }) => (
             <button key={title} title={title}
               style={{ width:28, height:28, border:"none", cursor:"pointer", background:"transparent", borderRadius:8, display:"grid", placeItems:"center", color:"var(--ink-3)", transition:"background 80ms, color 80ms" }}
-              onMouseEnter={ev=>{ev.currentTarget.style.background="rgba(255,255,255,0.08)";ev.currentTarget.style.color="var(--ink)"}}
+              onMouseEnter={ev=>{ev.currentTarget.style.background="color-mix(in srgb, var(--app-fg) 8%, transparent)";ev.currentTarget.style.color="var(--ink)"}}
               onMouseLeave={ev=>{ev.currentTarget.style.background="transparent";ev.currentTarget.style.color="var(--ink-3)"}}>
               {dots
                 ? <svg width={14} height={14} viewBox="0 0 24 24" fill="currentColor"><circle cx="5" cy="12" r="2"/><circle cx="12" cy="12" r="2"/><circle cx="19" cy="12" r="2"/></svg>
@@ -1096,7 +1096,7 @@ export default function ConversationPage() {
             <div style={{ display:"grid", gridTemplateColumns:"52px minmax(0,1fr)", padding:"10px 24px", animation:"msg-in 240ms cubic-bezier(0.22,1,0.36,1) both" }}>
               <div style={{ display:"flex", justifyContent:"flex-end", paddingRight:8, paddingTop:2 }}>
                 <div style={{ width:32, height:32, borderRadius:"50%", background:"linear-gradient(135deg,oklch(0.7 0.18 282),oklch(0.55 0.18 250))", display:"grid", placeItems:"center" }}>
-                  <svg width={14} height={14} viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth={2} strokeLinecap="round"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M5.6 18.4l2.8-2.8M15.6 8.4l2.8-2.8"/></svg>
+                  <svg width={14} height={14} viewBox="0 0 24 24" fill="none" stroke="var(--app-fg)" strokeWidth={2} strokeLinecap="round"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M5.6 18.4l2.8-2.8M15.6 8.4l2.8-2.8"/></svg>
                 </div>
               </div>
               <div style={{ minWidth:0 }}>
@@ -1181,7 +1181,7 @@ export default function ConversationPage() {
                 <div key={title} style={{ position:"relative" }}>
                   <button onClick={action} title={title}
                     style={{ width:30, height:30, borderRadius:7, display:"grid", placeItems:"center", color:showEmoji&&emoji?"var(--indigo)":"var(--ink-3)", background:showEmoji&&emoji?"var(--indigo-soft)":"transparent", border:"none", cursor:"pointer", transition:"background 100ms,color 100ms", fontSize:emoji?14:undefined }}
-                    onMouseEnter={e=>{ if(!(showEmoji&&emoji))Object.assign((e.currentTarget as HTMLElement).style,{background:"rgba(255,255,255,0.05)",color:"var(--ink)"}) }}
+                    onMouseEnter={e=>{ if(!(showEmoji&&emoji))Object.assign((e.currentTarget as HTMLElement).style,{background:"color-mix(in srgb, var(--app-fg) 5%, transparent)",color:"var(--ink)"}) }}
                     onMouseLeave={e=>{ if(!(showEmoji&&emoji))Object.assign((e.currentTarget as HTMLElement).style,{background:showEmoji&&emoji?"var(--indigo-soft)":"transparent",color:showEmoji&&emoji?"var(--indigo)":"var(--ink-3)"}) }}>
                     {emoji ? "😊"
                       : slash ? <span style={{ fontFamily:"monospace", fontSize:13, fontWeight:600 }}>/</span>
@@ -1206,9 +1206,9 @@ export default function ConversationPage() {
 
               {/* Send */}
               <button onClick={handleSend} disabled={!canSend}
-                style={{ marginLeft:"auto", height:30, padding:"0 10px 0 12px", borderRadius:8, display:"inline-flex", alignItems:"center", gap:6, background:canSend?"var(--indigo)":"var(--bg-3)", color:canSend?"#fff":"var(--ink-4)", border:"none", cursor:canSend?"pointer":"default", fontSize:12.5, fontWeight:600, boxShadow:canSend?"0 6px 16px oklch(0.45 0.18 282/0.45)":"none", transition:"all 150ms", fontFamily:"inherit" }}>
+                style={{ marginLeft:"auto", height:30, padding:"0 10px 0 12px", borderRadius:8, display:"inline-flex", alignItems:"center", gap:6, background:canSend?"var(--indigo)":"var(--bg-3)", color:canSend?"var(--app-fg)":"var(--ink-4)", border:"none", cursor:canSend?"pointer":"default", fontSize:12.5, fontWeight:600, boxShadow:canSend?"0 6px 16px oklch(0.45 0.18 282/0.45)":"none", transition:"all 150ms", fontFamily:"inherit" }}>
                 {sendMutation.isPending
-                  ? <div style={{ width:12, height:12, border:"2px solid rgba(255,255,255,0.5)", borderTopColor:"transparent", borderRadius:"50%", animation:"spin 0.6s linear infinite" }}/>
+                  ? <div style={{ width:12, height:12, border:"2px solid color-mix(in srgb, var(--app-fg) 50%, transparent)", borderTopColor:"transparent", borderRadius:"50%", animation:"spin 0.6s linear infinite" }}/>
                   : <>Send <svg width={12} height={12} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round"><path d="m5 12 7-7 7 7M12 5v14"/></svg></>
                 }
               </button>
@@ -1218,7 +1218,7 @@ export default function ConversationPage() {
           {/* Hints */}
           <div className="composer-hint" style={{ display:"flex", alignItems:"center", gap:12, marginTop:7, paddingLeft:4, fontSize:11, color:"var(--ink-4)" }}>
             {[["↵","Send"],["⇧↵","New line"],["/","Commands"]].map(([k,l])=>(
-              <span key={k}><span className="mono" style={{ padding:"1px 5px", borderRadius:4, background:"rgba(255,255,255,0.04)", border:"1px solid var(--line)", fontSize:10.5, marginRight:4 }}>{k}</span>{l}</span>
+              <span key={k}><span className="mono" style={{ padding:"1px 5px", borderRadius:4, background:"color-mix(in srgb, var(--app-fg) 4%, transparent)", border:"1px solid var(--line)", fontSize:10.5, marginRight:4 }}>{k}</span>{l}</span>
             ))}
             <span style={{ marginLeft:"auto", display:"inline-flex", alignItems:"center", gap:5, color:"var(--ink-4)", flexShrink:0 }}>
               <svg width={9} height={9} viewBox="0 0 24 24" fill="none" stroke="oklch(0.80 0.14 162)" strokeWidth={2.4} strokeLinecap="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
@@ -1285,7 +1285,7 @@ export default function ConversationPage() {
                   </p>
                   <div style={{ display:"flex", gap:8 }}>
                     <button onClick={() => webrtc.hangUp()}
-                      style={{ flex:1, padding:"8px 0", borderRadius:10, fontSize:12, fontWeight:600, cursor:"pointer", background:"rgba(255,255,255,0.06)", border:"1px solid rgba(255,255,255,0.12)", color:"rgba(255,255,255,0.5)" }}>
+                      style={{ flex:1, padding:"8px 0", borderRadius:10, fontSize:12, fontWeight:600, cursor:"pointer", background:"color-mix(in srgb, var(--app-fg) 6%, transparent)", border:"1px solid color-mix(in srgb, var(--app-fg) 12%, transparent)", color:"color-mix(in srgb, var(--app-fg) 50%, transparent)" }}>
                       Dismiss
                     </button>
                     <button onClick={() => { webrtc.hangUp(); setTimeout(()=>initiateCall(webrtc.callType || "audio"), 5000) }}
@@ -1306,7 +1306,7 @@ export default function ConversationPage() {
               )}
             </div>
             <button onClick={() => webrtc.hangUp()}
-              style={{ fontSize:16, color:"rgba(255,255,255,0.2)", cursor:"pointer", background:"none", border:"none", flexShrink:0 }}>✕</button>
+              style={{ fontSize:16, color:"color-mix(in srgb, var(--app-fg) 20%, transparent)", cursor:"pointer", background:"none", border:"none", flexShrink:0 }}>✕</button>
           </div>
         </div>
       )}

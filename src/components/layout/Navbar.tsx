@@ -100,7 +100,7 @@ function NavDropdown({ items, onClose }: { items: DropItem[]; onClose: () => voi
                   style={{
                     background: "linear-gradient(135deg, color-mix(in srgb, var(--app-accent) 18%, transparent) 0%, color-mix(in srgb, var(--app-accent-bright) 10%, transparent) 100%)",
                     border: "1px solid color-mix(in srgb, var(--app-accent) 30%, transparent)",
-                    boxShadow: "0 2px 10px color-mix(in srgb, var(--app-accent) 15%, transparent), inset 0 1px 0 rgba(255,255,255,0.08)",
+                    boxShadow: "0 2px 10px color-mix(in srgb, var(--app-accent) 15%, transparent), inset 0 1px 0 color-mix(in srgb, var(--app-fg) 8%, transparent)",
                   }}
                 >
                   <Icon size={16} weight="duotone" className="text-accent-bright group-hover:text-accent-bright transition-colors" />
@@ -215,7 +215,7 @@ export default function Navbar() {
       <motion.nav
         animate={{
           backgroundColor: scrolled ? "rgba(5,5,10,0.92)" : "rgba(0,0,0,0.08)",
-          borderColor:     scrolled ? "rgba(255,255,255,0.18)" : "rgba(255,255,255,0.06)",
+          borderColor:     scrolled ? "color-mix(in srgb, var(--app-fg) 18%, transparent)" : "color-mix(in srgb, var(--app-fg) 6%, transparent)",
           boxShadow:       "none",
         }}
         transition={T}
@@ -225,7 +225,7 @@ export default function Navbar() {
         {/* ── Logo ── */}
         <Link href="/" className="group flex items-center gap-2 shrink-0">
           <div className="rounded-xl transition-transform group-hover:scale-105"
-            style={{ boxShadow: "0 0 18px rgba(255,255,255,0.15)" }}>
+            style={{ boxShadow: "0 0 18px color-mix(in srgb, var(--app-fg) 15%, transparent)" }}>
             {/* Kaiveron K mark */}
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="32" height="32">
               <rect width="100" height="100" rx="18" fill="#0A0F1E"/>

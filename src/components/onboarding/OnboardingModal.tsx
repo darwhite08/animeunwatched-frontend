@@ -239,7 +239,7 @@ function StepPickAnime({
                   {anime.title}
                 </p>
                 <div className="flex items-center gap-0.5 mt-0.5">
-                  <Star className="w-2.5 h-2.5 text-accent-bright fill-amber-400" />
+                  <Star className="w-2.5 h-2.5 text-accent-bright fill-accent-bright" />
                   <span className="text-[9px] text-accent-bright">{anime.rating}</span>
                 </div>
               </div>

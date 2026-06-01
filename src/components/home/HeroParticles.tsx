@@ -15,7 +15,7 @@ function seededPct(seed: number, offset = 0) {
 const COLORS = [
   "rgba(99,102,241,0.7)",   // indigo
   "rgba(139,92,246,0.7)",   // violet
-  "rgba(255,255,255,0.5)",  // white
+  "color-mix(in srgb, var(--app-fg) 50%, transparent)",  // white
   "rgba(167,139,250,0.6)",  // light violet
   "rgba(129,140,248,0.65)", // indigo-400
 ]

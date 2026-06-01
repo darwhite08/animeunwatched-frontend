@@ -49,7 +49,7 @@ export default function ChatEmptyPage() {
         {/* Copy */}
         <div className="space-y-2">
           <h2 className="text-[18px] font-bold text-foreground tracking-tight">Select a conversation</h2>
-          <p className="text-[12.5px] leading-relaxed" style={{ color: "rgba(255,255,255,0.35)" }}>
+          <p className="text-[12.5px] leading-relaxed" style={{ color: "color-mix(in srgb, var(--app-fg) 35%, transparent)" }}>
             Pick a chat from the left panel or click ✏ to start a new encrypted conversation with any Shinobi on Kaiveron.
           </p>
         </div>
@@ -58,7 +58,7 @@ export default function ChatEmptyPage() {
         <div className="w-full space-y-2">
           {FEATURES.map(({ icon, label, desc }) => (
             <div key={label} className="flex items-center gap-3 px-4 py-3 rounded-xl text-left border"
-              style={{ background: "rgba(255,255,255,0.02)", borderColor: "rgba(255,255,255,0.05)" }}>
+              style={{ background: "color-mix(in srgb, var(--app-fg) 2%, transparent)", borderColor: "color-mix(in srgb, var(--app-fg) 5%, transparent)" }}>
               <span className="text-[16px] shrink-0">{icon}</span>
               <div>
                 <p className="text-[11.5px] font-semibold text-muted">{label}</p>

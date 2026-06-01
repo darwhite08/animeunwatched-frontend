@@ -281,7 +281,7 @@ export default function AccountSettingsPage() {
               style={{
                 borderColor: slugStatus === "available" ? "color-mix(in srgb, var(--app-accent) 40%, transparent)"
                   : slugStatus === "taken" || slugStatus === "invalid" ? "rgba(239,68,68,0.4)"
-                  : "rgba(255,255,255,0.1)",
+                  : "color-mix(in srgb, var(--app-fg) 10%, transparent)",
               }}
             />
             {/* Status indicator */}
@@ -312,7 +312,7 @@ export default function AccountSettingsPage() {
             className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all disabled:opacity-30 disabled:cursor-not-allowed text-black"
             style={slugStatus === "available" && slugChanged
               ? { background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))", boxShadow: "0 4px 16px color-mix(in srgb, var(--app-accent) 35%, transparent)" }
-              : { background: "rgba(255,255,255,0.08)" }}
+              : { background: "color-mix(in srgb, var(--app-fg) 8%, transparent)" }}
           >
             {slugSaving ? <><Loader2 size={12} className="animate-spin" /> Saving…</> : "Update URL"}
           </button>

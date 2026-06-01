@@ -195,17 +195,17 @@ export default function CollectionsPage() {
                 style={{
                   background: isActive
                     ? "linear-gradient(160deg, color-mix(in srgb, var(--app-accent) 8%, transparent), color-mix(in srgb, var(--app-accent) 3%, transparent))"
-                    : "rgba(255,255,255,0.02)",
+                    : "color-mix(in srgb, var(--app-fg) 2%, transparent)",
                   ...col.borderStyle,
-                  ...(isActive ? {} : { borderColor: "rgba(255,255,255,0.07)" }),
+                  ...(isActive ? {} : { borderColor: "color-mix(in srgb, var(--app-fg) 7%, transparent)" }),
                 }}
               >
                 <div className="flex items-center gap-4 flex-1 min-w-0">
                   {/* Emoji badge */}
                   <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl shrink-0"
                     style={{
-                      background: isActive ? "color-mix(in srgb, var(--app-accent) 15%, transparent)" : "rgba(255,255,255,0.04)",
-                      border: isActive ? "1px solid color-mix(in srgb, var(--app-accent) 25%, transparent)" : "1px solid rgba(255,255,255,0.07)",
+                      background: isActive ? "color-mix(in srgb, var(--app-accent) 15%, transparent)" : "color-mix(in srgb, var(--app-fg) 4%, transparent)",
+                      border: isActive ? "1px solid color-mix(in srgb, var(--app-accent) 25%, transparent)" : "1px solid color-mix(in srgb, var(--app-fg) 7%, transparent)",
                     }}>
                     {col.emoji}
                   </div>

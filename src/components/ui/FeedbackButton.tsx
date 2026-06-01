@@ -111,7 +111,7 @@ export default function FeedbackButton() {
                   <span className="text-[9px] font-black uppercase tracking-widest text-subtle mr-1">Rate:</span>
                   {[1,2,3,4,5].map(n => (
                     <button key={n} onMouseEnter={() => setHoverRating(n)} onMouseLeave={() => setHoverRating(0)} onClick={() => setRating(n)}>
-                      <Star size={16} className={`transition-colors ${n <= (hoverRating || rating) ? "text-accent-bright fill-amber-400" : "text-subtle"}`} />
+                      <Star size={16} className={`transition-colors ${n <= (hoverRating || rating) ? "text-accent-bright fill-accent-bright" : "text-subtle"}`} />
                     </button>
                   ))}
                 </div>

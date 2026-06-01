@@ -94,7 +94,7 @@ function Cloud({ className, delay=0, duration=80, scale=1, opacity=0.85 }: { cla
     <div className={"absolute pointer-events-none pan-right " + className}
       style={{ opacity, animationDuration:duration+"s", animationDelay:delay+"s" }}>
       <svg viewBox="0 0 280 110" width={220*scale} height={86*scale}>
-        <g fill="#ffffff" opacity=".95">
+        <g fill="var(--app-fg)" opacity=".95">
           <ellipse cx="64"  cy="60" rx="56" ry="24" />
           <ellipse cx="124" cy="44" rx="50" ry="30" />
           <ellipse cx="188" cy="58" rx="54" ry="24" />
@@ -179,7 +179,7 @@ export default function AnimeHero() {
 
       {/* Sun shimmer over horizon */}
       <div className="absolute left-1/2 -translate-x-1/2 top-[55%] w-[60vh] h-[60vh] rounded-full pointer-events-none mix-blend-screen"
-        style={{ background:"radial-gradient(circle,rgba(255,255,255,.45),rgba(255,255,255,0) 60%)" }} />
+        style={{ background:"radial-gradient(circle,color-mix(in srgb, var(--app-fg) 45%, transparent),color-mix(in srgb, var(--app-fg) 0%, transparent) 60%)" }} />
 
       {/* Distant island town */}
       <div className="absolute left-0 right-0 bottom-[28%] sm:bottom-[34%] h-[80px] sm:h-[110px] pointer-events-none">

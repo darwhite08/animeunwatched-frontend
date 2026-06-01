@@ -19,7 +19,7 @@ const GLOBAL_CSS = `
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap');
   :root {
     --bg-0:#0a0c12; --bg-1:#0f121b; --bg-2:#151926; --bg-3:#1c2132; --bg-elev:#1f2438;
-    --line:rgba(255,255,255,0.055); --line-strong:rgba(255,255,255,0.10);
+    --line:color-mix(in srgb, var(--app-fg) 5.5%, transparent); --line-strong:color-mix(in srgb, var(--app-fg) 10%, transparent);
     --ink:#ECEEF5; --ink-2:#B8BDD0; --ink-3:#8088A0; --ink-4:#545B73;
     --indigo:oklch(0.66 0.18 282); --indigo-soft:oklch(0.66 0.18 282/0.16); --indigo-ring:oklch(0.66 0.18 282/0.35);
     --mint:oklch(0.80 0.14 162); --amber:oklch(0.80 0.14 75); --rose:oklch(0.72 0.17 18);
@@ -30,8 +30,8 @@ const GLOBAL_CSS = `
   .mono{font-family:'JetBrains Mono',ui-monospace,monospace}
   ::-webkit-scrollbar{width:5px;height:5px}
   ::-webkit-scrollbar-track{background:transparent}
-  ::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.06);border-radius:99px}
-  ::-webkit-scrollbar-thumb:hover{background:rgba(255,255,255,0.12)}
+  ::-webkit-scrollbar-thumb{background:color-mix(in srgb, var(--app-fg) 6%, transparent);border-radius:99px}
+  ::-webkit-scrollbar-thumb:hover{background:color-mix(in srgb, var(--app-fg) 12%, transparent)}
   @keyframes msg-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
   @keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)}}
   @keyframes typing-bounce{0%,60%,100%{transform:translateY(0);opacity:.5}30%{transform:translateY(-3px);opacity:1}}
@@ -47,7 +47,7 @@ export function Avatar({ name, src, hue=282, size=28, showStatus=false, online=t
     <div style={{ position:"relative", width:size, height:size, flexShrink:0 }}>
       {src
         ? <Image src={src} alt={name} width={size} height={size} style={{ width:size, height:size, borderRadius:"50%", objectFit:"cover", boxShadow:ring?`0 0 0 2px var(--bg-1), 0 0 0 3px var(--indigo)`:undefined }} />
-        : <div style={{ width:size, height:size, borderRadius:"50%", background:`linear-gradient(135deg,oklch(0.72 0.16 ${hue}),oklch(0.55 0.18 ${hue+30}))`, display:"grid", placeItems:"center", color:"rgba(255,255,255,0.95)", fontWeight:600, fontSize:size*0.38, letterSpacing:"-0.02em", boxShadow:ring?`0 0 0 2px var(--bg-1), 0 0 0 3px var(--indigo)`:"inset 0 1px 0 rgba(255,255,255,0.16)" }}>{initials}</div>
+        : <div style={{ width:size, height:size, borderRadius:"50%", background:`linear-gradient(135deg,oklch(0.72 0.16 ${hue}),oklch(0.55 0.18 ${hue+30}))`, display:"grid", placeItems:"center", color:"color-mix(in srgb, var(--app-fg) 95%, transparent)", fontWeight:600, fontSize:size*0.38, letterSpacing:"-0.02em", boxShadow:ring?`0 0 0 2px var(--bg-1), 0 0 0 3px var(--indigo)`:"inset 0 1px 0 color-mix(in srgb, var(--app-fg) 16%, transparent)" }}>{initials}</div>
       }
       {showStatus && <div style={{ position:"absolute", right:-1, bottom:-1, width:Math.max(8,size*0.32), height:Math.max(8,size*0.32), background:online?"oklch(0.78 0.16 145)":"var(--bg-3)", border:"2px solid var(--bg-1)", borderRadius:"50%" }}/>}
     </div>
@@ -79,7 +79,7 @@ function NewDMModal({ onClose }: { onClose:()=>void }) {
           {!q.trim() && <p style={{ textAlign:"center", color:"var(--ink-4)", fontSize:12, padding:"28px 16px" }}>Search for a Shinobi to message</p>}
           {q.trim()&&!busy&&!res.length&&<p style={{ textAlign:"center", color:"var(--ink-4)", fontSize:12, padding:"20px" }}>No results</p>}
           {res.map(u=>(
-            <div key={u.id} onClick={()=>open(u.id)} style={{ display:"flex", alignItems:"center", gap:12, padding:"10px 16px", cursor:"pointer", transition:"background 100ms" }} onMouseEnter={e=>(e.currentTarget.style.background="rgba(255,255,255,0.04)")} onMouseLeave={e=>(e.currentTarget.style.background="transparent")}>
+            <div key={u.id} onClick={()=>open(u.id)} style={{ display:"flex", alignItems:"center", gap:12, padding:"10px 16px", cursor:"pointer", transition:"background 100ms" }} onMouseEnter={e=>(e.currentTarget.style.background="color-mix(in srgb, var(--app-fg) 4%, transparent)")} onMouseLeave={e=>(e.currentTarget.style.background="transparent")}>
               <Avatar name={u.displayName} src={u.avatarUrl} size={36} showStatus/>
               <div><div style={{ fontSize:13.5, fontWeight:600, color:"var(--ink)" }}>{u.displayName}</div><div style={{ fontSize:11, color:"var(--ink-3)", marginTop:1 }}>@{u.username}</div></div>
             </div>
@@ -187,7 +187,7 @@ function NewCommunityModal({ onClose, onCreated }: { onClose:()=>void; onCreated
             style={{ background:"none", border:"1px solid var(--line-strong)", color:"var(--ink-3)", padding:"8px 14px", borderRadius:8, fontSize:12.5, fontWeight:600, cursor:"pointer", fontFamily:"inherit" }}
           >Cancel</button>
           <button type="submit" disabled={!canSubmit}
-            style={{ background:canSubmit?"var(--indigo)":"var(--bg-3)", color:canSubmit?"#fff":"var(--ink-4)", border:"none", padding:"8px 16px", borderRadius:8, fontSize:12.5, fontWeight:600, cursor:canSubmit?"pointer":"not-allowed", fontFamily:"inherit", boxShadow:canSubmit?"0 4px 14px oklch(0.45 0.18 282/0.35)":"none", transition:"all 150ms" }}
+            style={{ background:canSubmit?"var(--indigo)":"var(--bg-3)", color:canSubmit?"var(--app-fg)":"var(--ink-4)", border:"none", padding:"8px 16px", borderRadius:8, fontSize:12.5, fontWeight:600, cursor:canSubmit?"pointer":"not-allowed", fontFamily:"inherit", boxShadow:canSubmit?"0 4px 14px oklch(0.45 0.18 282/0.35)":"none", transition:"all 150ms" }}
           >{createMut.isPending ? "Creating…" : "Create"}</button>
         </div>
       </motion.form>
@@ -211,7 +211,7 @@ function CommunityRail({ activeCommunity, onSelect }: { activeCommunity:string|n
         <button onClick={()=>onSelect(null)} style={{ width:38, height:38, borderRadius:activeCommunity===null?14:18, background:activeCommunity===null?"var(--indigo-soft)":"var(--bg-2)", border:`1px solid ${activeCommunity===null?"var(--indigo-ring)":"var(--line)"}`, display:"grid", placeItems:"center", cursor:"pointer", transition:"all 200ms", color:activeCommunity===null?"var(--indigo)":"var(--ink-3)" }}>
           <svg width={18} height={18} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg>
         </button>
-        {unreadCount>0 && <div style={{ position:"absolute", top:-3, right:-3, minWidth:16, height:16, borderRadius:8, background:"oklch(0.72 0.17 18)", color:"#fff", fontSize:9.5, fontWeight:700, display:"grid", placeItems:"center", padding:"0 4px", border:"2px solid var(--bg-0)" }}>{unreadCount}</div>}
+        {unreadCount>0 && <div style={{ position:"absolute", top:-3, right:-3, minWidth:16, height:16, borderRadius:8, background:"oklch(0.72 0.17 18)", color:"var(--app-fg)", fontSize:9.5, fontWeight:700, display:"grid", placeItems:"center", padding:"0 4px", border:"2px solid var(--bg-0)" }}>{unreadCount}</div>}
       </div>
 
       {/* Divider */}
@@ -226,7 +226,7 @@ function CommunityRail({ activeCommunity, onSelect }: { activeCommunity:string|n
           <div key={club.id} style={{ position:"relative" }}>
             {active && <div style={{ position:"absolute", left:-12, top:"50%", transform:"translateY(-50%)", width:3, height:22, background:"var(--ink)", borderRadius:"0 2px 2px 0" }}/>}
             <button onClick={()=>onSelect(club.slug)} title={club.name}
-              style={{ width:38, height:38, borderRadius:active?14:18, background:`linear-gradient(135deg,oklch(0.65 0.18 ${hue}),oklch(0.50 0.20 ${hue+20}))`, border:`2px solid ${active?"transparent":"rgba(0,0,0,0)"}`, display:"grid", placeItems:"center", cursor:"pointer", transition:"all 200ms", color:"rgba(255,255,255,0.95)", fontWeight:700, fontSize:14, boxShadow:"inset 0 1px 0 rgba(255,255,255,0.18)" }}
+              style={{ width:38, height:38, borderRadius:active?14:18, background:`linear-gradient(135deg,oklch(0.65 0.18 ${hue}),oklch(0.50 0.20 ${hue+20}))`, border:`2px solid ${active?"transparent":"rgba(0,0,0,0)"}`, display:"grid", placeItems:"center", cursor:"pointer", transition:"all 200ms", color:"color-mix(in srgb, var(--app-fg) 95%, transparent)", fontWeight:700, fontSize:14, boxShadow:"inset 0 1px 0 color-mix(in srgb, var(--app-fg) 18%, transparent)" }}
               onMouseEnter={e=>{if(!active)(e.currentTarget as HTMLElement).style.borderRadius="14px"}}
               onMouseLeave={e=>{if(!active)(e.currentTarget as HTMLElement).style.borderRadius="18px"}}
             >{letter}</button>
@@ -272,8 +272,8 @@ function ChannelItem({ name, locked=false, badge=0, dot=false, active=false, onC
   name:string; locked?:boolean; badge?:number; dot?:boolean; active?:boolean; onClick:()=>void; kind?:"text"|"voice"
 }) {
   return (
-    <div onClick={onClick} style={{ display:"flex", alignItems:"center", gap:8, padding:"5px 9px", borderRadius:"var(--r-sm)", cursor:"pointer", background:active?"rgba(255,255,255,0.06)":"transparent", transition:"background 100ms", color:active?"var(--ink)":"var(--ink-3)", minHeight:28 }}
-      onMouseEnter={e=>{ if(!active)(e.currentTarget as HTMLElement).style.background="rgba(255,255,255,0.03)"; (e.currentTarget as HTMLElement).style.color="var(--ink)" }}
+    <div onClick={onClick} style={{ display:"flex", alignItems:"center", gap:8, padding:"5px 9px", borderRadius:"var(--r-sm)", cursor:"pointer", background:active?"color-mix(in srgb, var(--app-fg) 6%, transparent)":"transparent", transition:"background 100ms", color:active?"var(--ink)":"var(--ink-3)", minHeight:28 }}
+      onMouseEnter={e=>{ if(!active)(e.currentTarget as HTMLElement).style.background="color-mix(in srgb, var(--app-fg) 3%, transparent)"; (e.currentTarget as HTMLElement).style.color="var(--ink)" }}
       onMouseLeave={e=>{ if(!active)(e.currentTarget as HTMLElement).style.background="transparent"; if(!active)(e.currentTarget as HTMLElement).style.color="var(--ink-3)" }}>
       {kind==="voice"
         ? <svg width={14} height={14} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
@@ -282,7 +282,7 @@ function ChannelItem({ name, locked=false, badge=0, dot=false, active=false, onC
           : <svg width={14} height={14} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.9} strokeLinecap="round"><path d="M4 9h16M4 15h16M10 3 8 21M16 3l-2 18"/></svg>
       }
       <span style={{ flex:1, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap", fontSize:13.5 }}>{name}</span>
-      {badge>0 && <span style={{ minWidth:18, height:18, borderRadius:9, background:"var(--indigo)", color:"#fff", fontSize:10.5, fontWeight:600, display:"grid", placeItems:"center", padding:"0 5px" }}>{badge}</span>}
+      {badge>0 && <span style={{ minWidth:18, height:18, borderRadius:9, background:"var(--indigo)", color:"var(--app-fg)", fontSize:10.5, fontWeight:600, display:"grid", placeItems:"center", padding:"0 5px" }}>{badge}</span>}
       {dot && !badge && <div style={{ width:7, height:7, borderRadius:"50%", background:"var(--indigo)", marginLeft:"auto" }}/>}
     </div>
   )
@@ -292,7 +292,7 @@ function ChannelItem({ name, locked=false, badge=0, dot=false, active=false, onC
 function VoiceParticipant({ name, avatarUrl, hue }:{ name:string; avatarUrl?:string|null; hue:number }) {
   return (
     <div style={{ display:"flex", alignItems:"center", gap:8, padding:"3px 6px 3px 26px", borderRadius:"var(--r-sm)", fontSize:12, color:"var(--ink-2)", transition:"background 100ms" }}
-      onMouseEnter={e=>(e.currentTarget.style.background="rgba(255,255,255,0.03)")}
+      onMouseEnter={e=>(e.currentTarget.style.background="color-mix(in srgb, var(--app-fg) 3%, transparent)")}
       onMouseLeave={e=>(e.currentTarget.style.background="transparent")}>
       <div style={{ position:"relative" }}>
         <Avatar name={name} src={avatarUrl} hue={hue} size={18} showStatus={false}/>
@@ -311,7 +311,7 @@ function CatHeader({ label, onAdd }:{ label:string; onAdd?:()=>void }) {
     <div style={{ display:"flex", alignItems:"center", gap:6, padding:"14px 6px 6px", fontSize:10.5, fontWeight:600, color:"var(--ink-4)", textTransform:"uppercase", letterSpacing:"0.08em", cursor:"pointer", userSelect:"none" }} onClick={()=>setOpen(o=>!o)}>
       <svg width={11} height={11} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" style={{ transition:"transform 160ms", transform:open?"rotate(0)":"rotate(-90deg)" }}><path d="m6 9 6 6 6-6"/></svg>
       <span style={{ flex:1 }}>{label}</span>
-      {onAdd && <div onClick={e=>{e.stopPropagation();onAdd()}} style={{ width:18, height:18, display:"grid", placeItems:"center", cursor:"pointer", borderRadius:4, transition:"background 120ms" }} onMouseEnter={e=>(e.currentTarget.style.background="rgba(255,255,255,0.06)")} onMouseLeave={e=>(e.currentTarget.style.background="transparent")}><svg width={13} height={13} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round"><path d="M12 5v14M5 12h14"/></svg></div>}
+      {onAdd && <div onClick={e=>{e.stopPropagation();onAdd()}} style={{ width:18, height:18, display:"grid", placeItems:"center", cursor:"pointer", borderRadius:4, transition:"background 120ms" }} onMouseEnter={e=>(e.currentTarget.style.background="color-mix(in srgb, var(--app-fg) 6%, transparent)")} onMouseLeave={e=>(e.currentTarget.style.background="transparent")}><svg width={13} height={13} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round"><path d="M12 5v14M5 12h14"/></svg></div>}
     </div>
   )
 }
@@ -368,7 +368,7 @@ export default function ChatLayout({ children }: { children: React.ReactNode }) 
             <div style={{ display:"flex", alignItems:"center", gap:10, marginBottom:10 }}>
               {activeCom && activeClub ? (
                 <>
-                  <div style={{ width:30, height:30, borderRadius:"var(--r-sm)", background:`linear-gradient(135deg,oklch(0.65 0.18 282),oklch(0.50 0.20 302))`, display:"grid", placeItems:"center", color:"rgba(255,255,255,0.95)", fontWeight:700, fontSize:13, flexShrink:0 }}>{activeClub.name[0]}</div>
+                  <div style={{ width:30, height:30, borderRadius:"var(--r-sm)", background:`linear-gradient(135deg,oklch(0.65 0.18 282),oklch(0.50 0.20 302))`, display:"grid", placeItems:"center", color:"color-mix(in srgb, var(--app-fg) 95%, transparent)", fontWeight:700, fontSize:13, flexShrink:0 }}>{activeClub.name[0]}</div>
                   <div style={{ flex:1, minWidth:0 }}>
                     <div style={{ fontSize:13.5, fontWeight:600, color:"var(--ink)", display:"flex", alignItems:"center", gap:5 }}>
                       {activeClub.name}
@@ -403,7 +403,7 @@ export default function ChatLayout({ children }: { children: React.ReactNode }) 
             <div style={{ display:"flex", alignItems:"center", gap:8, padding:"6px 10px", background:"var(--bg-2)", border:"1px solid var(--line)", borderRadius:"var(--r-sm)", cursor:"text" }}>
               <svg width={12} height={12} viewBox="0 0 24 24" fill="none" stroke="var(--ink-4)" strokeWidth={2} strokeLinecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
               <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Search" style={{ flex:1, background:"transparent", border:"none", color:"var(--ink)", fontSize:12.5, outline:"none" }}/>
-              <span style={{ fontSize:10, padding:"1px 5px", borderRadius:4, background:"rgba(255,255,255,0.04)", color:"var(--ink-4)", border:"1px solid var(--line)", fontFamily:"monospace" }}>⌘K</span>
+              <span style={{ fontSize:10, padding:"1px 5px", borderRadius:4, background:"color-mix(in srgb, var(--app-fg) 4%, transparent)", color:"var(--ink-4)", border:"1px solid var(--line)", fontFamily:"monospace" }}>⌘K</span>
             </div>
           </div>
 
@@ -451,7 +451,7 @@ export default function ChatLayout({ children }: { children: React.ReactNode }) 
                     { icon:<svg width={14} height={14} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round"><circle cx="12" cy="12" r="4"/><path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-3.92 7.94"/></svg>, label:"Mentions" },
                     { icon:<svg width={14} height={14} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>, label:"Drafts" },
                   ].map(({icon,label})=>(
-                    <div key={label} style={{ display:"flex", alignItems:"center", gap:8, padding:"6px 9px", borderRadius:"var(--r-sm)", cursor:"pointer", color:"var(--ink-3)", fontSize:13.5, transition:"background 100ms,color 100ms" }} onMouseEnter={e=>{(e.currentTarget as HTMLElement).style.background="rgba(255,255,255,0.03)";(e.currentTarget as HTMLElement).style.color="var(--ink)"}} onMouseLeave={e=>{(e.currentTarget as HTMLElement).style.background="transparent";(e.currentTarget as HTMLElement).style.color="var(--ink-3)"}}>
+                    <div key={label} style={{ display:"flex", alignItems:"center", gap:8, padding:"6px 9px", borderRadius:"var(--r-sm)", cursor:"pointer", color:"var(--ink-3)", fontSize:13.5, transition:"background 100ms,color 100ms" }} onMouseEnter={e=>{(e.currentTarget as HTMLElement).style.background="color-mix(in srgb, var(--app-fg) 3%, transparent)";(e.currentTarget as HTMLElement).style.color="var(--ink)"}} onMouseLeave={e=>{(e.currentTarget as HTMLElement).style.background="transparent";(e.currentTarget as HTMLElement).style.color="var(--ink-3)"}}>
                       {icon}<span style={{ flex:1 }}>{label}</span>
                     </div>
                   ))}
@@ -474,9 +474,9 @@ export default function ChatLayout({ children }: { children: React.ReactNode }) 
                         return (
                           <Link key={club.id} href={`/clubs/${club.slug}`} style={{ textDecoration:"none" }}>
                             <div style={{ display:"flex", alignItems:"center", gap:10, padding:"8px 9px", borderRadius:"var(--r-md)", cursor:"pointer", transition:"background 100ms" }}
-                              onMouseEnter={e=>{(e.currentTarget as HTMLDivElement).style.background="rgba(255,255,255,0.03)"}}
+                              onMouseEnter={e=>{(e.currentTarget as HTMLDivElement).style.background="color-mix(in srgb, var(--app-fg) 3%, transparent)"}}
                               onMouseLeave={e=>{(e.currentTarget as HTMLDivElement).style.background="transparent"}}>
-                              <div style={{ width:32, height:32, borderRadius:10, background:`linear-gradient(135deg,oklch(0.65 0.18 ${hue}),oklch(0.50 0.20 ${hue+30}))`, display:"grid", placeItems:"center", color:"rgba(255,255,255,0.95)", fontWeight:700, fontSize:13, boxShadow:"inset 0 1px 0 rgba(255,255,255,0.16)", flexShrink:0 }}>
+                              <div style={{ width:32, height:32, borderRadius:10, background:`linear-gradient(135deg,oklch(0.65 0.18 ${hue}),oklch(0.50 0.20 ${hue+30}))`, display:"grid", placeItems:"center", color:"color-mix(in srgb, var(--app-fg) 95%, transparent)", fontWeight:700, fontSize:13, boxShadow:"inset 0 1px 0 color-mix(in srgb, var(--app-fg) 16%, transparent)", flexShrink:0 }}>
                                 {letter}
                               </div>
                               <div style={{ flex:1, minWidth:0 }}>
@@ -516,7 +516,7 @@ export default function ChatLayout({ children }: { children: React.ReactNode }) 
                         return (
                           <Link key={conv.id} href={`/chat/${conv.id}`} style={{ textDecoration:"none" }}>
                             <div style={{ display:"flex", alignItems:"center", gap:10, padding:"8px 9px", borderRadius:"var(--r-md)", cursor:"pointer", background:active?"var(--bg-2)":"transparent", boxShadow:active?"inset 0 0 0 1px var(--line-strong)":"none", position:"relative", transition:"background 100ms", marginBottom:1 }}
-                              onMouseEnter={e=>{if(!active)(e.currentTarget as HTMLDivElement).style.background="rgba(255,255,255,0.03)"}}
+                              onMouseEnter={e=>{if(!active)(e.currentTarget as HTMLDivElement).style.background="color-mix(in srgb, var(--app-fg) 3%, transparent)"}}
                               onMouseLeave={e=>{if(!active)(e.currentTarget as HTMLDivElement).style.background="transparent"}}>
                               {active&&<div style={{ position:"absolute", left:0, top:"50%", transform:"translateY(-50%)", width:3, height:18, background:"var(--indigo)", borderRadius:"0 2px 2px 0" }}/>}
                               <Avatar name={conv.otherUser.displayName} src={conv.otherUser.avatarUrl} size={32} showStatus online/>

@@ -99,7 +99,10 @@ export default function RegisterPage() {
         ...(refBy ? { referredBy: refBy } : {}),
       } as Parameters<typeof register.mutate>[0],
       {
-        onSuccess: () => router.push("/onboarding"),
+        onSuccess: () => {
+          void import("@/lib/analytics/ga").then(({ track }) => track("sign_up", { method: "email" }))
+          router.push("/onboarding")
+        },
         onError: (err) => {
           if (err instanceof ApiError) {
             if (err.code === "CONFLICT") {

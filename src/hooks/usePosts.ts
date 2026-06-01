@@ -39,6 +39,7 @@ export function useCreatePost() {
     onSuccess:  () => {
       qc.invalidateQueries({ queryKey: feedKey })
       qc.invalidateQueries({ queryKey: discoverKey })
+      void import("@/lib/analytics/ga").then(({ track }) => track("post_created"))
     },
   })
 }

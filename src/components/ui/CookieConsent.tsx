@@ -4,28 +4,29 @@ import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import Link from "next/link"
 import { Cookie, X } from "lucide-react"
-
-const CONSENT_KEY = "kv_cookie_consent"
+import { getConsent, setConsent, isAdminHost } from "@/lib/analytics/consent"
 
 export default function CookieConsent() {
   const [show, setShow] = useState(false)
 
   useEffect(() => {
+    // Never show on the admin subdomain — admins don't need a marketing-site banner
+    if (isAdminHost()) return
+
     // Small delay so it doesn't flash on every page load
     const t = setTimeout(() => {
-      const consent = localStorage.getItem(CONSENT_KEY)
-      if (!consent) setShow(true)
+      if (!getConsent()) setShow(true)
     }, 1500)
     return () => clearTimeout(t)
   }, [])
 
   const accept = () => {
-    localStorage.setItem(CONSENT_KEY, "accepted")
+    setConsent("accepted")
     setShow(false)
   }
 
   const decline = () => {
-    localStorage.setItem(CONSENT_KEY, "declined")
+    setConsent("declined")
     setShow(false)
   }
 
@@ -44,40 +45,41 @@ export default function CookieConsent() {
               background: "linear-gradient(160deg, color-mix(in srgb, var(--app-bg) 97%, transparent), color-mix(in srgb, var(--app-bg) 99%, transparent))",
               boxShadow: "0 20px 60px rgba(0,0,0,0.7), 0 0 0 0.5px color-mix(in srgb, var(--app-accent) 10%, transparent) inset",
             }}>
-            {/* Header */}
             <div className="flex items-center gap-3 mb-3">
               <div className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0"
                 style={{ background: "color-mix(in srgb, var(--app-accent) 15%, transparent)", border: "1px solid color-mix(in srgb, var(--app-accent) 30%, transparent)" }}>
                 <Cookie size={15} className="text-accent-bright" />
               </div>
               <p className="text-[11px] font-black uppercase tracking-widest text-muted">
-                Cookie Notice
+                Cookies & Analytics
               </p>
               <button onClick={decline}
-                className="ml-auto text-subtle hover:text-muted transition-colors">
+                className="ml-auto text-subtle hover:text-muted transition-colors"
+                aria-label="Decline non-essential cookies">
                 <X size={14} />
               </button>
             </div>
 
-            {/* Body */}
             <p className="text-[11px] text-muted leading-relaxed mb-4">
-              We use essential cookies to keep you logged in and improve your experience.
-              No tracking or advertising cookies.{" "}
+              Essential cookies keep you signed in and remember preferences.
+              With your consent, we also load{" "}
+              <span className="text-foreground/80">Google Analytics</span>{" "}
+              (anonymised IP) to understand which features are useful.
+              No ad pixels, no cross-site trackers.{" "}
               <Link href="/privacy" className="text-accent-bright/80 hover:text-accent-bright underline">
-                Privacy Policy
+                Privacy
               </Link>
             </p>
 
-            {/* Actions */}
             <div className="flex items-center gap-2">
               <button onClick={accept}
                 className="flex-1 py-2 rounded-xl text-[11px] font-black uppercase tracking-widest text-black transition-all hover:opacity-90"
                 style={{ background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))" }}>
-                Accept
+                Accept all
               </button>
               <button onClick={decline}
                 className="flex-1 py-2 rounded-xl text-[11px] font-black uppercase tracking-widest text-muted border border-border hover:bg-surface hover:text-muted transition-all">
-                Decline
+                Essential only
               </button>
             </div>
           </div>

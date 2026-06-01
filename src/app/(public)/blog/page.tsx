@@ -1,12 +1,15 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect } from "react"
 import { useBlogs } from "@/hooks/useBlogs"
 import { motion, AnimatePresence } from "framer-motion"
 import {
   BookOpen, Heart, Eye, Clock, User, TrendingUp, PenSquare, ChevronRight,
 } from "lucide-react"
 import Link from "next/link"
+
+// Collapses the header from full → compact once the user scrolls this far.
+const COLLAPSE_AT = 96
 
 /* ── Types ── */
 type Category = "All" | "Deep Dive" | "Review" | "Theory" | "Opinion" | "List"
@@ -213,6 +216,16 @@ export default function BlogListingPage() {
   const [activeCategory, setActiveCategory] = useState<Category>("All")
   const { data: blogsData } = useBlogs()
 
+  // Collapse the header to a compact "The Chronicle." pill once the user
+  // scrolls past COLLAPSE_AT. Listens to window scroll only when mounted.
+  const [collapsed, setCollapsed] = useState(false)
+  useEffect(() => {
+    const onScroll = () => setCollapsed(window.scrollY > COLLAPSE_AT)
+    window.addEventListener("scroll", onScroll, { passive: true })
+    onScroll()
+    return () => window.removeEventListener("scroll", onScroll)
+  }, [])
+
   const apiBlogs: Blog[] = useMemo(() => (blogsData?.data ?? []).map(b => ({
     id: b.id, slug: b.slug, title: b.title,
     excerpt: b.body.slice(0, 160) + "…",
@@ -226,6 +239,42 @@ export default function BlogListingPage() {
   const allBlogs = apiBlogs
   void BLOGS
 
+  // Live sidebar data: top authors (by article count) + popular tags
+  // (#hashtag tokens across all blog bodies). Both recompute when blogs
+  // refetch — no mock fallback.
+  const liveTopAuthors = useMemo(() => {
+    const counts = new Map<string, { articles: number; avatar: string; username: string }>()
+    for (const b of (blogsData?.data ?? [])) {
+      const handle = b.author?.username ?? "anon"
+      const display = b.author?.displayName ?? b.author?.username ?? "Anonymous"
+      const cur = counts.get(display)
+      counts.set(display, {
+        articles: (cur?.articles ?? 0) + 1,
+        avatar: display[0]?.toUpperCase() ?? "?",
+        username: handle,
+      })
+    }
+    return [...counts.entries()]
+      .map(([name, v]) => ({ name, ...v }))
+      .sort((a, b) => b.articles - a.articles)
+      .slice(0, 5)
+  }, [blogsData])
+
+  const livePopularTags = useMemo(() => {
+    const counts = new Map<string, number>()
+    const RE = /(^|\s)#([a-zA-Z0-9_-]+)/g
+    for (const b of (blogsData?.data ?? [])) {
+      let m: RegExpExecArray | null
+      while ((m = RE.exec(b.body)) !== null) {
+        const tag = m[2].toLowerCase()
+        counts.set(tag, (counts.get(tag) ?? 0) + 1)
+      }
+    }
+    return [...counts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 12).map(e => e[0])
+  }, [blogsData])
+
+  void TOP_AUTHORS; void POPULAR_TAGS
+
   const filtered =
     activeCategory === "All"
       ? allBlogs
@@ -234,45 +283,88 @@ export default function BlogListingPage() {
   return (
     <div className="min-h-screen bg-background text-foreground pb-32">
 
-      {/* Cinematic header */}
-      <div className="relative border-b border-border overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-indigo-950/40 via-violet-950/20 to-transparent pointer-events-none" />
-        <div className="max-w-6xl mx-auto px-6 py-16 relative">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-          >
-            <span className="px-3 py-1 rounded-full bg-accent/10 border border-accent/20 text-[10px] font-black uppercase tracking-widest text-accent-bright">
-              Community Long-form
-            </span>
-            <h1 className="mt-4 text-5xl md:text-7xl font-black tracking-tighter uppercase italic text-foreground leading-none">
-              The Chronicle<span style={{color:"var(--app-accent)"}}>.</span>
-            </h1>
-            <p className="mt-3 text-subtle text-base max-w-lg">
-              Long-form anime journalism by the community — deep dives, reviews, theories, and takes.
-            </p>
-          </motion.div>
-
-          {/* Category filter tabs */}
-          <div className="mt-10 flex items-center gap-1 flex-wrap">
-            {CATEGORIES.map(cat => (
-              <button
-                key={cat}
-                onClick={() => setActiveCategory(cat)}
-                className={`relative px-5 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${
-                  activeCategory === cat
-                    ? "bg-accent text-black shadow-[0_0_20px_color-mix(in srgb, var(--app-accent) 40%, transparent)]"
-                    : "bg-surface border border-border text-muted hover:text-foreground hover:bg-surface"
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
+      {/* Sticky header — full at top, collapses to a compact "The Chronicle." +
+          category pills once the user scrolls past COLLAPSE_AT. Fully opaque
+          bg so feed content can't bleed through. */}
+      <div className="sticky top-0 z-40 bg-background border-b border-border shadow-[0_4px_12px_color-mix(in_srgb,var(--app-fg)_4%,transparent)]">
+        {/* The relative wrapper has indigo glow only in the FULL state */}
+        <div className="relative overflow-hidden transition-[padding] duration-300 motion-reduce:transition-none"
+          style={{ paddingTop: collapsed ? "92px" : "120px", paddingBottom: collapsed ? "12px" : "32px" }}>
+          {!collapsed && (
+            <div aria-hidden className="absolute inset-0 bg-gradient-to-br from-indigo-950/40 via-violet-950/20 to-transparent pointer-events-none" />
+          )}
+          <div className="max-w-6xl mx-auto px-6 relative">
+            <AnimatePresence initial={false} mode="wait">
+              {collapsed ? (
+                <motion.div
+                  key="compact"
+                  initial={{ opacity: 0, y: -6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -6 }}
+                  transition={{ duration: 0.2 }}
+                  className="flex items-center justify-between gap-4"
+                >
+                  <h1 className="text-2xl font-black tracking-tighter uppercase italic text-foreground leading-none">
+                    The Chronicle<span style={{color:"var(--app-accent)"}}>.</span>
+                  </h1>
+                  <div className="flex items-center gap-1 flex-wrap">
+                    {CATEGORIES.map(cat => (
+                      <button
+                        key={cat}
+                        onClick={() => setActiveCategory(cat)}
+                        aria-pressed={activeCategory === cat}
+                        className={`px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 ${
+                          activeCategory === cat
+                            ? "bg-accent text-black"
+                            : "bg-surface border border-border text-muted hover:text-foreground hover:bg-surface-2"
+                        }`}
+                      >
+                        {cat}
+                      </button>
+                    ))}
+                  </div>
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="full"
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 8 }}
+                  transition={{ duration: 0.25 }}
+                >
+                  <span className="px-3 py-1 rounded-full bg-accent/10 border border-accent/20 text-[10px] font-black uppercase tracking-widest text-accent-bright">
+                    Community Long-form
+                  </span>
+                  <h1 className="mt-4 text-5xl md:text-7xl font-black tracking-tighter uppercase italic text-foreground leading-none">
+                    The Chronicle<span style={{color:"var(--app-accent)"}}>.</span>
+                  </h1>
+                  <p className="mt-3 text-muted text-base max-w-lg">
+                    Long-form anime journalism by the community — deep dives, reviews, theories, and takes.
+                  </p>
+                  <div className="mt-10 flex items-center gap-1 flex-wrap">
+                    {CATEGORIES.map(cat => (
+                      <button
+                        key={cat}
+                        onClick={() => setActiveCategory(cat)}
+                        aria-pressed={activeCategory === cat}
+                        className={`px-5 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 ${
+                          activeCategory === cat
+                            ? "bg-accent text-black shadow-[0_0_20px_color-mix(in_srgb,var(--app-accent)_40%,transparent)]"
+                            : "bg-surface border border-border text-muted hover:text-foreground hover:bg-surface-2"
+                        }`}
+                      >
+                        {cat}
+                      </button>
+                    ))}
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </div>
       </div>
 
-      {/* Main grid */}
+      {/* Main grid — left feed + sticky right rail, independent scroll */}
       <div className="max-w-6xl mx-auto px-6 pt-10 grid lg:grid-cols-3 gap-10">
 
         {/* Blog grid (2/3) */}
@@ -297,51 +389,63 @@ export default function BlogListingPage() {
           </AnimatePresence>
         </div>
 
-        {/* Sidebar (1/3) */}
-        <div className="space-y-6">
+        {/* Sidebar — sticky + independently scrollable via data-lenis-prevent */}
+        <aside
+          data-lenis-prevent
+          className="lg:sticky lg:top-[180px] lg:self-start lg:max-h-[calc(100vh-200px)] lg:overflow-y-auto lg:overscroll-contain space-y-6 lg:pr-2"
+        >
 
-          {/* Top Authors */}
+          {/* Top Authors — derived from real blog data */}
           <div className="p-5 rounded-2xl bg-surface border border-border space-y-4">
             <div className="flex items-center gap-2">
               <TrendingUp size={14} className="text-accent-bright" />
               <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-muted">Top Authors</h3>
             </div>
-            <div className="space-y-3">
-              {TOP_AUTHORS.map((author, i) => (
-                <div key={author.name} className="flex items-center gap-3">
-                  <span className="text-[10px] font-black text-subtle w-4 shrink-0">{i + 1}</span>
-                  <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-xs font-black shrink-0">
-                    {author.avatar}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-xs font-bold text-muted truncate">{author.name}</p>
-                    <p className="text-[9px] text-subtle">{author.articles} articles</p>
-                  </div>
-                  <ChevronRight size={12} className="text-subtle shrink-0" />
-                </div>
-              ))}
-            </div>
+            {liveTopAuthors.length > 0 ? (
+              <div className="space-y-3">
+                {liveTopAuthors.map((author, i) => (
+                  <Link key={author.name} href={`/u/${author.username}`}
+                    className="flex items-center gap-3 group rounded-lg hover:bg-surface-2 -mx-1 px-1 py-1 transition-colors">
+                    <span className="text-[10px] font-black text-muted w-4 shrink-0 tabular-nums">{i + 1}</span>
+                    <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-xs font-black shrink-0 text-foreground">
+                      {author.avatar}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-xs font-bold text-foreground truncate group-hover:text-accent-bright transition-colors">{author.name}</p>
+                      <p className="text-[10px] text-muted tabular-nums">{author.articles} article{author.articles === 1 ? "" : "s"}</p>
+                    </div>
+                    <ChevronRight size={12} className="text-muted shrink-0" />
+                  </Link>
+                ))}
+              </div>
+            ) : (
+              <p className="text-[11px] text-muted">No published articles yet.</p>
+            )}
           </div>
 
-          {/* Popular Tags */}
+          {/* Popular Tags — derived from real blog body content */}
           <div className="p-5 rounded-2xl bg-surface border border-border space-y-4">
             <div className="flex items-center gap-2">
               <BookOpen size={14} className="text-violet-400" />
               <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-muted">Popular Tags</h3>
             </div>
+            {livePopularTags.length > 0 ? (
             <div className="flex flex-wrap gap-2">
-              {POPULAR_TAGS.map((tag, i) => (
+              {livePopularTags.map((tag, i) => (
                 <motion.span
                   key={tag}
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: i * 0.03 }}
-                  className="px-3 py-1.5 rounded-full bg-surface border border-border text-[10px] font-bold text-muted hover:text-accent-bright hover:border-accent/25 cursor-pointer transition-all"
+                  className="px-3 py-1.5 rounded-full bg-surface-2 border border-border text-[10px] font-bold text-muted hover:text-accent-bright hover:border-accent/30 cursor-pointer transition-colors"
                 >
                   #{tag}
                 </motion.span>
               ))}
             </div>
+            ) : (
+              <p className="text-[11px] text-muted">Tag posts with #hashtags to see them surface here.</p>
+            )}
           </div>
 
           {/* Write CTA */}
@@ -360,7 +464,7 @@ export default function BlogListingPage() {
             </div>
             <ChevronRight size={14} className="text-accent-bright/40 group-hover:text-accent-bright ml-auto transition-all group-hover:translate-x-0.5" />
           </Link>
-        </div>
+        </aside>
       </div>
     </div>
   )

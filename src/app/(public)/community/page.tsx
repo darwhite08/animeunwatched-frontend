@@ -1,6 +1,8 @@
 "use client"
 
-import { useState, useCallback, useRef } from "react"
+import { useState, useCallback, useRef, useMemo } from "react"
+import { useQuery } from "@tanstack/react-query"
+import { api } from "@/lib/api/client"
 import { motion, AnimatePresence } from "framer-motion"
 import {
   Flame, TrendingUp, Users, Vote,
@@ -22,33 +24,42 @@ import type { Post, PostComment } from "@/lib/api/types"
 
 type FeedTab = "trending" | "following" | "latest"
 
-const TRENDING_TAGS = ["frieren", "attack-on-titan", "one-piece", "demon-slayer", "jjk", "hxh", "monster"]
+/** Tally `#hashtag` occurrences across a set of post bodies. Returns the
+    top-N most common as plain strings (no leading '#'). */
+function deriveTrendingTags(bodies: string[], topN = 7): string[] {
+  const counts = new Map<string, number>()
+  const RE = /(^|\s)#([a-zA-Z0-9_-]+)/g
+  for (const body of bodies) {
+    let m: RegExpExecArray | null
+    while ((m = RE.exec(body)) !== null) {
+      const tag = m[2].toLowerCase()
+      counts.set(tag, (counts.get(tag) ?? 0) + 1)
+    }
+  }
+  return [...counts.entries()].sort((a, b) => b[1] - a[1]).slice(0, topN).map(e => e[0])
+}
 
-type PollOption = { label: string; votes: number }
-type ActivePoll  = { id: number; question: string; options: PollOption[] }
-
-const ACTIVE_POLLS: ActivePoll[] = [
-  {
-    id: 1, question: "Best anime of 2024?",
-    options: [
-      { label: "Dungeon Meshi",  votes: 1842 },
-      { label: "Solo Leveling",  votes: 1473 },
-      { label: "Frieren S2",     votes: 888  },
-    ],
-  },
-  {
-    id: 2, question: "Strongest anime character?",
-    options: [
-      { label: "Goku",            votes: 2901 },
-      { label: "Saitama",         votes: 2456 },
-      { label: "Anos Voldigoad",  votes: 1484 },
-    ],
-  },
-]
+type ActivePoll = {
+  id: string
+  question: string
+  options: Array<{ id: string; label: string; votes: number }>
+  totalVotes: number
+}
 
 function ActivePollRow({ poll }: { poll: ActivePoll }) {
   const [voted, setVoted] = useState<string | null>(null)
-  const total = poll.options.reduce((s, o) => s + o.votes, 0)
+  const { push } = useToast()
+  const total = poll.options.reduce((s, o) => s + o.votes, 0) || poll.totalVotes || 0
+
+  const onVote = async (optId: string) => {
+    if (voted) return
+    setVoted(optId)
+    try {
+      await api(`/polls/${poll.id}/vote`, { method: "POST", body: JSON.stringify({ optionId: optId }) })
+    } catch {
+      push("Couldn't record your vote — try again later", "error")
+    }
+  }
   return (
     <div className="p-4 rounded-xl bg-surface border border-border hover:border-accent/20 transition-colors space-y-3">
       <div className="flex items-start justify-between gap-3">
@@ -59,13 +70,13 @@ function ActivePollRow({ poll }: { poll: ActivePoll }) {
       </div>
       <div className="space-y-1.5">
         {poll.options.map(o => {
-          const pct = total > 0 ? Math.round((o.votes / total) * 100) : 0
-          const mine = voted === o.label
+          const pct  = total > 0 ? Math.round((o.votes / total) * 100) : 0
+          const mine = voted === o.id
           return (
             <button
-              key={o.label}
+              key={o.id}
               type="button"
-              onClick={() => !voted && setVoted(o.label)}
+              onClick={() => onVote(o.id)}
               disabled={!!voted && !mine}
               aria-pressed={mine}
               className={`relative w-full text-left rounded-lg overflow-hidden border transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 ${
@@ -76,7 +87,6 @@ function ActivePollRow({ poll }: { poll: ActivePoll }) {
                     : "border-border bg-surface-2 hover:bg-surface hover:border-accent/30 cursor-pointer"
               }`}
             >
-              {/* Result fill */}
               <span
                 aria-hidden
                 className={`absolute inset-y-0 left-0 transition-[width] duration-500 ease-out motion-reduce:transition-none ${
@@ -114,6 +124,44 @@ const AVATAR_GRADIENTS = [
 ]
 function avatarGradient(name: string): string {
   return AVATAR_GRADIENTS[(name.charCodeAt(0) ?? 0) % AVATAR_GRADIENTS.length]
+}
+
+/** Render a post body, turning `@username` into a profile link and
+    `#hashtag` into a tag-filtered search link. Anything else renders as
+    plain text. Splits on a single regex so the original word order is
+    preserved exactly. */
+function RichBody({ text }: { text: string }) {
+  // word-boundary aware: only matches when @/# is at start-of-line or after whitespace,
+  // and the token is alphanumeric / underscore / hyphen
+  const TOKEN = /(^|\s)([@#][a-zA-Z0-9_-]+)/g
+  const parts: React.ReactNode[] = []
+  let last = 0
+  let m: RegExpExecArray | null
+  while ((m = TOKEN.exec(text)) !== null) {
+    const tokenStart = m.index + m[1].length
+    if (tokenStart > last) parts.push(text.slice(last, tokenStart))
+    const token = m[2]
+    if (token.startsWith("@")) {
+      const username = token.slice(1)
+      parts.push(
+        <Link key={`m-${tokenStart}`} href={`/u/${username}`}
+          className="text-accent-bright font-bold hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 rounded">
+          {token}
+        </Link>
+      )
+    } else {
+      const tag = token.slice(1)
+      parts.push(
+        <Link key={`t-${tokenStart}`} href={`/search?q=${encodeURIComponent("#" + tag)}&type=posts`}
+          className="text-accent-bright font-bold hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 rounded">
+          {token}
+        </Link>
+      )
+    }
+    last = tokenStart + token.length
+  }
+  if (last < text.length) parts.push(text.slice(last))
+  return <>{parts}</>
 }
 
 function timeAgo(iso: string) {
@@ -244,7 +292,7 @@ function PostCard({ post }: { post: Post }) {
           if (spoilerMatch) {
             return <SpoilerBlock text={spoilerMatch[1]} />
           }
-          return <p className="text-[15px] text-foreground leading-[1.6] max-w-[65ch]">{post.content}</p>
+          return <p className="text-[15px] text-foreground leading-[1.6] max-w-[65ch] whitespace-pre-wrap break-words"><RichBody text={post.content} /></p>
         })()}
 
         {/* Image attachment */}
@@ -379,7 +427,36 @@ export default function CommunityPage() {
   const [draft, setDraft] = useState("")
   const [isSpoiler, setIsSpoiler] = useState(false)
   const [attachedImage, setAttachedImage] = useState<string | null>(null)
-  const fileInputRef = useRef<HTMLInputElement>(null)
+  const fileInputRef    = useRef<HTMLInputElement>(null)
+  const composerRef     = useRef<HTMLTextAreaElement>(null)
+
+  /** Insert text at the textarea's cursor; pad with a leading space when
+      adjacent to existing word characters so we don't accidentally form
+      "word@" or "tag#tag". Updates state + restores focus + cursor. */
+  const insertAtCursor = useCallback((token: "@" | "#") => {
+    const el = composerRef.current
+    if (!el) {
+      // Fallback: append.
+      setDraft(d => d + (d.length === 0 || /\s$/.test(d) ? token : ` ${token}`))
+      return
+    }
+    const start = el.selectionStart ?? draft.length
+    const end   = el.selectionEnd   ?? draft.length
+    const before = draft.slice(0, start)
+    const after  = draft.slice(end)
+    const needsLeadingSpace = before.length > 0 && !/\s$/.test(before)
+    const insert = (needsLeadingSpace ? " " : "") + token
+    const next   = before + insert + after
+    setDraft(next)
+    // Restore focus + place caret right after the inserted token
+    const nextCaret = (before + insert).length
+    requestAnimationFrame(() => {
+      const t = composerRef.current
+      if (!t) return
+      t.focus()
+      t.setSelectionRange(nextCaret, nextCaret)
+    })
+  }, [draft])
   const { upload, isUploading, error: uploadError, progress } = useImageUpload("post")
 
   // Realtime: new posts prepend, like/comment counts update without refresh
@@ -389,6 +466,31 @@ export default function CommunityPage() {
   const createPost = useCreatePost()
 
   const posts: Post[] = data?.pages.flatMap(p => p.data) ?? []
+
+  // ── Sidebar real-data sources ──────────────────────────────────────
+  // Trending tags: derived from the actual #hashtag tokens in the latest
+  // 50+ discover posts. Recomputed on every refetch.
+  const liveTrendingTags = useMemo(
+    () => deriveTrendingTags(posts.map(p => p.content), 8),
+    [posts],
+  )
+
+  // Active polls — live from /polls, refresh every 8s so the counts the
+  // user sees match the data on /poll. Only ACTIVE polls (not expired).
+  type ApiPoll = { id: string; question: string; options: Array<{ id: string; label: string; votes: number }>; totalVotes: number; expiresAt: string }
+  const { data: pollsApiData } = useQuery({
+    queryKey: ["community-sidebar-polls"],
+    queryFn:  () => api<{ data: ApiPoll[] }>("/polls?limit=4"),
+    refetchInterval: 8_000,
+    staleTime: 4_000,
+  })
+  const livePolls: ActivePoll[] = useMemo(
+    () => (pollsApiData?.data ?? [])
+      .filter(p => !p.expiresAt || new Date(p.expiresAt) > new Date())
+      .slice(0, 2)
+      .map(p => ({ id: p.id, question: p.question, options: p.options, totalVotes: p.totalVotes ?? 0 })),
+    [pollsApiData],
+  )
 
   const handleImagePick = useCallback(async (file: File) => {
     try {
@@ -481,7 +583,7 @@ export default function CommunityPage() {
             {composing && (
               <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} className="overflow-hidden">
                 <div className="bg-surface-2 border border-accent/20 rounded-2xl p-5 space-y-4">
-                  <textarea value={draft} onChange={e => setDraft(e.target.value)}
+                  <textarea ref={composerRef} value={draft} onChange={e => setDraft(e.target.value)}
                     placeholder={isAuthenticated ? "Share a theory, hot take, or reaction…" : "Sign in to post…"}
                     rows={4} autoFocus disabled={!isAuthenticated}
                     className="w-full bg-transparent text-sm text-foreground placeholder:text-subtle resize-none outline-none leading-relaxed disabled:opacity-40" />
@@ -522,13 +624,15 @@ export default function CommunityPage() {
                       <button
                         type="button"
                         title="Mention a user (@)"
-                        onClick={() => setDraft(d => d + (d.endsWith(" ") || d.length === 0 ? "@" : " @"))}
-                        className="p-1.5 text-subtle hover:text-accent-bright transition-colors"><AtSign size={15} /></button>
+                        aria-label="Mention a user"
+                        onClick={() => insertAtCursor("@")}
+                        className="p-2 rounded-lg text-muted hover:text-accent-bright hover:bg-accent/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60"><AtSign size={15} /></button>
                       <button
                         type="button"
                         title="Add a hashtag (#)"
-                        onClick={() => setDraft(d => d + (d.endsWith(" ") || d.length === 0 ? "#" : " #"))}
-                        className="p-1.5 text-subtle hover:text-accent-bright transition-colors"><Hash size={15} /></button>
+                        aria-label="Add a hashtag"
+                        onClick={() => insertAtCursor("#")}
+                        className="p-2 rounded-lg text-muted hover:text-accent-bright hover:bg-accent/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60"><Hash size={15} /></button>
                       <input
                         ref={fileInputRef}
                         type="file"
@@ -638,22 +742,35 @@ export default function CommunityPage() {
               <TrendingUp size={14} className="text-accent-bright" />
               <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-muted">Trending Tags</h3>
             </div>
-            <div className="flex flex-wrap gap-2">
-              {TRENDING_TAGS.map((tag, i) => (
-                <motion.span key={tag} initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: i * 0.04 }}
-                  className="px-3 py-1.5 rounded-full bg-surface border border-border text-[10px] font-bold text-muted hover:text-accent-bright hover:border-accent/25 cursor-pointer transition-all">
-                  #{tag}
-                </motion.span>
-              ))}
-            </div>
+            {liveTrendingTags.length > 0 ? (
+              <div className="flex flex-wrap gap-2">
+                {liveTrendingTags.map((tag, i) => (
+                  <motion.span key={tag} initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: i * 0.04 }}>
+                    <Link href={`/search?q=${encodeURIComponent("#" + tag)}&type=posts`}
+                      className="px-3 py-1.5 rounded-full bg-surface-2 border border-border text-[10px] font-bold text-muted hover:text-accent-bright hover:border-accent/30 transition-colors inline-block">
+                      #{tag}
+                    </Link>
+                  </motion.span>
+                ))}
+              </div>
+            ) : (
+              <p className="text-[11px] text-muted">No hashtags in the feed yet — be the first to start a trend.</p>
+            )}
           </div>
 
           <div className="p-5 rounded-2xl bg-surface border border-border space-y-4">
-            <div className="flex items-center gap-2">
-              <Vote size={14} className="text-accent-bright" />
-              <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-muted">Active Polls</h3>
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex items-center gap-2">
+                <Vote size={14} className="text-accent-bright" />
+                <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-muted">Active Polls</h3>
+              </div>
+              <Link href="/poll" className="text-[10px] font-bold text-accent-bright/80 hover:text-accent-bright transition-colors">
+                All →
+              </Link>
             </div>
-            {ACTIVE_POLLS.map(poll => <ActivePollRow key={poll.id} poll={poll} />)}
+            {livePolls.length > 0
+              ? livePolls.map(poll => <ActivePollRow key={poll.id} poll={poll} />)
+              : <p className="text-[11px] text-muted">No active polls right now. <Link href="/creators/create/polls" className="text-accent-bright hover:underline">Create one</Link>.</p>}
           </div>
 
           <WatchlistPreviewWidget />

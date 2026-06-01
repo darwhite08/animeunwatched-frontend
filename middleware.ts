@@ -4,34 +4,86 @@ import type { NextRequest } from "next/server"
 /**
  * Edge middleware — runs before any page render.
  *
- * Security model for /user/[slug]/* routes:
- *   Layer 1 (here): check that a refreshToken cookie exists. No cookie → not logged in → /login.
- *   Layer 2 (layout): client-side Zustand check confirms slug === session user's slug.
- *                     Mismatch → bounced to /user/<sessionSlug>/dashboard.
+ * Responsibilities:
+ *   1. Host-based routing: requests to admin-dashboard.kaiveron.com are
+ *      rewritten to /admin/* in the same Next.js app. Conversely, direct
+ *      /admin/* hits on the main host are bounced back to the marketing
+ *      site (so admin URLs only exist on the admin subdomain).
+ *   2. Cookie gate on /user/[slug]/* routes (existing layer-1 check).
  *
- * The access token lives in memory (Zustand) — the edge cannot read it.
- * We use the refreshToken cookie as a lightweight auth signal only; the actual
- * data fetching always uses the server-validated session userId.
+ * Security model for /user/[slug]/* routes:
+ *   Layer 1 (here): check that a refreshToken cookie exists. No cookie → /login.
+ *   Layer 2 (layout): client-side Zustand check confirms slug === session user's slug.
+ *
+ * Security model for /admin/* routes:
+ *   Layer 1 (here): refreshToken cookie must exist OR redirect to /login.
+ *   Layer 2 (page layout): client-side role check; non-ADMIN → /403.
+ *   Layer 3 (backend): every /api/v1/admin/* call has requireAdmin middleware
+ *                      that validates the JWT's role claim.
+ *
+ * The access token lives in memory (Zustand) — the edge cannot read it,
+ * so the role gate is enforced both client-side (UX) and server-side (security).
  */
+
+const ADMIN_HOST = "admin-dashboard.kaiveron.com"
+
 export function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl
+  const host = req.headers.get("host") ?? ""
+  const isAdminHost = host === ADMIN_HOST || host.startsWith(ADMIN_HOST + ":")
 
-  // Only guard user-scoped routes
-  if (!pathname.startsWith("/user/")) return NextResponse.next()
+  // ── Host-based routing ────────────────────────────────────────────────────
+  if (isAdminHost) {
+    // Already inside /admin → just continue (allows the rewrite below to be a no-op)
+    if (pathname.startsWith("/admin")) {
+      return guardAdminCookie(req)
+    }
+    // Map root → /admin, everything else → /admin/<path>
+    const target = req.nextUrl.clone()
+    target.pathname = "/admin" + (pathname === "/" ? "" : pathname)
+    return guardAdminCookie(req, NextResponse.rewrite(target))
+  }
 
-  // Allow the login redirect to avoid loops
-  const refreshToken = req.cookies.get("refreshToken")?.value
+  // Direct hits to /admin on the marketing host → not exposed here
+  if (pathname.startsWith("/admin")) {
+    const url = req.nextUrl.clone()
+    url.pathname = "/"
+    return NextResponse.redirect(url)
+  }
 
-  if (!refreshToken) {
-    const loginUrl = req.nextUrl.clone()
-    loginUrl.pathname = "/login"
-    loginUrl.searchParams.set("returnTo", pathname)
-    return NextResponse.redirect(loginUrl)
+  // ── User-scoped cookie gate (existing) ────────────────────────────────────
+  if (pathname.startsWith("/user/")) {
+    const refreshToken = req.cookies.get("refreshToken")?.value
+    if (!refreshToken) {
+      const loginUrl = req.nextUrl.clone()
+      loginUrl.pathname = "/login"
+      loginUrl.searchParams.set("returnTo", pathname)
+      return NextResponse.redirect(loginUrl)
+    }
   }
 
   return NextResponse.next()
 }
 
+function guardAdminCookie(req: NextRequest, fallback?: NextResponse): NextResponse {
+  // Skip cookie check on the login page itself + on Next internals
+  const p = req.nextUrl.pathname
+  if (p.startsWith("/admin/login") || p.startsWith("/_next") || p.startsWith("/admin/_next")) {
+    return fallback ?? NextResponse.next()
+  }
+
+  const refreshToken = req.cookies.get("refreshToken")?.value
+  if (!refreshToken) {
+    const loginUrl = req.nextUrl.clone()
+    loginUrl.pathname = "/admin/login"
+    loginUrl.searchParams.set("returnTo", p)
+    return NextResponse.redirect(loginUrl)
+  }
+  return fallback ?? NextResponse.next()
+}
+
 export const config = {
-  matcher: ["/user/:slug*"],
+  // Run on every request so the host check happens. Exclude Next internals
+  // and static assets to keep the edge cost down.
+  matcher: ["/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico|js|css|woff2?|map)$).*)"],
 }

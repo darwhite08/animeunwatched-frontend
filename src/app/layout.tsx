@@ -14,6 +14,9 @@ const KeyboardShortcutsOverlay = lazy(() => import("@/components/ui/KeyboardShor
 const MobileNav            = lazy(() => import("@/components/layout/MobileNav"))
 const CookieConsent        = lazy(() => import("@/components/ui/CookieConsent"))
 const MessagesButton       = lazy(() => import("@/components/ui/MessagesButton"))
+const GoogleAnalytics      = lazy(() =>
+  import("@/components/analytics/GoogleAnalytics").then(m => ({ default: m.GoogleAnalytics }))
+)
 
 export const viewport = {
   themeColor: "var(--app-accent)",
@@ -113,6 +116,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 </Suspense>
                 <Suspense fallback={null}>
                   <MessagesButton />
+                </Suspense>
+                {/* Loads + runs ONLY when NEXT_PUBLIC_GA_MEASUREMENT_ID is set
+                    AND the user has accepted the cookie banner */}
+                <Suspense fallback={null}>
+                  <GoogleAnalytics />
                 </Suspense>
               </KeyboardShortcuts>
             </LenisProvider>

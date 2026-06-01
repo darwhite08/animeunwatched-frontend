@@ -24,7 +24,8 @@ import {
 } from "lucide-react"
 import { useToast } from "@/stores/toast.store"
 import { useClub, useJoinClub, useClubMembers } from "@/hooks/useClubs"
-import { useClubThreads, useCreateClubThread, useCreateReply } from "@/hooks/useThreads"
+import { useClubThreads, useCreateClubThread } from "@/hooks/useThreads"
+import { api } from "@/lib/api/client"
 import { useAuthStore } from "@/stores/auth.store"
 
 /* ── Types ── */
@@ -478,7 +479,9 @@ export default function ClubDetailPage({
   const authUser = useAuthStore(s => s.user)
   const { data: clubData } = useClub(slug)
   const { data: threadsData } = useClubThreads(slug)
-  const acceptReply = useCreateReply
+  // `useCreateReply(threadId)` bakes threadId into the URL at hook-call time
+  // so we can't loop it per challenge. Each Accept click posts the "I'm in"
+  // reply directly via the API client — same endpoint, no hook-rules violation.
 
   const [acceptedChallenges, setAcceptedChallenges] = useState<Set<string>>(new Set())
   const [showCreateChallenge, setShowCreateChallenge] = useState(false)
@@ -535,23 +538,26 @@ export default function ClubDetailPage({
     )
   }
 
-  const handleAcceptChallenge = (challenge: Challenge) => {
+  const handleAcceptChallenge = async (challenge: Challenge) => {
     if (!authUser) { push("Sign in to accept challenges", "info"); return }
     if (acceptedChallenges.has(challenge.id)) return
-    const reply = acceptReply(challenge.threadId)
-    reply.mutate(
-      { content: `ACCEPTED: I'm in for the ${challenge.animeTitle} watch challenge! Let's go!` },
-      {
-        onSuccess: () => {
-          setAcceptedChallenges(prev => new Set(prev).add(challenge.id))
-          push(`Challenge accepted! Watch ${challenge.animeTitle} by ${new Date(challenge.deadline).toLocaleDateString()}`, "success")
-        },
-        onError: () => {
-          setAcceptedChallenges(prev => new Set(prev).add(challenge.id))
-          push(`Challenge accepted! Watch ${challenge.animeTitle}`, "success")
-        },
-      }
-    )
+
+    // Optimistic: mark accepted immediately so the button updates without lag.
+    setAcceptedChallenges(prev => new Set(prev).add(challenge.id))
+    push(`Challenge accepted! Watch ${challenge.animeTitle} by ${new Date(challenge.deadline).toLocaleDateString()}`, "success")
+
+    try {
+      await api(`/threads/${challenge.threadId}/replies`, {
+        method: "POST",
+        body: JSON.stringify({
+          content: `ACCEPTED: I'm in for the ${challenge.animeTitle} watch challenge! Let's go!`,
+        }),
+      })
+    } catch {
+      // Soft failure — leave the UI accepted; server might still record it.
+      // If you want strict rollback, uncomment:
+      // setAcceptedChallenges(prev => { const n = new Set(prev); n.delete(challenge.id); return n })
+    }
   }
 
   return (

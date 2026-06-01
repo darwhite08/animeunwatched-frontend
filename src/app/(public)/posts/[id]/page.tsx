@@ -1,6 +1,8 @@
 "use client"
 
 import { use, useState, useMemo } from "react"
+import { useQuery } from "@tanstack/react-query"
+import { api } from "@/lib/api/client"
 import { usePost, useLikePost, useCreateComment, useComments } from "@/hooks/usePosts"
 import { useLivePost } from "@/hooks/useRealtime"
 import { useAuthStore } from "@/stores/auth.store"
@@ -269,20 +271,24 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
     }
   }, [postData])
 
-  // Map API post to local shape
+  // Map API post to local shape — no fallback mocks. If the post isn't
+  // loaded, we render the loading / error UI further below.
   const apiPost = postData?.post
-  const post = apiPost ? {
-    ...FALLBACK_POST,
-    id: apiPost.id,
-    author: apiPost.author?.displayName ?? apiPost.author?.username ?? "Anonymous",
-    avatar: (apiPost.author?.displayName ?? apiPost.author?.username ?? "?")[0].toUpperCase(),
-    time: timeAgo(apiPost.createdAt),
-    anime: apiPost.anime?.title,
-    content: apiPost.content,
-    likes: likeCount,
-    comments: apiPost._count?.comments ?? 0,
-    liked,
-  } : POSTS[id] ?? FALLBACK_POST
+  const post = apiPost
+    ? {
+        ...FALLBACK_POST, // only used for unused decorative fields (tags)
+        id: apiPost.id,
+        author: apiPost.author?.displayName ?? apiPost.author?.username ?? "Anonymous",
+        avatar: (apiPost.author?.displayName ?? apiPost.author?.username ?? "?")[0].toUpperCase(),
+        time: timeAgo(apiPost.createdAt),
+        anime: apiPost.anime?.title,
+        content: apiPost.content,
+        likes: likeCount,
+        comments: apiPost._count?.comments ?? 0,
+        liked,
+        authorUsername: apiPost.author?.username,
+      }
+    : null
 
   const apiComments = (commentsData?.data ?? []).map(c => ({
     id: c.id as unknown as number,
@@ -296,7 +302,25 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
 
   const visibleComments = apiComments
 
-  const relatedPosts = RELATED_BY_AUTHOR[id] ?? FALLBACK_RELATED
+  // Related posts: live from /users/:username/posts, capped at 3, excluding
+  // the current post. Empty if the author has no other posts.
+  type ApiRelatedRow = { id: string; content: string; createdAt: string; _count?: { likes: number } }
+  const { data: relatedApi } = useQuery({
+    queryKey: ["related-posts", post?.authorUsername ?? ""],
+    queryFn:  () => api<{ data: ApiRelatedRow[] }>(`/users/${post!.authorUsername}/posts?page=1&limit=6`),
+    enabled:  !!post?.authorUsername,
+    staleTime: 60_000,
+  })
+  const relatedPosts: RelatedPost[] = (relatedApi?.data ?? [])
+    .filter(r => r.id !== id)
+    .slice(0, 3)
+    .map(r => ({
+      id: r.id,
+      author: post?.author ?? "Author",
+      content: r.content,
+      time: timeAgo(r.createdAt),
+      likes: r._count?.likes ?? 0,
+    }))
 
   const toggleLike = () => {
     if (!authUser) { push("Sign in to like posts", "info"); return }
@@ -315,8 +339,19 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
     })
   }
 
-  if (isLoading) return <div className="min-h-screen bg-background flex items-center justify-center"><Loader2 size={24} className="animate-spin text-accent-bright" /></div>
-  if (isError && !POSTS[id]) return <div className="min-h-screen bg-background flex items-center justify-center text-subtle">Post not found</div>
+  if (isLoading || !post) return <div className="min-h-screen bg-background flex items-center justify-center"><Loader2 size={24} className="animate-spin text-accent-bright" /></div>
+  if (isError) return (
+    <div className="min-h-screen bg-background flex items-center justify-center px-6">
+      <div className="max-w-sm text-center space-y-4">
+        <p className="text-[10px] font-black uppercase tracking-[0.3em] text-rose-400">Post unavailable</p>
+        <h1 className="text-2xl font-black tracking-tighter text-foreground">We couldn&apos;t load this post.</h1>
+        <p className="text-sm text-muted">It may have been deleted or hidden by its author.</p>
+        <Link href="/community" className="inline-flex items-center gap-1.5 text-[11px] font-black uppercase tracking-widest text-accent-bright hover:text-accent transition-colors">
+          ← Back to community
+        </Link>
+      </div>
+    </div>
+  )
 
   const share = async () => {
     try {

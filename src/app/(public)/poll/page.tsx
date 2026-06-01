@@ -154,19 +154,29 @@ const CATEGORY_CONFIG: Record<Poll["category"], { label: string; color: string }
 }
 
 /* ─────────────────────────────────────────────
-   Live vote ticker hook
+   Live ticker — animates a counter from prev → next value over ~600ms.
+   Pass it the real total-votes count; it interpolates between refreshes.
 ───────────────────────────────────────────── */
-function useLiveTicker(initial: number) {
-  const [count, setCount] = useState(initial)
-
+function useLiveTicker(target: number) {
+  const [display, setDisplay] = useState(target)
   useEffect(() => {
-    const id = setInterval(() => {
-      setCount((c) => c + Math.floor(Math.random() * 3))
-    }, 2_400)
-    return () => clearInterval(id)
-  }, [])
-
-  return count
+    if (display === target) return
+    const start = display
+    const delta = target - start
+    const dur   = 600
+    const t0    = performance.now()
+    let raf = 0
+    const tick = (now: number) => {
+      const p = Math.min((now - t0) / dur, 1)
+      const eased = 1 - Math.pow(1 - p, 3)
+      setDisplay(Math.round(start + delta * eased))
+      if (p < 1) raf = requestAnimationFrame(tick)
+    }
+    raf = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(raf)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [target])
+  return display
 }
 
 /* ─────────────────────────────────────────────
@@ -331,13 +341,33 @@ function PollCard({ poll }: { poll: Poll }) {
 ───────────────────────────────────────────── */
 export default function PollsPage() {
   const [activeTab, setActiveTab] = useState<FilterTab>("all")
-  const liveVotes = useLiveTicker(94_100)
+
+  // Collapse the page header from full → compact past this scroll position.
+  const [collapsed, setCollapsed] = useState(false)
+  useEffect(() => {
+    const onScroll = () => setCollapsed(window.scrollY > 96)
+    window.addEventListener("scroll", onScroll, { passive: true })
+    onScroll()
+    return () => window.removeEventListener("scroll", onScroll)
+  }, [])
 
   type ApiPoll = { id: string; question: string; options: Array<{ id: string; label: string; votes: number }>; totalVotes: number; createdAt: string; expiresAt: string }
+  // Polling realtime: refresh poll data every 4s while the tab is active.
+  // Server-pushed socket updates would replace this; for MVP this gives a
+  // visibly-live feel (counts tick up as votes arrive).
   const { data: pollsApiData } = useQuery({
     queryKey: ["polls"],
-    queryFn: () => api<{ data: ApiPoll[]; meta: { total: number } }>("/polls"),
+    queryFn:  () => api<{ data: ApiPoll[]; meta: { total: number } }>("/polls"),
+    refetchInterval: 4_000,
+    refetchOnWindowFocus: true,
   })
+
+  // Real total-votes count derived from the live data
+  const totalVotesAcrossPolls = useMemo(
+    () => (pollsApiData?.data ?? []).reduce((s, p) => s + (p.totalVotes ?? 0), 0),
+    [pollsApiData]
+  )
+  const liveVotes = useLiveTicker(totalVotesAcrossPolls)
 
   const apiPolls: Poll[] = useMemo(() => (pollsApiData?.data ?? []).map((p, i) => ({
     id: i + 1,
@@ -371,62 +401,86 @@ export default function PollsPage() {
   return (
     <div className="min-h-screen bg-background text-foreground pb-32">
 
-      {/* ── PAGE HEADER ── */}
-      <div className="border-b border-border bg-background/80 backdrop-blur-xl sticky top-[72px] z-30">
-        <div className="max-w-7xl mx-auto px-6 py-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div>
-            <div className="flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.4em] text-accent-bright mb-2">
-              <Vote size={11} />
-              Community Consensus
-              <span className="ml-1 flex items-center gap-1 text-emerald-400/70">
-                <span className="inline-block h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                Live
-              </span>
-            </div>
-            <h1 className="text-4xl md:text-5xl font-black tracking-tighter uppercase italic text-foreground">
-              Community <span className="text-accent">Polls</span>
-            </h1>
-            {/* Live vote ticker */}
-            <div className="flex items-center gap-2 mt-2 text-[10px] text-subtle font-mono">
-              <TrendingUp size={10} className="text-accent-bright" />
-              <motion.span
-                key={liveVotes}
-                initial={{ opacity: 0, y: -6 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.3 }}
-              >
-                {liveVotes.toLocaleString()} total votes cast
-              </motion.span>
+      {/* ── PAGE HEADER ── Sticky from top-0 with opaque bg, collapses on scroll */}
+      <div className="sticky top-0 z-40 bg-background border-b border-border shadow-[0_4px_12px_color-mix(in_srgb,var(--app-fg)_4%,transparent)]">
+        <div className="relative overflow-hidden transition-[padding] duration-300 motion-reduce:transition-none"
+          style={{ paddingTop: collapsed ? "92px" : "120px", paddingBottom: collapsed ? "12px" : "20px" }}>
+          {!collapsed && (
+            <div aria-hidden className="absolute inset-0 pointer-events-none opacity-90"
+              style={{ background: "radial-gradient(60% 80% at 100% 0%, color-mix(in srgb, var(--app-accent) 18%, transparent), transparent 70%)" }} />
+          )}
+          <div className="max-w-7xl mx-auto px-6 relative">
+            <AnimatePresence initial={false} mode="wait">
+              {collapsed ? (
+                <motion.div key="cmp" initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }} transition={{ duration: 0.2 }}
+                  className="flex items-center justify-between gap-4">
+                  <h1 className="text-2xl font-black tracking-tighter uppercase italic text-foreground leading-none">
+                    Polls<span style={{ color: "var(--app-accent)" }}>.</span>
+                  </h1>
+                  <div className="flex items-center gap-3">
+                    <span className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 text-[10px] font-black uppercase tracking-widest tabular-nums">
+                      <span className="inline-block h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse motion-reduce:animate-none" />
+                      {liveVotes.toLocaleString()} live
+                    </span>
+                    <Link href="/creators/create/polls"
+                      className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest text-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60"
+                      style={{ background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))" }}>
+                      <Plus size={11} /> New Poll
+                    </Link>
+                  </div>
+                </motion.div>
+              ) : (
+                <motion.div key="full" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 8 }} transition={{ duration: 0.25 }}
+                  className="flex flex-col md:flex-row items-start md:items-end justify-between gap-4">
+                  <div>
+                    <div className="flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.4em] text-accent-bright mb-2">
+                      <Vote size={11} />
+                      Community Consensus
+                      <span className="ml-1 inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 text-[8px]">
+                        <span className="inline-block h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse motion-reduce:animate-none" />
+                        Live
+                      </span>
+                    </div>
+                    <h1 className="text-5xl md:text-6xl font-black tracking-tighter uppercase italic text-foreground leading-none">
+                      Polls<span style={{ color: "var(--app-accent)" }}>.</span>
+                    </h1>
+                    <div className="flex items-center gap-2 mt-3 text-[11px] text-muted font-mono">
+                      <TrendingUp size={11} className="text-accent-bright" />
+                      <span className="tabular-nums">{liveVotes.toLocaleString()}</span>
+                      <span>total votes · refreshing every 4s</span>
+                    </div>
+                  </div>
+                  <Link href="/creators/create/polls"
+                    className="self-start md:self-end inline-flex items-center gap-2 px-5 py-3 rounded-xl text-[11px] font-black uppercase tracking-widest text-black transition-all hover:scale-[1.03] motion-reduce:transform-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70 shrink-0"
+                    style={{ background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))", boxShadow: "0 8px 24px color-mix(in srgb, var(--app-accent) 35%, transparent)" }}>
+                    <Plus size={13} /> Create Poll
+                  </Link>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {/* Tabs — same row, always visible (collapse-friendly) */}
+            <div className={`flex items-center gap-1 ${collapsed ? "mt-3" : "mt-8"}`}>
+              {TABS.map(tab => (
+                <button
+                  key={tab.key}
+                  onClick={() => setActiveTab(tab.key)}
+                  aria-pressed={activeTab === tab.key}
+                  className={`relative px-5 py-2.5 text-[10px] font-black uppercase tracking-widest transition-colors rounded-t-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 ${
+                    activeTab === tab.key
+                      ? "text-foreground"
+                      : "text-muted hover:text-foreground hover:bg-surface/60"
+                  }`}>
+                  {tab.label}
+                  {activeTab === tab.key && (
+                    <motion.div layoutId="poll-tab-underline"
+                      transition={{ type: "spring", stiffness: 320, damping: 28 }}
+                      className="absolute bottom-0 left-3 right-3 h-[2px] bg-accent rounded-full motion-reduce:transition-none" />
+                  )}
+                </button>
+              ))}
             </div>
           </div>
-
-          <Link
-            href="/creators/create/polls"
-            className="flex items-center gap-2 px-5 py-3 rounded-2xl bg-accent hover:bg-accent-bright text-xs font-black uppercase tracking-widest text-foreground transition-all shadow-[0_0_24px_rgba(99,102,241,0.3)] hover:-translate-y-0.5 shrink-0"
-          >
-            <Plus size={13} /> Create Poll
-          </Link>
-        </div>
-
-        {/* Filter tabs */}
-        <div className="max-w-7xl mx-auto px-6 flex items-center gap-1 pb-0">
-          {TABS.map((tab) => (
-            <button
-              key={tab.key}
-              onClick={() => setActiveTab(tab.key)}
-              className={`relative px-5 py-3 text-[10px] font-black uppercase tracking-widest transition-colors ${
-                activeTab === tab.key ? "text-foreground" : "text-subtle hover:text-muted"
-              }`}
-            >
-              {tab.label}
-              {activeTab === tab.key && (
-                <motion.div
-                  layoutId="poll-tab-underline"
-                  className="absolute bottom-0 left-0 right-0 h-[2px] bg-accent rounded-full"
-                />
-              )}
-            </button>
-          ))}
         </div>
       </div>
 

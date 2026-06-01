@@ -34,7 +34,12 @@ export function useFollow(username: string) {
   return useMutation({
     mutationFn: ({ follow }: { follow: boolean }) =>
       follow ? ep.follow(username) : ep.unfollow(username),
-    onSuccess: () => qc.invalidateQueries({ queryKey: userKey(username) }),
+    onSuccess: (_data, vars) => {
+      qc.invalidateQueries({ queryKey: userKey(username) })
+      void import("@/lib/analytics/ga").then(({ track }) =>
+        track(vars.follow ? "follow_user" : "unfollow_user")
+      )
+    },
   })
 }
 

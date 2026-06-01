@@ -335,14 +335,9 @@ export default function BlogReaderPage({ params }: { params: Promise<{ slug: str
   const { push } = useToast()
   const { data: blogData, isLoading: blogLoading, isError: blogError } = useBlog(slug)
 
-  // Show loading skeleton while blog is fetching
-  if (blogLoading) return (
-    <div className="min-h-screen bg-background flex items-center justify-center">
-      <div className="w-8 h-8 border-2 border-accent/30 border-t-indigo-500 rounded-full animate-spin" />
-    </div>
-  )
-
-  // Use real blog if available, fall back to mock for dev/demo
+  // Resolve the metadata before any conditional returns. useBlog returns
+  // undefined while loading; we fall back to the mock so the hooks below
+  // never change order between loading → loaded.
   const apiBlog = blogData?.blog
   const meta = apiBlog ? {
     slug: apiBlog.slug,
@@ -352,16 +347,38 @@ export default function BlogReaderPage({ params }: { params: Promise<{ slug: str
     publishedAt: apiBlog.publishedAt ? new Date(apiBlog.publishedAt).toLocaleDateString("en-US", { year: "numeric", month: "long", day: "numeric" }) : "",
     readTime: Math.max(1, Math.ceil(apiBlog.body.split(" ").length / 200)),
     coverGradient: "from-indigo-900 via-violet-900 to-purple-900",
-    tags: [],
+    tags: [] as string[],
     likes: 0,
     views: 0,
     content: apiBlog.body,
   } : (BLOG_META[slug] ?? { ...FALLBACK_META, slug, title: slug.replace(/-/g, " ") })
 
+  // ALL hooks must run on every render — never gate them behind an early
+  // return. Loading / error UI is rendered AFTER all hooks below.
   const [liked, setLiked]       = useState(false)
   const [likeCount, setLikeCount] = useState(meta.likes)
   const [bookmarked, setBookmarked] = useState(false)
   const [commentLikes, setCommentLikes] = useState<Record<number, boolean>>({})
+
+  // Now safe to short-circuit — these returns come AFTER every useState.
+  if (blogLoading) return (
+    <div className="min-h-screen bg-background flex items-center justify-center">
+      <div className="w-8 h-8 border-2 border-accent/30 border-t-accent rounded-full animate-spin" aria-label="Loading article" />
+    </div>
+  )
+
+  if (blogError && !apiBlog && !BLOG_META[slug]) return (
+    <div className="min-h-screen bg-background flex items-center justify-center px-6">
+      <div className="max-w-sm text-center space-y-4">
+        <p className="text-[10px] font-black uppercase tracking-[0.3em] text-rose-400">Article unavailable</p>
+        <h1 className="text-2xl font-black tracking-tighter text-foreground">We couldn&apos;t load this story.</h1>
+        <p className="text-sm text-muted">The blog may have been removed, or the API is offline. Try again from the listing.</p>
+        <Link href="/blog" className="inline-flex items-center gap-1.5 text-[11px] font-black uppercase tracking-widest text-accent-bright hover:text-accent transition-colors">
+          <ChevronLeft size={12} /> Back to The Chronicle
+        </Link>
+      </div>
+    </div>
+  )
 
   const toggleLike = () => {
     setLiked(l => !l)

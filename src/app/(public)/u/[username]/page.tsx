@@ -732,7 +732,7 @@ export default function UserProfilePage({
                           {anime.title}
                         </p>
                         <div className="flex items-center gap-1 mt-1">
-                          <Star size={9} fill="#f59e0b" className="text-accent-bright" />
+                          <Star size={9} fill="var(--app-accent)" className="text-accent-bright" />
                           <span className="text-[9px] text-muted font-bold">{anime.rating.toFixed(1)}</span>
                         </div>
                       </div>

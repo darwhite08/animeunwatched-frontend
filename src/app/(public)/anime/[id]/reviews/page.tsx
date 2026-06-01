@@ -159,7 +159,7 @@ export default function AnimeReviewsPage({ params }: { params: Promise<{ id: str
             <p className="text-[10px] text-subtle mt-0.5 font-mono">{anime.titleJapanese}</p>
             <div className="flex items-center gap-3 mt-2">
               <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-accent/10 border border-accent/20">
-                <Star size={11} fill="#f59e0b" className="text-accent-bright" />
+                <Star size={11} fill="var(--app-accent)" className="text-accent-bright" />
                 <span className="text-xs font-black text-accent-bright">{anime.rating.toFixed(1)}</span>
               </div>
               <span className="text-[10px] text-subtle">{anime.studio} · {anime.year}</span>
@@ -179,7 +179,7 @@ export default function AnimeReviewsPage({ params }: { params: Promise<{ id: str
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
           <div>
             <h2 className="text-3xl font-black uppercase italic tracking-tighter text-foreground leading-none">
-              Reviews<span style={{color:"#f59e0b"}}>.</span>
+              Reviews<span style={{color:"var(--app-accent)"}}>.</span>
             </h2>
             <p className="text-subtle text-xs mt-1">{reviews.length} reviews · Page 1 of 3</p>
           </div>
@@ -237,7 +237,7 @@ export default function AnimeReviewsPage({ params }: { params: Promise<{ id: str
                           <Star
                             key={star}
                             size={11}
-                            fill={star <= Math.round(r.score / 2) ? "#f59e0b" : "none"}
+                            fill={star <= Math.round(r.score / 2) ? "var(--app-accent)" : "none"}
                             className={star <= Math.round(r.score / 2) ? "text-accent-bright" : "text-subtle"}
                           />
                         ))}

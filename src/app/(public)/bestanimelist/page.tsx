@@ -212,7 +212,7 @@ export default function BestAnimeListPage() {
               <ListFilter size={13} className="text-accent" />
               Refine
               {activeFilterCount > 0 && (
-                <span className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full text-[8px] font-black text-black flex items-center justify-center" style={{background:"linear-gradient(135deg,#fbbf24,#f59e0b)"}}>
+                <span className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full text-[8px] font-black text-black flex items-center justify-center" style={{background:"linear-gradient(135deg,var(--app-accent-bright),var(--app-accent))"}}>
                   {activeFilterCount}
                 </span>
               )}
@@ -369,7 +369,7 @@ export default function BestAnimeListPage() {
                     onClick={() => { setPage(n as number); window.scrollTo({ top: 0, behavior: "smooth" }) }}
                     className={`w-9 h-9 rounded-xl text-xs font-black transition-all ${
                       page === n
-                        ? "bg-accent text-black shadow-[0_0_16px_rgba(245,158,11,0.4)]"
+                        ? "bg-accent text-black shadow-[0_0_16px_color-mix(in srgb, var(--app-accent) 40%, transparent)]"
                         : "bg-surface border border-border text-muted hover:text-foreground hover:bg-surface"
                     }`}
                   >

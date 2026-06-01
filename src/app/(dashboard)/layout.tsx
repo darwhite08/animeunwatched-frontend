@@ -104,8 +104,8 @@ function KLoader() {
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="56" height="56">
           <defs>
             <linearGradient id="loaderKGoldDash" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#fbbf24" />
-              <stop offset="100%" stopColor="#f59e0b" />
+              <stop offset="0%" stopColor="var(--app-accent-bright)" />
+              <stop offset="100%" stopColor="var(--app-accent)" />
             </linearGradient>
           </defs>
           <rect width="100" height="100" rx="22" fill="#0A0F1E" />

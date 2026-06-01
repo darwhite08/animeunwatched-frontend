@@ -26,7 +26,7 @@ export default function AIResultsGrid({ results, hasSearched, query }: AIResults
         <div className="max-w-7xl mx-auto">
           <div className="flex items-end justify-between mb-12">
             <h2 className="text-4xl font-black text-foreground italic uppercase tracking-tighter">
-              Neural Matches<span style={{color:"#f59e0b"}}>.</span>
+              Neural Matches<span style={{color:"var(--app-accent)"}}>.</span>
             </h2>
             <p className="text-[10px] font-black text-subtle uppercase tracking-widest">
               Submit a query to activate
@@ -54,7 +54,7 @@ export default function AIResultsGrid({ results, hasSearched, query }: AIResults
                 animate={{ opacity: 1, y: 0 }}
                 className="text-4xl font-black text-foreground italic uppercase tracking-tighter"
               >
-                Neural Matches<span style={{color:"#f59e0b"}}>.</span>
+                Neural Matches<span style={{color:"var(--app-accent)"}}>.</span>
               </motion.h2>
               <motion.p
                 initial={{ opacity: 0 }}

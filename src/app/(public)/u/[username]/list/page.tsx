@@ -131,7 +131,7 @@ function ListCard({ entry, index, onAdd }: ListCardProps) {
         {/* Rating */}
         <div className="absolute top-2.5 right-2.5">
           <div className="flex items-center gap-1 px-2 py-0.5 rounded-lg bg-black/60 backdrop-blur-md">
-            <Star size={9} fill="#f59e0b" className="text-accent-bright" />
+            <Star size={9} fill="var(--app-accent)" className="text-accent-bright" />
             <span className="text-[9px] font-black text-foreground">{anime.rating.toFixed(1)}</span>
           </div>
         </div>
@@ -284,7 +284,7 @@ export default function UserListPage({
                 onClick={() => setFilterStatus(tab)}
                 className={`relative px-5 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-200 ${
                   filterStatus === tab
-                    ? "bg-accent text-black shadow-[0_4px_16px_rgba(245,158,11,0.3)]"
+                    ? "bg-accent text-black shadow-[0_4px_16px_color-mix(in srgb, var(--app-accent) 30%, transparent)]"
                     : "bg-white/[0.04] border border-border text-muted hover:text-muted hover:bg-surface"
                 }`}
               >

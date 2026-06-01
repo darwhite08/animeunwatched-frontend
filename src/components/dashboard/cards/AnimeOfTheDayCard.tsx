@@ -122,7 +122,7 @@ export default function AnimeOfTheDayCard() {
               className="flex items-center gap-3 mb-3 flex-wrap"
             >
               <div className="flex items-center gap-1.5">
-                <Star size={12} fill="#f59e0b" className="text-accent-bright" />
+                <Star size={12} fill="var(--app-accent)" className="text-accent-bright" />
                 <span className="text-sm font-black text-foreground">{anime.rating.toFixed(1)}</span>
               </div>
               <div className="h-1 w-1 rounded-full bg-white/20" />

@@ -55,8 +55,8 @@ export default function AIPromptInput({ onSearch }: AIPromptInputProps) {
       <div className="relative rounded-[1.8rem] p-2 backdrop-blur-3xl"
         style={{
           background: "linear-gradient(160deg, #0c0c18 0%, #080810 100%)",
-          border: "1px solid rgba(245,158,11,0.18)",
-          boxShadow: "0 24px 80px rgba(0,0,0,0.6), 0 0 0 0.5px rgba(245,158,11,0.08) inset",
+          border: "1px solid color-mix(in srgb, var(--app-accent) 18%, transparent)",
+          boxShadow: "0 24px 80px rgba(0,0,0,0.6), 0 0 0 0.5px color-mix(in srgb, var(--app-accent) 8%, transparent) inset",
         }}>
         {/* Terminal header */}
         <div className="flex items-center justify-between px-6 py-3 border-b border-border">
@@ -134,7 +134,7 @@ export default function AIPromptInput({ onSearch }: AIPromptInputProps) {
               onClick={handleSubmit}
               disabled={loading || !prompt.trim()}
               className="relative group/submit overflow-hidden px-8 py-3 disabled:opacity-40 disabled:cursor-not-allowed rounded-xl transition-all font-black text-black text-xs uppercase tracking-widest"
-              style={{ background: "linear-gradient(135deg, #fbbf24, #f59e0b)", boxShadow: "0 4px 20px rgba(245,158,11,0.35)" }}
+              style={{ background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))", boxShadow: "0 4px 20px color-mix(in srgb, var(--app-accent) 35%, transparent)" }}
             >
               <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/15 to-transparent -translate-x-full group-hover/submit:animate-[shimmer_1.5s_infinite]" />
               <div className="relative z-10 flex items-center gap-2.5">

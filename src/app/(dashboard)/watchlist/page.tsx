@@ -84,7 +84,7 @@ export default function WatchlistPage() {
         <h2 className="text-3xl font-black text-foreground tracking-tighter">Your Archives Await</h2>
         <p className="text-muted text-sm max-w-xs text-center">Sign in to track your anime journey, manage your watchlist, and sync across devices.</p>
         <Link href="/login"
-          className="flex items-center gap-2 px-8 py-4 rounded-2xl font-black text-sm uppercase tracking-widest transition-all text-black" style={{background:"linear-gradient(135deg,#fbbf24,#f59e0b)",boxShadow:"0 4px 20px rgba(245,158,11,0.35)"}}>
+          className="flex items-center gap-2 px-8 py-4 rounded-2xl font-black text-sm uppercase tracking-widest transition-all text-black" style={{background:"linear-gradient(135deg,var(--app-accent-bright),var(--app-accent))",boxShadow:"0 4px 20px color-mix(in srgb, var(--app-accent) 35%, transparent)"}}>
           <LogIn size={15} /> Sign In
         </Link>
       </div>
@@ -101,7 +101,7 @@ export default function WatchlistPage() {
             <MonitorPlay size={13} /> Neural Transmission • Active
           </motion.p>
           <h1 className="text-6xl md:text-7xl font-black tracking-tighter text-foreground leading-none">
-            Archives<span style={{color:"#f59e0b"}}>.</span>
+            Archives<span style={{color:"var(--app-accent)"}}>.</span>
           </h1>
           <p className="text-subtle text-sm">{items.length} anime tracked</p>
         </div>
@@ -119,7 +119,7 @@ export default function WatchlistPage() {
             )}
           </div>
           <button onClick={() => push("Use the Browse page to add anime to your list!", "info")}
-            className="flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl font-black text-[11px] uppercase tracking-widest transition-all active:scale-95 text-black" style={{background:"linear-gradient(135deg,#fbbf24,#f59e0b)"}}>
+            className="flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl font-black text-[11px] uppercase tracking-widest transition-all active:scale-95 text-black" style={{background:"linear-gradient(135deg,var(--app-accent-bright),var(--app-accent))"}}>
             <Plus size={15} /> Add Anime
           </button>
         </div>
@@ -130,7 +130,7 @@ export default function WatchlistPage() {
         {bannerVisible && (
           <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} className="overflow-hidden">
             <div className="flex items-center justify-between gap-4 px-5 py-3.5 rounded-2xl"
-              style={{ background: "rgba(245,158,11,0.08)", border: "1px solid rgba(245,158,11,0.2)" }}>
+              style={{ background: "color-mix(in srgb, var(--app-accent) 8%, transparent)", border: "1px solid color-mix(in srgb, var(--app-accent) 20%, transparent)" }}>
               <div className="flex items-center gap-3 min-w-0">
                 <Share2 size={15} className="text-accent-bright shrink-0" />
                 <p className="text-sm font-bold text-muted truncate">Share your anime list and grow the community ↗</p>
@@ -138,7 +138,7 @@ export default function WatchlistPage() {
               <div className="flex items-center gap-2 shrink-0">
                 <button onClick={() => setShareModalOpen(true)}
                   className="px-4 py-1.5 rounded-xl text-[11px] font-black uppercase tracking-widest text-black transition-all"
-                  style={{ background: "linear-gradient(135deg, #fbbf24, #f59e0b)" }}>
+                  style={{ background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))" }}>
                   Share List
                 </button>
                 <button onClick={() => { localStorage.setItem(SHARE_KEY, "1"); setBannerVisible(false) }}
@@ -203,10 +203,10 @@ export default function WatchlistPage() {
                 <button key={t} onClick={() => setTab(t)}
                   className={`relative flex items-center gap-2 px-5 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest whitespace-nowrap transition-all ${
                     tab === t
-                      ? "text-black shadow-[0_0_20px_rgba(245,158,11,0.3)]"
+                      ? "text-black shadow-[0_0_20px_color-mix(in srgb, var(--app-accent) 30%, transparent)]"
                       : "bg-surface text-muted hover:bg-surface border border-border"
                   }`}
-                  style={tab === t ? { background: "linear-gradient(135deg,#fbbf24,#f59e0b)" } : undefined}
+                  style={tab === t ? { background: "linear-gradient(135deg,var(--app-accent-bright),var(--app-accent))" } : undefined}
                 >
                   {t}
                   {COUNTS[t] > 0 && (
@@ -229,7 +229,7 @@ export default function WatchlistPage() {
                 <div className="h-28 w-28 rounded-[2rem] bg-surface border border-border flex items-center justify-center">
                   <MonitorPlay size={36} className="text-subtle" />
                 </div>
-                <div className="absolute -bottom-2 -right-2 h-8 w-8 rounded-xl flex items-center justify-center text-black text-xs font-black" style={{ background: "linear-gradient(135deg, #fbbf24, #f59e0b)" }}>
+                <div className="absolute -bottom-2 -right-2 h-8 w-8 rounded-xl flex items-center justify-center text-black text-xs font-black" style={{ background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))" }}>
                   <Plus size={14} />
                 </div>
               </div>
@@ -244,7 +244,7 @@ export default function WatchlistPage() {
               <div className="flex flex-col sm:flex-row items-center gap-3">
                 <Link href="/bestanimelist"
                   className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl text-sm font-black uppercase tracking-widest text-black transition-all hover:-translate-y-0.5"
-                  style={{ background: "linear-gradient(135deg, #fbbf24, #f59e0b)", boxShadow: "0 4px 20px rgba(245,158,11,0.3)" }}
+                  style={{ background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))", boxShadow: "0 4px 20px color-mix(in srgb, var(--app-accent) 30%, transparent)" }}
                 >
                   <MonitorPlay size={14} /> Browse Anime
                 </Link>

@@ -156,7 +156,7 @@ export default function UserReviewsPage({
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-5 mb-8">
           <div>
             <h1 className="text-5xl font-black tracking-tighter uppercase italic text-foreground leading-none">
-              @{username}&apos;s Reviews<span style={{color:"#f59e0b"}}>.</span>
+              @{username}&apos;s Reviews<span style={{color:"var(--app-accent)"}}>.</span>
             </h1>
             <p className="text-subtle text-sm mt-2">{reviews.length} reviews</p>
           </div>
@@ -229,7 +229,7 @@ export default function UserReviewsPage({
                             <Star
                               key={star}
                               size={10}
-                              fill={star <= Math.round(r.score / 2) ? "#f59e0b" : "none"}
+                              fill={star <= Math.round(r.score / 2) ? "var(--app-accent)" : "none"}
                               className={star <= Math.round(r.score / 2) ? "text-accent-bright" : "text-subtle"}
                             />
                           ))}

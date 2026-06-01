@@ -7,7 +7,7 @@ export default function AIDiscoverHero() {
     <section className="relative pt-32 pb-16 flex flex-col items-center justify-center overflow-hidden w-full bg-[#030303]">
       {/* Background glows */}
       <div className="absolute top-20 left-1/2 -translate-x-1/2 w-[700px] h-[400px] blur-[140px] rounded-full pointer-events-none"
-        style={{ background: "radial-gradient(ellipse, rgba(245,158,11,0.08) 0%, rgba(99,102,241,0.06) 50%, transparent 70%)" }} />
+        style={{ background: "radial-gradient(ellipse, color-mix(in srgb, var(--app-accent) 8%, transparent) 0%, rgba(99,102,241,0.06) 50%, transparent 70%)" }} />
       <div className="absolute bottom-0 right-0 w-[400px] h-[300px] blur-[120px] rounded-full pointer-events-none"
         style={{ background: "rgba(139,92,246,0.05)" }} />
 
@@ -19,14 +19,14 @@ export default function AIDiscoverHero() {
           transition={{ duration: 0.5 }}
           className="inline-flex items-center gap-2 mb-8 px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.4em]"
           style={{
-            background: "rgba(245,158,11,0.1)",
-            border: "1px solid rgba(245,158,11,0.25)",
-            color: "#fbbf24",
+            background: "color-mix(in srgb, var(--app-accent) 10%, transparent)",
+            border: "1px solid color-mix(in srgb, var(--app-accent) 25%, transparent)",
+            color: "var(--app-accent-bright)",
           }}
         >
           <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" style={{ background: "#fbbf24" }} />
-            <span className="relative inline-flex rounded-full h-2 w-2" style={{ background: "#f59e0b" }} />
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75" style={{ background: "var(--app-accent-bright)" }} />
+            <span className="relative inline-flex rounded-full h-2 w-2" style={{ background: "var(--app-accent)" }} />
           </span>
           Neural Engine v4.0
         </motion.div>
@@ -40,7 +40,7 @@ export default function AIDiscoverHero() {
         >
           Find Your Next{" "}
           <span className="italic" style={{
-            backgroundImage: "linear-gradient(135deg, #fbbf24 0%, #f59e0b 40%, #ffffff 100%)",
+            backgroundImage: "linear-gradient(135deg, var(--app-accent-bright) 0%, var(--app-accent) 40%, #ffffff 100%)",
             WebkitBackgroundClip: "text",
             WebkitTextFillColor: "transparent",
           }}>

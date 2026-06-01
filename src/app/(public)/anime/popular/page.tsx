@@ -93,7 +93,7 @@ function HorizontalSection({ title, icon, accent, items, onSelect, viewAllHref =
                 />
                 <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black via-black/70 to-transparent p-3">
                   <div className="flex items-center gap-1 mb-1">
-                    <Star size={9} fill="#f59e0b" className="text-accent-bright" />
+                    <Star size={9} fill="var(--app-accent)" className="text-accent-bright" />
                     <span className="text-[9px] font-black text-accent-bright">{anime.rating.toFixed(1)}</span>
                   </div>
                   <p className="text-[10px] font-black uppercase italic text-foreground leading-tight line-clamp-2">

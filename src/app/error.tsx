@@ -50,7 +50,7 @@ export default function GlobalError({ error, reset }: { error: Error & { digest?
           <button
             onClick={reset}
             className="flex items-center gap-2 px-6 py-3.5 rounded-2xl text-xs font-black uppercase tracking-widest text-black transition-all"
-            style={{ background: "linear-gradient(135deg, #fbbf24, #f59e0b)", boxShadow: "0 4px 16px rgba(245,158,11,0.35)" }}
+            style={{ background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))", boxShadow: "0 4px 16px color-mix(in srgb, var(--app-accent) 35%, transparent)" }}
           >
             <RotateCcw size={13} /> Try Again
           </button>

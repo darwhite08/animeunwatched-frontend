@@ -43,7 +43,7 @@ export default function NotificationBell() {
         <Bell size={18} className={unreadCount > 0 ? "text-accent-bright" : ""} />
 
         {unreadCount > 0 && (
-          <span className="absolute -top-0.5 -right-0.5 min-w-[16px] h-[16px] px-1 rounded-full bg-accent text-black text-[9px] font-black flex items-center justify-center leading-none shadow-[0_0_8px_rgba(245,158,11,0.6)]">
+          <span className="absolute -top-0.5 -right-0.5 min-w-[16px] h-[16px] px-1 rounded-full bg-accent text-black text-[9px] font-black flex items-center justify-center leading-none shadow-[0_0_8px_color-mix(in srgb, var(--app-accent) 60%, transparent)]">
             {unreadCount > 9 ? "9+" : unreadCount}
           </span>
         )}

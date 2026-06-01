@@ -74,7 +74,7 @@ function SearchContent() {
             Neural Archive Search
           </p>
           <h1 className="text-4xl md:text-5xl font-black tracking-tighter text-foreground uppercase italic mb-8">
-            Search<span style={{color:"#f59e0b"}}>.</span>
+            Search<span style={{color:"var(--app-accent)"}}>.</span>
           </h1>
 
           {/* Search box */}
@@ -120,7 +120,7 @@ function SearchContent() {
               {tab === t.id && (
                 <motion.div
                   layoutId="search-tab-underline"
-                  className="absolute bottom-0 left-0 right-0 h-[2px] rounded-full" style={{background:"#f59e0b"}}
+                  className="absolute bottom-0 left-0 right-0 h-[2px] rounded-full" style={{background:"var(--app-accent)"}}
                 />
               )}
             </button>
@@ -161,7 +161,7 @@ function SearchContent() {
                             {anime.title}
                           </p>
                           <div className="flex items-center gap-1.5 mt-1.5">
-                            <Star size={10} fill="#f59e0b" className="text-accent-bright" />
+                            <Star size={10} fill="var(--app-accent)" className="text-accent-bright" />
                             <span className="text-[10px] font-black text-muted">{anime.rating.toFixed(1)}</span>
                             <span className="text-[9px] text-subtle">{anime.year}</span>
                           </div>

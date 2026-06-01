@@ -30,7 +30,7 @@ export const StreakHeatmap = () => {
               ${d.intensity === 1 ? "bg-indigo-900/40" : ""}
               ${d.intensity === 2 ? "bg-indigo-700/60" : ""}
               ${d.intensity === 3 ? "bg-accent" : ""}
-              ${d.intensity === 4 ? "bg-accent-bright shadow-[0_0_15px_rgba(251,191,36,0.5)]" : ""}
+              ${d.intensity === 4 ? "bg-accent-bright shadow-[0_0_15px_color-mix(in srgb, var(--app-accent-bright) 50%, transparent)]" : ""}
             `}
           />
         ))}

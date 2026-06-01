@@ -22,7 +22,7 @@ export default function CategoryTabs({ active, onChange }: CategoryTabsProps) {
             <motion.div
               layoutId="tab-bg"
               className="absolute inset-0 rounded-full"
-              style={{ background: "linear-gradient(135deg,#fbbf24,#f59e0b)", boxShadow: "0 0 20px rgba(245,158,11,0.4)" }}
+              style={{ background: "linear-gradient(135deg,var(--app-accent-bright),var(--app-accent))", boxShadow: "0 0 20px color-mix(in srgb, var(--app-accent) 40%, transparent)" }}
               transition={{ type: "spring", bounce: 0.2, duration: 0.5 }}
             />
           )}

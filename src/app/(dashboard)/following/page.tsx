@@ -78,7 +78,7 @@ export default function FollowingPage() {
         <div>
           <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-accent-bright/60 mb-2">Social Graph</p>
           <h1 className="text-4xl font-black tracking-tighter uppercase italic text-foreground">
-            Connections<span style={{color:"#f59e0b"}}>.</span>
+            Connections<span style={{color:"var(--app-accent)"}}>.</span>
           </h1>
         </div>
         <Link href="/users" className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-border bg-surface text-xs font-black uppercase tracking-widest text-muted hover:text-foreground hover:bg-white/[0.06] transition-all mt-2">

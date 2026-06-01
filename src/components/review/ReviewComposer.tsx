@@ -97,8 +97,8 @@ export default function ReviewComposer({ isOpen, onClose, animeTitle, animeId }:
                     <Star
                       size={22}
                       className="transition-colors duration-150"
-                      fill={display && n <= display ? "#f59e0b" : "none"}
-                      stroke={display && n <= display ? "#f59e0b" : "rgba(255,255,255,0.2)"}
+                      fill={display && n <= display ? "var(--app-accent)" : "none"}
+                      stroke={display && n <= display ? "var(--app-accent)" : "rgba(255,255,255,0.2)"}
                     />
                   </button>
                 ))}
@@ -153,7 +153,7 @@ export default function ReviewComposer({ isOpen, onClose, animeTitle, animeId }:
               onClick={handleSubmit}
               disabled={!canSubmit || submitting}
               className="w-full py-4 rounded-2xl disabled:opacity-40 disabled:cursor-not-allowed font-black text-xs uppercase tracking-widest text-black transition-all flex items-center justify-center gap-2.5"
-              style={{ background: "linear-gradient(135deg, #fbbf24, #f59e0b)", boxShadow: "0 4px 16px rgba(245,158,11,0.3)" }}
+              style={{ background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))", boxShadow: "0 4px 16px color-mix(in srgb, var(--app-accent) 30%, transparent)" }}
             >
               {submitting ? <><Loader2 size={14} className="animate-spin" /> Submitting…</> : <><Send size={14} /> Submit Review</>}
             </button>

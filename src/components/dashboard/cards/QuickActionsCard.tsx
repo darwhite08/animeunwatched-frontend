@@ -7,8 +7,8 @@ import { Play, Star, Search, TrendingUp, PenSquare, Trophy } from "lucide-react"
 /* ── Action definitions ── */
 const ACTIONS = [
   { icon: Play,       label: "Continue Watching", href: "/watchlist",   color: "text-emerald-400", bg: "bg-emerald-500/10", border: "hover:border-emerald-500/40 hover:shadow-[0_0_20px_rgba(52,211,153,0.08)]" },
-  { icon: Star,       label: "Rate an Anime",     href: "/rate",        color: "text-accent-bright",   bg: "bg-accent/10",   border: "hover:border-accent/40 hover:shadow-[0_0_20px_rgba(251,191,36,0.08)]"  },
-  { icon: Search,     label: "Search Archive",    href: "/search",          color: "text-accent-bright",  bg: "bg-accent/10",  border: "hover:border-accent/40 hover:shadow-[0_0_20px_rgba(245,158,11,0.08)]" },
+  { icon: Star,       label: "Rate an Anime",     href: "/rate",        color: "text-accent-bright",   bg: "bg-accent/10",   border: "hover:border-accent/40 hover:shadow-[0_0_20px_color-mix(in srgb, var(--app-accent-bright) 8%, transparent)]"  },
+  { icon: Search,     label: "Search Archive",    href: "/search",          color: "text-accent-bright",  bg: "bg-accent/10",  border: "hover:border-accent/40 hover:shadow-[0_0_20px_color-mix(in srgb, var(--app-accent) 8%, transparent)]" },
   { icon: TrendingUp, label: "View Trending",     href: "/community/trending", color: "text-rose-400", bg: "bg-rose-500/10",  border: "hover:border-rose-500/40 hover:shadow-[0_0_20px_rgba(251,113,133,0.08)]"  },
   { icon: PenSquare,  label: "Write a Review",    href: "/profile",     color: "text-violet-400",  bg: "bg-violet-500/10",  border: "hover:border-violet-500/40 hover:shadow-[0_0_20px_rgba(167,139,250,0.08)]" },
   { icon: Trophy,     label: "Leaderboard",       href: "/leaderboard", color: "text-yellow-400",  bg: "bg-yellow-500/10",  border: "hover:border-yellow-500/40 hover:shadow-[0_0_20px_rgba(250,204,21,0.08)]"  },

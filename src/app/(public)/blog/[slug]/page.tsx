@@ -296,7 +296,7 @@ function BlogComments({ slug }: { slug: string }) {
           <button onClick={() => draft.trim() && createMut.mutate(draft.trim())}
             disabled={!draft.trim() || createMut.isPending}
             className="p-3 rounded-xl text-black transition-all disabled:opacity-40 hover:scale-105"
-            style={{ background: "linear-gradient(135deg,#fbbf24,#f59e0b)" }}>
+            style={{ background: "linear-gradient(135deg,var(--app-accent-bright),var(--app-accent))" }}>
             {createMut.isPending ? <Loader2 size={16} className="animate-spin" /> : <Send size={16} />}
           </button>
         </div>

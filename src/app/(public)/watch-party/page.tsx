@@ -31,7 +31,7 @@ export default function WatchPartyPage() {
           <motion.h1 initial={{ opacity:0, y:20 }} animate={{ opacity:1, y:0 }} transition={{ delay:0.1 }}
             className="text-6xl md:text-7xl font-black tracking-tighter uppercase italic text-foreground leading-none"
           >
-            Watch Together<span style={{color:"#f59e0b"}}>.</span>
+            Watch Together<span style={{color:"var(--app-accent)"}}>.</span>
           </motion.h1>
 
           <motion.p initial={{ opacity:0 }} animate={{ opacity:1 }} transition={{ delay:0.2 }}

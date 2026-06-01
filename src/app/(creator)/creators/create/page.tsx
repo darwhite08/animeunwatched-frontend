@@ -34,7 +34,7 @@ const CONTENT_TYPES = [
     desc:    "Ask the community a question and collect votes for up to 6 options.",
     color:   "from-accent/30 to-amber-800/10",
     border:  "hover:border-accent/50",
-    glow:    "hover:shadow-[0_0_40px_rgba(245,158,11,0.15)]",
+    glow:    "hover:shadow-[0_0_40px_color-mix(in srgb, var(--app-accent) 15%, transparent)]",
     badge:   "text-accent-bright bg-accent/10 border-accent/20",
     tag:     "Interactive",
   },

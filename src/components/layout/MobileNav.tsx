@@ -50,7 +50,7 @@ export default function MobileNav() {
                   <Icon size={20} className={`transition-colors ${active ? "text-accent-bright" : "text-subtle"}`} />
                   {label === "Alerts" && unreadCount > 0 && (
                     <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full flex items-center justify-center text-[8px] font-black text-black"
-                      style={{ background: "linear-gradient(135deg,#fbbf24,#f59e0b)" }}>
+                      style={{ background: "linear-gradient(135deg,var(--app-accent-bright),var(--app-accent))" }}>
                       {unreadCount > 9 ? "9+" : unreadCount}
                     </span>
                   )}

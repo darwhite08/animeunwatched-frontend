@@ -100,7 +100,7 @@ export default function ContactPage() {
             className="text-5xl md:text-6xl font-black tracking-tighter uppercase italic leading-[0.92] text-foreground mb-4"
           >
             Get in<br />
-            <span style={{color:"#f59e0b"}}>Touch.</span>
+            <span style={{color:"var(--app-accent)"}}>Touch.</span>
           </motion.h1>
 
           <motion.p
@@ -158,7 +158,7 @@ export default function ContactPage() {
           <div className="mb-8">
             <p className="text-[10px] font-black uppercase tracking-[0.35em] text-subtle mb-2">Direct Message</p>
             <h2 className="text-2xl font-black tracking-tighter uppercase italic text-foreground">
-              Send a Message<span style={{color:"#f59e0b"}}>.</span>
+              Send a Message<span style={{color:"var(--app-accent)"}}>.</span>
             </h2>
           </div>
 

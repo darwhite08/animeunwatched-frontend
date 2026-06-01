@@ -36,7 +36,7 @@ export default function CharactersPage({ params }: { params: Promise<{ id: strin
         </Link>
         <div className="flex items-center gap-3 mb-8">
           <Users size={20} className="text-accent-bright" />
-          <h1 className="text-3xl font-black tracking-tighter uppercase italic text-foreground">Characters<span style={{ color: "#f59e0b" }}>.</span></h1>
+          <h1 className="text-3xl font-black tracking-tighter uppercase italic text-foreground">Characters<span style={{ color: "var(--app-accent)" }}>.</span></h1>
           {!isLoading && <span className="text-sm text-subtle">{characters.length} total</span>}
         </div>
 

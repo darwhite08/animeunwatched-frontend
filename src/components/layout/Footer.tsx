@@ -69,7 +69,7 @@ export default function Footer() {
     <footer className="relative mt-auto border-t border-border bg-surface overflow-hidden">
       {/* Background glows */}
       <div className="absolute bottom-0 left-1/4 w-[400px] h-[200px] blur-[100px] rounded-full pointer-events-none"
-        style={{ background: "rgba(245,158,11,0.05)" }} />
+        style={{ background: "color-mix(in srgb, var(--app-accent) 5%, transparent)" }} />
       <div className="absolute bottom-0 right-1/4 w-[500px] h-[250px] blur-[120px] rounded-full pointer-events-none"
         style={{ background: "rgba(99,102,241,0.05)" }} />
 
@@ -79,7 +79,7 @@ export default function Footer() {
           {STATS.map(({ value, label }) => (
             <div key={label} className="text-center">
               <p className="text-xl md:text-2xl font-black tracking-tighter"
-                style={{ background: "linear-gradient(135deg, #fbbf24, #f59e0b)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+                style={{ background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
                 {value}
               </p>
               <p className="text-[9px] font-black uppercase tracking-[0.3em] text-subtle mt-0.5">{label}</p>
@@ -100,7 +100,7 @@ export default function Footer() {
                 <path d="M 30 28 L 40 28 L 40 46 L 47 46 L 54 28 L 64 28 L 53 50 L 50 50 L 60 72 L 50 72 L 44 60 L 40 60 L 40 72 L 30 72 Z" fill="#F4F2EC"/>
               </svg>
               <span className="text-lg font-black tracking-tight text-foreground uppercase italic">
-                KAIVERON<span style={{color:"#f59e0b"}}>.</span>
+                KAIVERON<span style={{color:"var(--app-accent)"}}>.</span>
               </span>
             </Link>
 

@@ -49,9 +49,9 @@ export default function BillingPage() {
 
       {/* Pro upgrade */}
       <div className="relative p-6 rounded-2xl border space-y-5 overflow-hidden"
-        style={{ borderColor: "rgba(245,158,11,0.3)", background: "linear-gradient(160deg,rgba(245,158,11,0.06),rgba(245,158,11,0.02))", boxShadow: "0 0 60px rgba(245,158,11,0.08)" }}>
+        style={{ borderColor: "color-mix(in srgb, var(--app-accent) 30%, transparent)", background: "linear-gradient(160deg,color-mix(in srgb, var(--app-accent) 6%, transparent),color-mix(in srgb, var(--app-accent) 2%, transparent))", boxShadow: "0 0 60px color-mix(in srgb, var(--app-accent) 8%, transparent)" }}>
         <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest text-black"
-          style={{ background: "linear-gradient(135deg,#fbbf24,#f59e0b)" }}>
+          style={{ background: "linear-gradient(135deg,var(--app-accent-bright),var(--app-accent))" }}>
           Coming Soon — Q3 2026
         </div>
 
@@ -75,7 +75,7 @@ export default function BillingPage() {
         <div className="flex flex-col sm:flex-row gap-3 pt-2">
           <a href="mailto:kaiveron@gmail.com?subject=Pro Waitlist"
             className="flex-1 py-3.5 rounded-2xl text-center text-xs font-black uppercase tracking-widest text-black transition-all hover:scale-[1.02]"
-            style={{ background: "linear-gradient(135deg,#fbbf24,#f59e0b)", boxShadow: "0 4px 20px rgba(245,158,11,0.35)" }}>
+            style={{ background: "linear-gradient(135deg,var(--app-accent-bright),var(--app-accent))", boxShadow: "0 4px 20px color-mix(in srgb, var(--app-accent) 35%, transparent)" }}>
             <Crown size={12} className="inline mr-2" /> Join Pro Waitlist
           </a>
           <Link href="/pricing"

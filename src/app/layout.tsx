@@ -16,7 +16,7 @@ const CookieConsent        = lazy(() => import("@/components/ui/CookieConsent"))
 const MessagesButton       = lazy(() => import("@/components/ui/MessagesButton"))
 
 export const viewport = {
-  themeColor: "#f59e0b",
+  themeColor: "var(--app-accent)",
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,

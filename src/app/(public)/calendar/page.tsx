@@ -68,10 +68,10 @@ export default function CalendarPage() {
               <div className="flex items-center gap-2 mb-1">
                 <CalendarCheck size={14} weight="duotone" className="text-accent-bright" />
                 <p className="text-[9px] font-mono uppercase tracking-[0.4em]"
-                  style={{ color: "rgba(245,158,11,0.6)" }}>Seasonal Calendar</p>
+                  style={{ color: "color-mix(in srgb, var(--app-accent) 60%, transparent)" }}>Seasonal Calendar</p>
               </div>
               <h1 className="text-3xl font-black tracking-tighter uppercase italic text-foreground leading-none">
-                Anime Schedule<span style={{ color: "#f59e0b" }}>.</span>
+                Anime Schedule<span style={{ color: "var(--app-accent)" }}>.</span>
               </h1>
             </div>
 
@@ -106,8 +106,8 @@ export default function CalendarPage() {
                     active ? "text-black" : "bg-surface text-subtle hover:bg-surface hover:text-foreground border border-border"
                   }`}
                   style={active ? {
-                    background: "linear-gradient(135deg, #fbbf24, #f59e0b)",
-                    boxShadow: "0 4px 16px rgba(245,158,11,0.3)",
+                    background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))",
+                    boxShadow: "0 4px 16px color-mix(in srgb, var(--app-accent) 30%, transparent)",
                   } : undefined}
                 >
                   <span>{m.emoji}</span>
@@ -147,7 +147,7 @@ export default function CalendarPage() {
             </p>
             <button onClick={() => refetch()}
               className="text-xs font-black uppercase tracking-widest"
-              style={{ color: "#f59e0b" }}>
+              style={{ color: "var(--app-accent)" }}>
               Retry
             </button>
           </div>

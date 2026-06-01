@@ -158,7 +158,7 @@ function FeaturedAnimeCard({ anime, index }: { anime: Anime; index: number }) {
             </h3>
             <div className="flex items-center gap-3 mb-3">
               <span className="flex items-center gap-1 text-[10px] font-black text-accent-bright">
-                <Star size={10} fill="#f59e0b" /> {anime.rating.toFixed(1)}
+                <Star size={10} fill="var(--app-accent)" /> {anime.rating.toFixed(1)}
               </span>
               <span className="flex items-center gap-1 text-[10px] font-bold text-accent-bright">
                 <MessageSquare size={10} />

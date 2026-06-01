@@ -36,12 +36,12 @@ export default function ProfilePostsPage() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <MessageSquare size={16} className="text-accent-bright" />
-          <h2 className="text-lg font-black uppercase italic tracking-tight text-foreground">My Posts<span style={{ color: "#f59e0b" }}>.</span></h2>
+          <h2 className="text-lg font-black uppercase italic tracking-tight text-foreground">My Posts<span style={{ color: "var(--app-accent)" }}>.</span></h2>
           {posts.length > 0 && <span className="text-xs text-subtle">{data?.meta?.total ?? posts.length} total</span>}
         </div>
         <Link href="/community"
           className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest text-black transition-all hover:scale-105"
-          style={{ background: "linear-gradient(135deg,#fbbf24,#f59e0b)" }}>
+          style={{ background: "linear-gradient(135deg,var(--app-accent-bright),var(--app-accent))" }}>
           <Plus size={11} /> New Post
         </Link>
       </div>

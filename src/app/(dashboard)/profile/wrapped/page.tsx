@@ -98,7 +98,7 @@ export default function WrappedPage() {
             <motion.div key="stats" initial={{ opacity:0, y:30 }} animate={{ opacity:1, y:0 }} exit={{ opacity:0, y:-30 }} className="space-y-8 text-center">
               <div>
                 <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-accent-bright/60 mb-2">{CURRENT_YEAR} Wrapped</p>
-                <h1 className="text-5xl font-black tracking-tighter uppercase italic text-foreground">Your Year<br/>in Anime<span style={{color:"#f59e0b"}}>.</span></h1>
+                <h1 className="text-5xl font-black tracking-tighter uppercase italic text-foreground">Your Year<br/>in Anime<span style={{color:"var(--app-accent)"}}>.</span></h1>
                 <p className="text-subtle text-sm mt-3">A lot happened. Here's the data.</p>
               </div>
               <div className="grid grid-cols-2 gap-4">
@@ -137,7 +137,7 @@ export default function WrappedPage() {
                       <p className="text-[10px] text-subtle uppercase tracking-wider">{anime.studio}</p>
                     </div>
                     <div className="flex items-center gap-1 shrink-0">
-                      <Star size={11} fill="#f59e0b" className="text-accent-bright" />
+                      <Star size={11} fill="var(--app-accent)" className="text-accent-bright" />
                       <span className="text-sm font-black text-foreground">{anime.rating.toFixed(1)}</span>
                     </div>
                   </motion.div>
@@ -208,7 +208,7 @@ export default function WrappedPage() {
               <div>
                 <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-accent-bright/60 mb-2">Share your story</p>
                 <h2 className="text-5xl font-black tracking-tighter uppercase italic text-foreground">
-                  That was<br/>{CURRENT_YEAR}<span style={{color:"#f59e0b"}}>.</span>
+                  That was<br/>{CURRENT_YEAR}<span style={{color:"var(--app-accent)"}}>.</span>
                 </h2>
                 <p className="text-subtle text-sm mt-3">Share your Anime Wrapped with the world.</p>
               </div>

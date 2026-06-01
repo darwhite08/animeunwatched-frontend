@@ -41,7 +41,7 @@ export default function AnimeCard({ anime, index, onClick }: AnimeCardProps) {
     >
       {/* Premium glow on hover — gold tint */}
       <div className="absolute -inset-[3px] rounded-[2rem] opacity-0 group-hover:opacity-100 transition-opacity duration-500"
-        style={{ background: "linear-gradient(135deg, rgba(245,158,11,0.25), rgba(99,102,241,0.20))", filter: "blur(12px)" }}
+        style={{ background: "linear-gradient(135deg, color-mix(in srgb, var(--app-accent) 25%, transparent), rgba(99,102,241,0.20))", filter: "blur(12px)" }}
       />
 
       <div className="relative h-full w-full bg-[#0a0a12] rounded-[1.7rem] overflow-hidden border border-white/[0.07] group-hover:border-accent/25 transition-colors duration-500"
@@ -69,9 +69,9 @@ export default function AnimeCard({ anime, index, onClick }: AnimeCardProps) {
           <div className="absolute top-3 left-3">
             <div className="flex items-center gap-1 px-2 py-1 rounded-lg backdrop-blur-md"
               style={{
-                background: "linear-gradient(135deg, rgba(245,158,11,0.3), rgba(245,158,11,0.15))",
-                border: "1px solid rgba(245,158,11,0.4)",
-                boxShadow: "0 2px 8px rgba(245,158,11,0.15)",
+                background: "linear-gradient(135deg, color-mix(in srgb, var(--app-accent) 30%, transparent), color-mix(in srgb, var(--app-accent) 15%, transparent))",
+                border: "1px solid color-mix(in srgb, var(--app-accent) 40%, transparent)",
+                boxShadow: "0 2px 8px color-mix(in srgb, var(--app-accent) 15%, transparent)",
               }}
             >
               <Star size={9} weight="fill" className="text-accent-bright" />
@@ -121,7 +121,7 @@ export default function AnimeCard({ anime, index, onClick }: AnimeCardProps) {
           <div className="flex flex-wrap gap-1 mb-2.5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-75">
             {anime.genres.slice(0, 2).map(g => (
               <span key={g} className="text-[7px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded-md"
-                style={{ background: "rgba(245,158,11,0.1)", border: "1px solid rgba(245,158,11,0.15)", color: "rgba(245,158,11,0.7)" }}>
+                style={{ background: "color-mix(in srgb, var(--app-accent) 10%, transparent)", border: "1px solid color-mix(in srgb, var(--app-accent) 15%, transparent)", color: "color-mix(in srgb, var(--app-accent) 70%, transparent)" }}>
                 {g}
               </span>
             ))}
@@ -130,9 +130,9 @@ export default function AnimeCard({ anime, index, onClick }: AnimeCardProps) {
           {/* CTA button — premium gold */}
           <button className="w-full py-2 rounded-xl text-[8px] font-black uppercase tracking-[0.2em] flex items-center justify-center gap-1.5 opacity-0 group-hover:opacity-100 transition-all duration-300 delay-100"
             style={{
-              background: "linear-gradient(135deg, rgba(245,158,11,0.9), rgba(251,191,36,0.8))",
+              background: "linear-gradient(135deg, color-mix(in srgb, var(--app-accent) 90%, transparent), color-mix(in srgb, var(--app-accent-bright) 80%, transparent))",
               color: "#000",
-              boxShadow: "0 4px 16px rgba(245,158,11,0.3)",
+              boxShadow: "0 4px 16px color-mix(in srgb, var(--app-accent) 30%, transparent)",
             }}
           >
             <Play size={10} weight="fill" /> View Details

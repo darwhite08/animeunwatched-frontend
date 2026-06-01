@@ -33,7 +33,7 @@ export default function StaffPage({ params }: { params: Promise<{ id: string }> 
           <ChevronLeft size={11} className="group-hover:-translate-x-0.5 transition-transform" /> Back to Anime
         </Link>
         <div className="flex items-center gap-3 mb-8">
-          <h1 className="text-3xl font-black tracking-tighter uppercase italic text-foreground">Staff<span style={{ color: "#f59e0b" }}>.</span></h1>
+          <h1 className="text-3xl font-black tracking-tighter uppercase italic text-foreground">Staff<span style={{ color: "var(--app-accent)" }}>.</span></h1>
           {!isLoading && <span className="text-sm text-subtle">{staff.length} members</span>}
         </div>
 

@@ -83,7 +83,7 @@ export default function CommunityReviewsPage() {
           <div>
             <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-accent-bright/60 mb-2">Community Voices</p>
             <h1 className="text-5xl font-black tracking-tighter uppercase italic text-foreground">
-              Reviews<span style={{color:"#f59e0b"}}>.</span>
+              Reviews<span style={{color:"var(--app-accent)"}}>.</span>
             </h1>
             <p className="text-subtle text-sm mt-1">{MOCK.length} community reviews</p>
           </div>
@@ -123,7 +123,7 @@ export default function CommunityReviewsPage() {
                   <div className="flex items-center gap-2 mt-0.5">
                     <div className="flex gap-0.5">
                       {[1,2,3,4,5].map(s=>(
-                        <Star key={s} size={9} fill={s<=Math.round(r.score/2)?"#f59e0b":"none"} className={s<=Math.round(r.score/2)?"text-accent-bright":"text-subtle"}/>
+                        <Star key={s} size={9} fill={s<=Math.round(r.score/2)?"var(--app-accent)":"none"} className={s<=Math.round(r.score/2)?"text-accent-bright":"text-subtle"}/>
                       ))}
                     </div>
                     <span className="text-[9px] font-black text-muted">{r.score}/10</span>

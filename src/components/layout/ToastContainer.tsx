@@ -16,9 +16,9 @@ const CONFIG: Record<ToastType, {
     icon: CheckCircle,
     iconClass: "text-accent-bright",
     containerStyle: {
-      background: "linear-gradient(135deg, rgba(245,158,11,0.13), rgba(251,191,36,0.06))",
-      border: "1px solid rgba(245,158,11,0.32)",
-      boxShadow: "0 12px 40px rgba(0,0,0,0.55), 0 0 0 0.5px rgba(245,158,11,0.12) inset",
+      background: "linear-gradient(135deg, color-mix(in srgb, var(--app-accent) 13%, transparent), color-mix(in srgb, var(--app-accent-bright) 6%, transparent))",
+      border: "1px solid color-mix(in srgb, var(--app-accent) 32%, transparent)",
+      boxShadow: "0 12px 40px rgba(0,0,0,0.55), 0 0 0 0.5px color-mix(in srgb, var(--app-accent) 12%, transparent) inset",
     },
   },
   error: {

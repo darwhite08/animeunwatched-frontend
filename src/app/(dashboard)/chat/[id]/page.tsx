@@ -1276,7 +1276,7 @@ export default function ConversationPage() {
               ) : webrtc.callError === "SOCKET_RECONNECTING" || webrtc.callError === "SOCKET_NULL" ? (
                 /* Socket not connected — reconnecting */
                 <>
-                  <p style={{ margin:"0 0 6px", fontWeight:700, color:"#fbbf24", fontSize:13.5 }}>
+                  <p style={{ margin:"0 0 6px", fontWeight:700, color:"var(--app-accent-bright)", fontSize:13.5 }}>
                     Reconnecting to server…
                   </p>
                   <p style={{ margin:"0 0 12px", fontSize:12.5, color:"rgba(252,211,77,0.7)", lineHeight:1.6 }}>
@@ -1289,7 +1289,7 @@ export default function ConversationPage() {
                       Dismiss
                     </button>
                     <button onClick={() => { webrtc.hangUp(); setTimeout(()=>initiateCall(webrtc.callType || "audio"), 5000) }}
-                      style={{ flex:1, padding:"8px 0", borderRadius:10, fontSize:12, fontWeight:700, cursor:"pointer", background:"rgba(251,191,36,0.15)", border:"1px solid rgba(251,191,36,0.35)", color:"#fbbf24" }}>
+                      style={{ flex:1, padding:"8px 0", borderRadius:10, fontSize:12, fontWeight:700, cursor:"pointer", background:"color-mix(in srgb, var(--app-accent-bright) 15%, transparent)", border:"1px solid color-mix(in srgb, var(--app-accent-bright) 35%, transparent)", color:"var(--app-accent-bright)" }}>
                       Retry in 5s
                     </button>
                   </div>

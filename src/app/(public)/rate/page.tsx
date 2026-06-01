@@ -168,7 +168,7 @@ export default function RatePage() {
             <ShieldCheck size={12} /> Verified Rating System
           </motion.div>
           <h1 className="text-4xl md:text-5xl font-black tracking-tighter uppercase italic text-foreground">
-            Rate & Verify<span style={{color:"#f59e0b"}}>.</span>
+            Rate & Verify<span style={{color:"var(--app-accent)"}}>.</span>
           </h1>
           <p className="text-muted text-sm max-w-md mx-auto">
             Your rating is weighted by credibility. Prove you've actually watched it to increase its impact.
@@ -227,7 +227,7 @@ export default function RatePage() {
                     <div className="min-w-0">
                       <p className="text-xs font-black text-muted group-hover:text-foreground transition-colors truncate">{a.title}</p>
                       <div className="flex items-center gap-1 mt-0.5">
-                        <Star size={9} fill="#f59e0b" className="text-accent-bright" />
+                        <Star size={9} fill="var(--app-accent)" className="text-accent-bright" />
                         <span className="text-[9px] text-subtle">{a.rating.toFixed(1)}</span>
                       </div>
                     </div>
@@ -279,7 +279,7 @@ export default function RatePage() {
                     <p className="text-3xl font-black text-foreground">{rating}<span className="text-subtle text-lg">/10</span></p>
                     <div className="flex items-center justify-center gap-1 mt-1">
                       {[...Array(Math.round(rating/2))].map((_,i) => (
-                        <Star key={i} size={14} fill="#f59e0b" className="text-accent-bright" />
+                        <Star key={i} size={14} fill="var(--app-accent)" className="text-accent-bright" />
                       ))}
                     </div>
                   </motion.div>
@@ -367,7 +367,7 @@ export default function RatePage() {
 
                 <div className="flex items-center justify-center gap-2 mt-4">
                   {[...Array(Math.round((rating ?? 0)/2))].map((_,i) => (
-                    <Star key={i} size={20} fill="#f59e0b" className="text-accent-bright" />
+                    <Star key={i} size={20} fill="var(--app-accent)" className="text-accent-bright" />
                   ))}
                   <span className="text-2xl font-black text-foreground ml-2">{rating}/10</span>
                 </div>

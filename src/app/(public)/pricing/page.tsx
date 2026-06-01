@@ -37,13 +37,13 @@ export default function PricingPage() {
       {/* Header */}
       <div className="max-w-4xl mx-auto px-6 pt-32 pb-16 text-center">
         <div className="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.4em]"
-          style={{ background: "rgba(245,158,11,0.1)", border: "1px solid rgba(245,158,11,0.25)", color: "#f59e0b" }}>
+          style={{ background: "color-mix(in srgb, var(--app-accent) 10%, transparent)", border: "1px solid color-mix(in srgb, var(--app-accent) 25%, transparent)", color: "var(--app-accent)" }}>
           <Crown size={11} /> Pricing
         </div>
         <h1 className="text-5xl md:text-7xl font-black tracking-tighter text-foreground leading-none mb-6">
           Simple,{" "}
           <span className="italic" style={{
-            backgroundImage: "linear-gradient(135deg, #fbbf24, #f59e0b)",
+            backgroundImage: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))",
             WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
           }}>
             transparent.
@@ -85,13 +85,13 @@ export default function PricingPage() {
         {/* Pro */}
         <div className="relative p-8 rounded-[2rem] border space-y-6"
           style={{
-            borderColor: "rgba(245,158,11,0.3)",
-            background: "linear-gradient(160deg, rgba(245,158,11,0.06), rgba(245,158,11,0.02))",
-            boxShadow: "0 0 60px rgba(245,158,11,0.08)",
+            borderColor: "color-mix(in srgb, var(--app-accent) 30%, transparent)",
+            background: "linear-gradient(160deg, color-mix(in srgb, var(--app-accent) 6%, transparent), color-mix(in srgb, var(--app-accent) 2%, transparent))",
+            boxShadow: "0 0 60px color-mix(in srgb, var(--app-accent) 8%, transparent)",
           }}>
           {/* Badge */}
           <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest text-black"
-            style={{ background: "linear-gradient(135deg, #fbbf24, #f59e0b)" }}>
+            style={{ background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))" }}>
             Most Popular
           </div>
 
@@ -107,7 +107,7 @@ export default function PricingPage() {
           <a
             href="mailto:kaiveron@gmail.com?subject=Pro Waitlist"
             className="block w-full py-3.5 rounded-2xl text-center text-xs font-black uppercase tracking-widest text-black transition-all hover:scale-[1.02]"
-            style={{ background: "linear-gradient(135deg, #fbbf24, #f59e0b)", boxShadow: "0 4px 20px rgba(245,158,11,0.35)" }}
+            style={{ background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))", boxShadow: "0 4px 20px color-mix(in srgb, var(--app-accent) 35%, transparent)" }}
           >
             <Crown size={13} className="inline mr-2" /> Join Pro Waitlist
           </a>
@@ -116,7 +116,7 @@ export default function PricingPage() {
             {PRO_FEATURES.map(f => (
               <div key={f} className="flex items-center gap-3">
                 <div className="w-4 h-4 rounded-full flex items-center justify-center shrink-0"
-                  style={{ background: "rgba(245,158,11,0.2)", border: "1px solid rgba(245,158,11,0.4)" }}>
+                  style={{ background: "color-mix(in srgb, var(--app-accent) 20%, transparent)", border: "1px solid color-mix(in srgb, var(--app-accent) 40%, transparent)" }}>
                   <Check size={9} className="text-accent-bright" />
                 </div>
                 <span className="text-sm text-muted">{f}</span>
@@ -129,7 +129,7 @@ export default function PricingPage() {
       {/* FAQ */}
       <div className="max-w-2xl mx-auto px-6 mt-20 space-y-6">
         <h2 className="text-2xl font-black tracking-tighter uppercase italic text-foreground text-center">
-          Common Questions<span style={{ color: "#f59e0b" }}>.</span>
+          Common Questions<span style={{ color: "var(--app-accent)" }}>.</span>
         </h2>
 
         {[

@@ -172,7 +172,7 @@ export default function PublicFeedPage() {
           <div className="flex items-center justify-between gap-4">
             <div>
               <h1 className="text-2xl font-black tracking-tighter uppercase italic text-foreground">
-                Community Feed<span style={{color:"#f59e0b"}}>.</span>
+                Community Feed<span style={{color:"var(--app-accent)"}}>.</span>
               </h1>
               <p className="text-xs text-subtle mt-0.5">
                 Discover what the Shinobi are watching and saying

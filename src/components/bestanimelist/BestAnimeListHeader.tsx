@@ -21,7 +21,7 @@ export default function BestAnimeListHeader() {
           <h1 className="text-6xl md:text-8xl font-black text-foreground tracking-tighter uppercase italic leading-[0.85]">
             The{" "}
             <span className="text-transparent bg-clip-text"
-              style={{ backgroundImage: "linear-gradient(135deg, #fbbf24, #f59e0b, #d97706)" }}>
+              style={{ backgroundImage: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent), #d97706)" }}>
               Vault.
             </span>
           </h1>
@@ -55,7 +55,7 @@ export default function BestAnimeListHeader() {
 
       {/* Gold gradient divider */}
       <div className="mt-10 h-px w-full" style={{
-        background: "linear-gradient(90deg, rgba(245,158,11,0.6), rgba(245,158,11,0.2) 40%, rgba(99,102,241,0.15) 70%, transparent)"
+        background: "linear-gradient(90deg, color-mix(in srgb, var(--app-accent) 60%, transparent), color-mix(in srgb, var(--app-accent) 20%, transparent) 40%, rgba(99,102,241,0.15) 70%, transparent)"
       }} />
     </div>
   )

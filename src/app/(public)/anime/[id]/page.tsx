@@ -200,7 +200,7 @@ function AnimeDetail({ anime, rawAnime }: { anime: Anime; rawAnime?: AnimeDTO })
         >
           {/* Score */}
           <div className="flex items-center gap-2 bg-black/60 backdrop-blur-md border border-border rounded-2xl px-5 py-3">
-            <Star size={16} fill="#f59e0b" className="text-accent-bright" />
+            <Star size={16} fill="var(--app-accent)" className="text-accent-bright" />
             <span className={`text-2xl font-black tracking-tighter ${scoreColor}`}>{anime.rating.toFixed(1)}</span>
             <span className="text-xs text-subtle">/10</span>
           </div>
@@ -412,7 +412,7 @@ function AnimeDetail({ anime, rawAnime }: { anime: Anime; rawAnime?: AnimeDTO })
                           </div>
                         </div>
                         <div className="flex items-center gap-1.5">
-                          <Star size={12} fill="#f59e0b" className="text-accent-bright" />
+                          <Star size={12} fill="var(--app-accent)" className="text-accent-bright" />
                           <span className="text-sm font-black text-foreground">{r.score}</span>
                           <span className="text-xs text-subtle">/10</span>
                         </div>
@@ -467,7 +467,7 @@ function AnimeDetail({ anime, rawAnime }: { anime: Anime; rawAnime?: AnimeDTO })
                     <div className="flex-1 min-w-0">
                       <p className="text-xs font-bold text-muted group-hover:text-foreground transition-colors truncate">{related.title}</p>
                       <p className="text-[9px] text-subtle mt-0.5 flex items-center gap-1">
-                        <Star size={9} fill="#f59e0b" className="text-accent-bright" /> {(related.score ?? 0).toFixed(1)}
+                        <Star size={9} fill="var(--app-accent)" className="text-accent-bright" /> {(related.score ?? 0).toFixed(1)}
                       </p>
                     </div>
                   </Link>

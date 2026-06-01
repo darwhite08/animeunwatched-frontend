@@ -151,7 +151,7 @@ function StarRating({ score }: { score: number }) {
           key={i}
           size={10}
           className={i < score ? "text-accent-bright" : "text-subtle"}
-          fill={i < score ? "#f59e0b" : "none"}
+          fill={i < score ? "var(--app-accent)" : "none"}
         />
       ))}
       <span className="ml-1.5 text-[10px] font-black text-muted">{score}/10</span>
@@ -257,7 +257,7 @@ function WatchlistTab() {
               </div>
               {/* Rating badge */}
               <div className="absolute bottom-2 right-2 flex items-center gap-1 px-2 py-0.5 rounded-lg bg-black/60 backdrop-blur-md">
-                <Star size={9} fill="#f59e0b" className="text-accent-bright" />
+                <Star size={9} fill="var(--app-accent)" className="text-accent-bright" />
                 <span className="text-[9px] font-black text-foreground">{anime.rating.toFixed(1)}</span>
               </div>
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
@@ -488,7 +488,7 @@ export default function WorldClassProfile() {
           <div className="flex flex-col gap-3">
             <div className="flex gap-4">
               <button className="h-14 px-10 rounded-2xl text-black font-bold transition-all hover:-translate-y-1"
-                style={{ background: "linear-gradient(135deg, #fbbf24, #f59e0b)", boxShadow: "0 10px 40px rgba(245,158,11,0.35)" }}>
+                style={{ background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))", boxShadow: "0 10px 40px color-mix(in srgb, var(--app-accent) 35%, transparent)" }}>
                 Customize Hub
               </button>
               <button
@@ -559,7 +559,7 @@ export default function WorldClassProfile() {
                 <motion.div
                   layoutId="tab-indicator"
                   className="absolute inset-0 rounded-xl"
-                  style={{ background: "linear-gradient(135deg, #f59e0b, #fbbf24)", boxShadow: "0 4px 20px rgba(245,158,11,0.35)" }}
+                  style={{ background: "linear-gradient(135deg, var(--app-accent), var(--app-accent-bright))", boxShadow: "0 4px 20px color-mix(in srgb, var(--app-accent) 35%, transparent)" }}
                   transition={{ type: "spring", stiffness: 380, damping: 36 }}
                 />
               )}

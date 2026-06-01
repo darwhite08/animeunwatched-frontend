@@ -52,7 +52,7 @@ export default function QuotesPage({ params }: { params: Promise<{ id: string }>
         <div className="flex items-center gap-3 mb-8">
           <Quote size={20} className="text-accent-bright" />
           <h1 className="text-3xl font-black tracking-tighter uppercase italic text-foreground">
-            Quotes<span style={{ color: "#f59e0b" }}>.</span>
+            Quotes<span style={{ color: "var(--app-accent)" }}>.</span>
           </h1>
         </div>
 

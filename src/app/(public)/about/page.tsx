@@ -106,7 +106,7 @@ export default function AboutPage() {
             className="text-5xl md:text-7xl font-black tracking-tighter uppercase italic leading-[0.92] text-foreground"
           >
             We Built The Anime Social Platform That Should Have{" "}
-            <span style={{color:"#f59e0b"}}>Existed Years Ago.</span>
+            <span style={{color:"var(--app-accent)"}}>Existed Years Ago.</span>
           </motion.h1>
 
           <motion.p
@@ -126,7 +126,7 @@ export default function AboutPage() {
         <div className="text-center mb-12">
           <p className="text-[10px] font-black uppercase tracking-[0.35em] text-subtle mb-3">Our Mission</p>
           <h2 className="text-3xl font-black tracking-tighter uppercase italic text-foreground">
-            Three Pillars<span style={{color:"#f59e0b"}}>.</span>
+            Three Pillars<span style={{color:"var(--app-accent)"}}>.</span>
           </h2>
         </div>
 
@@ -212,7 +212,7 @@ export default function AboutPage() {
           <div className="text-center mb-12">
             <p className="text-[10px] font-black uppercase tracking-[0.35em] text-subtle mb-3">Engineering</p>
             <h2 className="text-3xl font-black tracking-tighter uppercase italic text-foreground">
-              Built on Truth Not Hype<span style={{color:"#f59e0b"}}>.</span>
+              Built on Truth Not Hype<span style={{color:"var(--app-accent)"}}>.</span>
             </h2>
             <p className="mt-3 text-sm text-subtle">Every technology chosen for performance and longevity — not hype cycles.</p>
           </div>

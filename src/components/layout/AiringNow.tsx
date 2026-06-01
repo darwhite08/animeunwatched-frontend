@@ -93,7 +93,7 @@ export default function AiringNow() {
                   </div>
                   {/* Rating */}
                   <div className="absolute bottom-3 right-3 flex items-center gap-1 px-2 py-1 rounded-lg bg-black/60 backdrop-blur-md border border-border">
-                    <Star size={10} fill="#f59e0b" className="text-accent-bright" />
+                    <Star size={10} fill="var(--app-accent)" className="text-accent-bright" />
                     <span className="text-[9px] font-black text-foreground">{anime.rating.toFixed(1)}</span>
                   </div>
                 </div>

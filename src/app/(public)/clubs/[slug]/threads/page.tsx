@@ -287,7 +287,7 @@ function Pagination({
           onClick={() => onChange(p)}
           className={`h-9 w-9 flex items-center justify-center rounded-xl text-[11px] font-black transition-all ${
             page === p
-              ? "bg-accent text-black shadow-[0_0_16px_rgba(245,158,11,0.4)]"
+              ? "bg-accent text-black shadow-[0_0_16px_color-mix(in srgb, var(--app-accent) 40%, transparent)]"
               : "bg-surface border border-border text-muted hover:text-foreground hover:border-border"
           }`}
         >
@@ -394,7 +394,7 @@ export default function ClubThreadsPage({
               Community
             </p>
             <h1 className="text-4xl sm:text-5xl font-black uppercase italic tracking-tighter text-foreground leading-none">
-              Threads<span style={{color:"#f59e0b"}}>.</span>
+              Threads<span style={{color:"var(--app-accent)"}}>.</span>
             </h1>
             <p className="text-subtle text-xs">
               {threads.length + PINNED_THREADS.length} threads in {clubName}

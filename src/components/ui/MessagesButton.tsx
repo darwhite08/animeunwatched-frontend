@@ -57,8 +57,8 @@ export default function MessagesButton() {
       <motion.div
         whileHover={{ scale: 1.08 }}
         whileTap={{ scale: 0.95 }}
-        className="fixed bottom-6 right-6 z-40 flex items-center gap-2 px-5 py-3 rounded-2xl text-[11px] font-black uppercase tracking-widest text-black shadow-[0_8px_32px_rgba(245,158,11,0.35)] transition-all"
-        style={{ background: "linear-gradient(135deg, #fbbf24, #f59e0b)" }}
+        className="fixed bottom-6 right-6 z-40 flex items-center gap-2 px-5 py-3 rounded-2xl text-[11px] font-black uppercase tracking-widest text-black shadow-[0_8px_32px_color-mix(in srgb, var(--app-accent) 35%, transparent)] transition-all"
+        style={{ background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))" }}
       >
         <div className="relative">
           <MessageSquare size={15} />

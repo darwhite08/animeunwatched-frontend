@@ -41,7 +41,7 @@ export default function LeaderboardPeriodPage({ params }: { params: Promise<{ pe
           <div className="flex items-center gap-3">
             <Trophy size={22} className="text-accent-bright" />
             <h1 className="text-3xl font-black tracking-tighter uppercase italic text-foreground">
-              {PERIOD_LABELS[validPeriod]}<span style={{ color: "#f59e0b" }}>.</span>
+              {PERIOD_LABELS[validPeriod]}<span style={{ color: "var(--app-accent)" }}>.</span>
             </h1>
           </div>
           <div className="flex gap-2">
@@ -50,7 +50,7 @@ export default function LeaderboardPeriodPage({ params }: { params: Promise<{ pe
                 className={`px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${
                   p === validPeriod ? "text-black" : "bg-surface border border-border text-muted hover:text-muted"
                 }`}
-                style={p === validPeriod ? { background: "linear-gradient(135deg,#fbbf24,#f59e0b)" } : undefined}>
+                style={p === validPeriod ? { background: "linear-gradient(135deg,var(--app-accent-bright),var(--app-accent))" } : undefined}>
                 {PERIOD_LABELS[p]}
               </Link>
             ))}

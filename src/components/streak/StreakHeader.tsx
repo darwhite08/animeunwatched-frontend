@@ -14,7 +14,7 @@ export const StreakHeader = () => {
           <ChevronLeft size={14} /> Back to Hub
         </Link>
         <h1 className="text-5xl md:text-7xl font-black tracking-tighter text-foreground">
-          Momentum<span style={{color:"#f59e0b"}}>.</span>
+          Momentum<span style={{color:"var(--app-accent)"}}>.</span>
         </h1>
         <p className="text-muted text-lg font-medium tracking-wide">
           Your daily consistency and verification history.

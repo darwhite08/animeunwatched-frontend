@@ -107,7 +107,7 @@ function TrendingCard({
         <div className="space-y-2">
           <div className="flex flex-wrap items-center gap-2">
             <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-accent/10 border border-accent/20">
-              <Star size={10} fill="#f59e0b" className="text-accent-bright" />
+              <Star size={10} fill="var(--app-accent)" className="text-accent-bright" />
               <span className="text-[10px] font-black text-accent-bright">{anime.rating.toFixed(1)}</span>
             </div>
             <span className="text-[9px] font-black text-subtle uppercase tracking-widest">
@@ -256,7 +256,7 @@ export default function DiscoverPage() {
             Catalogue
           </p>
           <h1 className="text-5xl sm:text-7xl font-black uppercase italic tracking-tighter text-foreground leading-none">
-            Browse<span style={{color:"#f59e0b"}}>.</span>
+            Browse<span style={{color:"var(--app-accent)"}}>.</span>
           </h1>
           <p className="text-muted text-sm max-w-lg leading-relaxed">
             Curated anime for every mood. Trending picks, hidden gems, genre deep-dives, and studio spotlights — all in one place.
@@ -341,7 +341,7 @@ export default function DiscoverPage() {
                 onClick={() => setSelectedGenre(genre)}
                 className={`px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all duration-300 ${
                   selectedGenre === genre
-                    ? "bg-accent text-black shadow-[0_0_20px_rgba(245,158,11,0.4)]"
+                    ? "bg-accent text-black shadow-[0_0_20px_color-mix(in srgb, var(--app-accent) 40%, transparent)]"
                     : "bg-surface border border-border text-muted hover:text-foreground hover:bg-surface"
                 }`}
               >

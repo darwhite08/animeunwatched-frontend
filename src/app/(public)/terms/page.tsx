@@ -21,7 +21,7 @@ export default function TermsPage() {
       <div className="max-w-3xl mx-auto px-6 pt-32">
         <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-accent-bright/60 mb-4">Legal</p>
         <h1 className="text-5xl font-black tracking-tighter uppercase italic text-foreground mb-3">
-          Terms of Service<span style={{color:"#f59e0b"}}>.</span>
+          Terms of Service<span style={{color:"var(--app-accent)"}}>.</span>
         </h1>
         <p className="text-subtle text-sm mb-12">Last updated: May 2026 · Read carefully before using the platform.</p>
         <div className="space-y-10">

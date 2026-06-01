@@ -36,7 +36,7 @@ export default function WrappedBanner() {
 
           <div className="flex items-center gap-3 relative z-10">
             <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
-              style={{ background: "rgba(245,158,11,0.2)", border: "1px solid rgba(245,158,11,0.3)" }}>
+              style={{ background: "color-mix(in srgb, var(--app-accent) 20%, transparent)", border: "1px solid color-mix(in srgb, var(--app-accent) 30%, transparent)" }}>
               <Sparkles size={16} className="text-accent-bright" />
             </div>
             <div>
@@ -49,7 +49,7 @@ export default function WrappedBanner() {
             <Link
               href="/profile/wrapped"
               className="px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest text-black transition-all"
-              style={{ background: "linear-gradient(135deg, #fbbf24, #f59e0b)" }}
+              style={{ background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))" }}
             >
               See Wrapped
             </Link>

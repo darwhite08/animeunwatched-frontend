@@ -107,7 +107,7 @@ export default function DailyQuestCard() {
             animate={{ width: `${(done / QUESTS.length) * 100}%` }}
             transition={{ duration: 0.8, ease: "easeOut" }}
             className="h-full rounded-full"
-            style={{ background: "linear-gradient(90deg, #f59e0b, #fbbf24)" }}
+            style={{ background: "linear-gradient(90deg, var(--app-accent), var(--app-accent-bright))" }}
           />
         </div>
       </div>
@@ -141,7 +141,7 @@ export default function DailyQuestCard() {
         disabled={!allDone || claimed}
         className={`w-full py-3.5 rounded-2xl font-black text-xs uppercase tracking-widest transition-all relative z-10 ${
           claimed ? "bg-emerald-600/20 text-emerald-400 border border-emerald-500/20"
-          : allDone ? "text-black shadow-[0_0_20px_rgba(245,158,11,0.4)]"
+          : allDone ? "text-black shadow-[0_0_20px_color-mix(in srgb, var(--app-accent) 40%, transparent)]"
           : "bg-surface text-subtle border border-border cursor-not-allowed"
         }`}
       >

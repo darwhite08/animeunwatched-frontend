@@ -103,7 +103,7 @@ export default function PublicLeaderboardPage() {
               <Trophy size={11} /> Global Hall of Fame
             </motion.div>
             <h1 className="text-5xl md:text-6xl font-black tracking-tighter text-foreground uppercase italic leading-none">
-              The Pantheon<span style={{color:"#f59e0b"}}>.</span>
+              The Pantheon<span style={{color:"var(--app-accent)"}}>.</span>
             </h1>
             <p className="text-subtle text-sm mt-3">12,402 Shinobi competing globally</p>
           </div>
@@ -114,7 +114,7 @@ export default function PublicLeaderboardPage() {
               >
                 {period === p && (
                   <motion.div layoutId="period-bg" className="absolute inset-0 rounded-xl"
-                    style={{ background: "linear-gradient(135deg, #f59e0b, #d97706)" }} />
+                    style={{ background: "linear-gradient(135deg, var(--app-accent), #d97706)" }} />
                 )}
                 <span className="relative z-10">{PERIOD_LABELS[p]}</span>
               </button>

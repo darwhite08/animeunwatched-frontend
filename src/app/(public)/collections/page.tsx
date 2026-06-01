@@ -49,7 +49,7 @@ const COLLECTIONS: CollectionDef[] = [
     description: "Criminally underrated anime that deserve 10x more attention than they get.",
     emoji: "💎",
     accent: "text-accent-bright",
-    borderStyle: { borderColor: "rgba(245,158,11,0.25)" },
+    borderStyle: { borderColor: "color-mix(in srgb, var(--app-accent) 25%, transparent)" },
     params: { limit: 24 },
     clientFilter: a => a.rating >= 8.5 && a.rank > 15,
   },
@@ -129,7 +129,7 @@ function CollectionPanel({ col, onAnimeClick }: { col: CollectionDef; onAnimeCli
     <div className="pt-4 pb-2">
       {isLoading && (
         <div className="flex items-center justify-center py-16">
-          <Loader2 size={24} className="animate-spin" style={{ color: "#f59e0b" }} />
+          <Loader2 size={24} className="animate-spin" style={{ color: "var(--app-accent)" }} />
         </div>
       )}
       {isError && !isLoading && (
@@ -163,19 +163,19 @@ export default function CollectionsPage() {
       <div className="max-w-7xl mx-auto px-6 pt-32 pb-12">
         <div className="flex items-center gap-3 mb-6">
           <SquaresFour size={18} weight="duotone" className="text-accent-bright" />
-          <p className="text-[9px] font-mono uppercase tracking-[0.4em]" style={{ color: "rgba(245,158,11,0.6)" }}>
+          <p className="text-[9px] font-mono uppercase tracking-[0.4em]" style={{ color: "color-mix(in srgb, var(--app-accent) 60%, transparent)" }}>
             Curated Collections
           </p>
         </div>
         <h1 className="text-6xl md:text-7xl font-black tracking-tighter uppercase italic text-foreground leading-none mb-4">
-          Collections<span style={{ color: "#f59e0b" }}>.</span>
+          Collections<span style={{ color: "var(--app-accent)" }}>.</span>
         </h1>
         <p className="text-subtle text-lg max-w-xl leading-relaxed">
           {COLLECTIONS.length} hand-picked collections — grouped by mood, theme, and what they'll do to your soul.
         </p>
         {/* Gold divider */}
         <div className="mt-8 h-px w-full"
-          style={{ background: "linear-gradient(90deg, rgba(245,158,11,0.5), rgba(245,158,11,0.2) 40%, transparent)" }} />
+          style={{ background: "linear-gradient(90deg, color-mix(in srgb, var(--app-accent) 50%, transparent), color-mix(in srgb, var(--app-accent) 20%, transparent) 40%, transparent)" }} />
       </div>
 
       {/* Collection list */}
@@ -194,7 +194,7 @@ export default function CollectionsPage() {
                 className="w-full text-left p-6 rounded-2xl border transition-all duration-300 flex items-center justify-between gap-4 group"
                 style={{
                   background: isActive
-                    ? "linear-gradient(160deg, rgba(245,158,11,0.08), rgba(245,158,11,0.03))"
+                    ? "linear-gradient(160deg, color-mix(in srgb, var(--app-accent) 8%, transparent), color-mix(in srgb, var(--app-accent) 3%, transparent))"
                     : "rgba(255,255,255,0.02)",
                   ...col.borderStyle,
                   ...(isActive ? {} : { borderColor: "rgba(255,255,255,0.07)" }),
@@ -204,8 +204,8 @@ export default function CollectionsPage() {
                   {/* Emoji badge */}
                   <div className="w-12 h-12 rounded-2xl flex items-center justify-center text-2xl shrink-0"
                     style={{
-                      background: isActive ? "rgba(245,158,11,0.15)" : "rgba(255,255,255,0.04)",
-                      border: isActive ? "1px solid rgba(245,158,11,0.25)" : "1px solid rgba(255,255,255,0.07)",
+                      background: isActive ? "color-mix(in srgb, var(--app-accent) 15%, transparent)" : "rgba(255,255,255,0.04)",
+                      border: isActive ? "1px solid color-mix(in srgb, var(--app-accent) 25%, transparent)" : "1px solid rgba(255,255,255,0.07)",
                     }}>
                     {col.emoji}
                   </div>

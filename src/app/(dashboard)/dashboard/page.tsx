@@ -159,27 +159,27 @@ export default function DashboardPage() {
       <header className="relative overflow-hidden rounded-[2.5rem] border p-10 shadow-2xl"
         style={{
           background: "linear-gradient(160deg, #0a0a14 0%, #070710 100%)",
-          borderColor: "rgba(245,158,11,0.15)",
-          boxShadow: "0 0 80px rgba(245,158,11,0.06)",
+          borderColor: "color-mix(in srgb, var(--app-accent) 15%, transparent)",
+          boxShadow: "0 0 80px color-mix(in srgb, var(--app-accent) 6%, transparent)",
         }}>
         {/* Gold glow */}
         <div className="absolute top-0 right-0 w-[400px] h-[400px] blur-[120px] rounded-full pointer-events-none"
-          style={{ background: "rgba(245,158,11,0.07)" }} />
+          style={{ background: "color-mix(in srgb, var(--app-accent) 7%, transparent)" }} />
         <div className="absolute top-0 left-0 right-0 h-px"
-          style={{ background: "linear-gradient(90deg, transparent, rgba(245,158,11,0.5), transparent)" }} />
+          style={{ background: "linear-gradient(90deg, transparent, color-mix(in srgb, var(--app-accent) 50%, transparent), transparent)" }} />
 
         <div className="relative z-10 flex flex-col lg:flex-row justify-between items-start lg:items-end gap-8">
           <div className="space-y-3">
             <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}
               className="flex items-center gap-2 font-black uppercase tracking-[0.4em] text-[10px]"
-              style={{ color: "#f59e0b" }}>
+              style={{ color: "var(--app-accent)" }}>
               <Crown size={14} className="animate-pulse" />
               Neural Link Active • {grade}
             </motion.div>
             <h1 className="text-5xl lg:text-6xl font-black tracking-tighter text-foreground leading-none">
               Welcome,{" "}
               <span className="italic" style={{
-                backgroundImage: "linear-gradient(135deg, #fbbf24, #f59e0b, #ffffff)",
+                backgroundImage: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent), #ffffff)",
                 WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
               }}>
                 {user?.displayName ?? "Shinobi"}
@@ -225,8 +225,8 @@ export default function DashboardPage() {
           {/* Prime Grade CTA */}
           <div className="p-8 rounded-[2.5rem] text-black relative overflow-hidden group"
             style={{
-              background: "linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #d97706 100%)",
-              boxShadow: "0 16px 50px rgba(245,158,11,0.4)",
+              background: "linear-gradient(135deg, var(--app-accent-bright) 0%, var(--app-accent) 50%, #d97706 100%)",
+              boxShadow: "0 16px 50px color-mix(in srgb, var(--app-accent) 40%, transparent)",
             }}>
             <div className="absolute -right-8 -top-8 w-40 h-40 bg-white/20 blur-3xl rounded-full group-hover:scale-150 transition-transform duration-1000" />
             <div className="absolute top-0 left-0 right-0 h-px bg-white/30" />

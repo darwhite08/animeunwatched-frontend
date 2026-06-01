@@ -195,8 +195,8 @@ export default function CinematicHero() {
               href="/register"
               className="group inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-black uppercase tracking-widest transition-all duration-200 text-black"
               style={{
-                background: "linear-gradient(135deg, #fbbf24, #f59e0b)",
-                boxShadow: "0 4px 24px rgba(245,158,11,0.4), 0 0 0 1px rgba(245,158,11,0.3)",
+                background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))",
+                boxShadow: "0 4px 24px color-mix(in srgb, var(--app-accent) 40%, transparent), 0 0 0 1px color-mix(in srgb, var(--app-accent) 30%, transparent)",
               }}
             >
               Get started — it&apos;s free
@@ -224,7 +224,7 @@ export default function CinematicHero() {
             ].map(({ v, l }, i) => (
               <div key={l} className={`${i > 0 ? "pl-5 ml-5 border-l border-white/[0.06]" : ""}`}>
                 <p className="text-base font-black tracking-tighter"
-                  style={{ background: "linear-gradient(135deg, #fbbf24, #f59e0b)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+                  style={{ background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
                   {v}
                 </p>
                 <p className="text-[11px] text-subtle mt-0.5">{l}</p>

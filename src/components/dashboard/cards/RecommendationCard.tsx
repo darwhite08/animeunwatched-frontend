@@ -63,7 +63,7 @@ export default function RecommendationCard() {
                 />
                 <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black via-black/50 to-transparent p-2">
                   <div className="flex items-center gap-1">
-                    <Star size={9} fill="#f59e0b" className="text-accent-bright" />
+                    <Star size={9} fill="var(--app-accent)" className="text-accent-bright" />
                     <span className="text-[9px] font-black text-foreground">{anime.rating.toFixed(1)}</span>
                   </div>
                 </div>

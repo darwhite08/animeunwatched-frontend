@@ -140,7 +140,7 @@ function AnimeResultCard({
             {anime.title}
           </p>
           <div className="flex items-center gap-1.5 mt-1.5">
-            <Star size={10} fill="#f59e0b" className="text-accent-bright" />
+            <Star size={10} fill="var(--app-accent)" className="text-accent-bright" />
             <span className="text-[10px] font-black text-muted">{anime.rating.toFixed(1)}</span>
             <span className="text-[9px] text-subtle">{anime.year}</span>
             <span className="text-[9px] text-subtle">{anime.type}</span>
@@ -287,7 +287,7 @@ function AdvancedSearchContent() {
           <h1 className="text-5xl sm:text-6xl font-black tracking-tighter uppercase italic text-foreground leading-none">
             Advanced<br />
             <span className="text-accent-bright">Search</span>
-            <span style={{color:"#f59e0b"}}>.</span>
+            <span style={{color:"var(--app-accent)"}}>.</span>
           </h1>
           <Link
             href="/search"
@@ -620,7 +620,7 @@ function AdvancedSearchContent() {
                     <p className="text-sm text-muted italic line-clamp-2">{r.preview}</p>
                   </div>
                   <div className="flex items-center gap-1 shrink-0">
-                    <Star size={12} fill="#f59e0b" className="text-accent-bright" />
+                    <Star size={12} fill="var(--app-accent)" className="text-accent-bright" />
                     <span className="font-black text-foreground">{r.rating}</span>
                   </div>
                 </div>

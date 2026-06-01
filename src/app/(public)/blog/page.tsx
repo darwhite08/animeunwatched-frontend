@@ -246,7 +246,7 @@ export default function BlogListingPage() {
               Community Long-form
             </span>
             <h1 className="mt-4 text-5xl md:text-7xl font-black tracking-tighter uppercase italic text-foreground leading-none">
-              The Chronicle<span style={{color:"#f59e0b"}}>.</span>
+              The Chronicle<span style={{color:"var(--app-accent)"}}>.</span>
             </h1>
             <p className="mt-3 text-subtle text-base max-w-lg">
               Long-form anime journalism by the community — deep dives, reviews, theories, and takes.
@@ -261,7 +261,7 @@ export default function BlogListingPage() {
                 onClick={() => setActiveCategory(cat)}
                 className={`relative px-5 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${
                   activeCategory === cat
-                    ? "bg-accent text-black shadow-[0_0_20px_rgba(245,158,11,0.4)]"
+                    ? "bg-accent text-black shadow-[0_0_20px_color-mix(in srgb, var(--app-accent) 40%, transparent)]"
                     : "bg-surface border border-border text-muted hover:text-foreground hover:bg-surface"
                 }`}
               >

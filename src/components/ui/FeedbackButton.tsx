@@ -56,8 +56,8 @@ export default function FeedbackButton() {
         whileHover={{ scale: 1.08 }}
         whileTap={{ scale: 0.95 }}
         onClick={() => setOpen(true)}
-        className="fixed bottom-6 right-6 z-40 flex items-center gap-2 px-4 py-2.5 rounded-2xl text-[10px] font-black uppercase tracking-widest text-black shadow-[0_8px_32px_rgba(245,158,11,0.35)] transition-all"
-        style={{ background: "linear-gradient(135deg, #fbbf24, #f59e0b)" }}
+        className="fixed bottom-6 right-6 z-40 flex items-center gap-2 px-4 py-2.5 rounded-2xl text-[10px] font-black uppercase tracking-widest text-black shadow-[0_8px_32px_color-mix(in srgb, var(--app-accent) 35%, transparent)] transition-all"
+        style={{ background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))" }}
         aria-label="Send feedback"
       >
         <MessageSquarePlus size={14} />
@@ -133,7 +133,7 @@ export default function FeedbackButton() {
                   onClick={handleSubmit}
                   disabled={sending || !text.trim()}
                   className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest text-black transition-all hover:scale-[1.02] disabled:opacity-50"
-                  style={{ background: "linear-gradient(135deg, #fbbf24, #f59e0b)" }}
+                  style={{ background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))" }}
                 >
                   <Send size={11} />{sending ? "Sending…" : "Send"}
                 </button>

@@ -193,7 +193,7 @@ function ClubCard({
             className={`flex-1 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-200 ${
               club.isJoined
                 ? "bg-surface border border-border text-muted hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/20"
-                : "text-black shadow-[0_0_20px_rgba(245,158,11,0.3)]" // gold
+                : "text-black shadow-[0_0_20px_color-mix(in srgb, var(--app-accent) 30%, transparent)]" // gold
             }`}
           >
             {club.isJoined ? "Joined" : "Join Club"}
@@ -264,7 +264,7 @@ export default function ClubsPage() {
                   Community
                 </p>
                 <h1 className="text-6xl font-black uppercase italic tracking-tighter text-foreground leading-none">
-                  Clubs<span style={{color:"#f59e0b"}}>.</span>
+                  Clubs<span style={{color:"var(--app-accent)"}}>.</span>
                 </h1>
                 <p className="mt-3 text-muted text-sm max-w-md">
                   Join the conversation, build your community. Find your people.
@@ -272,7 +272,7 @@ export default function ClubsPage() {
               </div>
               <Link
                 href="/clubs/new"
-                className="flex items-center gap-2 px-6 py-3 rounded-2xl text-sm font-black uppercase tracking-widest text-black transition-all hover:-translate-y-0.5" style={{background:"linear-gradient(135deg,#fbbf24,#f59e0b)",boxShadow:"0 0 32px rgba(245,158,11,0.35)"}}
+                className="flex items-center gap-2 px-6 py-3 rounded-2xl text-sm font-black uppercase tracking-widest text-black transition-all hover:-translate-y-0.5" style={{background:"linear-gradient(135deg,var(--app-accent-bright),var(--app-accent))",boxShadow:"0 0 32px color-mix(in srgb, var(--app-accent) 35%, transparent)"}}
               >
                 <Plus size={14} /> Create Club
               </Link>
@@ -309,7 +309,7 @@ export default function ClubsPage() {
                 onClick={() => setActiveCategory(cat)}
                 className={`px-4 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all ${
                   activeCategory === cat
-                    ? "text-black shadow-[0_0_16px_rgba(245,158,11,0.3)]"
+                    ? "text-black shadow-[0_0_16px_color-mix(in srgb, var(--app-accent) 30%, transparent)]"
                     : "bg-surface border border-border text-muted hover:text-muted hover:border-border"
                 }`}
               >

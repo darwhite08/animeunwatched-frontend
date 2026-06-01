@@ -56,7 +56,7 @@ export default function UsersPage() {
           <Users size={11} /> Shinobi Directory
         </motion.div>
         <h1 className="text-5xl font-black tracking-tighter uppercase italic text-foreground leading-none mb-3">
-          Find Shinobi<span style={{color:"#f59e0b"}}>.</span>
+          Find Shinobi<span style={{color:"var(--app-accent)"}}>.</span>
         </h1>
         <p className="text-subtle text-sm">Discover the community, follow reviewers, find your tribe.</p>
       </div>

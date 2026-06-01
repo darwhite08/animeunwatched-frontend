@@ -94,7 +94,7 @@ export default function StatsPage() {
       <div>
         <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-accent-bright/60 mb-2">Viewing Analytics</p>
         <h1 className="text-4xl font-black tracking-tighter uppercase italic text-foreground">
-          Watch Stats<span style={{color:"#f59e0b"}}>.</span>
+          Watch Stats<span style={{color:"var(--app-accent)"}}>.</span>
         </h1>
         <p className="text-subtle text-sm mt-1">Your complete anime viewing history</p>
       </div>

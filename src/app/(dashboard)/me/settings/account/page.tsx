@@ -155,7 +155,7 @@ export default function AccountSettingsPage() {
   return (
     <div className="space-y-6">
       <div>
-        <p className="text-[9px] font-mono uppercase tracking-[0.4em] mb-1" style={{ color: "rgba(245,158,11,0.5)" }}>
+        <p className="text-[9px] font-mono uppercase tracking-[0.4em] mb-1" style={{ color: "color-mix(in srgb, var(--app-accent) 50%, transparent)" }}>
           Account
         </p>
         <h2 className="text-2xl font-black tracking-tighter uppercase italic text-foreground">Profile & Account</h2>
@@ -252,7 +252,7 @@ export default function AccountSettingsPage() {
 
       {/* Profile URL Slug */}
       <div className="p-6 rounded-2xl bg-surface border border-border space-y-4"
-        style={{ borderColor: slugStatus === "available" ? "rgba(245,158,11,0.25)" : undefined }}>
+        style={{ borderColor: slugStatus === "available" ? "color-mix(in srgb, var(--app-accent) 25%, transparent)" : undefined }}>
         <div className="flex items-center justify-between">
           <p className="text-[10px] font-black uppercase tracking-[0.3em] text-subtle flex items-center gap-2">
             <Link2 size={11} /> Profile URL Slug
@@ -279,7 +279,7 @@ export default function AccountSettingsPage() {
               maxLength={50}
               className="w-full rounded-2xl border px-4 pl-14 py-3 text-sm font-mono text-foreground placeholder:text-subtle outline-none transition-colors bg-black/30"
               style={{
-                borderColor: slugStatus === "available" ? "rgba(245,158,11,0.4)"
+                borderColor: slugStatus === "available" ? "color-mix(in srgb, var(--app-accent) 40%, transparent)"
                   : slugStatus === "taken" || slugStatus === "invalid" ? "rgba(239,68,68,0.4)"
                   : "rgba(255,255,255,0.1)",
               }}
@@ -311,7 +311,7 @@ export default function AccountSettingsPage() {
             disabled={slugStatus !== "available" || !slugChanged || slugSaving}
             className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all disabled:opacity-30 disabled:cursor-not-allowed text-black"
             style={slugStatus === "available" && slugChanged
-              ? { background: "linear-gradient(135deg, #fbbf24, #f59e0b)", boxShadow: "0 4px 16px rgba(245,158,11,0.35)" }
+              ? { background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))", boxShadow: "0 4px 16px color-mix(in srgb, var(--app-accent) 35%, transparent)" }
               : { background: "rgba(255,255,255,0.08)" }}
           >
             {slugSaving ? <><Loader2 size={12} className="animate-spin" /> Saving…</> : "Update URL"}

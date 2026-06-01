@@ -14,7 +14,7 @@ const PANTHEON_DATA = [
     xp: "1.2M",
     accent: "from-accent-bright to-orange-600",
     border: "border-accent/30",
-    glow: "shadow-[0_0_30px_-5px_rgba(251,191,36,0.3)]",
+    glow: "shadow-[0_0_30px_-5px_color-mix(in srgb, var(--app-accent-bright) 30%, transparent)]",
     Icon: Crown,
   },
   {

@@ -68,7 +68,7 @@ export default function AnimeModal({ isOpen, onClose, anime }: AnimeModalProps) 
             className="relative w-full max-w-5xl rounded-[2.5rem] border border-white/[0.08] overflow-hidden"
             style={{
               background: "linear-gradient(160deg, #0a0a14 0%, #070710 100%)",
-              boxShadow: "0 0 120px rgba(245,158,11,0.08), 0 0 60px rgba(99,102,241,0.12), 0 40px 80px rgba(0,0,0,0.8)",
+              boxShadow: "0 0 120px color-mix(in srgb, var(--app-accent) 8%, transparent), 0 0 60px rgba(99,102,241,0.12), 0 40px 80px rgba(0,0,0,0.8)",
             }}
           >
             <div className="grid lg:grid-cols-2">
@@ -87,10 +87,10 @@ export default function AnimeModal({ isOpen, onClose, anime }: AnimeModalProps) 
                 {/* Rank badge — gold */}
                 <div className="absolute top-6 left-6 px-3 py-1.5 backdrop-blur-md rounded-xl text-[10px] font-black uppercase italic"
                   style={{
-                    background: "rgba(245,158,11,0.15)",
-                    border: "1px solid rgba(245,158,11,0.35)",
-                    color: "#fbbf24",
-                    boxShadow: "0 2px 12px rgba(245,158,11,0.15)",
+                    background: "color-mix(in srgb, var(--app-accent) 15%, transparent)",
+                    border: "1px solid color-mix(in srgb, var(--app-accent) 35%, transparent)",
+                    color: "var(--app-accent-bright)",
+                    boxShadow: "0 2px 12px color-mix(in srgb, var(--app-accent) 15%, transparent)",
                   }}>
                   #{anime.rank} Neural Ranked
                 </div>
@@ -109,7 +109,7 @@ export default function AnimeModal({ isOpen, onClose, anime }: AnimeModalProps) 
                   {/* Badges */}
                   <div className="flex flex-wrap items-center gap-2">
                     <div className="flex items-center gap-1.5 px-3 py-1 rounded-full"
-                      style={{ background: "rgba(245,158,11,0.12)", border: "1px solid rgba(245,158,11,0.3)" }}>
+                      style={{ background: "color-mix(in srgb, var(--app-accent) 12%, transparent)", border: "1px solid color-mix(in srgb, var(--app-accent) 30%, transparent)" }}>
                       <Star size={12} weight="fill" className="text-accent-bright" />
                       <span className="text-xs font-black text-accent-bright">{anime.rating.toFixed(1)}</span>
                     </div>
@@ -173,9 +173,9 @@ export default function AnimeModal({ isOpen, onClose, anime }: AnimeModalProps) 
                         : ""
                     }`}
                     style={!inList ? {
-                      background: "linear-gradient(135deg, #f59e0b, #d97706)",
+                      background: "linear-gradient(135deg, var(--app-accent), #d97706)",
                       color: "#000",
-                      boxShadow: "0 4px 20px rgba(245,158,11,0.35)",
+                      boxShadow: "0 4px 20px color-mix(in srgb, var(--app-accent) 35%, transparent)",
                     } : undefined}
                   >
                     {inList ? <><Check size={15} /> In Watchlist</> : <><Plus size={15} /> Add to List</>}

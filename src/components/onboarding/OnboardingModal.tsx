@@ -125,7 +125,7 @@ function StepIdentity({
               className={[
                 "relative text-left rounded-2xl border p-4 transition-all duration-200 cursor-pointer group",
                 isSelected
-                  ? "border-accent bg-accent/10 shadow-[0_0_20px_rgba(245,158,11,0.25)]"
+                  ? "border-accent bg-accent/10 shadow-[0_0_20px_color-mix(in srgb, var(--app-accent) 25%, transparent)]"
                   : "border-zinc-800 bg-zinc-900/60 hover:border-zinc-600",
               ].join(" ")}
             >
@@ -152,7 +152,7 @@ function StepIdentity({
                 <motion.div
                   layoutId="watcher-check"
                   className="absolute top-3 right-3 w-5 h-5 rounded-full flex items-center justify-center"
-                  style={{ background: "linear-gradient(135deg, #fbbf24, #f59e0b)" }}
+                  style={{ background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))" }}
                 >
                   <Check className="w-3 h-3 text-foreground" />
                 </motion.div>
@@ -406,7 +406,7 @@ function StepReady({
         transition={{ delay: 0.4 }}
         onClick={onEnter}
         className="w-full flex items-center justify-center gap-2 px-6 py-4 rounded-2xl text-black font-black uppercase tracking-widest text-sm transition-all duration-200"
-        style={{ background: "linear-gradient(135deg, #fbbf24, #f59e0b)", boxShadow: "0 0 30px rgba(245,158,11,0.4)" }}
+        style={{ background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))", boxShadow: "0 0 30px color-mix(in srgb, var(--app-accent) 40%, transparent)" }}
       >
         Enter the Archive
         <ArrowRight className="w-4 h-4" />

@@ -68,7 +68,7 @@ export default function SeasonPage({ params }: { params: Promise<{ year: string;
                 {SEASON_MONTHS[seasonLower]} · {year}
               </p>
               <h1 className="text-5xl md:text-7xl font-black tracking-tighter uppercase italic text-foreground leading-none">
-                {seasonLower.charAt(0).toUpperCase() + seasonLower.slice(1)}<span style={{color:"#f59e0b"}}>.</span>
+                {seasonLower.charAt(0).toUpperCase() + seasonLower.slice(1)}<span style={{color:"var(--app-accent)"}}>.</span>
                 <br />
                 <span className="text-muted">{year}</span>
               </h1>
@@ -89,7 +89,7 @@ export default function SeasonPage({ params }: { params: Promise<{ year: string;
             {SEASONS.map(s => (
               <Link key={s} href={`/anime/season/${year}/${s}`}
                 className={`px-5 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${
-                  s === seasonLower ? "bg-accent text-black shadow-[0_0_20px_rgba(245,158,11,0.4)]" : "bg-surface text-subtle hover:bg-surface hover:text-foreground border border-border"
+                  s === seasonLower ? "bg-accent text-black shadow-[0_0_20px_color-mix(in srgb, var(--app-accent) 40%, transparent)]" : "bg-surface text-subtle hover:bg-surface hover:text-foreground border border-border"
                 }`}>
                 {s.charAt(0).toUpperCase() + s.slice(1)}
               </Link>

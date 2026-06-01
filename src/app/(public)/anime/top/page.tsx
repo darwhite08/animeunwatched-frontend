@@ -82,7 +82,7 @@ export default function TopAnimePage() {
                 </div>
                 <div className="flex items-center gap-3">
                   <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-accent/15 border border-accent/25">
-                    <Star size={13} fill="#f59e0b" className="text-accent-bright" />
+                    <Star size={13} fill="var(--app-accent)" className="text-accent-bright" />
                     <span className="font-black text-accent-bright text-sm">{filtered[0].rating.toFixed(1)}</span>
                   </div>
                   <span className="text-[10px] font-black uppercase tracking-widest text-subtle">{filtered[0].type}</span>
@@ -99,7 +99,7 @@ export default function TopAnimePage() {
           {CATEGORIES.map(c => (
             <button key={c.id} onClick={() => setCat(c.id)}
               className={`px-5 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${
-                cat === c.id ? "bg-accent text-foreground shadow-[0_0_20px_rgba(245,158,11,0.3)]"
+                cat === c.id ? "bg-accent text-foreground shadow-[0_0_20px_color-mix(in srgb, var(--app-accent) 30%, transparent)]"
                              : "bg-surface text-muted hover:bg-surface border border-border"
               }`}
             >{c.label}</button>

@@ -20,7 +20,7 @@ export default function MangaPage() {
       <div>
         <p className="text-[9px] font-mono font-black uppercase tracking-[0.4em] text-accent-bright/60 mb-2">My Space</p>
         <h1 className="text-5xl font-black tracking-tighter uppercase italic text-foreground leading-none">
-          Manga<span style={{ color: "#f59e0b" }}>.</span>
+          Manga<span style={{ color: "var(--app-accent)" }}>.</span>
         </h1>
         <p className="text-muted text-sm mt-3 max-w-md leading-relaxed">
           Manga tracking is launching in Q3 2026 with full chapter progress, reading lists, and publisher integration.

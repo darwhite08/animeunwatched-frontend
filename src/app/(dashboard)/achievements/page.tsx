@@ -27,15 +27,15 @@ export default function AchievementsPage() {
         <div className="flex items-center gap-2 mb-3">
           <Trophy size={14} className="text-accent-bright" />
           <p className="text-[9px] font-mono uppercase tracking-[0.4em]"
-            style={{ color: "rgba(245,158,11,0.6)" }}>
+            style={{ color: "color-mix(in srgb, var(--app-accent) 60%, transparent)" }}>
             Milestone Tracker
           </p>
         </div>
         <h1 className="text-4xl font-black tracking-tighter uppercase italic text-foreground">
-          Achievements<span style={{ color: "#f59e0b" }}>.</span>
+          Achievements<span style={{ color: "var(--app-accent)" }}>.</span>
         </h1>
         <div className="mt-5 h-px" style={{
-          background: "linear-gradient(90deg, rgba(245,158,11,0.5), rgba(245,158,11,0.2) 40%, transparent)"
+          background: "linear-gradient(90deg, color-mix(in srgb, var(--app-accent) 50%, transparent), color-mix(in srgb, var(--app-accent) 20%, transparent) 40%, transparent)"
         }} />
       </div>
 

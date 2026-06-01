@@ -72,7 +72,7 @@ export default function RankingsPage() {
       <div className="max-w-7xl mx-auto px-6 pt-32 pb-10">
         <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-accent-bright/60 mb-3">Neural Leaderboard</p>
         <h1 className="text-6xl font-black tracking-tighter uppercase italic text-foreground leading-none mb-2">
-          Leaderboard<span style={{color:"#f59e0b"}}>.</span>
+          Leaderboard<span style={{color:"var(--app-accent)"}}>.</span>
         </h1>
         <p className="text-subtle text-sm mb-10">Top anime by community credibility-weighted scores</p>
 
@@ -137,7 +137,7 @@ export default function RankingsPage() {
                           {anime.title}
                         </p>
                         <div className="flex items-center gap-2 mt-2">
-                          <Star size={10} fill="#f59e0b" className="text-accent-bright" />
+                          <Star size={10} fill="var(--app-accent)" className="text-accent-bright" />
                           <span className="text-xs font-black text-muted">{anime.rating.toFixed(1)}</span>
                           <span className="text-[9px] text-subtle">· {anime.year}</span>
                         </div>
@@ -192,7 +192,7 @@ export default function RankingsPage() {
                   <button key={n}
                     onClick={() => { setPage(n as number); window.scrollTo({ top: 0, behavior: "smooth" }) }}
                     className={`w-9 h-9 rounded-xl text-xs font-black transition-all ${
-                      page === n ? "bg-accent text-black shadow-[0_0_16px_rgba(245,158,11,0.4)]"
+                      page === n ? "bg-accent text-black shadow-[0_0_16px_color-mix(in srgb, var(--app-accent) 40%, transparent)]"
                         : "bg-surface border border-border text-muted hover:text-foreground hover:bg-surface"
                     }`}
                   >{n}</button>

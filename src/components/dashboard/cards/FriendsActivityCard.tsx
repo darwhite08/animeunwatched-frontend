@@ -82,7 +82,7 @@ export default function FriendsActivityCard() {
           </p>
           <Link href="/users"
             className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest text-black transition-all"
-            style={{ background: "linear-gradient(135deg, #fbbf24, #f59e0b)" }}>
+            style={{ background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))" }}>
             <Zap size={10} /> Find Friends
           </Link>
         </div>

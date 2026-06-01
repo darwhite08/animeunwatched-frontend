@@ -96,7 +96,7 @@ export default function ReviewsPage() {
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-5">
           <div>
             <h1 className="text-5xl font-black tracking-tighter uppercase italic text-foreground leading-none mb-2">
-              Reviews<span style={{color:"#f59e0b"}}>.</span>
+              Reviews<span style={{color:"var(--app-accent)"}}>.</span>
             </h1>
             <p className="text-subtle text-sm">{reviews.length} community reviews</p>
           </div>
@@ -160,7 +160,7 @@ export default function ReviewsPage() {
                       <div className="flex items-center gap-0.5">
                         {[1,2,3,4,5].map(star => (
                           <Star key={star} size={10}
-                            fill={star <= Math.round(r.score/2) ? "#f59e0b" : "none"}
+                            fill={star <= Math.round(r.score/2) ? "var(--app-accent)" : "none"}
                             className={star <= Math.round(r.score/2) ? "text-accent-bright" : "text-subtle"}
                           />
                         ))}

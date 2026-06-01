@@ -163,7 +163,7 @@ export default function MoodPage() {
       <div className="max-w-5xl mx-auto px-6 pt-32 pb-10 text-center">
         <motion.div initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }}
           className="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.4em]"
-          style={{ background: "rgba(245,158,11,0.1)", border: "1px solid rgba(245,158,11,0.25)", color: "#f59e0b" }}>
+          style={{ background: "color-mix(in srgb, var(--app-accent) 10%, transparent)", border: "1px solid color-mix(in srgb, var(--app-accent) 25%, transparent)", color: "var(--app-accent)" }}>
           <Sparkles size={11} /> Mood Matcher
         </motion.div>
 
@@ -171,7 +171,7 @@ export default function MoodPage() {
           className="text-5xl md:text-7xl font-black tracking-tighter text-foreground leading-none mb-4">
           How are you
           <span className="italic" style={{
-            backgroundImage: "linear-gradient(135deg, #fbbf24, #f59e0b)",
+            backgroundImage: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))",
             WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
           }}> feeling?</span>
         </motion.h1>
@@ -199,7 +199,7 @@ export default function MoodPage() {
                 <div className="flex items-center gap-3 mb-3">
                   <span className="text-3xl">{m.emoji}</span>
                   {active && (
-                    <div className="ml-auto w-2 h-2 rounded-full animate-pulse" style={{ background: "#f59e0b" }} />
+                    <div className="ml-auto w-2 h-2 rounded-full animate-pulse" style={{ background: "var(--app-accent)" }} />
                   )}
                 </div>
                 <p className={`text-sm font-black ${active ? m.accent : "text-muted group-hover:text-foreground"} transition-colors`}>
@@ -254,7 +254,7 @@ export default function MoodPage() {
               <div className="mt-8 text-center">
                 <Link href="/ai-discover"
                   className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl text-xs font-black uppercase tracking-widest text-black transition-all hover:scale-105"
-                  style={{ background: "linear-gradient(135deg, #fbbf24, #f59e0b)" }}>
+                  style={{ background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))" }}>
                   <Flame size={14} /> Get AI-powered picks instead
                 </Link>
               </div>

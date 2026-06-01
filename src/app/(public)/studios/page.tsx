@@ -24,7 +24,7 @@ function mapDTO(a: AnimeDTO, i: number): Anime {
 const STUDIOS = [
   { name: "MAPPA",            monogram: "MA", colors: ["#ef4444","#f97316"], known: "Jujutsu Kaisen, Chainsaw Man, AoT Final Season" },
   { name: "Madhouse",         monogram: "MH", colors: ["#8b5cf6","#6366f1"], known: "Hunter x Hunter, Death Note, OPM S1" },
-  { name: "Bones",            monogram: "BO", colors: ["#f59e0b","#d97706"], known: "Fullmetal Alchemist, My Hero Academia, SK8 the Infinity" },
+  { name: "Bones",            monogram: "BO", colors: ["var(--app-accent)","#d97706"], known: "Fullmetal Alchemist, My Hero Academia, SK8 the Infinity" },
   { name: "ufotable",         monogram: "UF", colors: ["#06b6d4","#0891b2"], known: "Demon Slayer, Fate/Zero, Fate/UBW, Tales of Zestiria" },
   { name: "Kyoto Animation",  monogram: "KA", colors: ["#10b981","#059669"], known: "Violet Evergarden, K-On!, Clannad, Tamako Market" },
   { name: "Trigger",          monogram: "TR", colors: ["#ec4899","#db2777"], known: "Kill la Kill, Promare, Little Witch Academia, Cyberpunk" },
@@ -37,7 +37,7 @@ const STUDIOS = [
   { name: "J.C.Staff",        monogram: "JC", colors: ["#84cc16","#65a30d"], known: "Toradora, Food Wars, DanMachi, Shakugan no Shana" },
   { name: "Production I.G",   monogram: "IG", colors: ["#14b8a6","#0d9488"], known: "Ghost in the Shell, Haikyuu!!, Attack on Titan, Eden of East" },
   { name: "CloverWorks",      monogram: "CW", colors: ["#f43f5e","#e11d48"], known: "Oshi no Ko, The Promised Neverland S2, Spy x Family S2" },
-  { name: "David Production", monogram: "DP", colors: ["#fbbf24","#f59e0b"], known: "JoJo's Bizarre Adventure, Dr. Stone, Cells at Work!" },
+  { name: "David Production", monogram: "DP", colors: ["var(--app-accent-bright)","var(--app-accent)"], known: "JoJo's Bizarre Adventure, Dr. Stone, Cells at Work!" },
   { name: "OLM",              monogram: "OL", colors: ["#22d3ee","#06b6d4"], known: "Pokémon, Inazuma Eleven, Berserk (1997)" },
   { name: "Doga Kobo",        monogram: "DK", colors: ["#fb7185","#f43f5e"], known: "Himouto Umaru-chan, Gabriel DropOut, Yuruyuri" },
   { name: "Silver Link",      monogram: "SL", colors: ["#c0c0c0","#9ca3af"], known: "Non Non Biyori, Chivalry of a Failed Knight, Strike the Blood" },

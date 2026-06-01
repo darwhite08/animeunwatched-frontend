@@ -212,16 +212,16 @@ export default function LoginPage() {
           className="w-full max-w-md"
         >
           <div className="border border-border bg-surface backdrop-blur-xl rounded-2xl p-10"
-            style={{ boxShadow: "0 0 40px rgba(245,158,11,0.1), 0 20px 60px rgba(0,0,0,0.5)" }}>
+            style={{ boxShadow: "0 0 40px color-mix(in srgb, var(--app-accent) 10%, transparent), 0 20px 60px rgba(0,0,0,0.5)" }}>
 
             {/* Logo */}
             <div className="flex flex-col items-center gap-3 mb-8">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="52" height="52"
-                style={{ filter: "drop-shadow(0 0 16px rgba(245,158,11,0.4))" }}>
+                style={{ filter: "drop-shadow(0 0 16px color-mix(in srgb, var(--app-accent) 40%, transparent))" }}>
                 <defs>
                   <linearGradient id="loginKGold" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#fbbf24"/>
-                    <stop offset="100%" stopColor="#f59e0b"/>
+                    <stop offset="0%" stopColor="var(--app-accent-bright)"/>
+                    <stop offset="100%" stopColor="var(--app-accent)"/>
                   </linearGradient>
                 </defs>
                 <rect width="100" height="100" rx="22" fill="#0A0F1E"/>
@@ -230,7 +230,7 @@ export default function LoginPage() {
               </svg>
               <div className="text-center">
                 <p className="text-lg font-black tracking-tight text-foreground uppercase italic">
-                  KAIVERON<span style={{ color: "#f59e0b" }}>.</span>
+                  KAIVERON<span style={{ color: "var(--app-accent)" }}>.</span>
                 </p>
                 <p className="text-[10px] font-black uppercase tracking-[0.35em] text-subtle mt-0.5">
                   Neural Anime Archive
@@ -355,7 +355,7 @@ export default function LoginPage() {
                 whileTap={{ scale: 0.98 }}
                 type="submit"
                 disabled={isDisabled}
-                className="w-full h-12 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed transition-all font-bold text-sm text-black flex items-center justify-center gap-2 focus:outline-none" style={{background:"linear-gradient(135deg,#fbbf24,#f59e0b)",boxShadow:"0 0 30px rgba(245,158,11,0.35)"}}
+                className="w-full h-12 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed transition-all font-bold text-sm text-black flex items-center justify-center gap-2 focus:outline-none" style={{background:"linear-gradient(135deg,var(--app-accent-bright),var(--app-accent))",boxShadow:"0 0 30px color-mix(in srgb, var(--app-accent) 35%, transparent)"}}
               >
                 {isSubmitting
                   ? <><Loader2 size={15} className="animate-spin" /> Signing in...</>

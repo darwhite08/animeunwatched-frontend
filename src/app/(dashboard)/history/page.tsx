@@ -287,7 +287,7 @@ export default function HistoryPage() {
             <History size={13} /> Viewing Log
           </motion.p>
           <h1 className="text-6xl md:text-7xl font-black tracking-tighter text-foreground italic leading-none">
-            Watch<span style={{color:"#f59e0b"}}>.</span>
+            Watch<span style={{color:"var(--app-accent)"}}>.</span>
             <br />
             <span className="text-subtle">History</span>
           </h1>

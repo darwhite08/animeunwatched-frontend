@@ -179,11 +179,11 @@ export default function RegisterPage() {
         {/* Logo */}
         <div className="flex flex-col items-center gap-3 mb-8">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="52" height="52"
-            style={{ filter: "drop-shadow(0 0 16px rgba(245,158,11,0.4))" }}>
+            style={{ filter: "drop-shadow(0 0 16px color-mix(in srgb, var(--app-accent) 40%, transparent))" }}>
             <defs>
               <linearGradient id="registerKGold" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="0%" stopColor="#fbbf24"/>
-                <stop offset="100%" stopColor="#f59e0b"/>
+                <stop offset="0%" stopColor="var(--app-accent-bright)"/>
+                <stop offset="100%" stopColor="var(--app-accent)"/>
               </linearGradient>
             </defs>
             <rect width="100" height="100" rx="22" fill="#0A0F1E"/>
@@ -192,7 +192,7 @@ export default function RegisterPage() {
           </svg>
           <div className="text-center">
             <span className="text-xl font-black tracking-tighter uppercase italic text-foreground">
-              KAIVERON<span style={{ color: "#f59e0b" }}>.</span>
+              KAIVERON<span style={{ color: "var(--app-accent)" }}>.</span>
             </span>
             <p className="text-[10px] font-black uppercase tracking-[0.35em] text-subtle mt-0.5">
               Neural Anime Archive
@@ -354,7 +354,7 @@ export default function RegisterPage() {
               whileTap={{ scale: 0.98 }}
               type="submit"
               disabled={isDisabled}
-              className="w-full h-12 rounded-2xl disabled:opacity-50 disabled:cursor-not-allowed transition-all font-black text-[11px] uppercase tracking-widest text-black flex items-center justify-center gap-2" style={{background:"linear-gradient(135deg,#fbbf24,#f59e0b)",boxShadow:"0 0 30px rgba(245,158,11,0.35)"}}
+              className="w-full h-12 rounded-2xl disabled:opacity-50 disabled:cursor-not-allowed transition-all font-black text-[11px] uppercase tracking-widest text-black flex items-center justify-center gap-2" style={{background:"linear-gradient(135deg,var(--app-accent-bright),var(--app-accent))",boxShadow:"0 0 30px color-mix(in srgb, var(--app-accent) 35%, transparent)"}}
             >
               {isSubmitting
                 ? <><Loader2 size={15} className="animate-spin" /> Creating Account…</>

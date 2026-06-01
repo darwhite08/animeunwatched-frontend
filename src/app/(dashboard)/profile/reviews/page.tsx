@@ -88,7 +88,7 @@ export default function MyReviewsPage() {
         <div>
           <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-accent-bright/60 mb-2">Your Opinions</p>
           <h1 className="text-3xl font-black tracking-tighter uppercase italic text-foreground">
-            My Reviews<span style={{color:"#f59e0b"}}>.</span>
+            My Reviews<span style={{color:"var(--app-accent)"}}>.</span>
           </h1>
         </div>
         <Link href="/rate" className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-accent hover:bg-accent-bright text-xs font-black uppercase tracking-widest text-foreground transition-all mt-2">
@@ -138,7 +138,7 @@ export default function MyReviewsPage() {
                   <div className="flex items-center gap-2 mt-0.5">
                     <div className="flex gap-0.5">
                       {[1,2,3,4,5].map(s=>(
-                        <Star key={s} size={9} fill={s<=Math.round(r.score/2)?"#f59e0b":"none"} className={s<=Math.round(r.score/2)?"text-accent-bright":"text-subtle"}/>
+                        <Star key={s} size={9} fill={s<=Math.round(r.score/2)?"var(--app-accent)":"none"} className={s<=Math.round(r.score/2)?"text-accent-bright":"text-subtle"}/>
                       ))}
                     </div>
                     <span className="text-[10px] font-black text-muted">{r.score}/10</span>

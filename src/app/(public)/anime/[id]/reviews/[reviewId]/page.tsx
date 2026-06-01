@@ -95,7 +95,7 @@ My only minor criticism is that the middle section has a few episodes that feel 
               </div>
             </div>
             <div className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-accent/10 border border-accent/20">
-              <Star size={16} fill="#f59e0b" className="text-accent-bright" />
+              <Star size={16} fill="var(--app-accent)" className="text-accent-bright" />
               <span className="text-xl font-black text-accent-bright">{review.score}</span>
               <span className="text-subtle text-sm">/10</span>
             </div>

@@ -52,7 +52,7 @@ const COMMUNITY_LINKS = [
 
 const SECTION_THEMES = [
   { bg: "rgba(5,5,20,0.90)",  border: "rgba(99,102,241,0.45)", glow: "0 0 60px rgba(99,102,241,0.18),0 2px 0 rgba(99,102,241,0.5)",  dotColor: "#6366f1", accent: "text-accent-bright",  label: "Ch.01 — Hero" },
-  { bg: "rgba(15,10,5,0.90)", border: "rgba(245,158,11,0.45)", glow: "0 0 60px rgba(245,158,11,0.12),0 2px 0 rgba(245,158,11,0.5)",  dotColor: "#f59e0b", accent: "text-accent-bright",   label: "Ch.02 — Discovery" },
+  { bg: "rgba(15,10,5,0.90)", border: "color-mix(in srgb, var(--app-accent) 45%, transparent)", glow: "0 0 60px color-mix(in srgb, var(--app-accent) 12%, transparent),0 2px 0 color-mix(in srgb, var(--app-accent) 50%, transparent)",  dotColor: "var(--app-accent)", accent: "text-accent-bright",   label: "Ch.02 — Discovery" },
   { bg: "rgba(8,5,20,0.92)",  border: "rgba(139,92,246,0.55)", glow: "0 0 80px rgba(139,92,246,0.22),0 2px 0 rgba(139,92,246,0.6)",  dotColor: "#8b5cf6", accent: "text-violet-400",  label: "Ch.03 — AI Oracle" },
   { bg: "rgba(2,12,8,0.92)",  border: "rgba(16,185,129,0.45)", glow: "0 0 60px rgba(16,185,129,0.15),0 2px 0 rgba(16,185,129,0.5)",  dotColor: "#10b981", accent: "text-emerald-400", label: "Ch.04 — Community" },
   { bg: "rgba(5,2,18,0.94)",  border: "rgba(99,102,241,0.35)", glow: "0 0 50px rgba(99,102,241,0.15),0 2px 0 rgba(99,102,241,0.4)",  dotColor: "#4f46e5", accent: "text-accent-bright",  label: "Ch.05 — Showcase" },
@@ -80,7 +80,7 @@ function NavDropdown({ items, onClose }: { items: DropItem[]; onClose: () => voi
         className="rounded-2xl overflow-hidden border border-white/[0.07]"
         style={{
           background: "linear-gradient(160deg, rgba(12,10,22,0.98) 0%, rgba(8,7,18,0.99) 100%)",
-          boxShadow: "0 24px 80px rgba(0,0,0,0.7), 0 0 0 0.5px rgba(245,158,11,0.12) inset, 0 1px 0 rgba(245,158,11,0.15) inset",
+          boxShadow: "0 24px 80px rgba(0,0,0,0.7), 0 0 0 0.5px color-mix(in srgb, var(--app-accent) 12%, transparent) inset, 0 1px 0 color-mix(in srgb, var(--app-accent) 15%, transparent) inset",
           backdropFilter: "blur(32px) saturate(180%)",
         }}
       >
@@ -98,9 +98,9 @@ function NavDropdown({ items, onClose }: { items: DropItem[]; onClose: () => voi
                 <div
                   className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0 transition-all duration-200 group-hover:scale-110"
                   style={{
-                    background: "linear-gradient(135deg, rgba(245,158,11,0.18) 0%, rgba(251,191,36,0.10) 100%)",
-                    border: "1px solid rgba(245,158,11,0.3)",
-                    boxShadow: "0 2px 10px rgba(245,158,11,0.15), inset 0 1px 0 rgba(255,255,255,0.08)",
+                    background: "linear-gradient(135deg, color-mix(in srgb, var(--app-accent) 18%, transparent) 0%, color-mix(in srgb, var(--app-accent-bright) 10%, transparent) 100%)",
+                    border: "1px solid color-mix(in srgb, var(--app-accent) 30%, transparent)",
+                    boxShadow: "0 2px 10px color-mix(in srgb, var(--app-accent) 15%, transparent), inset 0 1px 0 rgba(255,255,255,0.08)",
                   }}
                 >
                   <Icon size={16} weight="duotone" className="text-accent-bright group-hover:text-accent-bright transition-colors" />
@@ -233,7 +233,7 @@ export default function Navbar() {
             </svg>
           </div>
           <span className="text-lg font-black tracking-tight text-foreground uppercase italic hidden sm:block">
-            KAIVERON<span style={{ color: "#f59e0b" }}>.</span>
+            KAIVERON<span style={{ color: "var(--app-accent)" }}>.</span>
           </span>
         </Link>
 
@@ -320,7 +320,7 @@ export default function Navbar() {
           {isHydrated && !isAuthenticated ? (
             <Link href="/login"
               className="px-5 py-2 rounded-full text-[10px] font-black text-black uppercase tracking-widest transition-all hover:scale-105"
-              style={{ background: "linear-gradient(135deg, #fbbf24, #f59e0b)", boxShadow: "0 2px 12px rgba(245,158,11,0.35)" }}>
+              style={{ background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))", boxShadow: "0 2px 12px color-mix(in srgb, var(--app-accent) 35%, transparent)" }}>
               Sign In
             </Link>
           ) : isHydrated && isAuthenticated && storeUser ? (
@@ -404,7 +404,7 @@ export default function Navbar() {
                 {!isAuthenticated ? (
                   <Link href="/login" onClick={() => setMobileMenuOpen(false)}
                     className="flex items-center justify-center px-4 py-3 rounded-xl text-xs font-black text-black transition-all uppercase tracking-widest"
-                    style={{ background: "linear-gradient(135deg, #fbbf24, #f59e0b)" }}>
+                    style={{ background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))" }}>
                     Sign In
                   </Link>
                 ) : (
@@ -433,8 +433,8 @@ function MobileSection({ title, links, onClose }: { title: string; links: DropIt
             className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold text-muted hover:text-foreground hover:bg-white/[0.04] transition-all group">
             <div className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 transition-all group-hover:scale-110"
               style={{
-                background: "linear-gradient(135deg, rgba(245,158,11,0.12) 0%, rgba(251,191,36,0.06) 100%)",
-                border: "1px solid rgba(245,158,11,0.2)",
+                background: "linear-gradient(135deg, color-mix(in srgb, var(--app-accent) 12%, transparent) 0%, color-mix(in srgb, var(--app-accent-bright) 6%, transparent) 100%)",
+                border: "1px solid color-mix(in srgb, var(--app-accent) 20%, transparent)",
               }}
             >
               <Icon size={14} weight="duotone" className="text-accent-bright/80 group-hover:text-accent-bright transition-colors" />
@@ -458,7 +458,7 @@ function WatchlistLink() {
       <Bookmark size={15} />
       {count > 0 && (
         <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full text-[8px] font-black text-black flex items-center justify-center"
-          style={{ background: "linear-gradient(135deg, #fbbf24, #f59e0b)" }}>
+          style={{ background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))" }}>
           {count > 9 ? "9+" : count}
         </span>
       )}

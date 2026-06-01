@@ -286,7 +286,7 @@ export default function FeedPage() {
           <div className="flex-1">
             <div className="flex items-center gap-3">
               <h1 className="text-2xl font-black tracking-tighter uppercase italic text-foreground">
-                Your Feed<span style={{color:"#f59e0b"}}>.</span>
+                Your Feed<span style={{color:"var(--app-accent)"}}>.</span>
               </h1>
               {/* Live badge */}
               <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-[9px] font-black uppercase tracking-widest text-emerald-400">
@@ -312,7 +312,7 @@ export default function FeedPage() {
               {feedTab === key && (
                 <motion.div
                   layoutId="feed-tab-line"
-                  className="absolute bottom-0 left-0 right-0 h-[2px] rounded-full" style={{background:"#f59e0b"}}
+                  className="absolute bottom-0 left-0 right-0 h-[2px] rounded-full" style={{background:"var(--app-accent)"}}
                 />
               )}
             </button>
@@ -432,7 +432,7 @@ export default function FeedPage() {
                 </div>
                 <Link href="/community"
                   className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest text-black transition-all"
-                  style={{ background: "linear-gradient(135deg,#fbbf24,#f59e0b)" }}>
+                  style={{ background: "linear-gradient(135deg,var(--app-accent-bright),var(--app-accent))" }}>
                   <Users size={13} /> Visit Community
                 </Link>
               </motion.div>

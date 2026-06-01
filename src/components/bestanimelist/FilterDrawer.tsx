@@ -55,7 +55,7 @@ export default function FilterDrawer({
                 </h2>
                 {totalActive > 0 && (
                   <span className="px-2 py-0.5 rounded-full text-[9px] font-black text-black"
-                    style={{ background: "linear-gradient(135deg, #fbbf24, #f59e0b)" }}>
+                    style={{ background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))" }}>
                     {totalActive}
                   </span>
                 )}

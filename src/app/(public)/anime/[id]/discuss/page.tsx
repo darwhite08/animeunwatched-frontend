@@ -88,15 +88,15 @@ export default function AnimeDiscussPage({ params }: { params: Promise<{ id: str
           <div className="flex items-center gap-2 mb-3">
             <MessageSquare size={16} className="text-accent-bright" />
             <p className="text-[9px] font-mono uppercase tracking-[0.4em]"
-              style={{ color: "rgba(245,158,11,0.6)" }}>
+              style={{ color: "color-mix(in srgb, var(--app-accent) 60%, transparent)" }}>
               {ep ? `Episode ${ep} Discussion` : "Community Discussion"}
             </p>
           </div>
           <h1 className="text-3xl font-black tracking-tighter uppercase italic text-foreground leading-tight">
             {ep ? (
-              <>Episode <span style={{ color: "#f59e0b" }}>{ep}</span><br />Spoiler Chat</>
+              <>Episode <span style={{ color: "var(--app-accent)" }}>{ep}</span><br />Spoiler Chat</>
             ) : (
-              <>General<br /><span style={{ color: "#f59e0b" }}>Discussion</span></>
+              <>General<br /><span style={{ color: "var(--app-accent)" }}>Discussion</span></>
             )}
           </h1>
           {ep && (
@@ -126,7 +126,7 @@ export default function AnimeDiscussPage({ params }: { params: Promise<{ id: str
             <span className="text-[9px] text-subtle font-mono">{2000 - draft.length} chars</span>
             <button onClick={submit} disabled={!draft.trim() || createThread.isPending || !isAuthenticated}
               className="flex items-center gap-2 px-4 py-2 rounded-xl text-[11px] font-black uppercase tracking-widest text-black transition-all disabled:opacity-40"
-              style={{ background: "linear-gradient(135deg, #fbbf24, #f59e0b)" }}>
+              style={{ background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))" }}>
               {createThread.isPending ? <Loader2 size={12} className="animate-spin" /> : <Send size={12} />}
               Post
             </button>

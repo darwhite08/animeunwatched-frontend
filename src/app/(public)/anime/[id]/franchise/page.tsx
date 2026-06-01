@@ -33,7 +33,7 @@ export default function FranchisePage({ params }: { params: Promise<{ id: string
           <ChevronLeft size={11} className="group-hover:-translate-x-0.5 transition-transform" /> Back to Anime
         </Link>
         <h1 className="text-3xl font-black tracking-tighter uppercase italic text-foreground mb-8">
-          Franchise<span style={{ color: "#f59e0b" }}>.</span>
+          Franchise<span style={{ color: "var(--app-accent)" }}>.</span>
         </h1>
 
         {isLoading ? (

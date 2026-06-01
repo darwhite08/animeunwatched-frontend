@@ -345,7 +345,7 @@ function ChallengeCard({ challenge, onAccept, accepted }: { challenge: Challenge
                   ? "bg-emerald-500/15 border border-emerald-500/25 text-emerald-400 cursor-default"
                   : "text-black hover:scale-105"
                 }`}
-                style={!accepted ? { background: "linear-gradient(135deg, #fbbf24, #f59e0b)", boxShadow: "0 2px 12px rgba(245,158,11,0.3)" } : undefined}
+                style={!accepted ? { background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))", boxShadow: "0 2px 12px color-mix(in srgb, var(--app-accent) 30%, transparent)" } : undefined}
                 disabled={accepted}
               >
                 {accepted ? <><CheckCircle2 size={9} className="inline mr-1" />Accepted</> : "Accept Challenge"}
@@ -458,7 +458,7 @@ function CreateChallengeModal({ slug, onClose }: { slug: string; onClose: () => 
           onClick={submit}
           disabled={createThread.isPending}
           className="w-full py-3 rounded-2xl text-sm font-black uppercase tracking-widest text-black transition-all hover:scale-[1.02] disabled:opacity-50"
-          style={{ background: "linear-gradient(135deg, #fbbf24, #f59e0b)", boxShadow: "0 4px 20px rgba(245,158,11,0.3)" }}
+          style={{ background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))", boxShadow: "0 4px 20px color-mix(in srgb, var(--app-accent) 30%, transparent)" }}
         >
           {createThread.isPending ? "Creating…" : "Launch Challenge"}
         </button>
@@ -624,7 +624,7 @@ export default function ClubDetailPage({
             >
               {tab}
               {tab === "challenges" && challenges.length > 0 && (
-                <span className="ml-1.5 inline-flex items-center justify-center h-4 w-4 rounded-full text-[8px] font-black text-black" style={{ background: "linear-gradient(135deg, #fbbf24, #f59e0b)" }}>
+                <span className="ml-1.5 inline-flex items-center justify-center h-4 w-4 rounded-full text-[8px] font-black text-black" style={{ background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))" }}>
                   {challenges.length}
                 </span>
               )}
@@ -729,7 +729,7 @@ export default function ClubDetailPage({
                   <button
                     onClick={() => setShowCreateChallenge(true)}
                     className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest text-black transition-all hover:-translate-y-0.5"
-                    style={{ background: "linear-gradient(135deg, #fbbf24, #f59e0b)", boxShadow: "0 0 20px rgba(245,158,11,0.25)" }}
+                    style={{ background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))", boxShadow: "0 0 20px color-mix(in srgb, var(--app-accent) 25%, transparent)" }}
                   >
                     <Swords size={11} /> New Challenge
                   </button>
@@ -747,7 +747,7 @@ export default function ClubDetailPage({
                     <button
                       onClick={() => setShowCreateChallenge(true)}
                       className="mt-2 px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest text-black"
-                      style={{ background: "linear-gradient(135deg, #fbbf24, #f59e0b)" }}
+                      style={{ background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))" }}
                     >
                       Create First Challenge
                     </button>

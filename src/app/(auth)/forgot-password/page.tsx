@@ -106,7 +106,7 @@ export default function ForgotPasswordPage() {
                   type="submit"
                   disabled={submitting}
                   className="w-full py-3 rounded-2xl text-sm font-black uppercase tracking-widest text-black transition-all hover:scale-[1.01] disabled:opacity-50"
-                  style={{ background: "linear-gradient(135deg,#fbbf24,#f59e0b)", boxShadow: "0 4px 20px rgba(245,158,11,0.3)" }}
+                  style={{ background: "linear-gradient(135deg,var(--app-accent-bright),var(--app-accent))", boxShadow: "0 4px 20px color-mix(in srgb, var(--app-accent) 30%, transparent)" }}
                 >
                   {submitting ? <Loader2 size={14} className="inline animate-spin mr-2" /> : null}
                   {submitting ? "Sending…" : "Send Reset Link"}

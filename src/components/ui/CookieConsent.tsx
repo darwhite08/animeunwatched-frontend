@@ -42,12 +42,12 @@ export default function CookieConsent() {
           <div className="rounded-2xl border border-border p-5 backdrop-blur-2xl"
             style={{
               background: "linear-gradient(160deg, rgba(12,10,22,0.97), rgba(8,7,18,0.99))",
-              boxShadow: "0 20px 60px rgba(0,0,0,0.7), 0 0 0 0.5px rgba(245,158,11,0.1) inset",
+              boxShadow: "0 20px 60px rgba(0,0,0,0.7), 0 0 0 0.5px color-mix(in srgb, var(--app-accent) 10%, transparent) inset",
             }}>
             {/* Header */}
             <div className="flex items-center gap-3 mb-3">
               <div className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0"
-                style={{ background: "rgba(245,158,11,0.15)", border: "1px solid rgba(245,158,11,0.3)" }}>
+                style={{ background: "color-mix(in srgb, var(--app-accent) 15%, transparent)", border: "1px solid color-mix(in srgb, var(--app-accent) 30%, transparent)" }}>
                 <Cookie size={15} className="text-accent-bright" />
               </div>
               <p className="text-[11px] font-black uppercase tracking-widest text-muted">
@@ -72,7 +72,7 @@ export default function CookieConsent() {
             <div className="flex items-center gap-2">
               <button onClick={accept}
                 className="flex-1 py-2 rounded-xl text-[11px] font-black uppercase tracking-widest text-black transition-all hover:opacity-90"
-                style={{ background: "linear-gradient(135deg, #fbbf24, #f59e0b)" }}>
+                style={{ background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))" }}>
                 Accept
               </button>
               <button onClick={decline}

@@ -61,7 +61,7 @@ export default function EpisodesPage({ params }: { params: Promise<{ id: string 
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-3">
             <Play size={20} className="text-accent-bright" />
-            <h1 className="text-3xl font-black tracking-tighter uppercase italic text-foreground">Episodes<span style={{ color: "#f59e0b" }}>.</span></h1>
+            <h1 className="text-3xl font-black tracking-tighter uppercase italic text-foreground">Episodes<span style={{ color: "var(--app-accent)" }}>.</span></h1>
           </div>
           {!isLoading && pagination && (
             <span className="text-xs text-subtle">Page {page} / {totalPages}</span>

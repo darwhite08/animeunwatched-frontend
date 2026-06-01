@@ -11,7 +11,7 @@ import { useMemo } from "react"
 import type { AnimeDTO } from "@/lib/api/types"
 
 const AVATAR_GRADIENTS = [
-  "linear-gradient(135deg,#f59e0b,#d97706)",
+  "linear-gradient(135deg,var(--app-accent),#d97706)",
   "linear-gradient(135deg,#8b5cf6,#6d28d9)",
   "linear-gradient(135deg,#10b981,#059669)",
   "linear-gradient(135deg,#ef4444,#dc2626)",
@@ -23,7 +23,7 @@ function grad(name: string) {
 }
 
 function levelFromRep(rep: number) {
-  if (rep >= 5000) return { level: 99, title: "Legendary Shinobi", color: "#f59e0b" }
+  if (rep >= 5000) return { level: 99, title: "Legendary Shinobi", color: "var(--app-accent)" }
   if (rep >= 2000) return { level: Math.floor(rep / 50) + 20, title: "Elite Jonin",     color: "#8b5cf6" }
   if (rep >= 500)  return { level: Math.floor(rep / 25) + 10, title: "Arch-Mage",       color: "#3b82f6" }
   if (rep >= 100)  return { level: Math.floor(rep / 10) + 5,  title: "Flame Grade II",  color: "#f97316" }
@@ -99,7 +99,7 @@ export default function ShareProfilePage({ params }: { params: Promise<{ usernam
           <div className="absolute -top-20 -right-20 w-80 h-80 rounded-full blur-[100px] opacity-30"
             style={{ background: color }} />
           <div className="absolute -bottom-20 -left-20 w-60 h-60 rounded-full blur-[80px] opacity-15"
-            style={{ background: "#f59e0b" }} />
+            style={{ background: "var(--app-accent)" }} />
 
           <div className="relative z-10 p-8 space-y-8">
 
@@ -196,7 +196,7 @@ export default function ShareProfilePage({ params }: { params: Promise<{ usernam
           <Link
             href={`/u/${username}`}
             className="flex-1 flex items-center justify-center gap-2 py-3 rounded-2xl text-xs font-black uppercase tracking-widest text-black transition-all hover:-translate-y-0.5"
-            style={{ background: "linear-gradient(135deg,#fbbf24,#f59e0b)", boxShadow: "0 4px 20px rgba(245,158,11,0.3)" }}
+            style={{ background: "linear-gradient(135deg,var(--app-accent-bright),var(--app-accent))", boxShadow: "0 4px 20px color-mix(in srgb, var(--app-accent) 30%, transparent)" }}
           >
             <ExternalLink size={12} /> View Profile
           </Link>
@@ -211,7 +211,7 @@ export default function ShareProfilePage({ params }: { params: Promise<{ usernam
           <Link
             href="/register"
             className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest text-black"
-            style={{ background: "linear-gradient(135deg,#fbbf24,#f59e0b)" }}
+            style={{ background: "linear-gradient(135deg,var(--app-accent-bright),var(--app-accent))" }}
           >
             Join Kaiveron Free →
           </Link>

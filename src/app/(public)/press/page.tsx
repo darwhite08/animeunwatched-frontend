@@ -30,7 +30,7 @@ export default function PressPage() {
         <div>
           <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-accent-bright/60 mb-3">Media</p>
           <h1 className="text-5xl font-black tracking-tighter uppercase italic text-foreground leading-none mb-3">
-            Press Kit<span style={{color:"#f59e0b"}}>.</span>
+            Press Kit<span style={{color:"var(--app-accent)"}}>.</span>
           </h1>
           <p className="text-subtle text-sm max-w-xl">
             Resources for journalists and media covering Kaiveron. For press inquiries, contact us at press@kaiveron.app.

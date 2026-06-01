@@ -225,7 +225,7 @@ function AIResultRow({
 
       <div className="text-right shrink-0 flex flex-col items-end">
         <p className="text-[16px] font-black leading-none tabular-nums" style={{
-          backgroundImage: "linear-gradient(135deg, #fbbf24, #f59e0b)",
+          backgroundImage: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))",
           WebkitBackgroundClip: "text",
           WebkitTextFillColor: "transparent",
         }}>{match}<span className="text-[10px]">%</span></p>
@@ -235,7 +235,7 @@ function AIResultRow({
             animate={{ width: `${match}%` }}
             transition={{ duration: 0.8, delay: index * 0.08, ease: "easeOut" }}
             className="h-full rounded-full"
-            style={{ background: "linear-gradient(90deg, #fbbf24, #f59e0b)" }}
+            style={{ background: "linear-gradient(90deg, var(--app-accent-bright), var(--app-accent))" }}
           />
         </div>
       </div>
@@ -278,7 +278,7 @@ function AIOracleSection() {
     <section className="min-h-screen py-28 relative z-[2] overflow-hidden bg-[#050509] flex items-center">
       {/* Ambient backdrop */}
       <div className="absolute inset-0 pointer-events-none" style={{
-        background: "radial-gradient(ellipse 60% 70% at 78% 50%, rgba(245,158,11,0.06) 0%, transparent 60%), radial-gradient(ellipse 40% 50% at 10% 30%, rgba(99,102,241,0.04) 0%, transparent 55%)",
+        background: "radial-gradient(ellipse 60% 70% at 78% 50%, color-mix(in srgb, var(--app-accent) 6%, transparent) 0%, transparent 60%), radial-gradient(ellipse 40% 50% at 10% 30%, rgba(99,102,241,0.04) 0%, transparent 55%)",
       }} />
       {/* Subtle grid */}
       <div className="absolute inset-0 opacity-[0.025] pointer-events-none" style={{
@@ -314,7 +314,7 @@ function AIOracleSection() {
                 <span
                   className="italic"
                   style={{
-                    backgroundImage: "linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #fde68a 100%)",
+                    backgroundImage: "linear-gradient(135deg, var(--app-accent-bright) 0%, var(--app-accent) 50%, #fde68a 100%)",
                     WebkitBackgroundClip: "text",
                     WebkitTextFillColor: "transparent",
                   }}
@@ -362,7 +362,7 @@ function AIOracleSection() {
                       />
                     )}
                     <span className={`w-1.5 h-1.5 rounded-full shrink-0 transition-all ${
-                      active === i ? "bg-accent-bright shadow-[0_0_8px_rgba(245,158,11,0.6)]" : "bg-white/15 group-hover:bg-white/30"
+                      active === i ? "bg-accent-bright shadow-[0_0_8px_color-mix(in srgb, var(--app-accent) 60%, transparent)]" : "bg-white/15 group-hover:bg-white/30"
                     }`} />
                     <span className="text-[13px] font-medium leading-snug">&ldquo;{p.full}&rdquo;</span>
                   </motion.button>
@@ -373,8 +373,8 @@ function AIOracleSection() {
             <Link href="/ai-discover"
               className="group inline-flex items-center gap-2.5 px-6 py-3 rounded-xl text-[12px] font-black uppercase tracking-[0.18em] text-black transition-all hover:-translate-y-0.5"
               style={{
-                background: "linear-gradient(135deg,#fbbf24,#f59e0b)",
-                boxShadow: "0 8px 28px rgba(245,158,11,0.35), inset 0 1px 0 rgba(255,255,255,0.4)",
+                background: "linear-gradient(135deg,var(--app-accent-bright),var(--app-accent))",
+                boxShadow: "0 8px 28px color-mix(in srgb, var(--app-accent) 35%, transparent), inset 0 1px 0 rgba(255,255,255,0.4)",
               }}
             >
               <Sparkles size={13} className="group-hover:rotate-12 transition-transform" />
@@ -393,7 +393,7 @@ function AIOracleSection() {
           >
             {/* Glow halo */}
             <div className="absolute -inset-px rounded-[20px] pointer-events-none" style={{
-              background: "linear-gradient(135deg, rgba(245,158,11,0.18), rgba(255,255,255,0.02) 35%, rgba(99,102,241,0.10))",
+              background: "linear-gradient(135deg, color-mix(in srgb, var(--app-accent) 18%, transparent), rgba(255,255,255,0.02) 35%, rgba(99,102,241,0.10))",
               filter: "blur(2px)",
             }} />
 
@@ -452,7 +452,7 @@ function AIOracleSection() {
                     onClick={() => setActive(i)}
                     className={`px-3 py-1.5 rounded-lg text-[10.5px] font-bold uppercase tracking-[0.04em] transition-all ${
                       active === i
-                        ? "bg-accent text-black shadow-[0_2px_12px_rgba(245,158,11,0.35)]"
+                        ? "bg-accent text-black shadow-[0_2px_12px_color-mix(in srgb, var(--app-accent) 35%, transparent)]"
                         : "bg-white/[0.025] text-muted border border-white/[0.07] hover:bg-white/[0.06] hover:text-muted hover:border-white/[0.12]"
                     }`}
                   >
@@ -509,7 +509,7 @@ function CommunitySection() {
   return (
     <section className="min-h-screen py-28 bg-[#06060d] relative z-[2] overflow-hidden flex items-center">
       <div className="absolute inset-0 pointer-events-none" style={{
-        background: "radial-gradient(ellipse 60% 70% at 88% 50%, rgba(245,158,11,0.05) 0%, transparent 60%), radial-gradient(ellipse 40% 50% at 8% 30%, rgba(99,102,241,0.04) 0%, transparent 55%)",
+        background: "radial-gradient(ellipse 60% 70% at 88% 50%, color-mix(in srgb, var(--app-accent) 5%, transparent) 0%, transparent 60%), radial-gradient(ellipse 40% 50% at 8% 30%, rgba(99,102,241,0.04) 0%, transparent 55%)",
       }} />
       <div className="absolute inset-0 opacity-[0.025] pointer-events-none" style={{
         backgroundImage: "linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)",
@@ -544,7 +544,7 @@ function CommunitySection() {
                 <span
                   className="italic"
                   style={{
-                    backgroundImage: "linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #fde68a 100%)",
+                    backgroundImage: "linear-gradient(135deg, var(--app-accent-bright) 0%, var(--app-accent) 50%, #fde68a 100%)",
                     WebkitBackgroundClip: "text",
                     WebkitTextFillColor: "transparent",
                   }}
@@ -619,8 +619,8 @@ function CommunitySection() {
               <Link href="/leaderboard"
                 className="group inline-flex items-center gap-2.5 px-6 py-3 rounded-xl text-[12px] font-black uppercase tracking-[0.18em] text-black transition-all hover:-translate-y-0.5"
                 style={{
-                  background: "linear-gradient(135deg,#fbbf24,#f59e0b)",
-                  boxShadow: "0 8px 28px rgba(245,158,11,0.35), inset 0 1px 0 rgba(255,255,255,0.4)",
+                  background: "linear-gradient(135deg,var(--app-accent-bright),var(--app-accent))",
+                  boxShadow: "0 8px 28px color-mix(in srgb, var(--app-accent) 35%, transparent), inset 0 1px 0 rgba(255,255,255,0.4)",
                 }}
               >
                 <Trophy size={13} className="group-hover:rotate-[-6deg] transition-transform" />
@@ -645,7 +645,7 @@ function CommunitySection() {
           >
             {/* Glow halo */}
             <div className="absolute -inset-px rounded-[20px] pointer-events-none" style={{
-              background: "linear-gradient(135deg, rgba(245,158,11,0.18), rgba(255,255,255,0.02) 35%, rgba(99,102,241,0.10))",
+              background: "linear-gradient(135deg, color-mix(in srgb, var(--app-accent) 18%, transparent), rgba(255,255,255,0.02) 35%, rgba(99,102,241,0.10))",
               filter: "blur(2px)",
             }} />
 
@@ -653,7 +653,7 @@ function CommunitySection() {
             <div className="relative flex items-center gap-4 p-5 rounded-2xl bg-gradient-to-r from-accent/[0.10] via-accent/[0.04] to-transparent border border-accent/[0.18] overflow-hidden">
               <div className="absolute -right-10 -top-10 w-32 h-32 rounded-full bg-accent/8 blur-3xl pointer-events-none" />
               <div className="relative shrink-0">
-                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-accent-bright/30 to-orange-500/15 border border-accent/25 flex items-center justify-center text-lg font-black text-amber-200 shadow-[0_0_20px_rgba(245,158,11,0.25)]">
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-accent-bright/30 to-orange-500/15 border border-accent/25 flex items-center justify-center text-lg font-black text-amber-200 shadow-[0_0_20px_color-mix(in srgb, var(--app-accent) 25%, transparent)]">
                   O
                 </div>
                 <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-gradient-to-br from-accent-bright to-orange-500 border-2 border-[#06060d] flex items-center justify-center shadow-md">
@@ -728,7 +728,7 @@ function CommunitySection() {
                             viewport={{ once: true }}
                             transition={{ duration: 0.8, delay: i * 0.08, ease: "easeOut" }}
                             className="h-full rounded-full"
-                            style={{ background: "linear-gradient(90deg, #fbbf24, #f59e0b)" }}
+                            style={{ background: "linear-gradient(90deg, var(--app-accent-bright), var(--app-accent))" }}
                           />
                         </div>
                         <span className="text-[9.5px] text-subtle font-bold shrink-0 tabular-nums">{xp}</span>
@@ -848,7 +848,7 @@ function ShowcaseSection() {
     <section className="py-32 bg-[#06060d] relative z-[2] overflow-hidden">
       {/* Ambient backdrop */}
       <div className="absolute inset-0 pointer-events-none" style={{
-        background: "radial-gradient(ellipse 50% 50% at 50% 30%, rgba(245,158,11,0.04) 0%, transparent 60%)",
+        background: "radial-gradient(ellipse 50% 50% at 50% 30%, color-mix(in srgb, var(--app-accent) 4%, transparent) 0%, transparent 60%)",
       }} />
       <div className="absolute inset-0 opacity-[0.02] pointer-events-none" style={{
         backgroundImage: "linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)",
@@ -880,7 +880,7 @@ function ShowcaseSection() {
             <span
               className="italic"
               style={{
-                backgroundImage: "linear-gradient(135deg, #fbbf24 0%, #f59e0b 50%, #fde68a 100%)",
+                backgroundImage: "linear-gradient(135deg, var(--app-accent-bright) 0%, var(--app-accent) 50%, #fde68a 100%)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
               }}
@@ -914,7 +914,7 @@ function ShowcaseSection() {
               <div className="absolute -inset-px rounded-[18px] pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{
                 background: `linear-gradient(135deg, ${
                   accent === "indigo" ? "rgba(99,102,241,0.25)" :
-                  accent === "amber" ? "rgba(245,158,11,0.30)" : "rgba(139,92,246,0.25)"
+                  accent === "amber" ? "color-mix(in srgb, var(--app-accent) 30%, transparent)" : "rgba(139,92,246,0.25)"
                 }, rgba(255,255,255,0.02) 40%, transparent)`,
                 filter: "blur(2px)",
               }} />
@@ -926,7 +926,7 @@ function ShowcaseSection() {
                 <div className="absolute -top-px left-4 right-4 h-px" style={{
                   background: `linear-gradient(90deg, transparent, ${
                     accent === "indigo" ? "rgba(99,102,241,0.4)" :
-                    accent === "amber" ? "rgba(245,158,11,0.5)" : "rgba(139,92,246,0.4)"
+                    accent === "amber" ? "color-mix(in srgb, var(--app-accent) 50%, transparent)" : "rgba(139,92,246,0.4)"
                   }, transparent)`,
                 }} />
 
@@ -1036,7 +1036,7 @@ function FinalCTASection() {
         <div className="flex flex-col items-center gap-4">
           <Link href="/register"
             className="group inline-flex items-center gap-2.5 px-8 py-4 rounded-xl text-base font-black uppercase tracking-wide text-black transition-all"
-            style={{ background: "linear-gradient(135deg,#fbbf24,#f59e0b)", boxShadow: "0 4px 30px rgba(245,158,11,0.4)" }}
+            style={{ background: "linear-gradient(135deg,var(--app-accent-bright),var(--app-accent))", boxShadow: "0 4px 30px color-mix(in srgb, var(--app-accent) 40%, transparent)" }}
           >
             Create your free account
             <ArrowRight size={16} className="group-hover:translate-x-0.5 transition-transform" />

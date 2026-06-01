@@ -293,7 +293,7 @@ function ListDetailModal({ list, onClose, onAnimeClick, allAnime }: ListModalPro
                     {anime.title}
                   </p>
                   <div className="flex items-center gap-2 mt-0.5 text-[9px] text-subtle">
-                    <Star size={9} fill="#f59e0b" className="text-accent-bright" />
+                    <Star size={9} fill="var(--app-accent)" className="text-accent-bright" />
                     <span>{anime.rating.toFixed(1)}</span>
                     <span className="text-subtle">·</span>
                     <span>{anime.studio}</span>
@@ -341,7 +341,7 @@ export default function PublicListsPage() {
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6">
           <div>
             <h1 className="text-6xl font-black tracking-tighter uppercase italic text-foreground leading-none mb-2">
-              Community Lists<span style={{color:"#f59e0b"}}>.</span>
+              Community Lists<span style={{color:"var(--app-accent)"}}>.</span>
             </h1>
             <p className="text-subtle text-sm">{COMMUNITY_LISTS.length} curated lists from the archive community</p>
           </div>

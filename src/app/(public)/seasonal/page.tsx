@@ -73,7 +73,7 @@ export default function SeasonalPage() {
           <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-accent-bright/60">Seasonal Archive</p>
         </div>
         <h1 className="text-6xl font-black tracking-tighter uppercase italic text-foreground leading-none mb-3">
-          Seasonal<span style={{color:"#f59e0b"}}>.</span>
+          Seasonal<span style={{color:"var(--app-accent)"}}>.</span>
         </h1>
         <p className="text-subtle text-sm">Every anime, every season — from {EARLIEST_YEAR} to {CURRENT_YEAR}.</p>
       </div>

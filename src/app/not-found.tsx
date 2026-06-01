@@ -12,7 +12,7 @@ export default function NotFound() {
         animate={{ scale: [1, 1.08, 1], opacity: [0.08, 0.18, 0.08] }}
         transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
         className="absolute top-1/3 left-1/4 w-[500px] h-[500px] blur-[160px] rounded-full pointer-events-none"
-        style={{ background: "rgba(245,158,11,0.12)" }}
+        style={{ background: "color-mix(in srgb, var(--app-accent) 12%, transparent)" }}
       />
       <motion.div
         animate={{ scale: [1, 1.12, 1], opacity: [0.05, 0.12, 0.05] }}
@@ -29,7 +29,7 @@ export default function NotFound() {
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           className="text-[9px] font-mono font-black uppercase tracking-[0.5em] mb-6"
-          style={{ color: "rgba(245,158,11,0.6)" }}
+          style={{ color: "color-mix(in srgb, var(--app-accent) 60%, transparent)" }}
         >
           Error 404 // Archive Not Found
         </motion.p>
@@ -40,7 +40,7 @@ export default function NotFound() {
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           className="text-[clamp(6rem,20vw,14rem)] font-black tracking-tighter leading-none uppercase italic mb-6"
           style={{
-            backgroundImage: "linear-gradient(135deg, #fbbf24 0%, #f59e0b 30%, rgba(255,255,255,0.15) 100%)",
+            backgroundImage: "linear-gradient(135deg, var(--app-accent-bright) 0%, var(--app-accent) 30%, rgba(255,255,255,0.15) 100%)",
             WebkitBackgroundClip: "text",
             WebkitTextFillColor: "transparent",
           }}
@@ -74,7 +74,7 @@ export default function NotFound() {
         >
           <Link href="/"
             className="flex items-center gap-2.5 px-6 py-3.5 rounded-2xl text-xs font-black uppercase tracking-widest text-black transition-all hover:-translate-y-0.5"
-            style={{ background: "linear-gradient(135deg, #fbbf24, #f59e0b)", boxShadow: "0 4px 20px rgba(245,158,11,0.4)" }}
+            style={{ background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))", boxShadow: "0 4px 20px color-mix(in srgb, var(--app-accent) 40%, transparent)" }}
           >
             <Home size={13} /> Go Home
           </Link>

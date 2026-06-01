@@ -265,7 +265,7 @@ export default function CommunityTrendingPage() {
             <h1 className="text-5xl sm:text-6xl font-black tracking-tighter uppercase italic text-foreground leading-none">
               Trending<br />
               <span className="text-accent-bright">Now</span>
-              <span style={{color:"#f59e0b"}}>.</span>
+              <span style={{color:"var(--app-accent)"}}>.</span>
             </h1>
             {/* Live pulse */}
             <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-rose-500/15 border border-rose-500/25 self-start mt-4">

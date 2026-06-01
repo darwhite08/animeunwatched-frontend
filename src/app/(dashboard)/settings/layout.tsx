@@ -27,16 +27,16 @@ export default function SettingsLayout({ children }: { children: React.ReactNode
         <div className="flex items-center gap-2 mb-3">
           <Settings size={14} className="text-accent-bright" />
           <p className="text-[9px] font-mono font-black uppercase tracking-[0.4em]"
-            style={{ color: "rgba(245,158,11,0.6)" }}>
+            style={{ color: "color-mix(in srgb, var(--app-accent) 60%, transparent)" }}>
             System Configuration
           </p>
         </div>
         <h1 className="text-4xl font-black tracking-tighter text-foreground uppercase italic">
-          Settings<span style={{ color: "#f59e0b" }}>.</span>
+          Settings<span style={{ color: "var(--app-accent)" }}>.</span>
         </h1>
         {/* Gold divider */}
         <div className="mt-6 h-px"
-          style={{ background: "linear-gradient(90deg, rgba(245,158,11,0.5), rgba(245,158,11,0.2) 40%, transparent)" }} />
+          style={{ background: "linear-gradient(90deg, color-mix(in srgb, var(--app-accent) 50%, transparent), color-mix(in srgb, var(--app-accent) 20%, transparent) 40%, transparent)" }} />
       </div>
 
       <div className="flex flex-col lg:flex-row gap-8">
@@ -54,8 +54,8 @@ export default function SettingsLayout({ children }: { children: React.ReactNode
                   <motion.div layoutId="settings-pill"
                     className="absolute inset-0 rounded-xl"
                     style={{
-                      background: "linear-gradient(135deg, rgba(245,158,11,0.1), rgba(245,158,11,0.05))",
-                      border: "1px solid rgba(245,158,11,0.2)",
+                      background: "linear-gradient(135deg, color-mix(in srgb, var(--app-accent) 10%, transparent), color-mix(in srgb, var(--app-accent) 5%, transparent))",
+                      border: "1px solid color-mix(in srgb, var(--app-accent) 20%, transparent)",
                     }}
                     transition={{ type: "spring", stiffness: 320, damping: 30 }}
                   />

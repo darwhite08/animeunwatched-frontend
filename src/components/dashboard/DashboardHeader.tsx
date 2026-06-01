@@ -41,7 +41,7 @@ export default function DashboardHeader() {
         <Link
           href="/bestanimelist"
           className="px-4 py-2 rounded-xl text-black flex items-center gap-2 transition-all hover:opacity-90"
-          style={{ background: "linear-gradient(135deg,#fbbf24,#f59e0b)" }}
+          style={{ background: "linear-gradient(135deg,var(--app-accent-bright),var(--app-accent))" }}
         >
           <Plus size={16} />
           Add Anime

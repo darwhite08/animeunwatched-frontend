@@ -40,7 +40,7 @@ export default function StudioPage({ params }: { params: Promise<{ name: string 
             <Building2 size={24} className="text-accent-bright" />
           </div>
           <div>
-            <h1 className="text-4xl font-black tracking-tighter uppercase italic text-foreground">{studioName}<span style={{color:"#f59e0b"}}>.</span></h1>
+            <h1 className="text-4xl font-black tracking-tighter uppercase italic text-foreground">{studioName}<span style={{color:"var(--app-accent)"}}>.</span></h1>
             <div className="flex items-center gap-4 mt-1 text-[10px] text-subtle font-mono">
               <span>{anime.length} anime</span>
               <span>·</span>
@@ -65,7 +65,7 @@ export default function StudioPage({ params }: { params: Promise<{ name: string 
                   <div>
                     <p className="text-xl font-black text-foreground uppercase italic">{anime[0].title}</p>
                     <div className="flex items-center gap-2 mt-1">
-                      <Star size={12} fill="#f59e0b" className="text-accent-bright" />
+                      <Star size={12} fill="var(--app-accent)" className="text-accent-bright" />
                       <span className="text-sm font-black text-accent-bright">{anime[0].rating.toFixed(1)}</span>
                       <span className="text-[10px] text-subtle">{anime[0].year} · {anime[0].type}</span>
                     </div>

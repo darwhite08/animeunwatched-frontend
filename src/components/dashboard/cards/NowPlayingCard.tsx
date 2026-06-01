@@ -132,7 +132,7 @@ export default function NowPlayingCard() {
               animate={{ width: playing ? "38%" : "35%" }}
               transition={{ duration: playing ? 30 : 0, ease: "linear", repeat: playing ? Infinity : 0 }}
               className="h-full rounded-full"
-              style={{ background: "linear-gradient(90deg, #f59e0b, #fbbf24)" }}
+              style={{ background: "linear-gradient(90deg, var(--app-accent), var(--app-accent-bright))" }}
             />
           </div>
           <div className="flex justify-between text-[9px] font-mono text-subtle">
@@ -146,7 +146,7 @@ export default function NowPlayingCard() {
             <button
               onClick={() => setPlaying(p => !p)}
               className="w-10 h-10 rounded-full flex items-center justify-center text-black transition-all hover:scale-105 active:scale-95"
-              style={{ background: "linear-gradient(135deg, #fbbf24, #f59e0b)", boxShadow: "0 0 16px rgba(245,158,11,0.45)" }}
+              style={{ background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))", boxShadow: "0 0 16px color-mix(in srgb, var(--app-accent) 45%, transparent)" }}
             >
               {playing ? <Pause size={16} fill="white" /> : <Play size={16} fill="white" />}
             </button>

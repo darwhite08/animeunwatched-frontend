@@ -126,7 +126,7 @@ export default function ImportPage() {
     <div className="space-y-6">
       <div>
         <p className="text-[9px] font-mono uppercase tracking-[0.4em] mb-1"
-          style={{ color: "rgba(245,158,11,0.5)" }}>Import</p>
+          style={{ color: "color-mix(in srgb, var(--app-accent) 50%, transparent)" }}>Import</p>
         <h2 className="text-2xl font-black tracking-tighter uppercase italic text-foreground">
           Import from MAL / AniList
         </h2>
@@ -180,7 +180,7 @@ export default function ImportPage() {
               <p className="text-xs text-muted mt-1">or click to browse</p>
             </div>
             <span className="px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider text-black"
-              style={{ background: "linear-gradient(135deg, #fbbf24, #f59e0b)" }}>
+              style={{ background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))" }}>
               Choose File
             </span>
             <input type="file" accept=".xml" onChange={handleFile} className="hidden" />
@@ -207,7 +207,7 @@ export default function ImportPage() {
               <div className="h-2 rounded-full transition-all duration-300"
                 style={{
                   width: `${(imported + errors) / entries.length * 100}%`,
-                  background: "linear-gradient(90deg, #f59e0b, #fbbf24)",
+                  background: "linear-gradient(90deg, var(--app-accent), var(--app-accent-bright))",
                 }} />
             </div>
           </div>
@@ -241,7 +241,7 @@ export default function ImportPage() {
             <button
               onClick={() => setStatus("idle")}
               className="px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider text-black transition-all"
-              style={{ background: "linear-gradient(135deg, #fbbf24, #f59e0b)" }}
+              style={{ background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))" }}
             >
               Try Again
             </button>

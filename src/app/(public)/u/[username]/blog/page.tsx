@@ -134,7 +134,7 @@ export default function UserBlogPage({
               Community Long-form
             </p>
             <h1 className="text-5xl font-black tracking-tighter uppercase italic text-foreground leading-none">
-              @{username}&apos;s Articles<span style={{color:"#f59e0b"}}>.</span>
+              @{username}&apos;s Articles<span style={{color:"var(--app-accent)"}}>.</span>
             </h1>
             <p className="text-subtle text-sm mt-2">
               {isLoading ? "Loading…" : `${posts.length} article${posts.length !== 1 ? "s" : ""} published`}

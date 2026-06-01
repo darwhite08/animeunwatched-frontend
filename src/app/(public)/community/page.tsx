@@ -294,7 +294,7 @@ function PostCard({ post }: { post: Post }) {
                       onClick={handleSubmitComment}
                       disabled={!commentDraft.trim() || createComment.isPending || !isAuthenticated}
                       className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-black text-black transition-all disabled:opacity-40 disabled:cursor-not-allowed"
-                      style={{ background: "linear-gradient(135deg, #fbbf24, #f59e0b)" }}
+                      style={{ background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))" }}
                     >
                       {createComment.isPending ? <Loader2 size={11} className="animate-spin" /> : <Send size={11} />}
                       Post
@@ -362,7 +362,7 @@ export default function CommunityPage() {
       <div className="max-w-6xl mx-auto px-6 pt-8 pb-3 flex items-start justify-between gap-4">
         <div>
           <h1 className="text-3xl font-black tracking-tighter uppercase italic text-foreground">
-            Community<span style={{ color: "#f59e0b" }}>.</span>
+            Community<span style={{ color: "var(--app-accent)" }}>.</span>
           </h1>
           <p className="text-xs text-subtle mt-1">
             {posts.length > 0 ? `${posts.length}+ posts from the Shinobi` : "The Dojo — share your thoughts"}
@@ -371,7 +371,7 @@ export default function CommunityPage() {
         {/* New Post visible on initial load; floating button handles scroll */}
         <button onClick={() => setComposing(c => !c)}
           className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest text-black transition-all hover:scale-105 shrink-0 mt-1"
-          style={{ background: "linear-gradient(135deg, #fbbf24, #f59e0b)", boxShadow: "0 4px 16px rgba(245,158,11,0.35)" }}>
+          style={{ background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))", boxShadow: "0 4px 16px color-mix(in srgb, var(--app-accent) 35%, transparent)" }}>
           <Plus size={13} /> New Post
         </button>
       </div>
@@ -400,7 +400,7 @@ export default function CommunityPage() {
         animate={{ opacity: 1, scale: 1 }}
         onClick={() => setComposing(c => !c)}
         className="fixed bottom-8 right-8 z-40 flex items-center gap-2 px-5 py-3 rounded-2xl text-xs font-black uppercase tracking-widest text-black transition-all hover:scale-105 md:hidden"
-        style={{ background: "linear-gradient(135deg, #fbbf24, #f59e0b)", boxShadow: "0 8px 24px rgba(245,158,11,0.5)" }}
+        style={{ background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))", boxShadow: "0 8px 24px color-mix(in srgb, var(--app-accent) 50%, transparent)" }}
       >
         <Plus size={14} /> Post
       </motion.button>

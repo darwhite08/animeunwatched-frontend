@@ -81,8 +81,8 @@ function FilterPill({ active, onClick, children }: { active: boolean; onClick: (
       onClick={onClick}
       className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider border transition-all whitespace-nowrap ${
         active
-          ? "bg-amber-500/20 border-amber-500/50 text-amber-400"
-          : "bg-white/5 border-white/10 text-white/40 hover:border-white/20 hover:text-white/60"
+          ? "bg-accent/20 border-accent/50 text-accent-bright"
+          : "bg-surface border-border text-muted hover:border-border hover:text-muted"
       }`}
     >
       {children}
@@ -188,28 +188,28 @@ export default function BestAnimeListPage() {
   const activeFilterCount = selectedGenres.length + (selectedType ? 1 : 0) + advancedFilterCount
 
   return (
-    <div className="min-h-screen bg-[#020202] pb-40">
+    <div className="min-h-screen bg-background pb-40">
       <BestAnimeListHeader />
 
       <div className="max-w-7xl mx-auto px-6">
         {/* Toolbar */}
-        <div className="flex flex-wrap items-center justify-between gap-4 mb-4 py-4 border-b border-white/5">
+        <div className="flex flex-wrap items-center justify-between gap-4 mb-4 py-4 border-b border-border">
           <CategoryTabs active={category} onChange={handleCategoryChange} />
           <div className="flex items-center gap-3">
             <div className="relative group">
-              <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/30 group-focus-within:text-amber-400 transition-colors" />
+              <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-subtle group-focus-within:text-accent-bright transition-colors" />
               <input value={query} onChange={e => handleQueryChange(e.target.value)}
                 placeholder="Search anime…"
-                className="pl-8 pr-8 py-2 bg-white/5 border border-white/10 rounded-full text-[11px] font-medium text-white placeholder:text-white/20 outline-none focus:border-amber-500/50 w-44 focus:w-64 transition-all duration-300" />
+                className="pl-8 pr-8 py-2 bg-surface border border-border rounded-full text-[11px] font-medium text-foreground placeholder:text-subtle outline-none focus:border-accent/50 w-44 focus:w-64 transition-all duration-300" />
               {query && (
                 <button onClick={() => setQuery("")} className="absolute right-3 top-1/2 -translate-y-1/2">
-                  <X size={11} className="text-white/30 hover:text-white" />
+                  <X size={11} className="text-subtle hover:text-foreground" />
                 </button>
               )}
             </div>
             <button onClick={() => setFilterOpen(true)}
-              className="flex items-center gap-2 px-5 py-2 bg-white/5 border border-white/10 rounded-full text-[10px] font-black text-white uppercase tracking-widest hover:bg-white/10 transition-all relative">
-              <ListFilter size={13} className="text-amber-500" />
+              className="flex items-center gap-2 px-5 py-2 bg-surface border border-border rounded-full text-[10px] font-black text-foreground uppercase tracking-widest hover:bg-surface transition-all relative">
+              <ListFilter size={13} className="text-accent" />
               Refine
               {activeFilterCount > 0 && (
                 <span className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full text-[8px] font-black text-black flex items-center justify-center" style={{background:"linear-gradient(135deg,#fbbf24,#f59e0b)"}}>
@@ -221,9 +221,9 @@ export default function BestAnimeListPage() {
         </div>
 
         {/* Advanced filter chips */}
-        <div className="flex flex-wrap items-center gap-2 mb-8 pb-4 border-b border-white/5">
+        <div className="flex flex-wrap items-center gap-2 mb-8 pb-4 border-b border-border">
           {/* Decade */}
-          <span className="text-[9px] font-black text-white/20 uppercase tracking-widest mr-1">Era</span>
+          <span className="text-[9px] font-black text-subtle uppercase tracking-widest mr-1">Era</span>
           {DECADE_OPTIONS.map(d => (
             <FilterPill key={d.label} active={selectedDecade === d.label}
               onClick={() => { setSelectedDecade(prev => prev === d.label ? "" : d.label); setPage(1) }}>
@@ -231,10 +231,10 @@ export default function BestAnimeListPage() {
             </FilterPill>
           ))}
 
-          <div className="w-px h-4 bg-white/10 mx-1" />
+          <div className="w-px h-4 bg-surface mx-1" />
 
           {/* Score */}
-          <span className="text-[9px] font-black text-white/20 uppercase tracking-widest mr-1">Score</span>
+          <span className="text-[9px] font-black text-subtle uppercase tracking-widest mr-1">Score</span>
           {SCORE_OPTIONS.map(s => (
             <FilterPill key={s.label} active={selectedScore === s.min}
               onClick={() => { setSelectedScore(prev => prev === s.min ? null : s.min) }}>
@@ -242,10 +242,10 @@ export default function BestAnimeListPage() {
             </FilterPill>
           ))}
 
-          <div className="w-px h-4 bg-white/10 mx-1" />
+          <div className="w-px h-4 bg-surface mx-1" />
 
           {/* Status */}
-          <span className="text-[9px] font-black text-white/20 uppercase tracking-widest mr-1">Status</span>
+          <span className="text-[9px] font-black text-subtle uppercase tracking-widest mr-1">Status</span>
           {STATUS_OPTIONS.map(st => (
             <FilterPill key={st} active={selectedStatus === st}
               onClick={() => { setSelectedStatus(prev => prev === st ? "" : st); setPage(1) }}>
@@ -253,10 +253,10 @@ export default function BestAnimeListPage() {
             </FilterPill>
           ))}
 
-          <div className="w-px h-4 bg-white/10 mx-1" />
+          <div className="w-px h-4 bg-surface mx-1" />
 
           {/* Season */}
-          <span className="text-[9px] font-black text-white/20 uppercase tracking-widest mr-1">Season</span>
+          <span className="text-[9px] font-black text-subtle uppercase tracking-widest mr-1">Season</span>
           {SEASON_OPTIONS.map(s => (
             <FilterPill key={s} active={selectedSeason === s}
               onClick={() => { setSelectedSeason(prev => prev === s ? "" : s) }}>
@@ -264,10 +264,10 @@ export default function BestAnimeListPage() {
             </FilterPill>
           ))}
 
-          <div className="w-px h-4 bg-white/10 mx-1" />
+          <div className="w-px h-4 bg-surface mx-1" />
 
           {/* Episodes */}
-          <span className="text-[9px] font-black text-white/20 uppercase tracking-widest mr-1">Eps</span>
+          <span className="text-[9px] font-black text-subtle uppercase tracking-widest mr-1">Eps</span>
           {EPISODE_OPTIONS.map(e => (
             <FilterPill key={e.key} active={selectedEpisodeRange === e.key}
               onClick={() => { setSelectedEpisodeRange(prev => prev === e.key ? "" : e.key) }}>
@@ -277,7 +277,7 @@ export default function BestAnimeListPage() {
 
           {advancedFilterCount > 0 && (
             <>
-              <div className="w-px h-4 bg-white/10 mx-1" />
+              <div className="w-px h-4 bg-surface mx-1" />
               <button onClick={handleReset}
                 className="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider border border-rose-500/30 bg-rose-500/10 text-rose-400 hover:bg-rose-500/20 transition-all">
                 Clear all
@@ -298,8 +298,8 @@ export default function BestAnimeListPage() {
         {/* Error */}
         {isError && !isLoading && (
           <div className="py-32 text-center">
-            <p className="text-white/30 font-black uppercase tracking-widest text-xs mb-4">Failed to load archives</p>
-            <button onClick={handleReset} className="text-xs text-amber-400 hover:text-amber-300 font-black uppercase tracking-widest">
+            <p className="text-subtle font-black uppercase tracking-widest text-xs mb-4">Failed to load archives</p>
+            <button onClick={handleReset} className="text-xs text-accent-bright hover:text-accent-bright font-black uppercase tracking-widest">
               Try again
             </button>
           </div>
@@ -308,10 +308,10 @@ export default function BestAnimeListPage() {
         {/* Result info */}
         {!isLoading && !isError && (query || activeFilterCount > 0) && (
           <motion.div initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} className="flex items-center justify-between mb-6">
-            <p className="text-[10px] font-black text-white/30 uppercase tracking-widest">
+            <p className="text-[10px] font-black text-subtle uppercase tracking-widest">
               {filtered.length} result{filtered.length !== 1 ? "s" : ""}
             </p>
-            <button onClick={handleReset} className="text-[10px] font-black text-amber-400 hover:text-amber-300 uppercase tracking-widest">
+            <button onClick={handleReset} className="text-[10px] font-black text-accent-bright hover:text-accent-bright uppercase tracking-widest">
               Clear all
             </button>
           </motion.div>
@@ -331,9 +331,9 @@ export default function BestAnimeListPage() {
         {/* Empty */}
         {!isLoading && !isError && filtered.length === 0 && allAnime.length > 0 && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-            className="py-32 text-center border border-dashed border-white/5 rounded-[3rem]">
-            <p className="text-white/20 font-black uppercase tracking-widest text-xs">No archives match your query</p>
-            <button onClick={handleReset} className="mt-6 text-xs text-amber-400 hover:text-amber-300 font-black uppercase tracking-widest">Clear filters</button>
+            className="py-32 text-center border border-dashed border-border rounded-[3rem]">
+            <p className="text-subtle font-black uppercase tracking-widest text-xs">No archives match your query</p>
+            <button onClick={handleReset} className="mt-6 text-xs text-accent-bright hover:text-accent-bright font-black uppercase tracking-widest">Clear filters</button>
           </motion.div>
         )}
 
@@ -344,7 +344,7 @@ export default function BestAnimeListPage() {
             <button
               onClick={() => { setPage(p => Math.max(1, p - 1)); window.scrollTo({ top: 0, behavior: "smooth" }) }}
               disabled={page === 1}
-              className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-xs font-black text-white/50 hover:text-white hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed transition-all uppercase tracking-widest"
+              className="px-4 py-2 rounded-xl bg-surface border border-border text-xs font-black text-muted hover:text-foreground hover:bg-surface disabled:opacity-30 disabled:cursor-not-allowed transition-all uppercase tracking-widest"
             >
               ← Prev
             </button>
@@ -362,15 +362,15 @@ export default function BestAnimeListPage() {
               }
               return nums.map((n, idx) =>
                 n === "..." ? (
-                  <span key={`dots-${idx}`} className="text-white/20 px-1 text-xs">…</span>
+                  <span key={`dots-${idx}`} className="text-subtle px-1 text-xs">…</span>
                 ) : (
                   <button
                     key={n}
                     onClick={() => { setPage(n as number); window.scrollTo({ top: 0, behavior: "smooth" }) }}
                     className={`w-9 h-9 rounded-xl text-xs font-black transition-all ${
                       page === n
-                        ? "bg-amber-500 text-black shadow-[0_0_16px_rgba(245,158,11,0.4)]"
-                        : "bg-white/5 border border-white/10 text-white/40 hover:text-white hover:bg-white/10"
+                        ? "bg-accent text-black shadow-[0_0_16px_rgba(245,158,11,0.4)]"
+                        : "bg-surface border border-border text-muted hover:text-foreground hover:bg-surface"
                     }`}
                   >
                     {n}
@@ -383,13 +383,13 @@ export default function BestAnimeListPage() {
             <button
               onClick={() => { setPage(p => Math.min(totalPages, p + 1)); window.scrollTo({ top: 0, behavior: "smooth" }) }}
               disabled={page >= totalPages}
-              className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-xs font-black text-white/50 hover:text-white hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed transition-all uppercase tracking-widest"
+              className="px-4 py-2 rounded-xl bg-surface border border-border text-xs font-black text-muted hover:text-foreground hover:bg-surface disabled:opacity-30 disabled:cursor-not-allowed transition-all uppercase tracking-widest"
             >
               Next →
             </button>
 
             {/* Total count */}
-            <span className="w-full text-center text-[10px] text-white/20 font-black uppercase tracking-widest mt-2">
+            <span className="w-full text-center text-[10px] text-subtle font-black uppercase tracking-widest mt-2">
               Page {page} of {totalPages.toLocaleString()} — {totalAnime.toLocaleString()} anime total
             </span>
           </div>

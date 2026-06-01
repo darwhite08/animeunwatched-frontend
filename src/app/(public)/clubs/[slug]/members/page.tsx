@@ -53,7 +53,7 @@ function slugToName(slug: string): string {
 
 const AVATAR_GRADIENTS = [
   "from-indigo-500 to-violet-600",
-  "from-amber-500 to-orange-600",
+  "from-accent to-orange-600",
   "from-emerald-500 to-teal-600",
   "from-rose-500 to-pink-600",
   "from-sky-500 to-blue-600",
@@ -90,9 +90,9 @@ function buildMembers(slug: string): Member[] {
 
 /* ── Styles ── */
 const ROLE_STYLES: Record<Role, string> = {
-  ADMIN: "bg-amber-500/15 border-amber-500/30 text-amber-400",
-  MOD:   "bg-amber-500/15 border-amber-500/30 text-amber-400",
-  USER:  "bg-white/5 border-white/10 text-white/40",
+  ADMIN: "bg-accent/15 border-accent/30 text-accent-bright",
+  MOD:   "bg-accent/15 border-accent/30 text-accent-bright",
+  USER:  "bg-surface border-border text-muted",
 }
 
 const ROLE_ICONS: Record<Role, typeof Crown> = {
@@ -119,21 +119,21 @@ function MemberCard({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.95 }}
       transition={{ duration: 0.3, delay: index * 0.04 }}
-      className="group p-5 rounded-2xl bg-white/[0.02] border border-white/8 hover:border-white/15 hover:bg-white/[0.04] transition-all duration-300 flex flex-col items-center gap-4 text-center"
+      className="group p-5 rounded-2xl bg-surface border border-border hover:border-border hover:bg-white/[0.04] transition-all duration-300 flex flex-col items-center gap-4 text-center"
     >
       {/* Avatar */}
       <div
-        className={`h-16 w-16 rounded-2xl bg-gradient-to-br ${member.avatarGradient} flex items-center justify-center font-black text-2xl text-white group-hover:scale-105 transition-transform duration-300 shadow-lg`}
+        className={`h-16 w-16 rounded-2xl bg-gradient-to-br ${member.avatarGradient} flex items-center justify-center font-black text-2xl text-foreground group-hover:scale-105 transition-transform duration-300 shadow-lg`}
       >
         {member.username[0].toUpperCase()}
       </div>
 
       {/* Identity */}
       <div className="space-y-1.5 w-full">
-        <p className="text-sm font-black text-white uppercase italic tracking-tighter leading-none">
+        <p className="text-sm font-black text-foreground uppercase italic tracking-tighter leading-none">
           {member.displayName}
         </p>
-        <p className="text-[10px] text-white/35 font-mono">@{member.username}</p>
+        <p className="text-[10px] text-subtle font-mono">@{member.username}</p>
 
         {/* Role badge */}
         <span
@@ -145,21 +145,21 @@ function MemberCard({
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-3 gap-2 w-full border-t border-white/5 pt-3">
+      <div className="grid grid-cols-3 gap-2 w-full border-t border-border pt-3">
         <div className="flex flex-col items-center gap-0.5">
-          <Star size={10} className="text-amber-400" />
-          <span className="text-[10px] font-black text-white/70">{member.reputation.toLocaleString()}</span>
-          <span className="text-[8px] text-white/25 uppercase tracking-widest">Rep</span>
+          <Star size={10} className="text-accent-bright" />
+          <span className="text-[10px] font-black text-muted">{member.reputation.toLocaleString()}</span>
+          <span className="text-[8px] text-subtle uppercase tracking-widest">Rep</span>
         </div>
         <div className="flex flex-col items-center gap-0.5">
-          <Tv2 size={10} className="text-amber-400" />
-          <span className="text-[10px] font-black text-white/70">{member.animeCount}</span>
-          <span className="text-[8px] text-white/25 uppercase tracking-widest">Anime</span>
+          <Tv2 size={10} className="text-accent-bright" />
+          <span className="text-[10px] font-black text-muted">{member.animeCount}</span>
+          <span className="text-[8px] text-subtle uppercase tracking-widest">Anime</span>
         </div>
         <div className="flex flex-col items-center gap-0.5">
-          <ChevronRight size={10} className="text-white/25" />
-          <span className="text-[10px] font-black text-white/70 truncate w-full text-center">{member.joinDate}</span>
-          <span className="text-[8px] text-white/25 uppercase tracking-widest">Joined</span>
+          <ChevronRight size={10} className="text-subtle" />
+          <span className="text-[10px] font-black text-muted truncate w-full text-center">{member.joinDate}</span>
+          <span className="text-[8px] text-subtle uppercase tracking-widest">Joined</span>
         </div>
       </div>
 
@@ -168,8 +168,8 @@ function MemberCard({
         onClick={() => onFollow(member.id)}
         className={`w-full py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-200 ${
           member.isFollowed
-            ? "bg-white/8 border border-white/10 text-white/40 hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/20"
-            : "bg-amber-500 hover:bg-amber-400 text-black shadow-[0_0_16px_rgba(99,102,241,0.25)]"
+            ? "bg-surface border border-border text-muted hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/20"
+            : "bg-accent hover:bg-accent-bright text-black shadow-[0_0_16px_rgba(99,102,241,0.25)]"
         }`}
       >
         {member.isFollowed ? "Following" : "Follow"}
@@ -181,9 +181,9 @@ function MemberCard({
 /* ── Stats bar ── */
 function StatBox({ label, value, accent }: { label: string; value: number; accent: string }) {
   return (
-    <div className="flex flex-col gap-1 p-4 rounded-2xl bg-white/[0.02] border border-white/8 min-w-[90px]">
+    <div className="flex flex-col gap-1 p-4 rounded-2xl bg-surface border border-border min-w-[90px]">
       <span className={`text-xl font-black ${accent}`}>{value.toLocaleString()}</span>
-      <span className="text-[9px] font-black uppercase tracking-[0.2em] text-white/30">{label}</span>
+      <span className="text-[9px] font-black uppercase tracking-[0.2em] text-subtle">{label}</span>
     </div>
   )
 }
@@ -237,7 +237,7 @@ export default function ClubMembersPage({
   }
 
   return (
-    <div className="min-h-screen bg-[#020202] text-white pb-32">
+    <div className="min-h-screen bg-background text-foreground pb-32">
       {/* Ambient glow */}
       <div className="pointer-events-none fixed inset-0 overflow-hidden">
         <div className="absolute top-[-20%] right-[-10%] w-[50%] h-[60%] bg-indigo-700/10 blur-[120px] rounded-full" />
@@ -248,20 +248,20 @@ export default function ClubMembersPage({
         <motion.nav
           initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-white/30 mb-8"
+          className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-subtle mb-8"
         >
-          <Link href="/clubs" className="hover:text-white/60 transition-colors flex items-center gap-1">
+          <Link href="/clubs" className="hover:text-muted transition-colors flex items-center gap-1">
             <ArrowLeft size={10} /> Clubs
           </Link>
-          <ChevronRight size={10} className="text-white/15" />
+          <ChevronRight size={10} className="text-subtle" />
           <Link
             href={`/clubs/${slug}`}
-            className="hover:text-white/60 transition-colors truncate max-w-[120px]"
+            className="hover:text-muted transition-colors truncate max-w-[120px]"
           >
             {clubName}
           </Link>
-          <ChevronRight size={10} className="text-white/15" />
-          <span className="text-amber-400">Members</span>
+          <ChevronRight size={10} className="text-subtle" />
+          <span className="text-accent-bright">Members</span>
         </motion.nav>
 
         {/* Header */}
@@ -272,13 +272,13 @@ export default function ClubMembersPage({
           className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-8"
         >
           <div className="space-y-2">
-            <p className="text-[10px] font-black uppercase tracking-[0.35em] text-amber-400/70">
+            <p className="text-[10px] font-black uppercase tracking-[0.35em] text-accent-bright/70">
               Community
             </p>
-            <h1 className="text-4xl sm:text-5xl font-black uppercase italic tracking-tighter text-white leading-none">
+            <h1 className="text-4xl sm:text-5xl font-black uppercase italic tracking-tighter text-foreground leading-none">
               Members<span style={{color:"#f59e0b"}}>.</span>
             </h1>
-            <p className="text-white/35 text-xs">
+            <p className="text-subtle text-xs">
               {members.length.toLocaleString()} members in {clubName}
             </p>
           </div>
@@ -287,8 +287,8 @@ export default function ClubMembersPage({
             onClick={handleJoin}
             className={`flex items-center gap-2 px-6 py-3 rounded-2xl text-sm font-black uppercase tracking-widest transition-all duration-300 whitespace-nowrap ${
               isJoined
-                ? "bg-white/8 border border-white/15 text-white/60 hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/20"
-                : "bg-amber-500 hover:bg-amber-400 text-black shadow-[0_0_32px_rgba(99,102,241,0.3)] hover:-translate-y-0.5"
+                ? "bg-surface border border-border text-muted hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/20"
+                : "bg-accent hover:bg-accent-bright text-black shadow-[0_0_32px_rgba(99,102,241,0.3)] hover:-translate-y-0.5"
             }`}
           >
             <UserPlus size={14} />
@@ -303,10 +303,10 @@ export default function ClubMembersPage({
           transition={{ delay: 0.1 }}
           className="flex flex-wrap gap-3 mb-8"
         >
-          <StatBox label="Total"   value={members.length} accent="text-white" />
-          <StatBox label="Admins"  value={admins}          accent="text-amber-400" />
-          <StatBox label="Mods"    value={mods}            accent="text-amber-400" />
-          <StatBox label="Regular" value={regulars}        accent="text-white/50" />
+          <StatBox label="Total"   value={members.length} accent="text-foreground" />
+          <StatBox label="Admins"  value={admins}          accent="text-accent-bright" />
+          <StatBox label="Mods"    value={mods}            accent="text-accent-bright" />
+          <StatBox label="Regular" value={regulars}        accent="text-muted" />
         </motion.div>
 
         {/* Search bar */}
@@ -318,19 +318,19 @@ export default function ClubMembersPage({
         >
           <Search
             size={14}
-            className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30 pointer-events-none"
+            className="absolute left-4 top-1/2 -translate-y-1/2 text-subtle pointer-events-none"
           />
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search members…"
-            className="w-full sm:max-w-md pl-10 pr-4 py-3 rounded-xl bg-white/[0.03] border border-white/8 text-sm text-white placeholder:text-white/25 focus:outline-none focus:border-amber-500/40 focus:bg-white/[0.05] transition-all"
+            className="w-full sm:max-w-md pl-10 pr-4 py-3 rounded-xl bg-surface border border-border text-sm text-foreground placeholder:text-subtle focus:outline-none focus:border-accent/40 focus:bg-surface transition-all"
           />
         </motion.div>
 
         {/* Results count */}
-        <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/20 mb-6">
+        <p className="text-[10px] font-black uppercase tracking-[0.2em] text-subtle mb-6">
           {filtered.length} member{filtered.length !== 1 ? "s" : ""}{search ? " found" : ""}
         </p>
 
@@ -358,16 +358,16 @@ export default function ClubMembersPage({
               exit={{ opacity: 0 }}
               className="flex flex-col items-center justify-center py-32 space-y-4"
             >
-              <div className="h-20 w-20 rounded-3xl bg-white/[0.03] border border-white/8 flex items-center justify-center">
-                <Users size={28} className="text-white/20" />
+              <div className="h-20 w-20 rounded-3xl bg-surface border border-border flex items-center justify-center">
+                <Users size={28} className="text-subtle" />
               </div>
-              <p className="text-lg font-black uppercase italic text-white/30">
+              <p className="text-lg font-black uppercase italic text-subtle">
                 No members found
               </p>
-              <p className="text-xs text-white/20">Try a different search</p>
+              <p className="text-xs text-subtle">Try a different search</p>
               <button
                 onClick={() => setSearch("")}
-                className="mt-2 px-5 py-2.5 rounded-xl bg-amber-600/20 border border-amber-500/20 text-xs font-black uppercase tracking-widest text-amber-400 hover:bg-amber-600/30 transition-all"
+                className="mt-2 px-5 py-2.5 rounded-xl bg-accent/20 border border-accent/20 text-xs font-black uppercase tracking-widest text-accent-bright hover:bg-accent/30 transition-all"
               >
                 Clear search
               </button>

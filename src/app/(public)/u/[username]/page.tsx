@@ -35,7 +35,7 @@ import { PresenceDot } from "@/components/ui/PresenceDot"
 function PresenceLabel({ userId }: { userId: string }) {
   const online = usePresence(userId)
   return (
-    <span className="inline-flex items-center gap-1.5 text-[10px] uppercase tracking-widest font-black text-white/30">
+    <span className="inline-flex items-center gap-1.5 text-[10px] uppercase tracking-widest font-black text-subtle">
       <PresenceDot userId={userId} size={6} showOffline />
       {online ? "Active now" : "Offline"}
     </span>
@@ -93,7 +93,7 @@ const USER_TEMPLATES: Record<string, Partial<MockUser>> = {
     dna: [
       { label: "Psychological", percent: 91, colors: "from-purple-600 via-pink-500 to-rose-400" },
       { label: "Seinen",        percent: 78, colors: "from-indigo-600 via-blue-500 to-cyan-400" },
-      { label: "Thriller",      percent: 62, colors: "from-red-600 via-orange-500 to-amber-400" },
+      { label: "Thriller",      percent: 62, colors: "from-red-600 via-orange-500 to-accent-bright" },
       { label: "Fantasy",       percent: 34, colors: "from-emerald-600 via-teal-500 to-green-400" },
     ],
   },
@@ -104,7 +104,7 @@ const USER_TEMPLATES: Record<string, Partial<MockUser>> = {
     level: 22,
     stats: { archived: 184, streak: 12, rank: 1_204, followers: 720 },
     dna: [
-      { label: "Action",    percent: 88, colors: "from-red-600 via-orange-500 to-amber-400" },
+      { label: "Action",    percent: 88, colors: "from-red-600 via-orange-500 to-accent-bright" },
       { label: "Shonen",    percent: 74, colors: "from-indigo-600 via-blue-500 to-cyan-400" },
       { label: "Horror",    percent: 55, colors: "from-purple-600 via-pink-500 to-rose-400" },
       { label: "Sci-Fi",    percent: 28, colors: "from-emerald-600 via-teal-500 to-green-400" },
@@ -136,7 +136,7 @@ function buildMockUser(username: string): MockUser {
     dna: template.dna ?? [
       { label: "Shonen",  percent: 72, colors: "from-indigo-600 via-blue-500 to-cyan-400" },
       { label: "Fantasy", percent: 55, colors: "from-emerald-600 via-teal-500 to-green-400" },
-      { label: "Action",  percent: 48, colors: "from-red-600 via-orange-500 to-amber-400" },
+      { label: "Action",  percent: 48, colors: "from-red-600 via-orange-500 to-accent-bright" },
       { label: "Romance", percent: 20, colors: "from-pink-600 via-rose-500 to-fuchsia-400" },
     ],
   }
@@ -222,14 +222,14 @@ function DNABar({
   return (
     <div className="space-y-3">
       <div className="flex justify-between items-end">
-        <span className="text-xs font-black uppercase tracking-widest text-white/80">
+        <span className="text-xs font-black uppercase tracking-widest text-muted">
           {label}
         </span>
-        <span className="text-[10px] font-medium text-white/30 tracking-tighter">
+        <span className="text-[10px] font-medium text-subtle tracking-tighter">
           {percent}%
         </span>
       </div>
-      <div className="h-3 w-full bg-white/5 rounded-full overflow-hidden p-[3px] border border-white/5 shadow-inner">
+      <div className="h-3 w-full bg-surface rounded-full overflow-hidden p-[3px] border border-border shadow-inner">
         <motion.div
           initial={{ width: 0 }}
           whileInView={{ width: `${percent}%` }}
@@ -332,8 +332,8 @@ export default function UserProfilePage({
       label: "Anime Archived",
       value: user.stats.archived.toLocaleString(),
       icon: Bookmark,
-      color: "text-amber-400",
-      glow: "group-hover:bg-amber-500/10",
+      color: "text-accent-bright",
+      glow: "group-hover:bg-accent/10",
     },
     {
       label: "Day Streak",
@@ -359,13 +359,13 @@ export default function UserProfilePage({
   ]
 
   return (
-    <div className="min-h-screen bg-[#020202] text-white pb-32">
+    <div className="min-h-screen bg-background text-foreground pb-32">
 
       {/* ── HERO ── */}
       <section className="relative overflow-hidden">
         {/* Mesh gradient background */}
         <div className="absolute inset-0 z-0">
-          <div className="absolute top-[-20%] right-[-10%] w-[55%] h-[120%] bg-amber-700/20 blur-[140px] rounded-full animate-pulse" />
+          <div className="absolute top-[-20%] right-[-10%] w-[55%] h-[120%] bg-accent/20 blur-[140px] rounded-full animate-pulse" />
           <div className="absolute top-[10%] left-[-15%] w-[45%] h-[90%] bg-violet-900/15 blur-[120px] rounded-full" />
           <div className="absolute bottom-[-10%] right-[20%] w-[30%] h-[60%] bg-blue-800/10 blur-[100px] rounded-full animate-pulse [animation-delay:1.5s]" />
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#020202]/40 to-[#020202]" />
@@ -382,14 +382,14 @@ export default function UserProfilePage({
               className="relative shrink-0"
             >
               <div className="h-40 w-40 md:h-52 md:w-52 rounded-[2.5rem] p-[3px] bg-gradient-to-br from-indigo-500 via-white/10 to-violet-600 shadow-2xl shadow-indigo-500/20">
-                <div className="h-full w-full rounded-[2.3rem] bg-gradient-to-br from-indigo-600/30 to-violet-700/30 flex items-center justify-center backdrop-blur-sm border border-white/5">
-                  <span className="text-5xl md:text-6xl font-black text-white tracking-tighter select-none">
+                <div className="h-full w-full rounded-[2.3rem] bg-gradient-to-br from-indigo-600/30 to-violet-700/30 flex items-center justify-center backdrop-blur-sm border border-border">
+                  <span className="text-5xl md:text-6xl font-black text-foreground tracking-tighter select-none">
                     {user.avatar}
                   </span>
                 </div>
               </div>
               {/* Level pip */}
-              <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-black border border-amber-500/40 text-[9px] font-black text-amber-400 uppercase tracking-widest whitespace-nowrap">
+              <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-background border border-accent/40 text-[9px] font-black text-accent-bright uppercase tracking-widest whitespace-nowrap">
                 Lvl {user.level}
               </div>
             </motion.div>
@@ -403,15 +403,15 @@ export default function UserProfilePage({
                 className="space-y-2"
               >
                 {/* Grade badge */}
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gradient-to-r from-indigo-500/20 to-violet-500/20 border border-amber-500/30 text-[9px] font-black uppercase tracking-[0.2em] text-amber-300">
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-gradient-to-r from-indigo-500/20 to-violet-500/20 border border-accent/30 text-[9px] font-black uppercase tracking-[0.2em] text-accent-bright">
                   <Award size={10} />
                   {user.grade}
                 </div>
 
-                <h1 className="text-5xl md:text-7xl font-black tracking-tighter uppercase italic text-white leading-none">
+                <h1 className="text-5xl md:text-7xl font-black tracking-tighter uppercase italic text-foreground leading-none">
                   {user.displayName}
                 </h1>
-                <p className="text-white/40 text-sm font-mono flex items-center gap-2">
+                <p className="text-muted text-sm font-mono flex items-center gap-2">
                   @{user.username}
                   {realUser?.id && <PresenceLabel userId={realUser.id} />}
                 </p>
@@ -421,7 +421,7 @@ export default function UserProfilePage({
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.2 }}
-                className="text-white/55 text-base max-w-lg leading-relaxed"
+                className="text-muted text-base max-w-lg leading-relaxed"
               >
                 {user.bio}
               </motion.p>
@@ -437,8 +437,8 @@ export default function UserProfilePage({
                   onClick={toggleFollow}
                   className={`flex items-center gap-2 px-7 py-3 rounded-2xl text-sm font-black uppercase tracking-widest transition-all duration-300 ${
                     following
-                      ? "bg-white/8 border border-white/15 text-white/70 hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/20"
-                      : "bg-amber-500 text-black hover:bg-amber-400 shadow-[0_0_32px_rgba(99,102,241,0.35)] hover:-translate-y-0.5"
+                      ? "bg-surface border border-border text-muted hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/20"
+                      : "bg-accent text-black hover:bg-accent-bright shadow-[0_0_32px_rgba(99,102,241,0.35)] hover:-translate-y-0.5"
                   }`}
                 >
                   {following ? (
@@ -452,13 +452,13 @@ export default function UserProfilePage({
                 {!isOwnProfile && (
                 <button
                   onClick={handleMessage}
-                  className="flex items-center gap-2 px-5 py-3 rounded-2xl text-sm font-black uppercase tracking-widest bg-white/8 border border-white/15 text-white/70 hover:bg-white/12 hover:text-white transition-all duration-300"
+                  className="flex items-center gap-2 px-5 py-3 rounded-2xl text-sm font-black uppercase tracking-widest bg-surface border border-border text-muted hover:bg-white/12 hover:text-foreground transition-all duration-300"
                 >
                   <Mail size={15} /> Message
                 </button>
                 )}
 
-                <div className="flex items-center gap-1.5 text-[10px] font-bold text-white/30 uppercase tracking-widest">
+                <div className="flex items-center gap-1.5 text-[10px] font-bold text-subtle uppercase tracking-widest">
                   <Clock size={11} />
                   Joined {user.joined}
                 </div>
@@ -478,16 +478,16 @@ export default function UserProfilePage({
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.08, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-              className={`group relative overflow-hidden p-7 rounded-[2rem] border border-white/5 bg-[#0a0a0a] hover:bg-zinc-900/50 transition-all duration-500 cursor-default`}
+              className={`group relative overflow-hidden p-7 rounded-[2rem] border border-border bg-surface hover:bg-zinc-900/50 transition-all duration-500 cursor-default`}
             >
               <div className={`mb-5 ${stat.color} opacity-80 group-hover:opacity-100 transition-opacity`}>
                 <stat.icon size={26} strokeWidth={1.5} />
               </div>
-              <p className="text-3xl font-black text-white tracking-tighter">{stat.value}</p>
-              <p className="mt-2 text-[9px] font-black text-white/30 uppercase tracking-[0.25em]">
+              <p className="text-3xl font-black text-foreground tracking-tighter">{stat.value}</p>
+              <p className="mt-2 text-[9px] font-black text-subtle uppercase tracking-[0.25em]">
                 {stat.label}
               </p>
-              <div className={`absolute -bottom-3 -right-3 w-20 h-20 bg-white/5 rounded-full blur-2xl ${stat.glow} transition-all`} />
+              <div className={`absolute -bottom-3 -right-3 w-20 h-20 bg-surface rounded-full blur-2xl ${stat.glow} transition-all`} />
             </motion.div>
           ))}
         </div>
@@ -499,18 +499,18 @@ export default function UserProfilePage({
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="p-7 rounded-[2rem] bg-white/[0.02] border border-white/8 space-y-5"
+          className="p-7 rounded-[2rem] bg-surface border border-border space-y-5"
         >
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <BookOpen size={16} className="text-amber-400" />
-              <h2 className="text-lg font-black tracking-tighter uppercase italic text-white">
+              <BookOpen size={16} className="text-accent-bright" />
+              <h2 className="text-lg font-black tracking-tighter uppercase italic text-foreground">
                 Public Watchlist
               </h2>
             </div>
             <Link
               href={`/u/${user.username}/list`}
-              className="group flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-amber-400 hover:text-amber-300 transition-colors"
+              className="group flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-accent-bright hover:text-accent-bright transition-colors"
             >
               See full list <ChevronRight size={11} className="group-hover:translate-x-0.5 transition-transform" />
             </Link>
@@ -526,7 +526,7 @@ export default function UserProfilePage({
                 transition={{ delay: i * 0.07 }}
               >
                 <Link href={`/anime/${anime.id}`} className="group block">
-                  <div className="relative aspect-[3/4] rounded-xl overflow-hidden border border-white/8 group-hover:border-amber-500/30 transition-all">
+                  <div className="relative aspect-[3/4] rounded-xl overflow-hidden border border-border group-hover:border-accent/30 transition-all">
                     <Image
                       src={anime.image}
                       alt={anime.title}
@@ -536,7 +536,7 @@ export default function UserProfilePage({
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
                     <div className="absolute bottom-2 left-2 right-2">
-                      <p className="text-[10px] font-black text-white leading-tight line-clamp-2">
+                      <p className="text-[10px] font-black text-foreground leading-tight line-clamp-2">
                         {anime.title}
                       </p>
                     </div>
@@ -548,15 +548,15 @@ export default function UserProfilePage({
 
           <Link
             href={`/u/${user.username}/list`}
-            className="flex items-center justify-between p-4 rounded-xl bg-white/[0.02] border border-white/8 hover:border-amber-500/20 hover:bg-white/[0.04] transition-all group"
+            className="flex items-center justify-between p-4 rounded-xl bg-surface border border-border hover:border-accent/20 hover:bg-white/[0.04] transition-all group"
           >
             <div className="flex items-center gap-3">
-              <BookOpen size={15} className="text-amber-400" />
-              <p className="text-sm font-bold text-white/70 group-hover:text-white transition-colors">
+              <BookOpen size={15} className="text-accent-bright" />
+              <p className="text-sm font-bold text-muted group-hover:text-foreground transition-colors">
                 See full list →
               </p>
             </div>
-            <span className="text-[10px] font-black text-white/25 uppercase tracking-widest">
+            <span className="text-[10px] font-black text-subtle uppercase tracking-widest">
               {user.stats.archived} titles
             </span>
           </Link>
@@ -575,7 +575,7 @@ export default function UserProfilePage({
               <h2 className="text-3xl font-black tracking-tighter uppercase italic">
                 Chronicles
               </h2>
-              <Link href={`/u/${username}/posts`} className="group flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-white/30 hover:text-white transition-colors">
+              <Link href={`/u/${username}/posts`} className="group flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-subtle hover:text-foreground transition-colors">
                 Full Log <ChevronRight size={13} className="group-hover:translate-x-0.5 transition-transform" />
               </Link>
             </div>
@@ -592,15 +592,15 @@ export default function UserProfilePage({
                   transition={{ delay: i * 0.08 }}
                   className="relative pl-20 group"
                 >
-                  <div className="absolute left-0 top-1/2 -translate-y-1/2 w-16 h-16 rounded-2xl bg-zinc-900 border border-white/5 flex items-center justify-center z-10 group-hover:border-amber-500/40 transition-all shadow-lg">
-                    <evt.icon size={20} className="text-amber-400" />
+                  <div className="absolute left-0 top-1/2 -translate-y-1/2 w-16 h-16 rounded-2xl bg-zinc-900 border border-border flex items-center justify-center z-10 group-hover:border-accent/40 transition-all shadow-lg">
+                    <evt.icon size={20} className="text-accent-bright" />
                   </div>
-                  <div className="p-5 rounded-[1.5rem] bg-white/[0.02] border border-white/5 group-hover:bg-white/[0.04] transition-all flex justify-between items-center">
+                  <div className="p-5 rounded-[1.5rem] bg-surface border border-border group-hover:bg-white/[0.04] transition-all flex justify-between items-center">
                     <div>
                       <h3 className="text-sm font-black text-white/90">{evt.text}</h3>
-                      <p className="text-xs text-white/40 font-medium mt-0.5">{evt.sub}</p>
+                      <p className="text-xs text-muted font-medium mt-0.5">{evt.sub}</p>
                     </div>
-                    <span className="text-[9px] font-black text-white/20 uppercase tracking-widest shrink-0 ml-4">
+                    <span className="text-[9px] font-black text-subtle uppercase tracking-widest shrink-0 ml-4">
                       {evt.time}
                     </span>
                   </div>
@@ -625,34 +625,34 @@ export default function UserProfilePage({
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: i * 0.07 }}
-                    className="p-6 rounded-2xl bg-zinc-900/60 border border-white/8 hover:border-white/15 transition-colors space-y-4"
+                    className="p-6 rounded-2xl bg-zinc-900/60 border border-border hover:border-border transition-colors space-y-4"
                   >
                     {post.anime && (
                       <Link
                         href="/bestanimelist"
-                        className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-amber-500/8 border border-amber-500/15 text-[10px] font-bold text-amber-400 hover:bg-amber-500/15 transition-colors"
+                        className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-accent/8 border border-accent/15 text-[10px] font-bold text-accent-bright hover:bg-accent/15 transition-colors"
                       >
                         <Star size={9} /> {post.anime}
                       </Link>
                     )}
 
-                    <p className="text-sm text-white/75 leading-relaxed">{post.content}</p>
+                    <p className="text-sm text-muted leading-relaxed">{post.content}</p>
 
-                    <div className="flex items-center gap-5 pt-2 border-t border-white/5">
+                    <div className="flex items-center gap-5 pt-2 border-t border-border">
                       <button
                         onClick={() => toggleLike(post.id)}
                         className={`flex items-center gap-1.5 text-xs font-bold transition-colors ${
-                          liked ? "text-rose-400" : "text-white/30 hover:text-rose-400"
+                          liked ? "text-rose-400" : "text-subtle hover:text-rose-400"
                         }`}
                       >
                         <Heart size={13} fill={liked ? "currentColor" : "none"} />
                         {liked ? post.likes + 1 : post.likes}
                       </button>
-                      <span className="flex items-center gap-1.5 text-xs font-bold text-white/30">
+                      <span className="flex items-center gap-1.5 text-xs font-bold text-subtle">
                         <MessageSquare size={13} />
                         {post.comments}
                       </span>
-                      <span className="ml-auto text-[9px] font-black text-white/20 uppercase tracking-widest">
+                      <span className="ml-auto text-[9px] font-black text-subtle uppercase tracking-widest">
                         {post.time}
                       </span>
                     </div>
@@ -672,7 +672,7 @@ export default function UserProfilePage({
               Anime DNA
             </h2>
 
-            <div className="p-8 rounded-[2.5rem] border border-white/5 bg-gradient-to-br from-zinc-900/80 to-black backdrop-blur-3xl space-y-7 relative shadow-2xl">
+            <div className="p-8 rounded-[2.5rem] border border-border bg-gradient-to-br from-zinc-900/80 to-black backdrop-blur-3xl space-y-7 relative shadow-2xl">
               <div className="absolute top-6 right-8 opacity-[0.07]">
                 <Award size={72} strokeWidth={1} />
               </div>
@@ -681,15 +681,15 @@ export default function UserProfilePage({
                 <DNABar key={bar.label} label={bar.label} percent={bar.percent} colors={bar.colors} />
               ))}
 
-              <div className="pt-6 border-t border-white/5 flex items-center justify-between">
+              <div className="pt-6 border-t border-border flex items-center justify-between">
                 <div className="space-y-0.5">
-                  <p className="text-[9px] font-black text-white/25 uppercase tracking-[0.2em]">Total Runtime</p>
-                  <p className="text-2xl font-black text-white tracking-tighter">
+                  <p className="text-[9px] font-black text-subtle uppercase tracking-[0.2em]">Total Runtime</p>
+                  <p className="text-2xl font-black text-foreground tracking-tighter">
                     {Math.round(user.stats.archived * 23.5).toLocaleString()}
-                    <span className="text-xs font-medium text-white/35 ml-1 italic">hrs</span>
+                    <span className="text-xs font-medium text-subtle ml-1 italic">hrs</span>
                   </p>
                 </div>
-                <Clock size={36} className="text-amber-500 opacity-20" strokeWidth={1} />
+                <Clock size={36} className="text-accent opacity-20" strokeWidth={1} />
               </div>
             </div>
           </div>
@@ -702,7 +702,7 @@ export default function UserProfilePage({
               </h2>
               <Link
                 href="/bestanimelist"
-                className="group flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-white/30 hover:text-white transition-colors"
+                className="group flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-subtle hover:text-foreground transition-colors"
               >
                 Browse All <ChevronRight size={13} className="group-hover:translate-x-0.5 transition-transform" />
               </Link>
@@ -718,7 +718,7 @@ export default function UserProfilePage({
                   transition={{ delay: i * 0.07 }}
                 >
                   <Link href={`/anime/${anime.id}`} className="group block">
-                    <div className="relative aspect-[3/4] rounded-2xl overflow-hidden border border-white/8 group-hover:border-amber-500/30 transition-all">
+                    <div className="relative aspect-[3/4] rounded-2xl overflow-hidden border border-border group-hover:border-accent/30 transition-all">
                       <Image
                         src={anime.image}
                         alt={anime.title}
@@ -728,12 +728,12 @@ export default function UserProfilePage({
                       />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
                       <div className="absolute bottom-3 left-3 right-3">
-                        <p className="text-xs font-black text-white leading-tight line-clamp-2">
+                        <p className="text-xs font-black text-foreground leading-tight line-clamp-2">
                           {anime.title}
                         </p>
                         <div className="flex items-center gap-1 mt-1">
-                          <Star size={9} fill="#f59e0b" className="text-amber-400" />
-                          <span className="text-[9px] text-white/60 font-bold">{anime.rating.toFixed(1)}</span>
+                          <Star size={9} fill="#f59e0b" className="text-accent-bright" />
+                          <span className="text-[9px] text-muted font-bold">{anime.rating.toFixed(1)}</span>
                         </div>
                       </div>
                     </div>
@@ -745,20 +745,20 @@ export default function UserProfilePage({
             {/* Reading list CTA */}
             <Link
               href="/bestanimelist"
-              className="flex items-center justify-between p-5 rounded-2xl bg-white/[0.02] border border-white/8 hover:border-amber-500/20 hover:bg-white/[0.04] transition-all group"
+              className="flex items-center justify-between p-5 rounded-2xl bg-surface border border-border hover:border-accent/20 hover:bg-white/[0.04] transition-all group"
             >
               <div className="flex items-center gap-3">
-                <BookOpen size={18} className="text-amber-400" />
+                <BookOpen size={18} className="text-accent-bright" />
                 <div>
-                  <p className="text-sm font-bold text-white/80 group-hover:text-white transition-colors">
+                  <p className="text-sm font-bold text-muted group-hover:text-foreground transition-colors">
                     Full Watchlist
                   </p>
-                  <p className="text-[10px] text-white/30 mt-0.5">
+                  <p className="text-[10px] text-subtle mt-0.5">
                     {user.stats.archived} titles archived
                   </p>
                 </div>
               </div>
-              <ChevronRight size={14} className="text-white/20 group-hover:text-amber-400 group-hover:translate-x-0.5 transition-all" />
+              <ChevronRight size={14} className="text-subtle group-hover:text-accent-bright group-hover:translate-x-0.5 transition-all" />
             </Link>
           </div>
         </div>

@@ -12,8 +12,8 @@ const LEVELS = [
   { min: 6000,   title: "Jonin",         color: "from-purple-600 to-purple-400" },
   { min: 12000,  title: "Anbu",          color: "from-pink-600 to-pink-400"     },
   { min: 25000,  title: "Elite Jonin",   color: "from-rose-600 to-rose-400"     },
-  { min: 50000,  title: "Kage",          color: "from-orange-600 to-amber-400"  },
-  { min: 100000, title: "Legendary",     color: "from-amber-500 to-yellow-300"  },
+  { min: 50000,  title: "Kage",          color: "from-orange-600 to-accent-bright"  },
+  { min: 100000, title: "Legendary",     color: "from-accent to-yellow-300"  },
 ]
 
 function getLevel(xp: number) {
@@ -42,28 +42,28 @@ export default function XPCard({ xp = 84000, reputation = 840 }: XPCardProps) {
     <Link href="/streak" className="block group">
       <div className={`p-8 rounded-[2.5rem] bg-gradient-to-br ${color} relative overflow-hidden`}>
         {/* Shine */}
-        <div className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-        <div className="absolute -right-8 -top-8 w-32 h-32 bg-white/10 blur-2xl rounded-full" />
+        <div className="absolute inset-0 bg-surface opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+        <div className="absolute -right-8 -top-8 w-32 h-32 bg-surface blur-2xl rounded-full" />
 
         <div className="relative z-10 space-y-5">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
               <div className="p-2 rounded-xl bg-black/20">
-                <Zap size={16} className="text-white" fill="white" />
+                <Zap size={16} className="text-foreground" fill="white" />
               </div>
-              <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/70">Neural Level</span>
+              <span className="text-[10px] font-black uppercase tracking-[0.3em] text-muted">Neural Level</span>
             </div>
-            <ChevronRight size={14} className="text-white/50 group-hover:translate-x-0.5 transition-transform" />
+            <ChevronRight size={14} className="text-muted group-hover:translate-x-0.5 transition-transform" />
           </div>
 
           <div>
-            <p className="text-4xl font-black tracking-tighter text-white leading-none">Lv. {level}</p>
-            <p className="text-sm font-black text-white/80 mt-1 italic">{title}</p>
+            <p className="text-4xl font-black tracking-tighter text-foreground leading-none">Lv. {level}</p>
+            <p className="text-sm font-black text-muted mt-1 italic">{title}</p>
           </div>
 
           {/* XP bar */}
           <div className="space-y-1.5">
-            <div className="flex justify-between text-[9px] font-black uppercase tracking-widest text-white/50">
+            <div className="flex justify-between text-[9px] font-black uppercase tracking-widest text-muted">
               <span>{xp.toLocaleString()} XP</span>
               <span>{nextMin.toLocaleString()} XP</span>
             </div>
@@ -77,7 +77,7 @@ export default function XPCard({ xp = 84000, reputation = 840 }: XPCardProps) {
             </div>
           </div>
 
-          <div className="flex items-center gap-4 text-[9px] font-black text-white/50 uppercase tracking-wider">
+          <div className="flex items-center gap-4 text-[9px] font-black text-muted uppercase tracking-wider">
             <span>Reputation: {reputation}</span>
             <span>·</span>
             <span>Top 4% globally</span>

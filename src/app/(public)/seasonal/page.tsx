@@ -14,7 +14,7 @@ type Season = typeof SEASONS[number]
 const SEASON_META: Record<Season, { emoji: string; months: string; accent: string; badge: string }> = {
   winter: { emoji: "❄️", months: "Jan – Mar", accent: "text-blue-400",   badge: "bg-blue-500/15 text-blue-300 border-blue-500/20"    },
   spring: { emoji: "🌸", months: "Apr – Jun", accent: "text-pink-400",   badge: "bg-pink-500/15 text-pink-300 border-pink-500/20"    },
-  summer: { emoji: "☀️", months: "Jul – Sep", accent: "text-amber-400",  badge: "bg-amber-500/15 text-amber-300 border-amber-500/20"  },
+  summer: { emoji: "☀️", months: "Jul – Sep", accent: "text-accent-bright",  badge: "bg-accent/15 text-accent-bright border-accent/20"  },
   fall:   { emoji: "🍂", months: "Oct – Dec", accent: "text-orange-400", badge: "bg-orange-500/15 text-orange-300 border-orange-500/20"},
 }
 
@@ -65,28 +65,28 @@ export default function SeasonalPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#020202] text-white pb-40">
+    <div className="min-h-screen bg-background text-foreground pb-40">
       {/* Header */}
       <div className="max-w-7xl mx-auto px-6 pt-32 pb-10">
         <div className="flex items-center gap-3 mb-4">
-          <CalendarDays size={16} className="text-amber-400" />
-          <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-amber-400/60">Seasonal Archive</p>
+          <CalendarDays size={16} className="text-accent-bright" />
+          <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-accent-bright/60">Seasonal Archive</p>
         </div>
-        <h1 className="text-6xl font-black tracking-tighter uppercase italic text-white leading-none mb-3">
+        <h1 className="text-6xl font-black tracking-tighter uppercase italic text-foreground leading-none mb-3">
           Seasonal<span style={{color:"#f59e0b"}}>.</span>
         </h1>
-        <p className="text-white/30 text-sm">Every anime, every season — from {EARLIEST_YEAR} to {CURRENT_YEAR}.</p>
+        <p className="text-subtle text-sm">Every anime, every season — from {EARLIEST_YEAR} to {CURRENT_YEAR}.</p>
       </div>
 
       {/* Sticky picker bar */}
-      <div className="sticky top-0 z-30 bg-[#020202]/90 backdrop-blur-xl border-b border-white/5">
+      <div className="sticky top-0 z-30 bg-background/90 backdrop-blur-xl border-b border-border">
         <div className="max-w-7xl mx-auto px-6 py-4 flex flex-wrap items-center gap-4">
 
           {/* Year control */}
           <div className="flex items-center gap-2">
             <button
               onClick={() => shiftYear(-1)} disabled={year <= EARLIEST_YEAR}
-              className="p-1.5 rounded-lg text-white/40 hover:text-white hover:bg-white/8 disabled:opacity-20 disabled:cursor-not-allowed transition-all"
+              className="p-1.5 rounded-lg text-muted hover:text-foreground hover:bg-surface disabled:opacity-20 disabled:cursor-not-allowed transition-all"
             >
               <ChevronLeft size={16} />
             </button>
@@ -94,22 +94,22 @@ export default function SeasonalPage() {
             <div className="relative">
               <button
                 onClick={() => setYearOpen(o => !o)}
-                className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white/6 border border-white/10 text-sm font-black text-white hover:bg-white/10 transition-all min-w-[90px] justify-center"
+                className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white/6 border border-border text-sm font-black text-foreground hover:bg-surface transition-all min-w-[90px] justify-center"
               >
                 {year}
-                <ChevronDown size={13} className={`text-white/40 transition-transform ${yearOpen ? "rotate-180" : ""}`} />
+                <ChevronDown size={13} className={`text-muted transition-transform ${yearOpen ? "rotate-180" : ""}`} />
               </button>
               <AnimatePresence>
                 {yearOpen && (
                   <motion.div
                     initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }}
-                    className="absolute top-full mt-2 left-0 z-50 w-32 bg-[#111] border border-white/10 rounded-2xl overflow-hidden shadow-2xl"
+                    className="absolute top-full mt-2 left-0 z-50 w-32 bg-[#111] border border-border rounded-2xl overflow-hidden shadow-2xl"
                   >
                     <div className="max-h-64 overflow-y-auto scrollbar-hide">
                       {YEAR_LIST.map(y => (
                         <button key={y} onClick={() => { setYear(y); setYearOpen(false) }}
                           className={`w-full text-left px-4 py-2 text-sm font-bold transition-colors ${
-                            y === year ? "bg-amber-600/20 text-amber-400" : "text-white/60 hover:text-white hover:bg-white/5"
+                            y === year ? "bg-accent/20 text-accent-bright" : "text-muted hover:text-foreground hover:bg-surface"
                           }`}
                         >
                           {y}
@@ -123,21 +123,21 @@ export default function SeasonalPage() {
 
             <button
               onClick={() => shiftYear(1)} disabled={year >= CURRENT_YEAR}
-              className="p-1.5 rounded-lg text-white/40 hover:text-white hover:bg-white/8 disabled:opacity-20 disabled:cursor-not-allowed transition-all"
+              className="p-1.5 rounded-lg text-muted hover:text-foreground hover:bg-surface disabled:opacity-20 disabled:cursor-not-allowed transition-all"
             >
               <ChevronRight size={16} />
             </button>
           </div>
 
           {/* Season tabs */}
-          <div className="flex items-center gap-1.5 bg-white/4 border border-white/8 rounded-2xl p-1">
+          <div className="flex items-center gap-1.5 bg-white/4 border border-border rounded-2xl p-1">
             {SEASONS.map(s => {
               const m = SEASON_META[s]
               const active = s === season
               return (
                 <button key={s} onClick={() => setSeason(s)}
                   className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${
-                    active ? "bg-white/12 text-white shadow-sm" : "text-white/35 hover:text-white hover:bg-white/6"
+                    active ? "bg-white/12 text-foreground shadow-sm" : "text-subtle hover:text-foreground hover:bg-white/6"
                   }`}
                 >
                   <span>{m.emoji}</span>
@@ -150,11 +150,11 @@ export default function SeasonalPage() {
           {/* Season arrows */}
           <div className="flex items-center gap-1 ml-auto">
             <button onClick={() => shiftSeason(-1)} title="Previous season"
-              className="p-1.5 rounded-lg text-white/40 hover:text-white hover:bg-white/8 transition-all">
+              className="p-1.5 rounded-lg text-muted hover:text-foreground hover:bg-surface transition-all">
               <ChevronLeft size={16} />
             </button>
             <button onClick={() => shiftSeason(1)} title="Next season"
-              className="p-1.5 rounded-lg text-white/40 hover:text-white hover:bg-white/8 transition-all">
+              className="p-1.5 rounded-lg text-muted hover:text-foreground hover:bg-surface transition-all">
               <ChevronRight size={16} />
             </button>
           </div>
@@ -163,14 +163,14 @@ export default function SeasonalPage() {
 
       {/* Season label */}
       <div className="max-w-7xl mx-auto px-6 pt-8 pb-6 flex items-center gap-4">
-        <h2 className="text-3xl font-black tracking-tighter uppercase italic text-white">
+        <h2 className="text-3xl font-black tracking-tighter uppercase italic text-foreground">
           {meta.emoji} {season.charAt(0).toUpperCase() + season.slice(1)} {year}
         </h2>
         <span className={`px-3 py-1 rounded-full border text-[10px] font-black uppercase tracking-widest ${meta.badge}`}>
           {meta.months}
         </span>
         {!isLoading && !isError && (
-          <span className="text-[10px] font-black text-white/25 uppercase tracking-widest ml-auto">
+          <span className="text-[10px] font-black text-subtle uppercase tracking-widest ml-auto">
             {anime.length} titles
           </span>
         )}
@@ -189,24 +189,24 @@ export default function SeasonalPage() {
         )}
 
         {isError && !isLoading && (
-          <div className="py-32 text-center border border-dashed border-white/5 rounded-[3rem]">
-            <p className="text-white/25 font-black uppercase tracking-widest text-xs mb-4">
+          <div className="py-32 text-center border border-dashed border-border rounded-[3rem]">
+            <p className="text-subtle font-black uppercase tracking-widest text-xs mb-4">
               Could not load {season} {year}
             </p>
             <button onClick={() => refetch()}
-              className="text-xs text-amber-400 hover:text-amber-300 font-black uppercase tracking-widest">
+              className="text-xs text-accent-bright hover:text-accent-bright font-black uppercase tracking-widest">
               Retry
             </button>
           </div>
         )}
 
         {!isLoading && !isError && anime.length === 0 && (
-          <div className="py-32 text-center border border-dashed border-white/5 rounded-[3rem]">
+          <div className="py-32 text-center border border-dashed border-border rounded-[3rem]">
             <p className="text-5xl mb-4">{meta.emoji}</p>
-            <p className="text-white/20 font-black uppercase tracking-widest text-xs">
+            <p className="text-subtle font-black uppercase tracking-widest text-xs">
               No anime archived for {season} {year}
             </p>
-            <p className="text-white/10 text-[10px] mt-2">Try an adjacent season or year</p>
+            <p className="text-subtle text-[10px] mt-2">Try an adjacent season or year</p>
           </div>
         )}
 
@@ -229,17 +229,17 @@ export default function SeasonalPage() {
                       <img src={a.image} alt={a.title} loading="lazy"
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center text-white/10 text-4xl font-black">
+                      <div className="w-full h-full flex items-center justify-center text-subtle text-4xl font-black">
                         {a.title[0]}
                       </div>
                     )}
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-3">
                       {a.rating > 0 && (
-                        <span className="text-[10px] font-black text-amber-400">★ {a.rating.toFixed(1)}</span>
+                        <span className="text-[10px] font-black text-accent-bright">★ {a.rating.toFixed(1)}</span>
                       )}
                     </div>
                     {a.rating >= 8.0 && (
-                      <div className="absolute top-2 right-2 px-2 py-0.5 rounded-full bg-amber-500/90 text-[8px] font-black text-black">
+                      <div className="absolute top-2 right-2 px-2 py-0.5 rounded-full bg-accent/90 text-[8px] font-black text-black">
                         {a.rating.toFixed(1)}
                       </div>
                     )}
@@ -251,11 +251,11 @@ export default function SeasonalPage() {
                     )}
                   </div>
                   <div className="mt-2.5 px-0.5">
-                    <p className="text-[11px] font-bold text-white/80 leading-tight line-clamp-2 group-hover:text-white transition-colors">
+                    <p className="text-[11px] font-bold text-muted leading-tight line-clamp-2 group-hover:text-foreground transition-colors">
                       {a.title}
                     </p>
                     {a.studio !== "Unknown" && (
-                      <p className="text-[9px] text-white/25 mt-0.5 truncate">{a.studio}</p>
+                      <p className="text-[9px] text-subtle mt-0.5 truncate">{a.studio}</p>
                     )}
                   </div>
                 </motion.div>

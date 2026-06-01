@@ -47,15 +47,15 @@ function ActivityRow({ a }: { a: PlatformActivity }) {
       animate={{ opacity: 1, y: 0, scale: 1 }}
       exit={{ opacity: 0, x: -16, scale: 0.96 }}
       transition={{ type: "spring", stiffness: 360, damping: 28 }}
-      className="flex items-center gap-2.5 px-3 py-1.5 rounded-full border border-white/8 bg-white/[0.02] hover:bg-white/[0.05] transition-colors whitespace-nowrap"
+      className="flex items-center gap-2.5 px-3 py-1.5 rounded-full border border-border bg-surface hover:bg-surface transition-colors whitespace-nowrap"
     >
-      <Icon size={11} className="text-amber-400 shrink-0" />
-      <Link href={`/u/${a.actor.username}`} className="text-[11px] font-black text-white hover:text-amber-300 transition-colors">
+      <Icon size={11} className="text-accent-bright shrink-0" />
+      <Link href={`/u/${a.actor.username}`} className="text-[11px] font-black text-foreground hover:text-accent-bright transition-colors">
         {a.actor.displayName ?? a.actor.username}
       </Link>
-      <span className="text-[11px] text-white/40">{verb}</span>
+      <span className="text-[11px] text-muted">{verb}</span>
       {a.target && (
-        <Link href={targetHref} className="text-[11px] font-bold text-amber-300/80 hover:text-amber-200 transition-colors max-w-[180px] truncate">
+        <Link href={targetHref} className="text-[11px] font-bold text-accent-bright/80 hover:text-amber-200 transition-colors max-w-[180px] truncate">
           {a.target.label}
         </Link>
       )}

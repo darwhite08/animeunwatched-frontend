@@ -27,7 +27,7 @@ const AiringTodayCard     = lazy(() => import("@/components/dashboard/cards/Airi
 const InviteFriendsCard   = lazy(() => import("@/components/dashboard/cards/InviteFriendsCard"))
 
 function CardSkeleton({ h = "h-48" }: { h?: string }) {
-  return <div className={`${h} rounded-[2.5rem] bg-white/[0.02] border border-white/5 animate-pulse`} />
+  return <div className={`${h} rounded-[2.5rem] bg-surface border border-border animate-pulse`} />
 }
 
 /* ── Streak card extracted as proper component (not IIFE — avoids render crash) ── */
@@ -56,7 +56,7 @@ function StreakBento({ reputation }: { reputation: number }) {
           <Flame size={180} />
         </div>
         <div className="flex justify-between items-center mb-12 relative z-10">
-          <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/30">Current Momentum</h4>
+          <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-subtle">Current Momentum</h4>
           <div className="flex items-center gap-2">
             {isAtRisk && streak > 0 && (
               <motion.span
@@ -70,19 +70,19 @@ function StreakBento({ reputation }: { reputation: number }) {
             <div className="p-2 rounded-lg bg-orange-500/10 text-orange-500"><Flame size={20} /></div>
           </div>
         </div>
-        <p className="text-8xl font-black tracking-tighter relative z-10 text-white">
-          {streak}<span className="text-xl text-white/20 ml-2 italic font-medium">Days</span>
+        <p className="text-8xl font-black tracking-tighter relative z-10 text-foreground">
+          {streak}<span className="text-xl text-subtle ml-2 italic font-medium">Days</span>
         </p>
         {isAtRisk && streak > 0 && (
           <p className="text-xs text-red-400/70 font-bold relative z-10 mt-2">
             Log an episode today to keep your streak alive →
           </p>
         )}
-        <div className="mt-4 h-2 w-full bg-white/5 rounded-full overflow-hidden relative z-10">
+        <div className="mt-4 h-2 w-full bg-surface rounded-full overflow-hidden relative z-10">
           <motion.div
             initial={{ width: 0 }}
             animate={{ width: `${pct}%` }}
-            className={`h-full shadow-[0_0_20px_rgba(249,115,22,0.4)] ${isAtRisk ? "bg-gradient-to-r from-red-600 to-orange-500" : "bg-gradient-to-r from-orange-600 to-amber-400"}`}
+            className={`h-full shadow-[0_0_20px_rgba(249,115,22,0.4)] ${isAtRisk ? "bg-gradient-to-r from-red-600 to-orange-500" : "bg-gradient-to-r from-orange-600 to-accent-bright"}`}
           />
         </div>
       </motion.div>
@@ -96,9 +96,9 @@ function HeaderMetric({ label, value, icon: Icon, color }: {
 }) {
   return (
     <div className="text-right flex flex-col items-end">
-      <div className={`p-2 rounded-xl bg-white/5 mb-2 ${color}`}><Icon size={18} /></div>
-      <p className="text-3xl font-black text-white leading-none tracking-tighter">{value}</p>
-      <p className="text-[10px] font-bold text-white/20 uppercase tracking-widest mt-1">{label}</p>
+      <div className={`p-2 rounded-xl bg-surface mb-2 ${color}`}><Icon size={18} /></div>
+      <p className="text-3xl font-black text-foreground leading-none tracking-tighter">{value}</p>
+      <p className="text-[10px] font-bold text-subtle uppercase tracking-widest mt-1">{label}</p>
     </div>
   )
 }
@@ -113,7 +113,7 @@ function QuickCard({ href, icon: Icon, label, color, iconColor }: {
       <div className={`w-10 h-10 rounded-xl bg-black/30 flex items-center justify-center ${iconColor}`}>
         <Icon size={20} />
       </div>
-      <p className="text-sm font-black text-white/80 group-hover:text-white transition-colors">{label}</p>
+      <p className="text-sm font-black text-muted group-hover:text-foreground transition-colors">{label}</p>
     </Link>
   )
 }
@@ -132,18 +132,18 @@ export default function DashboardPage() {
   if (!sessionReady) {
     return (
       <div className="max-w-[1400px] mx-auto px-6 py-10 space-y-8 pb-32">
-        <div className="h-40 rounded-[2.5rem] bg-white/[0.02] border border-white/5 animate-pulse" />
+        <div className="h-40 rounded-[2.5rem] bg-surface border border-border animate-pulse" />
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           <div className="lg:col-span-8 space-y-6">
-            <div className="h-40 rounded-[2.5rem] bg-white/[0.02] border border-white/5 animate-pulse" />
+            <div className="h-40 rounded-[2.5rem] bg-surface border border-border animate-pulse" />
             <div className="grid md:grid-cols-2 gap-6">
-              <div className="h-64 rounded-[2.5rem] bg-white/[0.02] border border-white/5 animate-pulse" />
-              <div className="h-64 rounded-[2.5rem] bg-white/[0.02] border border-white/5 animate-pulse" />
+              <div className="h-64 rounded-[2.5rem] bg-surface border border-border animate-pulse" />
+              <div className="h-64 rounded-[2.5rem] bg-surface border border-border animate-pulse" />
             </div>
           </div>
           <div className="lg:col-span-4 space-y-6">
-            <div className="h-80 rounded-[2.5rem] bg-white/[0.02] border border-white/5 animate-pulse" />
-            <div className="h-48 rounded-[2.5rem] bg-white/[0.02] border border-white/5 animate-pulse" />
+            <div className="h-80 rounded-[2.5rem] bg-surface border border-border animate-pulse" />
+            <div className="h-48 rounded-[2.5rem] bg-surface border border-border animate-pulse" />
           </div>
         </div>
       </div>
@@ -176,7 +176,7 @@ export default function DashboardPage() {
               <Crown size={14} className="animate-pulse" />
               Neural Link Active • {grade}
             </motion.div>
-            <h1 className="text-5xl lg:text-6xl font-black tracking-tighter text-white leading-none">
+            <h1 className="text-5xl lg:text-6xl font-black tracking-tighter text-foreground leading-none">
               Welcome,{" "}
               <span className="italic" style={{
                 backgroundImage: "linear-gradient(135deg, #fbbf24, #f59e0b, #ffffff)",
@@ -187,12 +187,12 @@ export default function DashboardPage() {
             </h1>
           </div>
 
-          <div className="flex items-center gap-6 border-l border-white/10 pl-8">
-            <HeaderMetric label="Reputation" value={String(rep)} icon={Zap}       color="text-amber-400"  />
-            <HeaderMetric label="Level"      value={String(level)} icon={TrendingUp} color="text-amber-400" />
+          <div className="flex items-center gap-6 border-l border-border pl-8">
+            <HeaderMetric label="Reputation" value={String(rep)} icon={Zap}       color="text-accent-bright"  />
+            <HeaderMetric label="Level"      value={String(level)} icon={TrendingUp} color="text-accent-bright" />
             <Link href="/notifications"
-              className="p-3 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all">
-              <Bell size={18} className="text-white/60" />
+              className="p-3 rounded-2xl bg-surface border border-border hover:bg-surface transition-all">
+              <Bell size={18} className="text-muted" />
             </Link>
           </div>
         </div>
@@ -265,12 +265,12 @@ export default function DashboardPage() {
 
       {/* ── QUICK ACCESS ── */}
       <div>
-        <p className="text-[9px] font-mono font-black uppercase tracking-[0.4em] text-white/20 mb-4">Quick Access</p>
+        <p className="text-[9px] font-mono font-black uppercase tracking-[0.4em] text-subtle mb-4">Quick Access</p>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           <QuickCard href="/clubs"           icon={Users} label="Browse Clubs"
             color="from-violet-600/20 to-violet-900/5 border-violet-500/20 hover:border-violet-500/50" iconColor="text-violet-400" />
           <QuickCard href="/profile#reviews" icon={Star}  label="My Reviews"
-            color="from-amber-600/20 to-amber-900/5 border-amber-500/20 hover:border-amber-500/50"   iconColor="text-amber-400" />
+            color="from-accent/20 to-amber-900/5 border-accent/20 hover:border-accent/50"   iconColor="text-accent-bright" />
         </div>
       </div>
 

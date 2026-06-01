@@ -25,7 +25,7 @@ export default function WrappedBanner() {
           initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, height: 0, marginBottom: 0 }}
-          className="relative flex items-center justify-between gap-4 p-4 rounded-2xl bg-gradient-to-r from-indigo-600/20 to-violet-600/15 border border-amber-500/25 mb-6"
+          className="relative flex items-center justify-between gap-4 p-4 rounded-2xl bg-gradient-to-r from-indigo-600/20 to-violet-600/15 border border-accent/25 mb-6"
         >
           {/* Shimmer */}
           <motion.div
@@ -37,11 +37,11 @@ export default function WrappedBanner() {
           <div className="flex items-center gap-3 relative z-10">
             <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
               style={{ background: "rgba(245,158,11,0.2)", border: "1px solid rgba(245,158,11,0.3)" }}>
-              <Sparkles size={16} className="text-amber-400" />
+              <Sparkles size={16} className="text-accent-bright" />
             </div>
             <div>
-              <p className="text-sm font-black text-white">Your 2024 Anime Wrapped is ready 🎉</p>
-              <p className="text-[10px] text-white/40 mt-0.5">See your year in anime — top shows, stats, badges, and more</p>
+              <p className="text-sm font-black text-foreground">Your 2024 Anime Wrapped is ready 🎉</p>
+              <p className="text-[10px] text-muted mt-0.5">See your year in anime — top shows, stats, badges, and more</p>
             </div>
           </div>
 
@@ -53,7 +53,7 @@ export default function WrappedBanner() {
             >
               See Wrapped
             </Link>
-            <button onClick={dismiss} className="p-1.5 text-white/30 hover:text-white transition-colors">
+            <button onClick={dismiss} className="p-1.5 text-subtle hover:text-foreground transition-colors">
               <X size={14} />
             </button>
           </div>

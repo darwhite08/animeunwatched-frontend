@@ -27,7 +27,7 @@ export default function CategoryTabs({ active, onChange }: CategoryTabsProps) {
             />
           )}
           <span className={`relative z-10 text-[11px] font-black uppercase tracking-widest transition-colors duration-300 ${
-            active === cat.id ? "text-white" : "text-white/40 group-hover:text-white/70"
+            active === cat.id ? "text-foreground" : "text-muted group-hover:text-muted"
           }`}>
             {cat.label}
           </span>

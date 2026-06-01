@@ -107,25 +107,25 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
               exit={{ scale: 0.96, y: -16, opacity: 0 }}
               transition={{ type: "spring", damping: 22, stiffness: 320 }}
               onClick={e => e.stopPropagation()}
-              className="w-full max-w-2xl bg-[#0c0c0c]/95 backdrop-blur-3xl rounded-3xl border border-white/10 shadow-[0_30px_100px_rgba(0,0,0,0.8)] overflow-hidden"
+              className="w-full max-w-2xl bg-[#0c0c0c]/95 backdrop-blur-3xl rounded-3xl border border-border shadow-[0_30px_100px_rgba(0,0,0,0.8)] overflow-hidden"
             >
               {/* Input */}
-              <div className="flex items-center gap-4 px-6 py-4 border-b border-white/5">
-                <MagnifyingGlass size={20} weight="bold" className={`shrink-0 transition-colors ${query ? "text-amber-400" : "text-white/30"}`} />
+              <div className="flex items-center gap-4 px-6 py-4 border-b border-border">
+                <MagnifyingGlass size={20} weight="bold" className={`shrink-0 transition-colors ${query ? "text-accent-bright" : "text-subtle"}`} />
                 <input
                   ref={inputRef}
                   value={query}
                   onChange={e => setQuery(e.target.value)}
                   onKeyDown={handleKeyDown}
                   placeholder="Search anime, genres, or tags…"
-                  className="flex-1 bg-transparent border-none outline-none text-lg font-medium text-white placeholder:text-white/20"
+                  className="flex-1 bg-transparent border-none outline-none text-lg font-medium text-foreground placeholder:text-subtle"
                 />
                 {query ? (
-                  <button onClick={() => setQuery("")} className="text-white/30 hover:text-white transition-colors">
+                  <button onClick={() => setQuery("")} className="text-subtle hover:text-foreground transition-colors">
                     <X size={16} />
                   </button>
                 ) : (
-                  <div className="flex items-center gap-1 px-2 py-1 rounded-md bg-white/5 border border-white/10 text-[9px] font-black text-white/20 uppercase tracking-tighter shrink-0">
+                  <div className="flex items-center gap-1 px-2 py-1 rounded-md bg-surface border border-border text-[9px] font-black text-subtle uppercase tracking-tighter shrink-0">
                     ⌘ K
                   </div>
                 )}
@@ -136,40 +136,40 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                 {!query.trim() ? (
                   <>
                     {/* Quick actions */}
-                    <p className="px-4 py-2 text-[9px] font-black text-amber-400 uppercase tracking-[0.2em]">Quick Navigate</p>
+                    <p className="px-4 py-2 text-[9px] font-black text-accent-bright uppercase tracking-[0.2em]">Quick Navigate</p>
                     <div className="space-y-0.5 mb-3">
                       {QUICK_ACTIONS.map((item, i) => (
                         <a
                           key={item.label}
                           href={item.href}
                           onClick={onClose}
-                          className={`group flex items-center justify-between px-4 py-3 rounded-xl hover:bg-white/5 cursor-pointer transition-all ${cursor === i ? "bg-white/5" : ""}`}
+                          className={`group flex items-center justify-between px-4 py-3 rounded-xl hover:bg-surface cursor-pointer transition-all ${cursor === i ? "bg-surface" : ""}`}
                         >
-                          <div className="flex items-center gap-3 text-white/50 group-hover:text-white">
-                            <item.icon size={14} className="text-amber-500/70 group-hover:text-amber-400" />
+                          <div className="flex items-center gap-3 text-muted group-hover:text-foreground">
+                            <item.icon size={14} className="text-accent/70 group-hover:text-accent-bright" />
                             <span className="text-sm font-bold uppercase tracking-tight">{item.label}</span>
                           </div>
-                          <span className="text-[9px] font-mono text-white/10 group-hover:text-white/30">{item.cmd}</span>
+                          <span className="text-[9px] font-mono text-subtle group-hover:text-subtle">{item.cmd}</span>
                         </a>
                       ))}
                     </div>
 
                     {/* Recent / trending */}
-                    <p className="px-4 py-2 text-[9px] font-black text-white/20 uppercase tracking-[0.2em]">Neural Trending</p>
+                    <p className="px-4 py-2 text-[9px] font-black text-subtle uppercase tracking-[0.2em]">Neural Trending</p>
                     <div className="space-y-0.5">
                       {RECENT.map((term, i) => (
                         <button
                           key={term}
                           onClick={() => setQuery(term)}
-                          className={`group w-full flex items-center justify-between px-4 py-3 rounded-xl hover:bg-amber-600/10 transition-all border border-transparent hover:border-amber-500/20 ${cursor === QUICK_ACTIONS.length + i ? "bg-amber-600/10 border-amber-500/20" : ""}`}
+                          className={`group w-full flex items-center justify-between px-4 py-3 rounded-xl hover:bg-accent/10 transition-all border border-transparent hover:border-accent/20 ${cursor === QUICK_ACTIONS.length + i ? "bg-accent/10 border-accent/20" : ""}`}
                         >
                           <div className="flex items-center gap-3">
-                            <div className="h-7 w-7 rounded-lg bg-white/5 flex items-center justify-center text-white/20 group-hover:text-amber-400">
+                            <div className="h-7 w-7 rounded-lg bg-surface flex items-center justify-center text-subtle group-hover:text-accent-bright">
                               <ArrowRight size={12} />
                             </div>
-                            <span className="text-sm font-bold uppercase tracking-tight text-white/40 group-hover:text-white transition-colors">{term}</span>
+                            <span className="text-sm font-bold uppercase tracking-tight text-muted group-hover:text-foreground transition-colors">{term}</span>
                           </div>
-                          <span className="text-[9px] font-black text-amber-500 italic opacity-0 group-hover:opacity-100">Search</span>
+                          <span className="text-[9px] font-black text-accent italic opacity-0 group-hover:opacity-100">Search</span>
                         </button>
                       ))}
                     </div>
@@ -178,7 +178,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                   <>
                     {results.length > 0 && (
                       <>
-                        <p className="px-4 py-2 text-[9px] font-black text-white/20 uppercase tracking-[0.2em]">
+                        <p className="px-4 py-2 text-[9px] font-black text-subtle uppercase tracking-[0.2em]">
                           {results.length} Archive{results.length !== 1 ? "s" : ""} Found
                         </p>
                         <div className="space-y-0.5">
@@ -186,20 +186,20 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                             <button
                               key={anime.id}
                               onClick={() => setSelectedAnime(anime)}
-                              className={`group w-full flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-white/5 transition-all text-left ${cursor === i ? "bg-white/5" : ""}`}
+                              className={`group w-full flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-surface transition-all text-left ${cursor === i ? "bg-surface" : ""}`}
                             >
-                              <div className="relative h-10 w-8 shrink-0 rounded-lg overflow-hidden bg-white/10">
+                              <div className="relative h-10 w-8 shrink-0 rounded-lg overflow-hidden bg-surface">
                                 {anime.image && <img src={anime.image} alt={anime.title} className="w-full h-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = "none" }} />}
                               </div>
                               <div className="flex-1 min-w-0">
-                                <p className="text-sm font-black text-white/80 group-hover:text-white truncate uppercase tracking-tight">
+                                <p className="text-sm font-black text-muted group-hover:text-foreground truncate uppercase tracking-tight">
                                   {anime.title}
                                 </p>
-                                <p className="text-[9px] text-white/30 uppercase tracking-wider">
+                                <p className="text-[9px] text-subtle uppercase tracking-wider">
                                   {anime.year} · {anime.type} · ★ {anime.rating}
                                 </p>
                               </div>
-                              <span className="text-[9px] font-black text-amber-500 italic opacity-0 group-hover:opacity-100 shrink-0">Open</span>
+                              <span className="text-[9px] font-black text-accent italic opacity-0 group-hover:opacity-100 shrink-0">Open</span>
                             </button>
                           ))}
                         </div>
@@ -207,21 +207,21 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                     )}
                     {userSuggestions.length > 0 && (
                       <>
-                        <p className="px-4 py-2 mt-2 text-[9px] font-black text-white/20 uppercase tracking-[0.2em]">Users</p>
+                        <p className="px-4 py-2 mt-2 text-[9px] font-black text-subtle uppercase tracking-[0.2em]">Users</p>
                         <div className="space-y-0.5">
                           {userSuggestions.map(u => (
                             <a
                               key={u.username}
                               href={`/u/${u.username}`}
                               onClick={onClose}
-                              className="group w-full flex items-center gap-3 px-4 py-2.5 rounded-xl hover:bg-white/5 transition-all"
+                              className="group w-full flex items-center gap-3 px-4 py-2.5 rounded-xl hover:bg-surface transition-all"
                             >
                               <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-xs font-black shrink-0">
                                 {u.displayName[0]}
                               </div>
                               <div>
-                                <p className="text-sm font-black text-white/70 group-hover:text-white">{u.displayName}</p>
-                                <p className="text-[9px] text-white/30">@{u.username}</p>
+                                <p className="text-sm font-black text-muted group-hover:text-foreground">{u.displayName}</p>
+                                <p className="text-[9px] text-subtle">@{u.username}</p>
                               </div>
                             </a>
                           ))}
@@ -231,19 +231,19 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                   </>
                 ) : (
                   <div className="py-10 text-center">
-                    <p className="text-white/20 text-xs font-black uppercase tracking-widest">No archives matched</p>
+                    <p className="text-subtle text-xs font-black uppercase tracking-widest">No archives matched</p>
                   </div>
                 )}
               </div>
 
               {/* Footer */}
-              <div className="px-6 py-3 border-t border-white/5 bg-black/30 flex items-center justify-between">
-                <div className="flex gap-4 text-[9px] font-black text-white/10 uppercase tracking-widest">
+              <div className="px-6 py-3 border-t border-border bg-black/30 flex items-center justify-between">
+                <div className="flex gap-4 text-[9px] font-black text-subtle uppercase tracking-widest">
                   <span>↑↓ navigate</span>
                   <span>↵ open</span>
                   <span>esc close</span>
                 </div>
-                <div className="text-[9px] font-black text-amber-500/40 uppercase tracking-widest animate-pulse">
+                <div className="text-[9px] font-black text-accent/40 uppercase tracking-widest animate-pulse">
                   {query ? `${results.length} matches` : "Neural_Link_Ready"}
                 </div>
               </div>

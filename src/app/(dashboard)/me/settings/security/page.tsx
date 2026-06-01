@@ -84,8 +84,8 @@ const LOGIN_HISTORY: LoginEntry[] = [
 /* ── Shared primitives ── */
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/8 space-y-5">
-      <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40">{title}</h2>
+    <div className="p-6 rounded-2xl bg-surface border border-border space-y-5">
+      <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-muted">{title}</h2>
       {children}
     </div>
   )
@@ -106,7 +106,7 @@ function PasswordField({
 
   return (
     <div>
-      <label className="block text-[10px] font-black uppercase tracking-[0.2em] text-white/35 mb-1.5">
+      <label className="block text-[10px] font-black uppercase tracking-[0.2em] text-subtle mb-1.5">
         {label}
       </label>
       <div className="relative">
@@ -115,12 +115,12 @@ function PasswordField({
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder ?? "••••••••"}
-          className="w-full rounded-xl bg-black/40 border border-white/10 pl-4 pr-11 py-3 text-sm text-white placeholder:text-white/20 outline-none focus:border-amber-500/50 transition-colors"
+          className="w-full rounded-xl bg-black/40 border border-border pl-4 pr-11 py-3 text-sm text-foreground placeholder:text-subtle outline-none focus:border-accent/50 transition-colors"
         />
         <button
           type="button"
           onClick={() => setShow((s) => !s)}
-          className="absolute right-3 top-1/2 -translate-y-1/2 text-white/25 hover:text-white/60 transition-colors"
+          className="absolute right-3 top-1/2 -translate-y-1/2 text-subtle hover:text-muted transition-colors"
         >
           {show ? <EyeOff size={14} /> : <Eye size={14} />}
         </button>
@@ -151,32 +151,32 @@ function ActiveSessions({
               transition={{ delay: i * 0.07 }}
               className={`flex items-center gap-4 p-4 rounded-xl border transition-all ${
                 session.isCurrent
-                  ? "bg-amber-500/8 border-amber-500/20"
-                  : "bg-white/[0.015] border-white/8 hover:border-white/15"
+                  ? "bg-accent/8 border-accent/20"
+                  : "bg-white/[0.015] border-border hover:border-border"
               }`}
             >
               <div
                 className={`h-10 w-10 rounded-xl flex items-center justify-center shrink-0 ${
-                  session.isCurrent ? "bg-amber-500/15" : "bg-white/5"
+                  session.isCurrent ? "bg-accent/15" : "bg-surface"
                 }`}
               >
                 <Icon
                   size={16}
-                  className={session.isCurrent ? "text-amber-400" : "text-white/30"}
+                  className={session.isCurrent ? "text-accent-bright" : "text-subtle"}
                 />
               </div>
 
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 flex-wrap">
-                  <p className="text-sm font-black text-white">{session.label}</p>
+                  <p className="text-sm font-black text-foreground">{session.label}</p>
                   {session.isCurrent && (
                     <span className="px-2 py-0.5 rounded-full bg-emerald-500/15 border border-emerald-500/25 text-[8px] font-black uppercase tracking-widest text-emerald-400">
                       This Device
                     </span>
                   )}
                 </div>
-                <p className="text-[10px] text-white/35 mt-0.5">{session.device}</p>
-                <div className="flex items-center gap-3 mt-1 text-[9px] text-white/25">
+                <p className="text-[10px] text-subtle mt-0.5">{session.device}</p>
+                <div className="flex items-center gap-3 mt-1 text-[9px] text-subtle">
                   <span className="flex items-center gap-1">
                     <Globe size={8} /> {session.location}
                   </span>
@@ -247,7 +247,7 @@ function PasswordChange() {
         <button
           onClick={handleSave}
           disabled={saving}
-          className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-xs font-black uppercase tracking-widest text-white transition-all disabled:opacity-50"
+          className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-accent hover:bg-accent-bright text-xs font-black uppercase tracking-widest text-foreground transition-all disabled:opacity-50"
         >
           {saving ? <Loader2 size={13} className="animate-spin" /> : <Key size={13} />}
           {saving ? "Updating…" : "Update Password"}
@@ -261,18 +261,18 @@ function PasswordChange() {
 function TwoFactor() {
   return (
     <Section title="Two-Factor Authentication">
-      <div className="flex items-start gap-4 p-5 rounded-xl bg-amber-500/5 border border-amber-500/15">
-        <div className="h-10 w-10 shrink-0 rounded-xl bg-amber-500/15 flex items-center justify-center">
-          <Lock size={16} className="text-amber-400" />
+      <div className="flex items-start gap-4 p-5 rounded-xl bg-accent/5 border border-accent/15">
+        <div className="h-10 w-10 shrink-0 rounded-xl bg-accent/15 flex items-center justify-center">
+          <Lock size={16} className="text-accent-bright" />
         </div>
         <div>
-          <p className="text-sm font-black text-white uppercase italic tracking-tighter">
+          <p className="text-sm font-black text-foreground uppercase italic tracking-tighter">
             Coming Soon — 2FA launching Q3 2026
           </p>
-          <p className="text-xs text-white/35 mt-1 leading-relaxed max-w-sm">
+          <p className="text-xs text-subtle mt-1 leading-relaxed max-w-sm">
             Authenticator app and SMS-based two-factor authentication are in active development. You will receive a notification when it rolls out.
           </p>
-          <span className="mt-3 inline-block px-3 py-1 rounded-full bg-amber-500/15 border border-amber-500/25 text-[9px] font-black uppercase tracking-widest text-amber-400">
+          <span className="mt-3 inline-block px-3 py-1 rounded-full bg-accent/15 border border-accent/25 text-[9px] font-black uppercase tracking-widest text-accent-bright">
             Q3 2026
           </span>
         </div>
@@ -309,12 +309,12 @@ function LoginHistory({ entries }: { entries: LoginEntry[] }) {
             </div>
 
             <div className="flex-1 min-w-0">
-              <p className="text-xs font-bold text-white/75">{entry.device}</p>
-              <p className="text-[9px] text-white/30 mt-0.5">{entry.timestamp}</p>
+              <p className="text-xs font-bold text-muted">{entry.device}</p>
+              <p className="text-[9px] text-subtle mt-0.5">{entry.timestamp}</p>
             </div>
 
             <div className="text-right shrink-0">
-              <span className="font-mono text-[9px] text-white/25">{entry.ip}</span>
+              <span className="font-mono text-[9px] text-subtle">{entry.ip}</span>
               <p
                 className={`text-[9px] font-black uppercase tracking-widest mt-0.5 ${
                   entry.status === "success" ? "text-emerald-400/70" : "text-red-400/70"
@@ -346,8 +346,8 @@ function DangerZone({ onLogoutAll }: { onLogoutAll: () => void }) {
             className="flex items-center justify-between gap-4 p-5 rounded-xl border border-red-500/15 bg-red-500/5"
           >
             <div>
-              <p className="text-sm font-black text-white">Logout All Other Devices</p>
-              <p className="text-xs text-white/35 mt-0.5">
+              <p className="text-sm font-black text-foreground">Logout All Other Devices</p>
+              <p className="text-xs text-subtle mt-0.5">
                 Revoke all active sessions except this browser.
               </p>
             </div>
@@ -368,23 +368,23 @@ function DangerZone({ onLogoutAll }: { onLogoutAll: () => void }) {
           >
             <div className="flex items-center gap-2">
               <AlertTriangle size={16} className="text-red-400 shrink-0" />
-              <p className="text-sm font-black text-white uppercase italic">
+              <p className="text-sm font-black text-foreground uppercase italic">
                 Are you absolutely sure?
               </p>
             </div>
-            <p className="text-xs text-white/40 leading-relaxed">
+            <p className="text-xs text-muted leading-relaxed">
               All sessions except your current browser will be immediately invalidated. Any unsaved work in other tabs will be lost.
             </p>
             <div className="flex gap-3">
               <button
                 onClick={() => { onLogoutAll(); setConfirm(false) }}
-                className="flex-1 py-2.5 rounded-xl bg-red-600 hover:bg-red-500 text-xs font-black uppercase tracking-widest text-white transition-colors"
+                className="flex-1 py-2.5 rounded-xl bg-red-600 hover:bg-red-500 text-xs font-black uppercase tracking-widest text-foreground transition-colors"
               >
                 Yes, Logout All
               </button>
               <button
                 onClick={() => setConfirm(false)}
-                className="flex-1 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 text-xs font-bold text-white/50 transition-colors"
+                className="flex-1 py-2.5 rounded-xl bg-surface hover:bg-surface text-xs font-bold text-muted transition-colors"
               >
                 Cancel
               </button>
@@ -427,14 +427,14 @@ export default function SecuritySettingsPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <p className="text-[9px] font-mono font-black uppercase tracking-[0.4em] text-amber-400/60 mb-2">
+        <p className="text-[9px] font-mono font-black uppercase tracking-[0.4em] text-accent-bright/60 mb-2">
           Settings · Security
         </p>
-        <h1 className="text-4xl font-black tracking-tighter text-white uppercase italic leading-none">
+        <h1 className="text-4xl font-black tracking-tighter text-foreground uppercase italic leading-none">
           Security<br />Settings
         </h1>
-        <p className="text-xs text-white/30 mt-2 flex items-center gap-2">
-          <Shield size={11} className="text-amber-400" />
+        <p className="text-xs text-subtle mt-2 flex items-center gap-2">
+          <Shield size={11} className="text-accent-bright" />
           Manage sessions, passwords, and account access.
         </p>
       </motion.div>

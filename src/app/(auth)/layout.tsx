@@ -39,7 +39,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
 
   // Bootstrap done: not authenticated → show the login/register page
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen bg-background">
       {children}
     </div>
   )

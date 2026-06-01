@@ -12,9 +12,9 @@ const FEATURES = [
     tags: ["Predictive_Scoring", "DNA_Mapping", "Seasonal_Forecast"],
     icon: Sparkles,
     glow: "group-hover:shadow-[0_0_60px_-15px_rgba(99,102,241,0.4)]",
-    border: "group-hover:border-amber-500/50",
+    border: "group-hover:border-accent/50",
     gradient: "from-indigo-500/20 via-indigo-500/5 to-transparent",
-    iconColor: "text-amber-400",
+    iconColor: "text-accent-bright",
     span: "md:col-span-8",
   },
   {
@@ -57,7 +57,7 @@ const FEATURES = [
 
 export default function LandingFeatures() {
   return (
-    <section className="relative py-40 px-6 w-full flex flex-col items-center justify-center overflow-hidden bg-[#020202]">
+    <section className="relative py-40 px-6 w-full flex flex-col items-center justify-center overflow-hidden bg-background">
       
       {/* 1. BACKGROUND ARCHITECTURE */}
       <div className="absolute inset-0 pointer-events-none">
@@ -75,7 +75,7 @@ export default function LandingFeatures() {
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-[10px] font-black uppercase tracking-[0.4em] text-white/60"
+              className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-surface border border-border text-[10px] font-black uppercase tracking-[0.4em] text-muted"
             >
               <Terminal size={14} className="text-emerald-500" /> System Capabilities // v4.0
             </motion.div>
@@ -84,7 +84,7 @@ export default function LandingFeatures() {
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-5xl md:text-7xl lg:text-[6.5rem] font-black tracking-tighter text-white leading-[0.85] uppercase italic"
+              className="text-5xl md:text-7xl lg:text-[6.5rem] font-black tracking-tighter text-foreground leading-[0.85] uppercase italic"
             >
               Engineered for <br />
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-indigo-500 drop-shadow-[0_0_30px_rgba(99,102,241,0.2)]">
@@ -98,7 +98,7 @@ export default function LandingFeatures() {
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="text-white/40 text-lg font-medium leading-relaxed max-w-sm uppercase tracking-tight"
+            className="text-muted text-lg font-medium leading-relaxed max-w-sm uppercase tracking-tight"
           >
             We’ve stripped away the noise of traditional trackers to build a high-fidelity protocol for true enthusiasts.
           </motion.p>
@@ -113,7 +113,7 @@ export default function LandingFeatures() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1, duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
-              className={`group relative p-8 md:p-12 rounded-[2.5rem] bg-[#0a0a0a] border border-white/5 overflow-hidden transition-all duration-700 w-full ${f.border} ${f.glow}`}
+              className={`group relative p-8 md:p-12 rounded-[2.5rem] bg-surface border border-border overflow-hidden transition-all duration-700 w-full ${f.border} ${f.glow}`}
             >
               {/* Internal Holographic Glow */}
               <div className={`absolute inset-0 bg-gradient-to-br ${f.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none`} />
@@ -125,10 +125,10 @@ export default function LandingFeatures() {
                 
                 {/* Header: ID + Icon */}
                 <div className="flex justify-between items-start">
-                  <span className="text-[10px] font-mono font-black text-white/20 group-hover:text-white/60 tracking-[0.2em] transition-colors">
+                  <span className="text-[10px] font-mono font-black text-subtle group-hover:text-muted tracking-[0.2em] transition-colors">
                     [{f.id}]
                   </span>
-                  <div className={`p-4 rounded-2xl bg-white/5 border border-white/5 group-hover:bg-black group-hover:border-transparent transition-all duration-500 transform group-hover:scale-110 group-hover:rotate-3 ${f.iconColor}`}>
+                  <div className={`p-4 rounded-2xl bg-surface border border-border group-hover:bg-background group-hover:border-transparent transition-all duration-500 transform group-hover:scale-110 group-hover:rotate-3 ${f.iconColor}`}>
                     <f.icon size={28} strokeWidth={2} />
                   </div>
                 </div>
@@ -136,10 +136,10 @@ export default function LandingFeatures() {
                 {/* Content */}
                 <div className="space-y-6">
                   <div className="space-y-4">
-                    <h3 className="text-3xl md:text-4xl font-black tracking-tighter text-white uppercase italic group-hover:translate-x-2 transition-transform duration-500">
+                    <h3 className="text-3xl md:text-4xl font-black tracking-tighter text-foreground uppercase italic group-hover:translate-x-2 transition-transform duration-500">
                       {f.title}
                     </h3>
-                    <p className="text-white/40 text-sm md:text-base leading-relaxed font-medium max-w-md group-hover:text-white/60 transition-colors duration-500">
+                    <p className="text-muted text-sm md:text-base leading-relaxed font-medium max-w-md group-hover:text-muted transition-colors duration-500">
                       {f.desc}
                     </p>
                   </div>
@@ -149,7 +149,7 @@ export default function LandingFeatures() {
                     {f.tags.map((tag) => (
                       <span 
                         key={tag} 
-                        className="px-3 py-1.5 rounded-lg bg-white/5 border border-white/5 text-[9px] font-mono font-black uppercase tracking-widest text-white/30 group-hover:bg-white/10 group-hover:text-white/80 transition-all duration-500"
+                        className="px-3 py-1.5 rounded-lg bg-surface border border-border text-[9px] font-mono font-black uppercase tracking-widest text-subtle group-hover:bg-surface group-hover:text-muted transition-all duration-500"
                       >
                         {tag}
                       </span>
@@ -168,11 +168,11 @@ export default function LandingFeatures() {
         </div>
 
         {/* 4. SERVER STATUS STRIP */}
-        <div className="pt-12 grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 border-t border-white/5 relative">
+        <div className="pt-12 grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 border-t border-border relative">
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-px bg-gradient-to-r from-transparent via-emerald-500 to-transparent" />
           
           <StatItem label="Active Shinobi" value="12,402" color="text-emerald-500" />
-          <StatItem label="Archives Logged" value="1.2M" color="text-amber-400" />
+          <StatItem label="Archives Logged" value="1.2M" color="text-accent-bright" />
           <StatItem label="Oracle Precision" value="98.4%" color="text-sky-400" />
           <StatItem label="System Uptime" value="99.9%" color="text-orange-500" isStatus />
         </div>
@@ -185,11 +185,11 @@ export default function LandingFeatures() {
 function StatItem({ label, value, color, isStatus = false }: { label: string; value: string, color: string, isStatus?: boolean }) {
   return (
     <div className="space-y-2 group cursor-default">
-      <div className={`text-4xl md:text-5xl font-black font-mono tracking-tighter text-white group-hover:${color} transition-colors duration-500 flex items-center gap-2`}>
+      <div className={`text-4xl md:text-5xl font-black font-mono tracking-tighter text-foreground group-hover:${color} transition-colors duration-500 flex items-center gap-2`}>
         {isStatus && <Activity size={24} className={`${color} animate-pulse`} />}
         {value}
       </div>
-      <p className="text-[10px] font-black text-white/20 uppercase tracking-[0.3em] group-hover:text-white/40 transition-colors">
+      <p className="text-[10px] font-black text-subtle uppercase tracking-[0.3em] group-hover:text-muted transition-colors">
         {label}
       </p>
     </div>

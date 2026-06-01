@@ -65,14 +65,14 @@ export default function MyListsPage() {
     <div className="max-w-3xl mx-auto px-6 py-12 pb-32 space-y-8">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-amber-400/60 mb-2">My Archive</p>
-          <h1 className="text-3xl font-black tracking-tighter uppercase italic text-white">
+          <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-accent-bright/60 mb-2">My Archive</p>
+          <h1 className="text-3xl font-black tracking-tighter uppercase italic text-foreground">
             My Lists<span style={{color:"#f59e0b"}}>.</span>
           </h1>
-          <p className="text-white/35 text-sm mt-1">{lists.length} curated lists</p>
+          <p className="text-subtle text-sm mt-1">{lists.length} curated lists</p>
         </div>
         <button onClick={() => push("List creation coming soon!", "info")}
-          className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-xs font-black uppercase tracking-widest text-white transition-all mt-2"
+          className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-accent hover:bg-accent-bright text-xs font-black uppercase tracking-widest text-foreground transition-all mt-2"
         >
           <Plus size={13} /> New List
         </button>
@@ -84,33 +84,33 @@ export default function MyListsPage() {
           return (
             <motion.div key={list.id} initial={{ opacity:0, y:8 }} animate={{ opacity:1, y:0 }} exit={{ opacity:0, height:0 }}
               transition={{ delay: i*0.06 }}
-              className="p-6 rounded-2xl bg-white/[0.02] border border-white/8 hover:border-white/15 transition-colors space-y-4"
+              className="p-6 rounded-2xl bg-surface border border-border hover:border-border transition-colors space-y-4"
             >
               {/* Header */}
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <div className="flex items-center gap-2 mb-1">
-                    <h2 className="font-black text-white">{list.title}</h2>
+                    <h2 className="font-black text-foreground">{list.title}</h2>
                     <span className={`flex items-center gap-1 text-[8px] font-black uppercase tracking-wider px-2 py-0.5 rounded-full border ${
-                      list.isPublic ? "text-emerald-400 bg-emerald-500/10 border-emerald-500/20" : "text-white/30 bg-white/5 border-white/10"
+                      list.isPublic ? "text-emerald-400 bg-emerald-500/10 border-emerald-500/20" : "text-subtle bg-surface border-border"
                     }`}>
                       {list.isPublic ? <><Globe size={9}/> Public</> : <><Lock size={9}/> Private</>}
                     </span>
                   </div>
-                  <p className="text-xs text-white/40">{list.description}</p>
+                  <p className="text-xs text-muted">{list.description}</p>
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
                   <button onClick={() => togglePublic(list.id)}
-                    className="p-2 rounded-lg text-white/30 hover:text-white hover:bg-white/5 transition-colors"
+                    className="p-2 rounded-lg text-subtle hover:text-foreground hover:bg-surface transition-colors"
                     title={list.isPublic ? "Make private" : "Make public"}
                   >
                     {list.isPublic ? <Globe size={14} /> : <Lock size={14} />}
                   </button>
                   <button onClick={() => push("List editing coming soon!", "info")}
-                    className="p-2 rounded-lg text-white/30 hover:text-amber-400 hover:bg-white/5 transition-colors"
+                    className="p-2 rounded-lg text-subtle hover:text-accent-bright hover:bg-surface transition-colors"
                   ><Edit2 size={14} /></button>
                   <button onClick={() => deleteList(list.id)}
-                    className="p-2 rounded-lg text-white/30 hover:text-red-400 hover:bg-red-500/5 transition-colors"
+                    className="p-2 rounded-lg text-subtle hover:text-red-400 hover:bg-red-500/5 transition-colors"
                   ><Trash2 size={14} /></button>
                 </div>
               </div>
@@ -125,14 +125,14 @@ export default function MyListsPage() {
                   </button>
                 ))}
                 {animes.length > 6 && (
-                  <div className="relative h-12 w-9 rounded-lg bg-white/10 border-2 border-[#0a0a0a] flex items-center justify-center text-[10px] font-black text-white/50">
+                  <div className="relative h-12 w-9 rounded-lg bg-surface border-2 border-[#0a0a0a] flex items-center justify-center text-[10px] font-black text-muted">
                     +{animes.length-6}
                   </div>
                 )}
               </div>
 
               {/* Footer */}
-              <div className="flex items-center justify-between text-[10px] text-white/25">
+              <div className="flex items-center justify-between text-[10px] text-subtle">
                 <span>{animes.length} anime</span>
                 <span>Created {new Date(list.createdAt).toLocaleDateString("en-US", { month:"short", year:"numeric" })}</span>
               </div>

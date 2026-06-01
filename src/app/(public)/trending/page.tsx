@@ -79,18 +79,18 @@ export default function TrendingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#020202] text-white pb-32">
+    <div className="min-h-screen bg-background text-foreground pb-32">
 
       {/* Header */}
-      <div className="border-b border-white/5 bg-black/40 backdrop-blur-md sticky top-[72px] z-30">
+      <div className="border-b border-border bg-black/40 backdrop-blur-md sticky top-[72px] z-30">
         <div className="max-w-6xl mx-auto px-6 py-5">
           <div className="flex items-center gap-3">
             <Flame size={18} className="text-orange-400" />
-            <h1 className="text-2xl font-black tracking-tighter uppercase italic text-white">
+            <h1 className="text-2xl font-black tracking-tighter uppercase italic text-foreground">
               Trending<span className="text-orange-500">.</span>
             </h1>
           </div>
-          <p className="text-xs text-white/30 mt-0.5">What the Shinobi are watching, saying, and voting on right now</p>
+          <p className="text-xs text-subtle mt-0.5">What the Shinobi are watching, saying, and voting on right now</p>
         </div>
       </div>
 
@@ -99,8 +99,8 @@ export default function TrendingPage() {
         {/* ── Section 1: Trending Discussions ── */}
         <section>
           <div className="flex items-center gap-2 mb-6">
-            <MessageSquare size={14} className="text-amber-400" />
-            <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40">Trending Discussions</h2>
+            <MessageSquare size={14} className="text-accent-bright" />
+            <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-muted">Trending Discussions</h2>
           </div>
 
           <div className="grid sm:grid-cols-2 gap-4">
@@ -114,22 +114,22 @@ export default function TrendingPage() {
               return (
               <motion.article key={post.id}
                 initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}
-                className="p-5 rounded-2xl bg-zinc-900/60 border border-white/8 hover:border-white/15 transition-colors space-y-3 cursor-pointer">
+                className="p-5 rounded-2xl bg-zinc-900/60 border border-border hover:border-border transition-colors space-y-3 cursor-pointer">
                 <div className="flex items-center gap-2.5">
                   <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center font-black text-xs shrink-0">
                     {author[0]?.toUpperCase()}
                   </div>
                   <div className="min-w-0">
-                    <p className="text-xs font-black text-white truncate">{author}</p>
-                    <p className="text-[9px] text-white/30">{time}</p>
+                    <p className="text-xs font-black text-foreground truncate">{author}</p>
+                    <p className="text-[9px] text-subtle">{time}</p>
                   </div>
                 </div>
-                <p className="text-xs text-white/55 leading-relaxed line-clamp-2">{excerpt}…</p>
+                <p className="text-xs text-muted leading-relaxed line-clamp-2">{excerpt}…</p>
                 <div className="flex items-center gap-4 pt-1">
-                  <span className={`flex items-center gap-1 text-xs font-bold ${likes > 200 ? "text-orange-400" : "text-white/30"}`}>
+                  <span className={`flex items-center gap-1 text-xs font-bold ${likes > 200 ? "text-orange-400" : "text-subtle"}`}>
                     {likes > 200 ? <Flame size={12} /> : <Heart size={12} />}{likes}
                   </span>
-                  <span className="flex items-center gap-1 text-xs font-bold text-white/30">
+                  <span className="flex items-center gap-1 text-xs font-bold text-subtle">
                     <MessageSquare size={12} />{comments}
                   </span>
                 </div>
@@ -142,7 +142,7 @@ export default function TrendingPage() {
         <section>
           <div className="flex items-center gap-2 mb-6">
             <TrendingUp size={14} className="text-emerald-400" />
-            <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40">Anime Getting Attention This Week</h2>
+            <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-muted">Anime Getting Attention This Week</h2>
           </div>
 
           <div className="space-y-4">
@@ -155,7 +155,7 @@ export default function TrendingPage() {
               >
                 <Link
                   href={`/anime/${anime.malId}`}
-                  className="flex gap-5 p-4 rounded-2xl bg-zinc-900/60 border border-white/8 hover:border-white/15 transition-colors group"
+                  className="flex gap-5 p-4 rounded-2xl bg-zinc-900/60 border border-border hover:border-border transition-colors group"
                 >
                   {/* Cover image */}
                   <div className="relative h-24 w-16 rounded-xl overflow-hidden shrink-0">
@@ -172,8 +172,8 @@ export default function TrendingPage() {
                   <div className="flex-1 min-w-0 flex flex-col justify-center gap-2">
                     <div className="flex items-start justify-between gap-3">
                       <div className="min-w-0">
-                        <p className="text-sm font-black text-white group-hover:text-amber-300 transition-colors truncate">{anime.title}</p>
-                        <p className="text-[10px] text-white/30 mt-0.5">{anime.studios[0] ?? "Unknown"} · {anime.year}</p>
+                        <p className="text-sm font-black text-foreground group-hover:text-accent-bright transition-colors truncate">{anime.title}</p>
+                        <p className="text-[10px] text-subtle mt-0.5">{anime.studios[0] ?? "Unknown"} · {anime.year}</p>
                       </div>
                       <span className="shrink-0 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-[10px] font-black text-emerald-400">
                         {"+9%"} this week
@@ -181,7 +181,7 @@ export default function TrendingPage() {
                     </div>
                     <div className="flex flex-wrap gap-1.5">
                       {anime.genres.slice(0, 3).map(g => (
-                        <span key={g} className="text-[9px] px-2 py-0.5 rounded-full bg-white/5 text-white/35 font-bold uppercase tracking-wide">
+                        <span key={g} className="text-[9px] px-2 py-0.5 rounded-full bg-surface text-subtle font-bold uppercase tracking-wide">
                           {g}
                         </span>
                       ))}
@@ -196,8 +196,8 @@ export default function TrendingPage() {
         {/* ── Section 3: Trending Polls ── */}
         <section>
           <div className="flex items-center gap-2 mb-6">
-            <Vote size={14} className="text-amber-400" />
-            <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40">Trending Polls</h2>
+            <Vote size={14} className="text-accent-bright" />
+            <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-muted">Trending Polls</h2>
           </div>
 
           <div className="grid sm:grid-cols-3 gap-4">
@@ -207,10 +207,10 @@ export default function TrendingPage() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.07 }}
-                className="p-5 rounded-2xl bg-white/[0.02] border border-white/8 space-y-4"
+                className="p-5 rounded-2xl bg-surface border border-border space-y-4"
               >
-                <p className="text-sm font-bold text-white/80">{poll.question}</p>
-                <p className="text-[10px] text-white/25">{poll.votes.toLocaleString()} votes</p>
+                <p className="text-sm font-bold text-muted">{poll.question}</p>
+                <p className="text-[10px] text-subtle">{poll.votes.toLocaleString()} votes</p>
 
                 <div className="space-y-2">
                   {poll.options.map(option => {
@@ -223,9 +223,9 @@ export default function TrendingPage() {
                         className={`w-full text-left px-3 py-2 rounded-lg text-xs font-bold transition-all ${
                           voted
                             ? isSelected
-                              ? "bg-amber-500/15 border border-amber-500/30 text-amber-400"
-                              : "bg-white/[0.02] border border-white/5 text-white/25"
-                            : "bg-white/[0.04] border border-white/8 text-white/55 hover:text-white hover:border-amber-500/20 hover:bg-amber-500/5"
+                              ? "bg-accent/15 border border-accent/30 text-accent-bright"
+                              : "bg-surface border border-border text-subtle"
+                            : "bg-white/[0.04] border border-border text-muted hover:text-foreground hover:border-accent/20 hover:bg-accent/5"
                         }`}
                       >
                         {option}
@@ -242,7 +242,7 @@ export default function TrendingPage() {
         <section>
           <div className="flex items-center gap-2 mb-6">
             <Users size={14} className="text-violet-400" />
-            <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40">Top Creators This Week</h2>
+            <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-muted">Top Creators This Week</h2>
           </div>
 
           <div className="grid sm:grid-cols-3 gap-5">
@@ -252,7 +252,7 @@ export default function TrendingPage() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.07 }}
-                className="p-5 rounded-2xl bg-white/[0.02] border border-white/8 hover:border-violet-500/20 transition-colors space-y-3 cursor-pointer"
+                className="p-5 rounded-2xl bg-surface border border-border hover:border-violet-500/20 transition-colors space-y-3 cursor-pointer"
               >
                 {/* Avatar + name */}
                 <div className="flex items-center gap-3">
@@ -260,8 +260,8 @@ export default function TrendingPage() {
                     {creator.avatar}
                   </div>
                   <div>
-                    <p className="text-sm font-black text-white">{creator.name}</p>
-                    <p className="text-[10px] text-white/30 flex items-center gap-1 mt-0.5">
+                    <p className="text-sm font-black text-foreground">{creator.name}</p>
+                    <p className="text-[10px] text-subtle flex items-center gap-1 mt-0.5">
                       <Users size={9} /> {creator.followers} followers
                     </p>
                   </div>
@@ -276,7 +276,7 @@ export default function TrendingPage() {
                 </div>
 
                 {/* Top article */}
-                <p className="text-xs text-white/40 leading-relaxed line-clamp-2">
+                <p className="text-xs text-muted leading-relaxed line-clamp-2">
                   {creator.topArticle}
                 </p>
               </motion.div>

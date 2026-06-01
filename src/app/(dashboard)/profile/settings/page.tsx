@@ -15,7 +15,7 @@ const SECTIONS = [
   {
     group: "Profile",
     items: [
-      { href:"/settings/account",    icon:User,       label:"Account",           desc:"Name, username, email, bio",          color:"text-amber-400", bg:"bg-amber-500/10" },
+      { href:"/settings/account",    icon:User,       label:"Account",           desc:"Name, username, email, bio",          color:"text-accent-bright", bg:"bg-accent/10" },
       { href:"/settings/appearance", icon:Palette,    label:"Appearance",        desc:"Theme, accent color, text size",      color:"text-violet-400", bg:"bg-violet-500/10" },
     ]
   },
@@ -23,7 +23,7 @@ const SECTIONS = [
     group: "Privacy & Security",
     items: [
       { href:"/settings/privacy",   icon:Eye,        label:"Privacy",           desc:"Who can see what on your profile",     color:"text-emerald-400",bg:"bg-emerald-500/10"},
-      { href:"/settings/security",  icon:Lock,       label:"Security",          desc:"Password, sessions, 2FA",              color:"text-amber-400",  bg:"bg-amber-500/10"  },
+      { href:"/settings/security",  icon:Lock,       label:"Security",          desc:"Password, sessions, 2FA",              color:"text-accent-bright",  bg:"bg-accent/10"  },
     ]
   },
   {
@@ -79,20 +79,20 @@ export default function ProfileSettingsIndex() {
   return (
     <div className="max-w-2xl mx-auto px-6 py-12 pb-32 space-y-8">
       <div>
-        <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-amber-400/60 mb-2">Preferences</p>
-        <h1 className="text-3xl font-black tracking-tighter uppercase italic text-white">
+        <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-accent-bright/60 mb-2">Preferences</p>
+        <h1 className="text-3xl font-black tracking-tighter uppercase italic text-foreground">
           Settings<span style={{color:"#f59e0b"}}>.</span>
         </h1>
-        <p className="text-white/35 text-sm mt-1">
+        <p className="text-subtle text-sm mt-1">
           {user ? `Signed in as @${user.username}` : "Manage your account, privacy, and preferences"}
         </p>
       </div>
 
       {/* Quick-edit profile card */}
-      <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/8 space-y-4">
-        <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/35">Quick Edit</p>
+      <div className="p-6 rounded-2xl bg-surface border border-border space-y-4">
+        <p className="text-[10px] font-black uppercase tracking-[0.3em] text-subtle">Quick Edit</p>
         <div>
-          <label className="block text-[10px] font-black uppercase tracking-[0.2em] text-white/35 mb-1.5">
+          <label className="block text-[10px] font-black uppercase tracking-[0.2em] text-subtle mb-1.5">
             Display Name
           </label>
           <input
@@ -100,11 +100,11 @@ export default function ProfileSettingsIndex() {
             value={form.displayName}
             onChange={setField("displayName")}
             placeholder="Your name"
-            className="w-full rounded-2xl bg-black/30 border border-white/10 px-4 py-3 text-sm text-white placeholder:text-white/20 outline-none focus:border-amber-500/40 transition-colors"
+            className="w-full rounded-2xl bg-black/30 border border-border px-4 py-3 text-sm text-foreground placeholder:text-subtle outline-none focus:border-accent/40 transition-colors"
           />
         </div>
         <div>
-          <label className="block text-[10px] font-black uppercase tracking-[0.2em] text-white/35 mb-1.5">
+          <label className="block text-[10px] font-black uppercase tracking-[0.2em] text-subtle mb-1.5">
             Bio
           </label>
           <textarea
@@ -113,9 +113,9 @@ export default function ProfileSettingsIndex() {
             rows={2}
             maxLength={200}
             placeholder="Tell the community about yourself…"
-            className="w-full rounded-2xl bg-black/30 border border-white/10 px-4 py-3 text-sm text-white placeholder:text-white/20 outline-none focus:border-amber-500/40 resize-none transition-colors"
+            className="w-full rounded-2xl bg-black/30 border border-border px-4 py-3 text-sm text-foreground placeholder:text-subtle outline-none focus:border-accent/40 resize-none transition-colors"
           />
-          <p className="text-[9px] text-right text-white/20 mt-1">{form.bio.length}/200</p>
+          <p className="text-[9px] text-right text-subtle mt-1">{form.bio.length}/200</p>
         </div>
         <div className="flex justify-end">
           <motion.button
@@ -124,7 +124,7 @@ export default function ProfileSettingsIndex() {
             onClick={save}
             disabled={saving}
             className={`flex items-center gap-2 px-6 py-3 rounded-2xl text-xs font-black uppercase tracking-widest transition-all ${
-              saved ? "bg-emerald-600 text-white" : "bg-amber-500 hover:bg-amber-400 text-black"
+              saved ? "bg-emerald-600 text-foreground" : "bg-accent hover:bg-accent-bright text-black"
             } disabled:opacity-60`}
           >
             {saving ? <><Loader2 size={13} className="animate-spin" /> Saving…</>
@@ -136,20 +136,20 @@ export default function ProfileSettingsIndex() {
 
       {SECTIONS.map((section, si) => (
         <div key={section.group} className="space-y-2">
-          <p className="text-[9px] font-black uppercase tracking-[0.35em] text-white/25 px-1">{section.group}</p>
+          <p className="text-[9px] font-black uppercase tracking-[0.35em] text-subtle px-1">{section.group}</p>
           {section.items.map((item, i) => (
             <motion.div key={item.href} initial={{ opacity:0, y:8 }} animate={{ opacity:1, y:0 }} transition={{ delay:(si*2+i)*0.05 }}>
               <Link href={item.href}
-                className="flex items-center gap-4 p-5 rounded-2xl bg-white/[0.02] border border-white/8 hover:border-white/18 hover:bg-white/[0.04] transition-all group"
+                className="flex items-center gap-4 p-5 rounded-2xl bg-surface border border-border hover:border-white/18 hover:bg-white/[0.04] transition-all group"
               >
                 <div className={`w-10 h-10 rounded-xl ${item.bg} flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform`}>
                   <item.icon size={18} className={item.color} />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="font-black text-white/80 group-hover:text-white transition-colors">{item.label}</p>
-                  <p className="text-[10px] text-white/35 mt-0.5">{item.desc}</p>
+                  <p className="font-black text-muted group-hover:text-foreground transition-colors">{item.label}</p>
+                  <p className="text-[10px] text-subtle mt-0.5">{item.desc}</p>
                 </div>
-                <ChevronRight size={14} className="text-white/20 group-hover:text-white/50 group-hover:translate-x-0.5 transition-all shrink-0" />
+                <ChevronRight size={14} className="text-subtle group-hover:text-muted group-hover:translate-x-0.5 transition-all shrink-0" />
               </Link>
             </motion.div>
           ))}

@@ -45,7 +45,7 @@ export default function ProfileMenu({ user, isOpen, onClose, onLogout }: Profile
             <p className="text-[9px] font-black uppercase tracking-[0.3em]" style={{ color: "rgba(245,158,11,0.5)" }}>
               {slug ? `@${slug}` : "Signed in as"}
             </p>
-            <p className="text-[11px] font-black text-white/80 truncate mt-0.5">{user.name}</p>
+            <p className="text-[11px] font-black text-muted truncate mt-0.5">{user.name}</p>
           </div>
 
           {/* Gold shimmer divider */}
@@ -53,9 +53,9 @@ export default function ProfileMenu({ user, isOpen, onClose, onLogout }: Profile
 
           {LINKS.map(({ href, icon: Icon, label }) => (
             <Link key={label} href={href} onClick={onClose}
-              className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-[10px] font-black text-white/50 uppercase tracking-widest hover:text-white hover:bg-white/[0.04] transition-all group"
+              className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-[10px] font-black text-muted uppercase tracking-widest hover:text-foreground hover:bg-white/[0.04] transition-all group"
             >
-              <Icon size={14} weight="duotone" className="text-amber-400/60 group-hover:text-amber-400 transition-colors" />
+              <Icon size={14} weight="duotone" className="text-accent-bright/60 group-hover:text-accent-bright transition-colors" />
               {label}
             </Link>
           ))}

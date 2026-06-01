@@ -151,23 +151,23 @@ const RARITY_CONFIG = {
   },
   rare: {
     label: "Rare",
-    color: "text-amber-300",
-    borderEarned: "border-amber-500/60",
+    color: "text-accent-bright",
+    borderEarned: "border-accent/60",
     borderLocked: "border-indigo-800/30",
     glow: "hover:shadow-indigo-500/20",
-    bg: "bg-amber-500/10",
-    bar: "bg-amber-400",
-    pill: "bg-indigo-900/60 text-amber-300",
+    bg: "bg-accent/10",
+    bar: "bg-accent-bright",
+    pill: "bg-indigo-900/60 text-accent-bright",
   },
   legendary: {
     label: "Legendary",
-    color: "text-amber-300",
-    borderEarned: "border-amber-500/60",
+    color: "text-accent-bright",
+    borderEarned: "border-accent/60",
     borderLocked: "border-amber-800/30",
     glow: "hover:shadow-amber-500/20",
-    bg: "bg-amber-500/10",
-    bar: "bg-amber-400",
-    pill: "bg-amber-900/60 text-amber-300",
+    bg: "bg-accent/10",
+    bar: "bg-accent-bright",
+    pill: "bg-amber-900/60 text-accent-bright",
   },
 }
 
@@ -210,18 +210,18 @@ export default function BadgeShowcase() {
       {/* Header */}
       <div className="flex items-end justify-between">
         <div>
-          <h2 className="text-3xl font-black tracking-tighter italic text-white">
+          <h2 className="text-3xl font-black tracking-tighter italic text-foreground">
             Your Badges
           </h2>
-          <p className="text-white/40 text-sm font-bold mt-1 tracking-tight uppercase">
+          <p className="text-muted text-sm font-bold mt-1 tracking-tight uppercase">
             {earnedCount} / {totalCount} Earned
           </p>
         </div>
         {/* mini legend */}
         <div className="hidden sm:flex items-center gap-4 text-xs font-bold uppercase tracking-tighter">
           <span className="text-slate-400">Common</span>
-          <span className="text-amber-400">Rare</span>
-          <span className="text-amber-400">Legendary</span>
+          <span className="text-accent-bright">Rare</span>
+          <span className="text-accent-bright">Legendary</span>
         </div>
       </div>
 
@@ -233,14 +233,14 @@ export default function BadgeShowcase() {
             onClick={() => setActiveTab(tab.key)}
             className={`relative px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-tight transition-all ${
               activeTab === tab.key
-                ? "text-white"
-                : "text-white/30 hover:text-white/60"
+                ? "text-foreground"
+                : "text-subtle hover:text-muted"
             }`}
           >
             {activeTab === tab.key && (
               <motion.span
                 layoutId="tab-pill"
-                className="absolute inset-0 rounded-full bg-white/10 border border-white/10"
+                className="absolute inset-0 rounded-full bg-surface border border-border"
                 transition={{ type: "spring", stiffness: 400, damping: 30 }}
               />
             )}
@@ -272,14 +272,14 @@ export default function BadgeShowcase() {
                   badge.earned
                     ? `${cfg.borderEarned} ${cfg.bg} hover:shadow-xl ${cfg.glow}`
                     : isInProgress
-                    ? `border-white/10 bg-white/[0.02] hover:bg-white/[0.04]`
-                    : `border-white/5 bg-white/[0.01] opacity-50`
+                    ? `border-border bg-surface hover:bg-white/[0.04]`
+                    : `border-border bg-white/[0.01] opacity-50`
                 }`}
               >
                 {/* Locked overlay icon */}
                 {isLocked && (
                   <div className="absolute top-3 right-3">
-                    <Lock size={12} className="text-white/20" />
+                    <Lock size={12} className="text-subtle" />
                   </div>
                 )}
 
@@ -298,12 +298,12 @@ export default function BadgeShowcase() {
                 </div>
 
                 {/* Name */}
-                <p className={`font-black tracking-tight text-sm mb-0.5 ${badge.earned ? "text-white" : "text-white/40"}`}>
+                <p className={`font-black tracking-tight text-sm mb-0.5 ${badge.earned ? "text-foreground" : "text-muted"}`}>
                   {badge.name}
                 </p>
 
                 {/* Description / requirement */}
-                <p className="text-[11px] text-white/30 leading-snug mb-3">
+                <p className="text-[11px] text-subtle leading-snug mb-3">
                   {badge.earned ? badge.description : badge.requirement}
                 </p>
 
@@ -317,7 +317,7 @@ export default function BadgeShowcase() {
                 {/* Progress bar */}
                 {isInProgress && (
                   <div className="space-y-1.5">
-                    <div className="h-1.5 w-full rounded-full bg-white/10 overflow-hidden">
+                    <div className="h-1.5 w-full rounded-full bg-surface overflow-hidden">
                       <motion.div
                         className={`h-full rounded-full ${cfg.bar}`}
                         initial={{ width: 0 }}
@@ -337,7 +337,7 @@ export default function BadgeShowcase() {
       </AnimatePresence>
 
       {filtered.length === 0 && (
-        <div className="text-center py-16 text-white/20 font-black tracking-tighter italic text-xl">
+        <div className="text-center py-16 text-subtle font-black tracking-tighter italic text-xl">
           No badges here yet.
         </div>
       )}

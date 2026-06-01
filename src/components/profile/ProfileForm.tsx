@@ -44,8 +44,8 @@ export default function ProfileForm() {
   }
 
   const STATS = [
-    { label: "Archives",     value: "124",          icon: Star,    color: "text-amber-400" },
-    { label: "On Watchlist", value: String(watchlistCount || 38), icon: Trophy, color: "text-amber-400"  },
+    { label: "Archives",     value: "124",          icon: Star,    color: "text-accent-bright" },
+    { label: "On Watchlist", value: String(watchlistCount || 38), icon: Trophy, color: "text-accent-bright"  },
     { label: "Streak",       value: "22 days",      icon: Flame,   color: "text-orange-500" },
     { label: "Global Rank",  value: "#812",         icon: Globe,   color: "text-blue-400"  },
   ]
@@ -57,7 +57,7 @@ export default function ProfileForm() {
       className="space-y-8"
     >
       {/* Avatar + name */}
-      <div className="flex items-center gap-6 p-8 rounded-[2rem] bg-white/[0.02] border border-white/8">
+      <div className="flex items-center gap-6 p-8 rounded-[2rem] bg-surface border border-border">
         <div className="relative group shrink-0">
           <div className="h-20 w-20 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-2xl font-black shadow-[0_0_20px_rgba(99,102,241,0.3)]">
             {form.displayName[0]}
@@ -68,16 +68,16 @@ export default function ProfileForm() {
             aria-label="Change avatar"
             className="absolute inset-0 rounded-2xl bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
           >
-            <Upload size={16} className="text-white" />
+            <Upload size={16} className="text-foreground" />
           </button>
         </div>
         <div>
-          <p className="text-xl font-black uppercase tracking-tighter text-white">{form.displayName}</p>
-          <p className="text-sm text-white/40 font-mono mt-0.5">@{form.username}</p>
+          <p className="text-xl font-black uppercase tracking-tighter text-foreground">{form.displayName}</p>
+          <p className="text-sm text-muted font-mono mt-0.5">@{form.username}</p>
           <button
             type="button"
             onClick={() => push("Avatar upload coming soon", "info")}
-            className="mt-2 flex items-center gap-1.5 text-[10px] font-black uppercase tracking-wider text-amber-400 hover:text-amber-300 transition-colors"
+            className="mt-2 flex items-center gap-1.5 text-[10px] font-black uppercase tracking-wider text-accent-bright hover:text-accent-bright transition-colors"
           >
             <Upload size={11} /> Change avatar
           </button>
@@ -87,17 +87,17 @@ export default function ProfileForm() {
       {/* Stats grid */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {STATS.map(({ label, value, icon: Icon, color }) => (
-          <div key={label} className="p-5 rounded-[1.5rem] bg-white/[0.02] border border-white/8 flex flex-col gap-2">
+          <div key={label} className="p-5 rounded-[1.5rem] bg-surface border border-border flex flex-col gap-2">
             <Icon size={16} className={color} />
-            <p className="text-2xl font-black tracking-tighter text-white">{value}</p>
-            <p className="text-[9px] font-black uppercase tracking-[0.2em] text-white/30">{label}</p>
+            <p className="text-2xl font-black tracking-tighter text-foreground">{value}</p>
+            <p className="text-[9px] font-black uppercase tracking-[0.2em] text-subtle">{label}</p>
           </div>
         ))}
       </div>
 
       {/* Form fields */}
-      <div className="p-8 rounded-[2rem] bg-white/[0.02] border border-white/8 space-y-6">
-        <h3 className="text-sm font-black uppercase tracking-widest text-white/50">Edit Profile</h3>
+      <div className="p-8 rounded-[2rem] bg-surface border border-border space-y-6">
+        <h3 className="text-sm font-black uppercase tracking-widest text-muted">Edit Profile</h3>
 
         <div className="grid md:grid-cols-2 gap-5">
           <Field label="Display Name" value={form.displayName} onChange={set("displayName")} />
@@ -107,15 +107,15 @@ export default function ProfileForm() {
         <Field label="Email" type="email" value={form.email} onChange={set("email")} />
 
         <div>
-          <label className="block text-[10px] font-black uppercase tracking-[0.2em] text-white/40 mb-2">Bio</label>
+          <label className="block text-[10px] font-black uppercase tracking-[0.2em] text-muted mb-2">Bio</label>
           <textarea
             value={form.bio}
             onChange={set("bio")}
             rows={3}
             maxLength={200}
-            className="w-full rounded-2xl bg-black/30 border border-white/10 px-4 py-3 text-sm text-white placeholder:text-white/20 outline-none focus:border-amber-500/50 focus:bg-white/[0.04] transition-all resize-none"
+            className="w-full rounded-2xl bg-black/30 border border-border px-4 py-3 text-sm text-foreground placeholder:text-subtle outline-none focus:border-accent/50 focus:bg-white/[0.04] transition-all resize-none"
           />
-          <p className="text-[9px] text-white/20 text-right mt-1">{form.bio.length}/200</p>
+          <p className="text-[9px] text-subtle text-right mt-1">{form.bio.length}/200</p>
         </div>
 
         <div className="flex justify-end pt-2">
@@ -126,8 +126,8 @@ export default function ProfileForm() {
             disabled={saving}
             className={`flex items-center gap-2.5 px-7 py-3.5 rounded-2xl font-black text-[11px] uppercase tracking-widest transition-all ${
               saved
-                ? "bg-emerald-600 text-white"
-                : "bg-amber-500 hover:bg-amber-400 text-black shadow-[0_0_24px_rgba(99,102,241,0.3)]"
+                ? "bg-emerald-600 text-foreground"
+                : "bg-accent hover:bg-accent-bright text-black shadow-[0_0_24px_rgba(99,102,241,0.3)]"
             } disabled:opacity-60 disabled:cursor-not-allowed`}
           >
             {saving ? (
@@ -155,16 +155,16 @@ function Field({
 }) {
   return (
     <div>
-      <label className="block text-[10px] font-black uppercase tracking-[0.2em] text-white/40 mb-2">{label}</label>
+      <label className="block text-[10px] font-black uppercase tracking-[0.2em] text-muted mb-2">{label}</label>
       <div className="relative">
         {prefix && (
-          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-sm text-white/30 font-mono">{prefix}</span>
+          <span className="absolute left-4 top-1/2 -translate-y-1/2 text-sm text-subtle font-mono">{prefix}</span>
         )}
         <input
           type={type}
           value={value}
           onChange={onChange}
-          className={`w-full rounded-2xl bg-black/30 border border-white/10 py-3 text-sm text-white placeholder:text-white/20 outline-none focus:border-amber-500/50 focus:bg-white/[0.04] transition-all ${prefix ? "pl-7 pr-4" : "px-4"}`}
+          className={`w-full rounded-2xl bg-black/30 border border-border py-3 text-sm text-foreground placeholder:text-subtle outline-none focus:border-accent/50 focus:bg-white/[0.04] transition-all ${prefix ? "pl-7 pr-4" : "px-4"}`}
         />
       </div>
     </div>

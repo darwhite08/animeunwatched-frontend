@@ -25,20 +25,20 @@ const TYPE_STYLES = {
   new: {
     bg: "bg-gradient-to-r from-indigo-600 via-violet-600 to-indigo-600",
     text: "text-amber-100",
-    linkClass: "text-white underline-offset-2 hover:underline font-black",
+    linkClass: "text-foreground underline-offset-2 hover:underline font-black",
     icon: Sparkles,
     iconClass: "text-violet-300",
     badge: "New",
-    badgeBg: "bg-white/15 text-white",
+    badgeBg: "bg-white/15 text-foreground",
   },
   event: {
-    bg: "bg-gradient-to-r from-amber-500 via-orange-500 to-amber-500",
+    bg: "bg-gradient-to-r from-accent via-orange-500 to-accent",
     text: "text-amber-50",
-    linkClass: "text-white underline-offset-2 hover:underline font-black",
+    linkClass: "text-foreground underline-offset-2 hover:underline font-black",
     icon: Calendar,
     iconClass: "text-amber-200",
     badge: "Event",
-    badgeBg: "bg-white/20 text-white",
+    badgeBg: "bg-white/20 text-foreground",
   },
   info: {
     bg: "bg-slate-800",
@@ -47,7 +47,7 @@ const TYPE_STYLES = {
     icon: Info,
     iconClass: "text-slate-400",
     badge: "Info",
-    badgeBg: "bg-white/10 text-slate-300",
+    badgeBg: "bg-surface text-slate-300",
   },
 }
 
@@ -112,7 +112,7 @@ export default function AnnouncementBanner({
             <button
               onClick={dismiss}
               aria-label="Dismiss announcement"
-              className="shrink-0 p-1 rounded-lg hover:bg-white/10 text-white/60 hover:text-white transition-all"
+              className="shrink-0 p-1 rounded-lg hover:bg-surface text-muted hover:text-foreground transition-all"
             >
               <X size={14} />
             </button>

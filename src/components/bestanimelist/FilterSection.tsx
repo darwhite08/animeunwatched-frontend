@@ -20,7 +20,7 @@ export default function FilterSection({
     <div className="mb-8">
       <button
         onClick={() => setOpen(!open)}
-        className="flex w-full items-center justify-between text-sm text-white/60 hover:text-white transition"
+        className="flex w-full items-center justify-between text-sm text-muted hover:text-foreground transition"
       >
         <span>{title}</span>
         <span className="text-xs">

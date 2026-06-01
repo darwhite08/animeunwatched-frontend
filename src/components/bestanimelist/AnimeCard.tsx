@@ -44,7 +44,7 @@ export default function AnimeCard({ anime, index, onClick }: AnimeCardProps) {
         style={{ background: "linear-gradient(135deg, rgba(245,158,11,0.25), rgba(99,102,241,0.20))", filter: "blur(12px)" }}
       />
 
-      <div className="relative h-full w-full bg-[#0a0a12] rounded-[1.7rem] overflow-hidden border border-white/[0.07] group-hover:border-amber-500/25 transition-colors duration-500"
+      <div className="relative h-full w-full bg-[#0a0a12] rounded-[1.7rem] overflow-hidden border border-white/[0.07] group-hover:border-accent/25 transition-colors duration-500"
         style={{ boxShadow: "0 4px 24px rgba(0,0,0,0.4)" }}
       >
         {/* Poster image */}
@@ -60,7 +60,7 @@ export default function AnimeCard({ anime, index, onClick }: AnimeCardProps) {
           />
         ) : (
           <div className="absolute inset-0 bg-gradient-to-br from-indigo-900/50 to-violet-900/30 flex items-center justify-center">
-            <span className="text-4xl font-black text-white/10 uppercase">{anime.title[0]}</span>
+            <span className="text-4xl font-black text-subtle uppercase">{anime.title[0]}</span>
           </div>
         )}
 
@@ -74,8 +74,8 @@ export default function AnimeCard({ anime, index, onClick }: AnimeCardProps) {
                 boxShadow: "0 2px 8px rgba(245,158,11,0.15)",
               }}
             >
-              <Star size={9} weight="fill" className="text-amber-400" />
-              <span className="text-[9px] font-black text-amber-300">{anime.rating.toFixed(1)}</span>
+              <Star size={9} weight="fill" className="text-accent-bright" />
+              <span className="text-[9px] font-black text-accent-bright">{anime.rating.toFixed(1)}</span>
             </div>
           </div>
         )}
@@ -86,10 +86,10 @@ export default function AnimeCard({ anime, index, onClick }: AnimeCardProps) {
           className={`absolute top-3 right-3 h-7 w-7 flex items-center justify-center rounded-full transition-all duration-300 shadow-lg ${
             inList
               ? "bg-emerald-500 opacity-100 scale-100"
-              : "bg-amber-600/90 opacity-0 scale-75 group-hover:opacity-100 group-hover:scale-100"
+              : "bg-accent/90 opacity-0 scale-75 group-hover:opacity-100 group-hover:scale-100"
           }`}
         >
-          {inList ? <Check size={12} className="text-white" /> : <Plus size={13} className="text-white" />}
+          {inList ? <Check size={12} className="text-foreground" /> : <Plus size={13} className="text-foreground" />}
         </button>
 
         {/* Live badge */}
@@ -108,12 +108,12 @@ export default function AnimeCard({ anime, index, onClick }: AnimeCardProps) {
         >
           {/* Year + type meta */}
           <div className="flex items-center gap-1.5 mb-1.5 opacity-60 group-hover:opacity-80 transition-opacity">
-            <span className="text-[8px] font-black text-white/50 uppercase tracking-widest">{anime.year}</span>
+            <span className="text-[8px] font-black text-muted uppercase tracking-widest">{anime.year}</span>
             <span className="w-0.5 h-0.5 rounded-full bg-white/25" />
-            <span className="text-[8px] font-black text-white/50 uppercase tracking-widest">{anime.type}</span>
+            <span className="text-[8px] font-black text-muted uppercase tracking-widest">{anime.type}</span>
           </div>
 
-          <h3 className="text-[11px] font-black text-white uppercase italic tracking-tight leading-tight mb-2.5 line-clamp-2">
+          <h3 className="text-[11px] font-black text-foreground uppercase italic tracking-tight leading-tight mb-2.5 line-clamp-2">
             {anime.title}
           </h3>
 

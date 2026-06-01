@@ -48,13 +48,13 @@ export default function SidebarLevelCard({
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -8 }}
           transition={{ duration: 0.3, ease: "easeOut" }}
-          className=" relative rounded-xl border border-white/10 bg-gradient-to-br from-black/60 to-black/40 backdrop-blur-md p-4 shadow-lg shadow-indigo-500/5"
+          className=" relative rounded-xl border border-border bg-gradient-to-br from-black/60 to-black/40 backdrop-blur-md p-4 shadow-lg shadow-indigo-500/5"
           aria-label="Creator level status"
         >
           {/* Close Button */}
           <button
             onClick={handleClose}
-            className="absolute top-3 right-3 text-white/40 hover:text-white transition-colors"
+            className="absolute top-3 right-3 text-muted hover:text-foreground transition-colors"
             aria-label="Hide level card"
           >
             <X size={16} />
@@ -64,14 +64,14 @@ export default function SidebarLevelCard({
             {/* Header */}
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <Sparkles className="h-4 w-4 text-amber-400" />
-                <span className="text-sm font-medium text-white">
+                <Sparkles className="h-4 w-4 text-accent-bright" />
+                <span className="text-sm font-medium text-foreground">
                   Level {level}
                 </span>
               </div>
 
               {tier && (
-                <span className="text-[10px] uppercase tracking-wide px-2 py-1 rounded-full bg-amber-600/20 text-amber-400 border border-amber-500/20">
+                <span className="text-[10px] uppercase tracking-wide px-2 py-1 rounded-full bg-accent/20 text-accent-bright border border-accent/20">
                   {tier}
                 </span>
               )}
@@ -79,7 +79,7 @@ export default function SidebarLevelCard({
 
             {/* XP Progress */}
             <div>
-              <div className="flex justify-between text-xs text-white/50 mb-1">
+              <div className="flex justify-between text-xs text-muted mb-1">
                 <span>XP</span>
                 <span>
                   {xp}/{maxXp}
@@ -87,7 +87,7 @@ export default function SidebarLevelCard({
               </div>
 
               <div
-                className="h-1.5 w-full rounded-full bg-white/10 overflow-hidden"
+                className="h-1.5 w-full rounded-full bg-surface overflow-hidden"
                 role="progressbar"
                 aria-valuenow={xp}
                 aria-valuemin={0}

@@ -67,7 +67,7 @@ function PostCard({
       layout
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-zinc-900/60 border border-white/8 hover:border-white/15 rounded-2xl p-6 space-y-4 transition-colors"
+      className="bg-zinc-900/60 border border-border hover:border-border rounded-2xl p-6 space-y-4 transition-colors"
     >
       {/* Author */}
       <div className="flex items-start justify-between">
@@ -76,8 +76,8 @@ function PostCard({
             {post.avatar}
           </div>
           <div>
-            <p className="text-sm font-black text-white">{post.author}</p>
-            <p className="text-[10px] text-white/30">{post.time}</p>
+            <p className="text-sm font-black text-foreground">{post.author}</p>
+            <p className="text-[10px] text-subtle">{post.time}</p>
           </div>
         </div>
         <PostMenu postId={String(post.id)} />
@@ -87,14 +87,14 @@ function PostCard({
       {post.anime && (
         <Link
           href="/bestanimelist"
-          className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-amber-500/8 border border-amber-500/15 text-[10px] font-bold text-amber-400 hover:bg-amber-500/15 transition-colors"
+          className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-accent/8 border border-accent/15 text-[10px] font-bold text-accent-bright hover:bg-accent/15 transition-colors"
         >
           <Star size={9} /> {post.anime}
         </Link>
       )}
 
       {/* Content */}
-      <p className="text-sm text-white/75 leading-relaxed">{post.content}</p>
+      <p className="text-sm text-muted leading-relaxed">{post.content}</p>
 
       {/* Tags */}
       {post.tags.length > 0 && (
@@ -102,7 +102,7 @@ function PostCard({
           {post.tags.map((tag) => (
             <span
               key={tag}
-              className="text-[9px] font-bold text-amber-400/60 hover:text-amber-400 cursor-pointer transition-colors"
+              className="text-[9px] font-bold text-accent-bright/60 hover:text-accent-bright cursor-pointer transition-colors"
             >
               #{tag}
             </span>
@@ -111,11 +111,11 @@ function PostCard({
       )}
 
       {/* Actions */}
-      <div className="flex items-center gap-5 pt-1 border-t border-white/5">
+      <div className="flex items-center gap-5 pt-1 border-t border-border">
         <button
           onClick={() => onLike(post.id)}
           className={`flex items-center gap-1.5 text-xs font-bold transition-colors ${
-            post.liked ? "text-rose-400" : "text-white/30 hover:text-rose-400"
+            post.liked ? "text-rose-400" : "text-subtle hover:text-rose-400"
           }`}
         >
           <Heart size={14} fill={post.liked ? "currentColor" : "none"} />
@@ -123,14 +123,14 @@ function PostCard({
         </button>
         <Link
           href={`/posts/${post.id}#comments`}
-          className="flex items-center gap-1.5 text-xs font-bold text-white/30 hover:text-amber-400 transition-colors"
+          className="flex items-center gap-1.5 text-xs font-bold text-subtle hover:text-accent-bright transition-colors"
         >
           <MessageSquare size={14} />
           {post.comments}
         </Link>
         <button
           onClick={() => onShare(post)}
-          className="flex items-center gap-1.5 text-xs font-bold text-white/30 hover:text-white/60 transition-colors ml-auto"
+          className="flex items-center gap-1.5 text-xs font-bold text-subtle hover:text-muted transition-colors ml-auto"
         >
           <Share2 size={13} />
         </button>
@@ -165,22 +165,22 @@ export default function PublicFeedPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#020202] text-white pb-32">
+    <div className="min-h-screen bg-background text-foreground pb-32">
       {/* Header */}
-      <div className="border-b border-white/5 bg-black/40 backdrop-blur-md sticky top-[72px] z-30">
+      <div className="border-b border-border bg-black/40 backdrop-blur-md sticky top-[72px] z-30">
         <div className="max-w-6xl mx-auto px-6 py-5">
           <div className="flex items-center justify-between gap-4">
             <div>
-              <h1 className="text-2xl font-black tracking-tighter uppercase italic text-white">
+              <h1 className="text-2xl font-black tracking-tighter uppercase italic text-foreground">
                 Community Feed<span style={{color:"#f59e0b"}}>.</span>
               </h1>
-              <p className="text-xs text-white/30 mt-0.5">
+              <p className="text-xs text-subtle mt-0.5">
                 Discover what the Shinobi are watching and saying
               </p>
             </div>
             <Link
               href="/register"
-              className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-xs font-black uppercase tracking-widest text-white transition-all"
+              className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-accent hover:bg-accent-bright text-xs font-black uppercase tracking-widest text-foreground transition-all"
             >
               Join Now
             </Link>
@@ -193,7 +193,7 @@ export default function PublicFeedPage() {
                 key={t}
                 onClick={() => setFeedTab(t)}
                 className={`relative flex items-center gap-1.5 px-5 py-3 text-[11px] font-black uppercase tracking-widest capitalize transition-colors ${
-                  feedTab === t ? "text-white" : "text-white/30 hover:text-white/60"
+                  feedTab === t ? "text-foreground" : "text-subtle hover:text-muted"
                 }`}
               >
                 {TAB_ICONS[t]}
@@ -201,7 +201,7 @@ export default function PublicFeedPage() {
                 {feedTab === t && (
                   <motion.div
                     layoutId="public-feed-tab-line"
-                    className="absolute bottom-0 left-0 right-0 h-[2px] bg-amber-500 rounded-full"
+                    className="absolute bottom-0 left-0 right-0 h-[2px] bg-accent rounded-full"
                   />
                 )}
               </button>
@@ -210,10 +210,10 @@ export default function PublicFeedPage() {
             {/* Login gate for following tab */}
             <Link
               href="/register"
-              className="relative flex items-center gap-1.5 px-5 py-3 text-[11px] font-black uppercase tracking-widest text-white/15 hover:text-white/30 transition-colors"
+              className="relative flex items-center gap-1.5 px-5 py-3 text-[11px] font-black uppercase tracking-widest text-subtle hover:text-subtle transition-colors"
             >
               Following
-              <span className="ml-1 px-1.5 py-0.5 rounded-full bg-amber-500/15 text-amber-400 text-[8px] font-black uppercase tracking-wider">
+              <span className="ml-1 px-1.5 py-0.5 rounded-full bg-accent/15 text-accent-bright text-[8px] font-black uppercase tracking-wider">
                 Login
               </span>
             </Link>
@@ -228,26 +228,26 @@ export default function PublicFeedPage() {
           <motion.div
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
-            className="flex items-center gap-4 px-5 py-4 rounded-2xl bg-amber-600/10 border border-amber-500/20"
+            className="flex items-center gap-4 px-5 py-4 rounded-2xl bg-accent/10 border border-accent/20"
           >
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-black text-white/80">
+              <p className="text-sm font-black text-muted">
                 Want to post your own takes?
               </p>
-              <p className="text-[10px] text-white/35 mt-0.5">
+              <p className="text-[10px] text-subtle mt-0.5">
                 Join thousands of Shinobi sharing anime hot-takes daily.
               </p>
             </div>
             <Link
               href="/register"
-              className="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-[11px] font-black uppercase tracking-widest text-white transition-all whitespace-nowrap"
+              className="px-4 py-2 rounded-xl bg-accent hover:bg-accent-bright text-[11px] font-black uppercase tracking-widest text-foreground transition-all whitespace-nowrap"
             >
               Sign Up Free
             </Link>
           </motion.div>
 
           {/* Posts */}
-          {isLoading && <div className="text-white/30 text-sm text-center py-8">Loading posts…</div>}
+          {isLoading && <div className="text-subtle text-sm text-center py-8">Loading posts…</div>}
           <AnimatePresence mode="popLayout">
             {displayPosts.map((post, i) => (
               <motion.div
@@ -262,13 +262,13 @@ export default function PublicFeedPage() {
           </AnimatePresence>
 
           {/* Load more CTA */}
-          <div className="py-8 text-center border border-dashed border-white/5 rounded-2xl">
-            <p className="text-white/20 text-xs font-bold mb-3">
+          <div className="py-8 text-center border border-dashed border-border rounded-2xl">
+            <p className="text-subtle text-xs font-bold mb-3">
               Sign in to see more posts from the community
             </p>
             <Link
               href="/register"
-              className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-white/5 hover:bg-white/10 border border-white/10 text-white/50 hover:text-white text-[11px] font-black uppercase tracking-widest transition-all"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-surface hover:bg-surface border border-border text-muted hover:text-foreground text-[11px] font-black uppercase tracking-widest transition-all"
             >
               Create Account
             </Link>
@@ -281,10 +281,10 @@ export default function PublicFeedPage() {
           <TrendingWidget />
 
           {/* Community stats */}
-          <div className="p-5 rounded-2xl bg-white/[0.02] border border-white/8 space-y-3">
+          <div className="p-5 rounded-2xl bg-surface border border-border space-y-3">
             <div className="flex items-center gap-2">
               <Flame size={14} className="text-orange-400" />
-              <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40">
+              <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-muted">
                 Live Activity
               </h3>
             </div>
@@ -294,8 +294,8 @@ export default function PublicFeedPage() {
               { label: "Votes cast today", value: "3,201" },
             ].map(({ label, value }) => (
               <div key={label} className="flex items-center justify-between">
-                <span className="text-xs text-white/35">{label}</span>
-                <span className="text-sm font-black text-white">{value}</span>
+                <span className="text-xs text-subtle">{label}</span>
+                <span className="text-sm font-black text-foreground">{value}</span>
               </div>
             ))}
           </div>
@@ -303,15 +303,15 @@ export default function PublicFeedPage() {
           {/* Sign-up CTA */}
           <Link
             href="/register"
-            className="flex flex-col gap-3 p-5 rounded-2xl bg-gradient-to-br from-indigo-600/15 to-violet-600/10 border border-amber-500/20 hover:from-indigo-600/20 transition-all"
+            className="flex flex-col gap-3 p-5 rounded-2xl bg-gradient-to-br from-indigo-600/15 to-violet-600/10 border border-accent/20 hover:from-indigo-600/20 transition-all"
           >
-            <p className="text-sm font-black text-white">
-              Join Kaiveron<span className="text-amber-400">.</span>
+            <p className="text-sm font-black text-foreground">
+              Join Kaiveron<span className="text-accent-bright">.</span>
             </p>
-            <p className="text-[11px] text-white/40 leading-relaxed">
+            <p className="text-[11px] text-muted leading-relaxed">
               Track what you watch, share your takes, join clubs, and discover hidden gems — all for free.
             </p>
-            <span className="inline-flex items-center justify-center px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-[11px] font-black uppercase tracking-widest text-white transition-all">
+            <span className="inline-flex items-center justify-center px-4 py-2 rounded-xl bg-accent hover:bg-accent-bright text-[11px] font-black uppercase tracking-widest text-foreground transition-all">
               Get Started Free
             </span>
           </Link>

@@ -19,8 +19,8 @@ type WatchItem = {
 
 const STATUS_CONFIG: Record<string, { color: string; bg: string }> = {
   "Watching":      { color: "text-emerald-400", bg: "bg-emerald-500/10" },
-  "Plan to Watch": { color: "text-amber-400",  bg: "bg-amber-500/10"  },
-  "Completed":     { color: "text-amber-400",   bg: "bg-amber-500/10"   },
+  "Plan to Watch": { color: "text-accent-bright",  bg: "bg-accent/10"  },
+  "Completed":     { color: "text-accent-bright",   bg: "bg-accent/10"   },
   "On Hold":       { color: "text-orange-400",  bg: "bg-orange-500/10"  },
   "Dropped":       { color: "text-red-400",     bg: "bg-red-500/10"     },
 }
@@ -28,7 +28,7 @@ const STATUS_CONFIG: Record<string, { color: string; bg: string }> = {
 export const WatchCard = ({ anime, onRemove, onEdit }: { anime: WatchItem; onRemove?: (id: string | number) => void; onEdit?: () => void }) => {
   const { push } = useToast()
   const [menuOpen, setMenuOpen] = useState(false)
-  const statusStyle = STATUS_CONFIG[anime.status] ?? { color: "text-white/40", bg: "bg-white/5" }
+  const statusStyle = STATUS_CONFIG[anime.status] ?? { color: "text-muted", bg: "bg-surface" }
 
   const handleMarkDone = () => {
     push(`Marked "${anime.title}" as completed!`, "success")
@@ -41,7 +41,7 @@ export const WatchCard = ({ anime, onRemove, onEdit }: { anime: WatchItem; onRem
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.9 }}
-      className="group relative rounded-[2.5rem] border border-white/5 bg-[#080808] overflow-hidden flex flex-col h-full hover:border-amber-500/30 transition-all duration-500 shadow-[0_20px_40px_-10px_rgba(0,0,0,0.5)]"
+      className="group relative rounded-[2.5rem] border border-border bg-[#080808] overflow-hidden flex flex-col h-full hover:border-accent/30 transition-all duration-500 shadow-[0_20px_40px_-10px_rgba(0,0,0,0.5)]"
       style={{ transformStyle: "preserve-3d" }}
     >
       {/* IMAGE */}
@@ -57,7 +57,7 @@ export const WatchCard = ({ anime, onRemove, onEdit }: { anime: WatchItem; onRem
 
         {/* Status badge */}
         <div className="absolute top-5 left-5 z-10">
-          <span className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-wider backdrop-blur-md border border-white/10 ${statusStyle.color} ${statusStyle.bg}`}>
+          <span className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-wider backdrop-blur-md border border-border ${statusStyle.color} ${statusStyle.bg}`}>
             {anime.status}
           </span>
         </div>
@@ -66,7 +66,7 @@ export const WatchCard = ({ anime, onRemove, onEdit }: { anime: WatchItem; onRem
         <div className="absolute top-5 right-5 z-10">
           <button
             onClick={() => setMenuOpen(o => !o)}
-            className="p-2 rounded-xl bg-black/50 backdrop-blur-md border border-white/10 text-white/40 hover:text-white transition-colors"
+            className="p-2 rounded-xl bg-black/50 backdrop-blur-md border border-border text-muted hover:text-foreground transition-colors"
           >
             <MoreHorizontal size={15} />
           </button>
@@ -77,21 +77,21 @@ export const WatchCard = ({ anime, onRemove, onEdit }: { anime: WatchItem; onRem
                 initial={{ opacity: 0, scale: 0.9, y: -4 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.9 }}
-                className="absolute right-0 top-10 w-40 bg-[#0c0c0c] border border-white/10 rounded-2xl overflow-hidden shadow-2xl z-20"
+                className="absolute right-0 top-10 w-40 bg-[#0c0c0c] border border-border rounded-2xl overflow-hidden shadow-2xl z-20"
               >
-                <button onClick={handleMarkDone} className="flex items-center gap-2 w-full px-4 py-3 text-xs font-bold text-white/60 hover:bg-white/5 hover:text-emerald-400 transition-colors">
+                <button onClick={handleMarkDone} className="flex items-center gap-2 w-full px-4 py-3 text-xs font-bold text-muted hover:bg-surface hover:text-emerald-400 transition-colors">
                   <Check size={13} /> Mark Done
                 </button>
                 <button
                   type="button"
                   onClick={() => { onEdit?.(); setMenuOpen(false) }}
-                  className="flex items-center gap-2 w-full px-4 py-3 text-xs font-bold text-white/60 hover:bg-white/5 transition-colors"
+                  className="flex items-center gap-2 w-full px-4 py-3 text-xs font-bold text-muted hover:bg-surface transition-colors"
                 >
                   <Edit2 size={13} /> Edit Entry
                 </button>
                 <button
                   onClick={() => { onRemove?.(anime.id); push(`Removed "${anime.title}"`, "info") }}
-                  className="flex items-center gap-2 w-full px-4 py-3 text-xs font-bold text-white/60 hover:bg-red-500/10 hover:text-red-400 transition-colors"
+                  className="flex items-center gap-2 w-full px-4 py-3 text-xs font-bold text-muted hover:bg-red-500/10 hover:text-red-400 transition-colors"
                 >
                   <Trash2 size={13} /> Remove
                 </button>
@@ -107,22 +107,22 @@ export const WatchCard = ({ anime, onRemove, onEdit }: { anime: WatchItem; onRem
         <div>
           <Link
             href={`/bestanimelist`}
-            className="text-xl font-black text-white tracking-tighter leading-tight hover:text-amber-400 transition-colors line-clamp-2"
+            className="text-xl font-black text-foreground tracking-tighter leading-tight hover:text-accent-bright transition-colors line-clamp-2"
           >
             {anime.title}
           </Link>
-          <p className="text-xs font-bold text-white/25 uppercase tracking-widest mt-1 flex items-center gap-1.5">
-            <Layers size={11} className="text-amber-500/50" /> {anime.ep}
+          <p className="text-xs font-bold text-subtle uppercase tracking-widest mt-1 flex items-center gap-1.5">
+            <Layers size={11} className="text-accent/50" /> {anime.ep}
           </p>
         </div>
 
         {/* Progress */}
         <div className="space-y-2">
           <div className="flex justify-between text-[10px] font-black uppercase tracking-widest">
-            <span className="text-white/25 italic">Progress</span>
-            <span className="text-white">{anime.progress}%</span>
+            <span className="text-subtle italic">Progress</span>
+            <span className="text-foreground">{anime.progress}%</span>
           </div>
-          <div className="h-1.5 w-full bg-white/5 rounded-full overflow-hidden">
+          <div className="h-1.5 w-full bg-surface rounded-full overflow-hidden">
             <motion.div
               initial={{ width: 0 }}
               animate={{ width: `${anime.progress}%` }}
@@ -138,13 +138,13 @@ export const WatchCard = ({ anime, onRemove, onEdit }: { anime: WatchItem; onRem
             href={`https://www.google.com/search?q=${encodeURIComponent(`${anime.title} watch on ${anime.platform}`)}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex-1 flex items-center justify-center gap-2 py-3 rounded-2xl bg-white/5 border border-white/8 text-white/50 text-[10px] font-black uppercase tracking-widest hover:bg-white hover:text-black hover:border-white transition-all duration-300"
+            className="flex-1 flex items-center justify-center gap-2 py-3 rounded-2xl bg-surface border border-border text-muted text-[10px] font-black uppercase tracking-widest hover:bg-white hover:text-black hover:border-white transition-all duration-300"
           >
             <ExternalLink size={12} /> {anime.platform}
           </a>
           <button
             onClick={() => push(`Opening ${anime.title}…`, "info")}
-            className="h-11 w-11 flex items-center justify-center rounded-2xl bg-amber-600/15 border border-amber-500/25 text-amber-400 hover:bg-amber-600 hover:text-white transition-all"
+            className="h-11 w-11 flex items-center justify-center rounded-2xl bg-accent/15 border border-accent/25 text-accent-bright hover:bg-accent hover:text-foreground transition-all"
           >
             <Play size={15} fill="currentColor" />
           </button>

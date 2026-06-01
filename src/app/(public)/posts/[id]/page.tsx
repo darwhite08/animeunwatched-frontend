@@ -154,7 +154,7 @@ function CommentCard({ comment, index }: { comment: Comment; index: number }) {
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.05 }}
-      className="p-4 rounded-2xl bg-white/[0.02] border border-white/8 space-y-3"
+      className="p-4 rounded-2xl bg-surface border border-border space-y-3"
     >
       {/* Author */}
       <div className="flex items-center gap-3">
@@ -162,20 +162,20 @@ function CommentCard({ comment, index }: { comment: Comment; index: number }) {
           {comment.avatar}
         </div>
         <div>
-          <p className="text-xs font-black text-white">{comment.author}</p>
-          <p className="text-[9px] text-white/25">{comment.time}</p>
+          <p className="text-xs font-black text-foreground">{comment.author}</p>
+          <p className="text-[9px] text-subtle">{comment.time}</p>
         </div>
       </div>
 
       {/* Body */}
-      <p className="text-sm text-white/60 leading-relaxed">{comment.body}</p>
+      <p className="text-sm text-muted leading-relaxed">{comment.body}</p>
 
       {/* Actions */}
       <div className="flex items-center gap-4">
         <button
           onClick={() => setLiked(l => !l)}
           className={`flex items-center gap-1.5 text-[10px] font-bold transition-colors ${
-            liked ? "text-rose-400" : "text-white/25 hover:text-rose-400"
+            liked ? "text-rose-400" : "text-subtle hover:text-rose-400"
           }`}
         >
           <Heart size={10} fill={liked ? "currentColor" : "none"} />
@@ -185,7 +185,7 @@ function CommentCard({ comment, index }: { comment: Comment; index: number }) {
         {hasReplies && (
           <button
             onClick={() => setShowReplies(s => !s)}
-            className="flex items-center gap-1 text-[10px] font-bold text-white/25 hover:text-amber-400 transition-colors"
+            className="flex items-center gap-1 text-[10px] font-bold text-subtle hover:text-accent-bright transition-colors"
           >
             {showReplies ? <ChevronUp size={10} /> : <ChevronDown size={10} />}
             {comment.replies!.length} {comment.replies!.length === 1 ? "reply" : "replies"}
@@ -203,22 +203,22 @@ function CommentCard({ comment, index }: { comment: Comment; index: number }) {
             transition={{ duration: 0.25 }}
             className="overflow-hidden"
           >
-            <div className="mt-2 ml-5 pl-4 border-l border-white/8 space-y-3">
+            <div className="mt-2 ml-5 pl-4 border-l border-border space-y-3">
               {comment.replies!.map((reply) => (
                 <div key={reply.id} className="space-y-2">
                   <div className="flex items-center gap-2">
-                    <CornerDownRight size={10} className="text-white/15 shrink-0" />
+                    <CornerDownRight size={10} className="text-subtle shrink-0" />
                     <div className={`h-6 w-6 rounded-lg bg-gradient-to-br ${reply.avatarColor} flex items-center justify-center text-[9px] font-black shrink-0`}>
                       {reply.avatar}
                     </div>
-                    <p className="text-[10px] font-black text-white">{reply.author}</p>
-                    <p className="text-[9px] text-white/20">{reply.time}</p>
+                    <p className="text-[10px] font-black text-foreground">{reply.author}</p>
+                    <p className="text-[9px] text-subtle">{reply.time}</p>
                   </div>
-                  <p className="ml-8 text-[11px] text-white/50 leading-relaxed">{reply.body}</p>
+                  <p className="ml-8 text-[11px] text-muted leading-relaxed">{reply.body}</p>
                   <button
                     onClick={() => setReplyLikes(prev => ({ ...prev, [reply.id]: !prev[reply.id] }))}
                     className={`ml-8 flex items-center gap-1 text-[9px] font-bold transition-colors ${
-                      replyLikes[reply.id] ? "text-rose-400" : "text-white/20 hover:text-rose-400"
+                      replyLikes[reply.id] ? "text-rose-400" : "text-subtle hover:text-rose-400"
                     }`}
                   >
                     <Heart size={8} fill={replyLikes[reply.id] ? "currentColor" : "none"} />
@@ -314,8 +314,8 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
     })
   }
 
-  if (isLoading) return <div className="min-h-screen bg-[#020202] flex items-center justify-center"><Loader2 size={24} className="animate-spin text-amber-400" /></div>
-  if (isError && !POSTS[id]) return <div className="min-h-screen bg-[#020202] flex items-center justify-center text-white/30">Post not found</div>
+  if (isLoading) return <div className="min-h-screen bg-background flex items-center justify-center"><Loader2 size={24} className="animate-spin text-accent-bright" /></div>
+  if (isError && !POSTS[id]) return <div className="min-h-screen bg-background flex items-center justify-center text-subtle">Post not found</div>
 
   const share = async () => {
     try {
@@ -327,13 +327,13 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
   }
 
   return (
-    <div className="min-h-screen bg-[#020202] text-white pb-32">
+    <div className="min-h-screen bg-background text-foreground pb-32">
       <div className="max-w-6xl mx-auto px-6 pt-8">
 
         {/* Back button */}
         <Link
           href="/community"
-          className="inline-flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-white/30 hover:text-white transition-colors mb-8"
+          className="inline-flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-subtle hover:text-foreground transition-colors mb-8"
         >
           <ChevronLeft size={13} /> Back to Community
         </Link>
@@ -346,7 +346,7 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
             <motion.div
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-zinc-900/60 border border-white/8 rounded-2xl p-6 space-y-5"
+              className="bg-zinc-900/60 border border-border rounded-2xl p-6 space-y-5"
             >
               <div className="flex items-start justify-between">
                 <div className="flex items-center gap-3">
@@ -354,8 +354,8 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
                     {post.avatar}
                   </div>
                   <div>
-                    <p className="text-sm font-black text-white">{post.author}</p>
-                    <p className="text-[10px] text-white/30">{post.time}</p>
+                    <p className="text-sm font-black text-foreground">{post.author}</p>
+                    <p className="text-[10px] text-subtle">{post.time}</p>
                   </div>
                 </div>
                 <PostMenu postId={String(post.id)} />
@@ -365,7 +365,7 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
               {post.anime && (
                 <Link
                   href="/bestanimelist"
-                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-amber-500/8 border border-amber-500/15 text-[10px] font-bold text-amber-400 hover:bg-amber-500/15 transition-colors"
+                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-accent/8 border border-accent/15 text-[10px] font-bold text-accent-bright hover:bg-accent/15 transition-colors"
                 >
                   <Star size={9} /> {post.anime}
                 </Link>
@@ -374,7 +374,7 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
               {/* Full content */}
               <div className="space-y-3">
                 {post.content.split("\n\n").map((paragraph, i) => (
-                  <p key={i} className="text-sm text-white/75 leading-relaxed">
+                  <p key={i} className="text-sm text-muted leading-relaxed">
                     {paragraph}
                   </p>
                 ))}
@@ -384,7 +384,7 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
               {post.tags.length > 0 && (
                 <div className="flex flex-wrap gap-1.5">
                   {post.tags.map(tag => (
-                    <span key={tag} className="text-[9px] font-bold text-amber-400/60 hover:text-amber-400 cursor-pointer transition-colors">
+                    <span key={tag} className="text-[9px] font-bold text-accent-bright/60 hover:text-accent-bright cursor-pointer transition-colors">
                       #{tag}
                     </span>
                   ))}
@@ -392,23 +392,23 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
               )}
 
               {/* Action bar */}
-              <div className="flex items-center gap-5 pt-2 border-t border-white/5">
+              <div className="flex items-center gap-5 pt-2 border-t border-border">
                 <button
                   onClick={toggleLike}
                   className={`flex items-center gap-1.5 text-xs font-bold transition-colors ${
-                    liked ? "text-rose-400" : "text-white/30 hover:text-rose-400"
+                    liked ? "text-rose-400" : "text-subtle hover:text-rose-400"
                   }`}
                 >
                   <Heart size={14} fill={liked ? "currentColor" : "none"} />
                   {likeCount}
                 </button>
-                <span className="flex items-center gap-1.5 text-xs font-bold text-white/30">
+                <span className="flex items-center gap-1.5 text-xs font-bold text-subtle">
                   <MessageSquare size={14} />
                   {post.comments}
                 </span>
                 <button
                   onClick={share}
-                  className="flex items-center gap-1.5 text-xs font-bold text-white/30 hover:text-white/60 transition-colors ml-auto"
+                  className="flex items-center gap-1.5 text-xs font-bold text-subtle hover:text-muted transition-colors ml-auto"
                 >
                   <Share2 size={13} /> Share
                 </button>
@@ -417,13 +417,13 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
 
             {/* Comment section */}
             <div className="space-y-4">
-              <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/30">
+              <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-subtle">
                 Comments ({visibleComments.length})
               </h2>
 
               <div className="space-y-3">
                 {visibleComments.length === 0 ? (
-                  <div className="text-center py-10 text-white/30 text-sm border border-dashed border-white/8 rounded-2xl">
+                  <div className="text-center py-10 text-subtle text-sm border border-dashed border-border rounded-2xl">
                     Be the first to comment.
                   </div>
                 ) : (
@@ -434,8 +434,8 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
               </div>
 
               {/* Add comment */}
-              <div className="bg-zinc-900/60 border border-white/8 rounded-2xl p-5 space-y-4">
-                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/30">
+              <div className="bg-zinc-900/60 border border-border rounded-2xl p-5 space-y-4">
+                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-subtle">
                   Add a Comment
                 </p>
                 <textarea
@@ -443,13 +443,13 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
                   onChange={e => setCommentText(e.target.value)}
                   placeholder="Share your thoughts…"
                   rows={3}
-                  className="w-full bg-transparent text-sm text-white placeholder:text-white/20 resize-none outline-none leading-relaxed"
+                  className="w-full bg-transparent text-sm text-foreground placeholder:text-subtle resize-none outline-none leading-relaxed"
                 />
-                <div className="flex justify-end border-t border-white/5 pt-3">
+                <div className="flex justify-end border-t border-border pt-3">
                   <button
                     onClick={submitComment}
                     disabled={!commentText.trim()}
-                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 disabled:opacity-40 text-xs font-black uppercase tracking-widest text-white transition-all"
+                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-accent hover:bg-accent-bright disabled:opacity-40 text-xs font-black uppercase tracking-widest text-foreground transition-all"
                   >
                     <Send size={12} /> Post Comment
                   </button>
@@ -460,7 +460,7 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
 
           {/* ── Sidebar: related posts ── */}
           <div className="space-y-4 lg:sticky lg:top-24">
-            <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/30">
+            <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-subtle">
               More from {post.author}
             </h2>
             <div className="space-y-3">
@@ -473,17 +473,17 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
                 >
                   <Link
                     href={`/posts/${rp.id}`}
-                    className="block p-4 rounded-2xl bg-white/[0.02] border border-white/8 hover:border-amber-500/25 hover:bg-white/[0.04] transition-all group"
+                    className="block p-4 rounded-2xl bg-surface border border-border hover:border-accent/25 hover:bg-white/[0.04] transition-all group"
                   >
                     {rp.anime && (
-                      <span className="inline-flex items-center gap-1 mb-2 text-[9px] font-bold text-amber-400/60">
+                      <span className="inline-flex items-center gap-1 mb-2 text-[9px] font-bold text-accent-bright/60">
                         <Star size={8} /> {rp.anime}
                       </span>
                     )}
-                    <p className="text-sm text-white/60 group-hover:text-white/80 transition-colors line-clamp-3 leading-relaxed">
+                    <p className="text-sm text-muted group-hover:text-muted transition-colors line-clamp-3 leading-relaxed">
                       {rp.content}
                     </p>
-                    <div className="flex items-center gap-3 mt-3 text-[10px] text-white/25">
+                    <div className="flex items-center gap-3 mt-3 text-[10px] text-subtle">
                       <span>{rp.time}</span>
                       <span className="flex items-center gap-1">
                         <Heart size={9} fill="currentColor" className="text-rose-400/50" /> {rp.likes}

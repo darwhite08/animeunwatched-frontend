@@ -77,77 +77,77 @@ export default function CommunityReviewsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#020202] text-white pb-32">
+    <div className="min-h-screen bg-background text-foreground pb-32">
       <div className="max-w-4xl mx-auto px-6 pt-32 space-y-8">
         <div className="flex items-end justify-between gap-4">
           <div>
-            <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-amber-400/60 mb-2">Community Voices</p>
-            <h1 className="text-5xl font-black tracking-tighter uppercase italic text-white">
+            <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-accent-bright/60 mb-2">Community Voices</p>
+            <h1 className="text-5xl font-black tracking-tighter uppercase italic text-foreground">
               Reviews<span style={{color:"#f59e0b"}}>.</span>
             </h1>
-            <p className="text-white/35 text-sm mt-1">{MOCK.length} community reviews</p>
+            <p className="text-subtle text-sm mt-1">{MOCK.length} community reviews</p>
           </div>
-          <Link href="/rate" className="flex items-center gap-2 px-5 py-3 rounded-2xl bg-amber-500 hover:bg-amber-400 text-xs font-black uppercase tracking-widest text-white transition-all">
+          <Link href="/rate" className="flex items-center gap-2 px-5 py-3 rounded-2xl bg-accent hover:bg-accent-bright text-xs font-black uppercase tracking-widest text-foreground transition-all">
             <PenSquare size={13} /> Write a Review
           </Link>
         </div>
 
         {/* Sort */}
         <div className="flex gap-2 flex-wrap items-center">
-          <SortAsc size={13} className="text-white/30" />
+          <SortAsc size={13} className="text-subtle" />
           {(["helpful","recent","highest","lowest"] as const).map(s => (
             <button key={s} onClick={() => setSort(s)}
-              className={`px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-wider transition-all capitalize ${sort===s?"bg-amber-500 text-black":"bg-white/5 text-white/40 border border-white/5 hover:bg-white/8"}`}
+              className={`px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-wider transition-all capitalize ${sort===s?"bg-accent text-black":"bg-surface text-muted border border-border hover:bg-surface"}`}
             >{s}</button>
           ))}
         </div>
 
         {/* Reviews */}
         {sorted.length === 0 && (
-          <div className="text-center py-20 border border-dashed border-white/8 rounded-2xl text-white/35">
+          <div className="text-center py-20 border border-dashed border-border rounded-2xl text-subtle">
             <p className="text-xs uppercase tracking-[0.3em] font-black">No reviews yet</p>
-            <p className="text-[11px] mt-2 text-white/25">Be the first to write one from an anime page.</p>
+            <p className="text-[11px] mt-2 text-subtle">Be the first to write one from an anime page.</p>
           </div>
         )}
         <div className="grid md:grid-cols-2 gap-5">
           {sorted.map((r, i) => (
             <motion.div key={r.id} initial={{ opacity:0, y:8 }} animate={{ opacity:1, y:0 }} transition={{ delay:i*0.04 }}
-              className="p-5 rounded-2xl bg-white/[0.02] border border-white/8 hover:border-white/15 transition-colors space-y-4"
+              className="p-5 rounded-2xl bg-surface border border-border hover:border-border transition-colors space-y-4"
             >
               <div className="flex items-center gap-3">
                 <Link href={`/anime/${r.anime.id}`} className="relative h-12 w-9 rounded-lg overflow-hidden shrink-0">
                   <Image src={r.anime.image} alt={r.anime.title} fill className="object-cover" sizes="36px"/>
                 </Link>
                 <div className="flex-1 min-w-0">
-                  <Link href={`/anime/${r.anime.id}`} className="text-sm font-black text-white/80 hover:text-white truncate block">{r.anime.title}</Link>
+                  <Link href={`/anime/${r.anime.id}`} className="text-sm font-black text-muted hover:text-foreground truncate block">{r.anime.title}</Link>
                   <div className="flex items-center gap-2 mt-0.5">
                     <div className="flex gap-0.5">
                       {[1,2,3,4,5].map(s=>(
-                        <Star key={s} size={9} fill={s<=Math.round(r.score/2)?"#f59e0b":"none"} className={s<=Math.round(r.score/2)?"text-amber-400":"text-white/15"}/>
+                        <Star key={s} size={9} fill={s<=Math.round(r.score/2)?"#f59e0b":"none"} className={s<=Math.round(r.score/2)?"text-accent-bright":"text-subtle"}/>
                       ))}
                     </div>
-                    <span className="text-[9px] font-black text-white/50">{r.score}/10</span>
-                    {r.hasSpoilers && <span className="text-[7px] font-black px-1.5 py-0.5 rounded-full bg-amber-500/15 text-amber-400 border border-amber-500/20">Spoilers</span>}
+                    <span className="text-[9px] font-black text-muted">{r.score}/10</span>
+                    {r.hasSpoilers && <span className="text-[7px] font-black px-1.5 py-0.5 rounded-full bg-accent/15 text-accent-bright border border-accent/20">Spoilers</span>}
                   </div>
                 </div>
               </div>
 
               <div>
                 {r.hasSpoilers && !revealed.has(r.id)
-                  ? <button onClick={()=>setRevealed(s=>new Set([...s,r.id]))} className="text-xs font-bold text-amber-400 hover:text-amber-300 transition-colors">
+                  ? <button onClick={()=>setRevealed(s=>new Set([...s,r.id]))} className="text-xs font-bold text-accent-bright hover:text-accent-bright transition-colors">
                       <Eye size={12} className="inline mr-1"/>Reveal spoiler review
                     </button>
-                  : <p className="text-sm text-white/60 leading-relaxed line-clamp-3">{r.body}</p>
+                  : <p className="text-sm text-muted leading-relaxed line-clamp-3">{r.body}</p>
                 }
               </div>
 
-              <div className="flex items-center justify-between pt-2 border-t border-white/5">
-                <div className="flex items-center gap-2 text-[9px] text-white/25">
-                  <span className="font-black text-white/40">{r.author}</span>
+              <div className="flex items-center justify-between pt-2 border-t border-border">
+                <div className="flex items-center gap-2 text-[9px] text-subtle">
+                  <span className="font-black text-muted">{r.author}</span>
                   <span>·</span><span>{r.date}</span>
                 </div>
                 <button onClick={()=>toggleHelp(r.id)}
-                  className={`flex items-center gap-1.5 text-[10px] font-bold transition-colors ${helpedBy.has(r.id)?"text-emerald-400":"text-white/25 hover:text-white/50"}`}
+                  className={`flex items-center gap-1.5 text-[10px] font-bold transition-colors ${helpedBy.has(r.id)?"text-emerald-400":"text-subtle hover:text-muted"}`}
                 >
                   <ThumbsUp size={11} fill={helpedBy.has(r.id)?"currentColor":"none"}/>
                   {r.helpful + (helpedBy.has(r.id) !== r.helpedByMe ? (helpedBy.has(r.id)?1:-1) : 0)}

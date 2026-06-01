@@ -38,12 +38,12 @@ export default function NotificationBell() {
         onClick={() => setIsOpen(!isOpen)}
         animate={shake ? { rotate: [0, -18, 18, -14, 14, -8, 8, 0] } : { rotate: 0 }}
         transition={{ duration: 0.8 }}
-        className="relative p-2.5 rounded-full bg-white/5 border border-white/5 text-white/40 hover:text-white hover:bg-amber-500/10 transition-colors group"
+        className="relative p-2.5 rounded-full bg-surface border border-border text-muted hover:text-foreground hover:bg-accent/10 transition-colors group"
       >
-        <Bell size={18} className={unreadCount > 0 ? "text-amber-400" : ""} />
+        <Bell size={18} className={unreadCount > 0 ? "text-accent-bright" : ""} />
 
         {unreadCount > 0 && (
-          <span className="absolute -top-0.5 -right-0.5 min-w-[16px] h-[16px] px-1 rounded-full bg-amber-500 text-black text-[9px] font-black flex items-center justify-center leading-none shadow-[0_0_8px_rgba(245,158,11,0.6)]">
+          <span className="absolute -top-0.5 -right-0.5 min-w-[16px] h-[16px] px-1 rounded-full bg-accent text-black text-[9px] font-black flex items-center justify-center leading-none shadow-[0_0_8px_rgba(245,158,11,0.6)]">
             {unreadCount > 9 ? "9+" : unreadCount}
           </span>
         )}

@@ -35,8 +35,8 @@ export const TopThree = () => {
 
           <div className={`relative p-8 rounded-[3.5rem] border transition-all duration-700 overflow-hidden ${
             user.pos === 1 
-              ? 'bg-gradient-to-b from-indigo-500/20 to-black border-amber-500/40 py-16' 
-              : 'bg-[#0a0a0a] border-white/5 py-12'
+              ? 'bg-gradient-to-b from-indigo-500/20 to-black border-accent/40 py-16' 
+              : 'bg-surface border-border py-12'
           }`}>
             {/* Shimmer effect for Rank 1 */}
             {user.pos === 1 && (
@@ -46,22 +46,22 @@ export const TopThree = () => {
             <div className="flex flex-col items-center gap-6 relative z-10">
               <div className="relative h-32 w-32 md:h-40 md:w-40">
                 <div className={`absolute inset-0 rounded-[2.5rem] rotate-6 group-hover:rotate-0 transition-transform duration-500 border-2 ${
-                   user.pos === 1 ? 'border-yellow-500/50 shadow-[0_0_30px_rgba(234,179,8,0.2)]' : 'border-white/10'
+                   user.pos === 1 ? 'border-yellow-500/50 shadow-[0_0_30px_rgba(234,179,8,0.2)]' : 'border-border'
                 }`} />
-                <div className="relative h-full w-full rounded-[2.2rem] overflow-hidden bg-zinc-900 border border-white/10">
+                <div className="relative h-full w-full rounded-[2.2rem] overflow-hidden bg-zinc-900 border border-border">
                   <Image src={user.img} alt={user.name} fill className="object-cover" />
                 </div>
               </div>
 
               <div className="text-center space-y-1">
-                <p className={`text-2xl font-black tracking-tighter ${user.pos === 1 ? 'text-white' : 'text-white/60'}`}>
+                <p className={`text-2xl font-black tracking-tighter ${user.pos === 1 ? 'text-foreground' : 'text-muted'}`}>
                   {user.name}
                 </p>
-                <p className="text-xs font-black text-amber-400 uppercase tracking-[0.2em]">{user.xp} XP</p>
+                <p className="text-xs font-black text-accent-bright uppercase tracking-[0.2em]">{user.xp} XP</p>
               </div>
 
-              <div className={`px-6 py-2 rounded-2xl bg-black border border-white/10 font-black italic text-xl ${
-                user.pos === 1 ? 'text-yellow-500 border-yellow-500/20' : 'text-white/20'
+              <div className={`px-6 py-2 rounded-2xl bg-background border border-border font-black italic text-xl ${
+                user.pos === 1 ? 'text-yellow-500 border-yellow-500/20' : 'text-subtle'
               }`}>
                 #{user.pos}
               </div>

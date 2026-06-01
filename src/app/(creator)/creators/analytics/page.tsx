@@ -16,8 +16,8 @@ const TOP_CONTENT_FALLBACK = [
 
 const TYPE_COLORS: Record<string, string> = {
   Blog: "bg-purple-500/20 text-purple-400 border-purple-500/20",
-  Feed: "bg-amber-500/20 text-amber-400 border-amber-500/20",
-  Poll: "bg-amber-500/20 text-amber-400 border-amber-500/20",
+  Feed: "bg-accent/20 text-accent-bright border-accent/20",
+  Poll: "bg-accent/20 text-accent-bright border-accent/20",
 }
 
 // Simple fake bar chart data (7 days)
@@ -46,9 +46,9 @@ export default function AnalyticsPage() {
   const reputation      = statsData?.reputation       ?? 840
 
   const METRICS = [
-    { label: "Total Views",    value: totalViews >= 1000 ? `${(totalViews / 1000).toFixed(1)}k` : String(totalViews), delta: "+18%", up: true,  icon: Eye,           color: "text-amber-400",  bg: "bg-amber-500/10"  },
+    { label: "Total Views",    value: totalViews >= 1000 ? `${(totalViews / 1000).toFixed(1)}k` : String(totalViews), delta: "+18%", up: true,  icon: Eye,           color: "text-accent-bright",  bg: "bg-accent/10"  },
     { label: "Published",      value: String(publishedBlogs), delta: "+0%",  up: true,  icon: BarChart3,     color: "text-rose-400",    bg: "bg-rose-500/10"    },
-    { label: "Total Posts",    value: String(postCount),      delta: "+5%",  up: true,  icon: MessageCircle, color: "text-amber-400",   bg: "bg-amber-500/10"   },
+    { label: "Total Posts",    value: String(postCount),      delta: "+5%",  up: true,  icon: MessageCircle, color: "text-accent-bright",   bg: "bg-accent/10"   },
     { label: "Reputation",     value: String(reputation),     delta: "+9%",  up: true,  icon: Users,         color: "text-emerald-400", bg: "bg-emerald-500/10" },
   ]
 
@@ -69,18 +69,18 @@ export default function AnalyticsPage() {
       {/* Header */}
       <div className="flex items-start justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-amber-600/20 border border-amber-500/30 flex items-center justify-center">
-            <BarChart3 size={18} className="text-amber-400" />
+          <div className="w-10 h-10 rounded-xl bg-accent/20 border border-accent/30 flex items-center justify-center">
+            <BarChart3 size={18} className="text-accent-bright" />
           </div>
           <div>
             <h1 className="text-2xl font-semibold">Analytics</h1>
-            <p className="text-sm text-white/40">Last 30 days performance</p>
+            <p className="text-sm text-muted">Last 30 days performance</p>
           </div>
         </div>
 
         <button
           onClick={handleSync}
-          className="flex items-center gap-2 text-xs font-semibold text-amber-400 hover:text-amber-300 border border-amber-500/30 hover:border-amber-500/60 bg-amber-600/10 hover:bg-amber-600/20 px-3 py-2 rounded-xl transition-all"
+          className="flex items-center gap-2 text-xs font-semibold text-accent-bright hover:text-accent-bright border border-accent/30 hover:border-accent/60 bg-accent/10 hover:bg-accent/20 px-3 py-2 rounded-xl transition-all"
         >
           <RefreshCw size={13} />
           Sync with Backend
@@ -95,14 +95,14 @@ export default function AnalyticsPage() {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.06 }}
-            className="bg-zinc-900 border border-white/10 rounded-2xl p-5 space-y-3"
+            className="bg-zinc-900 border border-border rounded-2xl p-5 space-y-3"
           >
             <div className={`w-9 h-9 rounded-xl ${m.bg} flex items-center justify-center`}>
               <m.icon size={16} className={m.color} />
             </div>
             <div>
-              <p className="text-2xl font-black tracking-tighter text-white">{m.value}</p>
-              <p className="text-xs text-white/40 uppercase tracking-wider mt-0.5">{m.label}</p>
+              <p className="text-2xl font-black tracking-tighter text-foreground">{m.value}</p>
+              <p className="text-xs text-muted uppercase tracking-wider mt-0.5">{m.label}</p>
             </div>
             <div className={`flex items-center gap-1 text-xs font-bold ${m.up ? "text-emerald-400" : "text-red-400"}`}>
               {m.up ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
@@ -113,10 +113,10 @@ export default function AnalyticsPage() {
       </div>
 
       {/* Views chart */}
-      <div className="bg-zinc-900 border border-white/10 rounded-2xl p-6 space-y-6">
+      <div className="bg-zinc-900 border border-border rounded-2xl p-6 space-y-6">
         <div className="flex items-center justify-between">
-          <h2 className="font-semibold text-white">Views — Last 7 Days</h2>
-          <span className="text-xs text-white/30 uppercase tracking-widest">Daily</span>
+          <h2 className="font-semibold text-foreground">Views — Last 7 Days</h2>
+          <span className="text-xs text-subtle uppercase tracking-widest">Daily</span>
         </div>
 
         <div className="flex items-end gap-3 h-40">
@@ -124,7 +124,7 @@ export default function AnalyticsPage() {
             const pct = (d.views / MAX_VIEWS) * 100
             return (
               <div key={d.day} className="flex-1 flex flex-col items-center gap-2">
-                <span className="text-[9px] text-white/30 font-mono">
+                <span className="text-[9px] text-subtle font-mono">
                   {d.views >= 1000 ? `${(d.views / 1000).toFixed(1)}k` : d.views}
                 </span>
                 <div className="w-full flex items-end" style={{ height: "80px" }}>
@@ -135,7 +135,7 @@ export default function AnalyticsPage() {
                     className="w-full rounded-t-lg bg-gradient-to-t from-indigo-600 to-indigo-400 min-h-[4px]"
                   />
                 </div>
-                <span className="text-[9px] text-white/40 uppercase">{d.day}</span>
+                <span className="text-[9px] text-muted uppercase">{d.day}</span>
               </div>
             )
           })}
@@ -143,8 +143,8 @@ export default function AnalyticsPage() {
       </div>
 
       {/* Top content */}
-      <div className="bg-zinc-900 border border-white/10 rounded-2xl p-6 space-y-4">
-        <h2 className="font-semibold text-white">Top Performing Content</h2>
+      <div className="bg-zinc-900 border border-border rounded-2xl p-6 space-y-4">
+        <h2 className="font-semibold text-foreground">Top Performing Content</h2>
 
         <div className="space-y-2">
           {topContent.map((item, i) => (
@@ -153,22 +153,22 @@ export default function AnalyticsPage() {
               initial={{ opacity: 0, x: -8 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: i * 0.05 }}
-              className="flex items-center gap-4 p-4 rounded-xl hover:bg-white/5 transition-colors group"
+              className="flex items-center gap-4 p-4 rounded-xl hover:bg-surface transition-colors group"
             >
-              <span className="text-xs font-black text-white/20 w-5 shrink-0">#{i + 1}</span>
+              <span className="text-xs font-black text-subtle w-5 shrink-0">#{i + 1}</span>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-bold text-white/80 group-hover:text-white truncate transition-colors">
+                <p className="text-sm font-bold text-muted group-hover:text-foreground truncate transition-colors">
                   {item.title}
                 </p>
               </div>
               <span className={`text-[9px] border px-2 py-0.5 rounded-full font-black uppercase tracking-wider shrink-0 ${TYPE_COLORS[item.type]}`}>
                 {item.type}
               </span>
-              <div className="flex items-center gap-3 text-xs text-white/30 shrink-0">
+              <div className="flex items-center gap-3 text-xs text-subtle shrink-0">
                 <span className="flex items-center gap-1"><Eye size={11} /> {item.views >= 1000 ? `${(item.views / 1000).toFixed(1)}k` : item.views}</span>
                 {item.likes > 0 && <span className="flex items-center gap-1"><Heart size={11} /> {item.likes}</span>}
               </div>
-              <ArrowUpRight size={14} className="text-white/20 group-hover:text-amber-400 transition-colors shrink-0" />
+              <ArrowUpRight size={14} className="text-subtle group-hover:text-accent-bright transition-colors shrink-0" />
             </motion.div>
           ))}
         </div>

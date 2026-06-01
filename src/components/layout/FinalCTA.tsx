@@ -23,7 +23,7 @@ export default function FinalCTA() {
   return (
     <section 
       ref={containerRef}
-      className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-[#020202] py-32"
+      className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden bg-background py-32"
     >
       {/* 1. ARCHITECTURAL GRID & NOISE */}
       <div className="absolute inset-0 pointer-events-none">
@@ -34,15 +34,15 @@ export default function FinalCTA() {
       </div>
 
       {/* 2. THE INDIGO EVENT HORIZON */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120vw] h-[500px] bg-amber-600/10 blur-[150px] rounded-[100%] pointer-events-none" />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120vw] h-[500px] bg-accent/10 blur-[150px] rounded-[100%] pointer-events-none" />
       <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-indigo-500/50 to-transparent" />
 
       {/* 3. FOUR-CORNER CROSSHAIRS (HUD Detail) */}
       <div className="absolute inset-8 pointer-events-none hidden md:block">
-        <Crosshair size={24} className="absolute top-0 left-0 text-white/20" />
-        <Crosshair size={24} className="absolute top-0 right-0 text-white/20" />
-        <Crosshair size={24} className="absolute bottom-0 left-0 text-white/20" />
-        <Crosshair size={24} className="absolute bottom-0 right-0 text-white/20" />
+        <Crosshair size={24} className="absolute top-0 left-0 text-subtle" />
+        <Crosshair size={24} className="absolute top-0 right-0 text-subtle" />
+        <Crosshair size={24} className="absolute bottom-0 left-0 text-subtle" />
+        <Crosshair size={24} className="absolute bottom-0 right-0 text-subtle" />
       </div>
 
       {/* 4. CONTENT PAYLOAD */}
@@ -53,20 +53,20 @@ export default function FinalCTA() {
         {/* Pre-Title Status */}
         <div className="flex items-center gap-3 mb-12">
           <div className="flex h-2 w-2 relative">
-             <span className="animate-ping absolute inline-flex h-2 w-2 rounded-full bg-amber-400 opacity-75" />
-             <span className="relative inline-flex rounded-full h-2 w-2 bg-amber-500" />
+             <span className="animate-ping absolute inline-flex h-2 w-2 rounded-full bg-accent-bright opacity-75" />
+             <span className="relative inline-flex rounded-full h-2 w-2 bg-accent" />
           </div>
-          <span className="text-[10px] font-mono tracking-[0.4em] text-amber-400 uppercase">
+          <span className="text-[10px] font-mono tracking-[0.4em] text-accent-bright uppercase">
             Global_Sync_Available // V.4.0
           </span>
         </div>
 
         {/* Massive Viewport Typography */}
-        <h2 className="text-[12vw] md:text-[10rem] font-black tracking-tighter leading-[0.75] uppercase italic text-white mix-blend-plus-lighter">
+        <h2 className="text-[12vw] md:text-[10rem] font-black tracking-tighter leading-[0.75] uppercase italic text-foreground mix-blend-plus-lighter">
           Your <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-white/20">Legend</span><br />
           <span className="relative inline-block">
             {/* Inner text glow */}
-            <span className="absolute -inset-4 bg-amber-500/30 blur-2xl rounded-full opacity-60 animate-pulse pointer-events-none" />
+            <span className="absolute -inset-4 bg-accent/30 blur-2xl rounded-full opacity-60 animate-pulse pointer-events-none" />
             <span className="relative text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-500">
               Starts Here.
             </span>
@@ -74,8 +74,8 @@ export default function FinalCTA() {
         </h2>
 
         {/* Technical Subtitle */}
-        <p className="mt-16 text-white/40 text-lg md:text-xl font-medium max-w-2xl mx-auto leading-relaxed tracking-tight uppercase">
-          Abandon the scattered lists. Join <span className="text-white">12,402 active Shinobi</span> currently archiving their legacy on the Neural Network.
+        <p className="mt-16 text-muted text-lg md:text-xl font-medium max-w-2xl mx-auto leading-relaxed tracking-tight uppercase">
+          Abandon the scattered lists. Join <span className="text-foreground">12,402 active Shinobi</span> currently archiving their legacy on the Neural Network.
         </p>
 
         {/* The Action Trigger */}
@@ -83,26 +83,26 @@ export default function FinalCTA() {
           {/* Outer Rotating Glow */}
           <div className="absolute -inset-1 bg-gradient-to-r from-indigo-600 via-purple-500 to-indigo-600 rounded-2xl blur opacity-30 group-hover:opacity-100 transition duration-1000 group-hover:duration-200 animate-[spin_4s_linear_infinite]" style={{ animationPlayState: 'paused' }} />
           
-          <Link href={ctaHref} className="relative flex items-center gap-6 px-10 py-6 bg-[#0a0a0a] border border-white/10 rounded-2xl overflow-hidden transition-all duration-500 group-hover:bg-white group-hover:border-transparent group-hover:shadow-[0_0_40px_rgba(99,102,241,0.4)]">
+          <Link href={ctaHref} className="relative flex items-center gap-6 px-10 py-6 bg-surface border border-border rounded-2xl overflow-hidden transition-all duration-500 group-hover:bg-white group-hover:border-transparent group-hover:shadow-[0_0_40px_rgba(99,102,241,0.4)]">
             
             {/* Left Icon Block */}
-            <div className="flex items-center justify-center text-amber-500 group-hover:text-black transition-colors duration-500">
+            <div className="flex items-center justify-center text-accent group-hover:text-black transition-colors duration-500">
                <Terminal size={24} />
             </div>
 
             {/* Main Text */}
             <div className="flex flex-col items-start text-left">
-              <span className="text-[10px] font-black text-white/40 group-hover:text-black/40 uppercase tracking-[0.3em] transition-colors duration-500">
+              <span className="text-[10px] font-black text-muted group-hover:text-black/40 uppercase tracking-[0.3em] transition-colors duration-500">
                 Execute Command
               </span>
-              <span className="text-xl font-black text-white group-hover:text-black uppercase tracking-tight transition-colors duration-500">
+              <span className="text-xl font-black text-foreground group-hover:text-black uppercase tracking-tight transition-colors duration-500">
                 Initialize Protocol
               </span>
             </div>
 
             {/* Right Arrow Block */}
-            <div className="ml-4 h-12 w-12 rounded-full bg-white/5 border border-white/10 flex items-center justify-center group-hover:bg-black group-hover:text-white transition-all duration-500 transform group-hover:translate-x-2">
-               <ArrowRight size={20} className="text-white group-hover:text-white" />
+            <div className="ml-4 h-12 w-12 rounded-full bg-surface border border-border flex items-center justify-center group-hover:bg-background group-hover:text-foreground transition-all duration-500 transform group-hover:translate-x-2">
+               <ArrowRight size={20} className="text-foreground group-hover:text-foreground" />
             </div>
             
             {/* Shimmer Line */}
@@ -111,7 +111,7 @@ export default function FinalCTA() {
         </div>
 
         {/* Post-Action Status HUD */}
-        <div className="mt-12 flex flex-wrap justify-center items-center gap-8 text-[9px] font-mono tracking-[0.2em] text-white/20 uppercase">
+        <div className="mt-12 flex flex-wrap justify-center items-center gap-8 text-[9px] font-mono tracking-[0.2em] text-subtle uppercase">
           <span className="flex items-center gap-2"><Cpu size={12}/> Hardware Accelerated</span>
           <span>Latency: 12ms</span>
           <span>Encryption: AES-256</span>

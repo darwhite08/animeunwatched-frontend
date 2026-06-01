@@ -76,18 +76,18 @@ export default function DailyQuestCard() {
   }
 
   return (
-    <div className="p-8 rounded-[2.5rem] border border-white/5 bg-[#0a0a0a] space-y-6 relative overflow-hidden">
-      <div className="absolute -right-6 -bottom-6 text-amber-500/5 pointer-events-none">
+    <div className="p-8 rounded-[2.5rem] border border-border bg-surface space-y-6 relative overflow-hidden">
+      <div className="absolute -right-6 -bottom-6 text-accent/5 pointer-events-none">
         <Target size={120} strokeWidth={1} />
       </div>
 
       {/* Header */}
       <div className="flex items-center justify-between relative z-10">
         <div className="flex items-center gap-2">
-          <Target size={15} className="text-amber-400" />
-          <h4 className="text-xs font-black uppercase tracking-[0.28em] text-white/40">Daily Quests</h4>
+          <Target size={15} className="text-accent-bright" />
+          <h4 className="text-xs font-black uppercase tracking-[0.28em] text-muted">Daily Quests</h4>
         </div>
-        <div className="flex items-center gap-1.5 text-[9px] font-mono text-white/25">
+        <div className="flex items-center gap-1.5 text-[9px] font-mono text-subtle">
           <Clock size={10} />
           Resets in {timeLeft}
         </div>
@@ -96,12 +96,12 @@ export default function DailyQuestCard() {
       {/* Global progress */}
       <div className="space-y-2 relative z-10">
         <div className="flex justify-between text-[9px] font-black uppercase tracking-wider">
-          <span className="text-white/30">{done}/{QUESTS.length} Complete</span>
-          <span className="text-amber-400 flex items-center gap-1">
+          <span className="text-subtle">{done}/{QUESTS.length} Complete</span>
+          <span className="text-accent-bright flex items-center gap-1">
             <Zap size={9} fill="currentColor" /> {earnedXp}/{totalXp} XP
           </span>
         </div>
-        <div className="h-1.5 bg-white/5 rounded-full overflow-hidden">
+        <div className="h-1.5 bg-surface rounded-full overflow-hidden">
           <motion.div
             initial={{ width: 0 }}
             animate={{ width: `${(done / QUESTS.length) * 100}%` }}
@@ -121,12 +121,12 @@ export default function DailyQuestCard() {
               <Link href={q.href} className="flex items-center gap-3 group">
                 {complete
                   ? <CheckCircle2 size={16} className="text-emerald-400 shrink-0" fill="currentColor" />
-                  : <Circle size={16} className="text-white/20 shrink-0 group-hover:text-amber-400 transition-colors" />
+                  : <Circle size={16} className="text-subtle shrink-0 group-hover:text-accent-bright transition-colors" />
                 }
-                <span className={`text-sm font-bold flex-1 transition-colors ${complete ? "text-white/40 line-through" : "text-white/70 group-hover:text-white"}`}>
+                <span className={`text-sm font-bold flex-1 transition-colors ${complete ? "text-muted line-through" : "text-muted group-hover:text-foreground"}`}>
                   {q.label}
                 </span>
-                <span className={`text-[9px] font-black px-2 py-0.5 rounded-full flex items-center gap-1 ${complete ? "bg-emerald-500/10 text-emerald-400/60" : "bg-amber-500/10 text-amber-400/80"}`}>
+                <span className={`text-[9px] font-black px-2 py-0.5 rounded-full flex items-center gap-1 ${complete ? "bg-emerald-500/10 text-emerald-400/60" : "bg-accent/10 text-accent-bright/80"}`}>
                   <Zap size={8} fill="currentColor" /> +{q.xp}
                 </span>
               </Link>
@@ -142,7 +142,7 @@ export default function DailyQuestCard() {
         className={`w-full py-3.5 rounded-2xl font-black text-xs uppercase tracking-widest transition-all relative z-10 ${
           claimed ? "bg-emerald-600/20 text-emerald-400 border border-emerald-500/20"
           : allDone ? "text-black shadow-[0_0_20px_rgba(245,158,11,0.4)]"
-          : "bg-white/5 text-white/20 border border-white/8 cursor-not-allowed"
+          : "bg-surface text-subtle border border-border cursor-not-allowed"
         }`}
       >
         {claimed ? "✓ Claimed!" : allDone ? "Claim All Rewards" : `Complete all quests (+${totalXp} XP)`}

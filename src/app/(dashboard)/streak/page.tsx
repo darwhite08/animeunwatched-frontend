@@ -43,7 +43,7 @@ export default function StreakPage() {
 
         {/* LEFT: Consistency & Routine */}
         <div className="lg:col-span-8 space-y-8">
-          <div className="p-10 rounded-[3rem] border border-white/5 bg-[#0a0a0a] shadow-2xl relative overflow-hidden">
+          <div className="p-10 rounded-[3rem] border border-border bg-surface shadow-2xl relative overflow-hidden">
              {/* Decorative Background Text */}
              <span className="absolute -bottom-10 -right-5 text-[120px] font-black text-white/[0.02] pointer-events-none uppercase italic">History</span>
 
@@ -67,7 +67,7 @@ export default function StreakPage() {
       </div>
 
       {/* SECTION 3: BADGE SHOWCASE */}
-      <div className="p-10 rounded-[3rem] border border-white/5 bg-[#0a0a0a] shadow-2xl">
+      <div className="p-10 rounded-[3rem] border border-border bg-surface shadow-2xl">
         <BadgeShowcase />
       </div>
     </div>

@@ -14,22 +14,22 @@ import { PresenceDot } from "@/components/ui/PresenceDot"
 type Period = "all-time" | "monthly" | "weekly"
 
 const GRADIENT_MAP: Record<number, string> = {
-  1: "from-amber-400 to-orange-600",
+  1: "from-accent-bright to-orange-600",
   2: "from-slate-300 to-slate-500",
-  3: "from-amber-600 to-amber-800",
+  3: "from-accent to-amber-800",
 }
 
 const TITLE_MAP: Record<number, { label: string; color: string }> = {
-  1:  { label: "Legendary Shinobi", color: "text-amber-400"   },
+  1:  { label: "Legendary Shinobi", color: "text-accent-bright"   },
   2:  { label: "Arch-Mage",         color: "text-slate-300"   },
-  3:  { label: "Elite Jonin",       color: "text-amber-600"   },
-  4:  { label: "Shadow Watcher",    color: "text-amber-400"  },
+  3:  { label: "Elite Jonin",       color: "text-accent"   },
+  4:  { label: "Shadow Watcher",    color: "text-accent-bright"  },
   5:  { label: "Binge Master",      color: "text-purple-400"  },
   6:  { label: "Neural Ranked",     color: "text-blue-400"    },
   7:  { label: "Veteran Otaku",     color: "text-teal-400"    },
   8:  { label: "Hidden Gem",        color: "text-emerald-400" },
   9:  { label: "Rising Star",       color: "text-rose-400"    },
-  10: { label: "Apprentice",        color: "text-white/50"    },
+  10: { label: "Apprentice",        color: "text-muted"    },
 }
 
 const ICON_MAP: Record<number, typeof Crown> = {
@@ -92,25 +92,25 @@ export default function PublicLeaderboardPage() {
   const displayUsers = realUsers.length > 0 ? realUsers : BASE_USERS
 
   return (
-    <div className="min-h-screen bg-[#020202] text-white pb-32">
+    <div className="min-h-screen bg-background text-foreground pb-32">
       {/* Header */}
       <div className="max-w-5xl mx-auto px-6 pt-32 pb-12 space-y-8">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div>
             <motion.div initial={{ opacity:0, x:-16 }} animate={{ opacity:1, x:0 }}
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-[9px] font-black uppercase tracking-[0.3em] text-amber-400 mb-4"
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent/10 border border-accent/20 text-[9px] font-black uppercase tracking-[0.3em] text-accent-bright mb-4"
             >
               <Trophy size={11} /> Global Hall of Fame
             </motion.div>
-            <h1 className="text-5xl md:text-6xl font-black tracking-tighter text-white uppercase italic leading-none">
+            <h1 className="text-5xl md:text-6xl font-black tracking-tighter text-foreground uppercase italic leading-none">
               The Pantheon<span style={{color:"#f59e0b"}}>.</span>
             </h1>
-            <p className="text-white/35 text-sm mt-3">12,402 Shinobi competing globally</p>
+            <p className="text-subtle text-sm mt-3">12,402 Shinobi competing globally</p>
           </div>
-          <div className="flex items-center gap-1 p-1 bg-white/[0.03] border border-white/8 rounded-2xl">
+          <div className="flex items-center gap-1 p-1 bg-surface border border-border rounded-2xl">
             {(["all-time","monthly","weekly"] as Period[]).map(p => (
               <button key={p} onClick={() => setPeriod(p)}
-                className={`relative px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition-all ${period === p ? "text-black" : "text-white/35 hover:text-white"}`}
+                className={`relative px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition-all ${period === p ? "text-black" : "text-subtle hover:text-foreground"}`}
               >
                 {period === p && (
                   <motion.div layoutId="period-bg" className="absolute inset-0 rounded-xl"
@@ -136,11 +136,11 @@ export default function PublicLeaderboardPage() {
                 >
                   {user.rank === 1 && (
                     <motion.div animate={{ y:[0,-4,0] }} transition={{ duration:2.5, repeat:Infinity }} className="mb-2">
-                      <Crown size={20} className="text-amber-400" fill="currentColor" />
+                      <Crown size={20} className="text-accent-bright" fill="currentColor" />
                     </motion.div>
                   )}
                   <div className={`relative w-14 h-14 rounded-2xl bg-gradient-to-br ${grad} p-0.5 mb-3 shadow-lg`}>
-                    <div className="w-full h-full rounded-[calc(1rem-2px)] bg-[#0a0a0a] flex items-center justify-center text-xl font-black">{user.name[0]}</div>
+                    <div className="w-full h-full rounded-[calc(1rem-2px)] bg-surface flex items-center justify-center text-xl font-black">{user.name[0]}</div>
                     <div className={`absolute -bottom-2 -right-2 w-6 h-6 rounded-lg bg-gradient-to-br ${grad} flex items-center justify-center`}>
                       <Icon size={12} className="text-black" />
                     </div>
@@ -150,16 +150,16 @@ export default function PublicLeaderboardPage() {
                       </span>
                     )}
                   </div>
-                  <p className="text-sm font-black text-white">{user.name}</p>
+                  <p className="text-sm font-black text-foreground">{user.name}</p>
                   <p className={`text-[9px] font-black uppercase tracking-wider ${title.color} mt-0.5`}>{title.label}</p>
-                  <p className="text-lg font-black text-white mt-1 font-mono">{user.xp}</p>
-                  <p className="text-[9px] text-white/25 uppercase tracking-widest">XP</p>
+                  <p className="text-lg font-black text-foreground mt-1 font-mono">{user.xp}</p>
+                  <p className="text-[9px] text-subtle uppercase tracking-widest">XP</p>
                   <div className={`w-full mt-4 ${heights[colIdx]} bg-gradient-to-t ${
-                    user.rank===1 ? "from-amber-600/40 to-amber-500/10 border-amber-500/30" :
+                    user.rank===1 ? "from-accent/40 to-accent/10 border-accent/30" :
                     user.rank===2 ? "from-slate-600/40 to-slate-400/10 border-slate-500/30" :
-                                    "from-amber-800/40 to-amber-700/10 border-amber-700/30"
+                                    "from-amber-800/40 to-accent/10 border-accent/30"
                   } border border-b-0 rounded-t-2xl flex items-center justify-center`}>
-                    <span className="text-3xl font-black text-white/10">#{user.rank}</span>
+                    <span className="text-3xl font-black text-subtle">#{user.rank}</span>
                   </div>
                 </motion.div>
               </TiltCard>
@@ -169,7 +169,7 @@ export default function PublicLeaderboardPage() {
 
         {/* RANKING TABLE */}
         <div className="space-y-2">
-          <div className="grid grid-cols-[2rem_1fr_5rem_5rem_5rem_5rem] gap-4 px-5 text-[9px] font-black uppercase tracking-[0.25em] text-white/20 mb-3">
+          <div className="grid grid-cols-[2rem_1fr_5rem_5rem_5rem_5rem] gap-4 px-5 text-[9px] font-black uppercase tracking-[0.25em] text-subtle mb-3">
             <span>#</span><span>Shinobi</span><span className="text-right">Level</span>
             <span className="text-right">Streak</span><span className="text-right">Archived</span>
             <span className="text-right">XP</span>
@@ -182,10 +182,10 @@ export default function PublicLeaderboardPage() {
               return (
                 <motion.div key={user.rank} initial={{ opacity:0, x:-12 }} animate={{ opacity:1, x:0 }} transition={{ delay: i*0.03 }}
                   className={`grid grid-cols-[2rem_1fr_5rem_5rem_5rem_5rem] gap-4 items-center px-5 py-4 rounded-2xl border transition-all ${
-                    isMe ? "border-amber-500/30 bg-amber-500/8" : "border-white/5 bg-white/[0.01] hover:bg-white/[0.03] hover:border-white/12"
+                    isMe ? "border-accent/30 bg-accent/8" : "border-border bg-white/[0.01] hover:bg-surface hover:border-border"
                   }`}
                 >
-                  <span className={`text-sm font-black ${isMe ? "text-amber-400" : "text-white/30"}`}>
+                  <span className={`text-sm font-black ${isMe ? "text-accent-bright" : "text-subtle"}`}>
                     {user.rank > 100 ? `#${user.rank}` : user.rank}
                   </span>
                   <div className="flex items-center gap-3 min-w-0">
@@ -199,22 +199,22 @@ export default function PublicLeaderboardPage() {
                     </div>
                     <div className="min-w-0">
                       <div className="flex items-center gap-2">
-                        <p className={`text-sm font-black truncate ${isMe ? "text-amber-300" : "text-white/80"}`}>{user.name}{isMe && " (You)"}</p>
+                        <p className={`text-sm font-black truncate ${isMe ? "text-accent-bright" : "text-muted"}`}>{user.name}{isMe && " (You)"}</p>
                         <Icon size={11} className={title.color} />
                       </div>
                       <p className={`text-[9px] uppercase tracking-wider ${title.color} opacity-80`}>{title.label}</p>
                     </div>
                   </div>
-                  <span className="text-sm font-black text-white/60 text-right">Lv.{user.level}</span>
-                  <span className="text-sm font-black text-white/60 text-right flex items-center justify-end gap-1">
+                  <span className="text-sm font-black text-muted text-right">Lv.{user.level}</span>
+                  <span className="text-sm font-black text-muted text-right flex items-center justify-end gap-1">
                     <Flame size={11} className="text-orange-500" />{user.streak}d
                   </span>
-                  <span className="text-sm font-black text-white/60 text-right">{user.archived}</span>
+                  <span className="text-sm font-black text-muted text-right">{user.archived}</span>
                   <div className="flex items-center justify-end gap-1.5">
-                    <span className="text-sm font-black text-white font-mono">{user.xp}</span>
+                    <span className="text-sm font-black text-foreground font-mono">{user.xp}</span>
                     {user.trend==="up"   && <ChevronUp   size={12} className="text-emerald-400 shrink-0"/>}
                     {user.trend==="down" && <ChevronDown size={12} className="text-red-400 shrink-0"/>}
-                    {user.trend==="same" && <Minus       size={12} className="text-white/20 shrink-0"/>}
+                    {user.trend==="same" && <Minus       size={12} className="text-subtle shrink-0"/>}
                   </div>
                 </motion.div>
               )
@@ -223,17 +223,17 @@ export default function PublicLeaderboardPage() {
         </div>
 
         {/* Stats */}
-        <div className="grid grid-cols-3 gap-4 pt-8 border-t border-white/5">
+        <div className="grid grid-cols-3 gap-4 pt-8 border-t border-border">
           {[
             { icon:Users,    label:"Global Shinobi", value:"12,402" },
             { icon:Activity, label:"Daily Active",   value:"1,120"  },
             { icon:Trophy,   label:"Your Standing",  value:"#812"   },
           ].map(({ icon:Icon, label, value }) => (
-            <div key={label} className="flex items-center gap-4 p-5 rounded-2xl bg-white/[0.02] border border-white/8">
-              <Icon size={18} className="text-amber-400 shrink-0" />
+            <div key={label} className="flex items-center gap-4 p-5 rounded-2xl bg-surface border border-border">
+              <Icon size={18} className="text-accent-bright shrink-0" />
               <div>
-                <p className="text-xl font-black tracking-tighter text-white">{value}</p>
-                <p className="text-[9px] text-white/25 uppercase tracking-[0.2em]">{label}</p>
+                <p className="text-xl font-black tracking-tighter text-foreground">{value}</p>
+                <p className="text-[9px] text-subtle uppercase tracking-[0.2em]">{label}</p>
               </div>
             </div>
           ))}

@@ -47,15 +47,15 @@ export default function BlogPage() {
   const xpLevel = Math.floor(reputation / 500) + 1
 
   const STAT_BAR = [
-    { label: "Total Views",     value: totalViews >= 1000 ? `${(totalViews / 1000).toFixed(1)}k` : String(totalViews), icon: Eye,      color: "text-amber-400",  bg: "bg-amber-500/10"  },
+    { label: "Total Views",     value: totalViews >= 1000 ? `${(totalViews / 1000).toFixed(1)}k` : String(totalViews), icon: Eye,      color: "text-accent-bright",  bg: "bg-accent/10"  },
     { label: "Published Blogs", value: String(publishedBlogs), icon: BookOpen, color: "text-rose-400",    bg: "bg-rose-500/10"    },
     { label: "Feed Posts",      value: String(postCount),      icon: Rss,      color: "text-teal-400",    bg: "bg-teal-500/10"    },
-    { label: "Reputation",      value: String(reputation),     icon: Star,     color: "text-amber-400",   bg: "bg-amber-500/10"   },
+    { label: "Reputation",      value: String(reputation),     icon: Star,     color: "text-accent-bright",   bg: "bg-accent/10"   },
     { label: "XP Level",        value: `Lv. ${xpLevel}`,       icon: Zap,      color: "text-emerald-400", bg: "bg-emerald-500/10" },
   ]
 
   return (
-    <main className="min-h-screen bg-black text-white flex">
+    <main className="min-h-screen bg-background text-foreground flex">
       <div className="flex gap-8 w-full mx-auto">
 
         {/* Main Content */}
@@ -64,16 +64,16 @@ export default function BlogPage() {
           {/* Hub header with analytics link */}
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-[9px] font-mono font-black uppercase tracking-[0.4em] text-amber-400/60 mb-1">
+              <p className="text-[9px] font-mono font-black uppercase tracking-[0.4em] text-accent-bright/60 mb-1">
                 Creator Hub
               </p>
-              <h1 className="text-3xl font-black tracking-tighter text-white uppercase italic">
+              <h1 className="text-3xl font-black tracking-tighter text-foreground uppercase italic">
                 Your Studio
               </h1>
             </div>
             <Link
               href="/creators/analytics"
-              className="flex items-center gap-2 text-sm font-semibold text-amber-400 hover:text-amber-300 border border-amber-500/30 hover:border-amber-500/60 bg-amber-600/10 hover:bg-amber-600/20 px-4 py-2 rounded-xl transition-all"
+              className="flex items-center gap-2 text-sm font-semibold text-accent-bright hover:text-accent-bright border border-accent/30 hover:border-accent/60 bg-accent/10 hover:bg-accent/20 px-4 py-2 rounded-xl transition-all"
             >
               <BarChart3 size={15} />
               View Analytics →
@@ -88,14 +88,14 @@ export default function BlogPage() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.06 }}
-                className="bg-zinc-900 border border-white/10 rounded-2xl p-4 flex items-center gap-4"
+                className="bg-zinc-900 border border-border rounded-2xl p-4 flex items-center gap-4"
               >
                 <div className={`w-9 h-9 rounded-xl ${s.bg} flex items-center justify-center shrink-0`}>
                   <s.icon size={16} className={s.color} />
                 </div>
                 <div className="min-w-0">
-                  <p className="text-xl font-black tracking-tighter text-white">{s.value}</p>
-                  <p className="text-[10px] text-white/40 uppercase tracking-wider truncate">{s.label}</p>
+                  <p className="text-xl font-black tracking-tighter text-foreground">{s.value}</p>
+                  <p className="text-[10px] text-muted uppercase tracking-wider truncate">{s.label}</p>
                 </div>
               </motion.div>
             ))}
@@ -117,12 +117,12 @@ export default function BlogPage() {
           </div>
 
           {/* Recent Performance mini-chart */}
-          <div className="bg-zinc-900 border border-white/10 rounded-2xl p-6 space-y-5">
+          <div className="bg-zinc-900 border border-border rounded-2xl p-6 space-y-5">
             <div className="flex items-center justify-between">
-              <h2 className="font-semibold text-white">Recent Performance</h2>
+              <h2 className="font-semibold text-foreground">Recent Performance</h2>
               <Link
                 href="/creators/analytics"
-                className="text-xs text-amber-400 hover:text-amber-300 transition"
+                className="text-xs text-accent-bright hover:text-accent-bright transition"
               >
                 Full Analytics →
               </Link>
@@ -141,13 +141,13 @@ export default function BlogPage() {
                         className="w-full rounded-t-md bg-gradient-to-t from-indigo-600 to-indigo-400 min-h-[4px]"
                       />
                     </div>
-                    <span className="text-[9px] text-white/40 uppercase">{d.day}</span>
+                    <span className="text-[9px] text-muted uppercase">{d.day}</span>
                   </div>
                 )
               })}
             </div>
 
-            <p className="text-xs text-white/30">
+            <p className="text-xs text-subtle">
               Views — last 7 days
             </p>
           </div>
@@ -172,7 +172,7 @@ function SectionHeader({
       <h2 className="text-xl font-semibold">{title}</h2>
       <Link
         href={href}
-        className="text-sm text-amber-400 hover:text-amber-300 transition"
+        className="text-sm text-accent-bright hover:text-accent-bright transition"
       >
         View All →
       </Link>
@@ -188,12 +188,12 @@ function ContentCard({
   type: "Feed" | "Blog" | "Poll"
 }) {
   return (
-    <div className="bg-zinc-900 border border-white/10 rounded-2xl p-5 hover:border-amber-500 transition cursor-pointer">
-      <span className="text-xs bg-amber-600/20 text-amber-400 px-3 py-1 rounded-full">
+    <div className="bg-zinc-900 border border-border rounded-2xl p-5 hover:border-accent transition cursor-pointer">
+      <span className="text-xs bg-accent/20 text-accent-bright px-3 py-1 rounded-full">
         {type}
       </span>
       <h3 className="mt-4 font-semibold">{title}</h3>
-      <p className="text-sm text-white/50 mt-2">
+      <p className="text-sm text-muted mt-2">
         1.2k views • 54 interactions
       </p>
     </div>

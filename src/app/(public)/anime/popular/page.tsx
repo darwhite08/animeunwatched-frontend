@@ -54,11 +54,11 @@ function HorizontalSection({ title, icon, accent, items, onSelect, viewAllHref =
       <div className="flex items-center justify-between mb-5 px-6">
         <div className="flex items-center gap-3">
           <span className={accent}>{icon}</span>
-          <h2 className="text-lg font-black uppercase italic tracking-tighter text-white">{title}</h2>
+          <h2 className="text-lg font-black uppercase italic tracking-tighter text-foreground">{title}</h2>
         </div>
         <Link
           href={viewAllHref}
-          className="flex items-center gap-1 text-[10px] font-black uppercase tracking-widest text-white/30 hover:text-white transition-colors"
+          className="flex items-center gap-1 text-[10px] font-black uppercase tracking-widest text-subtle hover:text-foreground transition-colors"
         >
           View All <ChevronRight size={13} />
         </Link>
@@ -78,12 +78,12 @@ function HorizontalSection({ title, icon, accent, items, onSelect, viewAllHref =
               className="group relative cursor-pointer shrink-0 w-36 md:w-auto"
             >
               {/* Rank number */}
-              <div className="absolute -top-3 -left-1 z-10 text-3xl font-black italic text-white/5 select-none">
+              <div className="absolute -top-3 -left-1 z-10 text-3xl font-black italic text-subtle select-none">
                 {i + 1}
               </div>
 
               {/* Card */}
-              <div className="relative aspect-[2/3] rounded-2xl overflow-hidden border border-white/5 group-hover:border-white/15 transition-colors bg-[#0a0a0a]">
+              <div className="relative aspect-[2/3] rounded-2xl overflow-hidden border border-border group-hover:border-border transition-colors bg-surface">
                 <Image
                   src={anime.image}
                   alt={anime.title}
@@ -93,10 +93,10 @@ function HorizontalSection({ title, icon, accent, items, onSelect, viewAllHref =
                 />
                 <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black via-black/70 to-transparent p-3">
                   <div className="flex items-center gap-1 mb-1">
-                    <Star size={9} fill="#f59e0b" className="text-amber-400" />
-                    <span className="text-[9px] font-black text-amber-400">{anime.rating.toFixed(1)}</span>
+                    <Star size={9} fill="#f59e0b" className="text-accent-bright" />
+                    <span className="text-[9px] font-black text-accent-bright">{anime.rating.toFixed(1)}</span>
                   </div>
-                  <p className="text-[10px] font-black uppercase italic text-white leading-tight line-clamp-2">
+                  <p className="text-[10px] font-black uppercase italic text-foreground leading-tight line-clamp-2">
                     {anime.title}
                   </p>
                 </div>
@@ -134,19 +134,19 @@ export default function PopularAnimePage() {
   if (isLoading) return null
 
   return (
-    <div className="min-h-screen bg-[#020202] text-white pb-32">
+    <div className="min-h-screen bg-background text-foreground pb-32">
       {/* Header */}
       <div className="max-w-7xl mx-auto px-6 pt-32 pb-10">
         <div className="flex items-center gap-3 mb-4">
-          <Flame size={16} className="text-amber-400" />
-          <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-amber-400/60">
+          <Flame size={16} className="text-accent-bright" />
+          <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-accent-bright/60">
             Community Pulse
           </p>
         </div>
-        <h1 className="text-6xl font-black tracking-tighter uppercase italic text-white leading-none mb-2">
-          Trending in the Archive<span className="text-amber-500">.</span>
+        <h1 className="text-6xl font-black tracking-tighter uppercase italic text-foreground leading-none mb-2">
+          Trending in the Archive<span className="text-accent">.</span>
         </h1>
-        <p className="text-white/35 text-sm">What the community is watching, adding, and reviewing right now</p>
+        <p className="text-subtle text-sm">What the community is watching, adding, and reviewing right now</p>
       </div>
 
       {/* Sections */}
@@ -154,7 +154,7 @@ export default function PopularAnimePage() {
         <HorizontalSection
           title="Most Watched This Week"
           icon={<TrendingUp size={18} />}
-          accent="text-amber-400"
+          accent="text-accent-bright"
           items={mostWatched}
           onSelect={setSelected}
           viewAllHref="/bestanimelist"
@@ -163,7 +163,7 @@ export default function PopularAnimePage() {
         <HorizontalSection
           title="Most Added to Lists"
           icon={<ListPlus size={18} />}
-          accent="text-amber-400"
+          accent="text-accent-bright"
           items={mostAdded}
           onSelect={setSelected}
           viewAllHref="/bestanimelist"

@@ -39,31 +39,31 @@ export default function BlogCommentsPage({ params }: { params: Promise<{ slug: s
   }
 
   return (
-    <div className="min-h-screen bg-[#020202] text-white pb-32">
+    <div className="min-h-screen bg-background text-foreground pb-32">
       <div className="max-w-2xl mx-auto px-6 pt-32 space-y-8">
         <div>
-          <Link href={`/blog/${slug}`} className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-amber-400/60 hover:text-amber-400 transition-colors mb-4">
+          <Link href={`/blog/${slug}`} className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-accent-bright/60 hover:text-accent-bright transition-colors mb-4">
             <ChevronLeft size={11} /> Back to Article
           </Link>
           <div className="flex items-center gap-2 mb-2">
-            <MessageSquare size={16} className="text-amber-400" />
-            <h1 className="text-2xl font-black tracking-tighter text-white">Comments</h1>
-            <span className="text-white/30 text-sm font-mono">({comments.length})</span>
+            <MessageSquare size={16} className="text-accent-bright" />
+            <h1 className="text-2xl font-black tracking-tighter text-foreground">Comments</h1>
+            <span className="text-subtle text-sm font-mono">({comments.length})</span>
           </div>
-          <p className="text-white/35 text-xs truncate">{title}</p>
+          <p className="text-subtle text-xs truncate">{title}</p>
         </div>
 
         {/* Compose */}
-        <div className="p-5 rounded-2xl bg-white/[0.02] border border-amber-500/15 space-y-3">
+        <div className="p-5 rounded-2xl bg-surface border border-accent/15 space-y-3">
           <textarea value={draft} onChange={e=>setDraft(e.target.value)}
             placeholder="Share your thoughts…"
             rows={3}
-            className="w-full bg-transparent text-sm text-white placeholder:text-white/20 resize-none outline-none leading-relaxed"
+            className="w-full bg-transparent text-sm text-foreground placeholder:text-subtle resize-none outline-none leading-relaxed"
           />
-          <div className="flex items-center justify-between border-t border-white/5 pt-3">
-            <span className={`text-[10px] font-mono ${500-draft.length<50?"text-amber-400":"text-white/20"}`}>{500-draft.length}</span>
+          <div className="flex items-center justify-between border-t border-border pt-3">
+            <span className={`text-[10px] font-mono ${500-draft.length<50?"text-accent-bright":"text-subtle"}`}>{500-draft.length}</span>
             <button onClick={submit} disabled={!draft.trim()}
-              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 disabled:opacity-40 text-xs font-black uppercase tracking-wider text-white transition-all"
+              className="flex items-center gap-2 px-4 py-2 rounded-xl bg-accent hover:bg-accent-bright disabled:opacity-40 text-xs font-black uppercase tracking-wider text-foreground transition-all"
             >
               <Send size={12} /> Post
             </button>
@@ -80,12 +80,12 @@ export default function BlogCommentsPage({ params }: { params: Promise<{ slug: s
                 <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center font-black text-sm shrink-0">{c.avatar}</div>
                 <div className="flex-1 space-y-2">
                   <div className="flex items-center gap-2">
-                    <span className="text-xs font-black text-white/70">{c.author}</span>
-                    <span className="text-[9px] text-white/25">{c.time}</span>
+                    <span className="text-xs font-black text-muted">{c.author}</span>
+                    <span className="text-[9px] text-subtle">{c.time}</span>
                   </div>
-                  <p className="text-sm text-white/65 leading-relaxed">{c.body}</p>
+                  <p className="text-sm text-muted leading-relaxed">{c.body}</p>
                   <button onClick={()=>toggleLike(c.id)}
-                    className={`flex items-center gap-1.5 text-[10px] font-bold transition-colors ${liked.has(c.id)?"text-emerald-400":"text-white/25 hover:text-white/50"}`}
+                    className={`flex items-center gap-1.5 text-[10px] font-bold transition-colors ${liked.has(c.id)?"text-emerald-400":"text-subtle hover:text-muted"}`}
                   >
                     <ThumbsUp size={11} fill={liked.has(c.id)?"currentColor":"none"}/>
                     {c.likes + (liked.has(c.id) !== c.likedByMe ? (liked.has(c.id)?1:-1):0)}
@@ -99,10 +99,10 @@ export default function BlogCommentsPage({ params }: { params: Promise<{ slug: s
                   <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-indigo-500/50 to-violet-600/50 flex items-center justify-center font-black text-xs shrink-0">{r.avatar}</div>
                   <div>
                     <div className="flex items-center gap-2 mb-1">
-                      <span className="text-xs font-black text-white/60">{r.author}</span>
-                      <span className="text-[9px] text-white/20">{r.time}</span>
+                      <span className="text-xs font-black text-muted">{r.author}</span>
+                      <span className="text-[9px] text-subtle">{r.time}</span>
                     </div>
-                    <p className="text-sm text-white/55">{r.body}</p>
+                    <p className="text-sm text-muted">{r.body}</p>
                   </div>
                 </div>
               ))}

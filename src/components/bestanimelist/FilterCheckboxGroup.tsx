@@ -16,13 +16,13 @@ export function FilterCheckboxGroup({ title, options, selected, onChange }: Prop
   const [isOpen, setIsOpen] = useState(true)
 
   return (
-    <div className="border-b border-white/5 py-6">
+    <div className="border-b border-border py-6">
       <button
         onClick={() => setIsOpen(o => !o)}
         className="flex items-center justify-between w-full mb-4 group"
       >
-        <span className="text-[11px] font-black text-white uppercase tracking-[0.2em]">{title}</span>
-        <ChevronDown size={14} className={`text-white/20 transition-transform ${isOpen ? "rotate-180" : ""}`} />
+        <span className="text-[11px] font-black text-foreground uppercase tracking-[0.2em]">{title}</span>
+        <ChevronDown size={14} className={`text-subtle transition-transform ${isOpen ? "rotate-180" : ""}`} />
       </button>
 
       {isOpen && (
@@ -33,7 +33,7 @@ export function FilterCheckboxGroup({ title, options, selected, onChange }: Prop
               <label key={opt.id} className="flex items-center gap-3 cursor-pointer group">
                 <div
                   className={`relative h-4 w-4 rounded border flex items-center justify-center transition-colors ${
-                    checked ? "bg-amber-600 border-amber-500" : "bg-white/5 border-white/10 group-hover:border-amber-500/50"
+                    checked ? "bg-accent border-accent" : "bg-surface border-border group-hover:border-accent/50"
                   }`}
                   onClick={() => onChange(opt.id)}
                 >
@@ -44,7 +44,7 @@ export function FilterCheckboxGroup({ title, options, selected, onChange }: Prop
                   )}
                 </div>
                 <span
-                  className={`text-xs font-medium transition-colors ${checked ? "text-white" : "text-white/40 group-hover:text-white"}`}
+                  className={`text-xs font-medium transition-colors ${checked ? "text-foreground" : "text-muted group-hover:text-foreground"}`}
                   onClick={() => onChange(opt.id)}
                 >
                   {opt.label}

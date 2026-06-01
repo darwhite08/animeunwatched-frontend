@@ -33,8 +33,8 @@ export default function AnimeOfTheDayCard() {
 
   if (isLoading || !anime) {
     return (
-      <div className="relative w-full rounded-[2.5rem] overflow-hidden border border-white/5 bg-[#0a0a0a] min-h-[340px] flex items-center justify-center">
-        <div className="w-8 h-8 rounded-full border-2 border-amber-500/30 border-t-indigo-500 animate-spin" />
+      <div className="relative w-full rounded-[2.5rem] overflow-hidden border border-border bg-surface min-h-[340px] flex items-center justify-center">
+        <div className="w-8 h-8 rounded-full border-2 border-accent/30 border-t-indigo-500 animate-spin" />
       </div>
     )
   }
@@ -56,7 +56,7 @@ export default function AnimeOfTheDayCard() {
   }
 
   return (
-    <div className="relative w-full rounded-[2.5rem] overflow-hidden border border-white/5 bg-[#0a0a0a] min-h-[340px]">
+    <div className="relative w-full rounded-[2.5rem] overflow-hidden border border-border bg-surface min-h-[340px]">
       {/* Blurred background image */}
       <div className="absolute inset-0">
         <Image
@@ -91,7 +91,7 @@ export default function AnimeOfTheDayCard() {
           <div>
             {/* Label */}
             <div className="flex items-center gap-2 mb-4">
-              <span className="px-3 py-1.5 rounded-full bg-amber-500/15 border border-amber-500/25 text-[9px] font-black uppercase tracking-[0.4em] text-amber-400">
+              <span className="px-3 py-1.5 rounded-full bg-accent/15 border border-accent/25 text-[9px] font-black uppercase tracking-[0.4em] text-accent-bright">
                 Anime of the Day
               </span>
               {anime.status === "airing" && (
@@ -108,7 +108,7 @@ export default function AnimeOfTheDayCard() {
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4 }}
-              className="text-2xl lg:text-3xl font-black tracking-tighter uppercase italic text-white leading-tight mb-3"
+              className="text-2xl lg:text-3xl font-black tracking-tighter uppercase italic text-foreground leading-tight mb-3"
             >
               {anime.title}
             </motion.h2>
@@ -122,15 +122,15 @@ export default function AnimeOfTheDayCard() {
               className="flex items-center gap-3 mb-3 flex-wrap"
             >
               <div className="flex items-center gap-1.5">
-                <Star size={12} fill="#f59e0b" className="text-amber-400" />
-                <span className="text-sm font-black text-white">{anime.rating.toFixed(1)}</span>
+                <Star size={12} fill="#f59e0b" className="text-accent-bright" />
+                <span className="text-sm font-black text-foreground">{anime.rating.toFixed(1)}</span>
               </div>
               <div className="h-1 w-1 rounded-full bg-white/20" />
-              <span className="text-xs font-bold text-white/40">{anime.studio}</span>
+              <span className="text-xs font-bold text-muted">{anime.studio}</span>
               <div className="h-1 w-1 rounded-full bg-white/20" />
-              <span className="text-xs font-bold text-white/40">{anime.year}</span>
+              <span className="text-xs font-bold text-muted">{anime.year}</span>
               <div className="h-1 w-1 rounded-full bg-white/20" />
-              <span className="text-xs font-bold text-white/40">{anime.type}</span>
+              <span className="text-xs font-bold text-muted">{anime.type}</span>
             </motion.div>
 
             {/* Genre tags */}
@@ -138,7 +138,7 @@ export default function AnimeOfTheDayCard() {
               {anime.genres.map(g => (
                 <span
                   key={g}
-                  className="text-[9px] font-black uppercase tracking-wider px-2 py-0.5 bg-white/8 rounded-full text-white/50"
+                  className="text-[9px] font-black uppercase tracking-wider px-2 py-0.5 bg-surface rounded-full text-muted"
                 >
                   {g}
                 </span>
@@ -151,7 +151,7 @@ export default function AnimeOfTheDayCard() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.15 }}
-              className="text-xs text-white/40 leading-relaxed line-clamp-3 max-w-sm"
+              className="text-xs text-muted leading-relaxed line-clamp-3 max-w-sm"
             >
               {anime.synopsis.slice(0, 100)}
               {anime.synopsis.length > 100 ? "…" : ""}
@@ -164,8 +164,8 @@ export default function AnimeOfTheDayCard() {
               onClick={handleToggleList}
               className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${
                 inList
-                  ? "bg-emerald-600 hover:bg-emerald-500 text-white"
-                  : "bg-amber-500 hover:bg-amber-400 text-black"
+                  ? "bg-emerald-600 hover:bg-emerald-500 text-foreground"
+                  : "bg-accent hover:bg-accent-bright text-black"
               }`}
             >
               {inList ? <Check size={13} /> : <Plus size={13} />}
@@ -174,7 +174,7 @@ export default function AnimeOfTheDayCard() {
 
             <Link
               href={`/anime/${anime.id}`}
-              className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/10 hover:border-white/20 text-xs font-black uppercase tracking-widest text-white/70 hover:text-white transition-all"
+              className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-surface hover:bg-surface border border-border hover:border-border text-xs font-black uppercase tracking-widest text-muted hover:text-foreground transition-all"
             >
               <ExternalLink size={13} /> View Details
             </Link>
@@ -182,7 +182,7 @@ export default function AnimeOfTheDayCard() {
             <button
               onClick={handleRefresh}
               title="Show next anime"
-              className="flex items-center justify-center w-10 h-10 rounded-xl bg-white/5 hover:bg-white/10 border border-white/8 hover:border-white/20 text-white/40 hover:text-white transition-all"
+              className="flex items-center justify-center w-10 h-10 rounded-xl bg-surface hover:bg-surface border border-border hover:border-border text-muted hover:text-foreground transition-all"
             >
               <RefreshCw size={13} />
             </button>

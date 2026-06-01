@@ -28,7 +28,7 @@ const CATEGORY_META: Record<string, CategoryMeta> = {
     emoji: "🔥",
     title: "Trending",
     description: "The anime everyone is talking about right now. Don't miss out.",
-    accentClass: "text-amber-400",
+    accentClass: "text-accent-bright",
     filter: (a) => a.category === "trending",
   },
   "hidden-gems": {
@@ -79,7 +79,7 @@ const FALLBACK_META: CategoryMeta = {
   emoji: "📺",
   title: "Discover",
   description: "A curated selection from the Kaiveron catalogue.",
-  accentClass: "text-amber-400",
+  accentClass: "text-accent-bright",
   filter: () => true,
 }
 
@@ -114,8 +114,8 @@ function FilterPill<T extends string>({
           onClick={() => onChange(opt)}
           className={`px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-200 ${
             value === opt
-              ? "bg-amber-500 text-black shadow-[0_0_16px_rgba(245,158,11,0.4)]"
-              : "bg-white/[0.03] border border-white/8 text-white/40 hover:text-white hover:border-white/15"
+              ? "bg-accent text-black shadow-[0_0_16px_rgba(245,158,11,0.4)]"
+              : "bg-surface border border-border text-muted hover:text-foreground hover:border-border"
           }`}
         >
           {opt}
@@ -159,7 +159,7 @@ export default function CategoryDiscoverPage({
   const displayTitle = meta.title.charAt(0).toUpperCase() + meta.title.slice(1)
 
   return (
-    <main className="min-h-screen bg-[#020202] text-white pb-32">
+    <main className="min-h-screen bg-background text-foreground pb-32">
       {/* Ambient glow */}
       <div className="pointer-events-none fixed inset-0 overflow-hidden">
         <div className="absolute top-[-30%] right-[-10%] w-[50%] h-[70%] bg-indigo-700/12 blur-[140px] rounded-full" />
@@ -176,7 +176,7 @@ export default function CategoryDiscoverPage({
         >
           <Link
             href="/discover"
-            className="inline-flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-white/40 hover:text-white/70 transition-colors group"
+            className="inline-flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-muted hover:text-muted transition-colors group"
           >
             <ArrowLeft size={11} className="group-hover:-translate-x-0.5 transition-transform" />
             Browse
@@ -193,11 +193,11 @@ export default function CategoryDiscoverPage({
           <span className="text-4xl" role="img" aria-label={displayTitle}>
             {meta.emoji}
           </span>
-          <h1 className="text-5xl sm:text-7xl font-black uppercase italic tracking-tighter text-white leading-none">
+          <h1 className="text-5xl sm:text-7xl font-black uppercase italic tracking-tighter text-foreground leading-none">
             {displayTitle}
             <span className={`${meta.accentClass}`}>.</span>
           </h1>
-          <p className="text-white/40 text-sm max-w-lg leading-relaxed">
+          <p className="text-muted text-sm max-w-lg leading-relaxed">
             {meta.description}
           </p>
         </motion.div>
@@ -207,12 +207,12 @@ export default function CategoryDiscoverPage({
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.12 }}
-          className="flex flex-col gap-4 mb-8 p-5 rounded-2xl bg-white/[0.02] border border-white/8"
+          className="flex flex-col gap-4 mb-8 p-5 rounded-2xl bg-surface border border-border"
         >
           <div className="flex flex-wrap gap-6">
             {/* Rating */}
             <div className="space-y-2">
-              <p className="text-[9px] font-black uppercase tracking-[0.3em] text-white/25">Rating</p>
+              <p className="text-[9px] font-black uppercase tracking-[0.3em] text-subtle">Rating</p>
               <FilterPill
                 options={["all", "8+", "8.5+", "9+"] as RatingFilter[]}
                 value={ratingFilter}
@@ -222,7 +222,7 @@ export default function CategoryDiscoverPage({
 
             {/* Type */}
             <div className="space-y-2">
-              <p className="text-[9px] font-black uppercase tracking-[0.3em] text-white/25">Type</p>
+              <p className="text-[9px] font-black uppercase tracking-[0.3em] text-subtle">Type</p>
               <FilterPill
                 options={["all", "TV", "Movie", "OVA"] as TypeFilter[]}
                 value={typeFilter}
@@ -232,7 +232,7 @@ export default function CategoryDiscoverPage({
 
             {/* Status */}
             <div className="space-y-2">
-              <p className="text-[9px] font-black uppercase tracking-[0.3em] text-white/25">Status</p>
+              <p className="text-[9px] font-black uppercase tracking-[0.3em] text-subtle">Status</p>
               <FilterPill
                 options={["all", "finished", "airing"] as StatusFilter[]}
                 value={statusFilter}
@@ -247,7 +247,7 @@ export default function CategoryDiscoverPage({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.18 }}
-          className="text-[10px] font-black uppercase tracking-[0.2em] text-white/20 mb-6"
+          className="text-[10px] font-black uppercase tracking-[0.2em] text-subtle mb-6"
         >
           {isLoading ? "Loading…" : `${filtered.length} title${filtered.length !== 1 ? "s" : ""}`}
         </motion.p>
@@ -281,17 +281,17 @@ export default function CategoryDiscoverPage({
               className="flex flex-col items-center justify-center py-32 space-y-4"
             >
               <span className="text-5xl">{meta.emoji}</span>
-              <p className="text-lg font-black uppercase italic text-white/30">
+              <p className="text-lg font-black uppercase italic text-subtle">
                 No results for these filters
               </p>
-              <p className="text-xs text-white/20">Try relaxing the rating or type filter</p>
+              <p className="text-xs text-subtle">Try relaxing the rating or type filter</p>
               <button
                 onClick={() => {
                   setRatingFilter("all")
                   setTypeFilter("all")
                   setStatusFilter("all")
                 }}
-                className="mt-2 px-5 py-2.5 rounded-xl bg-amber-600/20 border border-amber-500/20 text-xs font-black uppercase tracking-widest text-amber-400 hover:bg-amber-600/30 transition-all"
+                className="mt-2 px-5 py-2.5 rounded-xl bg-accent/20 border border-accent/20 text-xs font-black uppercase tracking-widest text-accent-bright hover:bg-accent/30 transition-all"
               >
                 Clear filters
               </button>

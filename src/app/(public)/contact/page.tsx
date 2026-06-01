@@ -13,10 +13,10 @@ const CONTACT_CARDS = [
     desc: "Found a bug? Open a GitHub issue and we'll triage it within 24 hours.",
     cta: "Open an Issue",
     href: "https://github.com/darwhite08/kaiveron-frontend/issues/new",
-    color: "text-white",
-    bg: "bg-white/8",
-    border: "border-white/10",
-    hoverBorder: "hover:border-white/20",
+    color: "text-foreground",
+    bg: "bg-surface",
+    border: "border-border",
+    hoverBorder: "hover:border-border",
   },
   {
     icon: MessageSquare,
@@ -35,10 +35,10 @@ const CONTACT_CARDS = [
     desc: "Partnerships, press, or sponsorships — email us directly and we'll respond within 48 hours.",
     cta: "info@athavita.com",
     href: "mailto:info@athavita.com",
-    color: "text-amber-400",
-    bg: "bg-amber-500/8",
-    border: "border-amber-500/15",
-    hoverBorder: "hover:border-amber-500/35",
+    color: "text-accent-bright",
+    bg: "bg-accent/8",
+    border: "border-accent/15",
+    hoverBorder: "hover:border-accent/35",
   },
 ]
 
@@ -76,19 +76,19 @@ export default function ContactPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#020202] text-white pb-32">
+    <div className="min-h-screen bg-background text-foreground pb-32">
 
       {/* ── Hero ── */}
-      <section className="relative overflow-hidden border-b border-white/5">
+      <section className="relative overflow-hidden border-b border-border">
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[350px] bg-amber-600/8 blur-[120px] rounded-full" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[350px] bg-accent/8 blur-[120px] rounded-full" />
         </div>
 
         <div className="relative z-10 max-w-4xl mx-auto px-6 pt-24 pb-16 text-center">
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-amber-500/25 bg-amber-500/8 text-[10px] font-black uppercase tracking-[0.3em] text-amber-400 mb-8"
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-accent/25 bg-accent/8 text-[10px] font-black uppercase tracking-[0.3em] text-accent-bright mb-8"
           >
             Contact
           </motion.div>
@@ -97,7 +97,7 @@ export default function ContactPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.05 }}
-            className="text-5xl md:text-6xl font-black tracking-tighter uppercase italic leading-[0.92] text-white mb-4"
+            className="text-5xl md:text-6xl font-black tracking-tighter uppercase italic leading-[0.92] text-foreground mb-4"
           >
             Get in<br />
             <span style={{color:"#f59e0b"}}>Touch.</span>
@@ -107,7 +107,7 @@ export default function ContactPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.12 }}
-            className="text-white/40 text-base max-w-md mx-auto"
+            className="text-muted text-base max-w-md mx-auto"
           >
             Bug, idea, collab, or just want to say hi — we read every message.
           </motion.p>
@@ -129,16 +129,16 @@ export default function ContactPage() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.08 }}
               whileHover={{ y: -3 }}
-              className={`group flex flex-col gap-5 p-7 rounded-[2rem] border ${card.border} ${card.hoverBorder} ${card.bg} bg-[#0a0a0a] transition-all overflow-hidden relative`}
+              className={`group flex flex-col gap-5 p-7 rounded-[2rem] border ${card.border} ${card.hoverBorder} ${card.bg} bg-surface transition-all overflow-hidden relative`}
             >
-              <div className={`p-3 rounded-2xl bg-white/5 w-fit ${card.color}`}>
+              <div className={`p-3 rounded-2xl bg-surface w-fit ${card.color}`}>
                 <card.icon size={20} />
               </div>
               <div className="flex-1">
                 <h3 className={`text-base font-black uppercase italic tracking-tight ${card.color} mb-2`}>
                   {card.title}
                 </h3>
-                <p className="text-sm text-white/40 leading-relaxed">{card.desc}</p>
+                <p className="text-sm text-muted leading-relaxed">{card.desc}</p>
               </div>
               <div className={`flex items-center gap-1.5 text-xs font-black uppercase tracking-widest ${card.color}`}>
                 {card.cta}
@@ -153,11 +153,11 @@ export default function ContactPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="rounded-[2.5rem] border border-white/8 bg-[#080808] p-8 md:p-12"
+          className="rounded-[2.5rem] border border-border bg-[#080808] p-8 md:p-12"
         >
           <div className="mb-8">
-            <p className="text-[10px] font-black uppercase tracking-[0.35em] text-white/25 mb-2">Direct Message</p>
-            <h2 className="text-2xl font-black tracking-tighter uppercase italic text-white">
+            <p className="text-[10px] font-black uppercase tracking-[0.35em] text-subtle mb-2">Direct Message</p>
+            <h2 className="text-2xl font-black tracking-tighter uppercase italic text-foreground">
               Send a Message<span style={{color:"#f59e0b"}}>.</span>
             </h2>
           </div>
@@ -166,7 +166,7 @@ export default function ContactPage() {
             <div className="grid md:grid-cols-2 gap-5">
               {/* Name */}
               <div className="space-y-2">
-                <label className="text-[10px] font-black uppercase tracking-[0.25em] text-white/30">
+                <label className="text-[10px] font-black uppercase tracking-[0.25em] text-subtle">
                   Name
                 </label>
                 <input
@@ -175,13 +175,13 @@ export default function ContactPage() {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Your name"
-                  className="w-full bg-white/[0.03] border border-white/8 rounded-xl px-4 py-3.5 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-amber-500/50 focus:bg-white/[0.05] transition-all"
+                  className="w-full bg-surface border border-border rounded-xl px-4 py-3.5 text-sm text-foreground placeholder:text-subtle focus:outline-none focus:border-accent/50 focus:bg-surface transition-all"
                 />
               </div>
 
               {/* Email */}
               <div className="space-y-2">
-                <label className="text-[10px] font-black uppercase tracking-[0.25em] text-white/30">
+                <label className="text-[10px] font-black uppercase tracking-[0.25em] text-subtle">
                   Email
                 </label>
                 <input
@@ -190,23 +190,23 @@ export default function ContactPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="you@example.com"
-                  className="w-full bg-white/[0.03] border border-white/8 rounded-xl px-4 py-3.5 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-amber-500/50 focus:bg-white/[0.05] transition-all"
+                  className="w-full bg-surface border border-border rounded-xl px-4 py-3.5 text-sm text-foreground placeholder:text-subtle focus:outline-none focus:border-accent/50 focus:bg-surface transition-all"
                 />
               </div>
             </div>
 
             {/* Category */}
             <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-[0.25em] text-white/30">
+              <label className="text-[10px] font-black uppercase tracking-[0.25em] text-subtle">
                 Category
               </label>
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value as Category)}
-                className="w-full bg-white/[0.03] border border-white/8 rounded-xl px-4 py-3.5 text-sm text-white focus:outline-none focus:border-amber-500/50 focus:bg-white/[0.05] transition-all appearance-none cursor-pointer"
+                className="w-full bg-surface border border-border rounded-xl px-4 py-3.5 text-sm text-foreground focus:outline-none focus:border-accent/50 focus:bg-surface transition-all appearance-none cursor-pointer"
               >
                 {CATEGORIES.map((c) => (
-                  <option key={c} value={c} className="bg-[#111] text-white">
+                  <option key={c} value={c} className="bg-[#111] text-foreground">
                     {c}
                   </option>
                 ))}
@@ -215,7 +215,7 @@ export default function ContactPage() {
 
             {/* Message */}
             <div className="space-y-2">
-              <label className="text-[10px] font-black uppercase tracking-[0.25em] text-white/30">
+              <label className="text-[10px] font-black uppercase tracking-[0.25em] text-subtle">
                 Message
               </label>
               <textarea
@@ -224,13 +224,13 @@ export default function ContactPage() {
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 placeholder="Write your message here…"
-                className="w-full bg-white/[0.03] border border-white/8 rounded-xl px-4 py-3.5 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-amber-500/50 focus:bg-white/[0.05] transition-all resize-none"
+                className="w-full bg-surface border border-border rounded-xl px-4 py-3.5 text-sm text-foreground placeholder:text-subtle focus:outline-none focus:border-accent/50 focus:bg-surface transition-all resize-none"
               />
             </div>
 
             {/* Submit */}
             <div className="flex items-center justify-between pt-2">
-              <p className="text-[10px] text-white/20 font-mono">
+              <p className="text-[10px] text-subtle font-mono">
                 We reply within 48 hours
               </p>
               <motion.button
@@ -238,7 +238,7 @@ export default function ContactPage() {
                 disabled={sending}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className="flex items-center gap-2.5 px-7 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 disabled:opacity-50 disabled:cursor-not-allowed text-sm font-black uppercase tracking-widest text-white transition-all"
+                className="flex items-center gap-2.5 px-7 py-3.5 rounded-xl bg-accent hover:bg-accent-bright disabled:opacity-50 disabled:cursor-not-allowed text-sm font-black uppercase tracking-widest text-foreground transition-all"
               >
                 {sending ? (
                   <>Sending…</>
@@ -257,7 +257,7 @@ export default function ContactPage() {
           transition={{ delay: 0.3 }}
           className="flex flex-col items-center gap-5"
         >
-          <p className="text-[10px] font-black uppercase tracking-[0.35em] text-white/20">Find us online</p>
+          <p className="text-[10px] font-black uppercase tracking-[0.35em] text-subtle">Find us online</p>
           <div className="flex items-center gap-3">
             {SOCIAL_LINKS.map(({ icon: Icon, label, href }) => (
               <motion.a
@@ -266,7 +266,7 @@ export default function ContactPage() {
                 target="_blank"
                 rel="noopener noreferrer"
                 whileHover={{ y: -3, scale: 1.08 }}
-                className="flex items-center gap-2 px-5 py-2.5 rounded-xl border border-white/8 bg-white/[0.02] text-white/40 hover:text-white hover:border-amber-500/30 hover:bg-white/[0.05] transition-all text-xs font-black uppercase tracking-wider"
+                className="flex items-center gap-2 px-5 py-2.5 rounded-xl border border-border bg-surface text-muted hover:text-foreground hover:border-accent/30 hover:bg-surface transition-all text-xs font-black uppercase tracking-wider"
               >
                 <Icon size={14} />
                 {label}

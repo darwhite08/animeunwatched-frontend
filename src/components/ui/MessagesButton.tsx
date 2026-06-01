@@ -63,7 +63,7 @@ export default function MessagesButton() {
         <div className="relative">
           <MessageSquare size={15} />
           {unread > 0 && (
-            <span className="absolute -top-1.5 -right-1.5 h-3.5 w-3.5 rounded-full bg-red-500 text-white text-[7px] font-black flex items-center justify-center leading-none">
+            <span className="absolute -top-1.5 -right-1.5 h-3.5 w-3.5 rounded-full bg-red-500 text-foreground text-[7px] font-black flex items-center justify-center leading-none">
               {unread > 9 ? "9+" : unread}
             </span>
           )}

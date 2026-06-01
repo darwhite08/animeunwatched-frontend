@@ -174,8 +174,8 @@ function InlineReply({
       exit={{ opacity: 0, height: 0 }}
       className="overflow-hidden mt-3"
     >
-      <div className="p-4 rounded-xl bg-zinc-900/80 border border-amber-500/20 space-y-3">
-        <p className="text-[10px] font-black uppercase tracking-widest text-amber-400">
+      <div className="p-4 rounded-xl bg-zinc-900/80 border border-accent/20 space-y-3">
+        <p className="text-[10px] font-black uppercase tracking-widest text-accent-bright">
           Replying to {authorName}
         </p>
         <textarea
@@ -184,19 +184,19 @@ function InlineReply({
           onChange={(e) => setText(e.target.value)}
           placeholder="Write your reply…"
           rows={3}
-          className="w-full bg-transparent text-sm text-white placeholder:text-white/25 resize-none outline-none leading-relaxed"
+          className="w-full bg-transparent text-sm text-foreground placeholder:text-subtle resize-none outline-none leading-relaxed"
         />
-        <div className="flex items-center gap-2 justify-end border-t border-white/5 pt-3">
+        <div className="flex items-center gap-2 justify-end border-t border-border pt-3">
           <button
             onClick={onCancel}
-            className="px-4 py-2 rounded-xl bg-white/5 text-[10px] font-black uppercase tracking-widest text-white/40 hover:text-white/60 transition-colors"
+            className="px-4 py-2 rounded-xl bg-surface text-[10px] font-black uppercase tracking-widest text-muted hover:text-muted transition-colors"
           >
             Cancel
           </button>
           <button
             onClick={() => { if (text.trim()) { onSubmit(text); setText("") } }}
             disabled={!text.trim()}
-            className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 disabled:opacity-40 text-[10px] font-black uppercase tracking-widest text-white transition-all"
+            className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-accent hover:bg-accent-bright disabled:opacity-40 text-[10px] font-black uppercase tracking-widest text-foreground transition-all"
           >
             <Send size={10} /> Reply
           </button>
@@ -288,26 +288,26 @@ export default function ThreadDetailPage({
   }
 
   return (
-    <div className="min-h-screen bg-[#020202] text-white pb-32">
+    <div className="min-h-screen bg-background text-foreground pb-32">
       <div className="max-w-3xl mx-auto px-6 pt-10">
         {/* Breadcrumb */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-white/30 mb-8 flex-wrap"
+          className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-subtle mb-8 flex-wrap"
         >
-          <Link href="/clubs" className="hover:text-white/60 transition-colors">
+          <Link href="/clubs" className="hover:text-muted transition-colors">
             Clubs
           </Link>
           <ChevronRight size={9} />
           <Link
             href={`/clubs/${thread.clubSlug}`}
-            className="hover:text-white/60 transition-colors"
+            className="hover:text-muted transition-colors"
           >
             {thread.clubName}
           </Link>
           <ChevronRight size={9} />
-          <span className="text-white/50 line-clamp-1">{thread.title}</span>
+          <span className="text-muted line-clamp-1">{thread.title}</span>
         </motion.div>
 
         {/* Thread header */}
@@ -320,7 +320,7 @@ export default function ThreadDetailPage({
           {/* Badges */}
           <div className="flex items-center gap-2 flex-wrap mb-3">
             {thread.isPinned && (
-              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-[9px] font-black uppercase tracking-wider text-amber-400">
+              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-accent/10 border border-accent/20 text-[9px] font-black uppercase tracking-wider text-accent-bright">
                 <Pin size={8} /> Pinned
               </span>
             )}
@@ -331,18 +331,18 @@ export default function ThreadDetailPage({
             )}
           </div>
 
-          <h1 className="text-3xl md:text-4xl font-black uppercase italic tracking-tighter text-white leading-tight mb-4">
+          <h1 className="text-3xl md:text-4xl font-black uppercase italic tracking-tighter text-foreground leading-tight mb-4">
             {thread.title}
           </h1>
 
           {/* Author meta */}
           <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center font-black text-sm text-white">
+            <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center font-black text-sm text-foreground">
               {thread.avatar}
             </div>
             <div>
-              <p className="text-sm font-black text-white">{thread.author}</p>
-              <p className="text-[10px] text-white/30 flex items-center gap-1">
+              <p className="text-sm font-black text-foreground">{thread.author}</p>
+              <p className="text-[10px] text-subtle flex items-center gap-1">
                 <Clock size={9} /> {thread.createdAt}
               </p>
             </div>
@@ -354,23 +354,23 @@ export default function ThreadDetailPage({
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1, duration: 0.5 }}
-          className="p-7 rounded-3xl bg-white/[0.02] border border-white/8 mb-8"
+          className="p-7 rounded-3xl bg-surface border border-border mb-8"
         >
-          <p className="text-sm text-white/75 leading-[1.8] whitespace-pre-line">
+          <p className="text-sm text-muted leading-[1.8] whitespace-pre-line">
             {thread.content}
           </p>
         </motion.div>
 
         {/* Reply count + add reply */}
         <div className="flex items-center justify-between mb-6">
-          <p className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-white/30">
+          <p className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-subtle">
             <MessageSquare size={12} />
             {replies.length + thread.replyCount - INITIAL_REPLIES.length} replies
           </p>
           <Link href="#composer">
             <button
               onClick={() => document.getElementById("composer")?.focus()}
-              className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-[10px] font-black uppercase tracking-widest text-white transition-all shadow-[0_0_20px_rgba(99,102,241,0.25)]"
+              className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-accent hover:bg-accent-bright text-[10px] font-black uppercase tracking-widest text-foreground transition-all shadow-[0_0_20px_rgba(99,102,241,0.25)]"
             >
               <Reply size={11} /> Add Reply
             </button>
@@ -382,10 +382,10 @@ export default function ThreadDetailPage({
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
-          className="p-5 rounded-2xl bg-zinc-900/60 border border-white/8 mb-8 space-y-4"
+          className="p-5 rounded-2xl bg-zinc-900/60 border border-border mb-8 space-y-4"
           id="composer"
         >
-          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30">
+          <p className="text-[10px] font-black uppercase tracking-[0.2em] text-subtle">
             Your Reply
           </p>
           <textarea
@@ -394,12 +394,12 @@ export default function ThreadDetailPage({
             onChange={(e) => setComposerText(e.target.value)}
             placeholder="Share your thoughts on this thread…"
             rows={4}
-            className="w-full bg-transparent text-sm text-white placeholder:text-white/25 resize-none outline-none leading-relaxed focus:outline-none"
+            className="w-full bg-transparent text-sm text-foreground placeholder:text-subtle resize-none outline-none leading-relaxed focus:outline-none"
           />
-          <div className="flex items-center justify-between border-t border-white/5 pt-3">
+          <div className="flex items-center justify-between border-t border-border pt-3">
             <span
               className={`text-[10px] font-mono ${
-                composerText.length > 450 ? "text-amber-400" : "text-white/20"
+                composerText.length > 450 ? "text-accent-bright" : "text-subtle"
               }`}
             >
               {500 - composerText.length} chars left
@@ -407,7 +407,7 @@ export default function ThreadDetailPage({
             <button
               onClick={submitMainReply}
               disabled={!composerText.trim()}
-              className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 disabled:opacity-40 text-[10px] font-black uppercase tracking-widest text-white transition-all"
+              className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-accent hover:bg-accent-bright disabled:opacity-40 text-[10px] font-black uppercase tracking-widest text-foreground transition-all"
             >
               <Send size={11} /> Post Reply
             </button>
@@ -425,28 +425,28 @@ export default function ThreadDetailPage({
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.97 }}
                 transition={{ delay: i * 0.04 }}
-                className="p-5 rounded-2xl bg-white/[0.02] border border-white/8 hover:border-white/12 transition-all space-y-4"
+                className="p-5 rounded-2xl bg-surface border border-border hover:border-border transition-all space-y-4"
               >
                 {/* Author */}
                 <div className="flex items-center gap-3">
-                  <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-indigo-500/70 to-violet-600/70 flex items-center justify-center font-black text-sm text-white shrink-0">
+                  <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-indigo-500/70 to-violet-600/70 flex items-center justify-center font-black text-sm text-foreground shrink-0">
                     {reply.avatar}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-black text-white">{reply.author}</p>
-                    <p className="text-[10px] text-white/30">{reply.date}</p>
+                    <p className="text-sm font-black text-foreground">{reply.author}</p>
+                    <p className="text-[10px] text-subtle">{reply.date}</p>
                   </div>
                 </div>
 
                 {/* Content */}
-                <p className="text-sm text-white/70 leading-relaxed">{reply.content}</p>
+                <p className="text-sm text-muted leading-relaxed">{reply.content}</p>
 
                 {/* Actions */}
-                <div className="flex items-center gap-4 border-t border-white/5 pt-3">
+                <div className="flex items-center gap-4 border-t border-border pt-3">
                   <button
                     onClick={() => toggleLike(reply.id)}
                     className={`flex items-center gap-1.5 text-xs font-bold transition-colors ${
-                      reply.liked ? "text-rose-400" : "text-white/30 hover:text-rose-400"
+                      reply.liked ? "text-rose-400" : "text-subtle hover:text-rose-400"
                     }`}
                   >
                     <Heart size={13} fill={reply.liked ? "currentColor" : "none"} />
@@ -456,7 +456,7 @@ export default function ThreadDetailPage({
                     onClick={() =>
                       setReplyingTo(replyingTo === reply.id ? null : reply.id)
                     }
-                    className="flex items-center gap-1.5 text-xs font-bold text-white/30 hover:text-amber-400 transition-colors"
+                    className="flex items-center gap-1.5 text-xs font-bold text-subtle hover:text-accent-bright transition-colors"
                   >
                     <Reply size={12} /> Reply
                   </button>
@@ -481,7 +481,7 @@ export default function ThreadDetailPage({
         <div className="mt-12">
           <Link
             href={`/clubs/${thread.clubSlug}`}
-            className="inline-flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-white/30 hover:text-white/60 transition-colors group"
+            className="inline-flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-subtle hover:text-muted transition-colors group"
           >
             <ArrowLeft size={11} className="group-hover:-translate-x-0.5 transition-transform" />
             Back to {thread.clubName}

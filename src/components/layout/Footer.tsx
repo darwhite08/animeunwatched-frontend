@@ -66,7 +66,7 @@ export default function Footer() {
   const year = new Date().getFullYear()
 
   return (
-    <footer className="relative mt-auto border-t border-white/5 bg-[#050505] overflow-hidden">
+    <footer className="relative mt-auto border-t border-border bg-surface overflow-hidden">
       {/* Background glows */}
       <div className="absolute bottom-0 left-1/4 w-[400px] h-[200px] blur-[100px] rounded-full pointer-events-none"
         style={{ background: "rgba(245,158,11,0.05)" }} />
@@ -74,7 +74,7 @@ export default function Footer() {
         style={{ background: "rgba(99,102,241,0.05)" }} />
 
       {/* Stats strip */}
-      <div className="border-b border-white/5">
+      <div className="border-b border-border">
         <div className="max-w-7xl mx-auto px-6 py-5 grid grid-cols-2 md:grid-cols-4 gap-6">
           {STATS.map(({ value, label }) => (
             <div key={label} className="text-center">
@@ -82,7 +82,7 @@ export default function Footer() {
                 style={{ background: "linear-gradient(135deg, #fbbf24, #f59e0b)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
                 {value}
               </p>
-              <p className="text-[9px] font-black uppercase tracking-[0.3em] text-white/25 mt-0.5">{label}</p>
+              <p className="text-[9px] font-black uppercase tracking-[0.3em] text-subtle mt-0.5">{label}</p>
             </div>
           ))}
         </div>
@@ -99,12 +99,12 @@ export default function Footer() {
                 <rect width="100" height="100" rx="18" fill="#0A0F1E"/>
                 <path d="M 30 28 L 40 28 L 40 46 L 47 46 L 54 28 L 64 28 L 53 50 L 50 50 L 60 72 L 50 72 L 44 60 L 40 60 L 40 72 L 30 72 Z" fill="#F4F2EC"/>
               </svg>
-              <span className="text-lg font-black tracking-tight text-white uppercase italic">
+              <span className="text-lg font-black tracking-tight text-foreground uppercase italic">
                 KAIVERON<span style={{color:"#f59e0b"}}>.</span>
               </span>
             </Link>
 
-            <p className="text-sm text-white/35 leading-relaxed max-w-xs">
+            <p className="text-sm text-subtle leading-relaxed max-w-xs">
               The neural anime tracking platform built for true enthusiasts. Track, rate, and discover anime that deserves more hype.
             </p>
 
@@ -119,7 +119,7 @@ export default function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   whileHover={{ y: -2, scale: 1.05 }}
-                  className="p-2.5 rounded-xl border border-white/8 bg-white/[0.02] text-white/35 hover:text-white hover:border-amber-500/30 transition-all"
+                  className="p-2.5 rounded-xl border border-border bg-surface text-subtle hover:text-foreground hover:border-accent/30 transition-all"
                   title={label}
                 >
                   <Icon size={16} />
@@ -128,7 +128,7 @@ export default function Footer() {
             </div>
 
             {/* System status */}
-            <div className="flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.2em] text-white/20">
+            <div className="flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.2em] text-subtle">
               <div className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
               <ShieldCheck size={11} className="text-emerald-500/50" />
               All systems operational • v4.0.0
@@ -138,7 +138,7 @@ export default function Footer() {
           {/* Nav columns */}
           {NAV_COLS.map(col => (
             <div key={col.title}>
-              <h4 className="text-[9px] font-black uppercase tracking-[0.4em] text-white/25 mb-5">
+              <h4 className="text-[9px] font-black uppercase tracking-[0.4em] text-subtle mb-5">
                 {col.title}
               </h4>
               <ul className="space-y-3">
@@ -146,7 +146,7 @@ export default function Footer() {
                   <li key={label}>
                     <Link
                       href={href}
-                      className="text-sm text-white/40 hover:text-white transition-colors duration-200 flex items-center gap-1 group"
+                      className="text-sm text-muted hover:text-foreground transition-colors duration-200 flex items-center gap-1 group"
                     >
                       {label}
                     </Link>
@@ -159,9 +159,9 @@ export default function Footer() {
       </div>
 
       {/* Bottom bar */}
-      <div className="border-t border-white/5">
+      <div className="border-t border-border">
         <div className="max-w-7xl mx-auto px-6 py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p className="text-[10px] font-black text-white/15 uppercase tracking-widest">
+          <p className="text-[10px] font-black text-subtle uppercase tracking-widest">
             © {year} Kaiveron • Neural Archive Protocol
           </p>
           <div className="flex items-center gap-6">
@@ -173,7 +173,7 @@ export default function Footer() {
               <a
                 key={label}
                 href={href}
-                className="text-[9px] font-bold text-white/15 uppercase tracking-wider hover:text-amber-400 transition-colors"
+                className="text-[9px] font-bold text-subtle uppercase tracking-wider hover:text-accent-bright transition-colors"
               >
                 {label}
               </a>

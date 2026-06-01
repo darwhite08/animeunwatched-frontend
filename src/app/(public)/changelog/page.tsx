@@ -142,17 +142,17 @@ function formatDate(iso: string) {
 /* ── Page ── */
 export default function ChangelogPage() {
   return (
-    <div className="min-h-screen bg-[#020202] text-white pb-32">
+    <div className="min-h-screen bg-background text-foreground pb-32">
 
       {/* Header */}
-      <div className="border-b border-white/5 bg-black/30 backdrop-blur-md sticky top-[72px] z-30">
+      <div className="border-b border-border bg-black/30 backdrop-blur-md sticky top-[72px] z-30">
         <div className="max-w-3xl mx-auto px-6 py-6 flex items-center gap-3">
-          <Cpu size={16} className="text-amber-400" />
+          <Cpu size={16} className="text-accent-bright" />
           <div>
-            <h1 className="text-xl font-black tracking-tighter uppercase italic text-white">
-              Changelog<span className="text-amber-500"> — Neural Archive</span>
+            <h1 className="text-xl font-black tracking-tighter uppercase italic text-foreground">
+              Changelog<span className="text-accent"> — Neural Archive</span>
             </h1>
-            <p className="text-[10px] text-white/25 mt-0.5">Every release. Every feature. Full transparency.</p>
+            <p className="text-[10px] text-subtle mt-0.5">Every release. Every feature. Full transparency.</p>
           </div>
         </div>
       </div>
@@ -161,7 +161,7 @@ export default function ChangelogPage() {
       <div className="max-w-3xl mx-auto px-6 pt-12">
         <div className="relative">
           {/* Vertical line */}
-          <div className="absolute left-[11px] top-2 bottom-2 w-px bg-white/5" />
+          <div className="absolute left-[11px] top-2 bottom-2 w-px bg-surface" />
 
           <div className="space-y-12">
             {RELEASES.map((release, i) => (
@@ -175,38 +175,38 @@ export default function ChangelogPage() {
                 {/* Timeline dot */}
                 <div className={`absolute left-0 top-1.5 h-[22px] w-[22px] rounded-full border-2 flex items-center justify-center ${
                   i === 0
-                    ? "border-amber-500 bg-amber-600/30"
-                    : "border-white/15 bg-[#020202]"
+                    ? "border-accent bg-accent/30"
+                    : "border-border bg-background"
                 }`}>
-                  <div className={`h-2 w-2 rounded-full ${i === 0 ? "bg-amber-400" : "bg-white/20"}`} />
+                  <div className={`h-2 w-2 rounded-full ${i === 0 ? "bg-accent-bright" : "bg-white/20"}`} />
                 </div>
 
                 {/* Card */}
                 <div className={`rounded-[1.75rem] border p-7 space-y-5 ${
                   i === 0
-                    ? "border-amber-500/25 bg-amber-600/5"
-                    : "border-white/8 bg-[#0a0a0a]"
+                    ? "border-accent/25 bg-accent/5"
+                    : "border-border bg-surface"
                 }`}>
                   {/* Top row */}
                   <div className="flex flex-wrap items-center gap-3">
-                    <span className="px-3 py-1 rounded-lg bg-amber-600/15 border border-amber-500/25 text-xs font-black text-amber-400 font-mono tracking-wider">
+                    <span className="px-3 py-1 rounded-lg bg-accent/15 border border-accent/25 text-xs font-black text-accent-bright font-mono tracking-wider">
                       {release.version}
                     </span>
                     <span className={`px-3 py-1 rounded-lg text-[10px] font-black uppercase tracking-widest ${
                       release.tag === "Major"
                         ? "bg-violet-600/10 border border-violet-500/20 text-violet-400"
-                        : "bg-white/5 border border-white/8 text-white/40"
+                        : "bg-surface border border-border text-muted"
                     }`}>
                       {release.tag}
                     </span>
-                    <span className="ml-auto text-[10px] text-white/25 font-mono">
+                    <span className="ml-auto text-[10px] text-subtle font-mono">
                       {formatDate(release.date)}
                     </span>
                   </div>
 
                   {/* Title */}
                   <div>
-                    <h2 className="text-lg font-black tracking-tight text-white leading-snug">
+                    <h2 className="text-lg font-black tracking-tight text-foreground leading-snug">
                       {release.title}
                     </h2>
                   </div>
@@ -215,8 +215,8 @@ export default function ChangelogPage() {
                   <ul className="space-y-2.5">
                     {release.features.map((feat) => (
                       <li key={feat} className="flex items-start gap-3">
-                        <CheckCircle2 size={13} className="text-amber-400 shrink-0 mt-0.5" />
-                        <span className="text-sm text-white/55 leading-snug">{feat}</span>
+                        <CheckCircle2 size={13} className="text-accent-bright shrink-0 mt-0.5" />
+                        <span className="text-sm text-muted leading-snug">{feat}</span>
                       </li>
                     ))}
                   </ul>
@@ -231,9 +231,9 @@ export default function ChangelogPage() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.5 }}
-          className="mt-16 flex items-center gap-2 text-[10px] text-white/20 font-mono"
+          className="mt-16 flex items-center gap-2 text-[10px] text-subtle font-mono"
         >
-          <Zap size={10} className="text-amber-500/50" />
+          <Zap size={10} className="text-accent/50" />
           Changelog auto-archives every production deploy. All times UTC.
         </motion.div>
       </div>

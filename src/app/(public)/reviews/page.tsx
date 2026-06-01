@@ -89,19 +89,19 @@ export default function ReviewsPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-[#020202] text-white pb-32">
+    <div className="min-h-screen bg-background text-foreground pb-32">
       {/* Header */}
       <div className="max-w-5xl mx-auto px-6 pt-32 pb-10">
-        <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-amber-400/60 mb-3">Community Voices</p>
+        <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-accent-bright/60 mb-3">Community Voices</p>
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-5">
           <div>
-            <h1 className="text-5xl font-black tracking-tighter uppercase italic text-white leading-none mb-2">
+            <h1 className="text-5xl font-black tracking-tighter uppercase italic text-foreground leading-none mb-2">
               Reviews<span style={{color:"#f59e0b"}}>.</span>
             </h1>
-            <p className="text-white/35 text-sm">{reviews.length} community reviews</p>
+            <p className="text-subtle text-sm">{reviews.length} community reviews</p>
           </div>
           <Link href="/rate"
-            className="flex items-center gap-2 px-5 py-3 rounded-2xl bg-amber-500 hover:bg-amber-400 text-xs font-black uppercase tracking-widest text-white transition-all self-start sm:self-auto"
+            className="flex items-center gap-2 px-5 py-3 rounded-2xl bg-accent hover:bg-accent-bright text-xs font-black uppercase tracking-widest text-foreground transition-all self-start sm:self-auto"
           >
             <PenSquare size={13} /> Write a Review
           </Link>
@@ -109,11 +109,11 @@ export default function ReviewsPage() {
 
         {/* Sort tabs */}
         <div className="flex items-center gap-2 mt-6 flex-wrap">
-          <Filter size={13} className="text-white/30" />
+          <Filter size={13} className="text-subtle" />
           {SORTS.map(s => (
             <button key={s.id} onClick={() => setSort(s.id)}
               className={`px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-wider transition-all ${
-                sort === s.id ? "bg-amber-500 text-black" : "bg-white/5 text-white/40 hover:bg-white/8 border border-white/5"
+                sort === s.id ? "bg-accent text-black" : "bg-surface text-muted hover:bg-surface border border-border"
               }`}
             >{s.label}</button>
           ))}
@@ -123,9 +123,9 @@ export default function ReviewsPage() {
       {/* Reviews grid */}
       {sorted.length === 0 && (
         <div className="max-w-5xl mx-auto px-6">
-          <div className="text-center py-20 border border-dashed border-white/8 rounded-2xl text-white/35">
+          <div className="text-center py-20 border border-dashed border-border rounded-2xl text-subtle">
             <p className="text-xs uppercase tracking-[0.3em] font-black">No reviews yet</p>
-            <p className="text-[11px] mt-2 text-white/25">Visit an anime detail page to write the first one.</p>
+            <p className="text-[11px] mt-2 text-subtle">Visit an anime detail page to write the first one.</p>
           </div>
         </div>
       )}
@@ -141,7 +141,7 @@ export default function ReviewsPage() {
             return (
               <motion.div key={r.id} layout initial={{ opacity:0, y:10 }} animate={{ opacity:1, y:0 }}
                 transition={{ delay: i*0.04 }}
-                className="p-5 rounded-2xl bg-white/[0.02] border border-white/8 hover:border-white/15 transition-colors space-y-4"
+                className="p-5 rounded-2xl bg-surface border border-border hover:border-border transition-colors space-y-4"
               >
                 {/* Anime info */}
                 <div className="flex items-center gap-3">
@@ -152,7 +152,7 @@ export default function ReviewsPage() {
                   )}
                   <div className="flex-1 min-w-0">
                     <Link href={`/anime/${r.animeId}`}
-                      className="text-sm font-black text-white/80 hover:text-white transition-colors truncate block"
+                      className="text-sm font-black text-muted hover:text-foreground transition-colors truncate block"
                     >
                       {anime?.title ?? r.animeId}
                     </Link>
@@ -161,13 +161,13 @@ export default function ReviewsPage() {
                         {[1,2,3,4,5].map(star => (
                           <Star key={star} size={10}
                             fill={star <= Math.round(r.score/2) ? "#f59e0b" : "none"}
-                            className={star <= Math.round(r.score/2) ? "text-amber-400" : "text-white/15"}
+                            className={star <= Math.round(r.score/2) ? "text-accent-bright" : "text-subtle"}
                           />
                         ))}
                       </div>
-                      <span className="text-[10px] font-black text-white/50">{r.score}/10</span>
+                      <span className="text-[10px] font-black text-muted">{r.score}/10</span>
                       {r.hasSpoilers && (
-                        <span className="text-[8px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded-full bg-amber-500/15 text-amber-400 border border-amber-500/20">
+                        <span className="text-[8px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded-full bg-accent/15 text-accent-bright border border-accent/20">
                           Spoilers
                         </span>
                       )}
@@ -179,21 +179,21 @@ export default function ReviewsPage() {
                 <div className="relative">
                   {r.hasSpoilers && !isRevealed ? (
                     <div className="relative">
-                      <p className="text-sm text-white/40 leading-relaxed blur-[4px] select-none line-clamp-3">{r.body}</p>
+                      <p className="text-sm text-muted leading-relaxed blur-[4px] select-none line-clamp-3">{r.body}</p>
                       <button onClick={() => setRevealed(s => new Set([...s, r.id]))}
-                        className="absolute inset-0 flex items-center justify-center gap-2 bg-black/20 rounded-xl text-xs font-black uppercase tracking-widest text-amber-400 hover:text-amber-300 transition-colors"
+                        className="absolute inset-0 flex items-center justify-center gap-2 bg-black/20 rounded-xl text-xs font-black uppercase tracking-widest text-accent-bright hover:text-accent-bright transition-colors"
                       >
                         <EyeOff size={13} /> Reveal Spoilers
                       </button>
                     </div>
                   ) : (
                     <div>
-                      <p className="text-sm text-white/65 leading-relaxed">
+                      <p className="text-sm text-muted leading-relaxed">
                         {isExpanded || r.body.length <= TRUNCATE ? r.body : r.body.slice(0, TRUNCATE) + "…"}
                       </p>
                       {r.body.length > TRUNCATE && (
                         <button onClick={() => setExpanded(s => { const n = new Set(s); isExpanded ? n.delete(r.id) : n.add(r.id); return n })}
-                          className="text-[10px] font-black text-amber-400 hover:text-amber-300 mt-1 transition-colors"
+                          className="text-[10px] font-black text-accent-bright hover:text-accent-bright mt-1 transition-colors"
                         >
                           {isExpanded ? "Show less" : "Read more"}
                         </button>
@@ -203,14 +203,14 @@ export default function ReviewsPage() {
                 </div>
 
                 {/* Footer */}
-                <div className="flex items-center justify-between pt-2 border-t border-white/5">
-                  <div className="flex items-center gap-2 text-[10px] text-white/25">
-                    <span className="font-black text-white/40">{r.author}</span>
+                <div className="flex items-center justify-between pt-2 border-t border-border">
+                  <div className="flex items-center gap-2 text-[10px] text-subtle">
+                    <span className="font-black text-muted">{r.author}</span>
                     <span>·</span>
                     <span>{r.date}</span>
                   </div>
                   <button onClick={() => { toggleHelp(r.id); push(r.helpedByMe ? "Removed helpful vote" : "Marked as helpful!", "success") }}
-                    className={`flex items-center gap-1.5 text-[10px] font-bold transition-colors ${r.helpedByMe ? "text-emerald-400" : "text-white/25 hover:text-white/50"}`}
+                    className={`flex items-center gap-1.5 text-[10px] font-bold transition-colors ${r.helpedByMe ? "text-emerald-400" : "text-subtle hover:text-muted"}`}
                   >
                     <ThumbsUp size={12} fill={r.helpedByMe ? "currentColor" : "none"} />
                     {r.helpful} helpful

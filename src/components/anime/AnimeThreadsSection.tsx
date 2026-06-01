@@ -116,12 +116,12 @@ export function AnimeThreadsSection({ animeId, animeTitle }: AnimeThreadsSection
     <div>
       {/* Header */}
       <div className="flex items-center justify-between mb-5">
-        <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/30">
+        <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-subtle">
           Discussion Threads
         </h2>
         <button
           onClick={() => push("Coming soon! Join a club to start discussions.", "info")}
-          className="text-[10px] font-black uppercase tracking-widest text-amber-400 hover:text-amber-300 transition-colors flex items-center gap-1.5"
+          className="text-[10px] font-black uppercase tracking-widest text-accent-bright hover:text-accent-bright transition-colors flex items-center gap-1.5"
         >
           <MessageSquare size={11} /> Start Thread
         </button>
@@ -135,8 +135,8 @@ export function AnimeThreadsSection({ animeId, animeTitle }: AnimeThreadsSection
             onClick={() => setActiveFilter(f)}
             className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider transition-all border ${
               activeFilter === f
-                ? "bg-amber-500 border-amber-400 text-black"
-                : "bg-white/[0.03] border-white/8 text-white/35 hover:text-white/60 hover:border-white/15"
+                ? "bg-accent border-accent text-black"
+                : "bg-surface border-border text-subtle hover:text-muted hover:border-border"
             }`}
           >
             {f}
@@ -147,18 +147,18 @@ export function AnimeThreadsSection({ animeId, animeTitle }: AnimeThreadsSection
       {/* Thread list */}
       <div className="space-y-2">
         {filtered.length === 0 ? (
-          <p className="text-sm text-white/25 py-4 text-center">No threads match this filter.</p>
+          <p className="text-sm text-subtle py-4 text-center">No threads match this filter.</p>
         ) : (
           filtered.map((thread) => (
             <Link
               key={thread.id}
               href={`/threads/${thread.id}`}
-              className="flex items-start gap-3 p-4 rounded-2xl bg-white/[0.02] border border-white/8 hover:border-white/15 hover:bg-white/[0.04] transition-all group"
+              className="flex items-start gap-3 p-4 rounded-2xl bg-surface border border-border hover:border-border hover:bg-white/[0.04] transition-all group"
             >
               {/* Pin icon */}
               <div className="shrink-0 mt-0.5">
                 {thread.isPinned ? (
-                  <Pin size={12} className="text-amber-400" />
+                  <Pin size={12} className="text-accent-bright" />
                 ) : (
                   <div className="w-3" />
                 )}
@@ -167,7 +167,7 @@ export function AnimeThreadsSection({ animeId, animeTitle }: AnimeThreadsSection
               {/* Content */}
               <div className="flex-1 min-w-0">
                 <div className="flex items-start gap-2 flex-wrap">
-                  <p className="text-sm font-bold text-white/75 group-hover:text-white transition-colors truncate max-w-[280px]">
+                  <p className="text-sm font-bold text-muted group-hover:text-foreground transition-colors truncate max-w-[280px]">
                     {thread.title}
                   </p>
                   {hasSpoiler(thread.title) && (
@@ -176,13 +176,13 @@ export function AnimeThreadsSection({ animeId, animeTitle }: AnimeThreadsSection
                     </span>
                   )}
                 </div>
-                <p className="text-[10px] text-white/25 mt-0.5">
-                  by <span className="text-white/40">{thread.author}</span> · {thread.lastActivity}
+                <p className="text-[10px] text-subtle mt-0.5">
+                  by <span className="text-muted">{thread.author}</span> · {thread.lastActivity}
                 </p>
               </div>
 
               {/* Stats */}
-              <div className="flex items-center gap-3 shrink-0 text-white/25 text-[10px] font-bold">
+              <div className="flex items-center gap-3 shrink-0 text-subtle text-[10px] font-bold">
                 <span className="flex items-center gap-1">
                   <MessageSquare size={10} /> {thread.replies}
                 </span>
@@ -198,7 +198,7 @@ export function AnimeThreadsSection({ animeId, animeTitle }: AnimeThreadsSection
       {/* Footer link */}
       <Link
         href="/community"
-        className="mt-4 flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-amber-400/70 hover:text-amber-400 transition-colors"
+        className="mt-4 flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-accent-bright/70 hover:text-accent-bright transition-colors"
       >
         View All Discussions <ChevronRight size={11} />
       </Link>

@@ -62,12 +62,12 @@ export default function CreatePollPage() {
     <div className="max-w-2xl space-y-8">
       {/* Header */}
       <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-xl bg-amber-600/20 border border-amber-500/30 flex items-center justify-center">
-          <Vote size={18} className="text-amber-400" />
+        <div className="w-10 h-10 rounded-xl bg-accent/20 border border-accent/30 flex items-center justify-center">
+          <Vote size={18} className="text-accent-bright" />
         </div>
         <div>
           <h1 className="text-2xl font-semibold">Create Poll</h1>
-          <p className="text-sm text-white/40">Ask the community — up to 6 options</p>
+          <p className="text-sm text-muted">Ask the community — up to 6 options</p>
         </div>
       </div>
 
@@ -81,21 +81,21 @@ export default function CreatePollPage() {
         </motion.div>
       )}
 
-      <div className="bg-zinc-900 border border-white/10 rounded-2xl p-6 space-y-6">
+      <div className="bg-zinc-900 border border-border rounded-2xl p-6 space-y-6">
         {/* Question */}
         <div className="space-y-2">
-          <label className="text-xs text-white/40 uppercase tracking-wider">Question</label>
+          <label className="text-xs text-muted uppercase tracking-wider">Question</label>
           <input
             value={question}
             onChange={e => setQuestion(e.target.value)}
             placeholder="e.g. Who is the strongest anime character?"
-            className="w-full bg-zinc-800 rounded-xl px-4 py-3 text-sm outline-none placeholder:text-white/30 focus:ring-1 focus:ring-amber-500/50"
+            className="w-full bg-zinc-800 rounded-xl px-4 py-3 text-sm outline-none placeholder:text-subtle focus:ring-1 focus:ring-accent/50"
           />
         </div>
 
         {/* Options */}
         <div className="space-y-2">
-          <label className="text-xs text-white/40 uppercase tracking-wider">
+          <label className="text-xs text-muted uppercase tracking-wider">
             Options ({options.length}/6)
           </label>
 
@@ -108,19 +108,19 @@ export default function CreatePollPage() {
                 exit={{ opacity: 0, y: -6 }}
                 className="flex items-center gap-2"
               >
-                <span className="w-6 h-6 rounded-full bg-zinc-700 flex items-center justify-center text-xs text-white/40 shrink-0">
+                <span className="w-6 h-6 rounded-full bg-zinc-700 flex items-center justify-center text-xs text-muted shrink-0">
                   {i + 1}
                 </span>
                 <input
                   value={opt}
                   onChange={e => updateOption(i, e.target.value)}
                   placeholder={`Option ${i + 1}…`}
-                  className="flex-1 bg-zinc-800 rounded-xl px-4 py-2.5 text-sm outline-none placeholder:text-white/30 focus:ring-1 focus:ring-amber-500/50"
+                  className="flex-1 bg-zinc-800 rounded-xl px-4 py-2.5 text-sm outline-none placeholder:text-subtle focus:ring-1 focus:ring-accent/50"
                 />
                 {options.length > 2 && (
                   <button
                     onClick={() => removeOption(i)}
-                    className="p-2 rounded-lg text-white/30 hover:text-red-400 hover:bg-white/5 transition"
+                    className="p-2 rounded-lg text-subtle hover:text-red-400 hover:bg-surface transition"
                   >
                     <Trash2 size={14} />
                   </button>
@@ -132,7 +132,7 @@ export default function CreatePollPage() {
           {options.length < 6 && (
             <button
               onClick={addOption}
-              className="flex items-center gap-2 text-sm text-white/40 hover:text-white px-3 py-2 rounded-xl hover:bg-white/5 transition"
+              className="flex items-center gap-2 text-sm text-muted hover:text-foreground px-3 py-2 rounded-xl hover:bg-surface transition"
             >
               <Plus size={14} />
               Add option
@@ -142,7 +142,7 @@ export default function CreatePollPage() {
 
         {/* Duration */}
         <div className="space-y-2">
-          <label className="text-xs text-white/40 uppercase tracking-wider flex items-center gap-1.5">
+          <label className="text-xs text-muted uppercase tracking-wider flex items-center gap-1.5">
             <Clock size={11} /> Duration
           </label>
           <div className="flex gap-2 flex-wrap">
@@ -152,8 +152,8 @@ export default function CreatePollPage() {
                 onClick={() => setDuration(d)}
                 className={`px-4 py-2 rounded-xl text-sm transition ${
                   duration === d
-                    ? "bg-amber-600/20 border border-amber-500/40 text-amber-400"
-                    : "bg-zinc-800 text-white/50 hover:bg-zinc-700"
+                    ? "bg-accent/20 border border-accent/40 text-accent-bright"
+                    : "bg-zinc-800 text-muted hover:bg-zinc-700"
                 }`}
               >
                 {d}
@@ -163,11 +163,11 @@ export default function CreatePollPage() {
         </div>
 
         {/* Submit */}
-        <div className="pt-2 border-t border-white/5 flex justify-end">
+        <div className="pt-2 border-t border-border flex justify-end">
           <button
             onClick={handleSubmit}
             disabled={!canSubmit}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 disabled:opacity-40 disabled:cursor-not-allowed transition text-sm font-medium"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-accent hover:bg-accent disabled:opacity-40 disabled:cursor-not-allowed transition text-sm font-medium"
           >
             <Send size={14} />
             Launch Poll
@@ -178,20 +178,20 @@ export default function CreatePollPage() {
       {/* Preview */}
       {question.trim() && (
         <div className="space-y-3">
-          <p className="text-xs text-white/30 uppercase tracking-wider">Preview</p>
-          <div className="bg-zinc-900 border border-white/10 rounded-2xl p-5 space-y-4">
+          <p className="text-xs text-subtle uppercase tracking-wider">Preview</p>
+          <div className="bg-zinc-900 border border-border rounded-2xl p-5 space-y-4">
             <p className="font-semibold">{question}</p>
             <div className="space-y-2">
               {options.filter(o => o.trim()).map((opt, i) => (
                 <div key={i} className="flex items-center gap-3">
-                  <div className="flex-1 bg-zinc-800 rounded-lg px-4 py-2 text-sm text-white/70">
+                  <div className="flex-1 bg-zinc-800 rounded-lg px-4 py-2 text-sm text-muted">
                     {opt}
                   </div>
-                  <span className="text-xs text-white/30 w-8 text-right">0%</span>
+                  <span className="text-xs text-subtle w-8 text-right">0%</span>
                 </div>
               ))}
             </div>
-            <p className="text-xs text-white/30">Closes in {duration} · 0 votes</p>
+            <p className="text-xs text-subtle">Closes in {duration} · 0 votes</p>
           </div>
         </div>
       )}

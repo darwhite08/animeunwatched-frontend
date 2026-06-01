@@ -58,29 +58,29 @@ export default function SeasonPage({ params }: { params: Promise<{ year: string;
   const nextSeason = seasonIdx < 3 ? { year, season: SEASONS[seasonIdx + 1] } : { year: year + 1, season: "winter" as Season }
 
   return (
-    <div className="min-h-screen bg-[#020202] text-white pb-32">
-      <div className={`relative bg-gradient-to-br ${SEASON_GRADIENTS[seasonLower]} border-b border-white/5`}>
+    <div className="min-h-screen bg-background text-foreground pb-32">
+      <div className={`relative bg-gradient-to-br ${SEASON_GRADIENTS[seasonLower]} border-b border-border`}>
         <div className="max-w-6xl mx-auto px-6 py-20 pt-32">
           <div className="flex items-end justify-between gap-6">
             <div>
-              <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-white/30 mb-3">
+              <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-subtle mb-3">
                 <Calendar size={11} className="inline mr-1.5" />
                 {SEASON_MONTHS[seasonLower]} · {year}
               </p>
-              <h1 className="text-5xl md:text-7xl font-black tracking-tighter uppercase italic text-white leading-none">
+              <h1 className="text-5xl md:text-7xl font-black tracking-tighter uppercase italic text-foreground leading-none">
                 {seasonLower.charAt(0).toUpperCase() + seasonLower.slice(1)}<span style={{color:"#f59e0b"}}>.</span>
                 <br />
-                <span className="text-white/40">{year}</span>
+                <span className="text-muted">{year}</span>
               </h1>
-              <p className="text-white/35 text-sm mt-4">{animeList.length} anime in the neural archive</p>
+              <p className="text-subtle text-sm mt-4">{animeList.length} anime in the neural archive</p>
             </div>
             <div className="flex items-center gap-3 shrink-0">
               <Link href={`/anime/season/${prevSeason.year}/${prevSeason.season}`}
-                className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-white/10 bg-white/5 text-xs font-black uppercase tracking-widest text-white/50 hover:text-white hover:bg-white/10 transition-all">
+                className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-border bg-surface text-xs font-black uppercase tracking-widest text-muted hover:text-foreground hover:bg-surface transition-all">
                 <ChevronLeft size={13} /> Prev
               </Link>
               <Link href={`/anime/season/${nextSeason.year}/${nextSeason.season}`}
-                className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-white/10 bg-white/5 text-xs font-black uppercase tracking-widest text-white/50 hover:text-white hover:bg-white/10 transition-all">
+                className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl border border-border bg-surface text-xs font-black uppercase tracking-widest text-muted hover:text-foreground hover:bg-surface transition-all">
                 Next <ChevronRight size={13} />
               </Link>
             </div>
@@ -89,7 +89,7 @@ export default function SeasonPage({ params }: { params: Promise<{ year: string;
             {SEASONS.map(s => (
               <Link key={s} href={`/anime/season/${year}/${s}`}
                 className={`px-5 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${
-                  s === seasonLower ? "bg-amber-500 text-black shadow-[0_0_20px_rgba(245,158,11,0.4)]" : "bg-white/5 text-white/35 hover:bg-white/10 hover:text-white border border-white/5"
+                  s === seasonLower ? "bg-accent text-black shadow-[0_0_20px_rgba(245,158,11,0.4)]" : "bg-surface text-subtle hover:bg-surface hover:text-foreground border border-border"
                 }`}>
                 {s.charAt(0).toUpperCase() + s.slice(1)}
               </Link>
@@ -99,7 +99,7 @@ export default function SeasonPage({ params }: { params: Promise<{ year: string;
       </div>
 
       <div className="max-w-6xl mx-auto px-6 py-12">
-        {isLoading && <div className="flex justify-center py-16"><Loader2 size={24} className="animate-spin text-amber-400" /></div>}
+        {isLoading && <div className="flex justify-center py-16"><Loader2 size={24} className="animate-spin text-accent-bright" /></div>}
         {!isLoading && animeList.length > 0 && (
           <motion.div layout className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-5">
             <AnimatePresence>
@@ -108,11 +108,11 @@ export default function SeasonPage({ params }: { params: Promise<{ year: string;
           </motion.div>
         )}
         {!isLoading && animeList.length === 0 && (
-          <div className="py-24 text-center border border-dashed border-white/5 rounded-[3rem]">
-            <p className="text-white/20 font-black uppercase tracking-widest text-sm">No anime for {seasonLower} {year}</p>
-            <p className="text-white/15 text-xs mt-2">
-              Try <Link href={`/anime/season/${year - 1}/fall`} className="text-amber-400 hover:underline">Fall {year - 1}</Link> or{" "}
-              <Link href="/bestanimelist" className="text-amber-400 hover:underline">browse all</Link>
+          <div className="py-24 text-center border border-dashed border-border rounded-[3rem]">
+            <p className="text-subtle font-black uppercase tracking-widest text-sm">No anime for {seasonLower} {year}</p>
+            <p className="text-subtle text-xs mt-2">
+              Try <Link href={`/anime/season/${year - 1}/fall`} className="text-accent-bright hover:underline">Fall {year - 1}</Link> or{" "}
+              <Link href="/bestanimelist" className="text-accent-bright hover:underline">browse all</Link>
             </p>
           </div>
         )}

@@ -57,7 +57,7 @@ export default function HeroSection() {
       <motion.div
         animate={{ scale:[1,1.07,1], opacity:[0.18,0.3,0.18] }}
         transition={{ duration:9, repeat:Infinity, ease:"easeInOut" }}
-        className="absolute top-[20%] left-[-5%] w-[480px] h-[480px] bg-amber-600 blur-[160px] rounded-full pointer-events-none"
+        className="absolute top-[20%] left-[-5%] w-[480px] h-[480px] bg-accent blur-[160px] rounded-full pointer-events-none"
       />
       {/* violet glow — right, behind characters */}
       <motion.div
@@ -85,10 +85,10 @@ export default function HeroSection() {
         transition={{ delay:0.2 }}
         className="relative z-20 flex justify-center pt-28 md:pt-32"
       >
-        <div className="flex items-center gap-3 border border-white/10 bg-white/[0.04] backdrop-blur-xl rounded-full px-5 py-2.5">
+        <div className="flex items-center gap-3 border border-border bg-white/[0.04] backdrop-blur-xl rounded-full px-5 py-2.5">
           <span className="relative flex h-2 w-2 shrink-0">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-amber-400 opacity-70" />
-            <span className="relative inline-flex h-2 w-2 rounded-full bg-amber-500" />
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent-bright opacity-70" />
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-accent" />
           </span>
           <AnimatePresence mode="wait">
             <motion.span
@@ -97,7 +97,7 @@ export default function HeroSection() {
               animate={{ opacity:1, y:0 }}
               exit={{ opacity:0, y:-5 }}
               transition={{ duration:0.28 }}
-              className="text-[10px] font-black uppercase tracking-[0.28em] text-white/55"
+              className="text-[10px] font-black uppercase tracking-[0.28em] text-muted"
             >
               {TICKERS[tickerIdx]}
             </motion.span>
@@ -118,7 +118,7 @@ export default function HeroSection() {
             initial={{ opacity:0, x:-16 }}
             animate={{ opacity:1, x:0 }}
             transition={{ delay:0.28 }}
-            className="text-[9px] font-mono font-black uppercase tracking-[0.48em] text-amber-400/60"
+            className="text-[9px] font-mono font-black uppercase tracking-[0.48em] text-accent-bright/60"
           >
             Neural Archive Protocol // V4.0
           </motion.p>
@@ -126,9 +126,9 @@ export default function HeroSection() {
           {/* headline — 3 lines, staggered mask reveal */}
           <div className="space-y-[-4px]">
             {[
-              { text:"Track",    color:"text-white",   dot:"text-amber-500", italic:false },
+              { text:"Track",    color:"text-foreground",   dot:"text-accent", italic:false },
               { text:"Rate",     color:"text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-violet-300 to-purple-400", dot:"text-violet-400", italic:true  },
-              { text:"Discover", color:"text-white/90", dot:"text-amber-500", italic:false },
+              { text:"Discover", color:"text-white/90", dot:"text-accent", italic:false },
             ].map(({ text, color, dot, italic }, i) => (
               <div key={text} className="overflow-hidden leading-none">
                 <motion.h1
@@ -149,10 +149,10 @@ export default function HeroSection() {
             initial={{ opacity:0, y:12 }}
             animate={{ opacity:1, y:0 }}
             transition={{ delay:0.58 }}
-            className="text-white/45 text-sm md:text-[0.95rem] leading-relaxed max-w-[420px] font-medium"
+            className="text-muted text-sm md:text-[0.95rem] leading-relaxed max-w-[420px] font-medium"
           >
             Stop scrolling through generic lists. Let our{" "}
-            <span className="text-white/80 italic font-bold">Neural Oracle</span> surface
+            <span className="text-muted italic font-bold">Neural Oracle</span> surface
             anime that matches your exact taste — and help hidden gems rise.
           </motion.p>
 
@@ -173,7 +173,7 @@ export default function HeroSection() {
             </Link>
             <Link
               href="/bestanimelist"
-              className="inline-flex items-center gap-2.5 rounded-2xl border border-white/12 bg-white/[0.04] px-6 py-3.5 text-[11px] font-black uppercase tracking-widest text-white/55 backdrop-blur-md hover:bg-white/[0.08] hover:text-white hover:border-white/20 hover:-translate-y-0.5 transition-all"
+              className="inline-flex items-center gap-2.5 rounded-2xl border border-border bg-white/[0.04] px-6 py-3.5 text-[11px] font-black uppercase tracking-widest text-muted backdrop-blur-md hover:bg-white/[0.08] hover:text-foreground hover:border-border hover:-translate-y-0.5 transition-all"
             >
               <Play size={12} />
               Best Anime List
@@ -195,7 +195,7 @@ export default function HeroSection() {
                 transition={{ delay:0.85+i*0.06 }}
                 className="flex flex-col gap-0.5"
               >
-                <span className="text-xl md:text-2xl font-black tracking-tighter text-white">{value}</span>
+                <span className="text-xl md:text-2xl font-black tracking-tighter text-foreground">{value}</span>
                 <span className="text-[8px] font-black uppercase tracking-[0.28em] text-white/22">{label}</span>
               </motion.div>
             ))}
@@ -209,7 +209,7 @@ export default function HeroSection() {
         >
           {/* floor glow */}
           <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[400px] h-[180px] bg-violet-600/25 blur-[55px] rounded-full" />
-          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[220px] h-[100px] bg-amber-500/30 blur-[35px] rounded-full" />
+          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[220px] h-[100px] bg-accent/30 blur-[35px] rounded-full" />
 
           {CHARS.map((c, i) => (
             <motion.div

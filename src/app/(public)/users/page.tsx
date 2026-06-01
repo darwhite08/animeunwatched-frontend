@@ -47,34 +47,34 @@ export default function UsersPage() {
   }, [query, sort])
 
   return (
-    <div className="min-h-screen bg-[#020202] text-white pb-32">
+    <div className="min-h-screen bg-background text-foreground pb-32">
       {/* Header */}
       <div className="max-w-4xl mx-auto px-6 pt-32 pb-10">
         <motion.div initial={{ opacity:0, x:-16 }} animate={{ opacity:1, x:0 }}
-          className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-[10px] font-black uppercase tracking-[0.3em] text-amber-400 mb-5"
+          className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent/10 border border-accent/20 text-[10px] font-black uppercase tracking-[0.3em] text-accent-bright mb-5"
         >
           <Users size={11} /> Shinobi Directory
         </motion.div>
-        <h1 className="text-5xl font-black tracking-tighter uppercase italic text-white leading-none mb-3">
+        <h1 className="text-5xl font-black tracking-tighter uppercase italic text-foreground leading-none mb-3">
           Find Shinobi<span style={{color:"#f59e0b"}}>.</span>
         </h1>
-        <p className="text-white/35 text-sm">Discover the community, follow reviewers, find your tribe.</p>
+        <p className="text-subtle text-sm">Discover the community, follow reviewers, find your tribe.</p>
       </div>
 
       <div className="max-w-4xl mx-auto px-6 space-y-6">
         {/* Search + sort */}
         <div className="flex flex-col sm:flex-row gap-3">
           <div className="relative flex-1">
-            <Search size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30" />
+            <Search size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-subtle" />
             <input value={query} onChange={e => setQuery(e.target.value)}
               placeholder="Search Shinobi…"
-              className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/10 rounded-2xl text-sm text-white placeholder:text-white/20 outline-none focus:border-amber-500/40"
+              className="w-full pl-10 pr-4 py-3 bg-surface border border-border rounded-2xl text-sm text-foreground placeholder:text-subtle outline-none focus:border-accent/40"
             />
           </div>
           <div className="flex gap-2">
             {([["reputation","Reputation"],["anime","Archive"],["streak","Streak"]] as const).map(([key, label]) => (
               <button key={key} onClick={() => setSort(key)}
-                className={`px-4 py-3 rounded-2xl text-xs font-black uppercase tracking-widest transition-all ${sort === key ? "bg-amber-500 text-black" : "bg-white/5 text-white/40 hover:bg-white/8 border border-white/5"}`}
+                className={`px-4 py-3 rounded-2xl text-xs font-black uppercase tracking-widest transition-all ${sort === key ? "bg-accent text-black" : "bg-surface text-muted hover:bg-surface border border-border"}`}
               >{label}</button>
             ))}
           </div>
@@ -85,9 +85,9 @@ export default function UsersPage() {
           {sorted.map((user, i) => (
             <motion.div key={user.id} initial={{ opacity:0, y:8 }} animate={{ opacity:1, y:0 }} transition={{ delay: i*0.04 }}>
               <Link href={`/u/${user.username}`}
-                className="flex items-center gap-4 p-4 rounded-2xl bg-white/[0.02] border border-white/8 hover:border-amber-500/20 hover:bg-white/[0.04] transition-all group"
+                className="flex items-center gap-4 p-4 rounded-2xl bg-surface border border-border hover:border-accent/20 hover:bg-white/[0.04] transition-all group"
               >
-                <span className="text-sm font-black text-white/20 w-6 shrink-0">#{i+1}</span>
+                <span className="text-sm font-black text-subtle w-6 shrink-0">#{i+1}</span>
                 <div className="relative shrink-0">
                   <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-lg font-black group-hover:scale-105 transition-transform">
                     {user.avatar}
@@ -97,12 +97,12 @@ export default function UsersPage() {
                   </span>
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="font-black text-white group-hover:text-amber-300 transition-colors">{user.displayName}</p>
-                  <p className="text-xs text-white/35">@{user.username} · Lv.{user.level} {user.title}</p>
+                  <p className="font-black text-foreground group-hover:text-accent-bright transition-colors">{user.displayName}</p>
+                  <p className="text-xs text-subtle">@{user.username} · Lv.{user.level} {user.title}</p>
                 </div>
-                <div className="hidden sm:flex items-center gap-6 text-xs text-white/30 shrink-0">
-                  <span className="flex items-center gap-1"><Trophy size={11} className="text-amber-400" /> {user.reputation}</span>
-                  <span className="flex items-center gap-1"><Star size={11} className="text-amber-400" /> {user.anime}</span>
+                <div className="hidden sm:flex items-center gap-6 text-xs text-subtle shrink-0">
+                  <span className="flex items-center gap-1"><Trophy size={11} className="text-accent-bright" /> {user.reputation}</span>
+                  <span className="flex items-center gap-1"><Star size={11} className="text-accent-bright" /> {user.anime}</span>
                   <span className="flex items-center gap-1"><Flame size={11} className="text-orange-400" /> {user.streak}d</span>
                 </div>
               </Link>

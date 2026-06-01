@@ -24,13 +24,13 @@ export default function UserSettingsLayout({ children }: { children: React.React
     <div className="max-w-5xl mx-auto px-6 py-12 pb-32">
       <div className="mb-10">
         <div className="flex items-center gap-2 mb-3">
-          <Settings size={14} className="text-amber-400" />
+          <Settings size={14} className="text-accent-bright" />
           <p className="text-[9px] font-mono font-black uppercase tracking-[0.4em]"
             style={{ color: "rgba(245,158,11,0.6)" }}>
             user / {slug} / settings
           </p>
         </div>
-        <h1 className="text-4xl font-black tracking-tighter text-white uppercase italic">
+        <h1 className="text-4xl font-black tracking-tighter text-foreground uppercase italic">
           Settings<span style={{ color: "#f59e0b" }}>.</span>
         </h1>
         <div className="mt-6 h-px"
@@ -44,7 +44,7 @@ export default function UserSettingsLayout({ children }: { children: React.React
             return (
               <Link key={item.href} href={item.href}
                 className={`relative flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition-all ${
-                  active ? "text-white" : "text-white/40 hover:text-white hover:bg-white/[0.03]"
+                  active ? "text-foreground" : "text-muted hover:text-foreground hover:bg-surface"
                 }`}
               >
                 {active && (
@@ -57,7 +57,7 @@ export default function UserSettingsLayout({ children }: { children: React.React
                     transition={{ type: "spring", stiffness: 320, damping: 30 }}
                   />
                 )}
-                <item.icon size={15} className={`relative z-10 ${active ? "text-amber-400" : ""}`} />
+                <item.icon size={15} className={`relative z-10 ${active ? "text-accent-bright" : ""}`} />
                 <span className="relative z-10">{item.label}</span>
               </Link>
             )

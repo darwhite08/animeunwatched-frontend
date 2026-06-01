@@ -48,7 +48,7 @@ const COLLECTIONS: CollectionDef[] = [
     name: "Hidden Gems",
     description: "Criminally underrated anime that deserve 10x more attention than they get.",
     emoji: "💎",
-    accent: "text-amber-400",
+    accent: "text-accent-bright",
     borderStyle: { borderColor: "rgba(245,158,11,0.25)" },
     params: { limit: 24 },
     clientFilter: a => a.rating >= 8.5 && a.rank > 15,
@@ -86,7 +86,7 @@ const COLLECTIONS: CollectionDef[] = [
     name: "Emotional Devastators",
     description: "Warning: keep tissues nearby. These will break you, then rebuild you.",
     emoji: "💔",
-    accent: "text-amber-400",
+    accent: "text-accent-bright",
     borderStyle: { borderColor: "rgba(99,102,241,0.2)" },
     params: { q: "Drama", limit: 24 },
   },
@@ -133,12 +133,12 @@ function CollectionPanel({ col, onAnimeClick }: { col: CollectionDef; onAnimeCli
         </div>
       )}
       {isError && !isLoading && (
-        <p className="text-white/20 text-xs font-black uppercase tracking-widest py-10 text-center">
+        <p className="text-subtle text-xs font-black uppercase tracking-widest py-10 text-center">
           Failed to load collection
         </p>
       )}
       {!isLoading && !isError && anime.length === 0 && (
-        <p className="text-white/15 text-xs font-black uppercase tracking-widest py-10 text-center">
+        <p className="text-subtle text-xs font-black uppercase tracking-widest py-10 text-center">
           No anime found for this collection yet
         </p>
       )}
@@ -158,19 +158,19 @@ export default function CollectionsPage() {
   const [selected, setSelected] = useState<Anime | null>(null)
 
   return (
-    <div className="min-h-screen bg-[#020202] text-white pb-32">
+    <div className="min-h-screen bg-background text-foreground pb-32">
       {/* Header */}
       <div className="max-w-7xl mx-auto px-6 pt-32 pb-12">
         <div className="flex items-center gap-3 mb-6">
-          <SquaresFour size={18} weight="duotone" className="text-amber-400" />
+          <SquaresFour size={18} weight="duotone" className="text-accent-bright" />
           <p className="text-[9px] font-mono uppercase tracking-[0.4em]" style={{ color: "rgba(245,158,11,0.6)" }}>
             Curated Collections
           </p>
         </div>
-        <h1 className="text-6xl md:text-7xl font-black tracking-tighter uppercase italic text-white leading-none mb-4">
+        <h1 className="text-6xl md:text-7xl font-black tracking-tighter uppercase italic text-foreground leading-none mb-4">
           Collections<span style={{ color: "#f59e0b" }}>.</span>
         </h1>
-        <p className="text-white/35 text-lg max-w-xl leading-relaxed">
+        <p className="text-subtle text-lg max-w-xl leading-relaxed">
           {COLLECTIONS.length} hand-picked collections — grouped by mood, theme, and what they'll do to your soul.
         </p>
         {/* Gold divider */}
@@ -212,17 +212,17 @@ export default function CollectionsPage() {
 
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-3 mb-0.5">
-                      <h2 className={`text-[15px] font-black ${isActive ? col.accent : "text-white/80 group-hover:text-white"} transition-colors`}>
+                      <h2 className={`text-[15px] font-black ${isActive ? col.accent : "text-muted group-hover:text-foreground"} transition-colors`}>
                         {col.name}
                       </h2>
                     </div>
-                    <p className="text-sm text-white/35 leading-snug line-clamp-1">{col.description}</p>
+                    <p className="text-sm text-subtle leading-snug line-clamp-1">{col.description}</p>
                   </div>
                 </div>
 
                 <motion.div animate={{ rotate: isActive ? 90 : 0 }} transition={{ duration: 0.2 }}
                   className="shrink-0">
-                  <ChevronRight size={18} className={isActive ? "text-amber-400" : "text-white/20 group-hover:text-white/40"} />
+                  <ChevronRight size={18} className={isActive ? "text-accent-bright" : "text-subtle group-hover:text-muted"} />
                 </motion.div>
               </button>
 

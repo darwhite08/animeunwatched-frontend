@@ -14,7 +14,7 @@ export default function NeuralDiscovery() {
       <motion.div
         animate={{ scale: [1, 1.05, 1], opacity: [0.15, 0.25, 0.15] }}
         transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute top-1/2 left-1/3 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-amber-600 blur-[140px] rounded-full pointer-events-none"
+        className="absolute top-1/2 left-1/3 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-accent blur-[140px] rounded-full pointer-events-none"
       />
       <motion.div
         animate={{ scale: [1, 1.1, 1], opacity: [0.1, 0.2, 0.1] }}
@@ -32,12 +32,12 @@ export default function NeuralDiscovery() {
             initial={{ opacity: 0, y: -20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="group relative inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.03] border border-white/[0.08] backdrop-blur-xl shadow-2xl overflow-hidden"
+            className="group relative inline-flex items-center gap-2 px-4 py-2 rounded-full bg-surface border border-white/[0.08] backdrop-blur-xl shadow-2xl overflow-hidden"
           >
             <div className="absolute inset-0 bg-gradient-to-r from-indigo-500/10 to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            <div className="w-2 h-2 rounded-full bg-amber-500 animate-pulse shadow-[0_0_12px_rgba(99,102,241,0.9)]" />
-            <span className="text-amber-300 font-bold uppercase tracking-[0.3em] text-[10px] flex items-center gap-2">
-              <Cpu size={14} className="text-amber-400" /> Neural Engine V4.0
+            <div className="w-2 h-2 rounded-full bg-accent animate-pulse shadow-[0_0_12px_rgba(99,102,241,0.9)]" />
+            <span className="text-accent-bright font-bold uppercase tracking-[0.3em] text-[10px] flex items-center gap-2">
+              <Cpu size={14} className="text-accent-bright" /> Neural Engine V4.0
             </span>
           </motion.div>
 
@@ -47,7 +47,7 @@ export default function NeuralDiscovery() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1, duration: 0.8, ease: "easeOut" }}
-            className="text-6xl md:text-8xl font-black tracking-tighter text-white leading-[0.85]"
+            className="text-6xl md:text-8xl font-black tracking-tighter text-foreground leading-[0.85]"
           >
             QUERY THE <br className="md:hidden" />
             <span className="relative inline-block italic text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-300 to-indigo-400 animate-shimmer bg-[length:200%_auto] pr-2">
@@ -64,7 +64,7 @@ export default function NeuralDiscovery() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2, duration: 0.8, ease: "easeOut" }}
-            className="text-white/50 max-w-2xl text-sm md:text-lg font-medium leading-relaxed"
+            className="text-muted max-w-2xl text-sm md:text-lg font-medium leading-relaxed"
           >
             Stop searching by generic tags. Start searching by <span className="text-white/90 italic font-bold">soul</span>. Define complex character scenarios and let our neural interface find your exact obsession.
           </motion.p>
@@ -79,15 +79,15 @@ export default function NeuralDiscovery() {
           className="relative w-full mt-12 mx-auto max-w-4xl"
         >
           {/* Tactical HUD Crosshairs */}
-          <div className="absolute -top-3 -left-3 w-6 h-6 border-t-2 border-l-2 border-amber-500/50 hidden md:block" />
-          <div className="absolute -top-3 -right-3 w-6 h-6 border-t-2 border-r-2 border-amber-500/50 hidden md:block" />
-          <div className="absolute -bottom-3 -left-3 w-6 h-6 border-b-2 border-l-2 border-amber-500/50 hidden md:block" />
-          <div className="absolute -bottom-3 -right-3 w-6 h-6 border-b-2 border-r-2 border-amber-500/50 hidden md:block" />
+          <div className="absolute -top-3 -left-3 w-6 h-6 border-t-2 border-l-2 border-accent/50 hidden md:block" />
+          <div className="absolute -top-3 -right-3 w-6 h-6 border-t-2 border-r-2 border-accent/50 hidden md:block" />
+          <div className="absolute -bottom-3 -left-3 w-6 h-6 border-b-2 border-l-2 border-accent/50 hidden md:block" />
+          <div className="absolute -bottom-3 -right-3 w-6 h-6 border-b-2 border-r-2 border-accent/50 hidden md:block" />
           
           {/* Top Meta Bar */}
-          <div className="absolute -top-8 right-0 text-[10px] font-mono text-amber-300/60 tracking-[0.2em] uppercase flex items-center gap-3 hidden md:flex">
-            <ScanEye size={14} className="text-amber-400" />
-            <span>Pattern Recognition: <span className="text-amber-400 font-bold">Active</span></span>
+          <div className="absolute -top-8 right-0 text-[10px] font-mono text-accent-bright/60 tracking-[0.2em] uppercase flex items-center gap-3 hidden md:flex">
+            <ScanEye size={14} className="text-accent-bright" />
+            <span>Pattern Recognition: <span className="text-accent-bright font-bold">Active</span></span>
           </div>
 
           {/* The Input Component wrapped in an elegant glass pane */}
@@ -97,8 +97,8 @@ export default function NeuralDiscovery() {
           </div>
 
           {/* Bottom Meta Bar */}
-          <div className="absolute -bottom-8 left-0 text-[10px] font-mono text-amber-300/60 tracking-[0.2em] uppercase flex items-center gap-3 hidden md:flex">
-            <Activity size={14} className="text-amber-400 animate-pulse" />
+          <div className="absolute -bottom-8 left-0 text-[10px] font-mono text-accent-bright/60 tracking-[0.2em] uppercase flex items-center gap-3 hidden md:flex">
+            <Activity size={14} className="text-accent-bright animate-pulse" />
             <span>Syncing with Global Archives...</span>
           </div>
         </motion.div>

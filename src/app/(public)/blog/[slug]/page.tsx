@@ -155,7 +155,7 @@ const RELATED_POSTS: RelatedPost[] = [
 function ArticleBody({ apiContent }: { apiContent?: string }) {
   if (apiContent) {
     return (
-      <div className="space-y-6 text-white/70 text-base leading-relaxed">
+      <div className="space-y-6 text-muted text-base leading-relaxed">
         {apiContent.split("\n\n").map((para, i) => (
           <p key={i}>{para}</p>
         ))}
@@ -163,7 +163,7 @@ function ArticleBody({ apiContent }: { apiContent?: string }) {
     )
   }
   return (
-    <div className="space-y-6 text-white/70 text-base leading-relaxed">
+    <div className="space-y-6 text-muted text-base leading-relaxed">
       <p>
         Anime has always been comfortable with death. From the early days of Osamu Tezuka to the
         present era of industry-defining franchises, loss is a genre staple. Yet very few series
@@ -172,7 +172,7 @@ function ArticleBody({ apiContent }: { apiContent?: string }) {
         you love, and how meaning is constructed in their absence.
       </p>
 
-      <h2 className="text-xl font-black uppercase italic tracking-tight text-white pt-4">
+      <h2 className="text-xl font-black uppercase italic tracking-tight text-foreground pt-4">
         The Fantasy That Starts After the Hero&apos;s Journey Ends
       </h2>
 
@@ -190,12 +190,12 @@ function ArticleBody({ apiContent }: { apiContent?: string }) {
         starting line of a longer, quieter journey toward understanding what those years meant.
       </p>
 
-      <blockquote className="border-l-4 border-amber-500 pl-5 py-1 italic text-white/50 text-sm">
+      <blockquote className="border-l-4 border-accent pl-5 py-1 italic text-muted text-sm">
         &ldquo;I didn&apos;t know much about Himmel. I want to understand, even if it takes me a
         hundred years.&rdquo; — Frieren
       </blockquote>
 
-      <h2 className="text-xl font-black uppercase italic tracking-tight text-white pt-4">
+      <h2 className="text-xl font-black uppercase italic tracking-tight text-foreground pt-4">
         Restraint as a Narrative Superpower
       </h2>
 
@@ -214,7 +214,7 @@ function ArticleBody({ apiContent }: { apiContent?: string }) {
         purely from strength — they derive from meaning.
       </p>
 
-      <h2 className="text-xl font-black uppercase italic tracking-tight text-white pt-4">
+      <h2 className="text-xl font-black uppercase italic tracking-tight text-foreground pt-4">
         Sollen vs. Sein: The Ethical Weight of Living Long
       </h2>
 
@@ -232,7 +232,7 @@ function ArticleBody({ apiContent }: { apiContent?: string }) {
         fantasy into something closer to philosophy.
       </p>
 
-      <h2 className="text-xl font-black uppercase italic tracking-tight text-white pt-4">
+      <h2 className="text-xl font-black uppercase italic tracking-tight text-foreground pt-4">
         Why It Works Where Others Have Failed
       </h2>
 
@@ -281,10 +281,10 @@ function BlogComments({ slug }: { slug: string }) {
   return (
     <div className="space-y-5">
       <div className="flex items-center justify-between">
-        <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/30">
+        <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-subtle">
           Comments ({isLoading ? "…" : comments.length})
         </h3>
-        <MessageSquare size={13} className="text-white/20" />
+        <MessageSquare size={13} className="text-subtle" />
       </div>
 
       {/* Comment composer */}
@@ -292,7 +292,7 @@ function BlogComments({ slug }: { slug: string }) {
         <div className="flex gap-3">
           <textarea value={draft} onChange={e => setDraft(e.target.value)}
             placeholder="Share your thoughts…" rows={2} maxLength={1000}
-            className="flex-1 px-4 py-3 rounded-xl bg-white/[0.03] border border-white/8 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-amber-500/30 resize-none transition-all" />
+            className="flex-1 px-4 py-3 rounded-xl bg-surface border border-border text-sm text-foreground placeholder:text-subtle focus:outline-none focus:border-accent/30 resize-none transition-all" />
           <button onClick={() => draft.trim() && createMut.mutate(draft.trim())}
             disabled={!draft.trim() || createMut.isPending}
             className="p-3 rounded-xl text-black transition-all disabled:opacity-40 hover:scale-105"
@@ -303,24 +303,24 @@ function BlogComments({ slug }: { slug: string }) {
       )}
 
       {isLoading ? (
-        <div className="flex justify-center py-8"><Loader2 size={20} className="animate-spin text-amber-400" /></div>
+        <div className="flex justify-center py-8"><Loader2 size={20} className="animate-spin text-accent-bright" /></div>
       ) : comments.length === 0 ? (
-        <p className="text-center py-8 text-xs text-white/20">No comments yet. Be the first!</p>
+        <p className="text-center py-8 text-xs text-subtle">No comments yet. Be the first!</p>
       ) : (
         <div className="space-y-4">
           {comments.map((c, i) => (
             <motion.div key={c.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.04 }}
-              className="p-5 rounded-2xl bg-white/[0.02] border border-white/8 space-y-3">
+              className="p-5 rounded-2xl bg-surface border border-border space-y-3">
               <div className="flex items-center gap-3">
                 <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-xs font-black shrink-0">
                   {(c.author.displayName || c.author.username)[0]?.toUpperCase()}
                 </div>
                 <div>
-                  <p className="text-xs font-black text-white">{c.author.displayName || c.author.username}</p>
-                  <p className="text-[9px] text-white/25">{new Date(c.createdAt).toLocaleDateString()}</p>
+                  <p className="text-xs font-black text-foreground">{c.author.displayName || c.author.username}</p>
+                  <p className="text-[9px] text-subtle">{new Date(c.createdAt).toLocaleDateString()}</p>
                 </div>
               </div>
-              <p className="text-sm text-white/55 leading-relaxed">{c.content}</p>
+              <p className="text-sm text-muted leading-relaxed">{c.content}</p>
             </motion.div>
           ))}
         </div>
@@ -337,8 +337,8 @@ export default function BlogReaderPage({ params }: { params: Promise<{ slug: str
 
   // Show loading skeleton while blog is fetching
   if (blogLoading) return (
-    <div className="min-h-screen bg-[#020202] flex items-center justify-center">
-      <div className="w-8 h-8 border-2 border-amber-500/30 border-t-indigo-500 rounded-full animate-spin" />
+    <div className="min-h-screen bg-background flex items-center justify-center">
+      <div className="w-8 h-8 border-2 border-accent/30 border-t-indigo-500 rounded-full animate-spin" />
     </div>
   )
 
@@ -382,7 +382,7 @@ export default function BlogReaderPage({ params }: { params: Promise<{ slug: str
   }
 
   return (
-    <div className="min-h-screen bg-[#020202] text-white pb-32">
+    <div className="min-h-screen bg-background text-foreground pb-32">
 
       {/* Hero banner */}
       <div className={`relative h-[45vh] min-h-[320px] w-full bg-gradient-to-br ${meta.coverGradient} overflow-hidden`}>
@@ -392,14 +392,14 @@ export default function BlogReaderPage({ params }: { params: Promise<{ slug: str
         {/* Back */}
         <Link
           href="/blog"
-          className="absolute top-6 left-6 flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-white/40 hover:text-white transition-colors"
+          className="absolute top-6 left-6 flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-muted hover:text-foreground transition-colors"
         >
           <ChevronLeft size={13} /> The Chronicle
         </Link>
 
         {/* Category */}
         <div className="absolute top-6 right-6">
-          <span className="px-3 py-1 rounded-full bg-black/50 backdrop-blur-md border border-white/10 text-[10px] font-black uppercase tracking-widest text-amber-400">
+          <span className="px-3 py-1 rounded-full bg-black/50 backdrop-blur-md border border-border text-[10px] font-black uppercase tracking-widest text-accent-bright">
             {(meta as Record<string, unknown>).category as string ?? "Article"}
           </span>
         </div>
@@ -409,7 +409,7 @@ export default function BlogReaderPage({ params }: { params: Promise<{ slug: str
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-3xl md:text-5xl font-black uppercase italic tracking-tighter text-white leading-none"
+            className="text-3xl md:text-5xl font-black uppercase italic tracking-tighter text-foreground leading-none"
           >
             {meta.title}
           </motion.h1>
@@ -417,7 +417,7 @@ export default function BlogReaderPage({ params }: { params: Promise<{ slug: str
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.1 }}
-            className="mt-2 text-white/40 text-sm max-w-2xl"
+            className="mt-2 text-muted text-sm max-w-2xl"
           >
             {(meta as Record<string, unknown>).excerpt as string ?? ""}
           </motion.p>
@@ -439,17 +439,17 @@ export default function BlogReaderPage({ params }: { params: Promise<{ slug: str
               {meta.authorAvatar}
             </div>
             <div>
-              <p className="text-sm font-black text-white">{meta.author}</p>
-              <p className="text-[10px] text-white/30">{meta.publishedAt}</p>
+              <p className="text-sm font-black text-foreground">{meta.author}</p>
+              <p className="text-[10px] text-subtle">{meta.publishedAt}</p>
             </div>
           </div>
 
-          <div className="flex items-center gap-2 text-[10px] text-white/25 ml-2">
+          <div className="flex items-center gap-2 text-[10px] text-subtle ml-2">
             <Clock size={10} />
             <span>{meta.readTime} min read</span>
           </div>
 
-          <div className="flex items-center gap-2 text-[10px] text-white/25">
+          <div className="flex items-center gap-2 text-[10px] text-subtle">
             <Eye size={10} />
             <span>{meta.views.toLocaleString()} views</span>
           </div>
@@ -457,7 +457,7 @@ export default function BlogReaderPage({ params }: { params: Promise<{ slug: str
           {/* Share */}
           <button
             onClick={share}
-            className="ml-auto flex items-center gap-2 px-4 py-2 rounded-xl border border-white/10 bg-white/[0.04] text-[10px] font-black uppercase tracking-widest text-white/40 hover:text-white hover:bg-white/[0.08] transition-all"
+            className="ml-auto flex items-center gap-2 px-4 py-2 rounded-xl border border-border bg-white/[0.04] text-[10px] font-black uppercase tracking-widest text-muted hover:text-foreground hover:bg-white/[0.08] transition-all"
           >
             <Share2 size={12} /> Share
           </button>
@@ -473,13 +473,13 @@ export default function BlogReaderPage({ params }: { params: Promise<{ slug: str
         </motion.div>
 
         {/* Like / Share / Bookmark bar */}
-        <div className="flex items-center gap-4 py-5 border-t border-b border-white/5">
+        <div className="flex items-center gap-4 py-5 border-t border-b border-border">
           <button
             onClick={toggleLike}
             className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${
               liked
                 ? "bg-rose-500/15 border border-rose-500/25 text-rose-400"
-                : "bg-white/[0.04] border border-white/10 text-white/40 hover:text-rose-400 hover:border-rose-500/20"
+                : "bg-white/[0.04] border border-border text-muted hover:text-rose-400 hover:border-rose-500/20"
             }`}
           >
             <Heart size={14} fill={liked ? "currentColor" : "none"} />
@@ -488,7 +488,7 @@ export default function BlogReaderPage({ params }: { params: Promise<{ slug: str
 
           <button
             onClick={share}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/[0.04] border border-white/10 text-xs font-black uppercase tracking-widest text-white/40 hover:text-white hover:bg-white/[0.08] transition-all"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/[0.04] border border-border text-xs font-black uppercase tracking-widest text-muted hover:text-foreground hover:bg-white/[0.08] transition-all"
           >
             <Share2 size={14} /> Share
           </button>
@@ -497,8 +497,8 @@ export default function BlogReaderPage({ params }: { params: Promise<{ slug: str
             onClick={() => { setBookmarked(b => !b); push(bookmarked ? "Removed bookmark" : "Bookmarked!", "success") }}
             className={`ml-auto flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all border ${
               bookmarked
-                ? "bg-amber-500/15 border-amber-500/25 text-amber-400"
-                : "bg-white/[0.04] border-white/10 text-white/40 hover:text-amber-400"
+                ? "bg-accent/15 border-accent/25 text-accent-bright"
+                : "bg-white/[0.04] border-border text-muted hover:text-accent-bright"
             }`}
           >
             <Bookmark size={14} fill={bookmarked ? "currentColor" : "none"} />
@@ -508,7 +508,7 @@ export default function BlogReaderPage({ params }: { params: Promise<{ slug: str
 
         {/* More from this author */}
         <div className="space-y-5">
-          <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/30">
+          <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-subtle">
             More from {meta.author}
           </h3>
           <div className="grid sm:grid-cols-2 gap-5">
@@ -516,19 +516,19 @@ export default function BlogReaderPage({ params }: { params: Promise<{ slug: str
               <Link
                 key={rp.slug}
                 href={`/blog/${rp.slug}`}
-                className="group block rounded-2xl overflow-hidden bg-zinc-900/60 border border-white/8 hover:border-amber-500/30 transition-all"
+                className="group block rounded-2xl overflow-hidden bg-zinc-900/60 border border-border hover:border-accent/30 transition-all"
               >
                 <div className={`h-28 bg-gradient-to-br ${rp.coverGradient} relative`}>
                   <div className="absolute inset-0 bg-black/30" />
-                  <span className="absolute top-2 left-2 px-2 py-0.5 rounded-md bg-black/50 text-[9px] font-black uppercase tracking-widest text-white/50">
+                  <span className="absolute top-2 left-2 px-2 py-0.5 rounded-md bg-black/50 text-[9px] font-black uppercase tracking-widest text-muted">
                     {rp.category}
                   </span>
                 </div>
                 <div className="p-4">
-                  <p className="text-sm font-black uppercase italic tracking-tight text-white group-hover:text-amber-300 transition-colors line-clamp-2 leading-snug">
+                  <p className="text-sm font-black uppercase italic tracking-tight text-foreground group-hover:text-accent-bright transition-colors line-clamp-2 leading-snug">
                     {rp.title}
                   </p>
-                  <p className="mt-1 text-[10px] text-white/30 flex items-center gap-1">
+                  <p className="mt-1 text-[10px] text-subtle flex items-center gap-1">
                     <Clock size={9} /> {rp.readTime} min read
                   </p>
                 </div>

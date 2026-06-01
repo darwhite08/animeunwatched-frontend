@@ -8,13 +8,13 @@ import { useMemo } from "react"
 
 const GENRE_COLORS: Record<string, string> = {
   Action:       "from-red-600 to-orange-500",
-  Adventure:    "from-amber-600 to-yellow-500",
+  Adventure:    "from-accent to-yellow-500",
   Drama:        "from-rose-600 to-pink-500",
   Fantasy:      "from-violet-600 to-purple-500",
   "Sci-Fi":     "from-cyan-600 to-blue-500",
   Thriller:     "from-slate-600 to-gray-500",
   Romance:      "from-pink-600 to-rose-500",
-  Comedy:       "from-yellow-500 to-amber-400",
+  Comedy:       "from-yellow-500 to-accent-bright",
   Mystery:      "from-purple-700 to-indigo-600",
   Psychological:"from-purple-600 to-pink-500",
   Seinen:       "from-emerald-600 to-teal-500",
@@ -61,10 +61,10 @@ export const GenreCard = () => {
   ]
 
   return (
-    <div className="p-10 rounded-[2.5rem] border border-white/5 bg-[#0a0a0a] h-full flex flex-col justify-between group">
+    <div className="p-10 rounded-[2.5rem] border border-border bg-surface h-full flex flex-col justify-between group">
       <div className="flex justify-between items-center mb-10">
-        <h4 className="text-xs font-black uppercase tracking-[0.3em] text-white/30 italic">Anime DNA</h4>
-        <div className="p-2 rounded-lg bg-amber-500/10 text-amber-400 group-hover:rotate-12 transition-transform">
+        <h4 className="text-xs font-black uppercase tracking-[0.3em] text-subtle italic">Anime DNA</h4>
+        <div className="p-2 rounded-lg bg-accent/10 text-accent-bright group-hover:rotate-12 transition-transform">
           <Fingerprint size={20} />
         </div>
       </div>
@@ -73,10 +73,10 @@ export const GenreCard = () => {
         {genres.map((genre, i) => (
           <div key={genre.name} className="space-y-3">
             <div className="flex justify-between items-end">
-              <span className="text-[11px] font-black uppercase tracking-widest text-white/70">{genre.name}</span>
-              <span className="text-[10px] font-bold text-white/25">{genre.percent}%</span>
+              <span className="text-[11px] font-black uppercase tracking-widest text-muted">{genre.name}</span>
+              <span className="text-[10px] font-bold text-subtle">{genre.percent}%</span>
             </div>
-            <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden p-[1px] border border-white/5">
+            <div className="h-2 w-full bg-surface rounded-full overflow-hidden p-[1px] border border-border">
               <motion.div
                 initial={{ width: 0 }}
                 whileInView={{ width: `${genre.percent}%` }}

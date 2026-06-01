@@ -12,9 +12,9 @@ const PILLARS = [
   {
     icon: Compass,
     title: "Discovery",
-    color: "text-amber-400",
-    bg: "bg-amber-500/10",
-    border: "border-amber-500/20",
+    color: "text-accent-bright",
+    bg: "bg-accent/10",
+    border: "border-accent/20",
     desc: "AI-powered recommendations that understand your taste profile, not just what's trending. Our Neural Oracle maps your DNA across 12 taste dimensions so every suggestion lands.",
   },
   {
@@ -28,9 +28,9 @@ const PILLARS = [
   {
     icon: BookOpen,
     title: "Legacy",
-    color: "text-amber-400",
-    bg: "bg-amber-500/10",
-    border: "border-amber-500/20",
+    color: "text-accent-bright",
+    bg: "bg-accent/10",
+    border: "border-accent/20",
     desc: "Your watch history is a personality statement, not a spreadsheet. We archive every rating, review, and streak so your anime legacy lives on — publicly, beautifully.",
   },
 ]
@@ -49,7 +49,7 @@ const TEAM = [
     initial: "D",
     name: "darwhite08",
     role: "Founder & Lead Shinobi",
-    from: "from-amber-500 to-orange-500",
+    from: "from-accent to-orange-500",
     quote: "We had 400 anime on our lists and no platform worthy of them. So we built one.",
   },
   {
@@ -81,20 +81,20 @@ const STACK = [
 /* ── Page ── */
 export default function AboutPage() {
   return (
-    <div className="min-h-screen bg-[#020202] text-white pb-32">
+    <div className="min-h-screen bg-background text-foreground pb-32">
 
       {/* ── Hero ── */}
-      <section className="relative overflow-hidden border-b border-white/5">
+      <section className="relative overflow-hidden border-b border-border">
         {/* Background glow */}
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-amber-600/8 blur-[120px] rounded-full" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-accent/8 blur-[120px] rounded-full" />
         </div>
 
         <div className="relative z-10 max-w-5xl mx-auto px-6 pt-24 pb-20 text-center">
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-amber-500/25 bg-amber-500/8 text-[10px] font-black uppercase tracking-[0.3em] text-amber-400 mb-8"
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-accent/25 bg-accent/8 text-[10px] font-black uppercase tracking-[0.3em] text-accent-bright mb-8"
           >
             About Kaiveron
           </motion.div>
@@ -103,7 +103,7 @@ export default function AboutPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.05 }}
-            className="text-5xl md:text-7xl font-black tracking-tighter uppercase italic leading-[0.92] text-white"
+            className="text-5xl md:text-7xl font-black tracking-tighter uppercase italic leading-[0.92] text-foreground"
           >
             We Built The Anime Social Platform That Should Have{" "}
             <span style={{color:"#f59e0b"}}>Existed Years Ago.</span>
@@ -113,7 +113,7 @@ export default function AboutPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.15 }}
-            className="mt-8 text-white/45 text-lg max-w-2xl mx-auto leading-relaxed"
+            className="mt-8 text-muted text-lg max-w-2xl mx-auto leading-relaxed"
           >
             MAL had the data. AniList had the design. Crunchyroll had the content. Nobody had all three
             plus a community worth staying in. We got tired of waiting.
@@ -124,8 +124,8 @@ export default function AboutPage() {
       {/* ── Mission pillars ── */}
       <section className="max-w-5xl mx-auto px-6 py-20">
         <div className="text-center mb-12">
-          <p className="text-[10px] font-black uppercase tracking-[0.35em] text-white/25 mb-3">Our Mission</p>
-          <h2 className="text-3xl font-black tracking-tighter uppercase italic text-white">
+          <p className="text-[10px] font-black uppercase tracking-[0.35em] text-subtle mb-3">Our Mission</p>
+          <h2 className="text-3xl font-black tracking-tighter uppercase italic text-foreground">
             Three Pillars<span style={{color:"#f59e0b"}}>.</span>
           </h2>
         </div>
@@ -137,7 +137,7 @@ export default function AboutPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.1 }}
-              className={`p-8 rounded-[2rem] border ${p.border} bg-[#0a0a0a] relative overflow-hidden group`}
+              className={`p-8 rounded-[2rem] border ${p.border} bg-surface relative overflow-hidden group`}
             >
               <div className={`absolute -bottom-6 -right-6 w-32 h-32 rounded-full blur-3xl opacity-0 group-hover:opacity-20 transition-opacity ${p.bg}`} />
               <div className={`p-3 rounded-2xl ${p.bg} ${p.color} w-fit mb-6`}>
@@ -146,14 +146,14 @@ export default function AboutPage() {
               <h3 className={`text-2xl font-black uppercase italic tracking-tighter ${p.color} mb-3`}>
                 {p.title}
               </h3>
-              <p className="text-sm text-white/45 leading-relaxed">{p.desc}</p>
+              <p className="text-sm text-muted leading-relaxed">{p.desc}</p>
             </motion.div>
           ))}
         </div>
       </section>
 
       {/* ── Stats strip ── */}
-      <section className="border-y border-white/5 bg-white/[0.015]">
+      <section className="border-y border-border bg-white/[0.015]">
         <div className="max-w-5xl mx-auto px-6 py-12 grid grid-cols-2 md:grid-cols-4 gap-8">
           {STATS.map((s, i) => (
             <motion.div
@@ -163,8 +163,8 @@ export default function AboutPage() {
               transition={{ delay: i * 0.08 }}
               className="text-center"
             >
-              <p className="text-4xl font-black tracking-tighter text-white">{s.value}</p>
-              <p className="text-[10px] font-black uppercase tracking-[0.25em] text-white/30 mt-2">{s.label}</p>
+              <p className="text-4xl font-black tracking-tighter text-foreground">{s.value}</p>
+              <p className="text-[10px] font-black uppercase tracking-[0.25em] text-subtle mt-2">{s.label}</p>
             </motion.div>
           ))}
         </div>
@@ -173,8 +173,8 @@ export default function AboutPage() {
       {/* ── Team ── */}
       <section className="max-w-5xl mx-auto px-6 py-20">
         <div className="text-center mb-12">
-          <p className="text-[10px] font-black uppercase tracking-[0.35em] text-white/25 mb-3">The Crew</p>
-          <h2 className="text-3xl font-black tracking-tighter uppercase italic text-white">
+          <p className="text-[10px] font-black uppercase tracking-[0.35em] text-subtle mb-3">The Crew</p>
+          <h2 className="text-3xl font-black tracking-tighter uppercase italic text-foreground">
             Founding Shinobi<span className="text-violet-500">.</span>
           </h2>
         </div>
@@ -186,19 +186,19 @@ export default function AboutPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.1 }}
-              className="p-7 rounded-[2rem] border border-white/8 bg-[#0a0a0a] flex flex-col gap-5"
+              className="p-7 rounded-[2rem] border border-border bg-surface flex flex-col gap-5"
             >
               {/* Avatar */}
-              <div className={`h-14 w-14 rounded-2xl bg-gradient-to-br ${member.from} flex items-center justify-center font-black text-xl text-white`}>
+              <div className={`h-14 w-14 rounded-2xl bg-gradient-to-br ${member.from} flex items-center justify-center font-black text-xl text-foreground`}>
                 {member.initial}
               </div>
               {/* Info */}
               <div>
-                <p className="text-base font-black text-white">{member.name}</p>
-                <p className="text-[10px] font-bold text-white/30 uppercase tracking-widest mt-0.5">{member.role}</p>
+                <p className="text-base font-black text-foreground">{member.name}</p>
+                <p className="text-[10px] font-bold text-subtle uppercase tracking-widest mt-0.5">{member.role}</p>
               </div>
               {/* Quote */}
-              <blockquote className="text-sm text-white/45 leading-relaxed italic border-l-2 border-amber-500/40 pl-4">
+              <blockquote className="text-sm text-muted leading-relaxed italic border-l-2 border-accent/40 pl-4">
                 "{member.quote}"
               </blockquote>
             </motion.div>
@@ -207,14 +207,14 @@ export default function AboutPage() {
       </section>
 
       {/* ── Tech stack ── */}
-      <section className="border-t border-white/5 bg-white/[0.01]">
+      <section className="border-t border-border bg-white/[0.01]">
         <div className="max-w-5xl mx-auto px-6 py-20">
           <div className="text-center mb-12">
-            <p className="text-[10px] font-black uppercase tracking-[0.35em] text-white/25 mb-3">Engineering</p>
-            <h2 className="text-3xl font-black tracking-tighter uppercase italic text-white">
+            <p className="text-[10px] font-black uppercase tracking-[0.35em] text-subtle mb-3">Engineering</p>
+            <h2 className="text-3xl font-black tracking-tighter uppercase italic text-foreground">
               Built on Truth Not Hype<span style={{color:"#f59e0b"}}>.</span>
             </h2>
-            <p className="mt-3 text-sm text-white/35">Every technology chosen for performance and longevity — not hype cycles.</p>
+            <p className="mt-3 text-sm text-subtle">Every technology chosen for performance and longevity — not hype cycles.</p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-4">
@@ -224,14 +224,14 @@ export default function AboutPage() {
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.07 }}
-                className="flex items-center gap-5 p-5 rounded-2xl border border-white/5 bg-white/[0.02] hover:border-amber-500/20 hover:bg-white/[0.035] transition-all group"
+                className="flex items-center gap-5 p-5 rounded-2xl border border-border bg-surface hover:border-accent/20 hover:bg-white/[0.035] transition-all group"
               >
-                <div className="p-2.5 rounded-xl bg-amber-500/10 text-amber-400 shrink-0 group-hover:bg-amber-500/15 transition-colors">
+                <div className="p-2.5 rounded-xl bg-accent/10 text-accent-bright shrink-0 group-hover:bg-accent/15 transition-colors">
                   <item.icon size={18} />
                 </div>
                 <div>
-                  <p className="text-sm font-black text-white">{item.label}</p>
-                  <p className="text-[10px] text-white/35 mt-0.5">{item.note}</p>
+                  <p className="text-sm font-black text-foreground">{item.label}</p>
+                  <p className="text-[10px] text-subtle mt-0.5">{item.note}</p>
                 </div>
               </motion.div>
             ))}
@@ -245,21 +245,21 @@ export default function AboutPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="relative overflow-hidden rounded-[2.5rem] border border-amber-500/20 bg-gradient-to-br from-indigo-600/12 via-violet-600/8 to-transparent p-12 text-center"
+          className="relative overflow-hidden rounded-[2.5rem] border border-accent/20 bg-gradient-to-br from-indigo-600/12 via-violet-600/8 to-transparent p-12 text-center"
         >
           <div className="absolute inset-0 pointer-events-none">
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-48 bg-amber-600/12 blur-[80px] rounded-full" />
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-48 bg-accent/12 blur-[80px] rounded-full" />
           </div>
           <div className="relative z-10">
-            <h2 className="text-4xl font-black tracking-tighter uppercase italic text-white mb-4">
-              Join The Dojo<span className="text-amber-400">.</span>
+            <h2 className="text-4xl font-black tracking-tighter uppercase italic text-foreground mb-4">
+              Join The Dojo<span className="text-accent-bright">.</span>
             </h2>
-            <p className="text-white/45 text-sm mb-8 max-w-lg mx-auto">
+            <p className="text-muted text-sm mb-8 max-w-lg mx-auto">
               12,400 Shinobi already archive their anime legacy here. Your list is waiting.
             </p>
             <Link
               href="/register"
-              className="inline-flex items-center gap-2.5 px-8 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-sm font-black uppercase tracking-widest text-white transition-all"
+              className="inline-flex items-center gap-2.5 px-8 py-3.5 rounded-xl bg-accent hover:bg-accent-bright text-sm font-black uppercase tracking-widest text-foreground transition-all"
             >
               Create Your Dojo Account <ArrowRight size={15} />
             </Link>

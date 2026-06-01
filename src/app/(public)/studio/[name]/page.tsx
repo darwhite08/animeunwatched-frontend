@@ -29,22 +29,22 @@ export default function StudioPage({ params }: { params: Promise<{ name: string 
     : "—"
 
   return (
-    <div className="min-h-screen bg-[#020202] text-white pb-32">
+    <div className="min-h-screen bg-background text-foreground pb-32">
       <div className="max-w-7xl mx-auto px-6 pt-32">
-        <Link href="/studios" className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-amber-400/60 hover:text-amber-400 transition-colors mb-6">
+        <Link href="/studios" className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-accent-bright/60 hover:text-accent-bright transition-colors mb-6">
           <ChevronLeft size={11}/> All Studios
         </Link>
 
         <div className="flex items-center gap-4 mb-4">
-          <div className="w-14 h-14 rounded-2xl bg-amber-600/20 border border-amber-500/30 flex items-center justify-center">
-            <Building2 size={24} className="text-amber-400" />
+          <div className="w-14 h-14 rounded-2xl bg-accent/20 border border-accent/30 flex items-center justify-center">
+            <Building2 size={24} className="text-accent-bright" />
           </div>
           <div>
-            <h1 className="text-4xl font-black tracking-tighter uppercase italic text-white">{studioName}<span style={{color:"#f59e0b"}}>.</span></h1>
-            <div className="flex items-center gap-4 mt-1 text-[10px] text-white/30 font-mono">
+            <h1 className="text-4xl font-black tracking-tighter uppercase italic text-foreground">{studioName}<span style={{color:"#f59e0b"}}>.</span></h1>
+            <div className="flex items-center gap-4 mt-1 text-[10px] text-subtle font-mono">
               <span>{anime.length} anime</span>
               <span>·</span>
-              <span className="flex items-center gap-1"><Star size={9} className="text-amber-400" fill="currentColor"/> avg {avgRating}</span>
+              <span className="flex items-center gap-1"><Star size={9} className="text-accent-bright" fill="currentColor"/> avg {avgRating}</span>
             </div>
           </div>
         </div>
@@ -55,19 +55,19 @@ export default function StudioPage({ params }: { params: Promise<{ name: string 
             {anime[0] && (
               <motion.div initial={{ opacity:0,y:16 }} animate={{ opacity:1,y:0 }}
                 onClick={() => setSelected(anime[0])}
-                className="group p-6 rounded-2xl bg-gradient-to-br from-indigo-600/15 to-violet-600/10 border border-amber-500/25 mb-8 cursor-pointer hover:border-amber-500/40 transition-all"
+                className="group p-6 rounded-2xl bg-gradient-to-br from-indigo-600/15 to-violet-600/10 border border-accent/25 mb-8 cursor-pointer hover:border-accent/40 transition-all"
               >
-                <p className="text-[9px] font-black uppercase tracking-widest text-amber-400/60 mb-2">Top Rated by {studioName}</p>
+                <p className="text-[9px] font-black uppercase tracking-widest text-accent-bright/60 mb-2">Top Rated by {studioName}</p>
                 <div className="flex items-center gap-4">
                   <div className="relative h-16 w-12 rounded-xl overflow-hidden shrink-0">
                     <img src={anime[0].image} alt={anime[0].title} className="w-full h-full object-cover" />
                   </div>
                   <div>
-                    <p className="text-xl font-black text-white uppercase italic">{anime[0].title}</p>
+                    <p className="text-xl font-black text-foreground uppercase italic">{anime[0].title}</p>
                     <div className="flex items-center gap-2 mt-1">
-                      <Star size={12} fill="#f59e0b" className="text-amber-400" />
-                      <span className="text-sm font-black text-amber-400">{anime[0].rating.toFixed(1)}</span>
-                      <span className="text-[10px] text-white/30">{anime[0].year} · {anime[0].type}</span>
+                      <Star size={12} fill="#f59e0b" className="text-accent-bright" />
+                      <span className="text-sm font-black text-accent-bright">{anime[0].rating.toFixed(1)}</span>
+                      <span className="text-[10px] text-subtle">{anime[0].year} · {anime[0].type}</span>
                     </div>
                   </div>
                 </div>
@@ -79,10 +79,10 @@ export default function StudioPage({ params }: { params: Promise<{ name: string 
             </div>
           </>
         ) : (
-          <div className="py-20 text-center border border-dashed border-white/5 rounded-[3rem]">
-            <Building2 size={32} className="mx-auto mb-3 text-white/15" />
-            <p className="text-white/20 font-black uppercase tracking-widest text-sm">"{studioName}" not found in archive</p>
-            <Link href="/studios" className="mt-4 inline-block text-xs text-amber-400 hover:underline font-black uppercase tracking-widest">Browse All Studios</Link>
+          <div className="py-20 text-center border border-dashed border-border rounded-[3rem]">
+            <Building2 size={32} className="mx-auto mb-3 text-subtle" />
+            <p className="text-subtle font-black uppercase tracking-widest text-sm">"{studioName}" not found in archive</p>
+            <Link href="/studios" className="mt-4 inline-block text-xs text-accent-bright hover:underline font-black uppercase tracking-widest">Browse All Studios</Link>
           </div>
         )}
       </div>

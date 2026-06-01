@@ -76,7 +76,7 @@ export default function NewAnimePage() {
   const stat = STATS[filter]
 
   return (
-    <div className="min-h-screen bg-[#020202] text-white pb-32">
+    <div className="min-h-screen bg-background text-foreground pb-32">
       {/* Header */}
       <div className="max-w-7xl mx-auto px-6 pt-32 pb-10">
         <div className="flex items-center gap-3 mb-4">
@@ -88,7 +88,7 @@ export default function NewAnimePage() {
 
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-8">
           <div>
-            <h1 className="text-6xl font-black tracking-tighter uppercase italic text-white leading-none mb-2">
+            <h1 className="text-6xl font-black tracking-tighter uppercase italic text-foreground leading-none mb-2">
               New to the Archive<span className="text-violet-500">.</span>
             </h1>
             <div className="flex items-center gap-3 mt-3">
@@ -96,7 +96,7 @@ export default function NewAnimePage() {
                 <span className="w-1.5 h-1.5 rounded-full bg-violet-400 animate-pulse" />
                 Updated Daily
               </span>
-              <span className="text-white/25 text-xs">{filtered.length} titles available</span>
+              <span className="text-subtle text-xs">{filtered.length} titles available</span>
             </div>
           </div>
 
@@ -104,8 +104,8 @@ export default function NewAnimePage() {
           <div className="flex gap-4 shrink-0">
             {(Object.keys(STATS) as Filter[]).map(k => (
               <div key={k} className="text-center">
-                <p className="text-2xl font-black text-white">{STATS[k].count}</p>
-                <p className="text-[9px] font-black uppercase tracking-widest text-white/30">{STATS[k].label}</p>
+                <p className="text-2xl font-black text-foreground">{STATS[k].count}</p>
+                <p className="text-[9px] font-black uppercase tracking-widest text-subtle">{STATS[k].label}</p>
               </div>
             ))}
           </div>
@@ -119,8 +119,8 @@ export default function NewAnimePage() {
               onClick={() => setFilter(t.id)}
               className={`px-5 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${
                 filter === t.id
-                  ? "bg-violet-600 text-white shadow-[0_0_20px_rgba(139,92,246,0.35)]"
-                  : "bg-white/5 text-white/40 hover:bg-white/8 border border-white/5"
+                  ? "bg-violet-600 text-foreground shadow-[0_0_20px_rgba(139,92,246,0.35)]"
+                  : "bg-surface text-muted hover:bg-surface border border-border"
               }`}
             >
               {t.label}
@@ -133,11 +133,11 @@ export default function NewAnimePage() {
           key={filter}
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mt-6 flex items-center gap-2 text-white/30 text-xs"
+          className="mt-6 flex items-center gap-2 text-subtle text-xs"
         >
           <TrendingUp size={13} className="text-violet-400" />
           <span>
-            <span className="font-black text-white/60">{stat.count}</span>{" "}
+            <span className="font-black text-muted">{stat.count}</span>{" "}
             {stat.label.toLowerCase()} — sorted by newest first
           </span>
         </motion.div>
@@ -147,16 +147,16 @@ export default function NewAnimePage() {
       <div className="max-w-7xl mx-auto px-6">
         {filtered.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-32 text-center">
-            <Sparkles size={32} className="text-white/10 mb-4" />
-            <p className="text-white/30 font-black uppercase tracking-widest text-sm">Nothing yet</p>
-            <p className="text-white/15 text-xs mt-1">Check back later for new additions</p>
+            <Sparkles size={32} className="text-subtle mb-4" />
+            <p className="text-subtle font-black uppercase tracking-widest text-sm">Nothing yet</p>
+            <p className="text-subtle text-xs mt-1">Check back later for new additions</p>
           </div>
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-5">
             {filtered.map((anime, i) => (
               <div key={anime.id} className="relative">
                 {isNew(anime) && (
-                  <div className="absolute top-3 left-3 z-10 px-2 py-0.5 bg-violet-600 rounded-full text-[8px] font-black uppercase tracking-widest text-white shadow-lg">
+                  <div className="absolute top-3 left-3 z-10 px-2 py-0.5 bg-violet-600 rounded-full text-[8px] font-black uppercase tracking-widest text-foreground shadow-lg">
                     NEW
                   </div>
                 )}

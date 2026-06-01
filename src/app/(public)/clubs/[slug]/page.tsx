@@ -204,9 +204,9 @@ const MOCK_MEMBERS: MemberEntry[] = [
 ]
 
 const ROLE_STYLES: Record<MemberEntry["role"], string> = {
-  ADMIN: "bg-amber-500/15 border-amber-500/30 text-amber-400",
-  MOD:   "bg-amber-500/15 border-amber-500/30 text-amber-400",
-  USER:  "bg-white/5 border-white/10 text-white/40",
+  ADMIN: "bg-accent/15 border-accent/30 text-accent-bright",
+  MOD:   "bg-accent/15 border-accent/30 text-accent-bright",
+  USER:  "bg-surface border-border text-muted",
 }
 
 const ROLE_ICONS: Record<MemberEntry["role"], typeof Crown> = {
@@ -288,11 +288,11 @@ function ChallengeCard({ challenge, onAccept, accepted }: { challenge: Challenge
     <motion.div
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      className="group relative overflow-hidden rounded-[2rem] border border-white/8 bg-[#0a0a0a] hover:border-amber-500/20 transition-all duration-300"
+      className="group relative overflow-hidden rounded-[2rem] border border-border bg-surface hover:border-accent/20 transition-all duration-300"
     >
       <div className="flex gap-5 p-6">
         {/* Anime thumbnail */}
-        <div className="shrink-0 w-20 h-28 rounded-xl overflow-hidden bg-white/5 border border-white/8">
+        <div className="shrink-0 w-20 h-28 rounded-xl overflow-hidden bg-surface border border-border">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src={challenge.imageUrl}
@@ -307,27 +307,27 @@ function ChallengeCard({ challenge, onAccept, accepted }: { challenge: Challenge
           <div className="flex items-start justify-between gap-3 flex-wrap">
             <div className="space-y-1">
               <div className="flex items-center gap-2">
-                <Swords size={11} className="text-amber-400" />
-                <span className="text-[9px] font-black uppercase tracking-[0.35em] text-amber-400/70">Watch Challenge</span>
+                <Swords size={11} className="text-accent-bright" />
+                <span className="text-[9px] font-black uppercase tracking-[0.35em] text-accent-bright/70">Watch Challenge</span>
               </div>
-              <h3 className="text-base font-black uppercase italic tracking-tight text-white leading-snug group-hover:text-amber-300 transition-colors">
+              <h3 className="text-base font-black uppercase italic tracking-tight text-foreground leading-snug group-hover:text-accent-bright transition-colors">
                 {challenge.animeTitle}
               </h3>
             </div>
             <CountdownBadge deadline={challenge.deadline} />
           </div>
 
-          <p className="text-xs text-white/45 leading-relaxed line-clamp-2">{challenge.description}</p>
+          <p className="text-xs text-muted leading-relaxed line-clamp-2">{challenge.description}</p>
 
           {challenge.prize && (
             <div className="flex items-center gap-1.5">
-              <Trophy size={10} className="text-amber-400" />
-              <span className="text-[10px] font-bold text-amber-400/80">{challenge.prize}</span>
+              <Trophy size={10} className="text-accent-bright" />
+              <span className="text-[10px] font-bold text-accent-bright/80">{challenge.prize}</span>
             </div>
           )}
 
-          <div className="flex items-center justify-between pt-2 border-t border-white/5">
-            <div className="flex items-center gap-3 text-[9px] text-white/25 font-bold">
+          <div className="flex items-center justify-between pt-2 border-t border-border">
+            <div className="flex items-center gap-3 text-[9px] text-subtle font-bold">
               <span className="flex items-center gap-1"><Users size={8} /> {challenge.replyCount} joined</span>
               <span>by @{challenge.authorName}</span>
             </div>
@@ -335,7 +335,7 @@ function ChallengeCard({ challenge, onAccept, accepted }: { challenge: Challenge
             <div className="flex items-center gap-2">
               <Link
                 href={`/anime/${challenge.malId}`}
-                className="px-3 py-1.5 rounded-lg bg-white/5 border border-white/8 text-[9px] font-black uppercase tracking-widest text-white/40 hover:text-white hover:border-white/15 transition-all"
+                className="px-3 py-1.5 rounded-lg bg-surface border border-border text-[9px] font-black uppercase tracking-widest text-muted hover:text-foreground hover:border-border transition-all"
               >
                 View Anime
               </Link>
@@ -400,14 +400,14 @@ function CreateChallengeModal({ slug, onClose }: { slug: string; onClose: () => 
         initial={{ scale: 0.95, y: 20 }}
         animate={{ scale: 1, y: 0 }}
         exit={{ scale: 0.95, y: 20 }}
-        className="w-full max-w-md bg-[#0f0f0f] border border-white/10 rounded-[2rem] p-7 space-y-5"
+        className="w-full max-w-md bg-[#0f0f0f] border border-border rounded-[2rem] p-7 space-y-5"
       >
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Swords size={14} className="text-amber-400" />
-            <h2 className="text-sm font-black uppercase tracking-[0.2em] text-white">Create Challenge</h2>
+            <Swords size={14} className="text-accent-bright" />
+            <h2 className="text-sm font-black uppercase tracking-[0.2em] text-foreground">Create Challenge</h2>
           </div>
-          <button onClick={onClose} className="text-white/30 hover:text-white transition-colors">
+          <button onClick={onClose} className="text-subtle hover:text-foreground transition-colors">
             <X size={16} />
           </button>
         </div>
@@ -419,37 +419,37 @@ function CreateChallengeModal({ slug, onClose }: { slug: string; onClose: () => 
             { label: "Prize (optional)", value: prize, setter: setPrize, placeholder: "e.g. Legendary badge + 500 XP" },
           ].map(({ label, value, setter, placeholder }) => (
             <div key={label} className="space-y-1.5">
-              <label className="text-[9px] font-black uppercase tracking-[0.3em] text-white/35">{label}</label>
+              <label className="text-[9px] font-black uppercase tracking-[0.3em] text-subtle">{label}</label>
               <input
                 type="text"
                 value={value}
                 onChange={e => setter(e.target.value)}
                 placeholder={placeholder}
-                className="w-full px-4 py-2.5 rounded-xl bg-white/[0.03] border border-white/8 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-amber-500/40 transition-all"
+                className="w-full px-4 py-2.5 rounded-xl bg-surface border border-border text-sm text-foreground placeholder:text-subtle focus:outline-none focus:border-accent/40 transition-all"
               />
             </div>
           ))}
 
           <div className="space-y-1.5">
-            <label className="text-[9px] font-black uppercase tracking-[0.3em] text-white/35">Deadline *</label>
+            <label className="text-[9px] font-black uppercase tracking-[0.3em] text-subtle">Deadline *</label>
             <input
               type="date"
               value={deadline}
               onChange={e => setDeadline(e.target.value)}
               min={new Date().toISOString().split("T")[0]}
-              className="w-full px-4 py-2.5 rounded-xl bg-white/[0.03] border border-white/8 text-sm text-white focus:outline-none focus:border-amber-500/40 transition-all"
+              className="w-full px-4 py-2.5 rounded-xl bg-surface border border-border text-sm text-foreground focus:outline-none focus:border-accent/40 transition-all"
               style={{ colorScheme: "dark" }}
             />
           </div>
 
           <div className="space-y-1.5">
-            <label className="text-[9px] font-black uppercase tracking-[0.3em] text-white/35">Description</label>
+            <label className="text-[9px] font-black uppercase tracking-[0.3em] text-subtle">Description</label>
             <textarea
               value={description}
               onChange={e => setDescription(e.target.value)}
               placeholder="What's the challenge about? Any rules?"
               rows={3}
-              className="w-full px-4 py-2.5 rounded-xl bg-white/[0.03] border border-white/8 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-amber-500/40 resize-none transition-all"
+              className="w-full px-4 py-2.5 rounded-xl bg-surface border border-border text-sm text-foreground placeholder:text-subtle focus:outline-none focus:border-accent/40 resize-none transition-all"
             />
           </div>
         </div>
@@ -555,7 +555,7 @@ export default function ClubDetailPage({
   }
 
   return (
-    <div className="min-h-screen bg-[#020202] text-white pb-32">
+    <div className="min-h-screen bg-background text-foreground pb-32">
       {/* Hero banner */}
       <div
         className={`relative overflow-hidden bg-gradient-to-br ${club.coverGradient}`}
@@ -568,7 +568,7 @@ export default function ClubDetailPage({
           {/* Back */}
           <Link
             href="/clubs"
-            className="inline-flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-white/40 hover:text-white/70 transition-colors mb-8 group"
+            className="inline-flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-muted hover:text-muted transition-colors mb-8 group"
           >
             <ArrowLeft size={11} className="group-hover:-translate-x-0.5 transition-transform" />
             All Clubs
@@ -579,19 +579,19 @@ export default function ClubDetailPage({
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
           >
-            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40 mb-3">
+            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-muted mb-3">
               {club.category}
             </p>
-            <h1 className="text-5xl md:text-6xl font-black uppercase italic tracking-tighter text-white leading-none mb-4">
+            <h1 className="text-5xl md:text-6xl font-black uppercase italic tracking-tighter text-foreground leading-none mb-4">
               {club.name}
             </h1>
 
             <div className="flex flex-wrap items-center gap-6 mb-6">
-              <span className="flex items-center gap-1.5 text-xs font-bold text-white/50">
+              <span className="flex items-center gap-1.5 text-xs font-bold text-muted">
                 <Users size={12} />
                 {club.memberCount.toLocaleString()} members
               </span>
-              <span className="flex items-center gap-1.5 text-xs font-bold text-white/50">
+              <span className="flex items-center gap-1.5 text-xs font-bold text-muted">
                 <MessageSquare size={12} />
                 {club.threadCount} threads
               </span>
@@ -601,8 +601,8 @@ export default function ClubDetailPage({
               onClick={toggleJoin}
               className={`px-8 py-3 rounded-2xl text-sm font-black uppercase tracking-widest transition-all duration-300 ${
                 club.isJoined
-                  ? "bg-white/8 border border-white/15 text-white/60 hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/20"
-                  : "bg-amber-500 hover:bg-amber-400 text-black shadow-[0_0_32px_rgba(99,102,241,0.4)] hover:-translate-y-0.5"
+                  ? "bg-surface border border-border text-muted hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/20"
+                  : "bg-accent hover:bg-accent-bright text-black shadow-[0_0_32px_rgba(99,102,241,0.4)] hover:-translate-y-0.5"
               }`}
             >
               {club.isJoined ? "Leave Club" : "Join Club"}
@@ -612,14 +612,14 @@ export default function ClubDetailPage({
       </div>
 
       {/* Tab navigation */}
-      <div className="sticky top-[72px] z-30 border-b border-white/5 bg-[#020202]/90 backdrop-blur-md">
+      <div className="sticky top-[72px] z-30 border-b border-border bg-background/90 backdrop-blur-md">
         <div className="max-w-6xl mx-auto px-6 flex items-center gap-1">
           {(["threads", "challenges", "members", "about"] as ClubTab[]).map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
               className={`relative px-5 py-4 text-[11px] font-black uppercase tracking-widest capitalize transition-colors ${
-                activeTab === tab ? "text-white" : "text-white/30 hover:text-white/60"
+                activeTab === tab ? "text-foreground" : "text-subtle hover:text-muted"
               }`}
             >
               {tab}
@@ -631,7 +631,7 @@ export default function ClubDetailPage({
               {activeTab === tab && (
                 <motion.div
                   layoutId="club-tab-line"
-                  className="absolute bottom-0 left-0 right-0 h-[2px] bg-amber-500 rounded-full"
+                  className="absolute bottom-0 left-0 right-0 h-[2px] bg-accent rounded-full"
                 />
               )}
             </button>
@@ -653,12 +653,12 @@ export default function ClubDetailPage({
               className="space-y-4"
             >
               <div className="flex items-center justify-between mb-6">
-                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/25">
+                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-subtle">
                   {club.threadCount || MOCK_THREADS.length} threads
                 </p>
                 <Link
                   href={`/clubs/${slug}/new-thread`}
-                  className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-[10px] font-black uppercase tracking-widest text-white transition-all shadow-[0_0_20px_rgba(99,102,241,0.25)]"
+                  className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-accent hover:bg-accent-bright text-[10px] font-black uppercase tracking-widest text-foreground transition-all shadow-[0_0_20px_rgba(99,102,241,0.25)]"
                 >
                   <Plus size={11} /> New Thread
                 </Link>
@@ -673,20 +673,20 @@ export default function ClubDetailPage({
                 >
                   <Link
                     href={`/threads/${thread.id}`}
-                    className="group flex items-center justify-between gap-4 p-5 rounded-2xl bg-white/[0.02] border border-white/8 hover:border-amber-500/25 hover:bg-white/[0.04] transition-all"
+                    className="group flex items-center justify-between gap-4 p-5 rounded-2xl bg-surface border border-border hover:border-accent/25 hover:bg-white/[0.04] transition-all"
                   >
                     <div className="flex-1 min-w-0 space-y-1.5">
                       <div className="flex items-center gap-2 flex-wrap">
                         {!!((thread as Record<string, unknown>).isTrending) && (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-[9px] font-black uppercase tracking-wider text-amber-400">
+                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-accent/10 border border-accent/20 text-[9px] font-black uppercase tracking-wider text-accent-bright">
                             <TrendingUp size={8} /> Trending
                           </span>
                         )}
-                        <h3 className="text-sm font-bold text-white/85 group-hover:text-white transition-colors line-clamp-1">
+                        <h3 className="text-sm font-bold text-white/85 group-hover:text-foreground transition-colors line-clamp-1">
                           {thread.title}
                         </h3>
                       </div>
-                      <div className="flex items-center gap-3 text-[10px] text-white/30">
+                      <div className="flex items-center gap-3 text-[10px] text-subtle">
                         <span>by {thread.author}</span>
                         <span className="flex items-center gap-1">
                           <MessageSquare size={9} />
@@ -700,7 +700,7 @@ export default function ClubDetailPage({
                     </div>
                     <ChevronRight
                       size={14}
-                      className="text-white/20 group-hover:text-amber-400 group-hover:translate-x-0.5 transition-all shrink-0"
+                      className="text-subtle group-hover:text-accent-bright group-hover:translate-x-0.5 transition-all shrink-0"
                     />
                   </Link>
                 </motion.div>
@@ -720,10 +720,10 @@ export default function ClubDetailPage({
             >
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/25">
+                  <p className="text-[10px] font-black uppercase tracking-[0.2em] text-subtle">
                     {challenges.length} active challenge{challenges.length !== 1 ? "s" : ""}
                   </p>
-                  <p className="text-xs text-white/20 mt-0.5">Complete challenges together, earn rewards as a club.</p>
+                  <p className="text-xs text-subtle mt-0.5">Complete challenges together, earn rewards as a club.</p>
                 </div>
                 {authUser && (
                   <button
@@ -738,11 +738,11 @@ export default function ClubDetailPage({
 
               {challenges.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-24 space-y-4">
-                  <div className="h-20 w-20 rounded-3xl bg-white/[0.03] border border-white/8 flex items-center justify-center">
-                    <Trophy size={28} className="text-white/15" />
+                  <div className="h-20 w-20 rounded-3xl bg-surface border border-border flex items-center justify-center">
+                    <Trophy size={28} className="text-subtle" />
                   </div>
-                  <p className="text-sm font-black uppercase italic text-white/25">No active challenges</p>
-                  <p className="text-xs text-white/15">Be the first to create a watch challenge for this club</p>
+                  <p className="text-sm font-black uppercase italic text-subtle">No active challenges</p>
+                  <p className="text-xs text-subtle">Be the first to create a watch challenge for this club</p>
                   {authUser && (
                     <button
                       onClick={() => setShowCreateChallenge(true)}
@@ -784,7 +784,7 @@ export default function ClubDetailPage({
                   : MOCK_MEMBERS
                 return (
                   <>
-                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/25 mb-6">
+                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-subtle mb-6">
                       {club.memberCount.toLocaleString()} members total — showing {displayMembers.length}
                     </p>
                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
@@ -792,12 +792,12 @@ export default function ClubDetailPage({
                         const RoleIcon = ROLE_ICONS[member.role]
                         return (
                           <motion.div key={member.id} initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: i * 0.06 }}
-                            className="p-5 rounded-2xl bg-white/[0.02] border border-white/8 hover:border-white/15 transition-all flex flex-col items-center gap-3 text-center group">
-                            <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center font-black text-xl text-white group-hover:scale-105 transition-transform">
+                            className="p-5 rounded-2xl bg-surface border border-border hover:border-border transition-all flex flex-col items-center gap-3 text-center group">
+                            <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center font-black text-xl text-foreground group-hover:scale-105 transition-transform">
                               {member.avatar}
                             </div>
                             <div className="space-y-1">
-                              <p className="text-sm font-black text-white">{member.username}</p>
+                              <p className="text-sm font-black text-foreground">{member.username}</p>
                               <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full border text-[9px] font-black uppercase tracking-wider ${ROLE_STYLES[member.role]}`}>
                                 <RoleIcon size={8} />{member.role}
                               </span>
@@ -823,28 +823,28 @@ export default function ClubDetailPage({
               className="max-w-2xl space-y-8"
             >
               {/* Description */}
-              <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/8 space-y-4">
+              <div className="p-6 rounded-2xl bg-surface border border-border space-y-4">
                 <div className="flex items-center gap-2">
-                  <BookOpen size={14} className="text-amber-400" />
-                  <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40">
+                  <BookOpen size={14} className="text-accent-bright" />
+                  <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-muted">
                     About
                   </h2>
                 </div>
-                <p className="text-sm text-white/60 leading-relaxed">{club.description}</p>
+                <p className="text-sm text-muted leading-relaxed">{club.description}</p>
               </div>
 
               {/* Rules */}
-              <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/8 space-y-4">
+              <div className="p-6 rounded-2xl bg-surface border border-border space-y-4">
                 <div className="flex items-center gap-2">
-                  <AlertTriangle size={14} className="text-amber-400" />
-                  <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40">
+                  <AlertTriangle size={14} className="text-accent-bright" />
+                  <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-muted">
                     Club Rules
                   </h2>
                 </div>
                 <ol className="space-y-3">
                   {club.rules.map((rule, i) => (
-                    <li key={i} className="flex items-start gap-3 text-sm text-white/60">
-                      <span className="shrink-0 h-5 w-5 rounded-full bg-amber-500/15 border border-amber-500/25 flex items-center justify-center text-[9px] font-black text-amber-400">
+                    <li key={i} className="flex items-start gap-3 text-sm text-muted">
+                      <span className="shrink-0 h-5 w-5 rounded-full bg-accent/15 border border-accent/25 flex items-center justify-center text-[9px] font-black text-accent-bright">
                         {i + 1}
                       </span>
                       {rule}
@@ -854,25 +854,25 @@ export default function ClubDetailPage({
               </div>
 
               {/* Meta */}
-              <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/8 space-y-4">
+              <div className="p-6 rounded-2xl bg-surface border border-border space-y-4">
                 <div className="flex items-center gap-2">
                   <CalendarDays size={14} className="text-violet-400" />
-                  <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-white/40">
+                  <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-muted">
                     Club Info
                   </h2>
                 </div>
                 <div className="space-y-3">
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-white/35">Created</span>
-                    <span className="font-bold text-white/70">{club.createdAt}</span>
+                    <span className="text-subtle">Created</span>
+                    <span className="font-bold text-muted">{club.createdAt}</span>
                   </div>
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-white/35">Owner</span>
-                    <span className="font-bold text-white/70">@{club.owner}</span>
+                    <span className="text-subtle">Owner</span>
+                    <span className="font-bold text-muted">@{club.owner}</span>
                   </div>
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-white/35">Category</span>
-                    <span className="font-bold text-white/70">{club.category}</span>
+                    <span className="text-subtle">Category</span>
+                    <span className="font-bold text-muted">{club.category}</span>
                   </div>
                 </div>
               </div>

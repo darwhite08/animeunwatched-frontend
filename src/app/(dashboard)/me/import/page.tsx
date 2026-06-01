@@ -127,22 +127,22 @@ export default function ImportPage() {
       <div>
         <p className="text-[9px] font-mono uppercase tracking-[0.4em] mb-1"
           style={{ color: "rgba(245,158,11,0.5)" }}>Import</p>
-        <h2 className="text-2xl font-black tracking-tighter uppercase italic text-white">
+        <h2 className="text-2xl font-black tracking-tighter uppercase italic text-foreground">
           Import from MAL / AniList
         </h2>
-        <p className="text-sm text-white/40 mt-2">
+        <p className="text-sm text-muted mt-2">
           Bring your existing anime list from MyAnimeList or AniList into Kaiveron.
           Your progress, scores, and statuses are all preserved.
         </p>
       </div>
 
       {/* How to export guide */}
-      <div className="p-5 rounded-2xl bg-white/[0.02] border border-white/8 space-y-4">
-        <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/35">How to export your list</h3>
+      <div className="p-5 rounded-2xl bg-surface border border-border space-y-4">
+        <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-subtle">How to export your list</h3>
         <div className="grid md:grid-cols-2 gap-4">
           <div className="space-y-2">
-            <p className="text-xs font-black text-amber-400">MyAnimeList (MAL)</p>
-            <ol className="text-xs text-white/50 space-y-1 list-decimal list-inside">
+            <p className="text-xs font-black text-accent-bright">MyAnimeList (MAL)</p>
+            <ol className="text-xs text-muted space-y-1 list-decimal list-inside">
               <li>Go to myanimelist.net → Profile</li>
               <li>Click "Export" in the side panel</li>
               <li>Choose "Anime List" → Export</li>
@@ -150,8 +150,8 @@ export default function ImportPage() {
             </ol>
           </div>
           <div className="space-y-2">
-            <p className="text-xs font-black text-amber-400">AniList</p>
-            <ol className="text-xs text-white/50 space-y-1 list-decimal list-inside">
+            <p className="text-xs font-black text-accent-bright">AniList</p>
+            <ol className="text-xs text-muted space-y-1 list-decimal list-inside">
               <li>Go to anilist.co → Profile Settings</li>
               <li>Scroll to "Import / Export"</li>
               <li>Click "Export Anime List" (downloads XML)</li>
@@ -167,17 +167,17 @@ export default function ImportPage() {
         onDragOver={e => { e.preventDefault(); setDragOver(true) }}
         onDragLeave={() => setDragOver(false)}
         className={`relative border-2 border-dashed rounded-2xl p-12 text-center transition-all duration-200 ${
-          dragOver ? "border-amber-500/60 bg-amber-500/5" : "border-white/15 bg-white/[0.02] hover:border-white/25"
+          dragOver ? "border-accent/60 bg-accent/5" : "border-border bg-surface hover:border-white/25"
         }`}
       >
         {status === "idle" && (
           <label className="cursor-pointer flex flex-col items-center gap-4">
-            <div className="w-16 h-16 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center">
-              <Upload size={28} className="text-amber-400" />
+            <div className="w-16 h-16 rounded-2xl bg-accent/10 border border-accent/20 flex items-center justify-center">
+              <Upload size={28} className="text-accent-bright" />
             </div>
             <div>
-              <p className="text-sm font-black text-white">Drop your XML file here</p>
-              <p className="text-xs text-white/40 mt-1">or click to browse</p>
+              <p className="text-sm font-black text-foreground">Drop your XML file here</p>
+              <p className="text-xs text-muted mt-1">or click to browse</p>
             </div>
             <span className="px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider text-black"
               style={{ background: "linear-gradient(135deg, #fbbf24, #f59e0b)" }}>
@@ -189,21 +189,21 @@ export default function ImportPage() {
 
         {status === "parsing" && (
           <div className="flex flex-col items-center gap-3">
-            <Loader2 size={32} className="animate-spin text-amber-400" />
-            <p className="text-sm font-black text-white">Parsing your list…</p>
+            <Loader2 size={32} className="animate-spin text-accent-bright" />
+            <p className="text-sm font-black text-foreground">Parsing your list…</p>
           </div>
         )}
 
         {status === "importing" && (
           <div className="flex flex-col items-center gap-4">
-            <Loader2 size={32} className="animate-spin text-amber-400" />
+            <Loader2 size={32} className="animate-spin text-accent-bright" />
             <div>
-              <p className="text-sm font-black text-white">Importing {entries.length} anime…</p>
-              <p className="text-xs text-white/40 mt-1">
+              <p className="text-sm font-black text-foreground">Importing {entries.length} anime…</p>
+              <p className="text-xs text-muted mt-1">
                 {imported} done · {errors} skipped
               </p>
             </div>
-            <div className="w-full max-w-xs bg-white/5 rounded-full h-2">
+            <div className="w-full max-w-xs bg-surface rounded-full h-2">
               <div className="h-2 rounded-full transition-all duration-300"
                 style={{
                   width: `${(imported + errors) / entries.length * 100}%`,
@@ -217,14 +217,14 @@ export default function ImportPage() {
           <div className="flex flex-col items-center gap-4">
             <CheckCircle size={40} className="text-emerald-400" />
             <div>
-              <p className="text-lg font-black text-white">Import complete!</p>
-              <p className="text-sm text-white/50 mt-1">
+              <p className="text-lg font-black text-foreground">Import complete!</p>
+              <p className="text-sm text-muted mt-1">
                 {imported} anime imported · {errors} skipped (not in our database yet)
               </p>
             </div>
             <button
               onClick={() => { setStatus("idle"); setEntries([]); setImported(0); setErrors(0) }}
-              className="px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider border border-white/10 text-white/60 hover:bg-white/5 transition-all"
+              className="px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider border border-border text-muted hover:bg-surface transition-all"
             >
               Import Another File
             </button>
@@ -235,8 +235,8 @@ export default function ImportPage() {
           <div className="flex flex-col items-center gap-4">
             <AlertCircle size={40} className="text-red-400" />
             <div>
-              <p className="text-sm font-black text-white">Import failed</p>
-              <p className="text-xs text-white/40 mt-1">Make sure it's a valid MAL/AniList XML export</p>
+              <p className="text-sm font-black text-foreground">Import failed</p>
+              <p className="text-xs text-muted mt-1">Make sure it's a valid MAL/AniList XML export</p>
             </div>
             <button
               onClick={() => setStatus("idle")}
@@ -250,9 +250,9 @@ export default function ImportPage() {
       </div>
 
       {/* Note */}
-      <div className="flex items-start gap-3 p-4 rounded-xl bg-white/[0.02] border border-white/5">
-        <FileText size={14} className="text-white/30 shrink-0 mt-0.5" />
-        <p className="text-xs text-white/35 leading-relaxed">
+      <div className="flex items-start gap-3 p-4 rounded-xl bg-surface border border-border">
+        <FileText size={14} className="text-subtle shrink-0 mt-0.5" />
+        <p className="text-xs text-subtle leading-relaxed">
           Import preserves your watch status, scores, and episode progress.
           Anime not yet in our database will be skipped and can be added manually.
           Your existing entries will be updated, not duplicated.

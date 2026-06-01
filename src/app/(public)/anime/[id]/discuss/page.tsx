@@ -71,28 +71,28 @@ export default function AnimeDiscussPage({ params }: { params: Promise<{ id: str
   }
 
   return (
-    <div className="min-h-screen bg-[#020202] text-white pb-32">
+    <div className="min-h-screen bg-background text-foreground pb-32">
       <div className="max-w-3xl mx-auto px-6 pt-32">
         {/* Breadcrumb */}
-        <div className="flex items-center gap-2 mb-6 text-xs text-white/30">
-          <Link href={`/anime/${id}`} className="hover:text-amber-400 transition-colors flex items-center gap-1">
+        <div className="flex items-center gap-2 mb-6 text-xs text-subtle">
+          <Link href={`/anime/${id}`} className="hover:text-accent-bright transition-colors flex items-center gap-1">
             <ChevronLeft size={13} /> {anime?.title ?? "Anime"}
           </Link>
           <span>/</span>
-          <Link href={`/anime/${id}/episodes`} className="hover:text-amber-400 transition-colors">Episodes</Link>
-          {ep && <><span>/</span><span className="text-white/60">Ep {ep}</span></>}
+          <Link href={`/anime/${id}/episodes`} className="hover:text-accent-bright transition-colors">Episodes</Link>
+          {ep && <><span>/</span><span className="text-muted">Ep {ep}</span></>}
         </div>
 
         {/* Header */}
         <div className="mb-8">
           <div className="flex items-center gap-2 mb-3">
-            <MessageSquare size={16} className="text-amber-400" />
+            <MessageSquare size={16} className="text-accent-bright" />
             <p className="text-[9px] font-mono uppercase tracking-[0.4em]"
               style={{ color: "rgba(245,158,11,0.6)" }}>
               {ep ? `Episode ${ep} Discussion` : "Community Discussion"}
             </p>
           </div>
-          <h1 className="text-3xl font-black tracking-tighter uppercase italic text-white leading-tight">
+          <h1 className="text-3xl font-black tracking-tighter uppercase italic text-foreground leading-tight">
             {ep ? (
               <>Episode <span style={{ color: "#f59e0b" }}>{ep}</span><br />Spoiler Chat</>
             ) : (
@@ -100,14 +100,14 @@ export default function AnimeDiscussPage({ params }: { params: Promise<{ id: str
             )}
           </h1>
           {ep && (
-            <div className="mt-3 flex items-center gap-1.5 text-[10px] text-amber-400/70 font-black uppercase tracking-widest">
+            <div className="mt-3 flex items-center gap-1.5 text-[10px] text-accent-bright/70 font-black uppercase tracking-widest">
               <Lock size={10} /> Spoiler-free posts only — tag spoilers with [spoiler]
             </div>
           )}
         </div>
 
         {/* Post composer */}
-        <div className="mb-8 p-5 rounded-2xl border border-white/8 bg-white/[0.02]">
+        <div className="mb-8 p-5 rounded-2xl border border-border bg-surface">
           <textarea
             value={draft}
             onChange={e => setDraft(e.target.value)}
@@ -120,10 +120,10 @@ export default function AnimeDiscussPage({ params }: { params: Promise<{ id: str
             disabled={!isAuthenticated}
             rows={3}
             maxLength={2000}
-            className="w-full bg-transparent text-sm text-white placeholder:text-white/25 resize-none outline-none leading-relaxed disabled:opacity-40"
+            className="w-full bg-transparent text-sm text-foreground placeholder:text-subtle resize-none outline-none leading-relaxed disabled:opacity-40"
           />
-          <div className="flex items-center justify-between mt-3 pt-3 border-t border-white/5">
-            <span className="text-[9px] text-white/20 font-mono">{2000 - draft.length} chars</span>
+          <div className="flex items-center justify-between mt-3 pt-3 border-t border-border">
+            <span className="text-[9px] text-subtle font-mono">{2000 - draft.length} chars</span>
             <button onClick={submit} disabled={!draft.trim() || createThread.isPending || !isAuthenticated}
               className="flex items-center gap-2 px-4 py-2 rounded-xl text-[11px] font-black uppercase tracking-widest text-black transition-all disabled:opacity-40"
               style={{ background: "linear-gradient(135deg, #fbbf24, #f59e0b)" }}>
@@ -137,7 +137,7 @@ export default function AnimeDiscussPage({ params }: { params: Promise<{ id: str
         {isLoading && (
           <div className="space-y-4">
             {Array.from({ length: 3 }).map((_, i) => (
-              <div key={i} className="h-24 rounded-2xl bg-white/[0.03] animate-pulse"
+              <div key={i} className="h-24 rounded-2xl bg-surface animate-pulse"
                 style={{ animationDelay: `${i * 100}ms` }} />
             ))}
           </div>
@@ -145,9 +145,9 @@ export default function AnimeDiscussPage({ params }: { params: Promise<{ id: str
 
         {!isLoading && threads.length === 0 && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-            className="py-20 text-center border border-dashed border-white/5 rounded-2xl space-y-3">
-            <MessageSquare size={28} className="mx-auto text-white/15" />
-            <p className="text-white/25 font-black uppercase tracking-widest text-xs">
+            className="py-20 text-center border border-dashed border-border rounded-2xl space-y-3">
+            <MessageSquare size={28} className="mx-auto text-subtle" />
+            <p className="text-subtle font-black uppercase tracking-widest text-xs">
               No discussions yet — be the first!
             </p>
           </motion.div>
@@ -159,15 +159,15 @@ export default function AnimeDiscussPage({ params }: { params: Promise<{ id: str
               initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.05 }}>
               <Link href={`/threads/${thread.id}`}
-                className="block p-5 rounded-2xl border border-white/8 bg-white/[0.02] hover:border-amber-500/20 hover:bg-white/[0.04] transition-all group">
+                className="block p-5 rounded-2xl border border-border bg-surface hover:border-accent/20 hover:bg-white/[0.04] transition-all group">
                 <div className="flex items-start justify-between gap-3 mb-2">
-                  <p className="text-[13px] font-bold text-white/85 group-hover:text-white transition-colors leading-snug">
+                  <p className="text-[13px] font-bold text-white/85 group-hover:text-foreground transition-colors leading-snug">
                     {thread.title}
                   </p>
-                  <span className="text-[9px] text-white/25 shrink-0">{timeAgo(thread.createdAt)}</span>
+                  <span className="text-[9px] text-subtle shrink-0">{timeAgo(thread.createdAt)}</span>
                 </div>
-                <p className="text-[11px] text-white/40 line-clamp-2 leading-relaxed">{thread.content}</p>
-                <div className="flex items-center gap-4 mt-3 text-[9px] text-white/25 font-black uppercase tracking-widest">
+                <p className="text-[11px] text-muted line-clamp-2 leading-relaxed">{thread.content}</p>
+                <div className="flex items-center gap-4 mt-3 text-[9px] text-subtle font-black uppercase tracking-widest">
                   <span>by {thread.author?.displayName ?? thread.author?.username ?? "?"}</span>
                   <span>{thread._count?.replies ?? 0} replies</span>
                 </div>

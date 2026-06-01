@@ -44,13 +44,13 @@ export default function FilterDrawer({
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", damping: 25, stiffness: 200 }}
-            className="fixed right-0 top-0 bottom-0 w-full max-w-xs bg-[#0a0a0a] border-l border-white/10 z-[101] flex flex-col"
+            className="fixed right-0 top-0 bottom-0 w-full max-w-xs bg-surface border-l border-border z-[101] flex flex-col"
           >
             {/* Header */}
-            <div className="flex items-center justify-between p-8 border-b border-white/5">
+            <div className="flex items-center justify-between p-8 border-b border-border">
               <div className="flex items-center gap-3">
-                <SlidersHorizontal size={16} className="text-amber-400" />
-                <h2 className="text-base font-black text-white uppercase italic tracking-tighter">
+                <SlidersHorizontal size={16} className="text-accent-bright" />
+                <h2 className="text-base font-black text-foreground uppercase italic tracking-tighter">
                   Refine Results
                 </h2>
                 {totalActive > 0 && (
@@ -60,7 +60,7 @@ export default function FilterDrawer({
                   </span>
                 )}
               </div>
-              <button onClick={onClose} className="p-2 hover:bg-white/5 rounded-full text-white/40 hover:text-white transition-colors">
+              <button onClick={onClose} className="p-2 hover:bg-surface rounded-full text-muted hover:text-foreground transition-colors">
                 <X size={18} />
               </button>
             </div>
@@ -82,16 +82,16 @@ export default function FilterDrawer({
             </div>
 
             {/* Footer */}
-            <div className="p-8 border-t border-white/5 flex gap-3">
+            <div className="p-8 border-t border-border flex gap-3">
               <button
                 onClick={() => { onClose() }}
-                className="flex-1 py-3.5 bg-amber-500 hover:bg-amber-400 rounded-xl text-[10px] font-black text-white uppercase tracking-widest transition-colors"
+                className="flex-1 py-3.5 bg-accent hover:bg-accent-bright rounded-xl text-[10px] font-black text-foreground uppercase tracking-widest transition-colors"
               >
                 Show {resultCount} Results
               </button>
               <button
                 onClick={() => { onReset(); onClose() }}
-                className="p-3.5 bg-white/5 hover:bg-white/10 rounded-xl text-white/50 hover:text-white transition-colors"
+                className="p-3.5 bg-surface hover:bg-surface rounded-xl text-muted hover:text-foreground transition-colors"
                 title="Reset filters"
               >
                 <RotateCcw size={15} />

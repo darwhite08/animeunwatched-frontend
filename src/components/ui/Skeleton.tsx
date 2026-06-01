@@ -9,7 +9,7 @@ interface SkeletonProps {
 
 export function Skeleton({ className, shimmer = true }: SkeletonProps) {
   return (
-    <div className={`relative overflow-hidden rounded-xl bg-white/5 ${className ?? ""}`}>
+    <div className={`relative overflow-hidden rounded-xl bg-surface ${className ?? ""}`}>
       {shimmer && (
         <motion.div
           animate={{ x: ["-100%", "100%"] }}
@@ -31,7 +31,7 @@ export function AnimeCardSkeleton() {
 
 export function PostCardSkeleton() {
   return (
-    <div className="p-5 rounded-2xl border border-white/5 space-y-4">
+    <div className="p-5 rounded-2xl border border-border space-y-4">
       <div className="flex items-center gap-3">
         <Skeleton className="h-10 w-10 rounded-xl shrink-0" />
         <div className="flex-1 space-y-2">
@@ -52,7 +52,7 @@ export function PostCardSkeleton() {
 
 export function StatCardSkeleton() {
   return (
-    <div className="p-8 rounded-[2.5rem] border border-white/5 bg-[#0a0a0a] space-y-4">
+    <div className="p-8 rounded-[2.5rem] border border-border bg-surface space-y-4">
       <Skeleton className="h-10 w-10 rounded-2xl" />
       <Skeleton className="h-8 w-20 rounded-xl" />
       <Skeleton className="h-3 w-24 rounded-full" />
@@ -63,7 +63,7 @@ export function StatCardSkeleton() {
 export function ProfileSkeleton() {
   return (
     <div className="space-y-8">
-      <div className="h-64 rounded-[2rem] bg-white/5 relative overflow-hidden">
+      <div className="h-64 rounded-[2rem] bg-surface relative overflow-hidden">
         <motion.div
           animate={{ x: ["-100%", "100%"] }}
           transition={{ repeat: Infinity, duration: 2, ease: "linear" }}

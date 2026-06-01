@@ -77,8 +77,8 @@ export default function NowPlayingCard() {
 
   if (isLoading || !subject) {
     return (
-      <div className="relative rounded-[2.5rem] overflow-hidden border border-white/5 bg-[#0a0a0a] h-48 flex items-center justify-center">
-        <div className="w-8 h-8 rounded-full border-2 border-amber-500/30 border-t-amber-500 animate-spin" />
+      <div className="relative rounded-[2.5rem] overflow-hidden border border-border bg-surface h-48 flex items-center justify-center">
+        <div className="w-8 h-8 rounded-full border-2 border-accent/30 border-t-amber-500 animate-spin" />
       </div>
     )
   }
@@ -86,10 +86,10 @@ export default function NowPlayingCard() {
   // Empty state: no WATCHING and no browse fallback
   if (!subject) {
     return (
-      <div className="relative rounded-[2.5rem] overflow-hidden border border-white/5 bg-[#0a0a0a] h-48 flex flex-col items-center justify-center gap-3 p-8">
-        <MonitorPlay size={24} className="text-white/10" />
-        <p className="text-xs font-black uppercase tracking-widest text-white/20">Nothing playing</p>
-        <Link href="/bestanimelist" className="text-[10px] font-black uppercase tracking-widest text-amber-400 hover:text-amber-300 transition-colors">
+      <div className="relative rounded-[2.5rem] overflow-hidden border border-border bg-surface h-48 flex flex-col items-center justify-center gap-3 p-8">
+        <MonitorPlay size={24} className="text-subtle" />
+        <p className="text-xs font-black uppercase tracking-widest text-subtle">Nothing playing</p>
+        <Link href="/bestanimelist" className="text-[10px] font-black uppercase tracking-widest text-accent-bright hover:text-accent-bright transition-colors">
           Browse Anime →
         </Link>
       </div>
@@ -97,7 +97,7 @@ export default function NowPlayingCard() {
   }
 
   return (
-    <div className="relative rounded-[2.5rem] overflow-hidden border border-white/5 bg-[#0a0a0a]">
+    <div className="relative rounded-[2.5rem] overflow-hidden border border-border bg-surface">
       {/* Background cover */}
       <div className="absolute inset-0">
         <Image src={subject.image} alt={subject.title} fill className="object-cover opacity-25 blur-sm scale-110" sizes="600px" />
@@ -108,7 +108,7 @@ export default function NowPlayingCard() {
         {/* Label */}
         <div className="flex items-center gap-2">
           <div className={`w-2 h-2 rounded-full ${playing ? "bg-emerald-400 animate-pulse" : "bg-white/20"}`} />
-          <span className="text-[9px] font-black uppercase tracking-[0.3em] text-white/40">
+          <span className="text-[9px] font-black uppercase tracking-[0.3em] text-muted">
             {playing ? "Now Streaming" : subject.fromList ? "Continue Watching" : "Paused"}
           </span>
         </div>
@@ -119,14 +119,14 @@ export default function NowPlayingCard() {
             <Image src={subject.image} alt={subject.title} fill className="object-cover" sizes="48px" />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="font-black text-white leading-tight line-clamp-1">{subject.title}</p>
-            <p className="text-[10px] text-white/40 mt-0.5">{subject.episodeLabel} · {subject.studio}</p>
+            <p className="font-black text-foreground leading-tight line-clamp-1">{subject.title}</p>
+            <p className="text-[10px] text-muted mt-0.5">{subject.episodeLabel} · {subject.studio}</p>
           </div>
         </div>
 
         {/* Progress bar */}
         <div className="space-y-2">
-          <div className="h-1.5 bg-white/5 rounded-full overflow-hidden">
+          <div className="h-1.5 bg-surface rounded-full overflow-hidden">
             <motion.div
               initial={{ width: "35%" }}
               animate={{ width: playing ? "38%" : "35%" }}
@@ -135,7 +135,7 @@ export default function NowPlayingCard() {
               style={{ background: "linear-gradient(90deg, #f59e0b, #fbbf24)" }}
             />
           </div>
-          <div className="flex justify-between text-[9px] font-mono text-white/20">
+          <div className="flex justify-between text-[9px] font-mono text-subtle">
             <span>14:22</span><span>24:00</span>
           </div>
         </div>
@@ -152,13 +152,13 @@ export default function NowPlayingCard() {
             </button>
             <button
               onClick={() => push("Skipped to next episode", "info")}
-              className="p-2 text-white/30 hover:text-white transition-colors"
+              className="p-2 text-subtle hover:text-foreground transition-colors"
             >
               <SkipForward size={16} />
             </button>
           </div>
           <Link href={`/anime/${subject.id}`}
-            className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest text-amber-400/60 hover:text-amber-400 transition-colors"
+            className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest text-accent-bright/60 hover:text-accent-bright transition-colors"
           >
             Details <ExternalLink size={10} />
           </Link>

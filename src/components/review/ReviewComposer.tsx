@@ -68,23 +68,23 @@ export default function ReviewComposer({ isOpen, onClose, animeTitle, animeId }:
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.93, y: 20 }}
             transition={{ type: "spring", damping: 26, stiffness: 260 }}
-            className="relative w-full max-w-lg bg-[#0c0c0c] rounded-3xl border border-white/10 p-8 shadow-2xl space-y-7"
+            className="relative w-full max-w-lg bg-[#0c0c0c] rounded-3xl border border-border p-8 shadow-2xl space-y-7"
           >
             <button
               onClick={onClose}
-              className="absolute top-5 right-5 p-2 rounded-full bg-white/5 border border-white/10 text-white/40 hover:text-white transition-colors"
+              className="absolute top-5 right-5 p-2 rounded-full bg-surface border border-border text-muted hover:text-foreground transition-colors"
             >
               <X size={16} />
             </button>
 
             <div>
-              <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-amber-400/60 mb-1">Write a Review</p>
-              <h2 className="text-2xl font-black tracking-tighter text-white">{animeTitle}</h2>
+              <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-accent-bright/60 mb-1">Write a Review</p>
+              <h2 className="text-2xl font-black tracking-tighter text-foreground">{animeTitle}</h2>
             </div>
 
             {/* Star rating */}
             <div className="space-y-3">
-              <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/35">Your Score</p>
+              <p className="text-[10px] font-black uppercase tracking-[0.3em] text-subtle">Your Score</p>
               <div className="flex items-center gap-1.5">
                 {[1,2,3,4,5,6,7,8,9,10].map(n => (
                   <button
@@ -107,7 +107,7 @@ export default function ReviewComposer({ isOpen, onClose, animeTitle, animeId }:
                     key={display}
                     initial={{ opacity: 0, x: -4 }}
                     animate={{ opacity: 1, x: 0 }}
-                    className="ml-2 text-sm font-black text-amber-400"
+                    className="ml-2 text-sm font-black text-accent-bright"
                   >
                     {display}/10 · {starLabel(display)}
                   </motion.span>
@@ -118,8 +118,8 @@ export default function ReviewComposer({ isOpen, onClose, animeTitle, animeId }:
             {/* Review body */}
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/35">Review</p>
-                <span className={`text-[9px] font-mono ${body.length < 20 ? "text-white/20" : "text-emerald-400/70"}`}>
+                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-subtle">Review</p>
+                <span className={`text-[9px] font-mono ${body.length < 20 ? "text-subtle" : "text-emerald-400/70"}`}>
                   {body.length}/2000 {body.length < 20 && `(min ${20 - body.length} more)`}
                 </span>
               </div>
@@ -129,7 +129,7 @@ export default function ReviewComposer({ isOpen, onClose, animeTitle, animeId }:
                 placeholder="Share your thoughts on this anime… (minimum 20 characters)"
                 rows={5}
                 maxLength={2000}
-                className="w-full rounded-2xl bg-white/[0.03] border border-white/10 px-4 py-3 text-sm text-white placeholder:text-white/20 outline-none focus:border-amber-500/40 resize-none leading-relaxed transition-colors"
+                className="w-full rounded-2xl bg-surface border border-border px-4 py-3 text-sm text-foreground placeholder:text-subtle outline-none focus:border-accent/40 resize-none leading-relaxed transition-colors"
               />
             </div>
 
@@ -137,13 +137,13 @@ export default function ReviewComposer({ isOpen, onClose, animeTitle, animeId }:
             <label className="flex items-center gap-3 cursor-pointer group">
               <div
                 onClick={() => setHasSpoilers(s => !s)}
-                className={`relative w-10 h-5 rounded-full transition-colors ${hasSpoilers ? "bg-amber-600" : "bg-white/10"}`}
+                className={`relative w-10 h-5 rounded-full transition-colors ${hasSpoilers ? "bg-accent" : "bg-surface"}`}
               >
                 <span className={`absolute top-0.5 h-4 w-4 rounded-full bg-white transition-transform ${hasSpoilers ? "translate-x-5" : "translate-x-0.5"}`} />
               </div>
               <div className="flex items-center gap-2">
-                <AlertTriangle size={13} className={hasSpoilers ? "text-amber-400" : "text-white/20"} />
-                <span className={`text-xs font-bold ${hasSpoilers ? "text-amber-400" : "text-white/35"}`}>
+                <AlertTriangle size={13} className={hasSpoilers ? "text-accent-bright" : "text-subtle"} />
+                <span className={`text-xs font-bold ${hasSpoilers ? "text-accent-bright" : "text-subtle"}`}>
                   Contains Spoilers
                 </span>
               </div>

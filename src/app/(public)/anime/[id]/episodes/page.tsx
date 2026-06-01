@@ -52,44 +52,44 @@ export default function EpisodesPage({ params }: { params: Promise<{ id: string 
   }
 
   return (
-    <div className="min-h-screen bg-[#020202] text-white pb-32 pt-6">
+    <div className="min-h-screen bg-background text-foreground pb-32 pt-6">
       <div className="max-w-4xl mx-auto px-6">
         <Link href={`/anime/${id}`}
-          className="inline-flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-white/40 hover:text-white/70 transition-colors mb-8 group">
+          className="inline-flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-muted hover:text-muted transition-colors mb-8 group">
           <ChevronLeft size={11} className="group-hover:-translate-x-0.5 transition-transform" /> Back to Anime
         </Link>
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-3">
-            <Play size={20} className="text-amber-400" />
-            <h1 className="text-3xl font-black tracking-tighter uppercase italic text-white">Episodes<span style={{ color: "#f59e0b" }}>.</span></h1>
+            <Play size={20} className="text-accent-bright" />
+            <h1 className="text-3xl font-black tracking-tighter uppercase italic text-foreground">Episodes<span style={{ color: "#f59e0b" }}>.</span></h1>
           </div>
           {!isLoading && pagination && (
-            <span className="text-xs text-white/30">Page {page} / {totalPages}</span>
+            <span className="text-xs text-subtle">Page {page} / {totalPages}</span>
           )}
         </div>
 
         {isLoading ? (
-          <div className="flex items-center justify-center py-24"><Loader2 size={28} className="animate-spin text-amber-400" /></div>
+          <div className="flex items-center justify-center py-24"><Loader2 size={28} className="animate-spin text-accent-bright" /></div>
         ) : episodes.length === 0 ? (
-          <p className="text-center py-24 text-white/30 text-sm">No episode data available for this anime.</p>
+          <p className="text-center py-24 text-subtle text-sm">No episode data available for this anime.</p>
         ) : (
           <>
             <div className="space-y-2">
               {episodes.map((ep, i) => (
                 <motion.div key={ep.mal_id}
                   initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.02 }}
-                  className="flex items-center gap-4 p-4 rounded-2xl border border-white/8 bg-[#0a0a0a] hover:border-amber-500/20 transition-all group">
+                  className="flex items-center gap-4 p-4 rounded-2xl border border-border bg-surface hover:border-accent/20 transition-all group">
                   {/* Episode number */}
-                  <div className="h-10 w-10 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center shrink-0">
-                    <span className="text-xs font-black text-amber-400">{ep.mal_id}</span>
+                  <div className="h-10 w-10 rounded-xl bg-accent/10 border border-accent/20 flex items-center justify-center shrink-0">
+                    <span className="text-xs font-black text-accent-bright">{ep.mal_id}</span>
                   </div>
 
                   {/* Info */}
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-black text-white truncate">
+                    <p className="text-sm font-black text-foreground truncate">
                       {ep.title || ep.title_romanji || `Episode ${ep.mal_id}`}
                     </p>
-                    <div className="flex items-center gap-3 mt-0.5 text-[9px] text-white/30">
+                    <div className="flex items-center gap-3 mt-0.5 text-[9px] text-subtle">
                       <span>{formatDate(ep.aired)}</span>
                       <span>{formatDuration(ep.duration)}</span>
                       {ep.filler && <span className="px-1.5 py-0.5 rounded-full bg-orange-500/15 border border-orange-500/25 text-orange-400">Filler</span>}
@@ -98,7 +98,7 @@ export default function EpisodesPage({ params }: { params: Promise<{ id: string 
                   </div>
 
                   {ep.score && (
-                    <span className="text-xs font-black text-amber-400 shrink-0">★ {ep.score.toFixed(1)}</span>
+                    <span className="text-xs font-black text-accent-bright shrink-0">★ {ep.score.toFixed(1)}</span>
                   )}
                 </motion.div>
               ))}
@@ -108,12 +108,12 @@ export default function EpisodesPage({ params }: { params: Promise<{ id: string 
             {totalPages > 1 && (
               <div className="flex items-center justify-center gap-3 mt-8">
                 <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}
-                  className="p-2 rounded-xl border border-white/10 text-white/40 hover:text-white hover:border-white/20 transition-all disabled:opacity-30">
+                  className="p-2 rounded-xl border border-border text-muted hover:text-foreground hover:border-border transition-all disabled:opacity-30">
                   <ChevronLeft size={16} />
                 </button>
-                <span className="text-sm text-white/50 font-black">{page} / {totalPages}</span>
+                <span className="text-sm text-muted font-black">{page} / {totalPages}</span>
                 <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={!pagination?.has_next_page}
-                  className="p-2 rounded-xl border border-white/10 text-white/40 hover:text-white hover:border-white/20 transition-all disabled:opacity-30">
+                  className="p-2 rounded-xl border border-border text-muted hover:text-foreground hover:border-border transition-all disabled:opacity-30">
                   <ChevronRight size={16} />
                 </button>
               </div>

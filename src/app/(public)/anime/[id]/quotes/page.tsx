@@ -42,16 +42,16 @@ export default function QuotesPage({ params }: { params: Promise<{ id: string }>
   const quotes = CURATED_QUOTES[malId] ?? GENERIC_QUOTES
 
   return (
-    <div className="min-h-screen bg-[#020202] text-white pb-32 pt-6">
+    <div className="min-h-screen bg-background text-foreground pb-32 pt-6">
       <div className="max-w-3xl mx-auto px-6">
         <Link href={`/anime/${id}`}
-          className="inline-flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-white/40 hover:text-white/70 transition-colors mb-8 group">
+          className="inline-flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-muted hover:text-muted transition-colors mb-8 group">
           <ChevronLeft size={11} className="group-hover:-translate-x-0.5 transition-transform" /> Back to Anime
         </Link>
 
         <div className="flex items-center gap-3 mb-8">
-          <Quote size={20} className="text-amber-400" />
-          <h1 className="text-3xl font-black tracking-tighter uppercase italic text-white">
+          <Quote size={20} className="text-accent-bright" />
+          <h1 className="text-3xl font-black tracking-tighter uppercase italic text-foreground">
             Quotes<span style={{ color: "#f59e0b" }}>.</span>
           </h1>
         </div>
@@ -60,26 +60,26 @@ export default function QuotesPage({ params }: { params: Promise<{ id: string }>
           {quotes.map((q, i) => (
             <motion.div key={i}
               initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.08 }}
-              className="relative p-6 rounded-2xl border border-white/8 bg-[#0a0a0a] hover:border-amber-500/20 transition-all">
+              className="relative p-6 rounded-2xl border border-border bg-surface hover:border-accent/20 transition-all">
               {/* Large quote mark */}
-              <span className="absolute top-4 left-5 text-5xl text-amber-500/10 font-serif leading-none select-none">"</span>
+              <span className="absolute top-4 left-5 text-5xl text-accent/10 font-serif leading-none select-none">"</span>
               <div className="pl-4">
-                <p className="text-base text-white/80 leading-relaxed italic">
+                <p className="text-base text-muted leading-relaxed italic">
                   "{q.text}"
                 </p>
                 <div className="flex items-center gap-2 mt-4">
-                  <div className="h-px flex-1 bg-white/5" />
-                  <span className="text-[10px] font-black text-amber-400/70 uppercase tracking-widest">— {q.character}</span>
+                  <div className="h-px flex-1 bg-surface" />
+                  <span className="text-[10px] font-black text-accent-bright/70 uppercase tracking-widest">— {q.character}</span>
                 </div>
               </div>
             </motion.div>
           ))}
         </div>
 
-        <div className="mt-8 p-4 rounded-2xl border border-white/5 bg-white/[0.02] text-center">
-          <p className="text-[10px] text-white/20">
+        <div className="mt-8 p-4 rounded-2xl border border-border bg-surface text-center">
+          <p className="text-[10px] text-subtle">
             Know a great quote from this anime? Share it in the{" "}
-            <Link href={`/anime/${id}/discuss`} className="text-amber-400/60 hover:text-amber-400 transition-colors">discussion thread</Link>.
+            <Link href={`/anime/${id}/discuss`} className="text-accent-bright/60 hover:text-accent-bright transition-colors">discussion thread</Link>.
           </p>
         </div>
       </div>

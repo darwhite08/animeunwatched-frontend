@@ -68,24 +68,24 @@ export default function RankingsPage() {
   const rest  = ranked.slice(page === 1 ? 3 : 0)
 
   return (
-    <div className="min-h-screen bg-[#020202] text-white pb-32">
+    <div className="min-h-screen bg-background text-foreground pb-32">
       <div className="max-w-7xl mx-auto px-6 pt-32 pb-10">
-        <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-amber-400/60 mb-3">Neural Leaderboard</p>
-        <h1 className="text-6xl font-black tracking-tighter uppercase italic text-white leading-none mb-2">
+        <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-accent-bright/60 mb-3">Neural Leaderboard</p>
+        <h1 className="text-6xl font-black tracking-tighter uppercase italic text-foreground leading-none mb-2">
           Leaderboard<span style={{color:"#f59e0b"}}>.</span>
         </h1>
-        <p className="text-white/35 text-sm mb-10">Top anime by community credibility-weighted scores</p>
+        <p className="text-subtle text-sm mb-10">Top anime by community credibility-weighted scores</p>
 
         {/* Category tabs */}
         <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-10">
           {CATEGORIES.map(c => (
             <button key={c.id} onClick={() => changeCategory(c.id)}
               className={`p-4 rounded-2xl border text-left transition-all ${
-                cat === c.id ? "border-amber-500/40 bg-amber-500/10" : "border-white/8 bg-white/[0.02] hover:border-white/15"
+                cat === c.id ? "border-accent/40 bg-accent/10" : "border-border bg-surface hover:border-border"
               }`}>
-              <c.icon size={16} className={cat === c.id ? "text-amber-400" : "text-white/30"} />
-              <p className={`font-black text-sm mt-2 ${cat === c.id ? "text-white" : "text-white/60"}`}>{c.label}</p>
-              <p className="text-[9px] text-white/25 mt-0.5 leading-tight">{c.desc}</p>
+              <c.icon size={16} className={cat === c.id ? "text-accent-bright" : "text-subtle"} />
+              <p className={`font-black text-sm mt-2 ${cat === c.id ? "text-foreground" : "text-muted"}`}>{c.label}</p>
+              <p className="text-[9px] text-subtle mt-0.5 leading-tight">{c.desc}</p>
             </button>
           ))}
         </div>
@@ -102,8 +102,8 @@ export default function RankingsPage() {
 
         {/* Error */}
         {isError && !isLoading && (
-          <div className="py-24 text-center border border-dashed border-white/5 rounded-[3rem]">
-            <p className="text-white/20 text-xs font-black uppercase tracking-widest">Failed to load rankings</p>
+          <div className="py-24 text-center border border-dashed border-border rounded-[3rem]">
+            <p className="text-subtle text-xs font-black uppercase tracking-widest">Failed to load rankings</p>
           </div>
         )}
 
@@ -125,21 +125,21 @@ export default function RankingsPage() {
                         initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: i * 0.08 }}
                         onClick={() => setSelected(anime)}
-                        className={`group p-5 rounded-2xl border cursor-pointer transition-all hover:border-amber-500/30 ${
-                          pos === 0 ? "border-amber-500/30 bg-amber-500/5" : "border-white/8 bg-white/[0.02]"
+                        className={`group p-5 rounded-2xl border cursor-pointer transition-all hover:border-accent/30 ${
+                          pos === 0 ? "border-accent/30 bg-accent/5" : "border-border bg-surface"
                         }`}
                       >
                         <div className="flex items-center gap-3 mb-3">
                           <span className="text-2xl">{medals[i]}</span>
-                          <span className="text-[10px] font-black text-white/30 font-mono">#{pos + 1}</span>
+                          <span className="text-[10px] font-black text-subtle font-mono">#{pos + 1}</span>
                         </div>
-                        <p className="font-black text-white/90 group-hover:text-white text-sm leading-tight line-clamp-2">
+                        <p className="font-black text-white/90 group-hover:text-foreground text-sm leading-tight line-clamp-2">
                           {anime.title}
                         </p>
                         <div className="flex items-center gap-2 mt-2">
-                          <Star size={10} fill="#f59e0b" className="text-amber-400" />
-                          <span className="text-xs font-black text-white/60">{anime.rating.toFixed(1)}</span>
-                          <span className="text-[9px] text-white/25">· {anime.year}</span>
+                          <Star size={10} fill="#f59e0b" className="text-accent-bright" />
+                          <span className="text-xs font-black text-muted">{anime.rating.toFixed(1)}</span>
+                          <span className="text-[9px] text-subtle">· {anime.year}</span>
                         </div>
                       </motion.div>
                     )
@@ -157,8 +157,8 @@ export default function RankingsPage() {
               )}
 
               {ranked.length === 0 && (
-                <div className="py-16 text-center border border-dashed border-white/5 rounded-[3rem]">
-                  <p className="text-white/20 text-sm font-black uppercase tracking-widest">No anime in this category</p>
+                <div className="py-16 text-center border border-dashed border-border rounded-[3rem]">
+                  <p className="text-subtle text-sm font-black uppercase tracking-widest">No anime in this category</p>
                 </div>
               )}
             </motion.div>
@@ -171,7 +171,7 @@ export default function RankingsPage() {
             <button
               onClick={() => { setPage(p => Math.max(1, p - 1)); window.scrollTo({ top: 0, behavior: "smooth" }) }}
               disabled={page === 1}
-              className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-xs font-black text-white/50 hover:text-white hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed transition-all uppercase tracking-widest"
+              className="px-4 py-2 rounded-xl bg-surface border border-border text-xs font-black text-muted hover:text-foreground hover:bg-surface disabled:opacity-30 disabled:cursor-not-allowed transition-all uppercase tracking-widest"
             >
               <ChevronLeft size={14} className="inline -mt-0.5" /> Prev
             </button>
@@ -187,13 +187,13 @@ export default function RankingsPage() {
               }
               return nums.map((n, idx) =>
                 n === "..." ? (
-                  <span key={`d-${idx}`} className="text-white/20 px-1 text-xs">…</span>
+                  <span key={`d-${idx}`} className="text-subtle px-1 text-xs">…</span>
                 ) : (
                   <button key={n}
                     onClick={() => { setPage(n as number); window.scrollTo({ top: 0, behavior: "smooth" }) }}
                     className={`w-9 h-9 rounded-xl text-xs font-black transition-all ${
-                      page === n ? "bg-amber-500 text-black shadow-[0_0_16px_rgba(245,158,11,0.4)]"
-                        : "bg-white/5 border border-white/10 text-white/40 hover:text-white hover:bg-white/10"
+                      page === n ? "bg-accent text-black shadow-[0_0_16px_rgba(245,158,11,0.4)]"
+                        : "bg-surface border border-border text-muted hover:text-foreground hover:bg-surface"
                     }`}
                   >{n}</button>
                 )
@@ -203,12 +203,12 @@ export default function RankingsPage() {
             <button
               onClick={() => { setPage(p => Math.min(totalPages, p + 1)); window.scrollTo({ top: 0, behavior: "smooth" }) }}
               disabled={page >= totalPages}
-              className="px-4 py-2 rounded-xl bg-white/5 border border-white/10 text-xs font-black text-white/50 hover:text-white hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed transition-all uppercase tracking-widest"
+              className="px-4 py-2 rounded-xl bg-surface border border-border text-xs font-black text-muted hover:text-foreground hover:bg-surface disabled:opacity-30 disabled:cursor-not-allowed transition-all uppercase tracking-widest"
             >
               Next <ChevronRight size={14} className="inline -mt-0.5" />
             </button>
 
-            <span className="w-full text-center text-[10px] text-white/20 font-black uppercase tracking-widest mt-1">
+            <span className="w-full text-center text-[10px] text-subtle font-black uppercase tracking-widest mt-1">
               Page {page} of {totalPages.toLocaleString()} — {totalAnime.toLocaleString()} total
             </span>
           </div>

@@ -26,9 +26,9 @@ export default function SimilarAnime({ currentId, genres }: SimilarAnimeProps) {
   if (isLoading) {
     return (
       <div className="space-y-4">
-        <h3 className="text-xs font-black uppercase italic tracking-widest text-white/40">More Like This</h3>
+        <h3 className="text-xs font-black uppercase italic tracking-widest text-muted">More Like This</h3>
         <div className="flex items-center justify-center h-20">
-          <div className="w-6 h-6 rounded-full border-2 border-amber-500/30 border-t-indigo-500 animate-spin" />
+          <div className="w-6 h-6 rounded-full border-2 border-accent/30 border-t-indigo-500 animate-spin" />
         </div>
       </div>
     )
@@ -38,7 +38,7 @@ export default function SimilarAnime({ currentId, genres }: SimilarAnimeProps) {
 
   return (
     <div className="space-y-4">
-      <h3 className="text-xs font-black uppercase italic tracking-widest text-white/40">
+      <h3 className="text-xs font-black uppercase italic tracking-widest text-muted">
         More Like This
       </h3>
 
@@ -52,7 +52,7 @@ export default function SimilarAnime({ currentId, genres }: SimilarAnimeProps) {
           >
             <Link
               href={`/anime/${anime.id}`}
-              className="group flex items-center gap-3 p-2 rounded-2xl hover:bg-white/5 transition-all duration-300"
+              className="group flex items-center gap-3 p-2 rounded-2xl hover:bg-surface transition-all duration-300"
             >
               {/* Cover thumbnail */}
               <div className="relative h-14 w-10 flex-shrink-0 rounded-lg overflow-hidden">
@@ -68,15 +68,15 @@ export default function SimilarAnime({ currentId, genres }: SimilarAnimeProps) {
 
               {/* Info */}
               <div className="min-w-0 flex-1">
-                <p className="text-xs font-black text-white uppercase italic tracking-tighter leading-tight truncate group-hover:text-amber-300 transition-colors duration-300">
+                <p className="text-xs font-black text-foreground uppercase italic tracking-tighter leading-tight truncate group-hover:text-accent-bright transition-colors duration-300">
                   {anime.title}
                 </p>
-                <p className="text-[9px] font-bold text-white/30 uppercase tracking-wider mt-0.5 truncate">
+                <p className="text-[9px] font-bold text-subtle uppercase tracking-wider mt-0.5 truncate">
                   {anime.studio}
                 </p>
                 <div className="flex items-center gap-1 mt-1">
-                  <Star size={9} fill="#f59e0b" className="text-amber-400 flex-shrink-0" />
-                  <span className="text-[9px] font-black text-white/60">
+                  <Star size={9} fill="#f59e0b" className="text-accent-bright flex-shrink-0" />
+                  <span className="text-[9px] font-black text-muted">
                     {anime.rating.toFixed(1)}
                   </span>
                 </div>

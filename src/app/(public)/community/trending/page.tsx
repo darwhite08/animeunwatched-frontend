@@ -158,7 +158,7 @@ function PostCard({ post, index }: { post: TrendingPost; index: number }) {
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.06 }}
-      className="relative p-5 rounded-2xl bg-white/[0.02] border border-white/8 hover:border-white/15 transition-all space-y-3"
+      className="relative p-5 rounded-2xl bg-surface border border-border hover:border-border transition-all space-y-3"
     >
       {isHot && (
         <div className="absolute top-4 right-4 flex items-center gap-1 px-2.5 py-1 rounded-full bg-orange-500/15 border border-orange-500/25">
@@ -173,26 +173,26 @@ function PostCard({ post, index }: { post: TrendingPost; index: number }) {
           {post.avatar}
         </div>
         <div>
-          <p className="text-sm font-black text-white">{post.author}</p>
-          <p className="text-[10px] text-white/30">{post.timeAgo}</p>
+          <p className="text-sm font-black text-foreground">{post.author}</p>
+          <p className="text-[10px] text-subtle">{post.timeAgo}</p>
         </div>
       </div>
 
       {/* Anime badge */}
       {post.anime && (
-        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-lg bg-amber-500/8 border border-amber-500/15 text-[9px] font-bold text-amber-400">
+        <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-lg bg-accent/8 border border-accent/15 text-[9px] font-bold text-accent-bright">
           <Star size={8} /> {post.anime}
         </span>
       )}
 
       {/* Content */}
-      <p className="text-sm text-white/70 leading-relaxed line-clamp-3">{post.content}</p>
+      <p className="text-sm text-muted leading-relaxed line-clamp-3">{post.content}</p>
 
       {/* Tags */}
       {post.tags.length > 0 && (
         <div className="flex flex-wrap gap-1.5">
           {post.tags.map((t) => (
-            <span key={t} className="text-[9px] font-bold text-amber-400/50">
+            <span key={t} className="text-[9px] font-bold text-accent-bright/50">
               #{t}
             </span>
           ))}
@@ -200,11 +200,11 @@ function PostCard({ post, index }: { post: TrendingPost; index: number }) {
       )}
 
       {/* Actions */}
-      <div className="flex items-center gap-4 pt-1 border-t border-white/5">
+      <div className="flex items-center gap-4 pt-1 border-t border-border">
         <button
           onClick={() => setLiked((l) => !l)}
           className={`flex items-center gap-1.5 text-xs font-bold transition-colors ${
-            liked ? "text-rose-400" : "text-white/30 hover:text-rose-400"
+            liked ? "text-rose-400" : "text-subtle hover:text-rose-400"
           }`}
         >
           <Heart size={13} fill={liked ? "currentColor" : "none"} />
@@ -212,7 +212,7 @@ function PostCard({ post, index }: { post: TrendingPost; index: number }) {
         </button>
         <Link
           href={`/posts/${post.id}#comments`}
-          className="flex items-center gap-1.5 text-xs font-bold text-white/30 hover:text-amber-400 transition-colors"
+          className="flex items-center gap-1.5 text-xs font-bold text-subtle hover:text-accent-bright transition-colors"
         >
           <MessageSquare size={13} />
           {post.comments}
@@ -224,7 +224,7 @@ function PostCard({ post, index }: { post: TrendingPost; index: number }) {
 
 function PollBar({ pct, color }: { pct: number; color: string }) {
   return (
-    <div className="h-1.5 w-full rounded-full bg-white/5 overflow-hidden">
+    <div className="h-1.5 w-full rounded-full bg-surface overflow-hidden">
       <motion.div
         initial={{ width: 0 }}
         animate={{ width: `${pct}%` }}
@@ -235,21 +235,21 @@ function PollBar({ pct, color }: { pct: number; color: string }) {
   )
 }
 
-const POLL_COLORS = ["bg-amber-500", "bg-violet-500", "bg-blue-500"]
+const POLL_COLORS = ["bg-accent", "bg-violet-500", "bg-blue-500"]
 
 /* ── Page ── */
 export default function CommunityTrendingPage() {
   const { data: browseData } = useBrowseAnime({ limit: 4 })
   const ANIME_DISCUSSION = (browseData?.data ?? []).map(mapDTO).slice(0, 4)
   return (
-    <div className="min-h-screen bg-[#020202] text-white pb-32">
+    <div className="min-h-screen bg-background text-foreground pb-32">
       <div className="max-w-5xl mx-auto px-6 pt-28">
 
         {/* Breadcrumb */}
-        <nav className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-white/25 mb-8">
-          <Link href="/community" className="hover:text-white/60 transition-colors">Community</Link>
-          <ChevronRight size={11} className="text-white/15" />
-          <span className="text-amber-400">Trending</span>
+        <nav className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-subtle mb-8">
+          <Link href="/community" className="hover:text-muted transition-colors">Community</Link>
+          <ChevronRight size={11} className="text-subtle" />
+          <span className="text-accent-bright">Trending</span>
         </nav>
 
         {/* Header */}
@@ -258,13 +258,13 @@ export default function CommunityTrendingPage() {
           animate={{ opacity: 1, y: 0 }}
           className="mb-12"
         >
-          <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-amber-400/60 mb-3">
+          <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-accent-bright/60 mb-3">
             Live · Updated every 15 min
           </p>
           <div className="flex items-center gap-4 mb-2">
-            <h1 className="text-5xl sm:text-6xl font-black tracking-tighter uppercase italic text-white leading-none">
+            <h1 className="text-5xl sm:text-6xl font-black tracking-tighter uppercase italic text-foreground leading-none">
               Trending<br />
-              <span className="text-amber-400">Now</span>
+              <span className="text-accent-bright">Now</span>
               <span style={{color:"#f59e0b"}}>.</span>
             </h1>
             {/* Live pulse */}
@@ -273,7 +273,7 @@ export default function CommunityTrendingPage() {
               <span className="text-[9px] font-black uppercase tracking-widest text-rose-400">Live</span>
             </div>
           </div>
-          <p className="text-white/35 text-sm">What the Shinobi community can&apos;t stop talking about.</p>
+          <p className="text-subtle text-sm">What the Shinobi community can&apos;t stop talking about.</p>
         </motion.div>
 
         {/* ── SECTION 1: Trending Posts ── */}
@@ -284,13 +284,13 @@ export default function CommunityTrendingPage() {
                 <Flame size={15} className="text-orange-400" />
               </div>
               <div>
-                <p className="text-[9px] font-black uppercase tracking-[0.3em] text-white/30">Section 01</p>
-                <h2 className="text-lg font-black uppercase italic tracking-tighter text-white">Trending Posts</h2>
+                <p className="text-[9px] font-black uppercase tracking-[0.3em] text-subtle">Section 01</p>
+                <h2 className="text-lg font-black uppercase italic tracking-tighter text-foreground">Trending Posts</h2>
               </div>
             </div>
             <Link
               href="/community/feed"
-              className="flex items-center gap-1 text-[10px] font-black uppercase tracking-widest text-amber-400 hover:text-amber-300 transition-colors"
+              className="flex items-center gap-1 text-[10px] font-black uppercase tracking-widest text-accent-bright hover:text-accent-bright transition-colors"
             >
               View All <ArrowUpRight size={11} />
             </Link>
@@ -307,17 +307,17 @@ export default function CommunityTrendingPage() {
         <section className="mb-14">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-3">
-              <div className="h-8 w-8 rounded-xl bg-amber-500/15 border border-amber-500/20 flex items-center justify-center">
-                <TrendingUp size={15} className="text-amber-400" />
+              <div className="h-8 w-8 rounded-xl bg-accent/15 border border-accent/20 flex items-center justify-center">
+                <TrendingUp size={15} className="text-accent-bright" />
               </div>
               <div>
-                <p className="text-[9px] font-black uppercase tracking-[0.3em] text-white/30">Section 02</p>
-                <h2 className="text-lg font-black uppercase italic tracking-tighter text-white">Trending Discussions</h2>
+                <p className="text-[9px] font-black uppercase tracking-[0.3em] text-subtle">Section 02</p>
+                <h2 className="text-lg font-black uppercase italic tracking-tighter text-foreground">Trending Discussions</h2>
               </div>
             </div>
             <Link
               href="/community/anime"
-              className="flex items-center gap-1 text-[10px] font-black uppercase tracking-widest text-amber-400 hover:text-amber-300 transition-colors"
+              className="flex items-center gap-1 text-[10px] font-black uppercase tracking-widest text-accent-bright hover:text-accent-bright transition-colors"
             >
               View All <ArrowUpRight size={11} />
             </Link>
@@ -330,7 +330,7 @@ export default function CommunityTrendingPage() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.05 + i * 0.07 }}
-                className="group relative rounded-2xl overflow-hidden border border-white/8 hover:border-amber-500/30 transition-all cursor-pointer"
+                className="group relative rounded-2xl overflow-hidden border border-border hover:border-accent/30 transition-all cursor-pointer"
               >
                 <Link href={`/anime/${anime.id}`} className="block">
                   <div className="relative aspect-[3/4]">
@@ -342,12 +342,12 @@ export default function CommunityTrendingPage() {
                       sizes="200px"
                     />
                     <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black via-black/70 to-transparent p-4">
-                      <p className="text-xs font-black text-white uppercase italic tracking-tight leading-tight line-clamp-2 mb-2">
+                      <p className="text-xs font-black text-foreground uppercase italic tracking-tight leading-tight line-clamp-2 mb-2">
                         {anime.title}
                       </p>
                       <div className="flex items-center gap-1.5">
-                        <MessageSquare size={10} className="text-amber-400" />
-                        <span className="text-[10px] font-black text-white/60">
+                        <MessageSquare size={10} className="text-accent-bright" />
+                        <span className="text-[10px] font-black text-muted">
                           {DISCUSSION_COUNTS[i].toLocaleString()} posts
                         </span>
                       </div>
@@ -363,17 +363,17 @@ export default function CommunityTrendingPage() {
         <section className="mb-14">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-3">
-              <div className="h-8 w-8 rounded-xl bg-amber-500/15 border border-amber-500/20 flex items-center justify-center">
-                <Vote size={15} className="text-amber-400" />
+              <div className="h-8 w-8 rounded-xl bg-accent/15 border border-accent/20 flex items-center justify-center">
+                <Vote size={15} className="text-accent-bright" />
               </div>
               <div>
-                <p className="text-[9px] font-black uppercase tracking-[0.3em] text-white/30">Section 03</p>
-                <h2 className="text-lg font-black uppercase italic tracking-tighter text-white">Trending Polls</h2>
+                <p className="text-[9px] font-black uppercase tracking-[0.3em] text-subtle">Section 03</p>
+                <h2 className="text-lg font-black uppercase italic tracking-tighter text-foreground">Trending Polls</h2>
               </div>
             </div>
             <Link
               href="/poll"
-              className="flex items-center gap-1 text-[10px] font-black uppercase tracking-widest text-amber-400 hover:text-amber-300 transition-colors"
+              className="flex items-center gap-1 text-[10px] font-black uppercase tracking-widest text-accent-bright hover:text-accent-bright transition-colors"
             >
               View All <ArrowUpRight size={11} />
             </Link>
@@ -386,21 +386,21 @@ export default function CommunityTrendingPage() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.05 + i * 0.08 }}
-                className="p-5 rounded-2xl bg-white/[0.02] border border-white/8 hover:border-amber-500/20 transition-all space-y-4"
+                className="p-5 rounded-2xl bg-surface border border-border hover:border-accent/20 transition-all space-y-4"
               >
                 <div>
-                  <p className="text-sm font-black text-white leading-snug">{poll.question}</p>
+                  <p className="text-sm font-black text-foreground leading-snug">{poll.question}</p>
                   <div className="flex items-center gap-1.5 mt-1.5">
-                    <BarChart2 size={10} className="text-amber-400" />
-                    <span className="text-[10px] text-white/30">{poll.votes.toLocaleString()} votes</span>
+                    <BarChart2 size={10} className="text-accent-bright" />
+                    <span className="text-[10px] text-subtle">{poll.votes.toLocaleString()} votes</span>
                   </div>
                 </div>
                 <div className="space-y-2.5">
                   {poll.options.map((opt, oi) => (
                     <div key={opt.label} className="space-y-1">
                       <div className="flex items-center justify-between text-[10px]">
-                        <span className="font-bold text-white/70">{opt.label}</span>
-                        <span className="font-black text-white/50">{opt.pct}%</span>
+                        <span className="font-bold text-muted">{opt.label}</span>
+                        <span className="font-black text-muted">{opt.pct}%</span>
                       </div>
                       <PollBar pct={opt.pct} color={POLL_COLORS[oi % POLL_COLORS.length]} />
                     </div>
@@ -408,7 +408,7 @@ export default function CommunityTrendingPage() {
                 </div>
                 <Link
                   href="/poll"
-                  className="block text-center text-[10px] font-black uppercase tracking-widest text-amber-400/60 hover:text-amber-400 transition-colors"
+                  className="block text-center text-[10px] font-black uppercase tracking-widest text-accent-bright/60 hover:text-accent-bright transition-colors"
                 >
                   Vote →
                 </Link>
@@ -422,15 +422,15 @@ export default function CommunityTrendingPage() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
-          className="mt-4 pt-8 border-t border-white/5 flex items-center justify-between"
+          className="mt-4 pt-8 border-t border-border flex items-center justify-between"
         >
           <div>
-            <p className="text-[10px] font-black uppercase tracking-widest text-white/25">Want more?</p>
-            <p className="text-sm text-white/50 mt-0.5">See the full trending board with live rankings.</p>
+            <p className="text-[10px] font-black uppercase tracking-widest text-subtle">Want more?</p>
+            <p className="text-sm text-muted mt-0.5">See the full trending board with live rankings.</p>
           </div>
           <Link
             href="/community/trending"
-            className="flex items-center gap-2 px-6 py-3 rounded-xl bg-amber-600/15 border border-amber-500/25 text-[11px] font-black uppercase tracking-widest text-amber-400 hover:bg-amber-600/25 transition-all"
+            className="flex items-center gap-2 px-6 py-3 rounded-xl bg-accent/15 border border-accent/25 text-[11px] font-black uppercase tracking-widest text-accent-bright hover:bg-accent/25 transition-all"
           >
             Full Trending <ArrowUpRight size={12} />
           </Link>

@@ -164,26 +164,26 @@ function BlogCard({ blog, index }: { blog: Blog; index: number }) {
     >
       <Link
         href={`/blog/${blog.slug}`}
-        className="group block bg-zinc-900/60 border border-white/8 hover:border-amber-500/30 rounded-2xl overflow-hidden transition-all"
+        className="group block bg-zinc-900/60 border border-border hover:border-accent/30 rounded-2xl overflow-hidden transition-all"
       >
         {/* Cover gradient */}
         <div className={`h-40 w-full bg-gradient-to-br ${blog.coverGradient} relative`}>
           <div className="absolute inset-0 bg-black/30" />
           {/* Category badge */}
-          <span className="absolute top-3 left-3 px-2.5 py-1 rounded-lg bg-black/50 backdrop-blur-md border border-white/10 text-[9px] font-black uppercase tracking-widest text-white/70">
+          <span className="absolute top-3 left-3 px-2.5 py-1 rounded-lg bg-black/50 backdrop-blur-md border border-border text-[9px] font-black uppercase tracking-widest text-muted">
             {blog.category}
           </span>
         </div>
 
         {/* Body */}
         <div className="p-5 space-y-3">
-          <h2 className="text-sm font-black uppercase italic tracking-tight text-white leading-snug group-hover:text-amber-300 transition-colors line-clamp-2">
+          <h2 className="text-sm font-black uppercase italic tracking-tight text-foreground leading-snug group-hover:text-accent-bright transition-colors line-clamp-2">
             {blog.title}
           </h2>
-          <p className="text-xs text-white/45 leading-relaxed line-clamp-2">{blog.excerpt}</p>
+          <p className="text-xs text-muted leading-relaxed line-clamp-2">{blog.excerpt}</p>
 
           {/* Meta */}
-          <div className="flex items-center gap-3 text-[10px] text-white/30 pt-1 border-t border-white/5">
+          <div className="flex items-center gap-3 text-[10px] text-subtle pt-1 border-t border-border">
             <span className="flex items-center gap-1">
               <User size={9} /> {blog.author}
             </span>
@@ -198,7 +198,7 @@ function BlogCard({ blog, index }: { blog: Blog; index: number }) {
             <span className="flex items-center gap-1 text-[10px] text-rose-400/70">
               <Heart size={10} fill="currentColor" /> {blog.likes.toLocaleString()}
             </span>
-            <span className="flex items-center gap-1 text-[10px] text-white/30">
+            <span className="flex items-center gap-1 text-[10px] text-subtle">
               <Eye size={10} /> {blog.views.toLocaleString()}
             </span>
           </div>
@@ -232,23 +232,23 @@ export default function BlogListingPage() {
       : allBlogs.filter(b => b.category === activeCategory)
 
   return (
-    <div className="min-h-screen bg-[#020202] text-white pb-32">
+    <div className="min-h-screen bg-background text-foreground pb-32">
 
       {/* Cinematic header */}
-      <div className="relative border-b border-white/5 overflow-hidden">
+      <div className="relative border-b border-border overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-indigo-950/40 via-violet-950/20 to-transparent pointer-events-none" />
         <div className="max-w-6xl mx-auto px-6 py-16 relative">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            <span className="px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-[10px] font-black uppercase tracking-widest text-amber-400">
+            <span className="px-3 py-1 rounded-full bg-accent/10 border border-accent/20 text-[10px] font-black uppercase tracking-widest text-accent-bright">
               Community Long-form
             </span>
-            <h1 className="mt-4 text-5xl md:text-7xl font-black tracking-tighter uppercase italic text-white leading-none">
+            <h1 className="mt-4 text-5xl md:text-7xl font-black tracking-tighter uppercase italic text-foreground leading-none">
               The Chronicle<span style={{color:"#f59e0b"}}>.</span>
             </h1>
-            <p className="mt-3 text-white/30 text-base max-w-lg">
+            <p className="mt-3 text-subtle text-base max-w-lg">
               Long-form anime journalism by the community — deep dives, reviews, theories, and takes.
             </p>
           </motion.div>
@@ -261,8 +261,8 @@ export default function BlogListingPage() {
                 onClick={() => setActiveCategory(cat)}
                 className={`relative px-5 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${
                   activeCategory === cat
-                    ? "bg-amber-500 text-black shadow-[0_0_20px_rgba(245,158,11,0.4)]"
-                    : "bg-white/5 border border-white/8 text-white/40 hover:text-white hover:bg-white/10"
+                    ? "bg-accent text-black shadow-[0_0_20px_rgba(245,158,11,0.4)]"
+                    : "bg-surface border border-border text-muted hover:text-foreground hover:bg-surface"
                 }`}
               >
                 {cat}
@@ -289,7 +289,7 @@ export default function BlogListingPage() {
                 <BlogCard key={blog.id} blog={blog} index={i} />
               ))}
               {filtered.length === 0 && (
-                <div className="col-span-2 text-center py-20 text-white/20 text-sm font-bold">
+                <div className="col-span-2 text-center py-20 text-subtle text-sm font-bold">
                   No articles in this category yet.
                 </div>
               )}
@@ -301,33 +301,33 @@ export default function BlogListingPage() {
         <div className="space-y-6">
 
           {/* Top Authors */}
-          <div className="p-5 rounded-2xl bg-white/[0.02] border border-white/8 space-y-4">
+          <div className="p-5 rounded-2xl bg-surface border border-border space-y-4">
             <div className="flex items-center gap-2">
-              <TrendingUp size={14} className="text-amber-400" />
-              <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40">Top Authors</h3>
+              <TrendingUp size={14} className="text-accent-bright" />
+              <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-muted">Top Authors</h3>
             </div>
             <div className="space-y-3">
               {TOP_AUTHORS.map((author, i) => (
                 <div key={author.name} className="flex items-center gap-3">
-                  <span className="text-[10px] font-black text-white/20 w-4 shrink-0">{i + 1}</span>
+                  <span className="text-[10px] font-black text-subtle w-4 shrink-0">{i + 1}</span>
                   <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-xs font-black shrink-0">
                     {author.avatar}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-xs font-bold text-white/80 truncate">{author.name}</p>
-                    <p className="text-[9px] text-white/25">{author.articles} articles</p>
+                    <p className="text-xs font-bold text-muted truncate">{author.name}</p>
+                    <p className="text-[9px] text-subtle">{author.articles} articles</p>
                   </div>
-                  <ChevronRight size={12} className="text-white/20 shrink-0" />
+                  <ChevronRight size={12} className="text-subtle shrink-0" />
                 </div>
               ))}
             </div>
           </div>
 
           {/* Popular Tags */}
-          <div className="p-5 rounded-2xl bg-white/[0.02] border border-white/8 space-y-4">
+          <div className="p-5 rounded-2xl bg-surface border border-border space-y-4">
             <div className="flex items-center gap-2">
               <BookOpen size={14} className="text-violet-400" />
-              <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40">Popular Tags</h3>
+              <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-muted">Popular Tags</h3>
             </div>
             <div className="flex flex-wrap gap-2">
               {POPULAR_TAGS.map((tag, i) => (
@@ -336,7 +336,7 @@ export default function BlogListingPage() {
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: i * 0.03 }}
-                  className="px-3 py-1.5 rounded-full bg-white/5 border border-white/8 text-[10px] font-bold text-white/50 hover:text-amber-400 hover:border-amber-500/25 cursor-pointer transition-all"
+                  className="px-3 py-1.5 rounded-full bg-surface border border-border text-[10px] font-bold text-muted hover:text-accent-bright hover:border-accent/25 cursor-pointer transition-all"
                 >
                   #{tag}
                 </motion.span>
@@ -347,18 +347,18 @@ export default function BlogListingPage() {
           {/* Write CTA */}
           <Link
             href="/creators/create/blog"
-            className="flex items-center gap-3 p-5 rounded-2xl bg-gradient-to-br from-indigo-600/15 to-violet-600/10 border border-amber-500/20 hover:from-indigo-600/20 transition-all group"
+            className="flex items-center gap-3 p-5 rounded-2xl bg-gradient-to-br from-indigo-600/15 to-violet-600/10 border border-accent/20 hover:from-indigo-600/20 transition-all group"
           >
-            <div className="h-10 w-10 rounded-xl bg-amber-600/20 border border-amber-500/30 flex items-center justify-center shrink-0">
-              <PenSquare size={16} className="text-amber-400" />
+            <div className="h-10 w-10 rounded-xl bg-accent/20 border border-accent/30 flex items-center justify-center shrink-0">
+              <PenSquare size={16} className="text-accent-bright" />
             </div>
             <div>
-              <p className="text-sm font-bold text-white group-hover:text-amber-300 transition-colors">
+              <p className="text-sm font-bold text-foreground group-hover:text-accent-bright transition-colors">
                 Write for The Chronicle
               </p>
-              <p className="text-[10px] text-white/35 mt-0.5">Share your takes with the community</p>
+              <p className="text-[10px] text-subtle mt-0.5">Share your takes with the community</p>
             </div>
-            <ChevronRight size={14} className="text-amber-400/40 group-hover:text-amber-400 ml-auto transition-all group-hover:translate-x-0.5" />
+            <ChevronRight size={14} className="text-accent-bright/40 group-hover:text-accent-bright ml-auto transition-all group-hover:translate-x-0.5" />
           </Link>
         </div>
       </div>

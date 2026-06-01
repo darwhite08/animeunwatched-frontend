@@ -17,13 +17,13 @@ type Event = {
 
 const TYPE_CONFIG: Record<EventType, { icon: typeof Activity; color: string; bg: string }> = {
   watch:  { icon: Play,          color:"text-emerald-400", bg:"bg-emerald-500/10" },
-  rate:   { icon: Star,          color:"text-amber-400",   bg:"bg-amber-500/10"   },
-  add:    { icon: Bookmark,      color:"text-amber-400",  bg:"bg-amber-500/10"  },
+  rate:   { icon: Star,          color:"text-accent-bright",   bg:"bg-accent/10"   },
+  add:    { icon: Bookmark,      color:"text-accent-bright",  bg:"bg-accent/10"  },
   review: { icon: MessageCircle, color:"text-blue-400",    bg:"bg-blue-500/10"    },
   badge:  { icon: Trophy,        color:"text-purple-400",  bg:"bg-purple-500/10"  },
   like:   { icon: Heart,         color:"text-rose-400",    bg:"bg-rose-500/10"    },
   follow: { icon: Activity,      color:"text-teal-400",    bg:"bg-teal-500/10"    },
-  post:   { icon: MessageCircle, color:"text-amber-400",  bg:"bg-amber-500/10"  },
+  post:   { icon: MessageCircle, color:"text-accent-bright",  bg:"bg-accent/10"  },
 }
 
 const ALL_TYPES: EventType[] = ["watch","rate","add","review","badge","like","follow","post"]
@@ -85,25 +85,25 @@ export default function ActivityPage() {
   return (
     <div className="max-w-2xl mx-auto px-6 py-12 pb-32 space-y-8">
       <div>
-        <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-amber-400/60 mb-2">Your History</p>
-        <h1 className="text-3xl font-black tracking-tighter uppercase italic text-white">
+        <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-accent-bright/60 mb-2">Your History</p>
+        <h1 className="text-3xl font-black tracking-tighter uppercase italic text-foreground">
           Activity<span style={{color:"#f59e0b"}}>.</span>
         </h1>
-        <p className="text-white/35 text-sm mt-1">{EVENTS.length} event{EVENTS.length !== 1 ? "s" : ""} tracked</p>
+        <p className="text-subtle text-sm mt-1">{EVENTS.length} event{EVENTS.length !== 1 ? "s" : ""} tracked</p>
       </div>
 
       {/* Filters */}
       <div className="flex gap-2 flex-wrap items-center">
-        <Filter size={13} className="text-white/30" />
+        <Filter size={13} className="text-subtle" />
         <button onClick={() => setFilter("all")}
-          className={`px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-wider transition-all ${filter==="all"?"bg-amber-500 text-black":"bg-white/5 text-white/40 border border-white/5"}`}
+          className={`px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-wider transition-all ${filter==="all"?"bg-accent text-black":"bg-surface text-muted border border-border"}`}
         >All</button>
         {ALL_TYPES.map(t => {
           const cfg = TYPE_CONFIG[t]
           return (
             <button key={t} onClick={() => setFilter(t)}
               className={`px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-wider transition-all ${
-                filter===t ? `${cfg.bg} ${cfg.color} border border-current/20` : "bg-white/5 text-white/40 border border-white/5"
+                filter===t ? `${cfg.bg} ${cfg.color} border border-current/20` : "bg-surface text-muted border border-border"
               }`}
             >{t}</button>
           )
@@ -118,15 +118,15 @@ export default function ActivityPage() {
             const Icon = cfg.icon
             return (
               <motion.div key={ev.id} layout initial={{ opacity:0, y:8 }} animate={{ opacity:1, y:0 }} exit={{ opacity:0 }} transition={{ delay:i*0.03 }}>
-                <Link href={ev.link} className="flex items-center gap-4 p-4 rounded-2xl bg-white/[0.02] border border-white/8 hover:border-white/15 hover:bg-white/[0.04] transition-all group">
+                <Link href={ev.link} className="flex items-center gap-4 p-4 rounded-2xl bg-surface border border-border hover:border-border hover:bg-white/[0.04] transition-all group">
                   <div className={`w-9 h-9 rounded-xl ${cfg.bg} flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform`}>
                     <Icon size={15} className={cfg.color} />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-black text-white/80 group-hover:text-white transition-colors">{ev.title}</p>
-                    <p className="text-[10px] text-white/35 truncate mt-0.5">{ev.detail}</p>
+                    <p className="text-sm font-black text-muted group-hover:text-foreground transition-colors">{ev.title}</p>
+                    <p className="text-[10px] text-subtle truncate mt-0.5">{ev.detail}</p>
                   </div>
-                  <span className="text-[9px] font-mono text-white/20 shrink-0">{ev.time}</span>
+                  <span className="text-[9px] font-mono text-subtle shrink-0">{ev.time}</span>
                 </Link>
               </motion.div>
             )
@@ -134,8 +134,8 @@ export default function ActivityPage() {
         </AnimatePresence>
 
         {filtered.length === 0 && (
-          <div className="py-12 text-center border border-dashed border-white/5 rounded-[2rem]">
-            <p className="text-white/20 text-xs font-black uppercase tracking-widest">No {filter} events yet</p>
+          <div className="py-12 text-center border border-dashed border-border rounded-[2rem]">
+            <p className="text-subtle text-xs font-black uppercase tracking-widest">No {filter} events yet</p>
           </div>
         )}
       </div>

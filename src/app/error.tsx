@@ -9,7 +9,7 @@ export default function GlobalError({ error, reset }: { error: Error & { digest?
   useEffect(() => { console.error(error) }, [error])
 
   return (
-    <div className="min-h-screen bg-[#020202] text-white flex items-center justify-center px-6">
+    <div className="min-h-screen bg-background text-foreground flex items-center justify-center px-6">
       {/* Glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-red-600/8 blur-[150px] rounded-full pointer-events-none" />
 
@@ -27,15 +27,15 @@ export default function GlobalError({ error, reset }: { error: Error & { digest?
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-3xl font-black tracking-tighter uppercase italic text-white"
+            className="text-3xl font-black tracking-tighter uppercase italic text-foreground"
           >
             System Error<span className="text-red-500">.</span>
           </motion.h1>
-          <p className="text-white/40 text-sm leading-relaxed">
+          <p className="text-muted text-sm leading-relaxed">
             Something went wrong in the neural network. The error has been logged.
           </p>
           {error.digest && (
-            <p className="text-[9px] font-mono text-white/20 uppercase tracking-widest">
+            <p className="text-[9px] font-mono text-subtle uppercase tracking-widest">
               Error ID: {error.digest}
             </p>
           )}
@@ -56,7 +56,7 @@ export default function GlobalError({ error, reset }: { error: Error & { digest?
           </button>
           <Link
             href="/"
-            className="flex items-center gap-2 px-6 py-3.5 rounded-2xl border border-white/10 bg-white/[0.04] text-xs font-black uppercase tracking-widest text-white/60 hover:text-white hover:bg-white/[0.08] transition-all"
+            className="flex items-center gap-2 px-6 py-3.5 rounded-2xl border border-border bg-white/[0.04] text-xs font-black uppercase tracking-widest text-muted hover:text-foreground hover:bg-white/[0.08] transition-all"
           >
             <Home size={13} /> Go Home
           </Link>

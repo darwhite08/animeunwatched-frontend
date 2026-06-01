@@ -6,26 +6,26 @@ import { LayoutGrid } from "lucide-react"
 
 export default function CreatorLayout({ children }: { children: React.ReactNode }) {
   return (
-    <main className="min-h-screen bg-black text-white">
+    <main className="min-h-screen bg-background text-foreground">
       <div className="flex w-full">
         {/* Sidebar */}
-        <aside className="w-80 shrink-0 border-r border-white/10">
+        <aside className="w-80 shrink-0 border-r border-border">
           <CreatorSidebar />
         </aside>
 
         {/* Content area */}
         <section className="flex-1 min-h-screen flex flex-col">
           {/* Top bar with back link */}
-          <div className="flex items-center gap-3 px-10 py-4 border-b border-white/5 bg-black/40 backdrop-blur-md">
+          <div className="flex items-center gap-3 px-10 py-4 border-b border-border bg-black/40 backdrop-blur-md">
             <Link
               href="/dashboard"
-              className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-white/30 hover:text-white transition-colors"
+              className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-subtle hover:text-foreground transition-colors"
             >
               <LayoutGrid size={13} />
               Dashboard
             </Link>
-            <span className="text-white/15">/</span>
-            <span className="text-[10px] font-black uppercase tracking-widest text-white/50">
+            <span className="text-subtle">/</span>
+            <span className="text-[10px] font-black uppercase tracking-widest text-muted">
               Creator Studio
             </span>
           </div>

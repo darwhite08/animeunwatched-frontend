@@ -6,7 +6,7 @@ import { Home, Search, ArrowLeft } from "lucide-react"
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen bg-[#020202] text-white flex flex-col items-center justify-center px-6 relative overflow-hidden">
+    <div className="min-h-screen bg-background text-foreground flex flex-col items-center justify-center px-6 relative overflow-hidden">
       {/* Background glows */}
       <motion.div
         animate={{ scale: [1, 1.08, 1], opacity: [0.08, 0.18, 0.08] }}
@@ -52,7 +52,7 @@ export default function NotFound() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
-          className="text-2xl md:text-3xl font-black tracking-tighter text-white mb-4"
+          className="text-2xl md:text-3xl font-black tracking-tighter text-foreground mb-4"
         >
           This archive doesn't exist.
         </motion.h1>
@@ -61,7 +61,7 @@ export default function NotFound() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.25 }}
-          className="text-white/40 text-sm leading-relaxed mb-10"
+          className="text-muted text-sm leading-relaxed mb-10"
         >
           The page you're looking for has been moved, deleted, or never existed in the neural archives.
         </motion.p>
@@ -79,13 +79,13 @@ export default function NotFound() {
             <Home size={13} /> Go Home
           </Link>
           <Link href="/bestanimelist"
-            className="flex items-center gap-2.5 px-6 py-3.5 rounded-2xl border border-white/10 bg-white/[0.04] text-xs font-black uppercase tracking-widest text-white/60 hover:text-white hover:bg-white/[0.08] transition-all hover:-translate-y-0.5"
+            className="flex items-center gap-2.5 px-6 py-3.5 rounded-2xl border border-border bg-white/[0.04] text-xs font-black uppercase tracking-widest text-muted hover:text-foreground hover:bg-white/[0.08] transition-all hover:-translate-y-0.5"
           >
             <Search size={13} /> Browse Anime
           </Link>
           <button
             onClick={() => window.history.back()}
-            className="flex items-center gap-2.5 px-6 py-3.5 rounded-2xl border border-white/5 bg-transparent text-xs font-black uppercase tracking-widest text-white/30 hover:text-white/60 transition-all"
+            className="flex items-center gap-2.5 px-6 py-3.5 rounded-2xl border border-border bg-transparent text-xs font-black uppercase tracking-widest text-subtle hover:text-muted transition-all"
           >
             <ArrowLeft size={13} /> Go Back
           </button>

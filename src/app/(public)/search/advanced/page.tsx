@@ -98,8 +98,8 @@ function GenreChip({
       onClick={onToggle}
       className={`px-3 py-1.5 rounded-full border text-[10px] font-black uppercase tracking-wider transition-all ${
         selected
-          ? "bg-amber-600/20 border-amber-500/50 text-amber-300"
-          : "bg-white/[0.03] border-white/10 text-white/40 hover:border-white/20 hover:text-white/60"
+          ? "bg-accent/20 border-accent/50 text-accent-bright"
+          : "bg-surface border-border text-muted hover:border-border hover:text-muted"
       }`}
     >
       {selected && <Check size={8} className="inline mr-1" />}
@@ -127,7 +127,7 @@ function AnimeResultCard({
       className="group relative aspect-[2/3] cursor-pointer"
     >
       <div className="absolute -inset-0.5 bg-gradient-to-b from-indigo-500/0 to-indigo-500/20 rounded-[1.5rem] opacity-0 group-hover:opacity-100 transition-opacity" />
-      <div className="relative h-full w-full rounded-[1.4rem] overflow-hidden border border-white/5 group-hover:border-white/15 transition-colors">
+      <div className="relative h-full w-full rounded-[1.4rem] overflow-hidden border border-border group-hover:border-border transition-colors">
         <Image
           src={anime.image}
           alt={anime.title}
@@ -136,14 +136,14 @@ function AnimeResultCard({
           sizes="200px"
         />
         <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black via-black/70 to-transparent p-4">
-          <p className="text-xs font-black text-white uppercase tracking-tight leading-tight line-clamp-2">
+          <p className="text-xs font-black text-foreground uppercase tracking-tight leading-tight line-clamp-2">
             {anime.title}
           </p>
           <div className="flex items-center gap-1.5 mt-1.5">
-            <Star size={10} fill="#f59e0b" className="text-amber-400" />
-            <span className="text-[10px] font-black text-white/70">{anime.rating.toFixed(1)}</span>
-            <span className="text-[9px] text-white/30">{anime.year}</span>
-            <span className="text-[9px] text-white/30">{anime.type}</span>
+            <Star size={10} fill="#f59e0b" className="text-accent-bright" />
+            <span className="text-[10px] font-black text-muted">{anime.rating.toFixed(1)}</span>
+            <span className="text-[9px] text-subtle">{anime.year}</span>
+            <span className="text-[9px] text-subtle">{anime.type}</span>
           </div>
         </div>
       </div>
@@ -165,11 +165,11 @@ function SelectField({
 }) {
   return (
     <div className="space-y-1.5">
-      <label className="text-[9px] font-black uppercase tracking-[0.3em] text-white/30">{label}</label>
+      <label className="text-[9px] font-black uppercase tracking-[0.3em] text-subtle">{label}</label>
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full px-4 py-2.5 rounded-xl bg-white/[0.04] border border-white/10 text-sm text-white outline-none focus:border-amber-500/40 transition-colors appearance-none"
+        className="w-full px-4 py-2.5 rounded-xl bg-white/[0.04] border border-border text-sm text-foreground outline-none focus:border-accent/40 transition-colors appearance-none"
       >
         {options.map((o) => (
           <option key={o.value} value={o.value} className="bg-[#111]">
@@ -195,12 +195,12 @@ function InputField({
 }) {
   return (
     <div className="space-y-1.5">
-      <label className="text-[9px] font-black uppercase tracking-[0.3em] text-white/30">{label}</label>
+      <label className="text-[9px] font-black uppercase tracking-[0.3em] text-subtle">{label}</label>
       <input
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="w-full px-4 py-2.5 rounded-xl bg-white/[0.04] border border-white/10 text-sm text-white placeholder:text-white/20 outline-none focus:border-amber-500/40 transition-colors"
+        className="w-full px-4 py-2.5 rounded-xl bg-white/[0.04] border border-border text-sm text-foreground placeholder:text-subtle outline-none focus:border-accent/40 transition-colors"
       />
     </div>
   )
@@ -280,23 +280,23 @@ function AdvancedSearchContent() {
         animate={{ opacity: 1, y: 0 }}
         className="mb-10"
       >
-        <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-amber-400/60 mb-3">
+        <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-accent-bright/60 mb-3">
           Neural Archive
         </p>
         <div className="flex items-end justify-between gap-4 flex-wrap">
-          <h1 className="text-5xl sm:text-6xl font-black tracking-tighter uppercase italic text-white leading-none">
+          <h1 className="text-5xl sm:text-6xl font-black tracking-tighter uppercase italic text-foreground leading-none">
             Advanced<br />
-            <span className="text-amber-400">Search</span>
+            <span className="text-accent-bright">Search</span>
             <span style={{color:"#f59e0b"}}>.</span>
           </h1>
           <Link
             href="/search"
-            className="text-[10px] font-black uppercase tracking-widest text-white/25 hover:text-white/50 transition-colors mb-2"
+            className="text-[10px] font-black uppercase tracking-widest text-subtle hover:text-muted transition-colors mb-2"
           >
             ← Basic Search
           </Link>
         </div>
-        <p className="text-white/35 text-sm mt-2">Filter across the entire anime catalog with precision.</p>
+        <p className="text-subtle text-sm mt-2">Filter across the entire anime catalog with precision.</p>
       </motion.div>
 
       {/* Search type selector */}
@@ -312,8 +312,8 @@ function AdvancedSearchContent() {
             onClick={() => setSearchType(id)}
             className={`flex items-center gap-2 px-5 py-2.5 rounded-xl border text-xs font-black uppercase tracking-widest transition-all ${
               searchType === id
-                ? "bg-amber-600/20 border-amber-500/40 text-amber-300"
-                : "bg-white/[0.02] border-white/8 text-white/40 hover:border-white/20 hover:text-white/70"
+                ? "bg-accent/20 border-accent/40 text-accent-bright"
+                : "bg-surface border-border text-muted hover:border-border hover:text-muted"
             }`}
           >
             <Icon size={13} />
@@ -331,17 +331,17 @@ function AdvancedSearchContent() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
             transition={{ delay: 0.05 }}
-            className="p-6 rounded-2xl bg-white/[0.02] border border-white/8 mb-8 space-y-6"
+            className="p-6 rounded-2xl bg-surface border border-border mb-8 space-y-6"
           >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                <SlidersHorizontal size={15} className="text-amber-400" />
-                <p className="text-sm font-black uppercase italic tracking-tighter text-white">Filters</p>
+                <SlidersHorizontal size={15} className="text-accent-bright" />
+                <p className="text-sm font-black uppercase italic tracking-tighter text-foreground">Filters</p>
               </div>
               {hasActiveFilters && (
                 <button
                   onClick={clearFilters}
-                  className="flex items-center gap-1 text-[10px] font-black uppercase tracking-widest text-white/30 hover:text-white/60 transition-colors"
+                  className="flex items-center gap-1 text-[10px] font-black uppercase tracking-widest text-subtle hover:text-muted transition-colors"
                 >
                   <X size={11} /> Clear All
                 </button>
@@ -358,10 +358,10 @@ function AdvancedSearchContent() {
 
             {/* Genre multi-select */}
             <div className="space-y-2">
-              <label className="text-[9px] font-black uppercase tracking-[0.3em] text-white/30">
+              <label className="text-[9px] font-black uppercase tracking-[0.3em] text-subtle">
                 Genres
                 {animeFilters.genres.length > 0 && (
-                  <span className="ml-2 text-amber-400">{animeFilters.genres.length} selected</span>
+                  <span className="ml-2 text-accent-bright">{animeFilters.genres.length} selected</span>
                 )}
               </label>
               <div className="flex flex-wrap gap-2">
@@ -421,13 +421,13 @@ function AdvancedSearchContent() {
             />
 
             {/* Actions */}
-            <div className="flex items-center gap-3 pt-2 border-t border-white/5">
-              <div className="text-xs text-white/30">
-                <span className="font-black text-white">{animeResults.length}</span> results
+            <div className="flex items-center gap-3 pt-2 border-t border-border">
+              <div className="text-xs text-subtle">
+                <span className="font-black text-foreground">{animeResults.length}</span> results
               </div>
               <button
                 onClick={handleSaveSearch}
-                className="ml-auto flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/8 hover:border-white/20 text-xs font-black uppercase tracking-widest text-white/60 hover:text-white transition-all"
+                className="ml-auto flex items-center gap-2 px-5 py-2.5 rounded-xl bg-surface hover:bg-surface border border-border hover:border-border text-xs font-black uppercase tracking-widest text-muted hover:text-foreground transition-all"
               >
                 <Save size={13} /> Save Search
               </button>
@@ -442,11 +442,11 @@ function AdvancedSearchContent() {
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
-            className="p-6 rounded-2xl bg-white/[0.02] border border-white/8 mb-8"
+            className="p-6 rounded-2xl bg-surface border border-border mb-8"
           >
             <div className="flex items-center gap-3 mb-4">
-              <SlidersHorizontal size={15} className="text-amber-400" />
-              <p className="text-sm font-black uppercase italic tracking-tighter text-white">
+              <SlidersHorizontal size={15} className="text-accent-bright" />
+              <p className="text-sm font-black uppercase italic tracking-tighter text-foreground">
                 {searchType.charAt(0).toUpperCase() + searchType.slice(1)} Filters
               </p>
             </div>
@@ -460,7 +460,7 @@ function AdvancedSearchContent() {
               <div className="flex items-end">
                 <button
                   onClick={handleSaveSearch}
-                  className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-amber-600/15 border border-amber-500/25 text-xs font-black uppercase tracking-widest text-amber-400 hover:bg-amber-600/25 transition-all"
+                  className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-accent/15 border border-accent/25 text-xs font-black uppercase tracking-widest text-accent-bright hover:bg-accent/25 transition-all"
                 >
                   <Save size={13} /> Save Search
                 </button>
@@ -478,7 +478,7 @@ function AdvancedSearchContent() {
           <motion.div key="anime-results" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
             {animeResults.length > 0 ? (
               <>
-                <p className="text-[9px] font-black uppercase tracking-[0.3em] text-white/25 mb-5">
+                <p className="text-[9px] font-black uppercase tracking-[0.3em] text-subtle mb-5">
                   {animeResults.length} anime found
                 </p>
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
@@ -488,12 +488,12 @@ function AdvancedSearchContent() {
                 </div>
               </>
             ) : (
-              <div className="py-20 text-center border border-dashed border-white/5 rounded-[3rem]">
-                <Search size={28} className="mx-auto mb-3 text-white/15" />
-                <p className="text-white/25 text-sm font-black uppercase tracking-widest">No anime matched your filters</p>
+              <div className="py-20 text-center border border-dashed border-border rounded-[3rem]">
+                <Search size={28} className="mx-auto mb-3 text-subtle" />
+                <p className="text-subtle text-sm font-black uppercase tracking-widest">No anime matched your filters</p>
                 <button
                   onClick={clearFilters}
-                  className="mt-4 text-[10px] font-black uppercase tracking-widest text-amber-400 hover:text-amber-300 transition-colors"
+                  className="mt-4 text-[10px] font-black uppercase tracking-widest text-accent-bright hover:text-accent-bright transition-colors"
                 >
                   Clear Filters →
                 </button>
@@ -513,18 +513,18 @@ function AdvancedSearchContent() {
                 initial={{ opacity: 0, y: 6 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.05 }}
-                className="flex items-center gap-4 p-5 rounded-2xl bg-white/[0.02] border border-white/8 hover:border-white/15 hover:bg-white/[0.04] transition-all group cursor-pointer"
+                className="flex items-center gap-4 p-5 rounded-2xl bg-surface border border-border hover:border-border hover:bg-white/[0.04] transition-all group cursor-pointer"
               >
                 <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-lg font-black shrink-0">
                   {u.name[0]}
                 </div>
                 <div className="flex-1">
-                  <p className="font-black text-white group-hover:text-amber-300 transition-colors">{u.name}</p>
-                  <p className="text-xs text-white/35 mt-0.5">{u.bio}</p>
+                  <p className="font-black text-foreground group-hover:text-accent-bright transition-colors">{u.name}</p>
+                  <p className="text-xs text-subtle mt-0.5">{u.bio}</p>
                 </div>
                 <div className="text-right">
-                  <p className="text-lg font-black text-white">{u.count}</p>
-                  <p className="text-[9px] text-white/25 uppercase tracking-wider">Archived</p>
+                  <p className="text-lg font-black text-foreground">{u.count}</p>
+                  <p className="text-[9px] text-subtle uppercase tracking-wider">Archived</p>
                 </div>
               </motion.div>
             ))}
@@ -542,10 +542,10 @@ function AdvancedSearchContent() {
                 initial={{ opacity: 0, y: 6 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.05 }}
-                className="p-5 rounded-2xl bg-white/[0.02] border border-white/8 hover:border-white/15 transition-all cursor-pointer"
+                className="p-5 rounded-2xl bg-surface border border-border hover:border-border transition-all cursor-pointer"
               >
-                <p className="font-bold text-white/80 hover:text-white transition-colors">{p.title}</p>
-                <div className="flex items-center gap-4 mt-2 text-xs text-white/25">
+                <p className="font-bold text-muted hover:text-foreground transition-colors">{p.title}</p>
+                <div className="flex items-center gap-4 mt-2 text-xs text-subtle">
                   <span>{p.author}</span>
                   <span>{p.time}</span>
                   <span>{p.likes} likes</span>
@@ -566,13 +566,13 @@ function AdvancedSearchContent() {
                 initial={{ opacity: 0, y: 6 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.06 }}
-                className="p-5 rounded-2xl bg-white/[0.02] border border-white/8 hover:border-amber-500/20 transition-all cursor-pointer"
+                className="p-5 rounded-2xl bg-surface border border-border hover:border-accent/20 transition-all cursor-pointer"
               >
                 <div className="flex items-start justify-between gap-3 mb-2">
-                  <p className="font-black text-white">{c.name}</p>
-                  <span className="text-[10px] font-black text-amber-400 shrink-0">{c.members.toLocaleString()} members</span>
+                  <p className="font-black text-foreground">{c.name}</p>
+                  <span className="text-[10px] font-black text-accent-bright shrink-0">{c.members.toLocaleString()} members</span>
                 </div>
-                <p className="text-xs text-white/40 leading-snug">{c.desc}</p>
+                <p className="text-xs text-muted leading-snug">{c.desc}</p>
               </motion.div>
             ))}
           </motion.div>
@@ -589,10 +589,10 @@ function AdvancedSearchContent() {
                 initial={{ opacity: 0, y: 6 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.06 }}
-                className="p-5 rounded-2xl bg-white/[0.02] border border-white/8 hover:border-white/15 transition-all cursor-pointer"
+                className="p-5 rounded-2xl bg-surface border border-border hover:border-border transition-all cursor-pointer"
               >
                 <p className="font-black text-white/90">{b.title}</p>
-                <div className="flex items-center gap-4 mt-2 text-xs text-white/25">
+                <div className="flex items-center gap-4 mt-2 text-xs text-subtle">
                   <span>{b.author}</span>
                   <span>{b.reads.toLocaleString()} reads</span>
                 </div>
@@ -612,19 +612,19 @@ function AdvancedSearchContent() {
                 initial={{ opacity: 0, y: 6 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.06 }}
-                className="p-5 rounded-2xl bg-white/[0.02] border border-white/8 hover:border-white/15 transition-all cursor-pointer"
+                className="p-5 rounded-2xl bg-surface border border-border hover:border-border transition-all cursor-pointer"
               >
                 <div className="flex items-start justify-between gap-3 mb-2">
                   <div>
-                    <p className="text-[10px] font-black uppercase tracking-wider text-amber-400 mb-0.5">{r.anime}</p>
-                    <p className="text-sm text-white/70 italic line-clamp-2">{r.preview}</p>
+                    <p className="text-[10px] font-black uppercase tracking-wider text-accent-bright mb-0.5">{r.anime}</p>
+                    <p className="text-sm text-muted italic line-clamp-2">{r.preview}</p>
                   </div>
                   <div className="flex items-center gap-1 shrink-0">
-                    <Star size={12} fill="#f59e0b" className="text-amber-400" />
-                    <span className="font-black text-white">{r.rating}</span>
+                    <Star size={12} fill="#f59e0b" className="text-accent-bright" />
+                    <span className="font-black text-foreground">{r.rating}</span>
                   </div>
                 </div>
-                <p className="text-[10px] text-white/25">by {r.author}</p>
+                <p className="text-[10px] text-subtle">by {r.author}</p>
               </motion.div>
             ))}
           </motion.div>
@@ -639,8 +639,8 @@ function AdvancedSearchContent() {
 /* ── Page export ── */
 export default function AdvancedSearchPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-[#020202]" />}>
-      <div className="min-h-screen bg-[#020202] text-white">
+    <Suspense fallback={<div className="min-h-screen bg-background" />}>
+      <div className="min-h-screen bg-background text-foreground">
         <AdvancedSearchContent />
       </div>
     </Suspense>

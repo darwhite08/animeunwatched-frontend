@@ -14,9 +14,9 @@ export default function AchievementsPage() {
   const nextLevelRep = ((level + 1) ** 2) * 10
 
   const MILESTONES = [
-    { icon: Trophy, label: "Next Badge",    value: level >= 10 ? "Legendary" : `Level ${level + 1}`, desc: `${rep.toLocaleString()} / ${nextLevelRep.toLocaleString()} rep`, color: "text-amber-400",  bg: "bg-amber-500/10",  border: "border-amber-500/20"  },
+    { icon: Trophy, label: "Next Badge",    value: level >= 10 ? "Legendary" : `Level ${level + 1}`, desc: `${rep.toLocaleString()} / ${nextLevelRep.toLocaleString()} rep`, color: "text-accent-bright",  bg: "bg-accent/10",  border: "border-accent/20"  },
     { icon: Flame,  label: "Current Level", value: `Level ${level}`,  desc: `${grade} Shinobi`,       color: "text-orange-400", bg: "bg-orange-500/10", border: "border-orange-500/20" },
-    { icon: Medal,  label: "Status",        value: grade,             desc: "Neural rank",             color: "text-amber-400",  bg: "bg-amber-500/10",  border: "border-amber-500/20"  },
+    { icon: Medal,  label: "Status",        value: grade,             desc: "Neural rank",             color: "text-accent-bright",  bg: "bg-accent/10",  border: "border-accent/20"  },
     { icon: Zap,    label: "Reputation",    value: rep.toLocaleString(), desc: "Total points",         color: "text-violet-400", bg: "bg-violet-500/10", border: "border-violet-500/20" },
   ]
 
@@ -25,13 +25,13 @@ export default function AchievementsPage() {
       {/* Header */}
       <div>
         <div className="flex items-center gap-2 mb-3">
-          <Trophy size={14} className="text-amber-400" />
+          <Trophy size={14} className="text-accent-bright" />
           <p className="text-[9px] font-mono uppercase tracking-[0.4em]"
             style={{ color: "rgba(245,158,11,0.6)" }}>
             Milestone Tracker
           </p>
         </div>
-        <h1 className="text-4xl font-black tracking-tighter uppercase italic text-white">
+        <h1 className="text-4xl font-black tracking-tighter uppercase italic text-foreground">
           Achievements<span style={{ color: "#f59e0b" }}>.</span>
         </h1>
         <div className="mt-5 h-px" style={{
@@ -51,10 +51,10 @@ export default function AchievementsPage() {
               <m.icon size={16} className={m.color} />
             </div>
             <div>
-              <p className="text-xl font-black text-white tracking-tighter">{m.value}</p>
-              <p className="text-[9px] font-black uppercase tracking-[0.2em] text-white/40">{m.label}</p>
+              <p className="text-xl font-black text-foreground tracking-tighter">{m.value}</p>
+              <p className="text-[9px] font-black uppercase tracking-[0.2em] text-muted">{m.label}</p>
             </div>
-            <p className="text-[9px] text-white/30 leading-relaxed">{m.desc}</p>
+            <p className="text-[9px] text-subtle leading-relaxed">{m.desc}</p>
           </motion.div>
         ))}
       </div>

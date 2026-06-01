@@ -11,7 +11,7 @@ export default function OnboardingPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#020202]">
+    <div className="min-h-screen bg-background">
       <OnboardingModal isOpen onComplete={handleComplete} />
     </div>
   )

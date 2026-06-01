@@ -14,7 +14,7 @@ const CONFIG: Record<ToastType, {
 }> = {
   success: {
     icon: CheckCircle,
-    iconClass: "text-amber-400",
+    iconClass: "text-accent-bright",
     containerStyle: {
       background: "linear-gradient(135deg, rgba(245,158,11,0.13), rgba(251,191,36,0.06))",
       border: "1px solid rgba(245,158,11,0.32)",
@@ -32,7 +32,7 @@ const CONFIG: Record<ToastType, {
   },
   info: {
     icon: Info,
-    iconClass: "text-amber-400",
+    iconClass: "text-accent-bright",
     containerStyle: {
       background: "linear-gradient(135deg, rgba(99,102,241,0.13), rgba(79,70,229,0.06))",
       border: "1px solid rgba(99,102,241,0.32)",
@@ -64,7 +64,7 @@ export default function ToastContainer() {
               <p className="text-[11px] font-bold flex-1 leading-snug text-white/85">{toast.message}</p>
               <button
                 onClick={() => dismiss(toast.id)}
-                className="shrink-0 text-white/20 hover:text-white/60 transition-colors ml-1"
+                className="shrink-0 text-subtle hover:text-muted transition-colors ml-1"
               >
                 <X size={12} />
               </button>

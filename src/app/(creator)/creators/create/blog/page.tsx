@@ -56,7 +56,7 @@ export default function CreateBlogPage() {
         </div>
         <div>
           <h1 className="text-2xl font-semibold">New Blog Article</h1>
-          <p className="text-sm text-white/40">Write a long-form piece for the community</p>
+          <p className="text-sm text-muted">Write a long-form piece for the community</p>
         </div>
       </div>
 
@@ -68,7 +68,7 @@ export default function CreateBlogPage() {
           className={`rounded-xl px-4 py-3 text-sm border ${
             status === "published"
               ? "bg-emerald-600/20 border-emerald-500/30 text-emerald-400"
-              : "bg-amber-600/20 border-amber-500/30 text-amber-400"
+              : "bg-accent/20 border-accent/30 text-accent-bright"
           }`}
         >
           {status === "published" ? "Article published!" : "Draft saved."}
@@ -76,14 +76,14 @@ export default function CreateBlogPage() {
       )}
 
       {/* Editor card */}
-      <div className="bg-zinc-900 border border-white/10 rounded-2xl overflow-hidden">
+      <div className="bg-zinc-900 border border-border rounded-2xl overflow-hidden">
         {/* Cover URL */}
         <div className="px-6 pt-6">
           <input
             value={coverUrl}
             onChange={e => setCoverUrl(e.target.value)}
             placeholder="Cover image URL (optional)"
-            className="w-full bg-zinc-800 rounded-xl px-4 py-3 text-sm outline-none placeholder:text-white/30 focus:ring-1 focus:ring-purple-500/50"
+            className="w-full bg-zinc-800 rounded-xl px-4 py-3 text-sm outline-none placeholder:text-subtle focus:ring-1 focus:ring-purple-500/50"
           />
           {coverUrl && (
             <div className="mt-3 rounded-xl overflow-hidden h-40 bg-zinc-800">
@@ -98,25 +98,25 @@ export default function CreateBlogPage() {
             value={title}
             onChange={e => setTitle(e.target.value)}
             placeholder="Article title…"
-            className="w-full bg-transparent text-2xl font-semibold outline-none placeholder:text-white/20"
+            className="w-full bg-transparent text-2xl font-semibold outline-none placeholder:text-subtle"
           />
         </div>
 
         {/* Meta */}
-        <div className="px-6 pt-2 pb-3 flex items-center gap-3 text-xs text-white/30 border-b border-white/5">
+        <div className="px-6 pt-2 pb-3 flex items-center gap-3 text-xs text-subtle border-b border-border">
           <span>{wordCount} words</span>
           <span>·</span>
           <span>{readTime} min read</span>
         </div>
 
         {/* Toolbar */}
-        <div className="flex items-center gap-1 px-6 py-3 border-b border-white/5">
+        <div className="flex items-center gap-1 px-6 py-3 border-b border-border">
           {TOOLBAR.map(({ icon: Icon, label, md }) => (
             <button
               key={label}
               onClick={() => insertMarkdown(md)}
               title={label}
-              className="p-2 rounded-lg text-white/40 hover:text-white hover:bg-white/5 transition"
+              className="p-2 rounded-lg text-muted hover:text-foreground hover:bg-surface transition"
             >
               <Icon size={15} />
             </button>
@@ -124,7 +124,7 @@ export default function CreateBlogPage() {
           <div className="ml-auto">
             <button
               onClick={() => setPreview(p => !p)}
-              className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs text-white/50 hover:bg-white/5 transition"
+              className="flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs text-muted hover:bg-surface transition"
             >
               {preview ? <EyeOff size={13} /> : <Eye size={13} />}
               {preview ? "Editor" : "Preview"}
@@ -135,8 +135,8 @@ export default function CreateBlogPage() {
         {/* Body */}
         <div className="px-6 py-4">
           {preview ? (
-            <div className="prose prose-invert prose-sm max-w-none min-h-[280px] text-white/80 whitespace-pre-wrap text-sm leading-relaxed">
-              {body || <span className="text-white/20">Nothing to preview yet…</span>}
+            <div className="prose prose-invert prose-sm max-w-none min-h-[280px] text-muted whitespace-pre-wrap text-sm leading-relaxed">
+              {body || <span className="text-subtle">Nothing to preview yet…</span>}
             </div>
           ) : (
             <textarea
@@ -144,13 +144,13 @@ export default function CreateBlogPage() {
               onChange={e => setBody(e.target.value)}
               placeholder="Start writing… Markdown is supported."
               rows={14}
-              className="w-full bg-transparent text-sm resize-none outline-none placeholder:text-white/20 leading-relaxed"
+              className="w-full bg-transparent text-sm resize-none outline-none placeholder:text-subtle leading-relaxed"
             />
           )}
         </div>
 
         {/* Actions */}
-        <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-white/5">
+        <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-border">
           <button
             onClick={() => handleAction("draft")}
             disabled={!title.trim() || !body.trim()}

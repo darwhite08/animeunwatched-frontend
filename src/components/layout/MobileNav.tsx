@@ -27,7 +27,7 @@ export default function MobileNav() {
 
   return (
     <nav className="fixed bottom-0 inset-x-0 z-[80] md:hidden">
-      <div className="bg-[#0a0a0a]/95 backdrop-blur-2xl border-t border-white/8 px-2 pb-safe">
+      <div className="bg-surface/95 backdrop-blur-2xl border-t border-border px-2 pb-safe">
         <div className="flex items-center justify-around py-2">
           {TABS.map(({ href, icon: Icon, label }) => {
             const active = pathname === href || pathname.startsWith(href + "/") ||
@@ -41,13 +41,13 @@ export default function MobileNav() {
               >
                 {active && (
                   <motion.div layoutId="mobile-nav-active"
-                    className="absolute inset-0 bg-amber-600/20 rounded-xl"
+                    className="absolute inset-0 bg-accent/20 rounded-xl"
                     transition={{ type: "spring", stiffness: 380, damping: 30 }}
                   />
                 )}
 
                 <div className="relative">
-                  <Icon size={20} className={`transition-colors ${active ? "text-amber-400" : "text-white/35"}`} />
+                  <Icon size={20} className={`transition-colors ${active ? "text-accent-bright" : "text-subtle"}`} />
                   {label === "Alerts" && unreadCount > 0 && (
                     <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full flex items-center justify-center text-[8px] font-black text-black"
                       style={{ background: "linear-gradient(135deg,#fbbf24,#f59e0b)" }}>
@@ -57,7 +57,7 @@ export default function MobileNav() {
                 </div>
 
                 <span className={`text-[9px] font-black uppercase tracking-wider transition-colors ${
-                  active ? "text-amber-400" : "text-white/25"
+                  active ? "text-accent-bright" : "text-subtle"
                 }`}>
                   {label}
                 </span>

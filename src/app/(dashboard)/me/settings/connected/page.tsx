@@ -34,10 +34,10 @@ export default function ConnectedAccountsPage() {
   return (
     <div className="max-w-2xl mx-auto px-6 py-12 space-y-8 pb-32">
       <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-        <p className="text-[9px] font-mono font-black uppercase tracking-[0.4em] text-amber-400/60 mb-2">Settings · Connected</p>
-        <h1 className="text-4xl font-black tracking-tighter text-white uppercase italic leading-none">Connected Accounts</h1>
-        <p className="text-xs text-white/30 mt-2 flex items-center gap-2">
-          <Link2 size={11} className="text-amber-400" /> Manage OAuth providers linked to your Kaiveron account.
+        <p className="text-[9px] font-mono font-black uppercase tracking-[0.4em] text-accent-bright/60 mb-2">Settings · Connected</p>
+        <h1 className="text-4xl font-black tracking-tighter text-foreground uppercase italic leading-none">Connected Accounts</h1>
+        <p className="text-xs text-subtle mt-2 flex items-center gap-2">
+          <Link2 size={11} className="text-accent-bright" /> Manage OAuth providers linked to your Kaiveron account.
         </p>
       </motion.div>
 
@@ -48,20 +48,20 @@ export default function ConnectedAccountsPage() {
 
           return (
             <motion.div key={providerKey} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 + i * 0.06 }}
-              className="flex items-center gap-5 p-5 rounded-2xl border border-white/8 bg-white/[0.02]">
+              className="flex items-center gap-5 p-5 rounded-2xl border border-border bg-surface">
               {/* Provider icon */}
-              <div className={`h-12 w-12 rounded-2xl bg-gradient-to-br ${meta.color} flex items-center justify-center text-white font-black text-lg shrink-0`}>
+              <div className={`h-12 w-12 rounded-2xl bg-gradient-to-br ${meta.color} flex items-center justify-center text-foreground font-black text-lg shrink-0`}>
                 {meta.icon}
               </div>
 
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-black text-white">{meta.label}</p>
+                <p className="text-sm font-black text-foreground">{meta.label}</p>
                 {connected ? (
                   <p className="text-[10px] text-emerald-400/70 mt-0.5">
                     Connected since {new Date(connected.createdAt).toLocaleDateString("en-US", { month: "short", year: "numeric" })}
                   </p>
                 ) : (
-                  <p className="text-[10px] text-white/30 mt-0.5">Not connected</p>
+                  <p className="text-[10px] text-subtle mt-0.5">Not connected</p>
                 )}
               </div>
 
@@ -72,7 +72,7 @@ export default function ConnectedAccountsPage() {
               ) : (
                 <a
                   href={providerKey === "google" ? "/api/v1/auth/google/redirect" : "#"}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-white/5 border border-white/10 text-[9px] font-black uppercase tracking-widest text-white/50 hover:text-white hover:border-white/20 transition-all shrink-0"
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-surface border border-border text-[9px] font-black uppercase tracking-widest text-muted hover:text-foreground hover:border-border transition-all shrink-0"
                 >
                   <Plus size={10} /> Connect
                 </a>
@@ -83,12 +83,12 @@ export default function ConnectedAccountsPage() {
       </div>
 
       {isLoading && (
-        <p className="text-xs text-white/25 text-center">Loading connected accounts…</p>
+        <p className="text-xs text-subtle text-center">Loading connected accounts…</p>
       )}
 
-      <div className="p-5 rounded-2xl border border-white/5 bg-white/[0.02] space-y-2">
-        <p className="text-xs font-black text-white/50">About connected accounts</p>
-        <p className="text-[10px] text-white/25 leading-relaxed">
+      <div className="p-5 rounded-2xl border border-border bg-surface space-y-2">
+        <p className="text-xs font-black text-muted">About connected accounts</p>
+        <p className="text-[10px] text-subtle leading-relaxed">
           Connected accounts let you sign in to Kaiveron using a provider without a password.
           Adding Google lets you use "Sign in with Google" on the login page.
           Your email and profile data are only read on first connection.

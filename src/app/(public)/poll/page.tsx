@@ -136,9 +136,9 @@ const POLLS: Poll[] = [
 ]
 
 const TOP_VOTERS = [
-  { rank: 1, name: "Otaku_Arch",    votes: 214, avatar: "O", color: "from-amber-500 to-yellow-500"     },
+  { rank: 1, name: "Otaku_Arch",    votes: 214, avatar: "O", color: "from-accent to-yellow-500"     },
   { rank: 2, name: "ShadowWatcher", votes: 187, avatar: "S", color: "from-slate-400 to-zinc-300"       },
-  { rank: 3, name: "NeuralBot_X",   votes: 162, avatar: "N", color: "from-orange-600 to-amber-500"     },
+  { rank: 3, name: "NeuralBot_X",   votes: 162, avatar: "N", color: "from-orange-600 to-accent"     },
 ]
 
 const TRENDING_TAGS = [
@@ -147,9 +147,9 @@ const TRENDING_TAGS = [
 ]
 
 const CATEGORY_CONFIG: Record<Poll["category"], { label: string; color: string }> = {
-  ranking:    { label: "Ranking",    color: "bg-amber-500/10 text-amber-400 border-amber-500/20"    },
+  ranking:    { label: "Ranking",    color: "bg-accent/10 text-accent-bright border-accent/20"    },
   vs:         { label: "VS Battle",  color: "bg-red-500/10 text-red-400 border-red-500/20"             },
-  prediction: { label: "Prediction", color: "bg-amber-500/10 text-amber-400 border-amber-500/20"       },
+  prediction: { label: "Prediction", color: "bg-accent/10 text-accent-bright border-accent/20"       },
   opinion:    { label: "Opinion",    color: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20" },
 }
 
@@ -195,10 +195,10 @@ function PollCard({ poll }: { poll: Poll }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-40px" }}
       transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-      className="relative group p-8 rounded-3xl border border-white/5 bg-[#0a0a0a] hover:border-amber-500/20 transition-all duration-500 overflow-hidden"
+      className="relative group p-8 rounded-3xl border border-border bg-surface hover:border-accent/20 transition-all duration-500 overflow-hidden"
     >
       {/* ambient glow */}
-      <div className="absolute top-0 right-0 w-56 h-56 bg-amber-600/5 blur-[100px] pointer-events-none group-hover:bg-amber-600/8 transition-all" />
+      <div className="absolute top-0 right-0 w-56 h-56 bg-accent/5 blur-[100px] pointer-events-none group-hover:bg-accent/8 transition-all" />
 
       <div className="relative z-10 space-y-6">
         {/* Header meta */}
@@ -214,7 +214,7 @@ function PollCard({ poll }: { poll: Poll }) {
             )}
           </div>
 
-          <div className="flex items-center gap-3 text-[9px] font-black uppercase tracking-widest text-white/25 shrink-0">
+          <div className="flex items-center gap-3 text-[9px] font-black uppercase tracking-widest text-subtle shrink-0">
             <span className="flex items-center gap-1">
               <Users size={10} />
               {poll.totalVotes.toLocaleString()}
@@ -226,13 +226,13 @@ function PollCard({ poll }: { poll: Poll }) {
               </span>
             )}
             {poll.status === "ended" && (
-              <span className="px-2 py-0.5 rounded bg-white/5 text-white/20 text-[8px]">ENDED</span>
+              <span className="px-2 py-0.5 rounded bg-surface text-subtle text-[8px]">ENDED</span>
             )}
           </div>
         </div>
 
         {/* Question */}
-        <h3 className="text-xl md:text-2xl font-black tracking-tighter text-white leading-snug">
+        <h3 className="text-xl md:text-2xl font-black tracking-tighter text-foreground leading-snug">
           {poll.question}
         </h3>
 
@@ -253,10 +253,10 @@ function PollCard({ poll }: { poll: Poll }) {
                 disabled={!!voted || poll.status === "ended"}
                 className={`relative w-full text-left p-4 rounded-2xl border transition-all duration-300 group/opt overflow-hidden ${
                   isSelected
-                    ? "border-amber-500/50 bg-amber-500/5"
+                    ? "border-accent/50 bg-accent/5"
                     : isWinner && poll.status === "ended"
-                    ? "border-amber-500/30 bg-amber-500/5"
-                    : "border-white/5 bg-white/[0.02] hover:bg-white/[0.04] disabled:cursor-default"
+                    ? "border-accent/30 bg-accent/5"
+                    : "border-border bg-surface hover:bg-white/[0.04] disabled:cursor-default"
                 } ${showBars && !isSelected && !isWinner ? "opacity-60" : ""}`}
               >
                 {/* Animated progress bar behind */}
@@ -267,10 +267,10 @@ function PollCard({ poll }: { poll: Poll }) {
                     transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1], delay: 0.05 }}
                     className={`absolute inset-0 ${
                       isSelected
-                        ? "bg-amber-500/12"
+                        ? "bg-accent/12"
                         : isWinner && poll.status === "ended"
-                        ? "bg-amber-500/10"
-                        : "bg-white/[0.03]"
+                        ? "bg-accent/10"
+                        : "bg-surface"
                     } rounded-2xl`}
                   />
                 )}
@@ -278,10 +278,10 @@ function PollCard({ poll }: { poll: Poll }) {
                 <div className="relative z-10 flex items-center justify-between gap-3">
                   <div className="flex items-center gap-3 min-w-0">
                     {showBars && isSelected && (
-                      <CheckCircle2 size={14} className="text-amber-400 shrink-0" />
+                      <CheckCircle2 size={14} className="text-accent-bright shrink-0" />
                     )}
                     {showBars && isWinner && poll.status === "ended" && (
-                      <Crown size={13} className="text-amber-400 shrink-0" />
+                      <Crown size={13} className="text-accent-bright shrink-0" />
                     )}
                     {!showBars && (
                       <div className="h-1.5 w-1.5 rounded-full bg-white/20 shrink-0" />
@@ -291,14 +291,14 @@ function PollCard({ poll }: { poll: Poll }) {
 
                   {showBars ? (
                     <span className={`text-sm font-black tracking-tighter shrink-0 ${
-                      isSelected ? "text-amber-300" : isWinner && poll.status === "ended" ? "text-amber-300" : "text-white/40"
+                      isSelected ? "text-accent-bright" : isWinner && poll.status === "ended" ? "text-accent-bright" : "text-muted"
                     }`}>
                       {pct}%
                     </span>
                   ) : (
                     <CheckCircle2
                       size={14}
-                      className="text-white/10 group-hover/opt:text-white/35 transition-colors shrink-0"
+                      className="text-subtle group-hover/opt:text-subtle transition-colors shrink-0"
                     />
                   )}
                 </div>
@@ -314,7 +314,7 @@ function PollCard({ poll }: { poll: Poll }) {
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
-              className="flex items-center justify-center gap-2 pt-2 text-[10px] font-black uppercase tracking-widest text-amber-400"
+              className="flex items-center justify-center gap-2 pt-2 text-[10px] font-black uppercase tracking-widest text-accent-bright"
             >
               <Zap size={11} fill="currentColor" />
               Vote Transmitted — Data Synced
@@ -369,13 +369,13 @@ export default function PollsPage() {
   ]
 
   return (
-    <div className="min-h-screen bg-[#020202] text-white pb-32">
+    <div className="min-h-screen bg-background text-foreground pb-32">
 
       {/* ── PAGE HEADER ── */}
-      <div className="border-b border-white/5 bg-[#020202]/80 backdrop-blur-xl sticky top-[72px] z-30">
+      <div className="border-b border-border bg-background/80 backdrop-blur-xl sticky top-[72px] z-30">
         <div className="max-w-7xl mx-auto px-6 py-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div>
-            <div className="flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.4em] text-amber-400 mb-2">
+            <div className="flex items-center gap-2 text-[9px] font-black uppercase tracking-[0.4em] text-accent-bright mb-2">
               <Vote size={11} />
               Community Consensus
               <span className="ml-1 flex items-center gap-1 text-emerald-400/70">
@@ -383,12 +383,12 @@ export default function PollsPage() {
                 Live
               </span>
             </div>
-            <h1 className="text-4xl md:text-5xl font-black tracking-tighter uppercase italic text-white">
-              Community <span className="text-amber-500">Polls</span>
+            <h1 className="text-4xl md:text-5xl font-black tracking-tighter uppercase italic text-foreground">
+              Community <span className="text-accent">Polls</span>
             </h1>
             {/* Live vote ticker */}
-            <div className="flex items-center gap-2 mt-2 text-[10px] text-white/30 font-mono">
-              <TrendingUp size={10} className="text-amber-400" />
+            <div className="flex items-center gap-2 mt-2 text-[10px] text-subtle font-mono">
+              <TrendingUp size={10} className="text-accent-bright" />
               <motion.span
                 key={liveVotes}
                 initial={{ opacity: 0, y: -6 }}
@@ -402,7 +402,7 @@ export default function PollsPage() {
 
           <Link
             href="/creators/create/polls"
-            className="flex items-center gap-2 px-5 py-3 rounded-2xl bg-amber-500 hover:bg-amber-400 text-xs font-black uppercase tracking-widest text-white transition-all shadow-[0_0_24px_rgba(99,102,241,0.3)] hover:-translate-y-0.5 shrink-0"
+            className="flex items-center gap-2 px-5 py-3 rounded-2xl bg-accent hover:bg-accent-bright text-xs font-black uppercase tracking-widest text-foreground transition-all shadow-[0_0_24px_rgba(99,102,241,0.3)] hover:-translate-y-0.5 shrink-0"
           >
             <Plus size={13} /> Create Poll
           </Link>
@@ -415,14 +415,14 @@ export default function PollsPage() {
               key={tab.key}
               onClick={() => setActiveTab(tab.key)}
               className={`relative px-5 py-3 text-[10px] font-black uppercase tracking-widest transition-colors ${
-                activeTab === tab.key ? "text-white" : "text-white/30 hover:text-white/60"
+                activeTab === tab.key ? "text-foreground" : "text-subtle hover:text-muted"
               }`}
             >
               {tab.label}
               {activeTab === tab.key && (
                 <motion.div
                   layoutId="poll-tab-underline"
-                  className="absolute bottom-0 left-0 right-0 h-[2px] bg-amber-500 rounded-full"
+                  className="absolute bottom-0 left-0 right-0 h-[2px] bg-accent rounded-full"
                 />
               )}
             </button>
@@ -444,8 +444,8 @@ export default function PollsPage() {
                 exit={{ opacity: 0 }}
                 className="col-span-2 py-24 text-center"
               >
-                <Vote size={36} className="text-white/10 mx-auto mb-4" />
-                <p className="text-white/30 font-bold text-sm">No polls match this filter.</p>
+                <Vote size={36} className="text-subtle mx-auto mb-4" />
+                <p className="text-subtle font-bold text-sm">No polls match this filter.</p>
               </motion.div>
             ) : (
               <motion.div
@@ -465,10 +465,10 @@ export default function PollsPage() {
         <aside className="space-y-6 lg:sticky lg:top-[148px]">
 
           {/* Most Active Voters */}
-          <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/8 space-y-5">
+          <div className="p-6 rounded-2xl bg-surface border border-border space-y-5">
             <div className="flex items-center gap-2">
-              <Crown size={13} className="text-amber-400" />
-              <h3 className="text-[9px] font-black uppercase tracking-[0.3em] text-white/35">
+              <Crown size={13} className="text-accent-bright" />
+              <h3 className="text-[9px] font-black uppercase tracking-[0.3em] text-subtle">
                 Most Active Voters
               </h3>
             </div>
@@ -476,18 +476,18 @@ export default function PollsPage() {
             <div className="space-y-4">
               {TOP_VOTERS.map((voter) => (
                 <div key={voter.rank} className="flex items-center gap-3">
-                  <div className="w-6 text-center text-[10px] font-black text-white/20">
+                  <div className="w-6 text-center text-[10px] font-black text-subtle">
                     {voter.rank === 1 ? "🥇" : voter.rank === 2 ? "🥈" : "🥉"}
                   </div>
                   <div className={`h-9 w-9 rounded-xl bg-gradient-to-br ${voter.color} flex items-center justify-center text-xs font-black text-black shrink-0`}>
                     {voter.avatar}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-xs font-bold text-white/80 truncate">{voter.name}</p>
-                    <p className="text-[9px] text-white/25 mt-0.5">{voter.votes} votes cast</p>
+                    <p className="text-xs font-bold text-muted truncate">{voter.name}</p>
+                    <p className="text-[9px] text-subtle mt-0.5">{voter.votes} votes cast</p>
                   </div>
                   <div className="text-right shrink-0">
-                    <p className="text-xs font-black text-amber-400">#{voter.rank}</p>
+                    <p className="text-xs font-black text-accent-bright">#{voter.rank}</p>
                   </div>
                 </div>
               ))}
@@ -495,28 +495,28 @@ export default function PollsPage() {
 
             <Link
               href="/leaderboard"
-              className="w-full block text-center text-[9px] font-black uppercase tracking-widest text-white/25 hover:text-white/50 transition-colors pt-2 border-t border-white/5"
+              className="w-full block text-center text-[9px] font-black uppercase tracking-widest text-subtle hover:text-muted transition-colors pt-2 border-t border-border"
             >
               Full Leaderboard →
             </Link>
           </div>
 
           {/* Create a Poll CTA */}
-          <div className="relative overflow-hidden p-6 rounded-2xl bg-gradient-to-br from-indigo-600/15 via-violet-600/8 to-transparent border border-amber-500/20 space-y-4">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-amber-500/10 blur-[60px] pointer-events-none" />
+          <div className="relative overflow-hidden p-6 rounded-2xl bg-gradient-to-br from-indigo-600/15 via-violet-600/8 to-transparent border border-accent/20 space-y-4">
+            <div className="absolute top-0 right-0 w-32 h-32 bg-accent/10 blur-[60px] pointer-events-none" />
             <div className="relative z-10 space-y-3">
-              <div className="h-11 w-11 rounded-2xl bg-amber-600/20 border border-amber-500/30 flex items-center justify-center">
-                <Vote size={18} className="text-amber-400" />
+              <div className="h-11 w-11 rounded-2xl bg-accent/20 border border-accent/30 flex items-center justify-center">
+                <Vote size={18} className="text-accent-bright" />
               </div>
               <div>
-                <p className="text-sm font-black text-white">Create a Poll</p>
-                <p className="text-[10px] text-white/35 mt-1 leading-relaxed">
+                <p className="text-sm font-black text-foreground">Create a Poll</p>
+                <p className="text-[10px] text-subtle mt-1 leading-relaxed">
                   Start a debate. Ask the community. Shape the rankings.
                 </p>
               </div>
               <Link
                 href="/creators/create/polls"
-                className="flex items-center justify-between w-full px-4 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 transition-all text-xs font-black uppercase tracking-widest text-white group"
+                className="flex items-center justify-between w-full px-4 py-3 rounded-xl bg-accent hover:bg-accent-bright transition-all text-xs font-black uppercase tracking-widest text-foreground group"
               >
                 Start Now
                 <ChevronRight size={13} className="group-hover:translate-x-0.5 transition-transform" />
@@ -525,10 +525,10 @@ export default function PollsPage() {
           </div>
 
           {/* Trending Tags */}
-          <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/8 space-y-4">
+          <div className="p-6 rounded-2xl bg-surface border border-border space-y-4">
             <div className="flex items-center gap-2">
-              <Hash size={13} className="text-amber-400" />
-              <h3 className="text-[9px] font-black uppercase tracking-[0.3em] text-white/35">
+              <Hash size={13} className="text-accent-bright" />
+              <h3 className="text-[9px] font-black uppercase tracking-[0.3em] text-subtle">
                 Trending Topics
               </h3>
             </div>
@@ -539,7 +539,7 @@ export default function PollsPage() {
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: i * 0.04 }}
-                  className="px-3 py-1.5 rounded-full bg-white/5 border border-white/8 text-[9px] font-bold text-white/45 hover:text-amber-400 hover:border-amber-500/25 cursor-pointer transition-all"
+                  className="px-3 py-1.5 rounded-full bg-surface border border-border text-[9px] font-bold text-muted hover:text-accent-bright hover:border-accent/25 cursor-pointer transition-all"
                 >
                   {tag}
                 </motion.span>
@@ -548,10 +548,10 @@ export default function PollsPage() {
           </div>
 
           {/* Community stats */}
-          <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/8 space-y-3">
+          <div className="p-6 rounded-2xl bg-surface border border-border space-y-3">
             <div className="flex items-center gap-2">
               <TrendingUp size={13} className="text-emerald-400" />
-              <h3 className="text-[9px] font-black uppercase tracking-[0.3em] text-white/35">
+              <h3 className="text-[9px] font-black uppercase tracking-[0.3em] text-subtle">
                 Poll Activity
               </h3>
             </div>
@@ -561,8 +561,8 @@ export default function PollsPage() {
               { label: "Shinobi voting",   value: "3.2k"   },
             ].map(({ label, value }) => (
               <div key={label} className="flex items-center justify-between">
-                <span className="text-xs text-white/30">{label}</span>
-                <span className="text-sm font-black text-white">{value}</span>
+                <span className="text-xs text-subtle">{label}</span>
+                <span className="text-sm font-black text-foreground">{value}</span>
               </div>
             ))}
           </div>

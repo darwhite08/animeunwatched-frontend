@@ -76,9 +76,9 @@ const MOODS = [
     emoji: "☕",
     desc: "Slow life. Healing. Just vibes.",
     icon: Coffee,
-    color: "from-amber-500/20 to-yellow-600/15",
-    border: "border-amber-500/30",
-    accent: "text-amber-400",
+    color: "from-accent/20 to-yellow-600/15",
+    border: "border-accent/30",
+    accent: "text-accent-bright",
     params: { q: "Slice of Life" },
   },
   {
@@ -158,7 +158,7 @@ export default function MoodPage() {
   }, [data])
 
   return (
-    <div className="min-h-screen bg-[#020202] text-white pb-40">
+    <div className="min-h-screen bg-background text-foreground pb-40">
       {/* Header */}
       <div className="max-w-5xl mx-auto px-6 pt-32 pb-10 text-center">
         <motion.div initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }}
@@ -168,7 +168,7 @@ export default function MoodPage() {
         </motion.div>
 
         <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.08 }}
-          className="text-5xl md:text-7xl font-black tracking-tighter text-white leading-none mb-4">
+          className="text-5xl md:text-7xl font-black tracking-tighter text-foreground leading-none mb-4">
           How are you
           <span className="italic" style={{
             backgroundImage: "linear-gradient(135deg, #fbbf24, #f59e0b)",
@@ -176,7 +176,7 @@ export default function MoodPage() {
           }}> feeling?</span>
         </motion.h1>
         <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.18 }}
-          className="text-white/40 text-lg">
+          className="text-muted text-lg">
           Pick your vibe — we'll find the perfect anime.
         </motion.p>
       </div>
@@ -193,7 +193,7 @@ export default function MoodPage() {
                 transition={{ delay: i * 0.04 }}
                 onClick={() => setSelected(active ? null : m.id)}
                 className={`relative text-left p-5 rounded-2xl border transition-all duration-300 group ${
-                  active ? `bg-gradient-to-br ${m.color} ${m.border} scale-[1.02]` : "bg-white/[0.02] border-white/8 hover:border-white/15 hover:bg-white/[0.04]"
+                  active ? `bg-gradient-to-br ${m.color} ${m.border} scale-[1.02]` : "bg-surface border-border hover:border-border hover:bg-white/[0.04]"
                 }`}
               >
                 <div className="flex items-center gap-3 mb-3">
@@ -202,10 +202,10 @@ export default function MoodPage() {
                     <div className="ml-auto w-2 h-2 rounded-full animate-pulse" style={{ background: "#f59e0b" }} />
                   )}
                 </div>
-                <p className={`text-sm font-black ${active ? m.accent : "text-white/80 group-hover:text-white"} transition-colors`}>
+                <p className={`text-sm font-black ${active ? m.accent : "text-muted group-hover:text-foreground"} transition-colors`}>
                   {m.label}
                 </p>
-                <p className="text-[10px] text-white/35 mt-0.5">{m.desc}</p>
+                <p className="text-[10px] text-subtle mt-0.5">{m.desc}</p>
               </motion.button>
             )
           })}
@@ -222,7 +222,7 @@ export default function MoodPage() {
                 <span className="text-2xl">{mood?.emoji}</span>
                 <div>
                   <h2 className={`text-xl font-black ${mood?.accent}`}>{mood?.label}</h2>
-                  <p className="text-[10px] text-white/30 uppercase tracking-widest">
+                  <p className="text-[10px] text-subtle uppercase tracking-widest">
                     {isLoading ? "Finding matches…" : `${anime.length} perfect matches`}
                   </p>
                 </div>
@@ -246,8 +246,8 @@ export default function MoodPage() {
               )}
 
               {!isLoading && anime.length === 0 && (
-                <div className="py-20 text-center border border-dashed border-white/5 rounded-[3rem]">
-                  <p className="text-white/20 font-black uppercase tracking-widest text-xs">No matches — try another mood</p>
+                <div className="py-20 text-center border border-dashed border-border rounded-[3rem]">
+                  <p className="text-subtle font-black uppercase tracking-widest text-xs">No matches — try another mood</p>
                 </div>
               )}
 
@@ -264,7 +264,7 @@ export default function MoodPage() {
 
         {!selected && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}
-            className="text-center py-16 text-white/20 text-sm">
+            className="text-center py-16 text-subtle text-sm">
             ↑ Pick a mood above to get started
           </motion.div>
         )}

@@ -67,9 +67,8 @@ export default function AuthCallbackPage() {
         // 6. Invalidate any stale auth queries
         await qc.invalidateQueries({ queryKey: ["auth/me"] })
 
-        // 7. Navigate — use the slug-prefixed dashboard if slug is available
-        const dest = user.slug ? `/user/${user.slug}/dashboard` : "/dashboard"
-        router.replace(dest)
+        // 7. Navigate to home
+        router.replace("/")
       } catch {
         setError("Failed to complete sign-in. Please try again.")
       }
@@ -80,15 +79,15 @@ export default function AuthCallbackPage() {
   }, [])
 
   if (error) return (
-    <div className="min-h-screen bg-black flex items-center justify-center px-6">
+    <div className="min-h-screen bg-background flex items-center justify-center px-6">
       <div className="max-w-sm w-full text-center space-y-4">
         <div className="flex justify-center">
           <div className="w-12 h-12 rounded-full bg-red-500/10 border border-red-500/20 flex items-center justify-center">
             <AlertTriangle size={22} className="text-red-400" />
           </div>
         </div>
-        <p className="text-white/70 text-sm">{error}</p>
-        <a href="/login" className="inline-block px-6 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-black text-sm font-medium transition-colors">
+        <p className="text-muted text-sm">{error}</p>
+        <a href="/login" className="inline-block px-6 py-2.5 rounded-xl bg-accent hover:bg-accent-bright text-black text-sm font-medium transition-colors">
           Back to login
         </a>
       </div>
@@ -96,9 +95,9 @@ export default function AuthCallbackPage() {
   )
 
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center">
-      <div className="flex flex-col items-center gap-4 text-white/40">
-        <Loader2 size={28} className="animate-spin text-amber-400" />
+    <div className="min-h-screen bg-background flex items-center justify-center">
+      <div className="flex flex-col items-center gap-4 text-muted">
+        <Loader2 size={28} className="animate-spin text-accent-bright" />
         <p className="text-sm">Signing you in…</p>
       </div>
     </div>

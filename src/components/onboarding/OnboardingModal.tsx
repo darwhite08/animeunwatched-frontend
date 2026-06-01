@@ -108,7 +108,7 @@ function StepIdentity({
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h2 className="font-black uppercase text-3xl tracking-tight text-white leading-tight">
+        <h2 className="font-black uppercase text-3xl tracking-tight text-foreground leading-tight">
           What kind of watcher<br />are you?
         </h2>
         <p className="text-zinc-400 text-sm mt-2">
@@ -125,14 +125,14 @@ function StepIdentity({
               className={[
                 "relative text-left rounded-2xl border p-4 transition-all duration-200 cursor-pointer group",
                 isSelected
-                  ? "border-amber-500 bg-amber-500/10 shadow-[0_0_20px_rgba(245,158,11,0.25)]"
+                  ? "border-accent bg-accent/10 shadow-[0_0_20px_rgba(245,158,11,0.25)]"
                   : "border-zinc-800 bg-zinc-900/60 hover:border-zinc-600",
               ].join(" ")}
             >
               <div
                 className={[
                   "mb-3 transition-colors duration-200",
-                  isSelected ? "text-amber-400" : "text-zinc-400 group-hover:text-zinc-300",
+                  isSelected ? "text-accent-bright" : "text-zinc-400 group-hover:text-zinc-300",
                 ].join(" ")}
               >
                 {wt.icon}
@@ -140,7 +140,7 @@ function StepIdentity({
               <p
                 className={[
                   "font-bold text-sm uppercase tracking-wide transition-colors",
-                  isSelected ? "text-amber-300" : "text-white",
+                  isSelected ? "text-accent-bright" : "text-foreground",
                 ].join(" ")}
               >
                 {wt.label}
@@ -154,7 +154,7 @@ function StepIdentity({
                   className="absolute top-3 right-3 w-5 h-5 rounded-full flex items-center justify-center"
                   style={{ background: "linear-gradient(135deg, #fbbf24, #f59e0b)" }}
                 >
-                  <Check className="w-3 h-3 text-white" />
+                  <Check className="w-3 h-3 text-foreground" />
                 </motion.div>
               )}
             </button>
@@ -182,7 +182,7 @@ function StepPickAnime({
   return (
     <div className="flex flex-col gap-4">
       <div>
-        <h2 className="font-black uppercase text-3xl tracking-tight text-white leading-tight">
+        <h2 className="font-black uppercase text-3xl tracking-tight text-foreground leading-tight">
           Pick your first 5 anime
         </h2>
         <p className="text-zinc-400 text-sm mt-2">
@@ -235,12 +235,12 @@ function StepPickAnime({
               />
               {/* Title overlay */}
               <div className="absolute inset-x-0 bottom-0 p-1.5 bg-gradient-to-t from-black/90 to-transparent">
-                <p className="text-[10px] font-bold text-white leading-tight line-clamp-2">
+                <p className="text-[10px] font-bold text-foreground leading-tight line-clamp-2">
                   {anime.title}
                 </p>
                 <div className="flex items-center gap-0.5 mt-0.5">
-                  <Star className="w-2.5 h-2.5 text-amber-400 fill-amber-400" />
-                  <span className="text-[9px] text-amber-400">{anime.rating}</span>
+                  <Star className="w-2.5 h-2.5 text-accent-bright fill-amber-400" />
+                  <span className="text-[9px] text-accent-bright">{anime.rating}</span>
                 </div>
               </div>
               {/* Selected overlay */}
@@ -253,7 +253,7 @@ function StepPickAnime({
                     className="absolute inset-0 flex items-center justify-center"
                   >
                     <div className="w-8 h-8 rounded-full bg-emerald-500 flex items-center justify-center shadow-lg">
-                      <Check className="w-5 h-5 text-white" />
+                      <Check className="w-5 h-5 text-foreground" />
                     </div>
                   </motion.div>
                 )}
@@ -285,7 +285,7 @@ function StepGenres({
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h2 className="font-black uppercase text-3xl tracking-tight text-white leading-tight">
+        <h2 className="font-black uppercase text-3xl tracking-tight text-foreground leading-tight">
           What keeps you up<br />at night?
         </h2>
         <p className="text-zinc-400 text-sm mt-2">
@@ -303,7 +303,7 @@ function StepGenres({
               className={[
                 "px-5 py-2.5 rounded-full border font-bold uppercase text-sm tracking-wide transition-all duration-200 cursor-pointer",
                 isSelected
-                  ? "border-amber-500 bg-amber-500/20 text-amber-300 shadow-[0_0_12px_rgba(99,102,241,0.25)]"
+                  ? "border-accent bg-accent/20 text-accent-bright shadow-[0_0_12px_rgba(99,102,241,0.25)]"
                   : "border-zinc-700 bg-zinc-900/60 text-zinc-400 hover:border-zinc-500 hover:text-zinc-300",
               ].join(" ")}
             >
@@ -317,7 +317,7 @@ function StepGenres({
         <motion.p
           initial={{ opacity: 0, y: 4 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-xs text-amber-400"
+          className="text-xs text-accent-bright"
         >
           {selected.size} genre{selected.size > 1 ? "s" : ""} selected — taste confirmed.
         </motion.p>
@@ -346,11 +346,11 @@ function StepReady({
         <motion.p
           initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-amber-400 text-sm font-bold uppercase tracking-widest mb-2"
+          className="text-accent-bright text-sm font-bold uppercase tracking-widest mb-2"
         >
           Identity unlocked
         </motion.p>
-        <h2 className="font-black uppercase text-3xl tracking-tight text-white leading-tight">
+        <h2 className="font-black uppercase text-3xl tracking-tight text-foreground leading-tight">
           Welcome to the Dojo,<br />Shinobi.
         </h2>
       </div>
@@ -392,7 +392,7 @@ function StepReady({
               sizes="20vw"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
-            <p className="absolute bottom-1 inset-x-1 text-[8px] font-bold text-white text-center leading-tight line-clamp-2">
+            <p className="absolute bottom-1 inset-x-1 text-[8px] font-bold text-foreground text-center leading-tight line-clamp-2">
               {anime.title}
             </p>
           </motion.div>
@@ -561,7 +561,7 @@ export default function OnboardingModal({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 16 }}
             transition={{ duration: 0.3, ease: [0.32, 0.72, 0, 1] }}
-            className="relative w-full max-w-lg bg-[#0a0a0a] border border-zinc-800 rounded-3xl overflow-hidden shadow-2xl"
+            className="relative w-full max-w-lg bg-surface border border-zinc-800 rounded-3xl overflow-hidden shadow-2xl"
           >
             {/* Header */}
             <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-zinc-800/60">
@@ -639,7 +639,7 @@ export default function OnboardingModal({
                   className={[
                     "flex items-center gap-2 px-5 py-2 rounded-xl font-black uppercase tracking-wide text-sm transition-all duration-200",
                     canProceed()
-                      ? "bg-amber-500 hover:bg-amber-400 text-black shadow-[0_0_16px_rgba(99,102,241,0.3)]"
+                      ? "bg-accent hover:bg-accent-bright text-black shadow-[0_0_16px_rgba(99,102,241,0.3)]"
                       : "bg-zinc-800 text-zinc-600 cursor-not-allowed",
                   ].join(" ")}
                 >

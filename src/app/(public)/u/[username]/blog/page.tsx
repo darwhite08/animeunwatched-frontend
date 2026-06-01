@@ -43,26 +43,26 @@ function BlogCard({ post, index }: { post: BlogPost; index: number }) {
       initial={{ opacity: 0, y: 18 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.07, duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
-      className="group block bg-zinc-900/60 border border-white/8 hover:border-amber-500/30 rounded-2xl overflow-hidden transition-all"
+      className="group block bg-zinc-900/60 border border-border hover:border-accent/30 rounded-2xl overflow-hidden transition-all"
     >
       {/* Cover gradient */}
       <div className={`h-40 w-full bg-gradient-to-br ${post.coverGradient} relative`}>
         <div className="absolute inset-0 bg-black/30" />
         {/* Category badge */}
-        <span className="absolute top-3 left-3 px-2.5 py-1 rounded-lg bg-black/50 backdrop-blur-md border border-white/10 text-[9px] font-black uppercase tracking-widest text-white/70">
+        <span className="absolute top-3 left-3 px-2.5 py-1 rounded-lg bg-black/50 backdrop-blur-md border border-border text-[9px] font-black uppercase tracking-widest text-muted">
           {post.category}
         </span>
       </div>
 
       {/* Body */}
       <div className="p-5 space-y-3">
-        <h2 className="text-sm font-black uppercase italic tracking-tight text-white leading-snug group-hover:text-amber-300 transition-colors line-clamp-2">
+        <h2 className="text-sm font-black uppercase italic tracking-tight text-foreground leading-snug group-hover:text-accent-bright transition-colors line-clamp-2">
           {post.title}
         </h2>
-        <p className="text-xs text-white/45 leading-relaxed line-clamp-2">{post.excerpt}</p>
+        <p className="text-xs text-muted leading-relaxed line-clamp-2">{post.excerpt}</p>
 
         {/* Date + read time */}
-        <div className="flex items-center gap-3 text-[10px] text-white/30 pt-1 border-t border-white/5">
+        <div className="flex items-center gap-3 text-[10px] text-subtle pt-1 border-t border-border">
           <span className="flex items-center gap-1">
             <Clock size={9} /> {post.readTime} min read
           </span>
@@ -74,7 +74,7 @@ function BlogCard({ post, index }: { post: BlogPost; index: number }) {
           <span className="flex items-center gap-1 text-[10px] text-rose-400/70">
             <Heart size={10} fill="currentColor" /> {post.likes.toLocaleString()}
           </span>
-          <span className="flex items-center gap-1 text-[10px] text-white/30">
+          <span className="flex items-center gap-1 text-[10px] text-subtle">
             <Eye size={10} /> {post.views.toLocaleString()}
           </span>
         </div>
@@ -110,16 +110,16 @@ export default function UserBlogPage({
   }))
 
   return (
-    <div className="min-h-screen bg-[#020202] text-white pb-32">
+    <div className="min-h-screen bg-background text-foreground pb-32">
       <div className="max-w-5xl mx-auto px-6 pt-28 pb-10">
 
         {/* Breadcrumb */}
-        <nav className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-white/25 mb-8">
-          <Link href={`/u/${username}`} className="hover:text-white/60 transition-colors">
+        <nav className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-subtle mb-8">
+          <Link href={`/u/${username}`} className="hover:text-muted transition-colors">
             @{username}
           </Link>
-          <ChevronRight size={11} className="text-white/15" />
-          <span className="text-amber-400">Blog</span>
+          <ChevronRight size={11} className="text-subtle" />
+          <span className="text-accent-bright">Blog</span>
         </nav>
 
         {/* Header */}
@@ -130,19 +130,19 @@ export default function UserBlogPage({
           className="flex flex-col sm:flex-row sm:items-end justify-between gap-5 mb-10"
         >
           <div>
-            <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-amber-400/60 mb-3">
+            <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-accent-bright/60 mb-3">
               Community Long-form
             </p>
-            <h1 className="text-5xl font-black tracking-tighter uppercase italic text-white leading-none">
+            <h1 className="text-5xl font-black tracking-tighter uppercase italic text-foreground leading-none">
               @{username}&apos;s Articles<span style={{color:"#f59e0b"}}>.</span>
             </h1>
-            <p className="text-white/35 text-sm mt-2">
+            <p className="text-subtle text-sm mt-2">
               {isLoading ? "Loading…" : `${posts.length} article${posts.length !== 1 ? "s" : ""} published`}
             </p>
           </div>
 
-          <div className="flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-white/[0.02] border border-white/8 text-[10px] font-black uppercase tracking-widest text-white/30">
-            <User size={12} className="text-amber-400" />
+          <div className="flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-surface border border-border text-[10px] font-black uppercase tracking-widest text-subtle">
+            <User size={12} className="text-accent-bright" />
             {username}
           </div>
         </motion.div>
@@ -151,7 +151,7 @@ export default function UserBlogPage({
         {isLoading && (
           <div className="grid sm:grid-cols-2 gap-6">
             {[0, 1, 2, 3].map((i) => (
-              <div key={i} className="h-64 rounded-2xl bg-white/[0.03] border border-white/5 animate-pulse" />
+              <div key={i} className="h-64 rounded-2xl bg-surface border border-border animate-pulse" />
             ))}
           </div>
         )}
@@ -159,8 +159,8 @@ export default function UserBlogPage({
         {/* Empty state */}
         {!isLoading && posts.length === 0 && (
           <div className="text-center py-24 space-y-3">
-            <p className="text-white/20 text-4xl font-black uppercase italic">No Articles Yet</p>
-            <p className="text-white/25 text-sm">@{username} hasn&apos;t published any blogs yet.</p>
+            <p className="text-subtle text-4xl font-black uppercase italic">No Articles Yet</p>
+            <p className="text-subtle text-sm">@{username} hasn&apos;t published any blogs yet.</p>
           </div>
         )}
 
@@ -180,14 +180,14 @@ export default function UserBlogPage({
           viewport={{ once: true }}
           className="mt-14 flex flex-col items-center gap-4 text-center"
         >
-          <p className="text-white/30 text-sm">
+          <p className="text-subtle text-sm">
             Enjoying {username}&apos;s writing? Visit their full profile.
           </p>
           <Link
             href={`/u/${username}`}
-            className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-white/[0.04] border border-white/10 hover:border-amber-500/30 hover:bg-white/[0.07] text-sm font-black uppercase tracking-widest text-white/60 hover:text-white transition-all"
+            className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-white/[0.04] border border-border hover:border-accent/30 hover:bg-surface text-sm font-black uppercase tracking-widest text-muted hover:text-foreground transition-all"
           >
-            <PenSquare size={14} className="text-amber-400" />
+            <PenSquare size={14} className="text-accent-bright" />
             More articles by @{username}
             <ChevronRight size={14} />
           </Link>

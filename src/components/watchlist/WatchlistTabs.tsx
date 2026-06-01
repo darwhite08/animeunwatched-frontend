@@ -9,7 +9,7 @@ export default function WatchlistTabs() {
   const [active, setActive] = useState("All")
 
   return (
-    <div className="flex gap-6 border-b border-white/10 pb-4">
+    <div className="flex gap-6 border-b border-border pb-4">
       {tabs.map((tab) => (
         <button
           key={tab}
@@ -17,14 +17,14 @@ export default function WatchlistTabs() {
           className={clsx(
             "relative pb-2 text-sm transition",
             active === tab
-              ? "text-white"
-              : "text-white/40 hover:text-white"
+              ? "text-foreground"
+              : "text-muted hover:text-foreground"
           )}
         >
           {tab}
 
           {active === tab && (
-            <span className="absolute bottom-0 left-0 h-[2px] w-full bg-amber-600 rounded-full" />
+            <span className="absolute bottom-0 left-0 h-[2px] w-full bg-accent rounded-full" />
           )}
         </button>
       ))}

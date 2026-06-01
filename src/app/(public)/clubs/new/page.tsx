@@ -76,7 +76,7 @@ function Field({
 }) {
   return (
     <div className="space-y-2">
-      <label className="block text-[10px] font-black uppercase tracking-[0.2em] text-white/50">
+      <label className="block text-[10px] font-black uppercase tracking-[0.2em] text-muted">
         {label}
       </label>
       {children}
@@ -85,7 +85,7 @@ function Field({
           <AlertCircle size={10} /> {error}
         </p>
       ) : hint ? (
-        <p className="text-[10px] text-white/25">{hint}</p>
+        <p className="text-[10px] text-subtle">{hint}</p>
       ) : null}
     </div>
   )
@@ -153,10 +153,10 @@ export default function NewClubPage() {
   }
 
   const inputClass =
-    "w-full px-4 py-3 rounded-xl bg-white/[0.03] border border-white/8 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-amber-500/50 focus:bg-white/[0.05] transition-all"
+    "w-full px-4 py-3 rounded-xl bg-surface border border-border text-sm text-foreground placeholder:text-subtle focus:outline-none focus:border-accent/50 focus:bg-surface transition-all"
 
   return (
-    <div className="min-h-screen bg-[#020202] text-white pb-32">
+    <div className="min-h-screen bg-background text-foreground pb-32">
       {/* Ambient glow */}
       <div className="fixed inset-0 pointer-events-none overflow-hidden">
         <div className="absolute top-[-10%] right-[-5%] w-[30%] h-[50%] bg-indigo-700/12 blur-[120px] rounded-full" />
@@ -167,7 +167,7 @@ export default function NewClubPage() {
         {/* Back link */}
         <Link
           href="/clubs"
-          className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-white/30 hover:text-white/60 transition-colors mb-10 group"
+          className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-subtle hover:text-muted transition-colors mb-10 group"
         >
           <ArrowLeft size={12} className="group-hover:-translate-x-0.5 transition-transform" />
           Back to Clubs
@@ -180,10 +180,10 @@ export default function NewClubPage() {
           transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
           className="mb-10"
         >
-          <h1 className="text-5xl font-black uppercase italic tracking-tighter text-white leading-none">
+          <h1 className="text-5xl font-black uppercase italic tracking-tighter text-foreground leading-none">
             Create Club<span style={{color:"#f59e0b"}}>.</span>
           </h1>
-          <p className="mt-3 text-white/40 text-sm">
+          <p className="mt-3 text-muted text-sm">
             Build a home for your anime corner of the community.
           </p>
         </motion.div>
@@ -202,7 +202,7 @@ export default function NewClubPage() {
             <p className="text-sm font-bold text-emerald-300">
               Reputation requirement met
             </p>
-            <p className="text-xs text-white/40 mt-0.5">
+            <p className="text-xs text-muted mt-0.5">
               Requires {REQUIRED_REPUTATION}+ reputation score. Your current score:{" "}
               <span className="font-black text-emerald-400">
                 {USER_REPUTATION} ✓
@@ -221,7 +221,7 @@ export default function NewClubPage() {
           className="space-y-6"
         >
           {/* Card wrapper */}
-          <div className="p-8 rounded-3xl bg-white/[0.02] border border-white/8 space-y-7">
+          <div className="p-8 rounded-3xl bg-surface border border-border space-y-7">
             {/* Club Name */}
             <Field
               label="Club Name"
@@ -239,7 +239,7 @@ export default function NewClubPage() {
               <div className="flex justify-end mt-1">
                 <span
                   className={`text-[9px] font-mono ${
-                    form.name.length > 54 ? "text-amber-400" : "text-white/20"
+                    form.name.length > 54 ? "text-accent-bright" : "text-subtle"
                   }`}
                 >
                   {form.name.length}/60
@@ -254,7 +254,7 @@ export default function NewClubPage() {
               hint="URL: kaiveron.app/clubs/your-slug"
             >
               <div className="relative">
-                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-xs text-white/25 font-mono select-none">
+                <span className="absolute left-4 top-1/2 -translate-y-1/2 text-xs text-subtle font-mono select-none">
                   /clubs/
                 </span>
                 <input
@@ -269,7 +269,7 @@ export default function NewClubPage() {
                 />
               </div>
               {!getFieldError("slug") && form.slug && (
-                <p className="flex items-center gap-1.5 text-[10px] text-amber-400">
+                <p className="flex items-center gap-1.5 text-[10px] text-accent-bright">
                   <Sparkles size={9} />
                   Auto-generated from name — editable
                 </p>
@@ -284,20 +284,20 @@ export default function NewClubPage() {
                   onChange={(e) => setField("category", e.target.value)}
                   className={`${inputClass} appearance-none cursor-pointer ${
                     getFieldError("category") ? "border-red-500/40" : ""
-                  } ${!form.category ? "text-white/20" : ""}`}
+                  } ${!form.category ? "text-subtle" : ""}`}
                 >
-                  <option value="" disabled className="bg-zinc-900 text-white/40">
+                  <option value="" disabled className="bg-zinc-900 text-muted">
                     Select a category
                   </option>
                   {CATEGORIES.map((cat) => (
-                    <option key={cat} value={cat} className="bg-zinc-900 text-white">
+                    <option key={cat} value={cat} className="bg-zinc-900 text-foreground">
                       {cat}
                     </option>
                   ))}
                 </select>
                 <ChevronDown
                   size={14}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-white/30 pointer-events-none"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-subtle pointer-events-none"
                 />
               </div>
             </Field>
@@ -323,13 +323,13 @@ export default function NewClubPage() {
             <button
               type="submit"
               disabled={submitting}
-              className="flex-1 py-3.5 rounded-2xl bg-amber-500 hover:bg-amber-400 disabled:opacity-50 text-sm font-black uppercase tracking-widest text-white transition-all shadow-[0_0_32px_rgba(99,102,241,0.3)] hover:-translate-y-0.5 disabled:translate-y-0"
+              className="flex-1 py-3.5 rounded-2xl bg-accent hover:bg-accent-bright disabled:opacity-50 text-sm font-black uppercase tracking-widest text-foreground transition-all shadow-[0_0_32px_rgba(99,102,241,0.3)] hover:-translate-y-0.5 disabled:translate-y-0"
             >
               {submitting ? "Creating…" : "Create Club"}
             </button>
             <Link
               href="/clubs"
-              className="px-6 py-3.5 rounded-2xl bg-white/[0.03] border border-white/8 text-sm font-black uppercase tracking-widest text-white/40 hover:text-white/70 hover:border-white/15 transition-all"
+              className="px-6 py-3.5 rounded-2xl bg-surface border border-border text-sm font-black uppercase tracking-widest text-muted hover:text-muted hover:border-border transition-all"
             >
               Cancel
             </Link>

@@ -67,17 +67,17 @@ function DiscoverySection() {
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-[clamp(2rem,5vw,4.5rem)] font-bold tracking-tight text-white leading-tight"
+              className="text-[clamp(2rem,5vw,4.5rem)] font-bold tracking-tight text-foreground leading-tight"
             >
               Discover the<br />
-              <span className="text-amber-400">undiscovered.</span>
+              <span className="text-accent-bright">undiscovered.</span>
             </motion.h2>
           </div>
           <motion.p
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            className="text-white/35 text-sm max-w-xs leading-relaxed"
+            className="text-subtle text-sm max-w-xs leading-relaxed"
           >
             We match you to anime based on how you actually think — not what everyone else is watching.
           </motion.p>
@@ -93,12 +93,12 @@ function DiscoverySection() {
               viewport={{ once: true }}
               transition={{ delay: i * 0.08 }}
               whileHover={{ y: -6, scale: 1.02 }}
-              className="group relative p-7 rounded-[2rem] bg-white/[0.02] border border-white/[0.06] hover:border-white/[0.12] hover:bg-white/[0.04] cursor-pointer overflow-hidden h-48 transition-all duration-300"
+              className="group relative p-7 rounded-[2rem] bg-surface border border-white/[0.06] hover:border-white/[0.12] hover:bg-white/[0.04] cursor-pointer overflow-hidden h-48 transition-all duration-300"
             >
-              <AnimatedCounterText value={count} className="text-5xl font-black tracking-tighter text-white mb-1" />
-              <p className="text-[9px] text-white/20 font-mono mb-2">anime</p>
-              <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40 group-hover:text-white/60 transition-colors">{label}</p>
-              <ArrowRight size={16} className="text-white/20 group-hover:text-white/50 absolute bottom-5 right-5 opacity-0 group-hover:opacity-100 transition-all group-hover:translate-x-1 duration-300" />
+              <AnimatedCounterText value={count} className="text-5xl font-black tracking-tighter text-foreground mb-1" />
+              <p className="text-[9px] text-subtle font-mono mb-2">anime</p>
+              <p className="text-[10px] font-black uppercase tracking-[0.3em] text-muted group-hover:text-muted transition-colors">{label}</p>
+              <ArrowRight size={16} className="text-subtle group-hover:text-muted absolute bottom-5 right-5 opacity-0 group-hover:opacity-100 transition-all group-hover:translate-x-1 duration-300" />
             </motion.div>
           ))}
         </div>
@@ -123,10 +123,10 @@ function DiscoverySection() {
                 sizes="200px"
               />
               <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black via-black/60 to-transparent p-3 translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
-                <p className="text-[9px] font-black text-white uppercase tracking-tight truncate">{anime.title}</p>
+                <p className="text-[9px] font-black text-foreground uppercase tracking-tight truncate">{anime.title}</p>
                 <div className="flex items-center gap-1 mt-0.5">
-                  <Star size={8} fill="currentColor" className="text-white/50" />
-                  <span className="text-[8px] text-white/40">{anime.rating.toFixed(1)}</span>
+                  <Star size={8} fill="currentColor" className="text-muted" />
+                  <span className="text-[8px] text-muted">{anime.rating.toFixed(1)}</span>
                 </div>
               </div>
             </motion.div>
@@ -140,7 +140,7 @@ function DiscoverySection() {
           className="text-center"
         >
           <Link href="/bestanimelist"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-white/[0.08] text-sm font-medium text-white/40 hover:text-white/70 hover:border-white/[0.15] hover:bg-white/[0.03] transition-all"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-white/[0.08] text-sm font-medium text-muted hover:text-muted hover:border-white/[0.15] hover:bg-surface transition-all"
           >
             View full catalog <ArrowRight size={13} />
           </Link>
@@ -182,7 +182,7 @@ function AIResultRow({
       transition={{ delay: index * 0.06 }}
       className="group flex items-center gap-4 px-6 py-4 hover:bg-white/[0.025] transition-colors cursor-pointer border-t border-white/[0.04] relative"
     >
-      <span className="text-[9px] font-bold tabular-nums text-white/20 w-3 shrink-0">{String(index + 1).padStart(2, "0")}</span>
+      <span className="text-[9px] font-bold tabular-nums text-subtle w-3 shrink-0">{String(index + 1).padStart(2, "0")}</span>
 
       {/* Poster thumbnail — real anime cover with gradient fallback */}
       <div className={`relative w-10 h-14 rounded-md shrink-0 ${showImage ? "bg-black/40" : `bg-gradient-to-b ${grad}`} border border-white/[0.1] overflow-hidden`}>
@@ -206,7 +206,7 @@ function AIResultRow({
         }} />
         {!showImage && (
           <div className="absolute inset-x-0 bottom-0 p-1 bg-gradient-to-t from-black/60 to-transparent">
-            <span className="text-[7.5px] font-black text-white/55 leading-none tracking-tight">{title.slice(0, 3).toUpperCase()}</span>
+            <span className="text-[7.5px] font-black text-muted leading-none tracking-tight">{title.slice(0, 3).toUpperCase()}</span>
           </div>
         )}
       </div>
@@ -215,11 +215,11 @@ function AIResultRow({
         <p className="text-[13.5px] font-bold text-white/90 truncate mb-1 group-hover:text-amber-200 transition-colors">{title}</p>
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-1">
-            <Star size={9} className="fill-amber-400 text-amber-400" />
-            <span className="text-[10px] text-white/55 font-semibold tabular-nums">{score}</span>
+            <Star size={9} className="fill-amber-400 text-accent-bright" />
+            <span className="text-[10px] text-muted font-semibold tabular-nums">{score}</span>
           </div>
-          <span className="text-[6px] text-white/15">●</span>
-          <span className="text-[10px] text-white/35 font-medium">{genre}</span>
+          <span className="text-[6px] text-subtle">●</span>
+          <span className="text-[10px] text-subtle font-medium">{genre}</span>
         </div>
       </div>
 
@@ -297,18 +297,18 @@ function AIOracleSection() {
                 initial={{ opacity: 0, y: 8 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-amber-500/15 bg-amber-500/[0.04] mb-7"
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-accent/15 bg-accent/[0.04] mb-7"
               >
                 <span className="relative inline-flex h-1.5 w-1.5">
-                  <motion.span animate={{ opacity: [0.5, 1, 0.5] }} transition={{ duration: 1.8, repeat: Infinity }} className="absolute inset-0 rounded-full bg-amber-400" />
+                  <motion.span animate={{ opacity: [0.5, 1, 0.5] }} transition={{ duration: 1.8, repeat: Infinity }} className="absolute inset-0 rounded-full bg-accent-bright" />
                 </span>
-                <span className="text-[10px] font-bold uppercase tracking-[0.28em] text-amber-300/80">AI Discovery</span>
+                <span className="text-[10px] font-bold uppercase tracking-[0.28em] text-accent-bright/80">AI Discovery</span>
               </motion.div>
               <motion.h2
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="text-[clamp(2.4rem,4.4vw,4rem)] font-black tracking-[-0.025em] text-white leading-[1.02] mb-6"
+                className="text-[clamp(2.4rem,4.4vw,4rem)] font-black tracking-[-0.025em] text-foreground leading-[1.02] mb-6"
               >
                 Tell us how you<br />
                 <span
@@ -326,7 +326,7 @@ function AIOracleSection() {
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
-                className="text-white/45 text-[15px] leading-relaxed max-w-[42ch]"
+                className="text-muted text-[15px] leading-relaxed max-w-[42ch]"
               >
                 Forget genre tags. Our AI matches anime to your mood — a vibe,
                 a feeling, the exact moment you&apos;re chasing.
@@ -336,7 +336,7 @@ function AIOracleSection() {
             {/* Example prompts */}
             <div>
               <div className="flex items-center gap-3 mb-4">
-                <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-white/30">Try asking for</p>
+                <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-subtle">Try asking for</p>
                 <span className="h-px flex-1 bg-gradient-to-r from-white/8 to-transparent" />
               </div>
               <div className="space-y-2">
@@ -350,19 +350,19 @@ function AIOracleSection() {
                     onClick={() => setActive(i)}
                     className={`group w-full text-left pl-4 pr-5 py-3.5 rounded-xl border transition-all flex items-center gap-3.5 relative overflow-hidden ${
                       active === i
-                        ? "border-amber-500/30 bg-gradient-to-r from-amber-500/[0.06] to-transparent text-white/90"
-                        : "border-white/[0.06] bg-white/[0.015] text-white/40 hover:border-white/[0.12] hover:bg-white/[0.03] hover:text-white/70"
+                        ? "border-accent/30 bg-gradient-to-r from-accent/[0.06] to-transparent text-white/90"
+                        : "border-white/[0.06] bg-white/[0.015] text-muted hover:border-white/[0.12] hover:bg-surface hover:text-muted"
                     }`}
                   >
                     {/* Active indicator bar */}
                     {active === i && (
                       <motion.span
                         layoutId="prompt-bar"
-                        className="absolute left-0 top-2 bottom-2 w-[3px] rounded-full bg-amber-400"
+                        className="absolute left-0 top-2 bottom-2 w-[3px] rounded-full bg-accent-bright"
                       />
                     )}
                     <span className={`w-1.5 h-1.5 rounded-full shrink-0 transition-all ${
-                      active === i ? "bg-amber-400 shadow-[0_0_8px_rgba(245,158,11,0.6)]" : "bg-white/15 group-hover:bg-white/30"
+                      active === i ? "bg-accent-bright shadow-[0_0_8px_rgba(245,158,11,0.6)]" : "bg-white/15 group-hover:bg-white/30"
                     }`} />
                     <span className="text-[13px] font-medium leading-snug">&ldquo;{p.full}&rdquo;</span>
                   </motion.button>
@@ -404,12 +404,12 @@ function AIOracleSection() {
               {/* Header */}
               <div className="px-6 py-4 border-b border-white/[0.06] flex items-center justify-between bg-gradient-to-b from-white/[0.02] to-transparent">
                 <div className="flex items-center gap-2.5">
-                  <div className="relative h-7 w-7 rounded-lg bg-gradient-to-br from-amber-500/20 to-amber-600/10 border border-amber-500/20 flex items-center justify-center">
-                    <Sparkles size={12} className="text-amber-400" />
+                  <div className="relative h-7 w-7 rounded-lg bg-gradient-to-br from-accent/20 to-accent/10 border border-accent/20 flex items-center justify-center">
+                    <Sparkles size={12} className="text-accent-bright" />
                   </div>
                   <div className="flex flex-col leading-none">
                     <span className="text-[11.5px] font-bold text-white/85">Neural Oracle</span>
-                    <span className="text-[8.5px] font-medium uppercase tracking-[0.2em] text-white/30 mt-0.5">v2.4 · matching engine</span>
+                    <span className="text-[8.5px] font-medium uppercase tracking-[0.2em] text-subtle mt-0.5">v2.4 · matching engine</span>
                   </div>
                 </div>
                 <div className="flex items-center gap-1.5 px-2 py-1 rounded-full border border-emerald-500/15 bg-emerald-500/[0.06]">
@@ -422,7 +422,7 @@ function AIOracleSection() {
 
               {/* Active prompt */}
               <div className="px-6 pt-5 pb-5 relative">
-                <p className="text-[9.5px] font-bold uppercase tracking-[0.22em] text-white/25 mb-3">Searching for</p>
+                <p className="text-[9.5px] font-bold uppercase tracking-[0.22em] text-subtle mb-3">Searching for</p>
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={active}
@@ -438,7 +438,7 @@ function AIOracleSection() {
                     <motion.span
                       animate={{ opacity: [1, 0, 1] }}
                       transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                      className="inline-block w-[2px] h-[18px] bg-amber-400 mt-[3px] shrink-0"
+                      className="inline-block w-[2px] h-[18px] bg-accent-bright mt-[3px] shrink-0"
                     />
                   </motion.div>
                 </AnimatePresence>
@@ -452,8 +452,8 @@ function AIOracleSection() {
                     onClick={() => setActive(i)}
                     className={`px-3 py-1.5 rounded-lg text-[10.5px] font-bold uppercase tracking-[0.04em] transition-all ${
                       active === i
-                        ? "bg-amber-500 text-black shadow-[0_2px_12px_rgba(245,158,11,0.35)]"
-                        : "bg-white/[0.025] text-white/40 border border-white/[0.07] hover:bg-white/[0.06] hover:text-white/70 hover:border-white/[0.12]"
+                        ? "bg-accent text-black shadow-[0_2px_12px_rgba(245,158,11,0.35)]"
+                        : "bg-white/[0.025] text-muted border border-white/[0.07] hover:bg-white/[0.06] hover:text-muted hover:border-white/[0.12]"
                     }`}
                   >
                     {p.short}
@@ -464,8 +464,8 @@ function AIOracleSection() {
               {/* Results */}
               <div className="border-t border-white/[0.06]">
                 <div className="px-6 py-3 flex items-center justify-between bg-white/[0.015]">
-                  <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-white/30">Top Matches</p>
-                  <span className="text-[9.5px] text-amber-400/70 font-bold tabular-nums">3 results</span>
+                  <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-subtle">Top Matches</p>
+                  <span className="text-[9.5px] text-accent-bright/70 font-bold tabular-nums">3 results</span>
                 </div>
                 <AnimatePresence mode="wait">
                   <motion.div
@@ -483,12 +483,12 @@ function AIOracleSection() {
 
                 <Link
                   href="/ai-discover"
-                  className="group flex items-center justify-between px-6 py-4 border-t border-white/[0.06] bg-white/[0.015] hover:bg-white/[0.03] transition-colors"
+                  className="group flex items-center justify-between px-6 py-4 border-t border-white/[0.06] bg-white/[0.015] hover:bg-surface transition-colors"
                 >
-                  <span className="text-[11px] font-bold text-amber-400/80 group-hover:text-amber-300 transition-colors uppercase tracking-[0.18em]">
+                  <span className="text-[11px] font-bold text-accent-bright/80 group-hover:text-accent-bright transition-colors uppercase tracking-[0.18em]">
                     Open AI Discovery
                   </span>
-                  <span className="flex items-center gap-1 text-amber-400/60 group-hover:text-amber-300 transition-all group-hover:translate-x-0.5">
+                  <span className="flex items-center gap-1 text-accent-bright/60 group-hover:text-accent-bright transition-all group-hover:translate-x-0.5">
                     <ArrowRight size={12} />
                   </span>
                 </Link>
@@ -527,18 +527,18 @@ function CommunitySection() {
                 initial={{ opacity: 0, y: 8 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-amber-500/15 bg-amber-500/[0.04] mb-7"
+                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-accent/15 bg-accent/[0.04] mb-7"
               >
                 <span className="relative inline-flex h-1.5 w-1.5">
-                  <motion.span animate={{ opacity: [0.5, 1, 0.5] }} transition={{ duration: 1.8, repeat: Infinity }} className="absolute inset-0 rounded-full bg-amber-400" />
+                  <motion.span animate={{ opacity: [0.5, 1, 0.5] }} transition={{ duration: 1.8, repeat: Infinity }} className="absolute inset-0 rounded-full bg-accent-bright" />
                 </span>
-                <span className="text-[10px] font-bold uppercase tracking-[0.28em] text-amber-300/80">Community</span>
+                <span className="text-[10px] font-bold uppercase tracking-[0.28em] text-accent-bright/80">Community</span>
               </motion.div>
               <motion.h2
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="text-[clamp(2.4rem,4.6vw,4rem)] font-black tracking-[-0.025em] text-white leading-[1.02] mb-6"
+                className="text-[clamp(2.4rem,4.6vw,4rem)] font-black tracking-[-0.025em] text-foreground leading-[1.02] mb-6"
               >
                 Every episode<br />
                 <span
@@ -556,7 +556,7 @@ function CommunitySection() {
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 viewport={{ once: true }}
-                className="text-white/45 text-[15px] leading-relaxed max-w-[42ch]"
+                className="text-muted text-[15px] leading-relaxed max-w-[42ch]"
               >
                 Earn XP for every episode you watch. Build streaks, unlock titles,
                 and compete on a global leaderboard that rewards dedication —
@@ -568,7 +568,7 @@ function CommunitySection() {
             <div className="grid grid-cols-2 gap-3">
               {[
                 { icon: Flame,  label: "Daily Streaks",   desc: "Watch daily to compound XP.",    iconColor: "text-orange-400",  iconBg: "from-orange-500/20 to-orange-600/5",  ring: "border-orange-500/20" },
-                { icon: Trophy, label: "Leaderboard",     desc: "Rank globally by season.",       iconColor: "text-amber-400",   iconBg: "from-amber-500/20 to-amber-600/5",    ring: "border-amber-500/20"  },
+                { icon: Trophy, label: "Leaderboard",     desc: "Rank globally by season.",       iconColor: "text-accent-bright",   iconBg: "from-accent/20 to-accent/5",    ring: "border-accent/20"  },
                 { icon: Star,   label: "Badges & Titles", desc: "100+ achievements to unlock.",   iconColor: "text-violet-400",  iconBg: "from-violet-500/20 to-violet-600/5",  ring: "border-violet-500/20" },
                 { icon: Users,  label: "Social Feed",     desc: "Follow fans with similar taste.", iconColor: "text-emerald-400", iconBg: "from-emerald-500/20 to-emerald-600/5", ring: "border-emerald-500/20" },
               ].map(({ icon: Icon, label, desc, iconColor, iconBg, ring }, i) => (
@@ -586,7 +586,7 @@ function CommunitySection() {
                     <Icon size={14} className={iconColor} />
                   </div>
                   <p className="text-[13px] font-bold text-white/90 mb-1 tracking-[-0.005em]">{label}</p>
-                  <p className="text-[11px] text-white/40 leading-snug">{desc}</p>
+                  <p className="text-[11px] text-muted leading-snug">{desc}</p>
                 </motion.div>
               ))}
             </div>
@@ -604,8 +604,8 @@ function CommunitySection() {
                 { v: "8.4",                               l: "Avg community rating"  },
               ].map(({ v, l }, i) => (
                 <div key={l} className={`${i > 0 ? "pl-6 border-l border-white/[0.05]" : ""}`}>
-                  <p className="text-[22px] font-black text-white tracking-[-0.02em] leading-none tabular-nums">{v}</p>
-                  <p className="text-[10px] font-medium uppercase tracking-[0.15em] text-white/30 mt-2">{l}</p>
+                  <p className="text-[22px] font-black text-foreground tracking-[-0.02em] leading-none tabular-nums">{v}</p>
+                  <p className="text-[10px] font-medium uppercase tracking-[0.15em] text-subtle mt-2">{l}</p>
                 </div>
               ))}
             </motion.div>
@@ -628,7 +628,7 @@ function CommunitySection() {
                 <ArrowRight size={12} className="group-hover:translate-x-0.5 transition-transform" />
               </Link>
               <Link href="/register"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-white/[0.1] text-[12px] font-bold uppercase tracking-[0.18em] text-white/55 hover:text-white hover:border-white/20 hover:bg-white/[0.04] transition-all"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-white/[0.1] text-[12px] font-bold uppercase tracking-[0.18em] text-muted hover:text-foreground hover:border-border hover:bg-white/[0.04] transition-all"
               >
                 Join Free
               </Link>
@@ -650,22 +650,22 @@ function CommunitySection() {
             }} />
 
             {/* Top fan spotlight */}
-            <div className="relative flex items-center gap-4 p-5 rounded-2xl bg-gradient-to-r from-amber-500/[0.10] via-amber-500/[0.04] to-transparent border border-amber-500/[0.18] overflow-hidden">
-              <div className="absolute -right-10 -top-10 w-32 h-32 rounded-full bg-amber-500/8 blur-3xl pointer-events-none" />
+            <div className="relative flex items-center gap-4 p-5 rounded-2xl bg-gradient-to-r from-accent/[0.10] via-accent/[0.04] to-transparent border border-accent/[0.18] overflow-hidden">
+              <div className="absolute -right-10 -top-10 w-32 h-32 rounded-full bg-accent/8 blur-3xl pointer-events-none" />
               <div className="relative shrink-0">
-                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-amber-400/30 to-orange-500/15 border border-amber-400/25 flex items-center justify-center text-lg font-black text-amber-200 shadow-[0_0_20px_rgba(245,158,11,0.25)]">
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-accent-bright/30 to-orange-500/15 border border-accent/25 flex items-center justify-center text-lg font-black text-amber-200 shadow-[0_0_20px_rgba(245,158,11,0.25)]">
                   O
                 </div>
-                <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 border-2 border-[#06060d] flex items-center justify-center shadow-md">
+                <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-gradient-to-br from-accent-bright to-orange-500 border-2 border-[#06060d] flex items-center justify-center shadow-md">
                   <span className="text-[8.5px] font-black text-black">1</span>
                 </div>
               </div>
               <div className="flex-1 min-w-0 relative">
                 <div className="flex items-center gap-2">
-                  <p className="text-[15px] font-bold text-white tracking-[-0.01em]">Otaku_Arch</p>
-                  <span className="text-[8.5px] px-1.5 py-0.5 rounded-md bg-amber-500/15 border border-amber-500/25 text-amber-300/90 font-bold uppercase tracking-[0.1em]">Legendary</span>
+                  <p className="text-[15px] font-bold text-foreground tracking-[-0.01em]">Otaku_Arch</p>
+                  <span className="text-[8.5px] px-1.5 py-0.5 rounded-md bg-accent/15 border border-accent/25 text-accent-bright/90 font-bold uppercase tracking-[0.1em]">Legendary</span>
                 </div>
-                <p className="text-[11.5px] text-white/45 mt-1 font-medium">42-day streak · 1.2M XP this season</p>
+                <p className="text-[11.5px] text-muted mt-1 font-medium">42-day streak · 1.2M XP this season</p>
               </div>
               <div className="text-right shrink-0 relative">
                 <div className="flex items-baseline gap-1 justify-end">
@@ -676,7 +676,7 @@ function CommunitySection() {
                     WebkitTextFillColor: "transparent",
                   }}>42</p>
                 </div>
-                <p className="text-[9px] text-white/30 font-medium uppercase tracking-[0.14em] mt-1">day streak</p>
+                <p className="text-[9px] text-subtle font-medium uppercase tracking-[0.14em] mt-1">day streak</p>
               </div>
             </div>
 
@@ -685,9 +685,9 @@ function CommunitySection() {
               style={{ boxShadow: "0 50px 100px -20px rgba(0,0,0,0.7), 0 0 0 1px rgba(255,255,255,0.02) inset" }}
             >
               <div className="px-6 py-4 border-b border-white/[0.06] flex items-center justify-between bg-gradient-to-b from-white/[0.02] to-transparent">
-                <span className="text-[11px] font-bold text-white/60 uppercase tracking-[0.18em]">Top fans this week</span>
-                <div className="h-7 w-7 rounded-lg bg-amber-500/10 border border-amber-500/15 flex items-center justify-center">
-                  <Trophy size={12} className="text-amber-400" />
+                <span className="text-[11px] font-bold text-muted uppercase tracking-[0.18em]">Top fans this week</span>
+                <div className="h-7 w-7 rounded-lg bg-accent/10 border border-accent/15 flex items-center justify-center">
+                  <Trophy size={12} className="text-accent-bright" />
                 </div>
               </div>
               <div className="divide-y divide-white/[0.04]">
@@ -703,14 +703,14 @@ function CommunitySection() {
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: i * 0.06 }}
-                    className="group flex items-center gap-3.5 px-6 py-4 hover:bg-white/[0.02] transition-colors cursor-pointer relative"
+                    className="group flex items-center gap-3.5 px-6 py-4 hover:bg-surface transition-colors cursor-pointer relative"
                   >
                     <span className={`text-[12px] font-black w-4 text-center shrink-0 tabular-nums ${
-                      rank === 1 ? "text-amber-400" : rank === 2 ? "text-white/55" : rank === 3 ? "text-amber-600/70" : "text-white/25"
+                      rank === 1 ? "text-accent-bright" : rank === 2 ? "text-muted" : rank === 3 ? "text-accent/70" : "text-subtle"
                     }`}>{rank}</span>
 
                     <div className={`relative w-9 h-9 rounded-xl border flex items-center justify-center text-[11px] font-black shrink-0 ${
-                      rank === 1 ? "bg-gradient-to-br from-amber-500/20 to-amber-600/5 border-amber-500/20 text-amber-300" : "bg-white/[0.04] border-white/[0.08] text-white/55"
+                      rank === 1 ? "bg-gradient-to-br from-accent/20 to-accent/5 border-accent/20 text-accent-bright" : "bg-white/[0.04] border-white/[0.08] text-muted"
                     }`}>
                       {name[0]}
                     </div>
@@ -718,10 +718,10 @@ function CommunitySection() {
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1.5">
                         <p className="text-[12.5px] font-bold text-white/85 group-hover:text-amber-200 transition-colors tracking-[-0.005em]">{name}</p>
-                        <span className="text-[8px] font-bold uppercase tracking-[0.1em] text-white/35 bg-white/[0.05] border border-white/[0.06] px-1.5 py-0.5 rounded shrink-0">{title}</span>
+                        <span className="text-[8px] font-bold uppercase tracking-[0.1em] text-subtle bg-surface border border-white/[0.06] px-1.5 py-0.5 rounded shrink-0">{title}</span>
                       </div>
                       <div className="flex items-center gap-2">
-                        <div className="flex-1 h-1 bg-white/[0.05] rounded-full overflow-hidden">
+                        <div className="flex-1 h-1 bg-surface rounded-full overflow-hidden">
                           <motion.div
                             initial={{ width: 0 }}
                             whileInView={{ width: `${pct}%` }}
@@ -731,25 +731,25 @@ function CommunitySection() {
                             style={{ background: "linear-gradient(90deg, #fbbf24, #f59e0b)" }}
                           />
                         </div>
-                        <span className="text-[9.5px] text-white/30 font-bold shrink-0 tabular-nums">{xp}</span>
+                        <span className="text-[9.5px] text-subtle font-bold shrink-0 tabular-nums">{xp}</span>
                       </div>
                     </div>
 
                     <div className="text-right shrink-0 ml-1">
                       <p className="text-[12px] font-bold text-orange-400/85 tabular-nums">{streak}d</p>
-                      <p className="text-[8px] text-white/20 font-medium uppercase tracking-[0.12em] mt-0.5">streak</p>
+                      <p className="text-[8px] text-subtle font-medium uppercase tracking-[0.12em] mt-0.5">streak</p>
                     </div>
                   </motion.div>
                 ))}
               </div>
               <Link
                 href="/leaderboard"
-                className="group flex items-center justify-between px-6 py-4 border-t border-white/[0.06] bg-white/[0.015] hover:bg-white/[0.03] transition-colors"
+                className="group flex items-center justify-between px-6 py-4 border-t border-white/[0.06] bg-white/[0.015] hover:bg-surface transition-colors"
               >
-                <span className="text-[11px] font-bold text-amber-400/80 group-hover:text-amber-300 transition-colors uppercase tracking-[0.18em]">
+                <span className="text-[11px] font-bold text-accent-bright/80 group-hover:text-accent-bright transition-colors uppercase tracking-[0.18em]">
                   View Full Leaderboard
                 </span>
-                <ArrowRight size={12} className="text-amber-400/60 group-hover:text-amber-300 group-hover:translate-x-0.5 transition-all" />
+                <ArrowRight size={12} className="text-accent-bright/60 group-hover:text-accent-bright group-hover:translate-x-0.5 transition-all" />
               </Link>
             </div>
           </motion.div>
@@ -777,18 +777,18 @@ function ShowcaseSection() {
           ].map(({ title, ep, pct, grad, status }) => (
             <div key={title} className="flex items-center gap-3">
               <div className={`w-7 h-10 rounded-md bg-gradient-to-b ${grad} shrink-0 border border-white/[0.08] flex items-end justify-start p-0.5`}>
-                <span className="text-[5px] font-bold text-white/30 leading-none">{title.slice(0,3).toUpperCase()}</span>
+                <span className="text-[5px] font-bold text-subtle leading-none">{title.slice(0,3).toUpperCase()}</span>
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex justify-between items-baseline mb-1.5">
-                  <span className="text-[10px] font-medium text-white/75 truncate">{title}</span>
-                  <span className="text-[8px] text-white/25 shrink-0 ml-2">{ep}</span>
+                  <span className="text-[10px] font-medium text-muted truncate">{title}</span>
+                  <span className="text-[8px] text-subtle shrink-0 ml-2">{ep}</span>
                 </div>
                 <div className="h-1 bg-white/[0.06] rounded-full">
-                  <div className={`h-full rounded-full ${pct === 100 ? "bg-emerald-500/70" : "bg-amber-500/70"}`} style={{ width: `${pct}%` }} />
+                  <div className={`h-full rounded-full ${pct === 100 ? "bg-emerald-500/70" : "bg-accent/70"}`} style={{ width: `${pct}%` }} />
                 </div>
               </div>
-              <span className={`text-[8px] font-medium shrink-0 ${pct === 100 ? "text-emerald-400/60" : "text-amber-400/50"}`}>{status}</span>
+              <span className={`text-[8px] font-medium shrink-0 ${pct === 100 ? "text-emerald-400/60" : "text-accent-bright/50"}`}>{status}</span>
             </div>
           ))}
         </div>
@@ -807,12 +807,12 @@ function ShowcaseSection() {
             { rank: 2, name: "ShadowWatch", xp: "840K", delta: null },
             { rank: 3, name: "You", xp: "320K", delta: "↑2" },
           ].map(({ rank, name, xp, delta }) => (
-            <div key={name} className={`flex items-center gap-3 px-3 py-2.5 rounded-xl ${name === "You" ? "bg-amber-500/[0.08] border border-amber-500/[0.15]" : "bg-white/[0.03]"}`}>
-              <span className="text-[11px] font-bold text-white/30 w-4 text-right">{rank}</span>
-              <div className="w-6 h-6 rounded-lg bg-white/[0.06] flex items-center justify-center text-[9px] font-bold text-white/50">{name[0]}</div>
-              <span className="flex-1 text-[11px] font-medium text-white/70">{name}</span>
-              {delta && <span className="text-[9px] text-amber-400 font-bold">{delta}</span>}
-              <span className="text-[9px] text-white/25 font-mono">{xp}</span>
+            <div key={name} className={`flex items-center gap-3 px-3 py-2.5 rounded-xl ${name === "You" ? "bg-accent/[0.08] border border-accent/[0.15]" : "bg-surface"}`}>
+              <span className="text-[11px] font-bold text-subtle w-4 text-right">{rank}</span>
+              <div className="w-6 h-6 rounded-lg bg-white/[0.06] flex items-center justify-center text-[9px] font-bold text-muted">{name[0]}</div>
+              <span className="flex-1 text-[11px] font-medium text-muted">{name}</span>
+              {delta && <span className="text-[9px] text-accent-bright font-bold">{delta}</span>}
+              <span className="text-[9px] text-subtle font-mono">{xp}</span>
             </div>
           ))}
         </div>
@@ -826,17 +826,17 @@ function ShowcaseSection() {
       accent: "violet",
       preview: (
         <div className="space-y-3">
-          <div className="p-3 rounded-xl bg-white/[0.03] border border-white/[0.06]">
-            <p className="text-[10px] font-semibold text-white/70 mb-1">My Frieren Review</p>
-            <p className="text-[9px] text-white/35 leading-relaxed line-clamp-2">"A masterpiece about the passage of time — slow, elegant, and devastating..."</p>
+          <div className="p-3 rounded-xl bg-surface border border-white/[0.06]">
+            <p className="text-[10px] font-semibold text-muted mb-1">My Frieren Review</p>
+            <p className="text-[9px] text-subtle leading-relaxed line-clamp-2">"A masterpiece about the passage of time — slow, elegant, and devastating..."</p>
             <div className="flex items-center gap-3 mt-2">
-              <span className="text-[8px] text-white/20">★★★★★</span>
-              <span className="text-[8px] text-white/20">· 142 likes · 28 comments</span>
+              <span className="text-[8px] text-subtle">★★★★★</span>
+              <span className="text-[8px] text-subtle">· 142 likes · 28 comments</span>
             </div>
           </div>
           <div className="flex gap-2">
             {["Blog", "Poll", "Review"].map(t => (
-              <span key={t} className="px-2.5 py-1 rounded-md bg-white/[0.04] border border-white/[0.06] text-[9px] text-white/35">{t}</span>
+              <span key={t} className="px-2.5 py-1 rounded-md bg-white/[0.04] border border-white/[0.06] text-[9px] text-subtle">{t}</span>
             ))}
           </div>
         </div>
@@ -863,18 +863,18 @@ function ShowcaseSection() {
             initial={{ opacity: 0, y: 8 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-amber-500/15 bg-amber-500/[0.04] mb-7"
+            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-accent/15 bg-accent/[0.04] mb-7"
           >
             <span className="relative inline-flex h-1.5 w-1.5">
-              <motion.span animate={{ opacity: [0.5, 1, 0.5] }} transition={{ duration: 1.8, repeat: Infinity }} className="absolute inset-0 rounded-full bg-amber-400" />
+              <motion.span animate={{ opacity: [0.5, 1, 0.5] }} transition={{ duration: 1.8, repeat: Infinity }} className="absolute inset-0 rounded-full bg-accent-bright" />
             </span>
-            <span className="text-[10px] font-bold uppercase tracking-[0.28em] text-amber-300/80">Platform</span>
+            <span className="text-[10px] font-bold uppercase tracking-[0.28em] text-accent-bright/80">Platform</span>
           </motion.div>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-[clamp(2.4rem,4.6vw,4rem)] font-black tracking-[-0.025em] text-white leading-[1.02] mb-5"
+            className="text-[clamp(2.4rem,4.6vw,4rem)] font-black tracking-[-0.025em] text-foreground leading-[1.02] mb-5"
           >
             Everything you need,<br />
             <span
@@ -892,7 +892,7 @@ function ShowcaseSection() {
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            className="text-white/45 text-[15px] leading-relaxed max-w-[52ch]"
+            className="text-muted text-[15px] leading-relaxed max-w-[52ch]"
           >
             Three studios in one platform — built for serious fans who treat
             anime as identity, not entertainment.
@@ -934,19 +934,19 @@ function ShowcaseSection() {
                   <div className="flex items-center gap-2 mb-4">
                     <span className={`inline-flex items-center gap-1.5 text-[9.5px] font-black uppercase tracking-[0.22em] px-2.5 py-1.5 rounded-md border ${
                       accent === "indigo" ? "text-indigo-300/90 bg-indigo-500/10 border-indigo-500/20" :
-                      accent === "amber" ? "text-amber-300/90 bg-amber-500/10 border-amber-500/20" :
+                      accent === "amber" ? "text-accent-bright/90 bg-accent/10 border-accent/20" :
                       "text-violet-300/90 bg-violet-500/10 border-violet-500/20"
                     }`}>
                       <span className={`w-1 h-1 rounded-full ${
                         accent === "indigo" ? "bg-indigo-400" :
-                        accent === "amber" ? "bg-amber-400" : "bg-violet-400"
+                        accent === "amber" ? "bg-accent-bright" : "bg-violet-400"
                       }`} />
                       {tag}
                     </span>
-                    <span className="text-[10px] font-mono text-white/15 tabular-nums">0{i + 1}</span>
+                    <span className="text-[10px] font-mono text-subtle tabular-nums">0{i + 1}</span>
                   </div>
-                  <h3 className="text-[18px] font-bold text-white leading-tight mb-3 tracking-[-0.015em]">{title}</h3>
-                  <p className="text-[13px] text-white/45 leading-relaxed">{desc}</p>
+                  <h3 className="text-[18px] font-bold text-foreground leading-tight mb-3 tracking-[-0.015em]">{title}</h3>
+                  <p className="text-[13px] text-muted leading-relaxed">{desc}</p>
                 </div>
 
                 {/* Mock preview */}
@@ -958,7 +958,7 @@ function ShowcaseSection() {
                   href={href}
                   className={`group/link inline-flex items-center gap-1.5 text-[11px] font-black uppercase tracking-[0.22em] transition-all ${
                     accent === "indigo" ? "text-indigo-300/80 hover:text-indigo-200" :
-                    accent === "amber" ? "text-amber-300/80 hover:text-amber-200" :
+                    accent === "amber" ? "text-accent-bright/80 hover:text-amber-200" :
                     "text-violet-300/80 hover:text-violet-200"
                   }`}
                 >
@@ -996,7 +996,7 @@ function FinalCTASection() {
       <motion.div
         animate={{ scale: [1, 1.1, 1], opacity: [0.07, 0.13, 0.07] }}
         transition={{ duration: 10, repeat: Infinity }}
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-amber-600 blur-[180px] rounded-full pointer-events-none"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-accent blur-[180px] rounded-full pointer-events-none"
       />
       {/* Dot grid */}
       <div className="absolute inset-0 opacity-[0.025] pointer-events-none" style={{ backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.8) 1px, transparent 1px)", backgroundSize: "40px 40px" }} />
@@ -1006,18 +1006,18 @@ function FinalCTASection() {
         {/* Platform badge */}
         <div className="flex justify-center mb-10">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.04] border border-white/[0.08]">
-            <Sparkles size={11} className="text-amber-400" />
-            <span className="text-[11px] font-medium text-white/45">Kaiveron · Open Beta</span>
+            <Sparkles size={11} className="text-accent-bright" />
+            <span className="text-[11px] font-medium text-muted">Kaiveron · Open Beta</span>
           </div>
         </div>
 
         {/* Heading */}
         <div className="text-center mb-8">
-          <h2 className="text-[clamp(2.2rem,6vw,5rem)] font-bold tracking-tight leading-tight text-white mb-4">
+          <h2 className="text-[clamp(2.2rem,6vw,5rem)] font-bold tracking-tight leading-tight text-foreground mb-4">
             Your anime archive,<br />
-            <span className="text-amber-400">starting today.</span>
+            <span className="text-accent-bright">starting today.</span>
           </h2>
-          <p className="text-white/35 text-base max-w-md mx-auto leading-relaxed">
+          <p className="text-subtle text-base max-w-md mx-auto leading-relaxed">
             The social platform built for serious anime fans. Track, rate, discover, and compete — all in one place.
           </p>
         </div>
@@ -1025,7 +1025,7 @@ function FinalCTASection() {
         {/* Feature pills */}
         <div className="flex flex-wrap justify-center gap-2 mb-10">
           {FEATURES.map((f) => (
-            <span key={f} className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.07] text-[11px] font-medium text-white/45">
+            <span key={f} className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.07] text-[11px] font-medium text-muted">
               <span className="w-1 h-1 rounded-full bg-indigo-400/70 shrink-0" />
               {f}
             </span>
@@ -1042,11 +1042,11 @@ function FinalCTASection() {
             <ArrowRight size={16} className="group-hover:translate-x-0.5 transition-transform" />
           </Link>
 
-          <div className="flex items-center gap-3 text-[11px] text-white/20">
+          <div className="flex items-center gap-3 text-[11px] text-subtle">
             <span>Free forever</span>
-            <span className="text-white/10">·</span>
+            <span className="text-subtle">·</span>
             <span>No credit card required</span>
-            <span className="text-white/10">·</span>
+            <span className="text-subtle">·</span>
             <span>Join in under 30 seconds</span>
           </div>
         </div>
@@ -1058,13 +1058,13 @@ function FinalCTASection() {
             <div className="flex items-center gap-3">
               <div className="flex -space-x-2.5">
                 {["O","S","V","N","C"].map((l, i) => (
-                  <div key={i} className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-600/40 to-violet-600/30 border-2 border-[#06060f] flex items-center justify-center text-[9px] font-bold text-white/60">
+                  <div key={i} className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-600/40 to-violet-600/30 border-2 border-[#06060f] flex items-center justify-center text-[9px] font-bold text-muted">
                     {l}
                   </div>
                 ))}
               </div>
-              <p className="text-xs text-white/25">
-                Joined by <span className="text-white/50 font-medium">{userCount >= 1000 ? userCount.toLocaleString() : "1,000+"}</span> fans
+              <p className="text-xs text-subtle">
+                Joined by <span className="text-muted font-medium">{userCount >= 1000 ? userCount.toLocaleString() : "1,000+"}</span> fans
               </p>
             </div>
 
@@ -1076,8 +1076,8 @@ function FinalCTASection() {
                 { v: "8.4★", l: "Avg rating"        },
               ].map(({ v, l }, i) => (
                 <div key={l} className={`${i > 0 ? "pl-5 border-l border-white/[0.06]" : ""}`}>
-                  <p className="text-sm font-bold text-white/70">{v}</p>
-                  <p className="text-[10px] text-white/20 mt-0.5">{l}</p>
+                  <p className="text-sm font-bold text-muted">{v}</p>
+                  <p className="text-[10px] text-subtle mt-0.5">{l}</p>
                 </div>
               ))}
             </div>
@@ -1091,7 +1091,7 @@ function FinalCTASection() {
 /* ─── ROOT ─── */
 export default function CinematicHomepage() {
   return (
-    <main className="bg-[#06060f] text-white overflow-x-hidden">
+    <main className="bg-[#06060f] text-foreground overflow-x-hidden">
       <ScrollProgressBar />
       <CinematicHero />
       <DiscoverySection />
@@ -1119,7 +1119,7 @@ function ScrollProgressBar() {
   return (
     <>
       <motion.div
-        className="fixed top-0 left-0 right-0 h-[2px] bg-amber-500 z-[200] origin-left opacity-60"
+        className="fixed top-0 left-0 right-0 h-[2px] bg-accent z-[200] origin-left opacity-60"
         style={{ scaleX }}
       />
       <div className="fixed right-6 top-1/2 -translate-y-1/2 z-[150] hidden lg:flex flex-col gap-3">
@@ -1134,7 +1134,7 @@ function ScrollProgressBar() {
             className="group flex items-center gap-2 justify-end"
           >
             <motion.span
-              className="text-[8px] font-black uppercase tracking-widest text-white/0 group-hover:text-white/35 transition-all"
+              className="text-[8px] font-black uppercase tracking-widest text-white/0 group-hover:text-subtle transition-all"
               animate={{ opacity: chapter === i ? 1 : 0, x: chapter === i ? 0 : 8 }}
             >
               {name}

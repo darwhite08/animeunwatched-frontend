@@ -17,7 +17,7 @@ function timeAgo(iso: string) {
 
 const FALLBACK = [
   { icon: Play,          color: "text-emerald-400", bg: "bg-emerald-500/10", title: "Watched Ep. 24",    anime: "Demon Slayer",    time: "2h ago",  href: "/watchlist" },
-  { icon: Star,          color: "text-amber-400",   bg: "bg-amber-500/10",   title: "Rated 10/10",       anime: "Monster",         time: "1d ago",  href: "/bestanimelist" },
+  { icon: Star,          color: "text-accent-bright",   bg: "bg-accent/10",   title: "Rated 10/10",       anime: "Monster",         time: "1d ago",  href: "/bestanimelist" },
   { icon: Trophy,        color: "text-purple-400",  bg: "bg-purple-500/10",  title: "Streak Milestone",  anime: "20 Day Streak",   time: "3d ago",  href: "/streak" },
   { icon: MessageCircle, color: "text-blue-400",    bg: "bg-blue-500/10",    title: "Left a Review",     anime: "FMA Brotherhood", time: "4d ago",  href: "/community" },
 ]
@@ -35,12 +35,12 @@ export const ActivityCard = () => {
         : entry.status === "WATCHING" ? Play
         : entry.status === "DROPPED" ? BookOpen
         : Bookmark
-      const statusColor = entry.status === "COMPLETED" ? "text-amber-400"
+      const statusColor = entry.status === "COMPLETED" ? "text-accent-bright"
         : entry.status === "WATCHING" ? "text-emerald-400"
-        : "text-amber-400"
-      const statusBg = entry.status === "COMPLETED" ? "bg-amber-500/10"
+        : "text-accent-bright"
+      const statusBg = entry.status === "COMPLETED" ? "bg-accent/10"
         : entry.status === "WATCHING" ? "bg-emerald-500/10"
-        : "bg-amber-500/10"
+        : "bg-accent/10"
       const title = entry.status === "COMPLETED" ? "Completed"
         : entry.status === "WATCHING" ? `Watching Ep. ${entry.episodesSeen}`
         : entry.status === "PLAN_TO_WATCH" ? "Added to List"
@@ -59,14 +59,14 @@ export const ActivityCard = () => {
   }, [listData])
 
   return (
-    <div className="p-8 rounded-[2.5rem] border border-white/5 bg-[#0a0a0a] flex flex-col gap-6 relative overflow-hidden group">
-      <div className="absolute -right-8 -bottom-8 w-32 h-32 bg-amber-500/5 blur-[40px] rounded-full pointer-events-none group-hover:bg-amber-500/10 transition-colors duration-700" />
+    <div className="p-8 rounded-[2.5rem] border border-border bg-surface flex flex-col gap-6 relative overflow-hidden group">
+      <div className="absolute -right-8 -bottom-8 w-32 h-32 bg-accent/5 blur-[40px] rounded-full pointer-events-none group-hover:bg-accent/10 transition-colors duration-700" />
 
       <div className="flex items-center justify-between relative z-10">
-        <h4 className="text-xs font-black uppercase tracking-[0.28em] text-white/30 flex items-center gap-2">
-          <Clock size={12} className="text-white/20" /> Recent Journey
+        <h4 className="text-xs font-black uppercase tracking-[0.28em] text-subtle flex items-center gap-2">
+          <Clock size={12} className="text-subtle" /> Recent Journey
         </h4>
-        <Link href="/watchlist" className="text-[9px] font-black uppercase tracking-widest text-amber-400/60 hover:text-amber-400 transition-colors flex items-center gap-1">
+        <Link href="/watchlist" className="text-[9px] font-black uppercase tracking-widest text-accent-bright/60 hover:text-accent-bright transition-colors flex items-center gap-1">
           All <ArrowRight size={10} />
         </Link>
       </div>
@@ -79,10 +79,10 @@ export const ActivityCard = () => {
                 <item.icon size={13} className={item.color} />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-bold text-white/80 group-hover/item:text-white transition-colors leading-tight">{item.title}</p>
-                <p className="text-[10px] font-black uppercase text-white/20 tracking-tighter truncate">{item.anime}</p>
+                <p className="text-sm font-bold text-muted group-hover/item:text-foreground transition-colors leading-tight">{item.title}</p>
+                <p className="text-[10px] font-black uppercase text-subtle tracking-tighter truncate">{item.anime}</p>
               </div>
-              <span className="text-[9px] font-medium text-white/15 italic shrink-0">{item.time}</span>
+              <span className="text-[9px] font-medium text-subtle italic shrink-0">{item.time}</span>
             </Link>
           </motion.div>
         ))}

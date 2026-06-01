@@ -17,21 +17,21 @@ const SECTIONS = [
 
 export default function TermsPage() {
   return (
-    <div className="min-h-screen bg-[#020202] text-white pb-32">
+    <div className="min-h-screen bg-background text-foreground pb-32">
       <div className="max-w-3xl mx-auto px-6 pt-32">
-        <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-amber-400/60 mb-4">Legal</p>
-        <h1 className="text-5xl font-black tracking-tighter uppercase italic text-white mb-3">
+        <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-accent-bright/60 mb-4">Legal</p>
+        <h1 className="text-5xl font-black tracking-tighter uppercase italic text-foreground mb-3">
           Terms of Service<span style={{color:"#f59e0b"}}>.</span>
         </h1>
-        <p className="text-white/35 text-sm mb-12">Last updated: May 2026 · Read carefully before using the platform.</p>
+        <p className="text-subtle text-sm mb-12">Last updated: May 2026 · Read carefully before using the platform.</p>
         <div className="space-y-10">
           {SECTIONS.map((s, i) => (
             <div key={s.title} className="space-y-3">
-              <h2 className="text-lg font-black uppercase tracking-tight text-white">
-                <span className="text-amber-500/50 font-mono text-sm mr-2">{String(i + 1).padStart(2, "0")}.</span>
+              <h2 className="text-lg font-black uppercase tracking-tight text-foreground">
+                <span className="text-accent/50 font-mono text-sm mr-2">{String(i + 1).padStart(2, "0")}.</span>
                 {s.title}
               </h2>
-              <p className="text-white/55 leading-relaxed font-medium">{s.content}</p>
+              <p className="text-muted leading-relaxed font-medium">{s.content}</p>
             </div>
           ))}
         </div>

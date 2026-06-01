@@ -27,9 +27,9 @@ const FAQ_GROUPS: FAQGroup[] = [
   {
     title: "Getting Started",
     icon: Zap,
-    color: "text-amber-400",
-    bg: "bg-amber-500/10",
-    border: "border-amber-500/20",
+    color: "text-accent-bright",
+    bg: "bg-accent/10",
+    border: "border-accent/20",
     items: [
       {
         q: "How do I create an account?",
@@ -73,9 +73,9 @@ const FAQ_GROUPS: FAQGroup[] = [
   {
     title: "Creator Studio",
     icon: PenSquare,
-    color: "text-amber-400",
-    bg: "bg-amber-500/10",
-    border: "border-amber-500/20",
+    color: "text-accent-bright",
+    bg: "bg-accent/10",
+    border: "border-accent/20",
     items: [
       {
         q: "How do I become a creator?",
@@ -119,13 +119,13 @@ function AccordionItem({ item, groupColor }: { item: FAQItem; groupColor: string
   const [open, setOpen] = useState(false)
 
   return (
-    <div className="border border-white/6 rounded-2xl overflow-hidden bg-[#0a0a0a] hover:border-white/10 transition-colors">
+    <div className="border border-border rounded-2xl overflow-hidden bg-surface hover:border-border transition-colors">
       <button
         onClick={() => setOpen((v) => !v)}
         className="w-full text-left px-6 py-5 flex items-center justify-between gap-4 group"
         aria-expanded={open}
       >
-        <span className="text-sm font-bold text-white/80 group-hover:text-white transition-colors leading-snug">
+        <span className="text-sm font-bold text-muted group-hover:text-foreground transition-colors leading-snug">
           {item.q}
         </span>
         <motion.div
@@ -147,7 +147,7 @@ function AccordionItem({ item, groupColor }: { item: FAQItem; groupColor: string
             transition={{ duration: 0.25, ease: "easeInOut" }}
             style={{ overflow: "hidden" }}
           >
-            <div className="px-6 pb-6 text-sm text-white/50 leading-relaxed border-t border-white/5 pt-4">
+            <div className="px-6 pb-6 text-sm text-muted leading-relaxed border-t border-border pt-4">
               {item.a}
             </div>
           </motion.div>
@@ -175,19 +175,19 @@ export default function HelpPage() {
   const totalVisible = filtered.reduce((acc, g) => acc + g.items.length, 0)
 
   return (
-    <div className="min-h-screen bg-[#020202] text-white pb-32">
+    <div className="min-h-screen bg-background text-foreground pb-32">
 
       {/* ── Hero ── */}
-      <section className="relative overflow-hidden border-b border-white/5">
+      <section className="relative overflow-hidden border-b border-border">
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[400px] bg-amber-600/8 blur-[120px] rounded-full" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[400px] bg-accent/8 blur-[120px] rounded-full" />
         </div>
 
         <div className="relative z-10 max-w-4xl mx-auto px-6 pt-24 pb-16 text-center">
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-amber-500/25 bg-amber-500/8 text-[10px] font-black uppercase tracking-[0.3em] text-amber-400 mb-8"
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-accent/25 bg-accent/8 text-[10px] font-black uppercase tracking-[0.3em] text-accent-bright mb-8"
           >
             Help Center
           </motion.div>
@@ -196,17 +196,17 @@ export default function HelpPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.05 }}
-            className="text-5xl md:text-6xl font-black tracking-tighter uppercase italic leading-[0.92] text-white mb-6"
+            className="text-5xl md:text-6xl font-black tracking-tighter uppercase italic leading-[0.92] text-foreground mb-6"
           >
             Got Questions?<br />
-            <span className="text-amber-400">We Have Answers.</span>
+            <span className="text-accent-bright">We Have Answers.</span>
           </motion.h1>
 
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.12 }}
-            className="text-white/40 text-base max-w-lg mx-auto mb-10"
+            className="text-muted text-base max-w-lg mx-auto mb-10"
           >
             Everything you need to know about Kaiveron — the Neural Oracle, gamification, creator tools, and more.
           </motion.p>
@@ -218,16 +218,16 @@ export default function HelpPage() {
             transition={{ delay: 0.18 }}
             className="relative max-w-xl mx-auto"
           >
-            <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/25" />
+            <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-subtle" />
             <input
               type="text"
               placeholder="Search questions…"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              className="w-full bg-white/[0.04] border border-white/10 rounded-2xl pl-11 pr-5 py-4 text-sm text-white placeholder:text-white/25 focus:outline-none focus:border-amber-500/50 focus:bg-white/[0.06] transition-all"
+              className="w-full bg-white/[0.04] border border-border rounded-2xl pl-11 pr-5 py-4 text-sm text-foreground placeholder:text-subtle focus:outline-none focus:border-accent/50 focus:bg-white/[0.06] transition-all"
             />
             {query && (
-              <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[10px] font-black text-white/25 uppercase tracking-widest">
+              <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[10px] font-black text-subtle uppercase tracking-widest">
                 {totalVisible} result{totalVisible !== 1 ? "s" : ""}
               </span>
             )}
@@ -247,11 +247,11 @@ export default function HelpPage() {
                 animate={{ opacity: 1 }}
                 className="text-center py-20"
               >
-                <HelpCircle size={40} className="text-white/10 mx-auto mb-4" />
-                <p className="text-white/30 text-sm">No questions match &quot;{query}&quot;</p>
+                <HelpCircle size={40} className="text-subtle mx-auto mb-4" />
+                <p className="text-subtle text-sm">No questions match &quot;{query}&quot;</p>
                 <button
                   onClick={() => setQuery("")}
-                  className="mt-4 text-amber-400 text-xs font-black uppercase tracking-widest hover:text-amber-300 transition-colors"
+                  className="mt-4 text-accent-bright text-xs font-black uppercase tracking-widest hover:text-accent-bright transition-colors"
                 >
                   Clear search
                 </button>
@@ -272,7 +272,7 @@ export default function HelpPage() {
                     <h2 className={`text-sm font-black uppercase tracking-[0.25em] ${group.color}`}>
                       {group.title}
                     </h2>
-                    <span className="text-[9px] font-black text-white/15 uppercase tracking-widest ml-1">
+                    <span className="text-[9px] font-black text-subtle uppercase tracking-widest ml-1">
                       {group.items.length} Q
                     </span>
                   </div>
@@ -295,15 +295,15 @@ export default function HelpPage() {
                 initial={{ opacity: 0, x: 16 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.15 }}
-                className="rounded-[2rem] border border-amber-500/20 bg-gradient-to-br from-indigo-600/10 via-violet-600/6 to-transparent p-8"
+                className="rounded-[2rem] border border-accent/20 bg-gradient-to-br from-indigo-600/10 via-violet-600/6 to-transparent p-8"
               >
-                <div className="h-12 w-12 rounded-2xl bg-amber-500/15 flex items-center justify-center mb-6">
-                  <MessageSquare size={20} className="text-amber-400" />
+                <div className="h-12 w-12 rounded-2xl bg-accent/15 flex items-center justify-center mb-6">
+                  <MessageSquare size={20} className="text-accent-bright" />
                 </div>
-                <h3 className="text-xl font-black tracking-tighter uppercase italic text-white mb-2">
+                <h3 className="text-xl font-black tracking-tighter uppercase italic text-foreground mb-2">
                   Contact Support
                 </h3>
-                <p className="text-sm text-white/40 leading-relaxed mb-6">
+                <p className="text-sm text-muted leading-relaxed mb-6">
                   Can&#39;t find what you&#39;re looking for? Our team responds within 48 hours.
                 </p>
 
@@ -312,12 +312,12 @@ export default function HelpPage() {
                     href="https://github.com/darwhite08"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-3 px-4 py-3.5 rounded-xl border border-white/8 bg-white/[0.02] hover:border-amber-500/30 hover:bg-white/[0.04] transition-all group"
+                    className="flex items-center gap-3 px-4 py-3.5 rounded-xl border border-border bg-surface hover:border-accent/30 hover:bg-white/[0.04] transition-all group"
                   >
-                    <Github size={16} className="text-white/40 group-hover:text-white transition-colors" />
+                    <Github size={16} className="text-muted group-hover:text-foreground transition-colors" />
                     <div>
-                      <p className="text-xs font-black text-white/70 group-hover:text-white transition-colors">GitHub Issues</p>
-                      <p className="text-[10px] text-white/25">Bug reports &amp; technical</p>
+                      <p className="text-xs font-black text-muted group-hover:text-foreground transition-colors">GitHub Issues</p>
+                      <p className="text-[10px] text-subtle">Bug reports &amp; technical</p>
                     </div>
                   </a>
 
@@ -325,23 +325,23 @@ export default function HelpPage() {
                     href="https://discord.gg/kaiveron"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-3 px-4 py-3.5 rounded-xl border border-white/8 bg-white/[0.02] hover:border-violet-500/30 hover:bg-white/[0.04] transition-all group"
+                    className="flex items-center gap-3 px-4 py-3.5 rounded-xl border border-border bg-surface hover:border-violet-500/30 hover:bg-white/[0.04] transition-all group"
                   >
-                    <Users size={16} className="text-white/40 group-hover:text-violet-400 transition-colors" />
+                    <Users size={16} className="text-muted group-hover:text-violet-400 transition-colors" />
                     <div>
-                      <p className="text-xs font-black text-white/70 group-hover:text-white transition-colors">Discord Community</p>
-                      <p className="text-[10px] text-white/25">Chat with the community</p>
+                      <p className="text-xs font-black text-muted group-hover:text-foreground transition-colors">Discord Community</p>
+                      <p className="text-[10px] text-subtle">Chat with the community</p>
                     </div>
                   </a>
 
                   <a
                     href="mailto:info@athavita.com"
-                    className="flex items-center gap-3 px-4 py-3.5 rounded-xl border border-white/8 bg-white/[0.02] hover:border-amber-500/30 hover:bg-white/[0.04] transition-all group"
+                    className="flex items-center gap-3 px-4 py-3.5 rounded-xl border border-border bg-surface hover:border-accent/30 hover:bg-white/[0.04] transition-all group"
                   >
-                    <Mail size={16} className="text-white/40 group-hover:text-amber-400 transition-colors" />
+                    <Mail size={16} className="text-muted group-hover:text-accent-bright transition-colors" />
                     <div>
-                      <p className="text-xs font-black text-white/70 group-hover:text-white transition-colors">Email Support</p>
-                      <p className="text-[10px] text-white/25">info@athavita.com</p>
+                      <p className="text-xs font-black text-muted group-hover:text-foreground transition-colors">Email Support</p>
+                      <p className="text-[10px] text-subtle">info@athavita.com</p>
                     </div>
                   </a>
                 </div>
@@ -352,16 +352,16 @@ export default function HelpPage() {
                 initial={{ opacity: 0, x: 16 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.22 }}
-                className="rounded-[2rem] border border-white/6 bg-[#0a0a0a] p-6 space-y-4"
+                className="rounded-[2rem] border border-border bg-surface p-6 space-y-4"
               >
-                <p className="text-[9px] font-black uppercase tracking-[0.35em] text-white/20">Response Times</p>
+                <p className="text-[9px] font-black uppercase tracking-[0.35em] text-subtle">Response Times</p>
                 {[
                   { label: "GitHub Issues", time: "< 24h", color: "text-emerald-400" },
                   { label: "Discord",        time: "< 2h",  color: "text-violet-400"  },
-                  { label: "Email",          time: "< 48h", color: "text-amber-400"   },
+                  { label: "Email",          time: "< 48h", color: "text-accent-bright"   },
                 ].map(({ label, time, color }) => (
                   <div key={label} className="flex items-center justify-between">
-                    <span className="text-xs text-white/40">{label}</span>
+                    <span className="text-xs text-muted">{label}</span>
                     <span className={`text-xs font-black ${color}`}>{time}</span>
                   </div>
                 ))}

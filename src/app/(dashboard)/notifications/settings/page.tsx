@@ -36,7 +36,7 @@ const NOTIF_TYPES: {
     label: "New Follower",
     desc: "When someone starts following your profile",
     icon: UserPlus,
-    accent: "text-amber-400",
+    accent: "text-accent-bright",
   },
   {
     key: "postReply",
@@ -57,7 +57,7 @@ const NOTIF_TYPES: {
     label: "Poll Results",
     desc: "When a poll you voted on closes and results are published",
     icon: BarChart2,
-    accent: "text-amber-400",
+    accent: "text-accent-bright",
   },
   {
     key: "newEpisode",
@@ -99,7 +99,7 @@ function Toggle({
       role="switch"
       className={`relative w-11 h-6 rounded-full transition-colors duration-200 ${
         disabled ? "opacity-30 cursor-not-allowed" : "cursor-pointer"
-      } ${checked && !disabled ? "bg-amber-600" : "bg-white/10"}`}
+      } ${checked && !disabled ? "bg-accent" : "bg-surface"}`}
     >
       <span
         className={`absolute top-1 h-4 w-4 rounded-full bg-white shadow transition-transform duration-200 ${
@@ -151,12 +151,12 @@ export default function NotificationDashboardSettingsPage() {
     <div className="max-w-2xl mx-auto px-6 py-12 pb-32 space-y-8">
 
       {/* Breadcrumb */}
-      <nav className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-white/25">
-        <Link href="/notifications" className="hover:text-white/60 transition-colors">
+      <nav className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-subtle">
+        <Link href="/notifications" className="hover:text-muted transition-colors">
           Notifications
         </Link>
-        <ChevronRight size={11} className="text-white/15" />
-        <span className="text-amber-400">Settings</span>
+        <ChevronRight size={11} className="text-subtle" />
+        <span className="text-accent-bright">Settings</span>
       </nav>
 
       {/* Header */}
@@ -164,17 +164,17 @@ export default function NotificationDashboardSettingsPage() {
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
       >
-        <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-amber-400/60 mb-2">
+        <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-accent-bright/60 mb-2">
           Dashboard · Notifications
         </p>
-        <h1 className="text-4xl font-black tracking-tighter text-white uppercase italic leading-none">
+        <h1 className="text-4xl font-black tracking-tighter text-foreground uppercase italic leading-none">
           Notification<br />
-          <span className="text-amber-400">Settings</span>
+          <span className="text-accent-bright">Settings</span>
           <span style={{color:"#f59e0b"}}>.</span>
         </h1>
-        <p className="text-xs text-white/30 mt-2">
+        <p className="text-xs text-subtle mt-2">
           {enabledCount} of {NOTIF_TYPES.length} notification types enabled
-          {user?.email ? <> · <span className="text-white/50">{user.email}</span></> : null}
+          {user?.email ? <> · <span className="text-muted">{user.email}</span></> : null}
         </p>
       </motion.div>
 
@@ -194,13 +194,13 @@ export default function NotificationDashboardSettingsPage() {
             key={label}
             className={`p-4 rounded-xl border text-center transition-all ${
               active
-                ? "bg-amber-600/8 border-amber-500/20"
-                : "bg-white/[0.02] border-white/8 opacity-50"
+                ? "bg-accent/8 border-accent/20"
+                : "bg-surface border-border opacity-50"
             }`}
           >
-            <Icon size={16} className={`mx-auto mb-2 ${active ? "text-amber-400" : "text-white/25"}`} />
-            <p className="text-xs font-black text-white">{label}</p>
-            <p className="text-[9px] text-white/30 mt-0.5">{note}</p>
+            <Icon size={16} className={`mx-auto mb-2 ${active ? "text-accent-bright" : "text-subtle"}`} />
+            <p className="text-xs font-black text-foreground">{label}</p>
+            <p className="text-[9px] text-subtle mt-0.5">{note}</p>
           </div>
         ))}
       </motion.div>
@@ -211,10 +211,10 @@ export default function NotificationDashboardSettingsPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
       >
-        <p className="text-[9px] font-black uppercase tracking-[0.35em] text-white/25 mb-4">
+        <p className="text-[9px] font-black uppercase tracking-[0.35em] text-subtle mb-4">
           Notification Types
         </p>
-        <div className="rounded-2xl bg-white/[0.02] border border-white/8 divide-y divide-white/5">
+        <div className="rounded-2xl bg-surface border border-border divide-y divide-white/5">
           {NOTIF_TYPES.map(({ key, label, desc, icon: Icon, accent }, i) => (
             <motion.div
               key={key}
@@ -223,12 +223,12 @@ export default function NotificationDashboardSettingsPage() {
               transition={{ delay: 0.12 + i * 0.06 }}
               className="flex items-center gap-4 px-6 py-5"
             >
-              <div className="p-2.5 rounded-xl bg-white/[0.03] shrink-0">
+              <div className="p-2.5 rounded-xl bg-surface shrink-0">
                 <Icon size={15} className={accent} />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-black text-white">{label}</p>
-                <p className="text-[10px] text-white/35 mt-0.5 leading-snug">{desc}</p>
+                <p className="text-sm font-black text-foreground">{label}</p>
+                <p className="text-[10px] text-subtle mt-0.5 leading-snug">{desc}</p>
               </div>
               <Toggle checked={notifs[key]} onChange={() => toggleNotif(key)} />
             </motion.div>
@@ -242,7 +242,7 @@ export default function NotificationDashboardSettingsPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.35 }}
       >
-        <p className="text-[9px] font-black uppercase tracking-[0.35em] text-white/25 mb-4">
+        <p className="text-[9px] font-black uppercase tracking-[0.35em] text-subtle mb-4">
           Email Digest Frequency
         </p>
         <div className="grid grid-cols-3 gap-3">
@@ -252,14 +252,14 @@ export default function NotificationDashboardSettingsPage() {
               onClick={() => { setDigest(id); setSaved(false) }}
               className={`p-4 rounded-xl border text-left transition-all ${
                 digest === id
-                  ? "bg-amber-600/12 border-amber-500/35"
-                  : "bg-white/[0.02] border-white/8 hover:border-white/15"
+                  ? "bg-accent/12 border-accent/35"
+                  : "bg-surface border-border hover:border-border"
               }`}
             >
-              <p className={`text-sm font-black ${digest === id ? "text-amber-300" : "text-white"}`}>
+              <p className={`text-sm font-black ${digest === id ? "text-accent-bright" : "text-foreground"}`}>
                 {label}
               </p>
-              <p className="text-[10px] text-white/30 mt-0.5 leading-snug">{desc}</p>
+              <p className="text-[10px] text-subtle mt-0.5 leading-snug">{desc}</p>
             </button>
           ))}
         </div>
@@ -278,7 +278,7 @@ export default function NotificationDashboardSettingsPage() {
           className={`flex items-center gap-2 px-7 py-3.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all disabled:opacity-60 ${
             saved
               ? "bg-emerald-600/15 border border-emerald-500/30 text-emerald-400 cursor-default"
-              : "bg-amber-500 hover:bg-amber-400 text-black"
+              : "bg-accent hover:bg-accent-bright text-black"
           }`}
         >
           {saved ? (
@@ -289,7 +289,7 @@ export default function NotificationDashboardSettingsPage() {
         </button>
         <Link
           href="/settings/notifications"
-          className="text-[10px] font-black uppercase tracking-widest text-white/25 hover:text-white/50 transition-colors"
+          className="text-[10px] font-black uppercase tracking-widest text-subtle hover:text-muted transition-colors"
         >
           Advanced settings →
         </Link>

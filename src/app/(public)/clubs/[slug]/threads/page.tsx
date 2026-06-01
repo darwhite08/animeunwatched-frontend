@@ -198,7 +198,7 @@ function ThreadRow({ thread, index }: { thread: Thread; index: number }) {
     >
       <Link
         href={`/threads/${thread.id}`}
-        className="group flex gap-5 p-5 rounded-2xl bg-white/[0.02] border border-white/8 hover:border-amber-500/25 hover:bg-white/[0.04] transition-all duration-300"
+        className="group flex gap-5 p-5 rounded-2xl bg-surface border border-border hover:border-accent/25 hover:bg-white/[0.04] transition-all duration-300"
       >
         {/* Left: content */}
         <div className="flex-1 min-w-0 space-y-2">
@@ -210,14 +210,14 @@ function ThreadRow({ thread, index }: { thread: Thread; index: number }) {
               </span>
             )}
             {thread.isTrending && (
-              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-[8px] font-black uppercase tracking-wider text-amber-400">
+              <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-accent/10 border border-accent/20 text-[8px] font-black uppercase tracking-wider text-accent-bright">
                 <TrendingUp size={7} /> Hot
               </span>
             )}
             {thread.tags.map((tag) => (
               <span
                 key={tag}
-                className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/5 border border-white/10 text-[8px] font-black uppercase tracking-wider text-white/35"
+                className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-surface border border-border text-[8px] font-black uppercase tracking-wider text-subtle"
               >
                 <Tag size={6} /> {tag}
               </span>
@@ -225,18 +225,18 @@ function ThreadRow({ thread, index }: { thread: Thread; index: number }) {
           </div>
 
           {/* Title */}
-          <h3 className="text-sm font-bold text-white/85 group-hover:text-white transition-colors leading-snug line-clamp-2">
+          <h3 className="text-sm font-bold text-white/85 group-hover:text-foreground transition-colors leading-snug line-clamp-2">
             {thread.title}
           </h3>
 
           {/* Excerpt */}
-          <p className="text-[10px] text-white/30 leading-relaxed line-clamp-1 hidden sm:block">
+          <p className="text-[10px] text-subtle leading-relaxed line-clamp-1 hidden sm:block">
             {thread.excerpt}
           </p>
 
           {/* Meta */}
-          <div className="flex flex-wrap items-center gap-3 text-[9px] text-white/25">
-            <span>by <span className="text-white/45 font-bold">{thread.author}</span></span>
+          <div className="flex flex-wrap items-center gap-3 text-[9px] text-subtle">
+            <span>by <span className="text-muted font-bold">{thread.author}</span></span>
             <span className="flex items-center gap-1">
               <MessageSquare size={8} /> {thread.replyCount} replies
             </span>
@@ -253,7 +253,7 @@ function ThreadRow({ thread, index }: { thread: Thread; index: number }) {
         <div className="flex items-center shrink-0">
           <ChevronRight
             size={14}
-            className="text-white/20 group-hover:text-amber-400 group-hover:translate-x-0.5 transition-all"
+            className="text-subtle group-hover:text-accent-bright group-hover:translate-x-0.5 transition-all"
           />
         </div>
       </Link>
@@ -276,7 +276,7 @@ function Pagination({
       <button
         onClick={() => onChange(Math.max(1, page - 1))}
         disabled={page === 1}
-        className="h-9 w-9 flex items-center justify-center rounded-xl bg-white/[0.03] border border-white/8 text-white/40 hover:text-white hover:border-white/20 disabled:opacity-30 transition-all"
+        className="h-9 w-9 flex items-center justify-center rounded-xl bg-surface border border-border text-muted hover:text-foreground hover:border-border disabled:opacity-30 transition-all"
       >
         <ChevronLeft size={14} />
       </button>
@@ -287,8 +287,8 @@ function Pagination({
           onClick={() => onChange(p)}
           className={`h-9 w-9 flex items-center justify-center rounded-xl text-[11px] font-black transition-all ${
             page === p
-              ? "bg-amber-500 text-black shadow-[0_0_16px_rgba(245,158,11,0.4)]"
-              : "bg-white/[0.03] border border-white/8 text-white/40 hover:text-white hover:border-white/20"
+              ? "bg-accent text-black shadow-[0_0_16px_rgba(245,158,11,0.4)]"
+              : "bg-surface border border-border text-muted hover:text-foreground hover:border-border"
           }`}
         >
           {p}
@@ -298,7 +298,7 @@ function Pagination({
       <button
         onClick={() => onChange(Math.min(total, page + 1))}
         disabled={page === total}
-        className="h-9 w-9 flex items-center justify-center rounded-xl bg-white/[0.03] border border-white/8 text-white/40 hover:text-white hover:border-white/20 disabled:opacity-30 transition-all"
+        className="h-9 w-9 flex items-center justify-center rounded-xl bg-surface border border-border text-muted hover:text-foreground hover:border-border disabled:opacity-30 transition-all"
       >
         <ChevronRight size={14} />
       </button>
@@ -354,7 +354,7 @@ export default function ClubThreadsPage({
   }
 
   return (
-    <div className="min-h-screen bg-[#020202] text-white pb-32">
+    <div className="min-h-screen bg-background text-foreground pb-32">
       {/* Ambient glow */}
       <div className="pointer-events-none fixed inset-0 overflow-hidden">
         <div className="absolute top-[-25%] left-[-10%] w-[45%] h-[55%] bg-violet-700/8 blur-[130px] rounded-full" />
@@ -366,20 +366,20 @@ export default function ClubThreadsPage({
         <motion.nav
           initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-white/30 mb-8"
+          className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-subtle mb-8"
         >
-          <Link href="/clubs" className="hover:text-white/60 transition-colors flex items-center gap-1">
+          <Link href="/clubs" className="hover:text-muted transition-colors flex items-center gap-1">
             <ArrowLeft size={10} /> Clubs
           </Link>
-          <ChevronRight size={10} className="text-white/15" />
+          <ChevronRight size={10} className="text-subtle" />
           <Link
             href={`/clubs/${slug}`}
-            className="hover:text-white/60 transition-colors truncate max-w-[120px]"
+            className="hover:text-muted transition-colors truncate max-w-[120px]"
           >
             {clubName}
           </Link>
-          <ChevronRight size={10} className="text-white/15" />
-          <span className="text-amber-400">Threads</span>
+          <ChevronRight size={10} className="text-subtle" />
+          <span className="text-accent-bright">Threads</span>
         </motion.nav>
 
         {/* Header */}
@@ -390,20 +390,20 @@ export default function ClubThreadsPage({
           className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-10"
         >
           <div className="space-y-2">
-            <p className="text-[10px] font-black uppercase tracking-[0.35em] text-amber-400/70">
+            <p className="text-[10px] font-black uppercase tracking-[0.35em] text-accent-bright/70">
               Community
             </p>
-            <h1 className="text-4xl sm:text-5xl font-black uppercase italic tracking-tighter text-white leading-none">
+            <h1 className="text-4xl sm:text-5xl font-black uppercase italic tracking-tighter text-foreground leading-none">
               Threads<span style={{color:"#f59e0b"}}>.</span>
             </h1>
-            <p className="text-white/35 text-xs">
+            <p className="text-subtle text-xs">
               {threads.length + PINNED_THREADS.length} threads in {clubName}
             </p>
           </div>
 
           <button
             onClick={handleNewThread}
-            className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-amber-500 hover:bg-amber-400 text-sm font-black uppercase tracking-widest text-white transition-all shadow-[0_0_32px_rgba(99,102,241,0.3)] hover:-translate-y-0.5 whitespace-nowrap self-start sm:self-auto"
+            className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-accent hover:bg-accent-bright text-sm font-black uppercase tracking-widest text-foreground transition-all shadow-[0_0_32px_rgba(99,102,241,0.3)] hover:-translate-y-0.5 whitespace-nowrap self-start sm:self-auto"
           >
             <Plus size={14} /> New Thread
           </button>
@@ -413,15 +413,15 @@ export default function ClubThreadsPage({
         {composerOpen && (
           <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }}
             className="overflow-hidden mb-6">
-            <div className="bg-zinc-900/80 border border-amber-500/20 rounded-2xl p-5 space-y-4">
+            <div className="bg-zinc-900/80 border border-accent/20 rounded-2xl p-5 space-y-4">
               <input type="text" value={newTitle} onChange={e => setNewTitle(e.target.value)} placeholder="Thread title…"
-                className="w-full bg-transparent border-b border-white/10 text-sm font-bold text-white placeholder:text-white/25 outline-none py-2" />
+                className="w-full bg-transparent border-b border-border text-sm font-bold text-foreground placeholder:text-subtle outline-none py-2" />
               <textarea value={newContent} onChange={e => setNewContent(e.target.value)} rows={4} placeholder="Share your thoughts…"
-                className="w-full bg-transparent text-sm text-white/70 placeholder:text-white/25 resize-none outline-none" />
-              <div className="flex items-center justify-end gap-3 pt-1 border-t border-white/5">
-                <button onClick={() => setComposerOpen(false)} className="text-xs text-white/40 hover:text-white transition-colors">Cancel</button>
+                className="w-full bg-transparent text-sm text-muted placeholder:text-subtle resize-none outline-none" />
+              <div className="flex items-center justify-end gap-3 pt-1 border-t border-border">
+                <button onClick={() => setComposerOpen(false)} className="text-xs text-muted hover:text-foreground transition-colors">Cancel</button>
                 <button onClick={submitThread} disabled={createThread.isPending}
-                  className="flex items-center gap-2 px-5 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 disabled:opacity-50 text-xs font-black uppercase tracking-widest text-white transition-all">
+                  className="flex items-center gap-2 px-5 py-2 rounded-xl bg-accent hover:bg-accent-bright disabled:opacity-50 text-xs font-black uppercase tracking-widest text-foreground transition-all">
                   Post Thread
                 </button>
               </div>
@@ -448,11 +448,11 @@ export default function ClubThreadsPage({
 
         {/* Divider */}
         <div className="flex items-center gap-4 mb-8">
-          <div className="h-px flex-1 bg-white/5" />
-          <span className="text-[9px] font-black uppercase tracking-[0.35em] text-white/20">
+          <div className="h-px flex-1 bg-surface" />
+          <span className="text-[9px] font-black uppercase tracking-[0.35em] text-subtle">
             All Threads
           </span>
-          <div className="h-px flex-1 bg-white/5" />
+          <div className="h-px flex-1 bg-surface" />
         </div>
 
         {/* ── Regular threads ── */}

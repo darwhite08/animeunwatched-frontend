@@ -18,7 +18,7 @@ export default function BestAnimeListHeader() {
             Neural Archive · 30,000+ Titles
           </motion.div>
 
-          <h1 className="text-6xl md:text-8xl font-black text-white tracking-tighter uppercase italic leading-[0.85]">
+          <h1 className="text-6xl md:text-8xl font-black text-foreground tracking-tighter uppercase italic leading-[0.85]">
             The{" "}
             <span className="text-transparent bg-clip-text"
               style={{ backgroundImage: "linear-gradient(135deg, #fbbf24, #f59e0b, #d97706)" }}>
@@ -26,7 +26,7 @@ export default function BestAnimeListHeader() {
             </span>
           </h1>
 
-          <p className="text-white/40 max-w-md font-medium text-base leading-relaxed uppercase tracking-tighter">
+          <p className="text-muted max-w-md font-medium text-base leading-relaxed uppercase tracking-tighter">
             Every anime ever made — searchable, filterable, ranked.
           </p>
         </div>

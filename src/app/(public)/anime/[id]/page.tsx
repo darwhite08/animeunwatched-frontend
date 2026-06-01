@@ -37,8 +37,8 @@ function AnimeDetailLoader({ malId }: { malId: number }) {
   const { data, isLoading, isError } = useAnime(malId)
 
   if (isLoading) return (
-    <div className="min-h-screen bg-[#020202] flex items-center justify-center">
-      <div className="w-8 h-8 border-2 border-amber-500/30 border-t-indigo-500 rounded-full animate-spin" />
+    <div className="min-h-screen bg-background flex items-center justify-center">
+      <div className="w-8 h-8 border-2 border-accent/30 border-t-indigo-500 rounded-full animate-spin" />
     </div>
   )
 
@@ -109,10 +109,10 @@ function AnimeDetail({ anime, rawAnime }: { anime: Anime; rawAnime?: AnimeDTO })
   const share = () => setShareOpen(true)
 
   /* score → colour */
-  const scoreColor = anime.rating >= 9 ? "text-emerald-400" : anime.rating >= 8 ? "text-amber-400" : "text-white/60"
+  const scoreColor = anime.rating >= 9 ? "text-emerald-400" : anime.rating >= 8 ? "text-accent-bright" : "text-muted"
 
   return (
-    <div className="min-h-screen bg-[#020202] text-white pb-32">
+    <div className="min-h-screen bg-background text-foreground pb-32">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -155,7 +155,7 @@ function AnimeDetail({ anime, rawAnime }: { anime: Anime; rawAnime?: AnimeDTO })
 
         {/* Rank chip */}
         <div className="absolute top-6 left-6 md:left-[max(1.5rem,calc((100vw-1280px)/2+1.5rem))]">
-          <span className="px-3 py-1 bg-black/60 backdrop-blur-md border border-amber-500/30 rounded-full text-[10px] font-black text-amber-400 uppercase tracking-widest">
+          <span className="px-3 py-1 bg-black/60 backdrop-blur-md border border-accent/30 rounded-full text-[10px] font-black text-accent-bright uppercase tracking-widest">
             #{anime.rank} Neural Ranked
           </span>
         </div>
@@ -163,7 +163,7 @@ function AnimeDetail({ anime, rawAnime }: { anime: Anime; rawAnime?: AnimeDTO })
         {/* Back button */}
         <Link
           href="/bestanimelist"
-          className="absolute top-6 right-6 flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-white/40 hover:text-white transition-colors"
+          className="absolute top-6 right-6 flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-muted hover:text-foreground transition-colors"
         >
           <ChevronLeft size={13} /> All Anime
         </Link>
@@ -173,7 +173,7 @@ function AnimeDetail({ anime, rawAnime }: { anime: Anime; rawAnime?: AnimeDTO })
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-4xl md:text-6xl font-black tracking-tighter leading-none uppercase italic text-white"
+            className="text-4xl md:text-6xl font-black tracking-tighter leading-none uppercase italic text-foreground"
           >
             {anime.title}
           </motion.h1>
@@ -181,7 +181,7 @@ function AnimeDetail({ anime, rawAnime }: { anime: Anime; rawAnime?: AnimeDTO })
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.1 }}
-            className="text-white/40 text-sm mt-2 font-mono"
+            className="text-muted text-sm mt-2 font-mono"
           >
             {anime.titleJapanese}
           </motion.p>
@@ -199,10 +199,10 @@ function AnimeDetail({ anime, rawAnime }: { anime: Anime; rawAnime?: AnimeDTO })
           className="flex flex-wrap items-center gap-4 mb-10"
         >
           {/* Score */}
-          <div className="flex items-center gap-2 bg-black/60 backdrop-blur-md border border-white/10 rounded-2xl px-5 py-3">
-            <Star size={16} fill="#f59e0b" className="text-amber-400" />
+          <div className="flex items-center gap-2 bg-black/60 backdrop-blur-md border border-border rounded-2xl px-5 py-3">
+            <Star size={16} fill="#f59e0b" className="text-accent-bright" />
             <span className={`text-2xl font-black tracking-tighter ${scoreColor}`}>{anime.rating.toFixed(1)}</span>
-            <span className="text-xs text-white/30">/10</span>
+            <span className="text-xs text-subtle">/10</span>
           </div>
 
           {/* Metadata chips */}
@@ -215,8 +215,8 @@ function AnimeDetail({ anime, rawAnime }: { anime: Anime; rawAnime?: AnimeDTO })
                 ? [{ icon: BookOpen, label: rawAnime.studios[0] }]
                 : []),
           ].map(m => (
-            <div key={m.label} className="flex items-center gap-2 px-4 py-2.5 bg-white/[0.04] border border-white/8 rounded-xl text-sm font-bold text-white/50">
-              <m.icon size={14} className="text-white/30" />
+            <div key={m.label} className="flex items-center gap-2 px-4 py-2.5 bg-white/[0.04] border border-border rounded-xl text-sm font-bold text-muted">
+              <m.icon size={14} className="text-subtle" />
               {m.label}
             </div>
           ))}
@@ -225,12 +225,12 @@ function AnimeDetail({ anime, rawAnime }: { anime: Anime; rawAnime?: AnimeDTO })
           <span className={`px-4 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider border ${
             anime.status === "airing"
               ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
-              : "bg-white/5 border-white/10 text-white/40"
+              : "bg-surface border-border text-muted"
           }`}>
             {anime.status === "airing" ? "● Airing" : "Completed"}
           </span>
 
-          <span className="text-sm text-white/25">{anime.year}</span>
+          <span className="text-sm text-subtle">{anime.year}</span>
 
           {/* Actions */}
           <div className="ml-auto flex items-center gap-3">
@@ -251,8 +251,8 @@ function AnimeDetail({ anime, rawAnime }: { anime: Anime; rawAnime?: AnimeDTO })
               onClick={toggle}
               className={`flex items-center gap-2.5 px-6 py-3 rounded-2xl text-xs font-black uppercase tracking-widest transition-all ${
                 inList
-                  ? "bg-emerald-600 text-white hover:bg-emerald-700"
-                  : "bg-amber-500 text-black hover:bg-amber-400 shadow-[0_0_24px_rgba(99,102,241,0.35)]"
+                  ? "bg-emerald-600 text-foreground hover:bg-emerald-700"
+                  : "bg-accent text-black hover:bg-accent-bright shadow-[0_0_24px_rgba(99,102,241,0.35)]"
               }`}
             >
               {inList ? <><Check size={14} /> In List</> : <><Plus size={14} /> Add to List</>}
@@ -260,21 +260,21 @@ function AnimeDetail({ anime, rawAnime }: { anime: Anime; rawAnime?: AnimeDTO })
 
             <button
               onClick={() => setReviewOpen(true)}
-              className="flex items-center gap-2 px-4 py-3 rounded-2xl border border-white/10 bg-white/[0.04] text-white/50 hover:text-white hover:bg-white/[0.08] transition-all text-xs font-black uppercase tracking-widest"
+              className="flex items-center gap-2 px-4 py-3 rounded-2xl border border-border bg-white/[0.04] text-muted hover:text-foreground hover:bg-white/[0.08] transition-all text-xs font-black uppercase tracking-widest"
             >
               <PenSquare size={14} /> Review
             </button>
 
             <button
               onClick={share}
-              className="p-3 rounded-2xl border border-white/10 bg-white/[0.04] text-white/40 hover:text-white hover:bg-white/[0.08] transition-all"
+              className="p-3 rounded-2xl border border-border bg-white/[0.04] text-muted hover:text-foreground hover:bg-white/[0.08] transition-all"
             >
               <Share2 size={16} />
             </button>
 
             <button
               onClick={() => setReportOpen(true)}
-              className="p-3 rounded-2xl border border-white/10 bg-white/[0.04] text-white/30 hover:text-red-400 hover:bg-red-500/5 hover:border-red-500/20 transition-all"
+              className="p-3 rounded-2xl border border-border bg-white/[0.04] text-subtle hover:text-red-400 hover:bg-red-500/5 hover:border-red-500/20 transition-all"
               title="Report this anime"
             >
               <Flag size={14} />
@@ -290,8 +290,8 @@ function AnimeDetail({ anime, rawAnime }: { anime: Anime; rawAnime?: AnimeDTO })
 
             {/* Social proof — user stats */}
             {userStats && userStats.total > 0 && (
-              <div className="flex flex-wrap items-center gap-4 p-4 rounded-2xl bg-white/[0.02] border border-white/5">
-                <span className="text-[9px] font-black uppercase tracking-[0.3em] text-white/25">On Kaiveron</span>
+              <div className="flex flex-wrap items-center gap-4 p-4 rounded-2xl bg-surface border border-border">
+                <span className="text-[9px] font-black uppercase tracking-[0.3em] text-subtle">On Kaiveron</span>
                 {userStats.watching > 0 && (
                   <span className="flex items-center gap-1.5 text-xs font-bold text-emerald-400">
                     <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
@@ -299,10 +299,10 @@ function AnimeDetail({ anime, rawAnime }: { anime: Anime; rawAnime?: AnimeDTO })
                   </span>
                 )}
                 {userStats.completed > 0 && (
-                  <span className="text-xs font-bold text-white/40">{userStats.completed} completed</span>
+                  <span className="text-xs font-bold text-muted">{userStats.completed} completed</span>
                 )}
                 {userStats.planToWatch > 0 && (
-                  <span className="text-xs font-bold text-white/30">{userStats.planToWatch} planning</span>
+                  <span className="text-xs font-bold text-subtle">{userStats.planToWatch} planning</span>
                 )}
               </div>
             )}
@@ -310,7 +310,7 @@ function AnimeDetail({ anime, rawAnime }: { anime: Anime; rawAnime?: AnimeDTO })
             {/* Genres */}
             <div className="flex flex-wrap gap-2">
               {anime.genres.map(g => (
-                <span key={g} className="px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-xs font-black uppercase tracking-wider text-white/50">
+                <span key={g} className="px-4 py-1.5 rounded-full bg-surface border border-border text-xs font-black uppercase tracking-wider text-muted">
                   {g}
                 </span>
               ))}
@@ -318,18 +318,18 @@ function AnimeDetail({ anime, rawAnime }: { anime: Anime; rawAnime?: AnimeDTO })
 
             {/* Synopsis */}
             <div>
-              <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/30 mb-4">Synopsis</h2>
+              <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-subtle mb-4">Synopsis</h2>
               {anime.synopsis ? (
-                <p className="text-white/70 text-base leading-relaxed font-medium">{anime.synopsis}</p>
+                <p className="text-muted text-base leading-relaxed font-medium">{anime.synopsis}</p>
               ) : (
-                <p className="text-white/30 text-base leading-relaxed font-medium italic">No synopsis available.</p>
+                <p className="text-subtle text-base leading-relaxed font-medium italic">No synopsis available.</p>
               )}
             </div>
 
             {/* Trailer */}
             <div>
-              <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/30 mb-4">Trailer</h2>
-              <div className="relative w-full aspect-video rounded-2xl overflow-hidden bg-black/40 border border-white/8">
+              <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-subtle mb-4">Trailer</h2>
+              <div className="relative w-full aspect-video rounded-2xl overflow-hidden bg-black/40 border border-border">
                 <iframe
                   src={(() => {
                     const url = rawAnime?.trailerUrl
@@ -346,16 +346,16 @@ function AnimeDetail({ anime, rawAnime }: { anime: Anime; rawAnime?: AnimeDTO })
                 />
               </div>
               {!rawAnime?.trailerUrl && (
-                <p className="text-[9px] text-white/20 mt-2 font-mono">Placeholder trailer — official trailer coming soon</p>
+                <p className="text-[9px] text-subtle mt-2 font-mono">Placeholder trailer — official trailer coming soon</p>
               )}
             </div>
 
             {/* Tags */}
             <div>
-              <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/30 mb-4">Neural Tags</h2>
+              <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-subtle mb-4">Neural Tags</h2>
               <div className="flex flex-wrap gap-2">
                 {anime.tags.map(t => (
-                  <span key={t} className="px-3 py-1 rounded-lg bg-amber-500/8 border border-amber-500/15 text-[10px] font-bold text-amber-400/80 uppercase tracking-wider">
+                  <span key={t} className="px-3 py-1 rounded-lg bg-accent/8 border border-accent/15 text-[10px] font-bold text-accent-bright/80 uppercase tracking-wider">
                     {t}
                   </span>
                 ))}
@@ -364,7 +364,7 @@ function AnimeDetail({ anime, rawAnime }: { anime: Anime; rawAnime?: AnimeDTO })
 
             {/* Episode Tracking */}
             <div>
-              <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/30 mb-4">Episode Tracking</h2>
+              <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-subtle mb-4">Episode Tracking</h2>
               <EpisodeTracker totalEpisodes={anime.episodes} animeId={anime.id} />
             </div>
 
@@ -374,10 +374,10 @@ function AnimeDetail({ anime, rawAnime }: { anime: Anime; rawAnime?: AnimeDTO })
             {/* Reviews */}
             <div>
               <div className="flex items-center justify-between mb-5">
-                <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/30">Community Reviews</h2>
+                <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-subtle">Community Reviews</h2>
                 <button
                   onClick={() => setReviewOpen(true)}
-                  className="text-[10px] font-black uppercase tracking-widest text-amber-400 hover:text-amber-300 transition-colors flex items-center gap-1.5"
+                  className="text-[10px] font-black uppercase tracking-widest text-accent-bright hover:text-accent-bright transition-colors flex items-center gap-1.5"
                 >
                   <PenSquare size={11} /> Write a Review
                 </button>
@@ -393,32 +393,32 @@ function AnimeDetail({ anime, rawAnime }: { anime: Anime; rawAnime?: AnimeDTO })
                   void MOCK_REVIEWS
                   if (reviews.length === 0) {
                     return (
-                      <div className="text-center py-10 text-white/30 text-sm border border-dashed border-white/8 rounded-2xl">
+                      <div className="text-center py-10 text-subtle text-sm border border-dashed border-border rounded-2xl">
                         No reviews yet. Be the first to write one.
                       </div>
                     )
                   }
                   return reviews.map((r, i) => (
                     <motion.div key={r.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 + i * 0.06 }}
-                      className="p-5 rounded-2xl bg-white/[0.02] border border-white/8 space-y-3">
+                      className="p-5 rounded-2xl bg-surface border border-border space-y-3">
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
                           <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-xs font-black">
                             {r.user[0]}
                           </div>
                           <div>
-                            <p className="text-xs font-black text-white">{r.user}</p>
-                            <p className="text-[9px] text-white/25 mt-0.5">{r.date}</p>
+                            <p className="text-xs font-black text-foreground">{r.user}</p>
+                            <p className="text-[9px] text-subtle mt-0.5">{r.date}</p>
                           </div>
                         </div>
                         <div className="flex items-center gap-1.5">
-                          <Star size={12} fill="#f59e0b" className="text-amber-400" />
-                          <span className="text-sm font-black text-white">{r.score}</span>
-                          <span className="text-xs text-white/25">/10</span>
+                          <Star size={12} fill="#f59e0b" className="text-accent-bright" />
+                          <span className="text-sm font-black text-foreground">{r.score}</span>
+                          <span className="text-xs text-subtle">/10</span>
                         </div>
                       </div>
-                      <p className="text-sm text-white/55 leading-relaxed">{r.body}</p>
-                      <span className="flex items-center gap-1.5 text-[10px] text-white/25">
+                      <p className="text-sm text-muted leading-relaxed">{r.body}</p>
+                      <span className="flex items-center gap-1.5 text-[10px] text-subtle">
                         <Heart size={11} /> {r.likes} helpful
                       </span>
                     </motion.div>
@@ -434,8 +434,8 @@ function AnimeDetail({ anime, rawAnime }: { anime: Anime; rawAnime?: AnimeDTO })
           <div className="space-y-6">
 
             {/* Quick facts */}
-            <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/8 space-y-4">
-              <h3 className="text-[9px] font-black uppercase tracking-[0.3em] text-white/25">Quick Facts</h3>
+            <div className="p-6 rounded-2xl bg-surface border border-border space-y-4">
+              <h3 className="text-[9px] font-black uppercase tracking-[0.3em] text-subtle">Quick Facts</h3>
               {[
                 { label: "Studio",     value: anime.studio },
                 { label: "Type",       value: anime.type   },
@@ -448,26 +448,26 @@ function AnimeDetail({ anime, rawAnime }: { anime: Anime; rawAnime?: AnimeDTO })
                 ...(rawAnime?.source ? [{ label: "Source", value: rawAnime.source }] : []),
               ].map(f => (
                 <div key={f.label} className="flex justify-between items-center text-sm">
-                  <span className="text-white/35 font-medium">{f.label}</span>
-                  <span className="font-bold text-white/80 text-right max-w-[55%]">{f.value}</span>
+                  <span className="text-subtle font-medium">{f.label}</span>
+                  <span className="font-bold text-muted text-right max-w-[55%]">{f.value}</span>
                 </div>
               ))}
             </div>
 
             {/* Related */}
-            <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/8 space-y-4">
-              <h3 className="text-[9px] font-black uppercase tracking-[0.3em] text-white/25">More Like This</h3>
+            <div className="p-6 rounded-2xl bg-surface border border-border space-y-4">
+              <h3 className="text-[9px] font-black uppercase tracking-[0.3em] text-subtle">More Like This</h3>
               <div className="space-y-3">
                 {relatedAnime.map(related => (
                   <Link key={related.malId} href={`/anime/${related.malId}`}
                     className="flex items-center gap-3 group">
-                    <div className="relative h-12 w-9 rounded-lg overflow-hidden shrink-0 bg-white/5">
+                    <div className="relative h-12 w-9 rounded-lg overflow-hidden shrink-0 bg-surface">
                       {related.imageUrl && <Image src={related.imageUrl} alt={related.title} fill className="object-cover" sizes="36px" />}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-xs font-bold text-white/70 group-hover:text-white transition-colors truncate">{related.title}</p>
-                      <p className="text-[9px] text-white/30 mt-0.5 flex items-center gap-1">
-                        <Star size={9} fill="#f59e0b" className="text-amber-400" /> {(related.score ?? 0).toFixed(1)}
+                      <p className="text-xs font-bold text-muted group-hover:text-foreground transition-colors truncate">{related.title}</p>
+                      <p className="text-[9px] text-subtle mt-0.5 flex items-center gap-1">
+                        <Star size={9} fill="#f59e0b" className="text-accent-bright" /> {(related.score ?? 0).toFixed(1)}
                       </p>
                     </div>
                   </Link>
@@ -476,10 +476,10 @@ function AnimeDetail({ anime, rawAnime }: { anime: Anime; rawAnime?: AnimeDTO })
             </div>
 
             {/* Where to Watch */}
-            <div className="p-6 rounded-2xl bg-white/[0.02] border border-white/8 space-y-4">
+            <div className="p-6 rounded-2xl bg-surface border border-border space-y-4">
               <div className="flex items-center gap-2">
-                <Tv size={13} className="text-white/30" />
-                <h3 className="text-[9px] font-black uppercase tracking-[0.3em] text-white/25">Where to Watch</h3>
+                <Tv size={13} className="text-subtle" />
+                <h3 className="text-[9px] font-black uppercase tracking-[0.3em] text-subtle">Where to Watch</h3>
               </div>
               <div className="space-y-2">
                 {[
@@ -492,11 +492,11 @@ function AnimeDetail({ anime, rawAnime }: { anime: Anime; rawAnime?: AnimeDTO })
                     className={`flex items-center justify-between px-4 py-2.5 rounded-xl border text-xs font-bold transition-all hover:scale-[1.02] ${p.bg}`}
                   >
                     <span className={p.color}>{p.name}</span>
-                    <span className="text-white/20 text-[9px]">Search →</span>
+                    <span className="text-subtle text-[9px]">Search →</span>
                   </a>
                 ))}
               </div>
-              <p className="text-[8px] text-white/15 font-mono leading-relaxed">
+              <p className="text-[8px] text-subtle font-mono leading-relaxed">
                 Availability varies by region. Links open search results on each platform.
               </p>
             </div>
@@ -504,26 +504,26 @@ function AnimeDetail({ anime, rawAnime }: { anime: Anime; rawAnime?: AnimeDTO })
             {/* Season link */}
             <Link
               href={`/anime/season/${anime.year}/${rawAnime?.season ?? "fall"}`}
-              className="flex items-center gap-3 p-4 rounded-2xl bg-white/[0.02] border border-white/8 hover:border-white/15 transition-colors group"
+              className="flex items-center gap-3 p-4 rounded-2xl bg-surface border border-border hover:border-border transition-colors group"
             >
-              <Calendar size={14} className="text-white/30 shrink-0" />
+              <Calendar size={14} className="text-subtle shrink-0" />
               <div>
-                <p className="text-sm font-bold text-white/60 group-hover:text-white">View {anime.year} Season</p>
-                <p className="text-[10px] text-white/25 mt-0.5">Browse {rawAnime?.season ?? "fall"} {anime.year} anime</p>
+                <p className="text-sm font-bold text-muted group-hover:text-foreground">View {anime.year} Season</p>
+                <p className="text-[10px] text-subtle mt-0.5">Browse {rawAnime?.season ?? "fall"} {anime.year} anime</p>
               </div>
             </Link>
 
             {/* AI Discover CTA */}
             <Link
               href="/ai-discover"
-              className="flex items-center gap-3 p-5 rounded-2xl bg-amber-600/10 border border-amber-500/20 hover:bg-amber-600/15 transition-colors group"
+              className="flex items-center gap-3 p-5 rounded-2xl bg-accent/10 border border-accent/20 hover:bg-accent/15 transition-colors group"
             >
-              <Sparkles size={16} className="text-amber-400 shrink-0" />
+              <Sparkles size={16} className="text-accent-bright shrink-0" />
               <div>
-                <p className="text-sm font-bold text-white">Find Similar Anime</p>
-                <p className="text-[10px] text-white/35 mt-0.5">Use Neural Oracle to discover more</p>
+                <p className="text-sm font-bold text-foreground">Find Similar Anime</p>
+                <p className="text-[10px] text-subtle mt-0.5">Use Neural Oracle to discover more</p>
               </div>
-              <ChevronLeft size={14} className="text-amber-400/50 group-hover:text-amber-400 rotate-180 ml-auto transition-all group-hover:translate-x-0.5" />
+              <ChevronLeft size={14} className="text-accent-bright/50 group-hover:text-accent-bright rotate-180 ml-auto transition-all group-hover:translate-x-0.5" />
             </Link>
           </div>
         </div>

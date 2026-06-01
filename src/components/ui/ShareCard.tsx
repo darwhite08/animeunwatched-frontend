@@ -43,7 +43,7 @@ function CardPreview({
     <div className="w-full rounded-2xl overflow-hidden border border-zinc-700/60 bg-[#0d0d0d] shadow-2xl select-none">
       {/* Top bar */}
       <div className="flex items-center justify-between px-4 py-3 border-b border-zinc-800">
-        <span className="font-black uppercase tracking-widest text-amber-400 text-sm">
+        <span className="font-black uppercase tracking-widest text-accent-bright text-sm">
           KAIVERON.
         </span>
         <span className="text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full bg-violet-500/20 text-violet-300 border border-violet-500/30">
@@ -53,7 +53,7 @@ function CardPreview({
 
       {/* Body */}
       <div className="px-4 py-5">
-        <h3 className="font-black uppercase text-xl text-white leading-tight tracking-tight">
+        <h3 className="font-black uppercase text-xl text-foreground leading-tight tracking-tight">
           {title}
         </h3>
         {subtitle && (
@@ -69,8 +69,8 @@ function CardPreview({
           <div className="flex items-center gap-1.5">
             {rating !== undefined ? (
               <>
-                <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
-                <span className="text-amber-400 font-bold text-sm">{rating}/10</span>
+                <Star className="w-3.5 h-3.5 text-accent-bright fill-amber-400" />
+                <span className="text-accent-bright font-bold text-sm">{rating}/10</span>
               </>
             ) : (
               <span className="text-zinc-500 text-xs">No rating yet</span>
@@ -112,7 +112,7 @@ function ShareButton({
           ? "border-zinc-800 bg-zinc-900/40 text-zinc-700 cursor-not-allowed"
           : muted
           ? "border-zinc-700/60 bg-zinc-900/60 text-zinc-400 hover:border-zinc-500 hover:text-zinc-200 hover:bg-zinc-800/60"
-          : "border-amber-500/40 bg-amber-500/10 text-amber-300 hover:border-indigo-400 hover:bg-amber-500/20",
+          : "border-accent/40 bg-accent/10 text-accent-bright hover:border-indigo-400 hover:bg-accent/20",
       ].join(" ")}
     >
       <span className="transition-transform duration-200 group-hover:scale-110">
@@ -194,12 +194,12 @@ export default function ShareCard({
             exit={{ opacity: 0, scale: 0.93, y: 20 }}
             transition={{ duration: 0.25, ease: [0.32, 0.72, 0, 1] }}
             onClick={(e) => e.stopPropagation()}
-            className="relative w-full max-w-sm bg-[#0a0a0a] border border-zinc-800 rounded-3xl overflow-hidden shadow-2xl"
+            className="relative w-full max-w-sm bg-surface border border-zinc-800 rounded-3xl overflow-hidden shadow-2xl"
           >
             {/* Modal header */}
             <div className="flex items-center justify-between px-5 pt-5 pb-4">
               <div>
-                <h2 className="font-black uppercase text-base text-white tracking-tight">
+                <h2 className="font-black uppercase text-base text-foreground tracking-tight">
                   Share
                 </h2>
                 <p className="text-zinc-500 text-xs mt-0.5">
@@ -208,7 +208,7 @@ export default function ShareCard({
               </div>
               <button
                 onClick={onClose}
-                className="w-8 h-8 rounded-xl border border-zinc-700 flex items-center justify-center text-zinc-400 hover:text-white hover:border-zinc-500 transition-colors"
+                className="w-8 h-8 rounded-xl border border-zinc-700 flex items-center justify-center text-zinc-400 hover:text-foreground hover:border-zinc-500 transition-colors"
               >
                 <X className="w-4 h-4" />
               </button>

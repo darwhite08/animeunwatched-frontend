@@ -122,7 +122,7 @@ function FeaturedAnimeCard({ anime, index }: { anime: Anime; index: number }) {
       initial={{ opacity: 0, y: 24 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.1 * index, duration: 0.45 }}
-      className="relative rounded-[2rem] overflow-hidden border border-white/5 bg-[#0a0a0a] group hover:border-amber-500/30 transition-all duration-500"
+      className="relative rounded-[2rem] overflow-hidden border border-border bg-surface group hover:border-accent/30 transition-all duration-500"
     >
       {/* Blurred BG */}
       <div className="absolute inset-0">
@@ -153,27 +153,27 @@ function FeaturedAnimeCard({ anime, index }: { anime: Anime; index: number }) {
         {/* Info */}
         <div className="flex-1 min-w-0 flex flex-col justify-between">
           <div>
-            <h3 className="text-base font-black uppercase italic tracking-tight text-white leading-tight line-clamp-2 mb-2">
+            <h3 className="text-base font-black uppercase italic tracking-tight text-foreground leading-tight line-clamp-2 mb-2">
               {anime.title}
             </h3>
             <div className="flex items-center gap-3 mb-3">
-              <span className="flex items-center gap-1 text-[10px] font-black text-amber-400">
+              <span className="flex items-center gap-1 text-[10px] font-black text-accent-bright">
                 <Star size={10} fill="#f59e0b" /> {anime.rating.toFixed(1)}
               </span>
-              <span className="flex items-center gap-1 text-[10px] font-bold text-amber-400">
+              <span className="flex items-center gap-1 text-[10px] font-bold text-accent-bright">
                 <MessageSquare size={10} />
                 {threadCount} thread{threadCount !== 1 ? "s" : ""}
               </span>
             </div>
             {latest && (
-              <p className="text-[10px] text-white/30 line-clamp-2 leading-relaxed">
-                <span className="text-white/50 font-bold">{latest.author}:</span> {latest.title}
+              <p className="text-[10px] text-subtle line-clamp-2 leading-relaxed">
+                <span className="text-muted font-bold">{latest.author}:</span> {latest.title}
               </p>
             )}
           </div>
           <Link
             href="/threads/some-id"
-            className="mt-4 inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-[10px] font-black uppercase tracking-widest text-white transition-all w-fit"
+            className="mt-4 inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-accent hover:bg-accent-bright text-[10px] font-black uppercase tracking-widest text-foreground transition-all w-fit"
           >
             Join Discussion <ArrowRight size={11} />
           </Link>
@@ -200,7 +200,7 @@ function ThreadRow({
       initial={{ opacity: 0, x: -12 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay: 0.04 * index, duration: 0.35 }}
-      className="group flex items-center gap-5 p-5 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-white/10 hover:bg-white/[0.035] transition-all duration-300 cursor-pointer"
+      className="group flex items-center gap-5 p-5 rounded-2xl bg-surface border border-border hover:border-border hover:bg-white/[0.035] transition-all duration-300 cursor-pointer"
     >
       {/* Anime thumbnail */}
       <div className="shrink-0 w-12 h-16 rounded-xl overflow-hidden shadow-lg">
@@ -218,7 +218,7 @@ function ThreadRow({
       {/* Content */}
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 mb-1">
-          <span className="text-[9px] font-black uppercase tracking-[0.3em] text-amber-400">
+          <span className="text-[9px] font-black uppercase tracking-[0.3em] text-accent-bright">
             {anime.title}
           </span>
           {thread.trending && (
@@ -227,25 +227,25 @@ function ThreadRow({
             </span>
           )}
         </div>
-        <p className="text-sm font-bold text-white/80 group-hover:text-white transition-colors line-clamp-1 leading-snug">
+        <p className="text-sm font-bold text-muted group-hover:text-foreground transition-colors line-clamp-1 leading-snug">
           {thread.title}
         </p>
-        <p className="text-[10px] text-white/30 mt-0.5 font-medium">
-          by <span className="text-white/50">{thread.author}</span>
+        <p className="text-[10px] text-subtle mt-0.5 font-medium">
+          by <span className="text-muted">{thread.author}</span>
         </p>
       </div>
 
       {/* Stats */}
       <div className="shrink-0 flex flex-col items-end gap-1.5 text-right">
-        <span className="flex items-center gap-1 text-[10px] font-black text-white/40">
+        <span className="flex items-center gap-1 text-[10px] font-black text-muted">
           <MessageSquare size={10} /> {thread.replies}
         </span>
-        <span className="flex items-center gap-1 text-[9px] font-bold text-white/20">
+        <span className="flex items-center gap-1 text-[9px] font-bold text-subtle">
           <Clock size={9} /> {thread.lastActivity}
         </span>
       </div>
 
-      <ChevronRight size={14} className="shrink-0 text-white/10 group-hover:text-white/30 transition-colors" />
+      <ChevronRight size={14} className="shrink-0 text-subtle group-hover:text-subtle transition-colors" />
     </motion.div>
   )
 }
@@ -272,11 +272,11 @@ export default function AnimeDiscussionsPage() {
   }, [query, allAnime])
 
   return (
-    <div className="min-h-screen bg-[#020202] text-white pb-32">
+    <div className="min-h-screen bg-background text-foreground pb-32">
       {/* ── Page Header ── */}
-      <div className="relative overflow-hidden border-b border-white/5">
+      <div className="relative overflow-hidden border-b border-border">
         <div className="absolute inset-0 bg-gradient-to-br from-indigo-950/40 via-transparent to-violet-950/30 pointer-events-none" />
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[300px] bg-amber-600/8 blur-[100px] rounded-full pointer-events-none" />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[300px] bg-accent/8 blur-[100px] rounded-full pointer-events-none" />
 
         <div className="relative z-10 max-w-6xl mx-auto px-6 py-20">
           <motion.div
@@ -284,17 +284,17 @@ export default function AnimeDiscussionsPage() {
             animate={{ opacity: 1, y: 0 }}
             className="space-y-5 max-w-2xl"
           >
-            <div className="flex items-center gap-2 text-amber-400 text-[10px] font-black uppercase tracking-[0.4em]">
+            <div className="flex items-center gap-2 text-accent-bright text-[10px] font-black uppercase tracking-[0.4em]">
               <Users size={12} />
               Community · Anime Threads
             </div>
-            <h1 className="text-6xl font-black tracking-tighter uppercase italic leading-[0.9] text-white">
+            <h1 className="text-6xl font-black tracking-tighter uppercase italic leading-[0.9] text-foreground">
               Anime<br />
               <span className="bg-gradient-to-r from-indigo-400 via-violet-400 to-purple-400 bg-clip-text text-transparent">
                 Discussions
               </span>
             </h1>
-            <p className="text-white/40 text-sm font-medium leading-relaxed max-w-md">
+            <p className="text-muted text-sm font-medium leading-relaxed max-w-md">
               Community threads, debates, and deep dives on every anime. Join the conversation or start one of your own.
             </p>
           </motion.div>
@@ -306,7 +306,7 @@ export default function AnimeDiscussionsPage() {
         <section>
           <div className="flex items-center gap-3 mb-6">
             <TrendingUp size={14} className="text-violet-400" />
-            <h2 className="text-[10px] font-black uppercase tracking-[0.4em] text-white/40">
+            <h2 className="text-[10px] font-black uppercase tracking-[0.4em] text-muted">
               Most Discussed
             </h2>
           </div>
@@ -322,14 +322,14 @@ export default function AnimeDiscussionsPage() {
           <div className="relative max-w-xl">
             <Search
               size={15}
-              className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 pointer-events-none"
+              className="absolute left-4 top-1/2 -translate-y-1/2 text-subtle pointer-events-none"
             />
             <input
               type="text"
               placeholder="Search discussions by anime, topic, or author…"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              className="w-full pl-11 pr-5 py-4 rounded-2xl bg-white/[0.04] border border-white/8 focus:border-amber-500/40 focus:bg-white/[0.06] text-white text-sm font-medium placeholder:text-white/20 outline-none transition-all"
+              className="w-full pl-11 pr-5 py-4 rounded-2xl bg-white/[0.04] border border-border focus:border-accent/40 focus:bg-white/[0.06] text-foreground text-sm font-medium placeholder:text-subtle outline-none transition-all"
             />
           </div>
         </section>
@@ -338,19 +338,19 @@ export default function AnimeDiscussionsPage() {
         <section>
           <div className="flex items-center justify-between mb-5">
             <div className="flex items-center gap-3">
-              <MessageSquare size={14} className="text-amber-400" />
-              <h2 className="text-[10px] font-black uppercase tracking-[0.4em] text-white/40">
+              <MessageSquare size={14} className="text-accent-bright" />
+              <h2 className="text-[10px] font-black uppercase tracking-[0.4em] text-muted">
                 All Threads
-                <span className="ml-2 text-white/20">({filteredThreads.length})</span>
+                <span className="ml-2 text-subtle">({filteredThreads.length})</span>
               </h2>
             </div>
           </div>
 
           {filteredThreads.length === 0 ? (
             <div className="py-20 text-center">
-              <MessageSquare size={32} className="text-white/10 mx-auto mb-4" />
-              <p className="text-white/30 font-bold text-sm">No threads match your search</p>
-              <p className="text-white/15 text-xs mt-1">Try a different anime name or topic</p>
+              <MessageSquare size={32} className="text-subtle mx-auto mb-4" />
+              <p className="text-subtle font-bold text-sm">No threads match your search</p>
+              <p className="text-subtle text-xs mt-1">Try a different anime name or topic</p>
             </div>
           ) : (
             <div className="space-y-3">
@@ -362,21 +362,21 @@ export default function AnimeDiscussionsPage() {
         </section>
 
         {/* ── CTA ── */}
-        <section className="relative rounded-[2.5rem] overflow-hidden border border-white/5 bg-[#0a0a0a] p-10 text-center">
+        <section className="relative rounded-[2.5rem] overflow-hidden border border-border bg-surface p-10 text-center">
           <div className="absolute inset-0 bg-gradient-to-br from-violet-600/8 via-transparent to-indigo-600/8 pointer-events-none" />
           <div className="relative z-10 max-w-md mx-auto space-y-5">
-            <div className="w-14 h-14 rounded-2xl bg-amber-600/20 border border-amber-500/20 flex items-center justify-center mx-auto">
-              <MessageSquare size={22} className="text-amber-400" />
+            <div className="w-14 h-14 rounded-2xl bg-accent/20 border border-accent/20 flex items-center justify-center mx-auto">
+              <MessageSquare size={22} className="text-accent-bright" />
             </div>
-            <h3 className="text-3xl font-black uppercase italic tracking-tight text-white">
+            <h3 className="text-3xl font-black uppercase italic tracking-tight text-foreground">
               Start a Discussion
             </h3>
-            <p className="text-white/30 text-sm font-medium leading-relaxed">
+            <p className="text-subtle text-sm font-medium leading-relaxed">
               Have something to say about an anime? Create a thread in a club and invite the community.
             </p>
             <Link
               href="/clubs"
-              className="inline-flex items-center gap-2 px-8 py-4 rounded-2xl bg-amber-500 hover:bg-amber-400 text-sm font-black uppercase tracking-widest text-white transition-all shadow-lg shadow-indigo-600/20 hover:shadow-indigo-500/30 active:scale-[0.98]"
+              className="inline-flex items-center gap-2 px-8 py-4 rounded-2xl bg-accent hover:bg-accent-bright text-sm font-black uppercase tracking-widest text-foreground transition-all shadow-lg shadow-indigo-600/20 hover:shadow-indigo-500/30 active:scale-[0.98]"
             >
               Browse Clubs <ArrowRight size={15} />
             </Link>

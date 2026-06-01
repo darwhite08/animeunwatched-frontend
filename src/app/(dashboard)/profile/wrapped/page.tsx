@@ -44,10 +44,10 @@ export default function WrappedPage() {
   const topAnime = (browseData?.data ?? []).map(mapDTO).filter(a => a.rating >= 8.8).slice(0, 5)
 
   const STAT_CARDS = [
-    { icon: Clock,     label: "Hours watched",   value: realStats.totalHrs.toLocaleString(),    color: "from-indigo-600/30 to-indigo-900/10",  text: "text-amber-400" },
+    { icon: Clock,     label: "Hours watched",   value: realStats.totalHrs.toLocaleString(),    color: "from-indigo-600/30 to-indigo-900/10",  text: "text-accent-bright" },
     { icon: BarChart2, label: "Episodes logged",  value: realStats.totalEps.toLocaleString(),    color: "from-violet-600/30 to-violet-900/10",  text: "text-violet-400" },
     { icon: Flame,     label: "Best streak",      value: `${realStats.bestStreak} days`,         color: "from-orange-600/30 to-orange-900/10",  text: "text-orange-400" },
-    { icon: Star,      label: "Reviews written",  value: String(REVIEWS_WRITTEN),                color: "from-amber-600/30 to-amber-900/10",    text: "text-amber-400"  },
+    { icon: Star,      label: "Reviews written",  value: String(REVIEWS_WRITTEN),                color: "from-accent/30 to-amber-900/10",    text: "text-accent-bright"  },
   ]
 
   const SLIDES = [
@@ -61,7 +61,7 @@ export default function WrappedPage() {
   const isLast = slide === SLIDES.length - 1
 
   return (
-    <div className="min-h-screen bg-[#020202] text-white flex flex-col items-center justify-center px-6 py-16 relative overflow-hidden">
+    <div className="min-h-screen bg-background text-foreground flex flex-col items-center justify-center px-6 py-16 relative overflow-hidden">
       {/* Background glows that shift per slide */}
       <motion.div
         key={slide}
@@ -70,11 +70,11 @@ export default function WrappedPage() {
         className="absolute inset-0 pointer-events-none"
       >
         <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] blur-[160px] rounded-full ${
-          slide === 0 ? "bg-amber-600/15" :
+          slide === 0 ? "bg-accent/15" :
           slide === 1 ? "bg-violet-600/15" :
-          slide === 2 ? "bg-amber-600/10"  :
+          slide === 2 ? "bg-accent/10"  :
           slide === 3 ? "bg-emerald-600/10" :
-                        "bg-amber-600/20"
+                        "bg-accent/20"
         }`} />
       </motion.div>
 
@@ -84,7 +84,7 @@ export default function WrappedPage() {
           <button
             key={i}
             onClick={() => setSlide(i)}
-            className={`h-1.5 rounded-full transition-all ${i === slide ? "w-8 bg-amber-500" : "w-1.5 bg-white/20"}`}
+            className={`h-1.5 rounded-full transition-all ${i === slide ? "w-8 bg-accent" : "w-1.5 bg-white/20"}`}
           />
         ))}
       </div>
@@ -97,18 +97,18 @@ export default function WrappedPage() {
           {slide === 0 && (
             <motion.div key="stats" initial={{ opacity:0, y:30 }} animate={{ opacity:1, y:0 }} exit={{ opacity:0, y:-30 }} className="space-y-8 text-center">
               <div>
-                <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-amber-400/60 mb-2">{CURRENT_YEAR} Wrapped</p>
-                <h1 className="text-5xl font-black tracking-tighter uppercase italic text-white">Your Year<br/>in Anime<span style={{color:"#f59e0b"}}>.</span></h1>
-                <p className="text-white/35 text-sm mt-3">A lot happened. Here's the data.</p>
+                <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-accent-bright/60 mb-2">{CURRENT_YEAR} Wrapped</p>
+                <h1 className="text-5xl font-black tracking-tighter uppercase italic text-foreground">Your Year<br/>in Anime<span style={{color:"#f59e0b"}}>.</span></h1>
+                <p className="text-subtle text-sm mt-3">A lot happened. Here's the data.</p>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 {STAT_CARDS.map((s, i) => (
                   <motion.div key={s.label} initial={{ opacity:0, scale:0.9 }} animate={{ opacity:1, scale:1 }} transition={{ delay: i*0.1 }}
-                    className={`p-6 rounded-2xl bg-gradient-to-br ${s.color} border border-white/5 text-left`}
+                    className={`p-6 rounded-2xl bg-gradient-to-br ${s.color} border border-border text-left`}
                   >
                     <s.icon size={20} className={`${s.text} mb-3`} />
-                    <p className="text-3xl font-black text-white tracking-tighter">{s.value}</p>
-                    <p className="text-[10px] text-white/40 uppercase tracking-wider mt-1">{s.label}</p>
+                    <p className="text-3xl font-black text-foreground tracking-tighter">{s.value}</p>
+                    <p className="text-[10px] text-muted uppercase tracking-wider mt-1">{s.label}</p>
                   </motion.div>
                 ))}
               </div>
@@ -120,25 +120,25 @@ export default function WrappedPage() {
             <motion.div key="top" initial={{ opacity:0, y:30 }} animate={{ opacity:1, y:0 }} exit={{ opacity:0, y:-30 }} className="space-y-6">
               <div className="text-center">
                 <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-violet-400/60 mb-2">Your Top 5</p>
-                <h2 className="text-4xl font-black tracking-tighter uppercase italic text-white">Favourite<br/>Anime of {CURRENT_YEAR}</h2>
+                <h2 className="text-4xl font-black tracking-tighter uppercase italic text-foreground">Favourite<br/>Anime of {CURRENT_YEAR}</h2>
               </div>
-              {animeLoading && <div className="text-white/30 text-sm text-center py-4">Loading…</div>}
+              {animeLoading && <div className="text-subtle text-sm text-center py-4">Loading…</div>}
               <div className="space-y-3">
                 {topAnime.map((anime, i) => (
                   <motion.div key={anime.id} initial={{ opacity:0, x:-20 }} animate={{ opacity:1, x:0 }} transition={{ delay: i*0.08 }}
-                    className="flex items-center gap-4 p-4 rounded-2xl bg-white/[0.03] border border-white/8"
+                    className="flex items-center gap-4 p-4 rounded-2xl bg-surface border border-border"
                   >
-                    <span className="text-2xl font-black text-white/20 w-7 shrink-0">#{i+1}</span>
+                    <span className="text-2xl font-black text-subtle w-7 shrink-0">#{i+1}</span>
                     <div className="relative h-12 w-9 rounded-lg overflow-hidden shrink-0">
                       <Image src={anime.image} alt={anime.title} fill className="object-cover" sizes="36px" />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="font-black text-white truncate">{anime.title}</p>
-                      <p className="text-[10px] text-white/30 uppercase tracking-wider">{anime.studio}</p>
+                      <p className="font-black text-foreground truncate">{anime.title}</p>
+                      <p className="text-[10px] text-subtle uppercase tracking-wider">{anime.studio}</p>
                     </div>
                     <div className="flex items-center gap-1 shrink-0">
-                      <Star size={11} fill="#f59e0b" className="text-amber-400" />
-                      <span className="text-sm font-black text-white">{anime.rating.toFixed(1)}</span>
+                      <Star size={11} fill="#f59e0b" className="text-accent-bright" />
+                      <span className="text-sm font-black text-foreground">{anime.rating.toFixed(1)}</span>
                     </div>
                   </motion.div>
                 ))}
@@ -150,12 +150,12 @@ export default function WrappedPage() {
           {slide === 2 && (
             <motion.div key="genre" initial={{ opacity:0, y:30 }} animate={{ opacity:1, y:0 }} exit={{ opacity:0, y:-30 }} className="space-y-8 text-center">
               <div>
-                <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-amber-400/60 mb-2">Your DNA</p>
-                <h2 className="text-4xl font-black tracking-tighter uppercase italic text-white">You Are<br/>A {TOP_GENRE}<br/>Otaku<span className="text-amber-400">.</span></h2>
-                <p className="text-white/35 text-sm mt-3">68% of your watches were {TOP_GENRE} this year.</p>
+                <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-accent-bright/60 mb-2">Your DNA</p>
+                <h2 className="text-4xl font-black tracking-tighter uppercase italic text-foreground">You Are<br/>A {TOP_GENRE}<br/>Otaku<span className="text-accent-bright">.</span></h2>
+                <p className="text-subtle text-sm mt-3">68% of your watches were {TOP_GENRE} this year.</p>
               </div>
               {[
-                { genre:"Seinen",       pct:68, color:"from-amber-500 to-yellow-400"   },
+                { genre:"Seinen",       pct:68, color:"from-accent to-yellow-400"   },
                 { genre:"Action",       pct:52, color:"from-indigo-500 to-blue-400"    },
                 { genre:"Psychological",pct:41, color:"from-purple-500 to-pink-400"    },
                 { genre:"Fantasy",      pct:28, color:"from-emerald-500 to-teal-400"   },
@@ -163,10 +163,10 @@ export default function WrappedPage() {
               ].map((g, i) => (
                 <motion.div key={g.genre} initial={{ opacity:0 }} animate={{ opacity:1 }} transition={{ delay: i*0.1 }} className="space-y-1.5">
                   <div className="flex justify-between text-xs font-black">
-                    <span className="text-white/60 uppercase tracking-wider">{g.genre}</span>
-                    <span className="text-white/40">{g.pct}%</span>
+                    <span className="text-muted uppercase tracking-wider">{g.genre}</span>
+                    <span className="text-muted">{g.pct}%</span>
                   </div>
-                  <div className="h-2 bg-white/5 rounded-full overflow-hidden">
+                  <div className="h-2 bg-surface rounded-full overflow-hidden">
                     <motion.div initial={{ width:0 }} animate={{ width:`${g.pct}%` }} transition={{ delay:i*0.1+0.2, duration:0.8, ease:"easeOut" }}
                       className={`h-full bg-gradient-to-r ${g.color} rounded-full`}
                     />
@@ -181,7 +181,7 @@ export default function WrappedPage() {
             <motion.div key="achieve" initial={{ opacity:0, y:30 }} animate={{ opacity:1, y:0 }} exit={{ opacity:0, y:-30 }} className="space-y-6 text-center">
               <div>
                 <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-emerald-400/60 mb-2">Milestones</p>
-                <h2 className="text-4xl font-black tracking-tighter uppercase italic text-white">What You<br/>Unlocked<span className="text-emerald-400">.</span></h2>
+                <h2 className="text-4xl font-black tracking-tighter uppercase italic text-foreground">What You<br/>Unlocked<span className="text-emerald-400">.</span></h2>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 {[
@@ -194,8 +194,8 @@ export default function WrappedPage() {
                     className="p-5 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-center space-y-2"
                   >
                     <span className="text-3xl">{b.emoji}</span>
-                    <p className="font-black text-white text-sm">{b.label}</p>
-                    <p className="text-[10px] text-white/40">{b.desc}</p>
+                    <p className="font-black text-foreground text-sm">{b.label}</p>
+                    <p className="text-[10px] text-muted">{b.desc}</p>
                   </motion.div>
                 ))}
               </div>
@@ -206,19 +206,19 @@ export default function WrappedPage() {
           {slide === 4 && (
             <motion.div key="share" initial={{ opacity:0, y:30 }} animate={{ opacity:1, y:0 }} exit={{ opacity:0, y:-30 }} className="space-y-8 text-center">
               <div>
-                <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-amber-400/60 mb-2">Share your story</p>
-                <h2 className="text-5xl font-black tracking-tighter uppercase italic text-white">
+                <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-accent-bright/60 mb-2">Share your story</p>
+                <h2 className="text-5xl font-black tracking-tighter uppercase italic text-foreground">
                   That was<br/>{CURRENT_YEAR}<span style={{color:"#f59e0b"}}>.</span>
                 </h2>
-                <p className="text-white/35 text-sm mt-3">Share your Anime Wrapped with the world.</p>
+                <p className="text-subtle text-sm mt-3">Share your Anime Wrapped with the world.</p>
               </div>
               <div className="space-y-3">
                 <button onClick={() => setShareOpen(true)}
-                  className="w-full flex items-center justify-center gap-2 py-4 rounded-2xl bg-amber-500 hover:bg-amber-400 font-black text-xs uppercase tracking-widest transition-all shadow-[0_0_30px_rgba(99,102,241,0.4)]"
+                  className="w-full flex items-center justify-center gap-2 py-4 rounded-2xl bg-accent hover:bg-accent-bright font-black text-xs uppercase tracking-widest transition-all shadow-[0_0_30px_rgba(99,102,241,0.4)]"
                 >
                   <Share2 size={14} /> Share My {CURRENT_YEAR} Wrapped
                 </button>
-                <Link href="/dashboard" className="block text-center text-xs text-white/30 hover:text-white/60 transition-colors font-bold uppercase tracking-widest">
+                <Link href="/dashboard" className="block text-center text-xs text-subtle hover:text-muted transition-colors font-bold uppercase tracking-widest">
                   Back to Dashboard
                 </Link>
               </div>
@@ -234,7 +234,7 @@ export default function WrappedPage() {
             whileHover={{ scale:1.05 }}
             whileTap={{ scale:0.95 }}
             onClick={() => setSlide(s => s + 1)}
-            className="flex items-center gap-2 px-8 py-3.5 rounded-2xl bg-white/10 border border-white/10 font-black text-xs uppercase tracking-widest hover:bg-white/20 transition-all backdrop-blur-md"
+            className="flex items-center gap-2 px-8 py-3.5 rounded-2xl bg-surface border border-border font-black text-xs uppercase tracking-widest hover:bg-white/20 transition-all backdrop-blur-md"
           >
             Next <ChevronRight size={13} />
           </motion.button>

@@ -22,14 +22,14 @@ const MODES: { id: ModeId; label: string; sub: string; icon: typeof Dna; accent:
     label:  "Based on Your DNA",
     sub:    "Action · Psychological · Top genres",
     icon:   Dna,
-    accent: "from-indigo-600/30 to-violet-600/20 border-amber-500/25",
+    accent: "from-indigo-600/30 to-violet-600/20 border-accent/25",
   },
   {
     id:     "gems",
     label:  "Hidden Gems",
     sub:    "Rating ≥ 8.5 · Under the radar",
     icon:   Gem,
-    accent: "from-amber-600/20 to-orange-600/15 border-amber-500/25",
+    accent: "from-accent/20 to-orange-600/15 border-accent/25",
   },
   {
     id:     "similar",
@@ -111,11 +111,11 @@ export default function RecommendationsPage() {
   const { anime: results, isLoading } = useModeAnime(mode)
 
   return (
-    <div className="min-h-screen bg-[#020202] text-white">
+    <div className="min-h-screen bg-background text-foreground">
       {/* ── Cinematic header ── */}
-      <div className="relative overflow-hidden border-b border-white/5">
+      <div className="relative overflow-hidden border-b border-border">
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute -top-32 left-1/4 w-96 h-96 bg-amber-600/10 blur-[120px] rounded-full" />
+          <div className="absolute -top-32 left-1/4 w-96 h-96 bg-accent/10 blur-[120px] rounded-full" />
           <div className="absolute -top-16 right-1/3 w-72 h-72 bg-violet-600/8 blur-[100px] rounded-full" />
         </div>
 
@@ -126,9 +126,9 @@ export default function RecommendationsPage() {
             transition={{ duration: 0.5 }}
             className="flex items-center gap-3 mb-4"
           >
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-amber-600/15 border border-amber-500/20">
-              <Brain size={13} className="text-amber-400" />
-              <span className="text-[9px] font-black uppercase tracking-[0.4em] text-amber-400">Neural Oracle</span>
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent/15 border border-accent/20">
+              <Brain size={13} className="text-accent-bright" />
+              <span className="text-[9px] font-black uppercase tracking-[0.4em] text-accent-bright">Neural Oracle</span>
             </div>
           </motion.div>
 
@@ -136,17 +136,17 @@ export default function RecommendationsPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="text-5xl lg:text-7xl font-black tracking-tighter uppercase italic text-white leading-none mb-3"
+            className="text-5xl lg:text-7xl font-black tracking-tighter uppercase italic text-foreground leading-none mb-3"
           >
             What to Watch<br />
-            <span className="text-amber-400">Next</span>
+            <span className="text-accent-bright">Next</span>
           </motion.h1>
 
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.25 }}
-            className="text-white/40 text-sm max-w-lg"
+            className="text-muted text-sm max-w-lg"
           >
             Neural Oracle analyses your watch history, genre preferences, and behaviour
             patterns to surface exactly what you should watch next.
@@ -167,7 +167,7 @@ export default function RecommendationsPage() {
               className={`relative p-5 rounded-2xl border text-left transition-all duration-300 overflow-hidden group ${
                 mode === m.id
                   ? `bg-gradient-to-br ${m.accent} scale-[1.02] shadow-lg shadow-black/40`
-                  : "bg-white/[0.02] border-white/8 hover:border-white/15 hover:bg-white/[0.04]"
+                  : "bg-surface border-border hover:border-border hover:bg-white/[0.04]"
               }`}
             >
               {mode === m.id && (
@@ -180,13 +180,13 @@ export default function RecommendationsPage() {
               <m.icon
                 size={20}
                 className={`mb-3 transition-colors ${
-                  mode === m.id ? "text-white" : "text-white/30 group-hover:text-white/60"
+                  mode === m.id ? "text-foreground" : "text-subtle group-hover:text-muted"
                 }`}
               />
-              <p className={`text-sm font-black leading-tight mb-1 ${mode === m.id ? "text-white" : "text-white/70"}`}>
+              <p className={`text-sm font-black leading-tight mb-1 ${mode === m.id ? "text-foreground" : "text-muted"}`}>
                 {m.label}
               </p>
-              <p className="text-[10px] text-white/30">{m.sub}</p>
+              <p className="text-[10px] text-subtle">{m.sub}</p>
             </motion.button>
           ))}
         </div>
@@ -196,10 +196,10 @@ export default function RecommendationsPage() {
           {/* Grid */}
           <div className="flex-1">
             <div className="flex items-center justify-between mb-6">
-              <h2 className="text-[10px] font-black uppercase tracking-[0.4em] text-white/30">
+              <h2 className="text-[10px] font-black uppercase tracking-[0.4em] text-subtle">
                 {isLoading ? "Loading…" : `${results.length} results`} · {MODES.find(m => m.id === mode)?.label}
               </h2>
-              <div className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-wider text-amber-400/60">
+              <div className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-wider text-accent-bright/60">
                 <Sparkles size={10} />
                 AI curated
               </div>
@@ -217,8 +217,8 @@ export default function RecommendationsPage() {
                 {results.map((anime, idx) => (
                   <div key={anime.id} className="space-y-2">
                     {/* Match score badge */}
-                    <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-amber-600/10 border border-amber-500/15 w-fit">
-                      <span className="text-[9px] font-black text-amber-400 uppercase tracking-widest">
+                    <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-accent/10 border border-accent/15 w-fit">
+                      <span className="text-[9px] font-black text-accent-bright uppercase tracking-widest">
                         <AnimatedCounter target={matchScore(anime, mode)} />% Match
                       </span>
                     </div>
@@ -236,24 +236,24 @@ export default function RecommendationsPage() {
           {/* AI Oracle sidebar */}
           <aside className="xl:w-80 shrink-0">
             <div className="sticky top-6 space-y-4">
-              <div className="p-6 rounded-2xl bg-gradient-to-br from-indigo-600/10 to-violet-600/8 border border-amber-500/20 relative overflow-hidden">
-                <div className="absolute -top-8 -right-8 w-32 h-32 bg-amber-600/15 blur-[50px] rounded-full pointer-events-none" />
+              <div className="p-6 rounded-2xl bg-gradient-to-br from-indigo-600/10 to-violet-600/8 border border-accent/20 relative overflow-hidden">
+                <div className="absolute -top-8 -right-8 w-32 h-32 bg-accent/15 blur-[50px] rounded-full pointer-events-none" />
                 <div className="relative z-10">
                   <div className="flex items-center gap-2 mb-4">
-                    <div className="p-2 rounded-xl bg-amber-600/20">
-                      <Brain size={16} className="text-amber-400" />
+                    <div className="p-2 rounded-xl bg-accent/20">
+                      <Brain size={16} className="text-accent-bright" />
                     </div>
                     <div>
-                      <p className="text-xs font-black text-white">AI Oracle</p>
-                      <p className="text-[9px] text-white/30">Powered by Neural Engine</p>
+                      <p className="text-xs font-black text-foreground">AI Oracle</p>
+                      <p className="text-[9px] text-subtle">Powered by Neural Engine</p>
                     </div>
                   </div>
-                  <p className="text-[11px] text-white/50 leading-relaxed mb-5">
+                  <p className="text-[11px] text-muted leading-relaxed mb-5">
                     Tell Oracle exactly what you&apos;re in the mood for — genre, vibe, length, or emotional tone.
                   </p>
                   <Link
                     href="/ai-discover"
-                    className="flex items-center justify-between w-full px-5 py-3.5 rounded-xl bg-amber-500 hover:bg-amber-400 transition-colors text-xs font-black uppercase tracking-widest text-white"
+                    className="flex items-center justify-between w-full px-5 py-3.5 rounded-xl bg-accent hover:bg-accent-bright transition-colors text-xs font-black uppercase tracking-widest text-foreground"
                   >
                     Ask Oracle
                     <ArrowRight size={13} />
@@ -262,8 +262,8 @@ export default function RecommendationsPage() {
               </div>
 
               {/* Stats card */}
-              <div className="p-5 rounded-2xl bg-white/[0.02] border border-white/8">
-                <p className="text-[9px] font-black uppercase tracking-[0.3em] text-white/25 mb-4">Your DNA</p>
+              <div className="p-5 rounded-2xl bg-surface border border-border">
+                <p className="text-[9px] font-black uppercase tracking-[0.3em] text-subtle mb-4">Your DNA</p>
                 {[
                   { label: "Action",       pct: 82 },
                   { label: "Psychological",pct: 74 },
@@ -272,10 +272,10 @@ export default function RecommendationsPage() {
                   { label: "Fantasy",      pct: 48 },
                 ].map(({ label, pct }) => (
                   <div key={label} className="mb-3 last:mb-0">
-                    <div className="flex justify-between text-[9px] font-black uppercase tracking-wider text-white/40 mb-1">
+                    <div className="flex justify-between text-[9px] font-black uppercase tracking-wider text-muted mb-1">
                       <span>{label}</span><span>{pct}%</span>
                     </div>
-                    <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden">
+                    <div className="h-1 w-full bg-surface rounded-full overflow-hidden">
                       <motion.div
                         initial={{ width: 0 }}
                         animate={{ width: `${pct}%` }}
@@ -306,21 +306,21 @@ export default function RecommendationsPage() {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
               onClick={e => e.stopPropagation()}
-              className="bg-[#0a0a0a] border border-white/10 rounded-3xl p-6 max-w-md w-full"
+              className="bg-surface border border-border rounded-3xl p-6 max-w-md w-full"
             >
-              <p className="text-[9px] font-black uppercase tracking-[0.3em] text-amber-400 mb-1">{modalAnime.studio}</p>
-              <h3 className="text-2xl font-black tracking-tighter uppercase italic text-white mb-2">{modalAnime.title}</h3>
-              <p className="text-xs text-white/40 leading-relaxed mb-5">{modalAnime.synopsis.slice(0, 180)}…</p>
+              <p className="text-[9px] font-black uppercase tracking-[0.3em] text-accent-bright mb-1">{modalAnime.studio}</p>
+              <h3 className="text-2xl font-black tracking-tighter uppercase italic text-foreground mb-2">{modalAnime.title}</h3>
+              <p className="text-xs text-muted leading-relaxed mb-5">{modalAnime.synopsis.slice(0, 180)}…</p>
               <div className="flex gap-3">
                 <Link
                   href={`/anime/${modalAnime.id}`}
-                  className="flex-1 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-xs font-black uppercase tracking-widest text-white text-center transition-colors"
+                  className="flex-1 py-3 rounded-xl bg-accent hover:bg-accent-bright text-xs font-black uppercase tracking-widest text-foreground text-center transition-colors"
                 >
                   View Details
                 </Link>
                 <button
                   onClick={() => setModalAnime(null)}
-                  className="px-4 py-3 rounded-xl bg-white/5 hover:bg-white/10 text-xs font-bold text-white/60 transition-colors"
+                  className="px-4 py-3 rounded-xl bg-surface hover:bg-surface text-xs font-bold text-muted transition-colors"
                 >
                   Close
                 </button>

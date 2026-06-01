@@ -33,14 +33,14 @@ const PRO_FEATURES = [
 
 export default function PricingPage() {
   return (
-    <div className="min-h-screen bg-[#020202] text-white pb-32">
+    <div className="min-h-screen bg-background text-foreground pb-32">
       {/* Header */}
       <div className="max-w-4xl mx-auto px-6 pt-32 pb-16 text-center">
         <div className="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.4em]"
           style={{ background: "rgba(245,158,11,0.1)", border: "1px solid rgba(245,158,11,0.25)", color: "#f59e0b" }}>
           <Crown size={11} /> Pricing
         </div>
-        <h1 className="text-5xl md:text-7xl font-black tracking-tighter text-white leading-none mb-6">
+        <h1 className="text-5xl md:text-7xl font-black tracking-tighter text-foreground leading-none mb-6">
           Simple,{" "}
           <span className="italic" style={{
             backgroundImage: "linear-gradient(135deg, #fbbf24, #f59e0b)",
@@ -49,7 +49,7 @@ export default function PricingPage() {
             transparent.
           </span>
         </h1>
-        <p className="text-white/40 text-lg max-w-lg mx-auto">
+        <p className="text-muted text-lg max-w-lg mx-auto">
           Kaiveron is free forever. Upgrade to Pro if you want the extras — no pressure, no dark patterns.
         </p>
       </div>
@@ -57,18 +57,18 @@ export default function PricingPage() {
       {/* Plans */}
       <div className="max-w-4xl mx-auto px-6 grid md:grid-cols-2 gap-6">
         {/* Free */}
-        <div className="relative p-8 rounded-[2rem] border border-white/10 bg-white/[0.02] space-y-6">
+        <div className="relative p-8 rounded-[2rem] border border-border bg-surface space-y-6">
           <div>
-            <p className="text-[10px] font-black uppercase tracking-[0.4em] text-white/30 mb-2">Free forever</p>
+            <p className="text-[10px] font-black uppercase tracking-[0.4em] text-subtle mb-2">Free forever</p>
             <div className="flex items-baseline gap-2">
-              <span className="text-5xl font-black text-white">₹0</span>
-              <span className="text-white/40">/month</span>
+              <span className="text-5xl font-black text-foreground">₹0</span>
+              <span className="text-muted">/month</span>
             </div>
-            <p className="text-sm text-white/35 mt-2">No credit card. No trial. Always free.</p>
+            <p className="text-sm text-subtle mt-2">No credit card. No trial. Always free.</p>
           </div>
 
           <Link href="/register"
-            className="block w-full py-3.5 rounded-2xl text-center text-xs font-black uppercase tracking-widest border border-white/15 text-white/60 hover:bg-white/5 hover:text-white transition-all">
+            className="block w-full py-3.5 rounded-2xl text-center text-xs font-black uppercase tracking-widest border border-border text-muted hover:bg-surface hover:text-foreground transition-all">
             Get Started Free
           </Link>
 
@@ -76,7 +76,7 @@ export default function PricingPage() {
             {FREE_FEATURES.map(f => (
               <div key={f} className="flex items-center gap-3">
                 <Check size={14} className="text-emerald-400 shrink-0" />
-                <span className="text-sm text-white/60">{f}</span>
+                <span className="text-sm text-muted">{f}</span>
               </div>
             ))}
           </div>
@@ -96,12 +96,12 @@ export default function PricingPage() {
           </div>
 
           <div>
-            <p className="text-[10px] font-black uppercase tracking-[0.4em] text-amber-400/70 mb-2">Pro</p>
+            <p className="text-[10px] font-black uppercase tracking-[0.4em] text-accent-bright/70 mb-2">Pro</p>
             <div className="flex items-baseline gap-2">
-              <span className="text-5xl font-black text-white">₹399</span>
-              <span className="text-white/40">/month</span>
+              <span className="text-5xl font-black text-foreground">₹399</span>
+              <span className="text-muted">/month</span>
             </div>
-            <p className="text-sm text-white/35 mt-1">or ₹3,499/year (save 27%)</p>
+            <p className="text-sm text-subtle mt-1">or ₹3,499/year (save 27%)</p>
           </div>
 
           <a
@@ -117,9 +117,9 @@ export default function PricingPage() {
               <div key={f} className="flex items-center gap-3">
                 <div className="w-4 h-4 rounded-full flex items-center justify-center shrink-0"
                   style={{ background: "rgba(245,158,11,0.2)", border: "1px solid rgba(245,158,11,0.4)" }}>
-                  <Check size={9} className="text-amber-400" />
+                  <Check size={9} className="text-accent-bright" />
                 </div>
-                <span className="text-sm text-white/70">{f}</span>
+                <span className="text-sm text-muted">{f}</span>
               </div>
             ))}
           </div>
@@ -128,7 +128,7 @@ export default function PricingPage() {
 
       {/* FAQ */}
       <div className="max-w-2xl mx-auto px-6 mt-20 space-y-6">
-        <h2 className="text-2xl font-black tracking-tighter uppercase italic text-white text-center">
+        <h2 className="text-2xl font-black tracking-tighter uppercase italic text-foreground text-center">
           Common Questions<span style={{ color: "#f59e0b" }}>.</span>
         </h2>
 
@@ -150,25 +150,25 @@ export default function PricingPage() {
             a: "Yes — email us at kaiveron@gmail.com from your .edu address and we'll hook you up.",
           },
         ].map(({ q, a }) => (
-          <div key={q} className="p-5 rounded-2xl border border-white/8 bg-white/[0.02]">
-            <p className="text-sm font-black text-white mb-2">{q}</p>
-            <p className="text-xs text-white/45 leading-relaxed">{a}</p>
+          <div key={q} className="p-5 rounded-2xl border border-border bg-surface">
+            <p className="text-sm font-black text-foreground mb-2">{q}</p>
+            <p className="text-xs text-muted leading-relaxed">{a}</p>
           </div>
         ))}
       </div>
 
       {/* Commitment */}
       <div className="max-w-4xl mx-auto px-6 mt-16">
-        <div className="p-8 rounded-[2rem] border border-white/5 bg-white/[0.02] grid sm:grid-cols-3 gap-6 text-center">
+        <div className="p-8 rounded-[2rem] border border-border bg-surface grid sm:grid-cols-3 gap-6 text-center">
           {[
             { icon: Shield, label: "No dark patterns", desc: "Easy to cancel, easy to export, nothing hidden" },
             { icon: Users, label: "Community first", desc: "Free users are full citizens, not second class" },
             { icon: Star, label: "Fair pricing", desc: "₹399/mo — affordable for Indian anime fans" },
           ].map(({ icon: Icon, label, desc }) => (
             <div key={label} className="space-y-2">
-              <Icon size={20} className="mx-auto text-amber-400" />
-              <p className="text-sm font-black text-white">{label}</p>
-              <p className="text-xs text-white/35">{desc}</p>
+              <Icon size={20} className="mx-auto text-accent-bright" />
+              <p className="text-sm font-black text-foreground">{label}</p>
+              <p className="text-xs text-subtle">{desc}</p>
             </div>
           ))}
         </div>

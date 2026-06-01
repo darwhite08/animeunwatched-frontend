@@ -13,7 +13,7 @@ export const StreakHeatmap = () => {
 
   return (
     <div className="space-y-4">
-      <div className="flex justify-between text-[10px] font-black text-white/20 uppercase tracking-widest px-1">
+      <div className="flex justify-between text-[10px] font-black text-subtle uppercase tracking-widest px-1">
         {months.map(m => <span key={m}>{m}</span>)}
       </div>
       
@@ -26,11 +26,11 @@ export const StreakHeatmap = () => {
             transition={{ delay: i * 0.002 }}
             whileHover={{ scale: 1.5, zIndex: 50 }}
             className={`h-3.5 w-3.5 md:h-4 md:w-4 rounded-[4px] cursor-pointer transition-colors duration-500 shadow-sm
-              ${d.intensity === 0 ? "bg-white/5 hover:bg-white/20" : ""}
+              ${d.intensity === 0 ? "bg-surface hover:bg-white/20" : ""}
               ${d.intensity === 1 ? "bg-indigo-900/40" : ""}
               ${d.intensity === 2 ? "bg-indigo-700/60" : ""}
-              ${d.intensity === 3 ? "bg-amber-500" : ""}
-              ${d.intensity === 4 ? "bg-amber-400 shadow-[0_0_15px_rgba(251,191,36,0.5)]" : ""}
+              ${d.intensity === 3 ? "bg-accent" : ""}
+              ${d.intensity === 4 ? "bg-accent-bright shadow-[0_0_15px_rgba(251,191,36,0.5)]" : ""}
             `}
           />
         ))}

@@ -46,14 +46,14 @@ export default function AnimeBrowsePage() {
   const RECENT = animeList.filter(a => a.year >= 2022).sort((a, b) => b.year - a.year).slice(0, 6)
 
   return (
-    <div className="min-h-screen bg-[#020202] text-white pb-32">
+    <div className="min-h-screen bg-background text-foreground pb-32">
       {/* Hero */}
-      <div className="border-b border-white/5 bg-[#020202]/80 backdrop-blur-md sticky top-[72px] z-30">
+      <div className="border-b border-border bg-background/80 backdrop-blur-md sticky top-[72px] z-30">
         <div className="max-w-7xl mx-auto px-6 py-5">
-          <h1 className="text-3xl font-black tracking-tighter uppercase italic text-white">
+          <h1 className="text-3xl font-black tracking-tighter uppercase italic text-foreground">
             Anime Browse<span style={{color:"#f59e0b"}}>.</span>
           </h1>
-          <p className="text-white/35 text-sm mt-0.5">Your gateway to every archive in the neural network</p>
+          <p className="text-subtle text-sm mt-0.5">Your gateway to every archive in the neural network</p>
         </div>
       </div>
 
@@ -62,15 +62,15 @@ export default function AnimeBrowsePage() {
         {/* Quick links */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {[
-            { href: "/bestanimelist", icon: Star,      label: "Top Rated",     desc: "Highest neural scores",    color: "from-amber-600/20 to-amber-900/5",  border: "border-amber-500/20", text: "text-amber-400"   },
-            { href: "/calendar",      icon: Calendar,   label: "Seasonal",      desc: "Browse by season & year",  color: "from-indigo-600/20 to-indigo-900/5", border: "border-amber-500/20",text: "text-amber-400"  },
+            { href: "/bestanimelist", icon: Star,      label: "Top Rated",     desc: "Highest neural scores",    color: "from-accent/20 to-amber-900/5",  border: "border-accent/20", text: "text-accent-bright"   },
+            { href: "/calendar",      icon: Calendar,   label: "Seasonal",      desc: "Browse by season & year",  color: "from-indigo-600/20 to-indigo-900/5", border: "border-accent/20",text: "text-accent-bright"  },
             { href: "/discover",      icon: TrendingUp, label: "Trending",      desc: "What's hot right now",      color: "from-rose-600/20 to-rose-900/5",    border: "border-rose-500/20",  text: "text-rose-400"    },
             { href: "/ai-discover",   icon: Clock,      label: "For You",       desc: "AI-matched to your taste",  color: "from-violet-600/20 to-violet-900/5",border: "border-violet-500/20",text: "text-violet-400"  },
           ].map(({ href, icon: Icon, label, desc, color, border, text }) => (
             <Link key={href} href={href} className={`group p-6 rounded-2xl bg-gradient-to-br ${color} border ${border} hover:scale-[1.02] transition-all`}>
               <Icon size={20} className={`${text} mb-3`} />
-              <p className="font-black text-white">{label}</p>
-              <p className="text-[10px] text-white/35 mt-0.5">{desc}</p>
+              <p className="font-black text-foreground">{label}</p>
+              <p className="text-[10px] text-subtle mt-0.5">{desc}</p>
             </Link>
           ))}
         </div>
@@ -78,7 +78,7 @@ export default function AnimeBrowsePage() {
         {/* Currently Airing */}
         <div>
           <div className="flex items-center gap-3 mb-6">
-            <h2 className="text-xl font-black tracking-tighter uppercase italic text-white">Currently Airing</h2>
+            <h2 className="text-xl font-black tracking-tighter uppercase italic text-foreground">Currently Airing</h2>
             <span className="flex items-center gap-1 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-[9px] font-black text-emerald-400">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />Live
             </span>
@@ -91,8 +91,8 @@ export default function AnimeBrowsePage() {
         {/* Top Rated */}
         <div>
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-black tracking-tighter uppercase italic text-white">All-Time Best</h2>
-            <Link href="/bestanimelist" className="text-[10px] font-black uppercase tracking-widest text-amber-400 hover:text-amber-300 transition-colors">
+            <h2 className="text-xl font-black tracking-tighter uppercase italic text-foreground">All-Time Best</h2>
+            <Link href="/bestanimelist" className="text-[10px] font-black uppercase tracking-widest text-accent-bright hover:text-accent-bright transition-colors">
               Full List →
             </Link>
           </div>
@@ -103,17 +103,17 @@ export default function AnimeBrowsePage() {
 
         {/* Seasonal quick-nav */}
         <div>
-          <h2 className="text-xl font-black tracking-tighter uppercase italic text-white mb-6">Browse by Season</h2>
+          <h2 className="text-xl font-black tracking-tighter uppercase italic text-foreground mb-6">Browse by Season</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {SEASONS.map(s => (
               <div key={s} className="space-y-2">
-                <p className="text-[10px] font-black uppercase tracking-widest text-white/30">{SEASON_LABELS[s]}</p>
+                <p className="text-[10px] font-black uppercase tracking-widest text-subtle">{SEASON_LABELS[s]}</p>
                 {SEASONAL_YEARS.map(y => (
                   <Link key={y} href={`/anime/season/${y}/${s}`}
-                    className="flex items-center justify-between px-4 py-2.5 rounded-xl bg-white/[0.02] border border-white/8 hover:border-amber-500/25 hover:bg-white/[0.04] transition-all group"
+                    className="flex items-center justify-between px-4 py-2.5 rounded-xl bg-surface border border-border hover:border-accent/25 hover:bg-white/[0.04] transition-all group"
                   >
-                    <span className="text-sm font-bold text-white/60 group-hover:text-white transition-colors">{y}</span>
-                    <span className="text-[9px] text-white/20 group-hover:text-amber-400 transition-colors font-mono">
+                    <span className="text-sm font-bold text-muted group-hover:text-foreground transition-colors">{y}</span>
+                    <span className="text-[9px] text-subtle group-hover:text-accent-bright transition-colors font-mono">
                       {animeList.filter(a => a.year === y).length} anime
                     </span>
                   </Link>

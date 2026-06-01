@@ -72,7 +72,7 @@ const MOCK_BLOGS: Blog[] = [
 const STATUS_CONFIG: Record<BlogStatus, { label: string; cls: string }> = {
   published:    { label: "Published",    cls: "bg-emerald-600/20 text-emerald-400 border-emerald-500/30" },
   draft:        { label: "Draft",        cls: "bg-zinc-600/20 text-zinc-400 border-zinc-500/30" },
-  under_review: { label: "Under Review", cls: "bg-amber-600/20 text-amber-400 border-amber-500/30" },
+  under_review: { label: "Under Review", cls: "bg-accent/20 text-accent-bright border-accent/30" },
 }
 
 type Filter = "all" | BlogStatus
@@ -117,7 +117,7 @@ export default function BlogListPage() {
           </div>
           <div>
             <h1 className="text-2xl font-semibold">Blog Articles</h1>
-            <p className="text-sm text-white/40">{allBlogs.length} articles</p>
+            <p className="text-sm text-muted">{allBlogs.length} articles</p>
           </div>
         </div>
 
@@ -132,7 +132,7 @@ export default function BlogListPage() {
 
       {/* Stats */}
       <div className="grid grid-cols-3 gap-4">
-        <StatCard icon={Eye} label="Total Views" value={totalViews.toLocaleString()} color="text-amber-400" />
+        <StatCard icon={Eye} label="Total Views" value={totalViews.toLocaleString()} color="text-accent-bright" />
         <StatCard icon={Heart} label="Total Likes" value={totalLikes.toLocaleString()} color="text-rose-400" />
         <StatCard icon={BarChart2} label="Published" value={String(published)} color="text-emerald-400" />
       </div>
@@ -140,12 +140,12 @@ export default function BlogListPage() {
       {/* Search + Filters */}
       <div className="flex flex-col sm:flex-row gap-3">
         <div className="relative flex-1 max-w-xs">
-          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/30" />
+          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-subtle" />
           <input
             value={query}
             onChange={e => setQuery(e.target.value)}
             placeholder="Search articles…"
-            className="w-full pl-9 pr-4 py-2.5 bg-zinc-800 rounded-xl text-sm outline-none placeholder:text-white/30 focus:ring-1 focus:ring-purple-500/50"
+            className="w-full pl-9 pr-4 py-2.5 bg-zinc-800 rounded-xl text-sm outline-none placeholder:text-subtle focus:ring-1 focus:ring-purple-500/50"
           />
         </div>
 
@@ -155,7 +155,7 @@ export default function BlogListPage() {
               key={f}
               onClick={() => setFilter(f)}
               className={`px-4 py-2.5 rounded-xl text-sm capitalize transition ${
-                filter === f ? "bg-white/10 text-white" : "text-white/40 hover:bg-white/5 hover:text-white"
+                filter === f ? "bg-surface text-foreground" : "text-muted hover:bg-surface hover:text-foreground"
               }`}
             >
               {f === "under_review" ? "Review" : f}
@@ -174,7 +174,7 @@ export default function BlogListPage() {
       </motion.div>
 
       {visible.length === 0 && (
-        <div className="text-center py-16 text-white/30">
+        <div className="text-center py-16 text-subtle">
           <FileText size={32} className="mx-auto mb-3 opacity-30" />
           <p className="text-sm">No articles match your filter</p>
         </div>
@@ -205,7 +205,7 @@ function BlogCard({ blog, index }: { blog: Blog; index: number }) {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.96 }}
       transition={{ delay: index * 0.04 }}
-      className="bg-zinc-900 border border-white/10 hover:border-white/20 rounded-2xl overflow-hidden transition group"
+      className="bg-zinc-900 border border-border hover:border-border rounded-2xl overflow-hidden transition group"
     >
       {/* Cover */}
       <div className={`h-32 bg-gradient-to-br ${blog.coverGradient} relative`}>
@@ -214,7 +214,7 @@ function BlogCard({ blog, index }: { blog: Blog; index: number }) {
         <div className="absolute top-3 right-3 flex gap-2 opacity-0 group-hover:opacity-100 transition">
           <Link
             href={`/creators/create/blog?id=${blog.id}`}
-            className="p-2 rounded-lg bg-black/60 backdrop-blur-sm text-white/70 hover:text-white transition"
+            className="p-2 rounded-lg bg-black/60 backdrop-blur-sm text-muted hover:text-foreground transition"
             onClick={e => e.stopPropagation()}
           >
             <Edit2 size={13} />
@@ -224,7 +224,7 @@ function BlogCard({ blog, index }: { blog: Blog; index: number }) {
             onClick={onDelete}
             disabled={deleteMut.isPending}
             title="Delete article"
-            className="p-2 rounded-lg bg-black/60 backdrop-blur-sm text-white/70 hover:text-red-400 transition disabled:opacity-50"
+            className="p-2 rounded-lg bg-black/60 backdrop-blur-sm text-muted hover:text-red-400 transition disabled:opacity-50"
           >
             <Trash2 size={13} />
           </button>
@@ -235,19 +235,19 @@ function BlogCard({ blog, index }: { blog: Blog; index: number }) {
       <div className="p-5 space-y-3">
         <div className="flex items-center justify-between">
           <span className={`text-xs border px-3 py-1 rounded-full ${cls}`}>{label}</span>
-          <span className="text-xs text-white/30 flex items-center gap-1">
+          <span className="text-xs text-subtle flex items-center gap-1">
             <Clock size={11} /> {blog.readTime} min
           </span>
         </div>
 
-        <h3 className="font-semibold text-sm leading-snug line-clamp-2 group-hover:text-amber-300 transition">
+        <h3 className="font-semibold text-sm leading-snug line-clamp-2 group-hover:text-accent-bright transition">
           {blog.title}
         </h3>
 
-        <p className="text-xs text-white/40 line-clamp-2">{blog.excerpt}</p>
+        <p className="text-xs text-muted line-clamp-2">{blog.excerpt}</p>
 
         {/* Footer */}
-        <div className="flex items-center justify-between pt-2 border-t border-white/5 text-xs text-white/30">
+        <div className="flex items-center justify-between pt-2 border-t border-border text-xs text-subtle">
           <div className="flex items-center gap-3">
             {blog.views > 0 && (
               <span className="flex items-center gap-1">
@@ -269,11 +269,11 @@ function BlogCard({ blog, index }: { blog: Blog; index: number }) {
 
 function StatCard({ icon: Icon, label, value, color }: { icon: any; label: string; value: string; color: string }) {
   return (
-    <div className="bg-zinc-900 border border-white/10 rounded-2xl p-4 flex items-center gap-3">
+    <div className="bg-zinc-900 border border-border rounded-2xl p-4 flex items-center gap-3">
       <Icon size={18} className={color} />
       <div>
         <p className="text-lg font-semibold">{value}</p>
-        <p className="text-xs text-white/40">{label}</p>
+        <p className="text-xs text-muted">{label}</p>
       </div>
     </div>
   )

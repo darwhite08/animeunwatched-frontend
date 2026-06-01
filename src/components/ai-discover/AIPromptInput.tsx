@@ -59,20 +59,20 @@ export default function AIPromptInput({ onSearch }: AIPromptInputProps) {
           boxShadow: "0 24px 80px rgba(0,0,0,0.6), 0 0 0 0.5px rgba(245,158,11,0.08) inset",
         }}>
         {/* Terminal header */}
-        <div className="flex items-center justify-between px-6 py-3 border-b border-white/5">
+        <div className="flex items-center justify-between px-6 py-3 border-b border-border">
           <div className="flex items-center gap-3">
             <div className="flex gap-1.5">
               <div className="w-2.5 h-2.5 rounded-full bg-red-500/30 border border-red-500/50" />
-              <div className="w-2.5 h-2.5 rounded-full bg-amber-500/30 border border-amber-500/50" />
+              <div className="w-2.5 h-2.5 rounded-full bg-accent/30 border border-accent/50" />
               <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/30 border border-emerald-500/50" />
             </div>
-            <div className="h-4 w-px bg-white/10 mx-2" />
-            <div className="flex items-center gap-2 text-amber-400">
+            <div className="h-4 w-px bg-surface mx-2" />
+            <div className="flex items-center gap-2 text-accent-bright">
               <Terminal size={13} className="animate-pulse" />
               <span className="text-[10px] font-black uppercase tracking-[0.2em]">Neural_Query_Interface</span>
             </div>
           </div>
-          <div className="flex items-center gap-1.5 text-white/20 text-[9px] font-mono">
+          <div className="flex items-center gap-1.5 text-subtle text-[9px] font-mono">
             <Command size={9} /> SHIFT+ENTER
           </div>
         </div>
@@ -87,7 +87,7 @@ export default function AIPromptInput({ onSearch }: AIPromptInputProps) {
               onKeyDown={handleKey}
               placeholder="Query the archives… (e.g. 'Seinen with philosophical depth and no filler')"
               rows={3}
-              className="w-full bg-transparent border-none rounded-xl p-4 text-lg text-white placeholder:text-white/20 focus:outline-none resize-none font-medium leading-relaxed"
+              className="w-full bg-transparent border-none rounded-xl p-4 text-lg text-foreground placeholder:text-subtle focus:outline-none resize-none font-medium leading-relaxed"
             />
             <AnimatePresence>
               {isFocused && (
@@ -111,7 +111,7 @@ export default function AIPromptInput({ onSearch }: AIPromptInputProps) {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.06 }}
                 onClick={() => setPrompt(text)}
-                className="group/btn relative px-3 py-1.5 text-[10px] font-bold rounded-lg border border-white/5 text-white/40 hover:text-amber-400 hover:border-amber-500/20 transition-all duration-300"
+                className="group/btn relative px-3 py-1.5 text-[10px] font-bold rounded-lg border border-border text-muted hover:text-accent-bright hover:border-accent/20 transition-all duration-300"
               >
                 <span className="relative z-10 uppercase tracking-wider">{text}</span>
               </motion.button>
@@ -120,11 +120,11 @@ export default function AIPromptInput({ onSearch }: AIPromptInputProps) {
 
           {/* Action row */}
           <div className="mt-5 flex items-center justify-end gap-4 px-2">
-            <div className="flex-1 hidden md:flex items-center gap-3 text-[9px] font-black text-white/10 uppercase tracking-[0.3em]">
+            <div className="flex-1 hidden md:flex items-center gap-3 text-[9px] font-black text-subtle uppercase tracking-[0.3em]">
               <Cpu size={11} />
               <span>Hardware Acceleration: ON</span>
-              <div className="h-1 w-10 bg-white/5 rounded-full overflow-hidden">
-                <motion.div animate={{ x: [-40, 40] }} transition={{ repeat: Infinity, duration: 1.5 }} className="h-full w-4 bg-amber-500/40" />
+              <div className="h-1 w-10 bg-surface rounded-full overflow-hidden">
+                <motion.div animate={{ x: [-40, 40] }} transition={{ repeat: Infinity, duration: 1.5 }} className="h-full w-4 bg-accent/40" />
               </div>
             </div>
 

@@ -86,12 +86,12 @@ export default function MyReviewsPage() {
     <div className="max-w-3xl mx-auto px-6 py-12 pb-32 space-y-8">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-amber-400/60 mb-2">Your Opinions</p>
-          <h1 className="text-3xl font-black tracking-tighter uppercase italic text-white">
+          <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-accent-bright/60 mb-2">Your Opinions</p>
+          <h1 className="text-3xl font-black tracking-tighter uppercase italic text-foreground">
             My Reviews<span style={{color:"#f59e0b"}}>.</span>
           </h1>
         </div>
-        <Link href="/rate" className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-xs font-black uppercase tracking-widest text-white transition-all mt-2">
+        <Link href="/rate" className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-accent hover:bg-accent-bright text-xs font-black uppercase tracking-widest text-foreground transition-all mt-2">
           <PenSquare size={13} /> Write Review
         </Link>
       </div>
@@ -99,24 +99,24 @@ export default function MyReviewsPage() {
       {/* Stats */}
       <div className="grid grid-cols-3 gap-4">
         {[
-          { label: "Reviews", value: String(reviews.length), icon: PenSquare, color: "text-amber-400" },
-          { label: "Avg Score", value: avgScore + "/10", icon: Star, color: "text-amber-400" },
+          { label: "Reviews", value: String(reviews.length), icon: PenSquare, color: "text-accent-bright" },
+          { label: "Avg Score", value: avgScore + "/10", icon: Star, color: "text-accent-bright" },
           { label: "Helpful", value: totalHelpful.toLocaleString(), icon: ThumbsUp, color: "text-emerald-400" },
         ].map(s => (
-          <div key={s.label} className="p-4 rounded-2xl bg-white/[0.02] border border-white/8 text-center space-y-1">
+          <div key={s.label} className="p-4 rounded-2xl bg-surface border border-border text-center space-y-1">
             <s.icon size={16} className={`${s.color} mx-auto`} />
-            <p className="text-xl font-black text-white">{s.value}</p>
-            <p className="text-[9px] font-black uppercase tracking-wider text-white/25">{s.label}</p>
+            <p className="text-xl font-black text-foreground">{s.value}</p>
+            <p className="text-[9px] font-black uppercase tracking-wider text-subtle">{s.label}</p>
           </div>
         ))}
       </div>
 
       {/* Sort */}
       <div className="flex gap-2 items-center flex-wrap">
-        <Filter size={13} className="text-white/30" />
+        <Filter size={13} className="text-subtle" />
         {(["recent","highest","lowest","helpful"] as Sort[]).map(s => (
           <button key={s} onClick={() => setSort(s)}
-            className={`px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-wider transition-all capitalize ${sort===s?"bg-amber-500 text-black":"bg-white/5 text-white/40 border border-white/5 hover:bg-white/8"}`}
+            className={`px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-wider transition-all capitalize ${sort===s?"bg-accent text-black":"bg-surface text-muted border border-border hover:bg-surface"}`}
           >{s}</button>
         ))}
       </div>
@@ -127,37 +127,37 @@ export default function MyReviewsPage() {
           {sorted.map((r, i) => (
             <motion.div key={r.id} layout initial={{ opacity:0, y:8 }} animate={{ opacity:1, y:0 }} exit={{ opacity:0, height:0 }}
               transition={{ delay:i*0.04 }}
-              className="p-5 rounded-2xl bg-white/[0.02] border border-white/8 hover:border-white/15 transition-colors space-y-4"
+              className="p-5 rounded-2xl bg-surface border border-border hover:border-border transition-colors space-y-4"
             >
               <div className="flex items-center gap-3">
                 <Link href={`/anime/${r.anime.id}`} className="relative h-12 w-9 rounded-lg overflow-hidden shrink-0">
                   <Image src={r.anime.image} alt={r.anime.title} fill className="object-cover" sizes="36px" />
                 </Link>
                 <div className="flex-1 min-w-0">
-                  <Link href={`/anime/${r.anime.id}`} className="text-sm font-black text-white/80 hover:text-white truncate block">{r.anime.title}</Link>
+                  <Link href={`/anime/${r.anime.id}`} className="text-sm font-black text-muted hover:text-foreground truncate block">{r.anime.title}</Link>
                   <div className="flex items-center gap-2 mt-0.5">
                     <div className="flex gap-0.5">
                       {[1,2,3,4,5].map(s=>(
-                        <Star key={s} size={9} fill={s<=Math.round(r.score/2)?"#f59e0b":"none"} className={s<=Math.round(r.score/2)?"text-amber-400":"text-white/15"}/>
+                        <Star key={s} size={9} fill={s<=Math.round(r.score/2)?"#f59e0b":"none"} className={s<=Math.round(r.score/2)?"text-accent-bright":"text-subtle"}/>
                       ))}
                     </div>
-                    <span className="text-[10px] font-black text-white/50">{r.score}/10</span>
-                    <span className="text-[9px] text-white/25">{r.date}</span>
+                    <span className="text-[10px] font-black text-muted">{r.score}/10</span>
+                    <span className="text-[9px] text-subtle">{r.date}</span>
                   </div>
                 </div>
                 <div className="flex gap-2 shrink-0">
-                  <button onClick={() => push("Review editing coming soon!", "info")} className="p-2 rounded-lg text-white/25 hover:text-amber-400 hover:bg-white/5 transition-colors">
+                  <button onClick={() => push("Review editing coming soon!", "info")} className="p-2 rounded-lg text-subtle hover:text-accent-bright hover:bg-surface transition-colors">
                     <Edit2 size={13} />
                   </button>
-                  <button onClick={() => deleteReview(r.id)} className="p-2 rounded-lg text-white/25 hover:text-red-400 hover:bg-red-500/5 transition-colors">
+                  <button onClick={() => deleteReview(r.id)} className="p-2 rounded-lg text-subtle hover:text-red-400 hover:bg-red-500/5 transition-colors">
                     <Trash2 size={13} />
                   </button>
                 </div>
               </div>
-              <p className="text-sm text-white/60 leading-relaxed line-clamp-3">{r.body}</p>
-              <div className="flex items-center justify-between pt-2 border-t border-white/5 text-[9px] text-white/25">
+              <p className="text-sm text-muted leading-relaxed line-clamp-3">{r.body}</p>
+              <div className="flex items-center justify-between pt-2 border-t border-border text-[9px] text-subtle">
                 <span>{r.helpful} people found this helpful</span>
-                <Link href={`/anime/${r.anime.id}/reviews`} className="text-amber-400/60 hover:text-amber-400 transition-colors font-black uppercase tracking-widest">
+                <Link href={`/anime/${r.anime.id}/reviews`} className="text-accent-bright/60 hover:text-accent-bright transition-colors font-black uppercase tracking-widest">
                   View on Anime →
                 </Link>
               </div>

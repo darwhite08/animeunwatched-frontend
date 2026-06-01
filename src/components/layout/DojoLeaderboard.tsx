@@ -12,8 +12,8 @@ const PANTHEON_DATA = [
     title: "Legendary Shinobi",
     level: 99,
     xp: "1.2M",
-    accent: "from-amber-400 to-orange-600",
-    border: "border-amber-500/30",
+    accent: "from-accent-bright to-orange-600",
+    border: "border-accent/30",
     glow: "shadow-[0_0_30px_-5px_rgba(251,191,36,0.3)]",
     Icon: Crown,
   },
@@ -24,7 +24,7 @@ const PANTHEON_DATA = [
     level: 88,
     xp: "840K",
     accent: "from-indigo-400 to-purple-600",
-    border: "border-amber-500/30",
+    border: "border-accent/30",
     glow: "shadow-[0_0_30px_-5px_rgba(99,102,241,0.2)]",
     Icon: Swords,
   },
@@ -43,7 +43,7 @@ const PANTHEON_DATA = [
 
 export default function DojoLeaderboard() {
   return (
-    <section className="py-32 bg-[#020202] relative overflow-hidden border-y border-white/[0.03]">
+    <section className="py-32 bg-background relative overflow-hidden border-y border-white/[0.03]">
       
       {/* 1. BACKGROUND GRID & TOP SCANLINE */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[1px] bg-gradient-to-r from-transparent via-indigo-500/50 to-transparent shadow-[0_0_15px_rgba(99,102,241,0.8)]" />
@@ -63,17 +63,17 @@ export default function DojoLeaderboard() {
           className="space-y-8"
         >
           {/* Status Badge */}
-          <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-white/[0.02] border border-white/[0.05] backdrop-blur-md">
+          <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full bg-surface border border-white/[0.05] backdrop-blur-md">
             <span className="relative flex h-2.5 w-2.5">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-amber-500"></span>
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent-bright opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-accent"></span>
             </span>
-            <span className="text-amber-300 text-[10px] font-black uppercase tracking-[0.3em]">
+            <span className="text-accent-bright text-[10px] font-black uppercase tracking-[0.3em]">
               Global Server Rankings • Live
             </span>
           </div>
 
-          <h2 className="text-6xl md:text-7xl font-black text-white tracking-tighter leading-[0.85] uppercase">
+          <h2 className="text-6xl md:text-7xl font-black text-foreground tracking-tighter leading-[0.85] uppercase">
             The <br />
             <span className="italic text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-300 to-indigo-400 animate-shimmer bg-[length:200%_auto]">
               Pantheon
@@ -81,14 +81,14 @@ export default function DojoLeaderboard() {
             <br /> Of Watchers.
           </h2>
 
-          <p className="text-white/40 text-sm md:text-base max-w-md leading-relaxed font-medium">
-            Every episode logged, every review verified, and every poll won contributes to your standing. Ascend from <span className="text-white/80 italic">Neophyte</span> to <span className="text-white/80 italic">Legendary Shinobi</span>.
+          <p className="text-muted text-sm md:text-base max-w-md leading-relaxed font-medium">
+            Every episode logged, every review verified, and every poll won contributes to your standing. Ascend from <span className="text-muted italic">Neophyte</span> to <span className="text-muted italic">Legendary Shinobi</span>.
           </p>
 
           {/* High-End Cyber Button */}
           <Link href="/leaderboard" className="group relative inline-block px-8 py-4 bg-white text-black font-black uppercase text-[11px] tracking-[0.3em] overflow-hidden rounded-sm transition-all hover:scale-105 active:scale-95">
             <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-indigo-500 to-purple-500 translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-in-out" />
-            <span className="relative z-10 group-hover:text-white transition-colors duration-500 flex items-center gap-2">
+            <span className="relative z-10 group-hover:text-foreground transition-colors duration-500 flex items-center gap-2">
               <Trophy size={14} /> Ascend The Ranks
             </span>
           </Link>
@@ -107,7 +107,7 @@ export default function DojoLeaderboard() {
                 whileInView={{ opacity: 1, y: 0, scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.15, duration: 0.6, type: "spring", stiffness: 60 }}
-                className={`group relative flex items-center justify-between p-6 rounded-[2rem] bg-white/[0.02] border ${user.border} backdrop-blur-xl transition-all hover:bg-white/[0.04] hover:-translate-y-1 ${user.glow}`}
+                className={`group relative flex items-center justify-between p-6 rounded-[2rem] bg-surface border ${user.border} backdrop-blur-xl transition-all hover:bg-white/[0.04] hover:-translate-y-1 ${user.glow}`}
               >
                 {/* Background Gradient Hover Sweep */}
                 <div className="absolute inset-0 rounded-[2rem] bg-gradient-to-r from-white/[0.01] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
@@ -125,33 +125,33 @@ export default function DojoLeaderboard() {
 
                   {/* Avatar/Badge */}
                   <div className={`h-14 w-14 rounded-2xl bg-gradient-to-br ${user.accent} p-[2px] shadow-lg`}>
-                     <div className="h-full w-full rounded-2xl bg-[#0a0a0a] flex items-center justify-center">
+                     <div className="h-full w-full rounded-2xl bg-surface flex items-center justify-center">
                         <user.Icon size={20} className={`text-transparent bg-clip-text bg-gradient-to-br ${user.accent} drop-shadow-md`} color="currentColor" />
                      </div>
                   </div>
 
                   {/* User Meta */}
                   <div>
-                    <h4 className="text-white font-black text-lg uppercase tracking-tight flex items-center gap-2">
+                    <h4 className="text-foreground font-black text-lg uppercase tracking-tight flex items-center gap-2">
                       {user.name}
-                      {user.rank === 1 && <ShieldCheck size={14} className="text-amber-400" />}
+                      {user.rank === 1 && <ShieldCheck size={14} className="text-accent-bright" />}
                     </h4>
-                    <p className="text-[10px] text-white/50 font-bold uppercase tracking-widest mt-0.5">
-                      LVL {user.level} <span className="text-white/20 mx-1">•</span> <span className="text-amber-400">{user.title}</span>
+                    <p className="text-[10px] text-muted font-bold uppercase tracking-widest mt-0.5">
+                      LVL {user.level} <span className="text-subtle mx-1">•</span> <span className="text-accent-bright">{user.title}</span>
                     </p>
                   </div>
                 </div>
 
                 {/* Score & HUD Elements */}
                 <div className="text-right relative z-10 flex flex-col items-end">
-                  <div className="flex items-center gap-1.5 text-white">
-                    <Activity size={12} className="text-white/40" />
+                  <div className="flex items-center gap-1.5 text-foreground">
+                    <Activity size={12} className="text-muted" />
                     <span className="font-mono text-lg font-bold">{user.xp}</span>
-                    <span className="text-[9px] text-white/30 uppercase tracking-widest font-black">XP</span>
+                    <span className="text-[9px] text-subtle uppercase tracking-widest font-black">XP</span>
                   </div>
                   {/* Decorative corner brackets on hover */}
-                  <div className="absolute -top-2 -right-2 w-3 h-3 border-t border-r border-white/20 opacity-0 group-hover:opacity-100 transition-opacity" />
-                  <div className="absolute -bottom-2 -right-2 w-3 h-3 border-b border-r border-white/20 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <div className="absolute -top-2 -right-2 w-3 h-3 border-t border-r border-border opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <div className="absolute -bottom-2 -right-2 w-3 h-3 border-b border-r border-border opacity-0 group-hover:opacity-100 transition-opacity" />
                 </div>
               </motion.div>
             ))}

@@ -39,7 +39,7 @@ export default function CookieConsent() {
           transition={{ duration: 0.3, ease: [0.32, 0.72, 0, 1] }}
           className="fixed bottom-6 left-6 z-[99990] max-w-sm w-full"
         >
-          <div className="rounded-2xl border border-white/10 p-5 backdrop-blur-2xl"
+          <div className="rounded-2xl border border-border p-5 backdrop-blur-2xl"
             style={{
               background: "linear-gradient(160deg, rgba(12,10,22,0.97), rgba(8,7,18,0.99))",
               boxShadow: "0 20px 60px rgba(0,0,0,0.7), 0 0 0 0.5px rgba(245,158,11,0.1) inset",
@@ -48,22 +48,22 @@ export default function CookieConsent() {
             <div className="flex items-center gap-3 mb-3">
               <div className="w-8 h-8 rounded-xl flex items-center justify-center shrink-0"
                 style={{ background: "rgba(245,158,11,0.15)", border: "1px solid rgba(245,158,11,0.3)" }}>
-                <Cookie size={15} className="text-amber-400" />
+                <Cookie size={15} className="text-accent-bright" />
               </div>
-              <p className="text-[11px] font-black uppercase tracking-widest text-white/80">
+              <p className="text-[11px] font-black uppercase tracking-widest text-muted">
                 Cookie Notice
               </p>
               <button onClick={decline}
-                className="ml-auto text-white/20 hover:text-white/60 transition-colors">
+                className="ml-auto text-subtle hover:text-muted transition-colors">
                 <X size={14} />
               </button>
             </div>
 
             {/* Body */}
-            <p className="text-[11px] text-white/45 leading-relaxed mb-4">
+            <p className="text-[11px] text-muted leading-relaxed mb-4">
               We use essential cookies to keep you logged in and improve your experience.
               No tracking or advertising cookies.{" "}
-              <Link href="/privacy" className="text-amber-400/80 hover:text-amber-400 underline">
+              <Link href="/privacy" className="text-accent-bright/80 hover:text-accent-bright underline">
                 Privacy Policy
               </Link>
             </p>
@@ -76,7 +76,7 @@ export default function CookieConsent() {
                 Accept
               </button>
               <button onClick={decline}
-                className="flex-1 py-2 rounded-xl text-[11px] font-black uppercase tracking-widest text-white/50 border border-white/10 hover:bg-white/5 hover:text-white/80 transition-all">
+                className="flex-1 py-2 rounded-xl text-[11px] font-black uppercase tracking-widest text-muted border border-border hover:bg-surface hover:text-muted transition-all">
                 Decline
               </button>
             </div>

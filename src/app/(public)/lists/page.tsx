@@ -121,7 +121,7 @@ function ListCoverGrid({ ids, allAnime }: { ids: string[]; allAnime: Anime[] }) 
       ))}
       {/* Fill empty slots */}
       {Array.from({ length: Math.max(0, 4 - covers.length) }).map((_, i) => (
-        <div key={`empty-${i}`} className="bg-white/5" />
+        <div key={`empty-${i}`} className="bg-surface" />
       ))}
     </div>
   )
@@ -141,7 +141,7 @@ function ListCard({ list, onClick, allAnime }: ListCardProps) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       onClick={() => onClick(list)}
-      className="group cursor-pointer p-5 rounded-2xl bg-white/[0.02] border border-white/8 hover:border-white/20 transition-all duration-300 space-y-4 hover:bg-white/[0.03]"
+      className="group cursor-pointer p-5 rounded-2xl bg-surface border border-border hover:border-border transition-all duration-300 space-y-4 hover:bg-surface"
     >
       <div className="flex gap-4">
         {/* Cover grid */}
@@ -151,13 +151,13 @@ function ListCard({ list, onClick, allAnime }: ListCardProps) {
 
         {/* Info */}
         <div className="flex-1 min-w-0">
-          <h3 className="text-sm font-black uppercase italic tracking-tighter text-white leading-tight mb-1 line-clamp-2 group-hover:text-amber-300 transition-colors">
+          <h3 className="text-sm font-black uppercase italic tracking-tighter text-foreground leading-tight mb-1 line-clamp-2 group-hover:text-accent-bright transition-colors">
             {list.title}
           </h3>
-          <div className="flex items-center gap-2 text-[10px] text-white/35">
+          <div className="flex items-center gap-2 text-[10px] text-subtle">
             <User size={10} />
             <span className="font-bold">{list.creator}</span>
-            <span className="text-white/15">·</span>
+            <span className="text-subtle">·</span>
             <List size={10} />
             <span>{list.animeCount} anime</span>
           </div>
@@ -165,14 +165,14 @@ function ListCard({ list, onClick, allAnime }: ListCardProps) {
       </div>
 
       {/* Description */}
-      <p className="text-xs text-white/45 leading-relaxed line-clamp-2">{list.description}</p>
+      <p className="text-xs text-muted leading-relaxed line-clamp-2">{list.description}</p>
 
       {/* Tags */}
       <div className="flex flex-wrap gap-1.5">
         {list.tags.map(tag => (
           <span
             key={tag}
-            className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-500/8 border border-amber-500/15 text-[8px] font-black uppercase tracking-wider text-amber-400/70"
+            className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-accent/8 border border-accent/15 text-[8px] font-black uppercase tracking-wider text-accent-bright/70"
           >
             <Tag size={7} />
             {tag}
@@ -181,11 +181,11 @@ function ListCard({ list, onClick, allAnime }: ListCardProps) {
       </div>
 
       {/* Footer */}
-      <div className="flex items-center justify-between pt-1 border-t border-white/5">
-        <span className="flex items-center gap-1.5 text-[10px] font-black text-white/25">
+      <div className="flex items-center justify-between pt-1 border-t border-border">
+        <span className="flex items-center gap-1.5 text-[10px] font-black text-subtle">
           <Heart size={11} /> {list.likes.toLocaleString()}
         </span>
-        <span className="flex items-center gap-1 text-[10px] font-black uppercase tracking-widest text-amber-400/50 group-hover:text-amber-400 transition-colors">
+        <span className="flex items-center gap-1 text-[10px] font-black uppercase tracking-widest text-accent-bright/50 group-hover:text-accent-bright transition-colors">
           View List <ChevronRight size={11} />
         </span>
       </div>
@@ -229,41 +229,41 @@ function ListDetailModal({ list, onClose, onAnimeClick, allAnime }: ListModalPro
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.93, y: 20 }}
           transition={{ type: "spring", damping: 26, stiffness: 260 }}
-          className="relative w-full max-w-3xl bg-[#0a0a0a] rounded-[2.5rem] border border-white/10 overflow-hidden shadow-[0_0_80px_rgba(79,70,229,0.18)] max-h-[85vh] flex flex-col"
+          className="relative w-full max-w-3xl bg-surface rounded-[2.5rem] border border-border overflow-hidden shadow-[0_0_80px_rgba(79,70,229,0.18)] max-h-[85vh] flex flex-col"
         >
           {/* Modal header */}
-          <div className="p-8 border-b border-white/5 shrink-0">
+          <div className="p-8 border-b border-border shrink-0">
             <button
               onClick={onClose}
-              className="absolute top-6 right-6 p-2 rounded-full bg-white/5 border border-white/10 text-white/40 hover:text-white hover:bg-white/10 transition-all"
+              className="absolute top-6 right-6 p-2 rounded-full bg-surface border border-border text-muted hover:text-foreground hover:bg-surface transition-all"
             >
               <X size={18} />
             </button>
-            <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-amber-400/60 mb-2">
+            <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-accent-bright/60 mb-2">
               Community List
             </p>
-            <h2 className="text-2xl font-black uppercase italic tracking-tighter text-white leading-tight mb-3 pr-10">
+            <h2 className="text-2xl font-black uppercase italic tracking-tighter text-foreground leading-tight mb-3 pr-10">
               {list.title}
             </h2>
-            <div className="flex items-center gap-3 text-xs text-white/40 mb-3">
+            <div className="flex items-center gap-3 text-xs text-muted mb-3">
               <span className="flex items-center gap-1.5">
                 <User size={11} /> {list.creator}
               </span>
-              <span className="text-white/15">·</span>
+              <span className="text-subtle">·</span>
               <span className="flex items-center gap-1.5">
                 <List size={11} /> {list.animeCount} anime
               </span>
-              <span className="text-white/15">·</span>
+              <span className="text-subtle">·</span>
               <span className="flex items-center gap-1.5">
                 <Heart size={11} /> {list.likes.toLocaleString()} likes
               </span>
             </div>
-            <p className="text-white/50 text-sm leading-relaxed">{list.description}</p>
+            <p className="text-muted text-sm leading-relaxed">{list.description}</p>
             <div className="flex flex-wrap gap-1.5 mt-3">
               {list.tags.map(tag => (
                 <span
                   key={tag}
-                  className="px-2 py-0.5 rounded-full bg-amber-500/8 border border-amber-500/15 text-[8px] font-black uppercase tracking-wider text-amber-400/70"
+                  className="px-2 py-0.5 rounded-full bg-accent/8 border border-accent/15 text-[8px] font-black uppercase tracking-wider text-accent-bright/70"
                 >
                   {tag}
                 </span>
@@ -280,33 +280,33 @@ function ListDetailModal({ list, onClose, onAnimeClick, allAnime }: ListModalPro
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.03 }}
                 onClick={() => onAnimeClick(anime)}
-                className="flex items-center gap-4 p-3 rounded-xl bg-white/[0.02] border border-white/5 hover:border-white/15 cursor-pointer transition-colors group"
+                className="flex items-center gap-4 p-3 rounded-xl bg-surface border border-border hover:border-border cursor-pointer transition-colors group"
               >
-                <span className="text-[10px] font-black text-white/20 w-5 text-right shrink-0">
+                <span className="text-[10px] font-black text-subtle w-5 text-right shrink-0">
                   {i + 1}
                 </span>
                 <div className="relative h-12 w-9 rounded-lg overflow-hidden shrink-0">
                   <Image src={anime.image} alt={anime.title} fill className="object-cover" sizes="36px" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-black uppercase italic text-white/80 group-hover:text-white transition-colors truncate">
+                  <p className="text-sm font-black uppercase italic text-muted group-hover:text-foreground transition-colors truncate">
                     {anime.title}
                   </p>
-                  <div className="flex items-center gap-2 mt-0.5 text-[9px] text-white/30">
-                    <Star size={9} fill="#f59e0b" className="text-amber-400" />
+                  <div className="flex items-center gap-2 mt-0.5 text-[9px] text-subtle">
+                    <Star size={9} fill="#f59e0b" className="text-accent-bright" />
                     <span>{anime.rating.toFixed(1)}</span>
-                    <span className="text-white/15">·</span>
+                    <span className="text-subtle">·</span>
                     <span>{anime.studio}</span>
-                    <span className="text-white/15">·</span>
+                    <span className="text-subtle">·</span>
                     <span>{anime.year}</span>
                   </div>
                 </div>
-                <Check size={13} className="text-amber-400/40 group-hover:text-amber-400 shrink-0 transition-colors" />
+                <Check size={13} className="text-accent-bright/40 group-hover:text-accent-bright shrink-0 transition-colors" />
               </motion.div>
             ))}
 
             {allAnimes.length < list.animeCount && (
-              <p className="text-center text-[10px] text-white/20 py-4 font-black uppercase tracking-widest">
+              <p className="text-center text-[10px] text-subtle py-4 font-black uppercase tracking-widest">
                 + {list.animeCount - allAnimes.length} more not shown
               </p>
             )}
@@ -329,25 +329,25 @@ export default function PublicListsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#020202] text-white pb-32">
+    <div className="min-h-screen bg-background text-foreground pb-32">
       {/* Header */}
       <div className="max-w-6xl mx-auto px-6 pt-32 pb-10">
         <div className="flex items-center gap-3 mb-4">
-          <List size={16} className="text-amber-400" />
-          <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-amber-400/60">
+          <List size={16} className="text-accent-bright" />
+          <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-accent-bright/60">
             Curated by the Community
           </p>
         </div>
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6">
           <div>
-            <h1 className="text-6xl font-black tracking-tighter uppercase italic text-white leading-none mb-2">
+            <h1 className="text-6xl font-black tracking-tighter uppercase italic text-foreground leading-none mb-2">
               Community Lists<span style={{color:"#f59e0b"}}>.</span>
             </h1>
-            <p className="text-white/35 text-sm">{COMMUNITY_LISTS.length} curated lists from the archive community</p>
+            <p className="text-subtle text-sm">{COMMUNITY_LISTS.length} curated lists from the archive community</p>
           </div>
           <Link
             href="/creators"
-            className="flex items-center gap-2 px-5 py-3 rounded-2xl bg-amber-500 hover:bg-amber-400 text-xs font-black uppercase tracking-widest text-white transition-all shadow-[0_0_24px_rgba(99,102,241,0.3)] shrink-0 self-start sm:self-auto"
+            className="flex items-center gap-2 px-5 py-3 rounded-2xl bg-accent hover:bg-accent-bright text-xs font-black uppercase tracking-widest text-foreground transition-all shadow-[0_0_24px_rgba(99,102,241,0.3)] shrink-0 self-start sm:self-auto"
           >
             <Plus size={13} /> Create a List
           </Link>

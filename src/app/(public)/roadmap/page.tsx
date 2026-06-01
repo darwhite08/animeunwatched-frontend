@@ -62,10 +62,10 @@ const COLUMNS: Column[] = [
     status: "in-progress",
     emoji: "🚧",
     label: "In Progress",
-    color: "text-amber-400",
-    bg: "bg-amber-500/10",
-    border: "border-amber-500/20",
-    glow: "bg-amber-500/6",
+    color: "text-accent-bright",
+    bg: "bg-accent/10",
+    border: "border-accent/20",
+    glow: "bg-accent/6",
     items: [
       { title: "Real-time Notifications",             icon: Bell,        priority: "high",   note: "Socket.io + push badge"               },
       { title: "Native Mobile App",                   icon: Smartphone,  priority: "high",   note: "PWA → React Native migration"          },
@@ -95,7 +95,7 @@ const COLUMNS: Column[] = [
 
 const PRIORITY_MAP: Record<Priority, { label: string; color: string; bg: string }> = {
   high:   { label: "High",   color: "text-rose-400",   bg: "bg-rose-500/10 border border-rose-500/20"   },
-  medium: { label: "Medium", color: "text-amber-400",  bg: "bg-amber-500/10 border border-amber-500/20" },
+  medium: { label: "Medium", color: "text-accent-bright",  bg: "bg-accent/10 border border-accent/20" },
   low:    { label: "Low",    color: "text-blue-400",   bg: "bg-blue-500/10 border border-blue-500/20"   },
 }
 
@@ -134,7 +134,7 @@ function RoadmapCard({
         <div className="flex-1 min-w-0">
           <p className="text-sm font-bold text-white/85 leading-snug">{item.title}</p>
           {item.note && (
-            <p className="text-[11px] text-white/35 mt-1 leading-relaxed">{item.note}</p>
+            <p className="text-[11px] text-subtle mt-1 leading-relaxed">{item.note}</p>
           )}
 
           {/* Priority badge (in-progress + planned only) */}
@@ -152,10 +152,10 @@ function RoadmapCard({
 /* ── Page ── */
 export default function RoadmapPage() {
   return (
-    <div className="min-h-screen bg-[#020202] text-white pb-32">
+    <div className="min-h-screen bg-background text-foreground pb-32">
 
       {/* ── Hero ── */}
-      <section className="relative overflow-hidden border-b border-white/5">
+      <section className="relative overflow-hidden border-b border-border">
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[400px] bg-violet-600/8 blur-[120px] rounded-full" />
         </div>
@@ -173,7 +173,7 @@ export default function RoadmapPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.05 }}
-            className="text-5xl md:text-6xl font-black tracking-tighter uppercase italic leading-[0.92] text-white mb-6"
+            className="text-5xl md:text-6xl font-black tracking-tighter uppercase italic leading-[0.92] text-foreground mb-6"
           >
             Building in the<br />
             <span className="text-violet-400">Open.</span>
@@ -183,7 +183,7 @@ export default function RoadmapPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.12 }}
-            className="text-white/40 text-base max-w-xl mx-auto"
+            className="text-muted text-base max-w-xl mx-auto"
           >
             Full transparency on what we shipped, what we&#39;re building now, and what&#39;s coming next.
             No vaporware. No excuses.
@@ -200,12 +200,12 @@ export default function RoadmapPage() {
               <span className={`text-[10px] font-black uppercase tracking-[0.3em] ${col.color}`}>
                 {col.label}
               </span>
-              <span className="text-[10px] text-white/20 font-mono">
+              <span className="text-[10px] text-subtle font-mono">
                 ({col.items.length})
               </span>
             </div>
           ))}
-          <span className="ml-auto text-[10px] text-white/20 font-mono hidden sm:block">
+          <span className="ml-auto text-[10px] text-subtle font-mono hidden sm:block">
             Last updated: May 2026
           </span>
         </div>
@@ -255,20 +255,20 @@ export default function RoadmapPage() {
             <div className="absolute top-0 left-1/2 -translate-x-1/2 w-80 h-40 bg-violet-600/10 blur-[80px] rounded-full" />
           </div>
           <div className="relative z-10">
-            <p className="text-[10px] font-black uppercase tracking-[0.35em] text-white/25 mb-3">
+            <p className="text-[10px] font-black uppercase tracking-[0.35em] text-subtle mb-3">
               Have an idea?
             </p>
-            <h2 className="text-3xl font-black tracking-tighter uppercase italic text-white mb-3">
+            <h2 className="text-3xl font-black tracking-tighter uppercase italic text-foreground mb-3">
               Shape the Roadmap<span className="text-violet-400">.</span>
             </h2>
-            <p className="text-white/40 text-sm mb-6 max-w-md mx-auto">
+            <p className="text-muted text-sm mb-6 max-w-md mx-auto">
               Feature requests, complaints, and wild ideas are all welcome. The best ones get shipped.
             </p>
             <a
               href="https://discord.gg/kaiveron"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-7 py-3 rounded-xl bg-violet-600 hover:bg-violet-500 text-sm font-black uppercase tracking-widest text-white transition-all"
+              className="inline-flex items-center gap-2 px-7 py-3 rounded-xl bg-violet-600 hover:bg-violet-500 text-sm font-black uppercase tracking-widest text-foreground transition-all"
             >
               Join the Discord
             </a>

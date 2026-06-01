@@ -28,7 +28,7 @@ type Season = typeof SEASONS[number]
 const SEASON_META: Record<Season, { emoji: string; months: string; accent: string }> = {
   winter: { emoji: "❄️", months: "Jan – Mar", accent: "text-blue-400"   },
   spring: { emoji: "🌸", months: "Apr – Jun", accent: "text-pink-400"   },
-  summer: { emoji: "☀️", months: "Jul – Sep", accent: "text-amber-400"  },
+  summer: { emoji: "☀️", months: "Jul – Sep", accent: "text-accent-bright"  },
   fall:   { emoji: "🍂", months: "Oct – Dec", accent: "text-orange-400" },
 }
 
@@ -56,21 +56,21 @@ export default function CalendarPage() {
   const meta = SEASON_META[season]
 
   return (
-    <div className="min-h-screen bg-[#020202] text-white pb-32">
+    <div className="min-h-screen bg-background text-foreground pb-32">
 
       {/* Sticky header */}
-      <div className="sticky top-[72px] z-30 border-b border-white/5 backdrop-blur-xl"
+      <div className="sticky top-[72px] z-30 border-b border-border backdrop-blur-xl"
         style={{ background: "rgba(2,2,2,0.92)" }}>
         <div className="max-w-6xl mx-auto px-6 py-5">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             {/* Title */}
             <div>
               <div className="flex items-center gap-2 mb-1">
-                <CalendarCheck size={14} weight="duotone" className="text-amber-400" />
+                <CalendarCheck size={14} weight="duotone" className="text-accent-bright" />
                 <p className="text-[9px] font-mono uppercase tracking-[0.4em]"
                   style={{ color: "rgba(245,158,11,0.6)" }}>Seasonal Calendar</p>
               </div>
-              <h1 className="text-3xl font-black tracking-tighter uppercase italic text-white leading-none">
+              <h1 className="text-3xl font-black tracking-tighter uppercase italic text-foreground leading-none">
                 Anime Schedule<span style={{ color: "#f59e0b" }}>.</span>
               </h1>
             </div>
@@ -80,15 +80,15 @@ export default function CalendarPage() {
               <button
                 onClick={() => setYear(y => Math.max(EARLIEST_YEAR, y - 1))}
                 disabled={year <= EARLIEST_YEAR}
-                className="p-2 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                className="p-2 rounded-xl border border-border bg-surface hover:bg-surface disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
               >
                 <ChevronLeft size={15} />
               </button>
-              <span className="text-xl font-black tracking-tighter text-white w-16 text-center">{year}</span>
+              <span className="text-xl font-black tracking-tighter text-foreground w-16 text-center">{year}</span>
               <button
                 onClick={() => setYear(y => Math.min(CURRENT_YEAR, y + 1))}
                 disabled={year >= CURRENT_YEAR}
-                className="p-2 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+                className="p-2 rounded-xl border border-border bg-surface hover:bg-surface disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
               >
                 <ChevronRight size={15} />
               </button>
@@ -103,7 +103,7 @@ export default function CalendarPage() {
               return (
                 <button key={s} onClick={() => setSeason(s)}
                   className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${
-                    active ? "text-black" : "bg-white/5 text-white/35 hover:bg-white/10 hover:text-white border border-white/5"
+                    active ? "text-black" : "bg-surface text-subtle hover:bg-surface hover:text-foreground border border-border"
                   }`}
                   style={active ? {
                     background: "linear-gradient(135deg, #fbbf24, #f59e0b)",
@@ -118,7 +118,7 @@ export default function CalendarPage() {
             })}
 
             {!isLoading && !isError && (
-              <span className="ml-auto text-[10px] text-white/25 font-black uppercase tracking-widest">
+              <span className="ml-auto text-[10px] text-subtle font-black uppercase tracking-widest">
                 {anime.length} titles
               </span>
             )}
@@ -141,8 +141,8 @@ export default function CalendarPage() {
 
         {/* Error */}
         {isError && !isLoading && (
-          <div className="py-24 text-center border border-dashed border-white/5 rounded-[3rem]">
-            <p className="text-white/20 font-black uppercase tracking-widest text-xs mb-4">
+          <div className="py-24 text-center border border-dashed border-border rounded-[3rem]">
+            <p className="text-subtle font-black uppercase tracking-widest text-xs mb-4">
               Could not load {season} {year}
             </p>
             <button onClick={() => refetch()}
@@ -163,7 +163,7 @@ export default function CalendarPage() {
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
                   Currently Airing
                 </span>
-                <span className="text-[10px] text-white/25 font-black">{airing.length} series</span>
+                <span className="text-[10px] text-subtle font-black">{airing.length} series</span>
               </div>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
                 {airing.map((a, i) => <AnimeCard key={a.id} anime={a} index={i} onClick={setSelected} />)}
@@ -179,10 +179,10 @@ export default function CalendarPage() {
               initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
               transition={{ delay: 0.1 }}>
               <div className="flex items-center gap-3 mb-6">
-                <span className="px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-[10px] font-black text-white/40 uppercase tracking-wider">
+                <span className="px-3 py-1.5 rounded-full bg-surface border border-border text-[10px] font-black text-muted uppercase tracking-wider">
                   Completed
                 </span>
-                <span className="text-[10px] text-white/25 font-black">{finished.length} series</span>
+                <span className="text-[10px] text-subtle font-black">{finished.length} series</span>
               </div>
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
                 {finished.map((a, i) => <AnimeCard key={a.id} anime={a} index={i} onClick={setSelected} />)}
@@ -194,12 +194,12 @@ export default function CalendarPage() {
         {/* Empty */}
         {!isLoading && !isError && anime.length === 0 && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
-            className="py-28 text-center border border-dashed border-white/5 rounded-[3rem]">
+            className="py-28 text-center border border-dashed border-border rounded-[3rem]">
             <p className="text-4xl mb-4">{meta.emoji}</p>
-            <p className="text-white/20 font-black uppercase tracking-widest text-xs">
+            <p className="text-subtle font-black uppercase tracking-widest text-xs">
               No anime archived for {meta.emoji} {season} {year}
             </p>
-            <p className="text-white/10 text-[10px] mt-2">Try an adjacent season or year</p>
+            <p className="text-subtle text-[10px] mt-2">Try an adjacent season or year</p>
           </motion.div>
         )}
       </div>

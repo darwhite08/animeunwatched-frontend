@@ -26,36 +26,36 @@ export default function StaffPage({ params }: { params: Promise<{ id: string }> 
   const staff = data?.data ?? []
 
   return (
-    <div className="min-h-screen bg-[#020202] text-white pb-32 pt-6">
+    <div className="min-h-screen bg-background text-foreground pb-32 pt-6">
       <div className="max-w-6xl mx-auto px-6">
         <Link href={`/anime/${id}`}
-          className="inline-flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-white/40 hover:text-white/70 transition-colors mb-8 group">
+          className="inline-flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-muted hover:text-muted transition-colors mb-8 group">
           <ChevronLeft size={11} className="group-hover:-translate-x-0.5 transition-transform" /> Back to Anime
         </Link>
         <div className="flex items-center gap-3 mb-8">
-          <h1 className="text-3xl font-black tracking-tighter uppercase italic text-white">Staff<span style={{ color: "#f59e0b" }}>.</span></h1>
-          {!isLoading && <span className="text-sm text-white/30">{staff.length} members</span>}
+          <h1 className="text-3xl font-black tracking-tighter uppercase italic text-foreground">Staff<span style={{ color: "#f59e0b" }}>.</span></h1>
+          {!isLoading && <span className="text-sm text-subtle">{staff.length} members</span>}
         </div>
 
         {isLoading ? (
-          <div className="flex items-center justify-center py-24"><Loader2 size={28} className="animate-spin text-amber-400" /></div>
+          <div className="flex items-center justify-center py-24"><Loader2 size={28} className="animate-spin text-accent-bright" /></div>
         ) : staff.length === 0 ? (
-          <p className="text-center py-24 text-white/30 text-sm">No staff data available for this anime.</p>
+          <p className="text-center py-24 text-subtle text-sm">No staff data available for this anime.</p>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
             {staff.map((s, i) => (
               <motion.div key={`${s.person.mal_id}-${i}`}
                 initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.03 }}
-                className="flex items-center gap-4 p-4 rounded-2xl border border-white/8 bg-[#0a0a0a] hover:border-amber-500/20 transition-all">
-                <div className="h-14 w-10 rounded-xl overflow-hidden bg-white/5 shrink-0">
+                className="flex items-center gap-4 p-4 rounded-2xl border border-border bg-surface hover:border-accent/20 transition-all">
+                <div className="h-14 w-10 rounded-xl overflow-hidden bg-surface shrink-0">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={s.person.images.jpg.image_url} alt={s.person.name}
                     className="w-full h-full object-cover"
                     onError={(e) => { (e.target as HTMLImageElement).style.display = "none" }} />
                 </div>
                 <div className="min-w-0">
-                  <p className="text-sm font-black text-white truncate">{s.person.name}</p>
-                  <p className="text-[10px] text-amber-400/70 truncate">{s.positions.join(", ")}</p>
+                  <p className="text-sm font-black text-foreground truncate">{s.person.name}</p>
+                  <p className="text-[10px] text-accent-bright/70 truncate">{s.positions.join(", ")}</p>
                 </div>
               </motion.div>
             ))}

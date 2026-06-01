@@ -73,7 +73,7 @@ function TrendingCard({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay: index * 0.08 }}
-      className="group relative flex gap-0 bg-[#0a0a0a] rounded-2xl border border-white/5 hover:border-amber-500/20 overflow-hidden transition-all duration-500"
+      className="group relative flex gap-0 bg-surface rounded-2xl border border-border hover:border-accent/20 overflow-hidden transition-all duration-500"
     >
       {/* Glow */}
       <div className="absolute -inset-px bg-gradient-to-r from-indigo-500/10 to-purple-500/10 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
@@ -89,7 +89,7 @@ function TrendingCard({
         />
         <div className="absolute inset-0 bg-gradient-to-r from-transparent to-[#0a0a0a]" />
         {/* Rank */}
-        <div className="absolute top-3 left-3 px-2 py-1 bg-black/70 backdrop-blur border border-amber-500/30 rounded-lg text-[9px] font-black text-amber-400 uppercase italic">
+        <div className="absolute top-3 left-3 px-2 py-1 bg-black/70 backdrop-blur border border-accent/30 rounded-lg text-[9px] font-black text-accent-bright uppercase italic">
           #{anime.rank}
         </div>
         {anime.status === "airing" && (
@@ -106,17 +106,17 @@ function TrendingCard({
       <div className="flex-1 p-5 flex flex-col justify-between min-w-0">
         <div className="space-y-2">
           <div className="flex flex-wrap items-center gap-2">
-            <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/20">
-              <Star size={10} fill="#f59e0b" className="text-amber-400" />
-              <span className="text-[10px] font-black text-amber-400">{anime.rating.toFixed(1)}</span>
+            <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-accent/10 border border-accent/20">
+              <Star size={10} fill="#f59e0b" className="text-accent-bright" />
+              <span className="text-[10px] font-black text-accent-bright">{anime.rating.toFixed(1)}</span>
             </div>
-            <span className="text-[9px] font-black text-white/30 uppercase tracking-widest">
+            <span className="text-[9px] font-black text-subtle uppercase tracking-widest">
               {anime.studio}
             </span>
-            <span className="text-[9px] font-black text-white/20 uppercase">{anime.year}</span>
+            <span className="text-[9px] font-black text-subtle uppercase">{anime.year}</span>
           </div>
 
-          <h3 className="text-base font-black text-white uppercase italic tracking-tighter leading-tight line-clamp-2 group-hover:text-amber-200 transition-colors duration-300">
+          <h3 className="text-base font-black text-foreground uppercase italic tracking-tighter leading-tight line-clamp-2 group-hover:text-amber-200 transition-colors duration-300">
             {anime.title}
           </h3>
 
@@ -124,14 +124,14 @@ function TrendingCard({
             {anime.genres.map((g) => (
               <span
                 key={g}
-                className="px-2 py-0.5 rounded-full bg-white/5 border border-white/10 text-[8px] font-black uppercase tracking-wider text-white/40"
+                className="px-2 py-0.5 rounded-full bg-surface border border-border text-[8px] font-black uppercase tracking-wider text-muted"
               >
                 {g}
               </span>
             ))}
           </div>
 
-          <p className="text-white/40 text-xs leading-relaxed line-clamp-2 hidden sm:block">
+          <p className="text-muted text-xs leading-relaxed line-clamp-2 hidden sm:block">
             {anime.synopsis}
           </p>
         </div>
@@ -142,21 +142,21 @@ function TrendingCard({
             onClick={handleToggle}
             className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-300 ${
               inList
-                ? "bg-emerald-600 text-white hover:bg-emerald-700"
-                : "bg-white text-black hover:bg-amber-500 hover:text-black"
+                ? "bg-emerald-600 text-foreground hover:bg-emerald-700"
+                : "bg-white text-black hover:bg-accent hover:text-black"
             }`}
           >
             {inList ? <><Check size={12} /> In List</> : <><Plus size={12} /> Add to List</>}
           </button>
           <Link
             href={`/anime/${anime.id}`}
-            className="flex items-center gap-1.5 px-4 py-2 rounded-xl border border-white/10 bg-white/5 text-white/50 hover:bg-white/10 hover:text-white transition-all text-[10px] font-black uppercase tracking-widest"
+            className="flex items-center gap-1.5 px-4 py-2 rounded-xl border border-border bg-surface text-muted hover:bg-surface hover:text-foreground transition-all text-[10px] font-black uppercase tracking-widest"
           >
             <ArrowRight size={12} /> View Details
           </Link>
           <button
             onClick={() => onPreview(anime)}
-            className="flex items-center gap-1.5 px-4 py-2 rounded-xl border border-amber-500/20 bg-amber-500/5 text-amber-400 hover:bg-amber-500/10 transition-all text-[10px] font-black uppercase tracking-widest"
+            className="flex items-center gap-1.5 px-4 py-2 rounded-xl border border-accent/20 bg-accent/5 text-accent-bright hover:bg-accent/10 transition-all text-[10px] font-black uppercase tracking-widest"
           >
             Quick Preview
           </button>
@@ -186,8 +186,8 @@ function StudioCard({
       onClick={onClick}
       className={`relative text-left p-5 rounded-2xl border transition-all duration-300 w-full ${
         selected
-          ? "bg-amber-600/10 border-amber-500/40"
-          : "bg-[#0a0a0a] border-white/5 hover:border-white/15"
+          ? "bg-accent/10 border-accent/40"
+          : "bg-surface border-border hover:border-border"
       }`}
     >
       {selected && (
@@ -195,17 +195,17 @@ function StudioCard({
       )}
       <div className="relative">
         <div className="flex items-start justify-between gap-2 mb-2">
-          <div className="h-10 w-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center">
-            <Film size={18} className={selected ? "text-amber-400" : "text-white/30"} />
+          <div className="h-10 w-10 rounded-xl bg-surface border border-border flex items-center justify-center">
+            <Film size={18} className={selected ? "text-accent-bright" : "text-subtle"} />
           </div>
-          <span className={`text-xs font-black px-2 py-0.5 rounded-full ${selected ? "bg-amber-500/20 text-amber-400" : "bg-white/5 text-white/30"}`}>
+          <span className={`text-xs font-black px-2 py-0.5 rounded-full ${selected ? "bg-accent/20 text-accent-bright" : "bg-surface text-subtle"}`}>
             {count} anime
           </span>
         </div>
-        <h4 className={`text-sm font-black uppercase italic tracking-tighter ${selected ? "text-white" : "text-white/70"}`}>
+        <h4 className={`text-sm font-black uppercase italic tracking-tighter ${selected ? "text-foreground" : "text-muted"}`}>
           {studio}
         </h4>
-        <p className="text-[10px] text-white/30 mt-1 leading-relaxed">{description}</p>
+        <p className="text-[10px] text-subtle mt-1 leading-relaxed">{description}</p>
       </div>
     </motion.button>
   )
@@ -243,7 +243,7 @@ export default function DiscoverPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#020202] pt-32 pb-24">
+    <main className="min-h-screen bg-background pt-32 pb-24">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 space-y-24">
 
         {/* ── Page header ─────────────────────────────────────────────── */}
@@ -252,13 +252,13 @@ export default function DiscoverPage() {
           animate={{ opacity: 1, y: 0 }}
           className="space-y-4"
         >
-          <p className="text-[10px] font-black uppercase tracking-[0.4em] text-amber-500">
+          <p className="text-[10px] font-black uppercase tracking-[0.4em] text-accent">
             Catalogue
           </p>
-          <h1 className="text-5xl sm:text-7xl font-black uppercase italic tracking-tighter text-white leading-none">
+          <h1 className="text-5xl sm:text-7xl font-black uppercase italic tracking-tighter text-foreground leading-none">
             Browse<span style={{color:"#f59e0b"}}>.</span>
           </h1>
-          <p className="text-white/40 text-sm max-w-lg leading-relaxed">
+          <p className="text-muted text-sm max-w-lg leading-relaxed">
             Curated anime for every mood. Trending picks, hidden gems, genre deep-dives, and studio spotlights — all in one place.
           </p>
         </motion.div>
@@ -267,13 +267,13 @@ export default function DiscoverPage() {
         <section className="space-y-6">
           <div className="flex items-end justify-between">
             <div className="space-y-1">
-              <p className="text-[9px] font-black uppercase tracking-[0.4em] text-amber-500">Section 01</p>
-              <h2 className="text-2xl sm:text-3xl font-black uppercase italic tracking-tighter text-white">
+              <p className="text-[9px] font-black uppercase tracking-[0.4em] text-accent">Section 01</p>
+              <h2 className="text-2xl sm:text-3xl font-black uppercase italic tracking-tighter text-foreground">
                 Trending This Week
               </h2>
             </div>
-            <div className="h-px flex-1 mx-6 bg-white/5" />
-            <span className="text-[10px] font-black text-white/20 uppercase tracking-widest">
+            <div className="h-px flex-1 mx-6 bg-surface" />
+            <span className="text-[10px] font-black text-subtle uppercase tracking-widest">
               {TRENDING.length} picks
             </span>
           </div>
@@ -295,12 +295,12 @@ export default function DiscoverPage() {
           <div className="flex items-end justify-between">
             <div className="space-y-1">
               <p className="text-[9px] font-black uppercase tracking-[0.4em] text-violet-500">Section 02</p>
-              <h2 className="text-2xl sm:text-3xl font-black uppercase italic tracking-tighter text-white">
+              <h2 className="text-2xl sm:text-3xl font-black uppercase italic tracking-tighter text-foreground">
                 Hidden Gems
               </h2>
             </div>
-            <div className="h-px flex-1 mx-6 bg-white/5" />
-            <span className="text-[10px] font-black text-white/20 uppercase tracking-widest">
+            <div className="h-px flex-1 mx-6 bg-surface" />
+            <span className="text-[10px] font-black text-subtle uppercase tracking-widest">
               Rating ≥ 8.5
             </span>
           </div>
@@ -322,12 +322,12 @@ export default function DiscoverPage() {
           <div className="flex items-end justify-between">
             <div className="space-y-1">
               <p className="text-[9px] font-black uppercase tracking-[0.4em] text-purple-500">Section 03</p>
-              <h2 className="text-2xl sm:text-3xl font-black uppercase italic tracking-tighter text-white">
+              <h2 className="text-2xl sm:text-3xl font-black uppercase italic tracking-tighter text-foreground">
                 By Genre
               </h2>
             </div>
-            <div className="h-px flex-1 mx-6 bg-white/5" />
-            <span className="text-[10px] font-black text-white/20 uppercase tracking-widest">
+            <div className="h-px flex-1 mx-6 bg-surface" />
+            <span className="text-[10px] font-black text-subtle uppercase tracking-widest">
               {genreAnime.length} titles
             </span>
           </div>
@@ -341,8 +341,8 @@ export default function DiscoverPage() {
                 onClick={() => setSelectedGenre(genre)}
                 className={`px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all duration-300 ${
                   selectedGenre === genre
-                    ? "bg-amber-500 text-black shadow-[0_0_20px_rgba(245,158,11,0.4)]"
-                    : "bg-white/5 border border-white/10 text-white/40 hover:text-white hover:bg-white/10"
+                    ? "bg-accent text-black shadow-[0_0_20px_rgba(245,158,11,0.4)]"
+                    : "bg-surface border border-border text-muted hover:text-foreground hover:bg-surface"
                 }`}
               >
                 {genre}
@@ -369,7 +369,7 @@ export default function DiscoverPage() {
           </motion.div>
 
           {genreAnime.length === 0 && (
-            <div className="text-center py-16 text-white/20 text-sm font-black uppercase tracking-widest">
+            <div className="text-center py-16 text-subtle text-sm font-black uppercase tracking-widest">
               No anime found for {selectedGenre}
             </div>
           )}
@@ -380,15 +380,15 @@ export default function DiscoverPage() {
           <div className="flex items-end justify-between">
             <div className="space-y-1">
               <p className="text-[9px] font-black uppercase tracking-[0.4em] text-pink-500">Section 04</p>
-              <h2 className="text-2xl sm:text-3xl font-black uppercase italic tracking-tighter text-white">
+              <h2 className="text-2xl sm:text-3xl font-black uppercase italic tracking-tighter text-foreground">
                 Top Studios
               </h2>
             </div>
-            <div className="h-px flex-1 mx-6 bg-white/5" />
+            <div className="h-px flex-1 mx-6 bg-surface" />
             {selectedStudio && (
               <button
                 onClick={() => setSelectedStudio(null)}
-                className="text-[10px] font-black text-white/30 uppercase tracking-widest hover:text-white transition-colors"
+                className="text-[10px] font-black text-subtle uppercase tracking-widest hover:text-foreground transition-colors"
               >
                 Clear
               </button>
@@ -420,7 +420,7 @@ export default function DiscoverPage() {
               transition={{ duration: 0.3 }}
               className="space-y-4"
             >
-              <p className="text-[10px] font-black uppercase tracking-widest text-white/30">
+              <p className="text-[10px] font-black uppercase tracking-widest text-subtle">
                 {studioAnime.length} title{studioAnime.length !== 1 ? "s" : ""} from {selectedStudio}
               </p>
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
@@ -434,7 +434,7 @@ export default function DiscoverPage() {
                 ))}
               </div>
               {studioAnime.length === 0 && (
-                <div className="text-center py-12 text-white/20 text-sm font-black uppercase tracking-widest">
+                <div className="text-center py-12 text-subtle text-sm font-black uppercase tracking-widest">
                   No anime in catalogue for {selectedStudio}
                 </div>
               )}

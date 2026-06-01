@@ -51,12 +51,12 @@ const COMMUNITY_LINKS = [
 /* ── Homepage section themes ────────────────────────────────── */
 
 const SECTION_THEMES = [
-  { bg: "rgba(5,5,20,0.90)",  border: "rgba(99,102,241,0.45)", glow: "0 0 60px rgba(99,102,241,0.18),0 2px 0 rgba(99,102,241,0.5)",  dotColor: "#6366f1", accent: "text-amber-400",  label: "Ch.01 — Hero" },
-  { bg: "rgba(15,10,5,0.90)", border: "rgba(245,158,11,0.45)", glow: "0 0 60px rgba(245,158,11,0.12),0 2px 0 rgba(245,158,11,0.5)",  dotColor: "#f59e0b", accent: "text-amber-400",   label: "Ch.02 — Discovery" },
+  { bg: "rgba(5,5,20,0.90)",  border: "rgba(99,102,241,0.45)", glow: "0 0 60px rgba(99,102,241,0.18),0 2px 0 rgba(99,102,241,0.5)",  dotColor: "#6366f1", accent: "text-accent-bright",  label: "Ch.01 — Hero" },
+  { bg: "rgba(15,10,5,0.90)", border: "rgba(245,158,11,0.45)", glow: "0 0 60px rgba(245,158,11,0.12),0 2px 0 rgba(245,158,11,0.5)",  dotColor: "#f59e0b", accent: "text-accent-bright",   label: "Ch.02 — Discovery" },
   { bg: "rgba(8,5,20,0.92)",  border: "rgba(139,92,246,0.55)", glow: "0 0 80px rgba(139,92,246,0.22),0 2px 0 rgba(139,92,246,0.6)",  dotColor: "#8b5cf6", accent: "text-violet-400",  label: "Ch.03 — AI Oracle" },
   { bg: "rgba(2,12,8,0.92)",  border: "rgba(16,185,129,0.45)", glow: "0 0 60px rgba(16,185,129,0.15),0 2px 0 rgba(16,185,129,0.5)",  dotColor: "#10b981", accent: "text-emerald-400", label: "Ch.04 — Community" },
-  { bg: "rgba(5,2,18,0.94)",  border: "rgba(99,102,241,0.35)", glow: "0 0 50px rgba(99,102,241,0.15),0 2px 0 rgba(99,102,241,0.4)",  dotColor: "#4f46e5", accent: "text-amber-300",  label: "Ch.05 — Showcase" },
-  { bg: "rgba(2,2,15,0.94)",  border: "rgba(99,102,241,0.70)", glow: "0 0 80px rgba(99,102,241,0.30),0 2px 0 rgba(99,102,241,0.8)",  dotColor: "#818cf8", accent: "text-amber-300",  label: "Ch.06 — Begin" },
+  { bg: "rgba(5,2,18,0.94)",  border: "rgba(99,102,241,0.35)", glow: "0 0 50px rgba(99,102,241,0.15),0 2px 0 rgba(99,102,241,0.4)",  dotColor: "#4f46e5", accent: "text-accent-bright",  label: "Ch.05 — Showcase" },
+  { bg: "rgba(2,2,15,0.94)",  border: "rgba(99,102,241,0.70)", glow: "0 0 80px rgba(99,102,241,0.30),0 2px 0 rgba(99,102,241,0.8)",  dotColor: "#818cf8", accent: "text-accent-bright",  label: "Ch.06 — Begin" },
 ];
 
 /* ── Reusable dropdown panel ─────────────────────────────────── */
@@ -74,7 +74,7 @@ function NavDropdown({ items, onClose }: { items: DropItem[]; onClose: () => voi
       style={{ minWidth: "240px" }}
     >
       {/* Gold top-border accent line */}
-      <div className="h-px w-full bg-gradient-to-r from-transparent via-amber-400/60 to-transparent mb-0" />
+      <div className="h-px w-full bg-gradient-to-r from-transparent via-accent-bright/60 to-transparent mb-0" />
 
       <div
         className="rounded-2xl overflow-hidden border border-white/[0.07]"
@@ -85,14 +85,14 @@ function NavDropdown({ items, onClose }: { items: DropItem[]; onClose: () => voi
         }}
       >
         {/* Subtle gold shimmer at top */}
-        <div className="h-px w-full bg-gradient-to-r from-transparent via-amber-400/30 to-transparent" />
+        <div className="h-px w-full bg-gradient-to-r from-transparent via-accent-bright/30 to-transparent" />
 
         <div className="p-1.5">
           {items.map((item, i) => {
             const Icon = item.icon;
             return (
               <Link key={item.href} href={item.href} onClick={onClose}
-                className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-white/[0.05] transition-all duration-150 group relative"
+                className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-surface transition-all duration-150 group relative"
               >
                 {/* Gold icon container */}
                 <div
@@ -103,20 +103,20 @@ function NavDropdown({ items, onClose }: { items: DropItem[]; onClose: () => voi
                     boxShadow: "0 2px 10px rgba(245,158,11,0.15), inset 0 1px 0 rgba(255,255,255,0.08)",
                   }}
                 >
-                  <Icon size={16} weight="duotone" className="text-amber-400 group-hover:text-amber-300 transition-colors" />
+                  <Icon size={16} weight="duotone" className="text-accent-bright group-hover:text-accent-bright transition-colors" />
                 </div>
 
                 <div className="min-w-0 flex-1">
-                  <p className="text-[11px] font-black text-white/75 group-hover:text-white uppercase tracking-widest leading-none transition-colors">
+                  <p className="text-[11px] font-black text-muted group-hover:text-foreground uppercase tracking-widest leading-none transition-colors">
                     {item.name}
                   </p>
-                  <p className="text-[9px] text-white/25 group-hover:text-white/40 mt-0.5 truncate transition-colors">
+                  <p className="text-[9px] text-subtle group-hover:text-muted mt-0.5 truncate transition-colors">
                     {item.desc}
                   </p>
                 </div>
 
                 {/* Arrow indicator */}
-                <div className="text-white/0 group-hover:text-amber-400/60 transition-all translate-x-0 group-hover:translate-x-0.5 shrink-0">
+                <div className="text-white/0 group-hover:text-accent-bright/60 transition-all translate-x-0 group-hover:translate-x-0.5 shrink-0">
                   <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
                     <path d="M2 5h6M5.5 2.5L8 5l-2.5 2.5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
@@ -127,7 +127,7 @@ function NavDropdown({ items, onClose }: { items: DropItem[]; onClose: () => voi
         </div>
 
         {/* Bottom shimmer */}
-        <div className="h-px w-full bg-gradient-to-r from-transparent via-amber-400/10 to-transparent" />
+        <div className="h-px w-full bg-gradient-to-r from-transparent via-accent-bright/10 to-transparent" />
       </div>
     </motion.div>
   );
@@ -232,7 +232,7 @@ export default function Navbar() {
               <path d="M 30 28 L 40 28 L 40 46 L 47 46 L 54 28 L 64 28 L 53 50 L 50 50 L 60 72 L 50 72 L 44 60 L 40 60 L 40 72 L 30 72 Z" fill="#F4F2EC"/>
             </svg>
           </div>
-          <span className="text-lg font-black tracking-tight text-white uppercase italic hidden sm:block">
+          <span className="text-lg font-black tracking-tight text-foreground uppercase italic hidden sm:block">
             KAIVERON<span style={{ color: "#f59e0b" }}>.</span>
           </span>
         </Link>
@@ -241,14 +241,14 @@ export default function Navbar() {
         <nav className="hidden lg:flex items-center gap-1" aria-label="Main navigation">
 
           <Link href="/"
-            className={`whitespace-nowrap px-4 py-2 text-[10px] font-black uppercase tracking-widest rounded-full transition-all ${pathname === "/" ? "text-white bg-white/10" : "text-white/40 hover:text-white hover:bg-white/5"}`}>
+            className={`whitespace-nowrap px-4 py-2 text-[10px] font-black uppercase tracking-widest rounded-full transition-all ${pathname === "/" ? "text-foreground bg-surface" : "text-muted hover:text-foreground hover:bg-surface"}`}>
             Home
           </Link>
 
           {/* Anime dropdown */}
           <div className="relative" onMouseEnter={() => enterDropdown("anime")} onMouseLeave={leaveDropdown}>
             <button
-              className={`whitespace-nowrap flex items-center gap-1 px-4 py-2 text-[10px] font-black uppercase tracking-widest rounded-full transition-all ${isAnimePath || openDropdown === "anime" ? "text-white bg-white/10" : "text-white/40 hover:text-white hover:bg-white/5"}`}
+              className={`whitespace-nowrap flex items-center gap-1 px-4 py-2 text-[10px] font-black uppercase tracking-widest rounded-full transition-all ${isAnimePath || openDropdown === "anime" ? "text-foreground bg-surface" : "text-muted hover:text-foreground hover:bg-surface"}`}
               aria-expanded={openDropdown === "anime"} aria-haspopup="menu">
               Anime
               <ChevronDown size={11} className={`transition-transform duration-200 ${openDropdown === "anime" ? "rotate-180" : ""}`} />
@@ -261,7 +261,7 @@ export default function Navbar() {
           {/* Community dropdown */}
           <div className="relative" onMouseEnter={() => enterDropdown("community")} onMouseLeave={leaveDropdown}>
             <button
-              className={`whitespace-nowrap flex items-center gap-1 px-4 py-2 text-[10px] font-black uppercase tracking-widest rounded-full transition-all ${isCommunityPath || openDropdown === "community" ? "text-white bg-white/10" : "text-white/40 hover:text-white hover:bg-white/5"}`}
+              className={`whitespace-nowrap flex items-center gap-1 px-4 py-2 text-[10px] font-black uppercase tracking-widest rounded-full transition-all ${isCommunityPath || openDropdown === "community" ? "text-foreground bg-surface" : "text-muted hover:text-foreground hover:bg-surface"}`}
               aria-expanded={openDropdown === "community"} aria-haspopup="menu">
               Community
               <ChevronDown size={11} className={`transition-transform duration-200 ${openDropdown === "community" ? "rotate-180" : ""}`} />
@@ -275,7 +275,7 @@ export default function Navbar() {
           {isHydrated && isAuthenticated && (
             <div className="relative" onMouseEnter={() => enterDropdown("my")} onMouseLeave={leaveDropdown}>
               <button
-                className={`whitespace-nowrap flex items-center gap-1 px-4 py-2 text-[10px] font-black uppercase tracking-widest rounded-full transition-all ${isMyPath || openDropdown === "my" ? "text-white bg-white/10" : "text-white/40 hover:text-white hover:bg-white/5"}`}
+                className={`whitespace-nowrap flex items-center gap-1 px-4 py-2 text-[10px] font-black uppercase tracking-widest rounded-full transition-all ${isMyPath || openDropdown === "my" ? "text-foreground bg-surface" : "text-muted hover:text-foreground hover:bg-surface"}`}
                 aria-expanded={openDropdown === "my"} aria-haspopup="menu">
                 My List
                 <ChevronDown size={11} className={`transition-transform duration-200 ${openDropdown === "my" ? "rotate-180" : ""}`} />
@@ -287,7 +287,7 @@ export default function Navbar() {
           )}
 
           <Link href="/leaderboard"
-            className={`whitespace-nowrap flex items-center gap-1.5 px-4 py-2 text-[10px] font-black uppercase tracking-widest rounded-full transition-all ${pathname.startsWith("/leaderboard") ? "text-white bg-white/10" : "text-white/40 hover:text-white hover:bg-white/5"}`}>
+            className={`whitespace-nowrap flex items-center gap-1.5 px-4 py-2 text-[10px] font-black uppercase tracking-widest rounded-full transition-all ${pathname.startsWith("/leaderboard") ? "text-foreground bg-surface" : "text-muted hover:text-foreground hover:bg-surface"}`}>
             <TrendingUp size={11} />
             Leaderboard
           </Link>
@@ -297,9 +297,9 @@ export default function Navbar() {
         <div className="flex items-center gap-1.5">
           {/* Search */}
           <button onClick={() => setSearchOpen(true)}
-            className="flex items-center gap-2 h-9 px-3 rounded-full bg-white/5 border border-white/8 text-white/40 hover:text-white hover:bg-white/10 hover:border-white/15 transition-all">
+            className="flex items-center gap-2 h-9 px-3 rounded-full bg-surface border border-border text-muted hover:text-foreground hover:bg-surface hover:border-border transition-all">
             <Search size={15} />
-            <span className="hidden xl:block text-[10px] font-black text-white/25 tracking-widest">⌘K</span>
+            <span className="hidden xl:block text-[10px] font-black text-subtle tracking-widest">⌘K</span>
           </button>
 
           {isHydrated && isAuthenticated && (
@@ -310,7 +310,7 @@ export default function Navbar() {
           {isHydrated && isAuthenticated && <NotificationBell />}
           {isHydrated && isAuthenticated && (
             <Link href="/chat" title="Messages"
-              className="p-2 rounded-full text-white/40 hover:text-white hover:bg-white/10 transition-all">
+              className="p-2 rounded-full text-muted hover:text-foreground hover:bg-surface transition-all">
               <MessageSquare size={17} />
             </Link>
           )}
@@ -326,7 +326,7 @@ export default function Navbar() {
           ) : isHydrated && isAuthenticated && storeUser ? (
             <div className="relative" ref={profileRef}>
               <button onClick={() => setProfileOpen(!profileOpen)}
-                className="flex items-center gap-2 rounded-full border border-white/10 p-1 pr-3 bg-white/5 hover:bg-white/10 transition-all">
+                className="flex items-center gap-2 rounded-full border border-border p-1 pr-3 bg-surface hover:bg-surface transition-all">
                 {storeUser.avatarUrl ? (
                   <Image
                     src={storeUser.avatarUrl}
@@ -336,11 +336,11 @@ export default function Navbar() {
                     className="h-7 w-7 rounded-full object-cover"
                   />
                 ) : (
-                  <div className="h-7 w-7 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center text-[10px] font-bold text-white shrink-0">
+                  <div className="h-7 w-7 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center text-[10px] font-bold text-foreground shrink-0">
                     {(storeUser.displayName ?? storeUser.username)[0].toUpperCase()}
                   </div>
                 )}
-                <span className="text-[10px] font-black text-white/80 hidden xl:block uppercase tracking-wide max-w-[72px] truncate">
+                <span className="text-[10px] font-black text-muted hidden xl:block uppercase tracking-wide max-w-[72px] truncate">
                   {storeUser.displayName ?? storeUser.username}
                 </span>
               </button>
@@ -363,7 +363,7 @@ export default function Navbar() {
           ) : null}
 
           {/* Mobile hamburger */}
-          <button className="lg:hidden text-white/60 hover:text-white transition-colors p-2"
+          <button className="lg:hidden text-muted hover:text-foreground transition-colors p-2"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)} aria-label="Open menu">
             {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
@@ -380,15 +380,15 @@ export default function Navbar() {
             animate={{ opacity: 1, y: 0   }}
             exit={{    opacity: 0, y: -10  }}
             transition={{ duration: 0.2, ease: [0.32, 0.72, 0, 1] }}
-            className="fixed inset-x-4 top-24 z-[90] lg:hidden bg-[#0a0a12]/97 backdrop-blur-2xl rounded-3xl border border-white/10 shadow-2xl overflow-hidden"
+            className="fixed inset-x-4 top-24 z-[90] lg:hidden bg-[#0a0a12]/97 backdrop-blur-2xl rounded-3xl border border-border shadow-2xl overflow-hidden"
           >
             <div className="p-4 max-h-[80vh] overflow-y-auto space-y-4">
 
               <div>
-                <p className="text-[8px] font-black text-white/20 uppercase tracking-[0.3em] px-3 mb-1">Navigate</p>
+                <p className="text-[8px] font-black text-subtle uppercase tracking-[0.3em] px-3 mb-1">Navigate</p>
                 {[{ name: "Home", href: "/" }, { name: "Leaderboard", href: "/leaderboard" }].map(l => (
                   <Link key={l.href} href={l.href} onClick={() => setMobileMenuOpen(false)}
-                    className={`flex items-center px-3 py-3 rounded-xl text-xs font-bold transition-all ${pathname === l.href ? "text-white bg-white/8" : "text-white/50 hover:text-white hover:bg-white/5"}`}>
+                    className={`flex items-center px-3 py-3 rounded-xl text-xs font-bold transition-all ${pathname === l.href ? "text-foreground bg-surface" : "text-muted hover:text-foreground hover:bg-surface"}`}>
                     {l.name}
                   </Link>
                 ))}
@@ -400,7 +400,7 @@ export default function Navbar() {
                 <MobileSection title="My List" links={MY_LINKS} onClose={() => setMobileMenuOpen(false)} />
               )}
 
-              <div className="border-t border-white/5 pt-3">
+              <div className="border-t border-border pt-3">
                 {!isAuthenticated ? (
                   <Link href="/login" onClick={() => setMobileMenuOpen(false)}
                     className="flex items-center justify-center px-4 py-3 rounded-xl text-xs font-black text-black transition-all uppercase tracking-widest"
@@ -409,8 +409,8 @@ export default function Navbar() {
                   </Link>
                 ) : (
                   <>
-                    <Link href="/dashboard" onClick={() => setMobileMenuOpen(false)} className="flex items-center px-3 py-3 rounded-xl text-xs font-bold text-white/50 hover:text-white hover:bg-white/5 transition-all">Dashboard</Link>
-                    <Link href="/me/settings/account"  onClick={() => setMobileMenuOpen(false)} className="flex items-center px-3 py-3 rounded-xl text-xs font-bold text-white/50 hover:text-white hover:bg-white/5 transition-all">Settings</Link>
+                    <Link href="/dashboard" onClick={() => setMobileMenuOpen(false)} className="flex items-center px-3 py-3 rounded-xl text-xs font-bold text-muted hover:text-foreground hover:bg-surface transition-all">Dashboard</Link>
+                    <Link href="/me/settings/account"  onClick={() => setMobileMenuOpen(false)} className="flex items-center px-3 py-3 rounded-xl text-xs font-bold text-muted hover:text-foreground hover:bg-surface transition-all">Settings</Link>
                   </>
                 )}
               </div>
@@ -425,23 +425,23 @@ export default function Navbar() {
 function MobileSection({ title, links, onClose }: { title: string; links: DropItem[]; accentClass?: string; onClose: () => void }) {
   return (
     <div>
-      <p className="text-[8px] font-black text-amber-400/40 uppercase tracking-[0.4em] px-3 mb-1.5">{title}</p>
+      <p className="text-[8px] font-black text-accent-bright/40 uppercase tracking-[0.4em] px-3 mb-1.5">{title}</p>
       {links.map(l => {
         const Icon = l.icon;
         return (
           <Link key={l.href} href={l.href} onClick={onClose}
-            className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold text-white/50 hover:text-white hover:bg-white/[0.04] transition-all group">
+            className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold text-muted hover:text-foreground hover:bg-white/[0.04] transition-all group">
             <div className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 transition-all group-hover:scale-110"
               style={{
                 background: "linear-gradient(135deg, rgba(245,158,11,0.12) 0%, rgba(251,191,36,0.06) 100%)",
                 border: "1px solid rgba(245,158,11,0.2)",
               }}
             >
-              <Icon size={14} weight="duotone" className="text-amber-400/80 group-hover:text-amber-300 transition-colors" />
+              <Icon size={14} weight="duotone" className="text-accent-bright/80 group-hover:text-accent-bright transition-colors" />
             </div>
             <div>
               <p className="text-[11px] font-black uppercase tracking-wider leading-none">{l.name}</p>
-              <p className="text-[9px] text-white/25 mt-0.5">{l.desc}</p>
+              <p className="text-[9px] text-subtle mt-0.5">{l.desc}</p>
             </div>
           </Link>
         );
@@ -454,7 +454,7 @@ function WatchlistLink() {
   const count = useWatchlist(s => s.count);
   return (
     <Link href="/watchlist"
-      className="relative hidden sm:flex h-9 w-9 items-center justify-center rounded-full bg-white/5 border border-white/8 text-white/40 hover:text-white hover:bg-white/10 hover:border-white/15 transition-all">
+      className="relative hidden sm:flex h-9 w-9 items-center justify-center rounded-full bg-surface border border-border text-muted hover:text-foreground hover:bg-surface hover:border-border transition-all">
       <Bookmark size={15} />
       {count > 0 && (
         <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full text-[8px] font-black text-black flex items-center justify-center"

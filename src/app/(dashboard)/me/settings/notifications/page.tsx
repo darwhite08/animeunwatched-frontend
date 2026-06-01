@@ -64,10 +64,10 @@ export default function NotificationPrefsPage() {
   return (
     <div className="max-w-2xl mx-auto px-6 py-12 space-y-8 pb-32">
       <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-        <p className="text-[9px] font-mono font-black uppercase tracking-[0.4em] text-amber-400/60 mb-2">Settings · Notifications</p>
-        <h1 className="text-4xl font-black tracking-tighter text-white uppercase italic leading-none">Notifications</h1>
-        <p className="text-xs text-white/30 mt-2 flex items-center gap-2">
-          <Bell size={11} className="text-amber-400" /> Choose what you want to be notified about.
+        <p className="text-[9px] font-mono font-black uppercase tracking-[0.4em] text-accent-bright/60 mb-2">Settings · Notifications</p>
+        <h1 className="text-4xl font-black tracking-tighter text-foreground uppercase italic leading-none">Notifications</h1>
+        <p className="text-xs text-subtle mt-2 flex items-center gap-2">
+          <Bell size={11} className="text-accent-bright" /> Choose what you want to be notified about.
         </p>
       </motion.div>
 
@@ -78,13 +78,13 @@ export default function NotificationPrefsPage() {
           return (
             <motion.div key={pref.key} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 + i * 0.04 }}
-              className="flex items-start gap-4 p-5 rounded-2xl border border-white/8 bg-white/[0.02] hover:border-white/12 transition-all">
-              <div className={`h-10 w-10 rounded-xl flex items-center justify-center shrink-0 ${allOn ? "bg-amber-500/15" : "bg-white/5"}`}>
-                {allOn ? <Bell size={16} className="text-amber-400" /> : <BellOff size={16} className="text-white/25" />}
+              className="flex items-start gap-4 p-5 rounded-2xl border border-border bg-surface hover:border-border transition-all">
+              <div className={`h-10 w-10 rounded-xl flex items-center justify-center shrink-0 ${allOn ? "bg-accent/15" : "bg-surface"}`}>
+                {allOn ? <Bell size={16} className="text-accent-bright" /> : <BellOff size={16} className="text-subtle" />}
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-black text-white">{pref.label}</p>
-                <p className="text-[10px] text-white/35 mt-0.5">{pref.desc}</p>
+                <p className="text-sm font-black text-foreground">{pref.label}</p>
+                <p className="text-[10px] text-subtle mt-0.5">{pref.desc}</p>
                 <div className="flex gap-2 mt-2">
                   {pref.channels.map(ch => {
                     const k = `${pref.key}_${ch}`
@@ -92,7 +92,7 @@ export default function NotificationPrefsPage() {
                     return (
                       <button key={ch} onClick={() => toggle(k)}
                         className={`flex items-center gap-1 px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest border transition-all ${
-                          on ? "bg-amber-500/15 border-amber-500/30 text-amber-400" : "bg-white/5 border-white/8 text-white/25 hover:text-white/40"
+                          on ? "bg-accent/15 border-accent/30 text-accent-bright" : "bg-surface border-border text-subtle hover:text-muted"
                         }`}>
                         {on && <CheckCircle2 size={8} />}{ch}
                       </button>

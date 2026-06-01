@@ -98,7 +98,7 @@ const CREATORS: Creator[] = [
     username: "Cipher_Ronin",
     displayName: "Cipher Ronin",
     avatarLetter: "C",
-    avatarGradient: "from-amber-500 to-orange-600",
+    avatarGradient: "from-accent to-orange-600",
     bio: "Hype merchant and seasonal anime hunter. I cover manhwa adaptations, power fantasy done right, and why Solo Leveling changed the game. First to hype the next big thing.",
     articles: 55,
     followers: 18300,
@@ -141,20 +141,20 @@ function FeaturedCard({ creator }: { creator: Creator }) {
       initial={{ opacity: 0, y: 24 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-      className="relative overflow-hidden rounded-3xl border border-amber-500/20 bg-gradient-to-br from-amber-950/20 to-zinc-900/60 p-8 md:p-10"
+      className="relative overflow-hidden rounded-3xl border border-accent/20 bg-gradient-to-br from-amber-950/20 to-zinc-900/60 p-8 md:p-10"
     >
       {/* Decorative glow */}
-      <div className="absolute top-0 right-0 w-64 h-64 rounded-full bg-amber-500/5 blur-3xl pointer-events-none" />
+      <div className="absolute top-0 right-0 w-64 h-64 rounded-full bg-accent/5 blur-3xl pointer-events-none" />
 
       <div className="relative z-10 flex flex-col md:flex-row gap-8">
         {/* Avatar */}
         <div className="shrink-0 flex flex-col items-center gap-3">
-          <div className={`w-24 h-24 rounded-2xl bg-gradient-to-br ${creator.avatarGradient} flex items-center justify-center text-4xl font-black text-white shadow-2xl`}>
+          <div className={`w-24 h-24 rounded-2xl bg-gradient-to-br ${creator.avatarGradient} flex items-center justify-center text-4xl font-black text-foreground shadow-2xl`}>
             {creator.avatarLetter}
           </div>
-          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-500/15 border border-amber-500/20">
-            <Star size={10} className="text-amber-400 fill-amber-400" />
-            <span className="text-amber-400 text-[10px] font-black uppercase tracking-widest">
+          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-accent/15 border border-accent/20">
+            <Star size={10} className="text-accent-bright fill-amber-400" />
+            <span className="text-accent-bright text-[10px] font-black uppercase tracking-widest">
               Creator of the Month
             </span>
           </div>
@@ -163,16 +163,16 @@ function FeaturedCard({ creator }: { creator: Creator }) {
         {/* Info */}
         <div className="flex-1 space-y-4">
           <div>
-            <p className="text-[9px] font-black uppercase tracking-[0.4em] text-amber-400/60 mb-1">
+            <p className="text-[9px] font-black uppercase tracking-[0.4em] text-accent-bright/60 mb-1">
               Featured — May 2026
             </p>
-            <h2 className="text-3xl md:text-4xl font-black uppercase italic tracking-tighter text-white">
+            <h2 className="text-3xl md:text-4xl font-black uppercase italic tracking-tighter text-foreground">
               {creator.displayName}
             </h2>
-            <p className="text-white/40 text-sm font-bold">@{creator.username}</p>
+            <p className="text-muted text-sm font-bold">@{creator.username}</p>
           </div>
 
-          <p className="text-white/55 text-sm leading-relaxed max-w-2xl">{creator.bio}</p>
+          <p className="text-muted text-sm leading-relaxed max-w-2xl">{creator.bio}</p>
 
           {/* Stats */}
           <div className="flex flex-wrap gap-6">
@@ -182,10 +182,10 @@ function FeaturedCard({ creator }: { creator: Creator }) {
               { label: "Total Reads", value: formatNum(creator.totalReads), icon: <Eye size={12} /> },
             ].map(({ label, value, icon }) => (
               <div key={label} className="space-y-0.5">
-                <div className="flex items-center gap-1.5 text-white/30 text-[10px] font-bold">
+                <div className="flex items-center gap-1.5 text-subtle text-[10px] font-bold">
                   {icon} {label}
                 </div>
-                <p className="text-xl font-black text-white">{value}</p>
+                <p className="text-xl font-black text-foreground">{value}</p>
               </div>
             ))}
           </div>
@@ -193,7 +193,7 @@ function FeaturedCard({ creator }: { creator: Creator }) {
           {/* Best article */}
           <Link
             href={`/blog/${creator.bestArticleSlug}`}
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-300 hover:bg-amber-500/20 hover:border-amber-500/40 text-xs font-black transition-all group"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-accent/10 border border-accent/20 text-accent-bright hover:bg-accent/20 hover:border-accent/40 text-xs font-black transition-all group"
           >
             <Pen size={12} />
             <span className="line-clamp-1">{creator.bestArticleTitle}</span>
@@ -203,11 +203,11 @@ function FeaturedCard({ creator }: { creator: Creator }) {
           <div className="flex items-center gap-4 pt-1">
             <Link
               href={`/u/${creator.username}`}
-              className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/5 hover:bg-white/10 border border-white/8 text-white/60 hover:text-white text-[11px] font-black uppercase tracking-widest transition-all"
+              className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-surface hover:bg-surface border border-border text-muted hover:text-foreground text-[11px] font-black uppercase tracking-widest transition-all"
             >
               View Profile <ChevronRight size={12} />
             </Link>
-            <span className="text-[10px] text-white/20 font-bold">Member since {creator.joinedMonth}</span>
+            <span className="text-[10px] text-subtle font-bold">Member since {creator.joinedMonth}</span>
           </div>
         </div>
       </div>
@@ -223,26 +223,26 @@ function CreatorGridCard({ creator, index }: { creator: Creator; index: number }
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.1 + index * 0.07 }}
-      className="p-5 rounded-2xl border border-white/5 bg-zinc-900/40 hover:border-white/12 hover:bg-zinc-900/60 transition-all space-y-4 group"
+      className="p-5 rounded-2xl border border-border bg-zinc-900/40 hover:border-border hover:bg-zinc-900/60 transition-all space-y-4 group"
     >
       {/* Header */}
       <div className="flex items-start gap-3">
-        <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${creator.avatarGradient} flex items-center justify-center text-xl font-black text-white shrink-0`}>
+        <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${creator.avatarGradient} flex items-center justify-center text-xl font-black text-foreground shrink-0`}>
           {creator.avatarLetter}
         </div>
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-black text-white uppercase italic tracking-tight truncate group-hover:text-amber-300 transition-colors">
+          <p className="text-sm font-black text-foreground uppercase italic tracking-tight truncate group-hover:text-accent-bright transition-colors">
             {creator.displayName}
           </p>
-          <p className="text-[10px] text-white/30 font-bold">@{creator.username}</p>
-          <span className="inline-block mt-1 px-2 py-0.5 rounded-full bg-amber-500/10 border border-amber-500/15 text-[9px] font-black text-amber-400 uppercase tracking-wider">
+          <p className="text-[10px] text-subtle font-bold">@{creator.username}</p>
+          <span className="inline-block mt-1 px-2 py-0.5 rounded-full bg-accent/10 border border-accent/15 text-[9px] font-black text-accent-bright uppercase tracking-wider">
             {creator.specialty}
           </span>
         </div>
       </div>
 
       {/* Bio */}
-      <p className="text-[11px] text-white/40 leading-relaxed line-clamp-3">{creator.bio}</p>
+      <p className="text-[11px] text-muted leading-relaxed line-clamp-3">{creator.bio}</p>
 
       {/* Stats */}
       <div className="flex gap-4">
@@ -252,8 +252,8 @@ function CreatorGridCard({ creator, index }: { creator: Creator; index: number }
           { label: "Reads", value: formatNum(creator.totalReads) },
         ].map(({ label, value }) => (
           <div key={label} className="space-y-0">
-            <p className="text-[10px] text-white/20 font-bold">{label}</p>
-            <p className="text-sm font-black text-white">{value}</p>
+            <p className="text-[10px] text-subtle font-bold">{label}</p>
+            <p className="text-sm font-black text-foreground">{value}</p>
           </div>
         ))}
       </div>
@@ -261,17 +261,17 @@ function CreatorGridCard({ creator, index }: { creator: Creator; index: number }
       {/* Best article */}
       <Link
         href={`/blog/${creator.bestArticleSlug}`}
-        className="block text-[10px] text-amber-400/70 hover:text-amber-300 font-bold transition-colors line-clamp-2 leading-relaxed"
+        className="block text-[10px] text-accent-bright/70 hover:text-accent-bright font-bold transition-colors line-clamp-2 leading-relaxed"
       >
         → {creator.bestArticleTitle}
       </Link>
 
       {/* Footer */}
-      <div className="flex items-center justify-between pt-1 border-t border-white/5">
-        <span className="text-[9px] text-white/15 font-bold">{creator.joinedMonth}</span>
+      <div className="flex items-center justify-between pt-1 border-t border-border">
+        <span className="text-[9px] text-subtle font-bold">{creator.joinedMonth}</span>
         <Link
           href={`/u/${creator.username}`}
-          className="text-[9px] font-black uppercase tracking-widest text-white/25 hover:text-amber-400 transition-colors flex items-center gap-1"
+          className="text-[9px] font-black uppercase tracking-widest text-subtle hover:text-accent-bright transition-colors flex items-center gap-1"
         >
           Profile <ChevronRight size={9} />
         </Link>
@@ -286,15 +286,15 @@ export default function CreatorSpotlightPage() {
   const [featured, ...others] = CREATORS
 
   return (
-    <div className="min-h-screen bg-[#020202] text-white pb-32">
+    <div className="min-h-screen bg-background text-foreground pb-32">
       {/* Header */}
-      <div className="relative border-b border-white/5 py-20 px-6 overflow-hidden">
+      <div className="relative border-b border-border py-20 px-6 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-b from-amber-950/15 to-transparent" />
         <div className="max-w-6xl mx-auto relative z-10">
           <motion.p
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-[10px] font-black uppercase tracking-[0.5em] text-amber-400 mb-4"
+            className="text-[10px] font-black uppercase tracking-[0.5em] text-accent-bright mb-4"
           >
             Kaiveron — Community
           </motion.p>
@@ -302,17 +302,17 @@ export default function CreatorSpotlightPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-6xl md:text-8xl font-black italic uppercase tracking-tighter leading-none text-white"
+            className="text-6xl md:text-8xl font-black italic uppercase tracking-tighter leading-none text-foreground"
           >
-            Creator<span className="text-amber-500">.</span>
+            Creator<span className="text-accent">.</span>
             <br />
-            <span className="text-white/20">Spotlight</span>
+            <span className="text-subtle">Spotlight</span>
           </motion.h1>
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.25 }}
-            className="mt-6 text-white/40 text-sm max-w-xl leading-relaxed"
+            className="mt-6 text-muted text-sm max-w-xl leading-relaxed"
           >
             Celebrating the voices behind Kaiveron's best content — May 2026 edition.
             These creators write the takes, analyses, and guides that keep the community sharp.
@@ -325,8 +325,8 @@ export default function CreatorSpotlightPage() {
         {/* Featured creator */}
         <div className="space-y-4">
           <div className="flex items-center gap-3">
-            <Star size={14} className="text-amber-400 fill-amber-400" />
-            <h2 className="text-[10px] font-black uppercase tracking-[0.4em] text-white/30">
+            <Star size={14} className="text-accent-bright fill-amber-400" />
+            <h2 className="text-[10px] font-black uppercase tracking-[0.4em] text-subtle">
               Featured Creator
             </h2>
           </div>
@@ -336,8 +336,8 @@ export default function CreatorSpotlightPage() {
         {/* Creator grid */}
         <div className="space-y-4">
           <div className="flex items-center gap-3">
-            <Users size={14} className="text-amber-400" />
-            <h2 className="text-[10px] font-black uppercase tracking-[0.4em] text-white/30">
+            <Users size={14} className="text-accent-bright" />
+            <h2 className="text-[10px] font-black uppercase tracking-[0.4em] text-subtle">
               Rising Creators
             </h2>
           </div>
@@ -353,20 +353,20 @@ export default function CreatorSpotlightPage() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
-          className="flex flex-col sm:flex-row items-center justify-between gap-6 p-8 rounded-3xl bg-gradient-to-br from-indigo-600/15 to-violet-600/10 border border-amber-500/20"
+          className="flex flex-col sm:flex-row items-center justify-between gap-6 p-8 rounded-3xl bg-gradient-to-br from-indigo-600/15 to-violet-600/10 border border-accent/20"
         >
           <div className="space-y-2">
-            <h3 className="text-2xl font-black uppercase italic tracking-tight text-white">
-              Become a Creator<span className="text-amber-400">.</span>
+            <h3 className="text-2xl font-black uppercase italic tracking-tight text-foreground">
+              Become a Creator<span className="text-accent-bright">.</span>
             </h3>
-            <p className="text-white/40 text-sm max-w-md leading-relaxed">
+            <p className="text-muted text-sm max-w-md leading-relaxed">
               Got hot takes, deep analyses, or hidden gems to share? Publish on Kaiveron
               and reach thousands of fans who actually care.
             </p>
           </div>
           <Link
             href="/creators"
-            className="flex items-center gap-2 px-7 py-4 rounded-2xl bg-amber-500 hover:bg-amber-400 text-[11px] font-black uppercase tracking-widest text-white transition-all whitespace-nowrap"
+            className="flex items-center gap-2 px-7 py-4 rounded-2xl bg-accent hover:bg-accent-bright text-[11px] font-black uppercase tracking-widest text-foreground transition-all whitespace-nowrap"
           >
             Apply Now <ChevronRight size={14} />
           </Link>

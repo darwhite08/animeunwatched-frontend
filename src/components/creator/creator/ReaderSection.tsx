@@ -8,7 +8,7 @@ export default function ReaderSection() {
         <h1 className="text-3xl font-semibold">
           Discover Anime Blogs
         </h1>
-        <p className="text-white/50 mt-2">
+        <p className="text-muted mt-2">
           Deep dives, theories, and reviews from creators.
         </p>
       </div>

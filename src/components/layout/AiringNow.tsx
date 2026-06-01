@@ -16,14 +16,14 @@ export default function AiringNow() {
   const AIRING = (data?.data ?? []).map(mapDTO).filter(a => a.status === "airing").slice(0, 6)
   if (isLoading) {
     return (
-      <section className="py-24 bg-[#020202] relative overflow-hidden border-y border-white/[0.03] flex items-center justify-center min-h-[200px]">
+      <section className="py-24 bg-background relative overflow-hidden border-y border-white/[0.03] flex items-center justify-center min-h-[200px]">
         <div className="w-8 h-8 rounded-full border-2 border-emerald-500/30 border-t-emerald-500 animate-spin" />
       </section>
     )
   }
 
   return (
-    <section className="py-24 bg-[#020202] relative overflow-hidden border-y border-white/[0.03]">
+    <section className="py-24 bg-background relative overflow-hidden border-y border-white/[0.03]">
       {/* Grid */}
       <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:52px_52px] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_50%,#000_20%,transparent_100%)] pointer-events-none" />
 
@@ -50,16 +50,16 @@ export default function AiringNow() {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-5xl md:text-6xl font-black tracking-tighter text-white uppercase italic leading-none"
+              className="text-5xl md:text-6xl font-black tracking-tighter text-foreground uppercase italic leading-none"
             >
               What's Airing<span className="text-emerald-400">.</span>
             </motion.h2>
-            <p className="text-white/35 text-sm">New episodes dropping this season</p>
+            <p className="text-subtle text-sm">New episodes dropping this season</p>
           </div>
 
           <Link
             href="/anime/season/2024/fall"
-            className="hidden md:flex items-center gap-2 px-5 py-3 rounded-2xl border border-white/10 bg-white/[0.03] text-xs font-black uppercase tracking-widest text-white/50 hover:text-white hover:bg-white/[0.06] transition-all"
+            className="hidden md:flex items-center gap-2 px-5 py-3 rounded-2xl border border-border bg-surface text-xs font-black uppercase tracking-widest text-muted hover:text-foreground hover:bg-white/[0.06] transition-all"
           >
             Full Season <ChevronRight size={13} />
           </Link>
@@ -92,15 +92,15 @@ export default function AiringNow() {
                     </span>
                   </div>
                   {/* Rating */}
-                  <div className="absolute bottom-3 right-3 flex items-center gap-1 px-2 py-1 rounded-lg bg-black/60 backdrop-blur-md border border-white/10">
-                    <Star size={10} fill="#f59e0b" className="text-amber-400" />
-                    <span className="text-[9px] font-black text-white">{anime.rating.toFixed(1)}</span>
+                  <div className="absolute bottom-3 right-3 flex items-center gap-1 px-2 py-1 rounded-lg bg-black/60 backdrop-blur-md border border-border">
+                    <Star size={10} fill="#f59e0b" className="text-accent-bright" />
+                    <span className="text-[9px] font-black text-foreground">{anime.rating.toFixed(1)}</span>
                   </div>
                 </div>
-                <p className="text-xs font-black text-white/70 group-hover:text-white transition-colors line-clamp-2 leading-tight">
+                <p className="text-xs font-black text-muted group-hover:text-foreground transition-colors line-clamp-2 leading-tight">
                   {anime.title}
                 </p>
-                <p className="text-[9px] text-white/30 mt-0.5 uppercase tracking-wider">{anime.studio}</p>
+                <p className="text-[9px] text-subtle mt-0.5 uppercase tracking-wider">{anime.studio}</p>
               </Link>
             </motion.div>
           ))}
@@ -109,7 +109,7 @@ export default function AiringNow() {
         <div className="mt-8 flex justify-center md:hidden">
           <Link
             href="/anime/season/2024/fall"
-            className="flex items-center gap-2 px-6 py-3 rounded-2xl border border-white/10 bg-white/[0.03] text-xs font-black uppercase tracking-widest text-white/50 hover:text-white transition-all"
+            className="flex items-center gap-2 px-6 py-3 rounded-2xl border border-border bg-surface text-xs font-black uppercase tracking-widest text-muted hover:text-foreground transition-all"
           >
             Full Season <ChevronRight size={13} />
           </Link>

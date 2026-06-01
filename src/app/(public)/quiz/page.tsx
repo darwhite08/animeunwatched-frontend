@@ -61,21 +61,21 @@ export default function QuizPage() {
   const grade = pct === 100 ? "Perfect! Legendary Shinobi 🏆" : pct >= 80 ? "Expert! Elite Jonin 🎯" : pct >= 60 ? "Good! Shinobi Level 👍" : pct >= 40 ? "Decent. Keep watching! 📺" : "Rookie! More anime needed 😅"
 
   if (isLoading || questions.length === 0) return (
-    <div className="min-h-screen bg-[#020202] text-white flex items-center justify-center text-white/30">
+    <div className="min-h-screen bg-background text-foreground flex items-center justify-center text-subtle">
       {isLoading ? "Loading quiz…" : "Not enough anime data to build a quiz."}
     </div>
   )
 
   if (done) return (
-    <div className="min-h-screen bg-[#020202] text-white flex items-center justify-center px-6">
+    <div className="min-h-screen bg-background text-foreground flex items-center justify-center px-6">
       <motion.div initial={{ opacity:0, scale:0.9 }} animate={{ opacity:1, scale:1 }} className="max-w-md w-full text-center space-y-8">
-        <div className="w-24 h-24 mx-auto rounded-[2rem] bg-amber-600/20 border border-amber-500/30 flex items-center justify-center">
-          <Trophy size={40} className="text-amber-400" />
+        <div className="w-24 h-24 mx-auto rounded-[2rem] bg-accent/20 border border-accent/30 flex items-center justify-center">
+          <Trophy size={40} className="text-accent-bright" />
         </div>
         <div>
-          <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-amber-400/60 mb-2">Quiz Complete</p>
-          <h1 className="text-5xl font-black tracking-tighter uppercase italic text-white">{score}/{questions.length}</h1>
-          <p className="text-white/40 text-sm mt-2">{grade}</p>
+          <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-accent-bright/60 mb-2">Quiz Complete</p>
+          <h1 className="text-5xl font-black tracking-tighter uppercase italic text-foreground">{score}/{questions.length}</h1>
+          <p className="text-muted text-sm mt-2">{grade}</p>
         </div>
         {/* Answer breakdown */}
         <div className="flex justify-center gap-2">
@@ -83,11 +83,11 @@ export default function QuizPage() {
             <div key={i} className={`w-8 h-2 rounded-full ${correct ? "bg-emerald-500" : "bg-red-500"}`} />
           ))}
         </div>
-        <div className="p-6 rounded-2xl bg-white/[0.03] border border-white/8">
-          <p className="text-3xl font-black text-white">{pct}%</p>
-          <p className="text-[10px] text-white/30 uppercase tracking-widest mt-1">Accuracy</p>
+        <div className="p-6 rounded-2xl bg-surface border border-border">
+          <p className="text-3xl font-black text-foreground">{pct}%</p>
+          <p className="text-[10px] text-subtle uppercase tracking-widest mt-1">Accuracy</p>
         </div>
-        <button onClick={reset} className="w-full flex items-center justify-center gap-2 py-4 rounded-2xl bg-amber-500 hover:bg-amber-400 font-black text-xs uppercase tracking-widest text-white transition-all">
+        <button onClick={reset} className="w-full flex items-center justify-center gap-2 py-4 rounded-2xl bg-accent hover:bg-accent-bright font-black text-xs uppercase tracking-widest text-foreground transition-all">
           <RotateCcw size={14} /> Try Again
         </button>
       </motion.div>
@@ -95,28 +95,28 @@ export default function QuizPage() {
   )
 
   return (
-    <div className="min-h-screen bg-[#020202] text-white flex items-center justify-center px-6">
+    <div className="min-h-screen bg-background text-foreground flex items-center justify-center px-6">
       <div className="max-w-xl w-full space-y-8 py-20">
         {/* Header */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Brain size={18} className="text-amber-400" />
-            <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-amber-400/60">Neural Quiz</p>
+            <Brain size={18} className="text-accent-bright" />
+            <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-accent-bright/60">Neural Quiz</p>
           </div>
-          <span className="text-sm font-black text-white/40">{idx+1} / {questions.length}</span>
+          <span className="text-sm font-black text-muted">{idx+1} / {questions.length}</span>
         </div>
 
         {/* Progress */}
-        <div className="h-1 bg-white/5 rounded-full overflow-hidden">
-          <motion.div animate={{ width: `${((idx+1)/questions.length)*100}%` }} className="h-full bg-amber-500 rounded-full" />
+        <div className="h-1 bg-surface rounded-full overflow-hidden">
+          <motion.div animate={{ width: `${((idx+1)/questions.length)*100}%` }} className="h-full bg-accent rounded-full" />
         </div>
 
         {/* Question */}
         <AnimatePresence mode="wait">
           <motion.div key={idx} initial={{ opacity:0, x:30 }} animate={{ opacity:1, x:0 }} exit={{ opacity:0, x:-30 }} className="space-y-6">
             <div className="space-y-2">
-              <p className="text-[10px] font-black uppercase tracking-widest text-amber-400/60">{q.anime}</p>
-              <h2 className="text-2xl font-black tracking-tighter text-white">{q.q}</h2>
+              <p className="text-[10px] font-black uppercase tracking-widest text-accent-bright/60">{q.anime}</p>
+              <h2 className="text-2xl font-black tracking-tighter text-foreground">{q.q}</h2>
             </div>
 
             <div className="space-y-3">
@@ -125,10 +125,10 @@ export default function QuizPage() {
                 return (
                   <button key={opt} onClick={() => handleSelect(opt)}
                     className={`w-full text-left px-5 py-4 rounded-2xl border text-sm font-bold transition-all flex items-center justify-between ${
-                      state === "correct" ? "bg-emerald-500/15 border-emerald-500/40 text-white" :
-                      state === "wrong"   ? "bg-red-500/15 border-red-500/40 text-white" :
-                      hasAnswered         ? "border-white/5 bg-white/[0.02] text-white/30" :
-                                            "border-white/10 bg-white/[0.03] text-white/70 hover:border-amber-500/40 hover:bg-amber-500/8 hover:text-white"
+                      state === "correct" ? "bg-emerald-500/15 border-emerald-500/40 text-foreground" :
+                      state === "wrong"   ? "bg-red-500/15 border-red-500/40 text-foreground" :
+                      hasAnswered         ? "border-border bg-surface text-subtle" :
+                                            "border-border bg-surface text-muted hover:border-accent/40 hover:bg-accent/8 hover:text-foreground"
                     }`}
                   >
                     {opt}
@@ -148,7 +148,7 @@ export default function QuizPage() {
             )}
 
             {hasAnswered && (
-              <button onClick={next} className="w-full flex items-center justify-center gap-2 py-4 rounded-2xl bg-amber-500 hover:bg-amber-400 font-black text-xs uppercase tracking-widest text-white transition-all">
+              <button onClick={next} className="w-full flex items-center justify-center gap-2 py-4 rounded-2xl bg-accent hover:bg-accent-bright font-black text-xs uppercase tracking-widest text-foreground transition-all">
                 {idx + 1 >= questions.length ? "See Results" : "Next Question"} <ChevronRight size={14} />
               </button>
             )}

@@ -74,13 +74,13 @@ function PosterCard({ title, image, score, genre, bgIdx, delay, w, h }: CardProp
       <div className="absolute inset-0 bg-gradient-to-t from-black/88 via-transparent to-transparent" />
 
       <div className="absolute top-2 right-2 flex items-center gap-0.5 px-1.5 py-0.5 rounded-md bg-black/55 backdrop-blur-sm border border-white/[0.08]">
-        <Star size={7} className="fill-amber-400 text-amber-400" />
-        <span className="text-[9px] font-semibold text-white">{score.toFixed(1)}</span>
+        <Star size={7} className="fill-amber-400 text-accent-bright" />
+        <span className="text-[9px] font-semibold text-foreground">{score.toFixed(1)}</span>
       </div>
 
       <div className="absolute bottom-0 inset-x-0 p-2.5">
-        {genre && <p className="text-[7px] uppercase tracking-wider text-white/35 mb-0.5">{genre}</p>}
-        <p className="text-[10px] font-semibold text-white leading-tight line-clamp-2">{title}</p>
+        {genre && <p className="text-[7px] uppercase tracking-wider text-subtle mb-0.5">{genre}</p>}
+        <p className="text-[10px] font-semibold text-foreground leading-tight line-clamp-2">{title}</p>
       </div>
     </motion.div>
   )
@@ -151,7 +151,7 @@ export default function CinematicHero() {
               transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
               className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0"
             />
-            <span className="text-[11px] text-white/45 font-medium">Open Beta · Free forever</span>
+            <span className="text-[11px] text-muted font-medium">Open Beta · Free forever</span>
           </motion.div>
 
           {/* Headline */}
@@ -163,7 +163,7 @@ export default function CinematicHero() {
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ duration: 0.82, delay: 0.28 + i * 0.12, ease: [0.22, 1, 0.36, 1] }}
                   className={`font-bold tracking-tight leading-[1.06] text-[clamp(2.8rem,5.2vw,5rem)] ${
-                    i === 2 ? "text-amber-400" : "text-white"
+                    i === 2 ? "text-accent-bright" : "text-foreground"
                   }`}
                 >
                   {line}
@@ -177,10 +177,10 @@ export default function CinematicHero() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.76, duration: 0.5 }}
-            className="text-white/40 text-[1.05rem] leading-relaxed mb-8 max-w-[40ch] font-normal"
+            className="text-muted text-[1.05rem] leading-relaxed mb-8 max-w-[40ch] font-normal"
           >
             Build your watchlist, rate every episode, and let{" "}
-            <span className="text-white/65 font-medium">AI-powered discovery</span>{" "}
+            <span className="text-muted font-medium">AI-powered discovery</span>{" "}
             surface the shows made for exactly how you think.
           </motion.p>
 
@@ -204,7 +204,7 @@ export default function CinematicHero() {
             </Link>
             <Link
               href="/bestanimelist"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-white/[0.1] text-white/50 hover:text-white hover:bg-white/[0.05] text-sm font-medium transition-all duration-150"
+              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-white/[0.1] text-muted hover:text-foreground hover:bg-surface text-sm font-medium transition-all duration-150"
             >
               Browse catalog
             </Link>
@@ -227,7 +227,7 @@ export default function CinematicHero() {
                   style={{ background: "linear-gradient(135deg, #fbbf24, #f59e0b)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
                   {v}
                 </p>
-                <p className="text-[11px] text-white/30 mt-0.5">{l}</p>
+                <p className="text-[11px] text-subtle mt-0.5">{l}</p>
               </div>
             ))}
           </motion.div>
@@ -282,15 +282,15 @@ export default function CinematicHero() {
                   <motion.div
                     animate={{ y: [0, -5, 0] }}
                     transition={{ duration: 5.6, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
-                    className="w-[136px] p-3 rounded-xl border border-amber-500/[0.14] bg-amber-500/[0.06]"
+                    className="w-[136px] p-3 rounded-xl border border-accent/[0.14] bg-accent/[0.06]"
                     style={{ backdropFilter: "blur(12px)" }}
                   >
                     <div className="flex items-center gap-1.5 mb-1.5">
-                      <Sparkles size={10} className="text-amber-400 shrink-0" />
-                      <span className="text-[10px] text-amber-300/60 font-medium">AI Match</span>
+                      <Sparkles size={10} className="text-accent-bright shrink-0" />
+                      <span className="text-[10px] text-accent-bright/60 font-medium">AI Match</span>
                     </div>
-                    <p className="text-[12px] font-semibold text-white">98% for you</p>
-                    <p className="text-[9px] text-white/30 mt-0.5">Based on your taste</p>
+                    <p className="text-[12px] font-semibold text-foreground">98% for you</p>
+                    <p className="text-[9px] text-subtle mt-0.5">Based on your taste</p>
                   </motion.div>
                 </motion.div>
               </motion.div>
@@ -311,9 +311,9 @@ export default function CinematicHero() {
         transition={{ delay: 2, duration: 0.5 }}
         style={{ opacity: scrollOp }}
       >
-        <span className="text-[9px] text-white/20 uppercase tracking-[0.45em]">Scroll</span>
+        <span className="text-[9px] text-subtle uppercase tracking-[0.45em]">Scroll</span>
         <motion.div animate={{ y: [0, 5, 0] }} transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}>
-          <ChevronDown size={13} className="text-white/20" />
+          <ChevronDown size={13} className="text-subtle" />
         </motion.div>
       </motion.div>
     </section>

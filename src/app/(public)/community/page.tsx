@@ -30,12 +30,12 @@ const ACTIVE_POLLS = [
 
 // Deterministic avatar gradient from author username initial
 const AVATAR_GRADIENTS = [
-  "from-amber-500 to-orange-600",
+  "from-accent to-orange-600",
   "from-violet-500 to-purple-600",
   "from-emerald-500 to-teal-600",
   "from-rose-500 to-pink-600",
   "from-sky-500 to-blue-600",
-  "from-amber-400 to-yellow-500",
+  "from-accent-bright to-yellow-500",
   "from-cyan-500 to-indigo-600",
   "from-lime-500 to-green-600",
 ]
@@ -63,10 +63,10 @@ function CommentRow({ comment }: { comment: PostComment }) {
       </div>
       <div className="flex-1 min-w-0">
         <div className="flex items-baseline gap-2">
-          <span className="text-[11px] font-black text-white/80">{name}</span>
-          <span className="text-[9px] text-white/25">{timeAgo(comment.createdAt)}</span>
+          <span className="text-[11px] font-black text-muted">{name}</span>
+          <span className="text-[9px] text-subtle">{timeAgo(comment.createdAt)}</span>
         </div>
-        <p className="text-[12px] text-white/65 leading-relaxed mt-0.5">{comment.content}</p>
+        <p className="text-[12px] text-muted leading-relaxed mt-0.5">{comment.content}</p>
       </div>
     </div>
   )
@@ -78,13 +78,13 @@ function SpoilerBlock({ text }: { text: string }) {
   return (
     <div className="relative">
       <p className={`text-[15px] leading-relaxed transition-all duration-300 ${
-        revealed ? "text-white/85 blur-none" : "text-white/20 blur-md select-none"
+        revealed ? "text-white/85 blur-none" : "text-subtle blur-md select-none"
       }`}>
         {text}
       </p>
       {!revealed && (
         <button onClick={() => setRevealed(true)}
-          className="absolute inset-0 flex items-center justify-center rounded-xl bg-amber-500/8 border border-amber-500/20 text-[11px] font-black uppercase tracking-widest text-amber-400 hover:bg-amber-500/15 transition-all">
+          className="absolute inset-0 flex items-center justify-center rounded-xl bg-accent/8 border border-accent/20 text-[11px] font-black uppercase tracking-widest text-accent-bright hover:bg-accent/15 transition-all">
           ⚠️ Spoiler — click to reveal
         </button>
       )}
@@ -152,7 +152,7 @@ function PostCard({ post }: { post: Post }) {
 
   return (
     <motion.article layout initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
-      className="border border-white/8 hover:border-white/12 rounded-2xl overflow-hidden transition-colors"
+      className="border border-border hover:border-border rounded-2xl overflow-hidden transition-colors"
       style={{
         background: "linear-gradient(160deg, rgba(15,15,25,0.9), rgba(10,10,18,0.95))",
         scrollMarginTop: "160px",  // account for sticky navbar + community header
@@ -169,9 +169,9 @@ function PostCard({ post }: { post: Post }) {
             </Link>
             <div>
               <Link href={`/u/${post.author?.username ?? ""}`}>
-                <p className="text-[15px] font-black text-white hover:text-amber-300 transition-colors leading-tight">{authorName}</p>
+                <p className="text-[15px] font-black text-foreground hover:text-accent-bright transition-colors leading-tight">{authorName}</p>
               </Link>
-              <p className="text-[10px] text-white/30 mt-0.5">{timeAgo(post.createdAt)}</p>
+              <p className="text-[10px] text-subtle mt-0.5">{timeAgo(post.createdAt)}</p>
             </div>
           </div>
           <PostMenu postId={post.id} />
@@ -180,8 +180,8 @@ function PostCard({ post }: { post: Post }) {
         {/* Anime tag */}
         {post.anime && (
           <Link href={`/anime/${post.anime.malId}`}
-            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-amber-500/10 border border-amber-500/20 text-[10px] font-bold text-amber-400 hover:bg-amber-500/20 transition-colors">
-            <Star size={9} fill="currentColor" className="text-amber-400" /> {post.anime.title}
+            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-accent/10 border border-accent/20 text-[10px] font-bold text-accent-bright hover:bg-accent/20 transition-colors">
+            <Star size={9} fill="currentColor" className="text-accent-bright" /> {post.anime.title}
           </Link>
         )}
 
@@ -197,7 +197,7 @@ function PostCard({ post }: { post: Post }) {
 
         {/* Image attachment */}
         {post.imageUrl && (
-          <a href={post.imageUrl} target="_blank" rel="noopener noreferrer" className="block rounded-2xl overflow-hidden border border-white/8 max-w-[520px] hover:border-white/15 transition-colors">
+          <a href={post.imageUrl} target="_blank" rel="noopener noreferrer" className="block rounded-2xl overflow-hidden border border-border max-w-[520px] hover:border-border transition-colors">
             <NextImage
               src={post.imageUrl}
               alt="Post attachment"
@@ -210,11 +210,11 @@ function PostCard({ post }: { post: Post }) {
         )}
 
         {/* Actions */}
-        <div className="flex items-center gap-1 pt-1 border-t border-white/5">
+        <div className="flex items-center gap-1 pt-1 border-t border-border">
           {/* Like */}
           <button onClick={handleLike} disabled={likePost.isPending}
             className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-black transition-all ${
-              liked ? "text-rose-400 bg-rose-500/10" : "text-white/35 hover:text-rose-400 hover:bg-rose-500/8"
+              liked ? "text-rose-400 bg-rose-500/10" : "text-subtle hover:text-rose-400 hover:bg-rose-500/8"
             }`}>
             <Heart size={14} fill={liked ? "currentColor" : "none"} className="transition-transform active:scale-90" />
             {likeCount > 0 && <span>{likeCount}</span>}
@@ -223,7 +223,7 @@ function PostCard({ post }: { post: Post }) {
           {/* Comment toggle */}
           <button onClick={handleToggleComments}
             className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-black transition-all ${
-              showComments ? "text-amber-400 bg-amber-500/10" : "text-white/35 hover:text-amber-400 hover:bg-amber-500/8"
+              showComments ? "text-accent-bright bg-accent/10" : "text-subtle hover:text-accent-bright hover:bg-accent/8"
             }`}>
             <MessageSquare size={14} />
             {commentCount > 0 && <span>{commentCount}</span>}
@@ -235,7 +235,7 @@ function PostCard({ post }: { post: Post }) {
             navigator.clipboard.writeText(window.location.origin + `/posts/${post.id}`).catch(() => {})
             push("Link copied!", "success")
           }}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-black text-white/35 hover:text-white/70 hover:bg-white/5 transition-all ml-auto">
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-black text-subtle hover:text-muted hover:bg-surface transition-all ml-auto">
             <Share2 size={13} />
           </button>
         </div>
@@ -249,18 +249,18 @@ function PostCard({ post }: { post: Post }) {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.22, ease: [0.32, 0.72, 0, 1] }}
-            className="overflow-hidden border-t border-white/5"
+            className="overflow-hidden border-t border-border"
           >
             <div className="p-5 space-y-4 bg-white/[0.015]">
               {/* Existing comments */}
               {loadingComments && (
                 <div className="flex items-center justify-center py-4">
-                  <Loader2 size={16} className="animate-spin text-white/30" />
+                  <Loader2 size={16} className="animate-spin text-subtle" />
                 </div>
               )}
 
               {!loadingComments && comments.length === 0 && (
-                <p className="text-[11px] text-white/25 font-black uppercase tracking-widest text-center py-3">
+                <p className="text-[11px] text-subtle font-black uppercase tracking-widest text-center py-3">
                   No comments yet — be first!
                 </p>
               )}
@@ -270,7 +270,7 @@ function PostCard({ post }: { post: Post }) {
               </div>
 
               {/* New comment input */}
-              <div className="flex gap-3 pt-2 border-t border-white/5">
+              <div className="flex gap-3 pt-2 border-t border-border">
                 <div className={`h-7 w-7 rounded-lg bg-gradient-to-br ${avatarGradient(useAuthStore.getState().user?.displayName ?? "U")} flex items-center justify-center font-black text-[11px] shrink-0`}>
                   {(useAuthStore.getState().user?.displayName ?? "?")[0]?.toUpperCase()}
                 </div>
@@ -286,10 +286,10 @@ function PostCard({ post }: { post: Post }) {
                     disabled={!isAuthenticated}
                     rows={2}
                     maxLength={500}
-                    className="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-[12px] text-white placeholder:text-white/25 resize-none outline-none focus:border-amber-500/40 transition-colors disabled:opacity-40"
+                    className="w-full bg-surface border border-border rounded-xl px-3 py-2 text-[12px] text-foreground placeholder:text-subtle resize-none outline-none focus:border-accent/40 transition-colors disabled:opacity-40"
                   />
                   <div className="flex items-center justify-between mt-2">
-                    <span className="text-[9px] text-white/20 font-mono">{500 - commentDraft.length} chars</span>
+                    <span className="text-[9px] text-subtle font-mono">{500 - commentDraft.length} chars</span>
                     <button
                       onClick={handleSubmitComment}
                       disabled={!commentDraft.trim() || createComment.isPending || !isAuthenticated}
@@ -357,14 +357,14 @@ export default function CommunityPage() {
   }, [draft, attachedImage, isAuthenticated, createPost, push, isSpoiler])
 
   return (
-    <div className="min-h-screen bg-[#020202] text-white pb-32">
+    <div className="min-h-screen bg-background text-foreground pb-32">
       {/* Page header — scrolls naturally, never blocks post cards */}
       <div className="max-w-6xl mx-auto px-6 pt-8 pb-3 flex items-start justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-black tracking-tighter uppercase italic text-white">
+          <h1 className="text-3xl font-black tracking-tighter uppercase italic text-foreground">
             Community<span style={{ color: "#f59e0b" }}>.</span>
           </h1>
-          <p className="text-xs text-white/35 mt-1">
+          <p className="text-xs text-subtle mt-1">
             {posts.length > 0 ? `${posts.length}+ posts from the Shinobi` : "The Dojo — share your thoughts"}
           </p>
         </div>
@@ -377,17 +377,17 @@ export default function CommunityPage() {
       </div>
 
       {/* Tabs only — very thin sticky bar (~42px), won't cover card content */}
-      <div className="sticky top-[72px] z-30 bg-[#020202]/95 backdrop-blur-xl border-b border-white/[0.06]">
+      <div className="sticky top-[72px] z-30 bg-background/95 backdrop-blur-xl border-b border-white/[0.06]">
         <div className="max-w-6xl mx-auto px-6 flex items-center gap-1">
           {(["trending", "following", "latest"] as FeedTab[]).map(t => (
             <button key={t} onClick={() => setFeedTab(t)}
               className={`relative px-5 py-3 text-[11px] font-black uppercase tracking-widest capitalize transition-colors ${
-                feedTab === t ? "text-white" : "text-white/30 hover:text-white/60"
+                feedTab === t ? "text-foreground" : "text-subtle hover:text-muted"
               }`}>
               {t}
               {feedTab === t && (
                 <motion.div layoutId="feed-tab-line"
-                  className="absolute bottom-0 left-0 right-0 h-[2px] bg-amber-500 rounded-full" />
+                  className="absolute bottom-0 left-0 right-0 h-[2px] bg-accent rounded-full" />
               )}
             </button>
           ))}
@@ -414,15 +414,15 @@ export default function CommunityPage() {
           <AnimatePresence>
             {composing && (
               <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} className="overflow-hidden">
-                <div className="bg-zinc-900 border border-amber-500/20 rounded-2xl p-5 space-y-4">
+                <div className="bg-zinc-900 border border-accent/20 rounded-2xl p-5 space-y-4">
                   <textarea value={draft} onChange={e => setDraft(e.target.value)}
                     placeholder={isAuthenticated ? "Share a theory, hot take, or reaction…" : "Sign in to post…"}
                     rows={4} autoFocus disabled={!isAuthenticated}
-                    className="w-full bg-transparent text-sm text-white placeholder:text-white/25 resize-none outline-none leading-relaxed disabled:opacity-40" />
+                    className="w-full bg-transparent text-sm text-foreground placeholder:text-subtle resize-none outline-none leading-relaxed disabled:opacity-40" />
 
                   {/* Attached image preview */}
                   {attachedImage && (
-                    <div className="relative inline-block rounded-xl overflow-hidden border border-white/10 group">
+                    <div className="relative inline-block rounded-xl overflow-hidden border border-border group">
                       <NextImage
                         src={attachedImage}
                         alt="Attached"
@@ -434,15 +434,15 @@ export default function CommunityPage() {
                       <button
                         type="button"
                         onClick={() => setAttachedImage(null)}
-                        className="absolute top-1.5 right-1.5 w-6 h-6 rounded-full bg-black/70 backdrop-blur-sm text-white/80 hover:text-white hover:bg-black/90 flex items-center justify-center text-[14px] leading-none transition-colors"
+                        className="absolute top-1.5 right-1.5 w-6 h-6 rounded-full bg-black/70 backdrop-blur-sm text-muted hover:text-foreground hover:bg-black/90 flex items-center justify-center text-[14px] leading-none transition-colors"
                         aria-label="Remove image"
                       >×</button>
                     </div>
                   )}
                   {isUploading && (
-                    <div className="flex items-center gap-2 text-[11px] text-amber-400">
-                      <div className="flex-1 h-1 bg-white/5 rounded-full overflow-hidden">
-                        <div className="h-full bg-amber-500 transition-all" style={{ width: `${progress}%` }} />
+                    <div className="flex items-center gap-2 text-[11px] text-accent-bright">
+                      <div className="flex-1 h-1 bg-surface rounded-full overflow-hidden">
+                        <div className="h-full bg-accent transition-all" style={{ width: `${progress}%` }} />
                       </div>
                       <span className="tabular-nums">{progress}%</span>
                     </div>
@@ -451,18 +451,18 @@ export default function CommunityPage() {
                     <p className="text-[11px] text-rose-400">{uploadError}</p>
                   )}
 
-                  <div className="flex items-center justify-between border-t border-white/5 pt-3">
+                  <div className="flex items-center justify-between border-t border-border pt-3">
                     <div className="flex gap-2">
                       <button
                         type="button"
                         title="Mention a user (@)"
                         onClick={() => setDraft(d => d + (d.endsWith(" ") || d.length === 0 ? "@" : " @"))}
-                        className="p-1.5 text-white/30 hover:text-amber-300 transition-colors"><AtSign size={15} /></button>
+                        className="p-1.5 text-subtle hover:text-accent-bright transition-colors"><AtSign size={15} /></button>
                       <button
                         type="button"
                         title="Add a hashtag (#)"
                         onClick={() => setDraft(d => d + (d.endsWith(" ") || d.length === 0 ? "#" : " #"))}
-                        className="p-1.5 text-white/30 hover:text-amber-300 transition-colors"><Hash size={15} /></button>
+                        className="p-1.5 text-subtle hover:text-accent-bright transition-colors"><Hash size={15} /></button>
                       <input
                         ref={fileInputRef}
                         type="file"
@@ -481,25 +481,25 @@ export default function CommunityPage() {
                         onClick={() => fileInputRef.current?.click()}
                         className={`p-1.5 transition-colors ${
                           isUploading
-                            ? "text-amber-400 animate-pulse"
+                            ? "text-accent-bright animate-pulse"
                             : attachedImage
                             ? "text-emerald-400"
-                            : "text-white/30 hover:text-amber-300"
+                            : "text-subtle hover:text-accent-bright"
                         }`}
                       ><ImageIcon size={15} /></button>
                       {/* Spoiler toggle */}
                       <button onClick={() => setIsSpoiler(s => !s)}
                         title="Mark as spoiler"
                         className={`flex items-center gap-1 px-2 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest transition-all ${
-                          isSpoiler ? "bg-amber-500/20 text-amber-400 border border-amber-500/30" : "text-white/30 hover:text-amber-400 hover:bg-amber-500/10"
+                          isSpoiler ? "bg-accent/20 text-accent-bright border border-accent/30" : "text-subtle hover:text-accent-bright hover:bg-accent/10"
                         }`}>
                         ⚠️ Spoiler
                       </button>
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className={`text-[10px] font-mono ${500 - draft.length < 50 ? "text-amber-400" : "text-white/20"}`}>{500 - draft.length}</span>
+                      <span className={`text-[10px] font-mono ${500 - draft.length < 50 ? "text-accent-bright" : "text-subtle"}`}>{500 - draft.length}</span>
                       <button onClick={submitPost} disabled={!draft.trim() || createPost.isPending}
-                        className="flex items-center gap-2 px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 disabled:opacity-40 text-xs font-black uppercase tracking-wider text-white transition-all">
+                        className="flex items-center gap-2 px-4 py-2 rounded-xl bg-accent hover:bg-accent-bright disabled:opacity-40 text-xs font-black uppercase tracking-wider text-foreground transition-all">
                         {createPost.isPending ? <Loader2 size={12} className="animate-spin" /> : <Send size={12} />}
                         Post
                       </button>
@@ -514,17 +514,17 @@ export default function CommunityPage() {
           {isLoading && (
             <div className="space-y-5">
               {Array.from({ length: 4 }).map((_, i) => (
-                <div key={i} className="bg-zinc-900/60 border border-white/8 rounded-2xl p-6 space-y-3 animate-pulse" style={{ animationDelay: `${i * 100}ms` }}>
+                <div key={i} className="bg-zinc-900/60 border border-border rounded-2xl p-6 space-y-3 animate-pulse" style={{ animationDelay: `${i * 100}ms` }}>
                   <div className="flex items-center gap-3">
-                    <div className="h-10 w-10 rounded-xl bg-white/10" />
+                    <div className="h-10 w-10 rounded-xl bg-surface" />
                     <div className="space-y-1.5 flex-1">
-                      <div className="h-3 w-24 bg-white/10 rounded-full" />
-                      <div className="h-2 w-16 bg-white/5 rounded-full" />
+                      <div className="h-3 w-24 bg-surface rounded-full" />
+                      <div className="h-2 w-16 bg-surface rounded-full" />
                     </div>
                   </div>
                   <div className="space-y-1.5">
-                    <div className="h-3 w-full bg-white/5 rounded-full" />
-                    <div className="h-3 w-4/5 bg-white/5 rounded-full" />
+                    <div className="h-3 w-full bg-surface rounded-full" />
+                    <div className="h-3 w-4/5 bg-surface rounded-full" />
                   </div>
                 </div>
               ))}
@@ -533,7 +533,7 @@ export default function CommunityPage() {
 
           {isError && (
             <div className="py-16 text-center">
-              <p className="text-white/30 font-black uppercase tracking-widest text-xs">Failed to load posts</p>
+              <p className="text-subtle font-black uppercase tracking-widest text-xs">Failed to load posts</p>
             </div>
           )}
 
@@ -546,7 +546,7 @@ export default function CommunityPage() {
           {hasNextPage && (
             <div className="flex justify-center pt-4">
               <button onClick={() => fetchNextPage()} disabled={isFetchingNextPage}
-                className="flex items-center gap-2 px-6 py-3 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 text-xs font-black uppercase tracking-widest text-white/60 hover:text-white transition-all disabled:opacity-40">
+                className="flex items-center gap-2 px-6 py-3 rounded-xl border border-border bg-surface hover:bg-surface text-xs font-black uppercase tracking-widest text-muted hover:text-foreground transition-all disabled:opacity-40">
                 {isFetchingNextPage ? <Loader2 size={12} className="animate-spin" /> : null}
                 Load More
               </button>
@@ -554,43 +554,43 @@ export default function CommunityPage() {
           )}
 
           {!isLoading && posts.length === 0 && (
-            <div className="py-20 text-center border border-dashed border-white/5 rounded-2xl">
-              <MessageSquare size={24} className="mx-auto mb-3 text-white/10" />
-              <p className="text-white/20 font-black uppercase tracking-widest text-xs">No posts yet — be first!</p>
+            <div className="py-20 text-center border border-dashed border-border rounded-2xl">
+              <MessageSquare size={24} className="mx-auto mb-3 text-subtle" />
+              <p className="text-subtle font-black uppercase tracking-widest text-xs">No posts yet — be first!</p>
             </div>
           )}
         </div>
 
         {/* Sidebar */}
         <div className="space-y-6">
-          <div className="p-5 rounded-2xl bg-white/[0.02] border border-white/8 space-y-4">
+          <div className="p-5 rounded-2xl bg-surface border border-border space-y-4">
             <div className="flex items-center gap-2">
-              <TrendingUp size={14} className="text-amber-400" />
-              <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40">Trending Tags</h3>
+              <TrendingUp size={14} className="text-accent-bright" />
+              <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-muted">Trending Tags</h3>
             </div>
             <div className="flex flex-wrap gap-2">
               {TRENDING_TAGS.map((tag, i) => (
                 <motion.span key={tag} initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: i * 0.04 }}
-                  className="px-3 py-1.5 rounded-full bg-white/5 border border-white/8 text-[10px] font-bold text-white/50 hover:text-amber-400 hover:border-amber-500/25 cursor-pointer transition-all">
+                  className="px-3 py-1.5 rounded-full bg-surface border border-border text-[10px] font-bold text-muted hover:text-accent-bright hover:border-accent/25 cursor-pointer transition-all">
                   #{tag}
                 </motion.span>
               ))}
             </div>
           </div>
 
-          <div className="p-5 rounded-2xl bg-white/[0.02] border border-white/8 space-y-4">
+          <div className="p-5 rounded-2xl bg-surface border border-border space-y-4">
             <div className="flex items-center gap-2">
-              <Vote size={14} className="text-amber-400" />
-              <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40">Active Polls</h3>
+              <Vote size={14} className="text-accent-bright" />
+              <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-muted">Active Polls</h3>
             </div>
             {ACTIVE_POLLS.map(poll => (
               <Link key={poll.id} href="/poll"
-                className="block p-4 rounded-xl bg-white/[0.02] border border-white/5 hover:border-amber-500/20 hover:bg-white/[0.04] transition-all group">
-                <p className="text-sm font-bold text-white/80 group-hover:text-white transition-colors">{poll.question}</p>
-                <p className="text-[10px] text-white/25 mt-1">{poll.votes.toLocaleString()} votes</p>
+                className="block p-4 rounded-xl bg-surface border border-border hover:border-accent/20 hover:bg-white/[0.04] transition-all group">
+                <p className="text-sm font-bold text-muted group-hover:text-foreground transition-colors">{poll.question}</p>
+                <p className="text-[10px] text-subtle mt-1">{poll.votes.toLocaleString()} votes</p>
                 <div className="flex flex-wrap gap-1 mt-2">
                   {poll.options.map(o => (
-                    <span key={o} className="text-[9px] px-2 py-0.5 rounded-full bg-amber-500/8 text-amber-400/60">{o}</span>
+                    <span key={o} className="text-[9px] px-2 py-0.5 rounded-full bg-accent/8 text-accent-bright/60">{o}</span>
                   ))}
                 </div>
               </Link>
@@ -600,10 +600,10 @@ export default function CommunityPage() {
           <WatchlistPreviewWidget />
           <TrendingWidget />
 
-          <div className="p-5 rounded-2xl bg-white/[0.02] border border-white/8 space-y-3">
+          <div className="p-5 rounded-2xl bg-surface border border-border space-y-3">
             <div className="flex items-center gap-2">
               <Flame size={14} className="text-orange-400" />
-              <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/40">Live Activity</h3>
+              <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-muted">Live Activity</h3>
             </div>
             {[
               { label: "Posts today",      value: posts.length > 0 ? `${posts.length}+` : "..." },
@@ -611,20 +611,20 @@ export default function CommunityPage() {
               { label: "Votes cast today", value: "3,201" },
             ].map(({ label, value }) => (
               <div key={label} className="flex items-center justify-between">
-                <span className="text-xs text-white/35">{label}</span>
-                <span className="text-sm font-black text-white">{value}</span>
+                <span className="text-xs text-subtle">{label}</span>
+                <span className="text-sm font-black text-foreground">{value}</span>
               </div>
             ))}
           </div>
 
           <Link href="/creators"
-            className="flex items-center gap-3 p-5 rounded-2xl bg-gradient-to-br from-indigo-600/15 to-violet-600/10 border border-amber-500/20 hover:from-indigo-600/20 transition-all group">
-            <div className="h-10 w-10 rounded-xl bg-amber-600/20 border border-amber-500/30 flex items-center justify-center shrink-0">
-              <Users size={16} className="text-amber-400" />
+            className="flex items-center gap-3 p-5 rounded-2xl bg-gradient-to-br from-indigo-600/15 to-violet-600/10 border border-accent/20 hover:from-indigo-600/20 transition-all group">
+            <div className="h-10 w-10 rounded-xl bg-accent/20 border border-accent/30 flex items-center justify-center shrink-0">
+              <Users size={16} className="text-accent-bright" />
             </div>
             <div>
-              <p className="text-sm font-bold text-white group-hover:text-amber-300 transition-colors">Creator Studio</p>
-              <p className="text-[10px] text-white/35 mt-0.5">Publish blogs, polls, and feeds</p>
+              <p className="text-sm font-bold text-foreground group-hover:text-accent-bright transition-colors">Creator Studio</p>
+              <p className="text-[10px] text-subtle mt-0.5">Publish blogs, polls, and feeds</p>
             </div>
           </Link>
         </div>

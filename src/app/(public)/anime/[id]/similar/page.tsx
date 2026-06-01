@@ -19,7 +19,7 @@ function mapDTO(a: AnimeDTO, i: number): Anime {
 /* ── Genre tag chip ── */
 function GenreChip({ genre }: { genre: string }) {
   return (
-    <span className="px-3 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/20 text-[10px] font-black uppercase tracking-widest text-amber-400">
+    <span className="px-3 py-1.5 rounded-full bg-accent/10 border border-accent/20 text-[10px] font-black uppercase tracking-widest text-accent-bright">
       {genre}
     </span>
   )
@@ -38,7 +38,7 @@ export default function SimilarAnimePage({
 
   const anime = allAnime.find(a => a.id === id)
   if (!isLoading && !anime) notFound()
-  if (isLoading || !anime) return <div className="min-h-screen bg-[#020202] flex items-center justify-center text-white/30 text-sm">Loading…</div>
+  if (isLoading || !anime) return <div className="min-h-screen bg-background flex items-center justify-center text-subtle text-sm">Loading…</div>
 
   // Find similar: shared genres, different id, rating >= 7.5, sorted by rating desc
   const similar = allAnime
@@ -53,30 +53,30 @@ export default function SimilarAnimePage({
     candidate.genres.filter(g => anime.genres.includes(g))
 
   return (
-    <div className="min-h-screen bg-[#020202] text-white pb-32">
+    <div className="min-h-screen bg-background text-foreground pb-32">
       <div className="max-w-6xl mx-auto px-6 pt-28 pb-10">
 
         {/* Breadcrumb */}
-        <nav className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-white/25 mb-8">
-          <Link href="/bestanimelist" className="hover:text-white/60 transition-colors">
+        <nav className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-subtle mb-8">
+          <Link href="/bestanimelist" className="hover:text-muted transition-colors">
             Anime Archive
           </Link>
-          <ChevronRight size={11} className="text-white/15" />
+          <ChevronRight size={11} className="text-subtle" />
           <Link
             href={`/anime/${anime.id}`}
-            className="hover:text-white/60 transition-colors truncate max-w-[200px]"
+            className="hover:text-muted transition-colors truncate max-w-[200px]"
           >
             {anime.title}
           </Link>
-          <ChevronRight size={11} className="text-white/15" />
-          <span className="text-amber-400">Similar Anime</span>
+          <ChevronRight size={11} className="text-subtle" />
+          <span className="text-accent-bright">Similar Anime</span>
         </nav>
 
         {/* Anime mini-header */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex items-center gap-5 p-5 rounded-2xl bg-white/[0.02] border border-white/8 mb-10"
+          className="flex items-center gap-5 p-5 rounded-2xl bg-surface border border-border mb-10"
         >
           <Link href={`/anime/${anime.id}`} className="relative h-20 w-14 rounded-xl overflow-hidden shrink-0 group">
             <Image
@@ -89,16 +89,16 @@ export default function SimilarAnimePage({
           </Link>
           <div className="flex-1 min-w-0">
             <Link href={`/anime/${anime.id}`}>
-              <h1 className="text-xl font-black uppercase italic tracking-tighter text-white hover:text-amber-300 transition-colors leading-tight truncate">
+              <h1 className="text-xl font-black uppercase italic tracking-tighter text-foreground hover:text-accent-bright transition-colors leading-tight truncate">
                 {anime.title}
               </h1>
             </Link>
-            <p className="text-[10px] text-white/30 mt-0.5 font-mono">{anime.titleJapanese}</p>
+            <p className="text-[10px] text-subtle mt-0.5 font-mono">{anime.titleJapanese}</p>
             <div className="flex flex-wrap gap-1.5 mt-2">
               {anime.genres.map(g => (
                 <span
                   key={g}
-                  className="px-2.5 py-0.5 rounded-full bg-white/5 border border-white/10 text-[9px] font-black uppercase tracking-wider text-white/40"
+                  className="px-2.5 py-0.5 rounded-full bg-surface border border-border text-[9px] font-black uppercase tracking-wider text-muted"
                 >
                   {g}
                 </span>
@@ -114,15 +114,15 @@ export default function SimilarAnimePage({
           transition={{ delay: 0.1 }}
           className="mb-8"
         >
-          <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-amber-400/60 mb-3">
+          <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-accent-bright/60 mb-3">
             Recommendations
           </p>
-          <h2 className="text-5xl font-black tracking-tighter uppercase italic text-white leading-none">
+          <h2 className="text-5xl font-black tracking-tighter uppercase italic text-foreground leading-none">
             Anime Similar to<br />
-            <span className="text-amber-400">{anime.title}</span>
+            <span className="text-accent-bright">{anime.title}</span>
             <span style={{color:"#f59e0b"}}>.</span>
           </h2>
-          <p className="text-white/35 text-sm mt-3">
+          <p className="text-subtle text-sm mt-3">
             {similar.length} titles matched · rated ≥ 7.5 · sorted by rating
           </p>
         </motion.div>
@@ -134,8 +134,8 @@ export default function SimilarAnimePage({
           transition={{ delay: 0.15 }}
           className="flex items-center gap-3 flex-wrap mb-10"
         >
-          <div className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-white/30">
-            <Layers size={13} className="text-amber-400" />
+          <div className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-subtle">
+            <Layers size={13} className="text-accent-bright" />
             Matching genres:
           </div>
           {anime.genres.map(g => (
@@ -156,7 +156,7 @@ export default function SimilarAnimePage({
                     {common.slice(0, 2).map(g => (
                       <span
                         key={g}
-                        className="px-2 py-0.5 rounded-full bg-amber-500/8 border border-amber-500/15 text-[8px] font-black uppercase tracking-wider text-amber-400/70"
+                        className="px-2 py-0.5 rounded-full bg-accent/8 border border-accent/15 text-[8px] font-black uppercase tracking-wider text-accent-bright/70"
                       >
                         {g}
                       </span>
@@ -168,10 +168,10 @@ export default function SimilarAnimePage({
           </div>
         ) : (
           <div className="py-24 text-center">
-            <p className="text-white/20 text-sm font-bold">No similar anime found with rating ≥ 7.5.</p>
+            <p className="text-subtle text-sm font-bold">No similar anime found with rating ≥ 7.5.</p>
             <Link
               href="/bestanimelist"
-              className="inline-flex items-center gap-2 mt-4 px-5 py-3 rounded-2xl bg-amber-600/15 border border-amber-500/20 text-[11px] font-black uppercase tracking-widest text-amber-400 hover:bg-amber-600/25 transition-all"
+              className="inline-flex items-center gap-2 mt-4 px-5 py-3 rounded-2xl bg-accent/15 border border-accent/20 text-[11px] font-black uppercase tracking-widest text-accent-bright hover:bg-accent/25 transition-all"
             >
               Browse All Anime <ChevronRight size={12} />
             </Link>

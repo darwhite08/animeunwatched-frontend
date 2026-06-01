@@ -19,7 +19,7 @@ export const ReadCard = ({ manga }: { manga: any }) => {
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.95 }}
       whileHover={{ y: -12 }}
-      className="group relative rounded-[2.8rem] border border-white/5 bg-[#080808] overflow-hidden transition-all duration-700 hover:border-amber-500/40 hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.8)]"
+      className="group relative rounded-[2.8rem] border border-border bg-[#080808] overflow-hidden transition-all duration-700 hover:border-accent/40 hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.8)]"
     >
       {/* COVER IMAGE WITH DYNAMIC OVERLAY */}
       <div className="relative h-80 w-full overflow-hidden">
@@ -36,14 +36,14 @@ export const ReadCard = ({ manga }: { manga: any }) => {
         
         {/* Top Badges */}
         <div className="absolute top-6 inset-x-6 flex justify-between items-center z-20">
-          <div className="px-3 py-1 rounded-full bg-black/60 backdrop-blur-xl border border-white/10 text-[9px] font-black uppercase tracking-[0.2em] text-amber-400">
+          <div className="px-3 py-1 rounded-full bg-black/60 backdrop-blur-xl border border-border text-[9px] font-black uppercase tracking-[0.2em] text-accent-bright">
             {category || "Archives"}
           </div>
           <button
             type="button"
             onClick={soon}
             aria-label="Manga options (coming soon)"
-            className="p-2 bg-black/40 backdrop-blur-md rounded-xl border border-white/10 text-white/20 hover:text-white transition-all"
+            className="p-2 bg-black/40 backdrop-blur-md rounded-xl border border-border text-subtle hover:text-foreground transition-all"
           >
             <MoreVertical size={16} />
           </button>
@@ -51,7 +51,7 @@ export const ReadCard = ({ manga }: { manga: any }) => {
 
         {/* Floating Play Icon on Hover */}
         <div className="absolute inset-0 z-20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-4 group-hover:translate-y-0">
-          <div className="h-16 w-16 rounded-full bg-amber-500 flex items-center justify-center text-black shadow-[0_0_30px_rgba(79,70,229,0.5)]">
+          <div className="h-16 w-16 rounded-full bg-accent flex items-center justify-center text-black shadow-[0_0_30px_rgba(79,70,229,0.5)]">
             <BookOpen size={24} />
           </div>
         </div>
@@ -63,19 +63,19 @@ export const ReadCard = ({ manga }: { manga: any }) => {
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-px bg-gradient-to-r from-transparent via-indigo-500/20 to-transparent" />
 
         <div className="space-y-1">
-          <h3 className="text-2xl font-black text-white tracking-tighter leading-tight group-hover:text-amber-400 transition-colors">
+          <h3 className="text-2xl font-black text-foreground tracking-tighter leading-tight group-hover:text-accent-bright transition-colors">
             {title}
           </h3>
-          <p className="text-[11px] font-bold text-white/20 uppercase tracking-[0.2em]">{author}</p>
+          <p className="text-[11px] font-bold text-subtle uppercase tracking-[0.2em]">{author}</p>
         </div>
 
         {/* PROGRESS SYSTEM */}
         <div className="space-y-3">
           <div className="flex justify-between text-[10px] font-black uppercase tracking-[0.3em]">
-            <span className="text-white/40 italic">{status}</span>
-            <span className="text-white">{progress}% Complete</span>
+            <span className="text-muted italic">{status}</span>
+            <span className="text-foreground">{progress}% Complete</span>
           </div>
-          <div className="h-2 w-full bg-white/5 rounded-full overflow-hidden p-[2px] border border-white/5">
+          <div className="h-2 w-full bg-surface rounded-full overflow-hidden p-[2px] border border-border">
             <motion.div 
               initial={{ width: 0 }}
               whileInView={{ width: `${progress}%` }}
@@ -89,7 +89,7 @@ export const ReadCard = ({ manga }: { manga: any }) => {
         <button
           type="button"
           onClick={soon}
-          className="w-full py-5 rounded-2xl bg-white/5 border border-white/10 text-[10px] font-black uppercase tracking-[0.3em] text-white/60 hover:bg-white hover:text-black hover:border-white transition-all flex items-center justify-center gap-3"
+          className="w-full py-5 rounded-2xl bg-surface border border-border text-[10px] font-black uppercase tracking-[0.3em] text-muted hover:bg-white hover:text-black hover:border-white transition-all flex items-center justify-center gap-3"
         >
           <Play size={14} fill="currentColor" /> Resume Chapter
         </button>

@@ -37,22 +37,22 @@ const GENRES = [
   { name: "Sci-Fi",       gradient: "from-cyan-900/40 to-cyan-950/10",      border: "border-cyan-900/30",     accent: "text-cyan-400",     emoji: "🚀" },
   { name: "Slice of Life",gradient: "from-teal-900/40 to-teal-950/10",      border: "border-teal-900/30",     accent: "text-teal-400",     emoji: "🌿" },
   { name: "Sports",       gradient: "from-lime-900/40 to-lime-950/10",      border: "border-lime-900/30",     accent: "text-lime-400",     emoji: "🏆" },
-  { name: "Supernatural", gradient: "from-indigo-900/40 to-indigo-950/10",  border: "border-indigo-900/30",   accent: "text-amber-400",   emoji: "👁️" },
+  { name: "Supernatural", gradient: "from-indigo-900/40 to-indigo-950/10",  border: "border-indigo-900/30",   accent: "text-accent-bright",   emoji: "👁️" },
   { name: "Suspense",     gradient: "from-zinc-900/40 to-zinc-950/10",      border: "border-zinc-800/30",     accent: "text-zinc-300",     emoji: "🔪" },
   { name: "Ecchi",        gradient: "from-red-800/40 to-pink-950/10",       border: "border-red-800/30",      accent: "text-red-300",      emoji: "🔞" },
   { name: "Mecha",        gradient: "from-blue-900/40 to-blue-950/10",      border: "border-blue-900/30",     accent: "text-blue-400",     emoji: "🤖" },
   { name: "Military",     gradient: "from-stone-900/40 to-stone-950/10",    border: "border-stone-800/30",    accent: "text-stone-400",    emoji: "🎖️" },
   { name: "Music",        gradient: "from-purple-900/40 to-purple-950/10",  border: "border-purple-900/30",   accent: "text-purple-400",   emoji: "🎵" },
-  { name: "Parody",       gradient: "from-amber-800/40 to-amber-950/10",    border: "border-amber-800/30",    accent: "text-amber-300",    emoji: "🤡" },
+  { name: "Parody",       gradient: "from-amber-800/40 to-amber-950/10",    border: "border-amber-800/30",    accent: "text-accent-bright",    emoji: "🤡" },
   { name: "Psychological",gradient: "from-purple-950/50 to-zinc-950/30",    border: "border-purple-900/30",   accent: "text-purple-300",   emoji: "🧠" },
   { name: "Racing",       gradient: "from-red-800/40 to-orange-950/10",     border: "border-red-800/30",      accent: "text-orange-300",   emoji: "🏎️" },
   { name: "School",       gradient: "from-sky-900/40 to-sky-950/10",        border: "border-sky-900/30",      accent: "text-sky-400",      emoji: "🏫" },
   { name: "Seinen",       gradient: "from-blue-900/40 to-blue-950/10",      border: "border-blue-900/30",     accent: "text-blue-400",     emoji: "📖" },
   { name: "Shoujo",       gradient: "from-pink-900/40 to-rose-950/10",      border: "border-pink-900/30",     accent: "text-pink-400",     emoji: "🌷" },
   { name: "Shounen",      gradient: "from-orange-900/40 to-orange-950/10",  border: "border-orange-900/30",   accent: "text-orange-400",   emoji: "🔥" },
-  { name: "Space",        gradient: "from-indigo-950/50 to-blue-950/20",    border: "border-indigo-900/30",   accent: "text-amber-300",   emoji: "🌌" },
+  { name: "Space",        gradient: "from-indigo-950/50 to-blue-950/20",    border: "border-indigo-900/30",   accent: "text-accent-bright",   emoji: "🌌" },
   { name: "Vampire",      gradient: "from-red-900/50 to-zinc-950/30",       border: "border-red-900/30",      accent: "text-red-400",      emoji: "🧛" },
-  { name: "Historical",   gradient: "from-amber-900/40 to-amber-950/10",    border: "border-amber-900/30",    accent: "text-amber-400",    emoji: "🏯" },
+  { name: "Historical",   gradient: "from-amber-900/40 to-amber-950/10",    border: "border-amber-900/30",    accent: "text-accent-bright",    emoji: "🏯" },
 ] as const
 
 type GenreName = typeof GENRES[number]["name"]
@@ -68,13 +68,13 @@ function GenrePanel({ genre, onAnimeClick }: { genre: GenreName; onAnimeClick: (
   const g = GENRES.find(x => x.name === genre)!
 
   return (
-    <div className="mt-4 p-6 rounded-2xl bg-white/[0.02] border border-white/5">
+    <div className="mt-4 p-6 rounded-2xl bg-surface border border-border">
       <div className="flex items-center justify-between mb-6">
         <h3 className={`text-2xl font-black uppercase italic tracking-tight ${g.accent}`}>
           {g.emoji} {genre}
         </h3>
         {!isLoading && (
-          <span className="text-[10px] font-black text-white/25 uppercase tracking-widest">
+          <span className="text-[10px] font-black text-subtle uppercase tracking-widest">
             {totalAnime.toLocaleString()} titles
           </span>
         )}
@@ -82,12 +82,12 @@ function GenrePanel({ genre, onAnimeClick }: { genre: GenreName; onAnimeClick: (
 
       {isLoading && (
         <div className="flex items-center justify-center py-16">
-          <Loader2 size={24} className="animate-spin text-amber-400" />
+          <Loader2 size={24} className="animate-spin text-accent-bright" />
         </div>
       )}
 
       {isError && !isLoading && (
-        <p className="text-white/20 text-xs font-black uppercase tracking-widest py-10 text-center">
+        <p className="text-subtle text-xs font-black uppercase tracking-widest py-10 text-center">
           Failed to load {genre} anime
         </p>
       )}
@@ -103,14 +103,14 @@ function GenrePanel({ genre, onAnimeClick }: { genre: GenreName; onAnimeClick: (
           {totalPages > 1 && (
             <div className="flex items-center justify-center gap-2 pt-6 flex-wrap">
               <button onClick={() => setPage(p => Math.max(1, p - 1))} disabled={page === 1}
-                className="p-2 rounded-xl bg-white/5 border border-white/10 text-white/40 hover:text-white disabled:opacity-20 disabled:cursor-not-allowed transition-all">
+                className="p-2 rounded-xl bg-surface border border-border text-muted hover:text-foreground disabled:opacity-20 disabled:cursor-not-allowed transition-all">
                 <ChevronLeft size={14} />
               </button>
-              <span className="text-xs font-black text-white/40 px-3">
+              <span className="text-xs font-black text-muted px-3">
                 {page} / {totalPages}
               </span>
               <button onClick={() => setPage(p => Math.min(totalPages, p + 1))} disabled={page >= totalPages}
-                className="p-2 rounded-xl bg-white/5 border border-white/10 text-white/40 hover:text-white disabled:opacity-20 disabled:cursor-not-allowed transition-all">
+                className="p-2 rounded-xl bg-surface border border-border text-muted hover:text-foreground disabled:opacity-20 disabled:cursor-not-allowed transition-all">
                 <ChevronRight size={14} />
               </button>
             </div>
@@ -119,7 +119,7 @@ function GenrePanel({ genre, onAnimeClick }: { genre: GenreName; onAnimeClick: (
       )}
 
       {!isLoading && !isError && anime.length === 0 && (
-        <p className="text-white/20 font-black uppercase text-xs tracking-widest py-10 text-center">
+        <p className="text-subtle font-black uppercase text-xs tracking-widest py-10 text-center">
           No {genre} anime found
         </p>
       )}
@@ -136,22 +136,22 @@ export default function GenresPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#020202] pb-40">
+    <div className="min-h-screen bg-background pb-40">
       {/* Header */}
       <div className="max-w-7xl mx-auto px-6 pt-32 pb-14">
         <motion.p initial={{ opacity: 0, x: -16 }} animate={{ opacity: 1, x: 0 }}
-          className="flex items-center gap-2 text-amber-400 font-black uppercase tracking-[0.4em] text-[10px] mb-4"
+          className="flex items-center gap-2 text-accent-bright font-black uppercase tracking-[0.4em] text-[10px] mb-4"
         >
           <Layers size={13} /> Browse By Category
         </motion.p>
         <motion.h1 initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }}
-          className="text-6xl md:text-8xl font-black tracking-tighter text-white italic leading-none"
+          className="text-6xl md:text-8xl font-black tracking-tighter text-foreground italic leading-none"
         >
           Genre<span style={{color:"#f59e0b"}}>.</span>
-          <br /><span className="text-white/20">Explorer</span>
+          <br /><span className="text-subtle">Explorer</span>
         </motion.h1>
         <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.1 }}
-          className="mt-4 text-white/30 text-sm font-medium"
+          className="mt-4 text-subtle text-sm font-medium"
         >
           {GENRES.length} genres · click any to explore
         </motion.p>
@@ -175,11 +175,11 @@ export default function GenresPage() {
                     <h2 className={`text-xl font-black uppercase italic tracking-tight ${g.accent}`}>
                       {g.name}
                     </h2>
-                    <p className="text-[9px] font-black text-white/25 uppercase tracking-widest mt-1">
+                    <p className="text-[9px] font-black text-subtle uppercase tracking-widest mt-1">
                       Explore {g.name} →
                     </p>
                     <motion.div animate={{ rotate: isOpen ? 180 : 0 }} transition={{ duration: 0.25 }}
-                      className="absolute top-4 right-4 text-white/20"
+                      className="absolute top-4 right-4 text-subtle"
                     >
                       <ChevronDown size={16} />
                     </motion.div>

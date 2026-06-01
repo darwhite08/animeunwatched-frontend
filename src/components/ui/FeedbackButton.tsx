@@ -11,9 +11,9 @@ type FeedbackType = "bug" | "suggestion" | "love" | "other"
 
 const TYPE_CONFIG: Record<FeedbackType, { label: string; emoji: string; color: string }> = {
   bug:        { label: "Bug Report",   emoji: "🐛", color: "text-red-400" },
-  suggestion: { label: "Suggestion",   emoji: "💡", color: "text-amber-400" },
+  suggestion: { label: "Suggestion",   emoji: "💡", color: "text-accent-bright" },
   love:       { label: "Compliment",   emoji: "❤️", color: "text-pink-400" },
-  other:      { label: "Other",        emoji: "💬", color: "text-white/50" },
+  other:      { label: "Other",        emoji: "💬", color: "text-muted" },
 }
 
 export default function FeedbackButton() {
@@ -79,14 +79,14 @@ export default function FeedbackButton() {
               initial={{ scale: 0.95, y: 30 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.95, y: 30 }}
-              className="w-full max-w-sm bg-[#0f0f0f] border border-white/10 rounded-[2rem] p-6 space-y-5"
+              className="w-full max-w-sm bg-[#0f0f0f] border border-border rounded-[2rem] p-6 space-y-5"
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
-                  <MessageSquarePlus size={14} className="text-amber-400" />
-                  <h2 className="text-sm font-black uppercase tracking-[0.2em] text-white">Send Feedback</h2>
+                  <MessageSquarePlus size={14} className="text-accent-bright" />
+                  <h2 className="text-sm font-black uppercase tracking-[0.2em] text-foreground">Send Feedback</h2>
                 </div>
-                <button onClick={() => setOpen(false)} className="text-white/30 hover:text-white transition-colors">
+                <button onClick={() => setOpen(false)} className="text-subtle hover:text-foreground transition-colors">
                   <X size={16} />
                 </button>
               </div>
@@ -97,10 +97,10 @@ export default function FeedbackButton() {
                   <button
                     key={key}
                     onClick={() => setType(key)}
-                    className={`py-2.5 rounded-xl text-center space-y-1 transition-all border ${type === key ? "bg-amber-500/10 border-amber-500/30" : "bg-white/[0.02] border-white/5 hover:border-white/10"}`}
+                    className={`py-2.5 rounded-xl text-center space-y-1 transition-all border ${type === key ? "bg-accent/10 border-accent/30" : "bg-surface border-border hover:border-border"}`}
                   >
                     <div className="text-base">{cfg.emoji}</div>
-                    <div className={`text-[8px] font-black uppercase tracking-widest leading-tight ${type === key ? "text-amber-400" : "text-white/30"}`}>{cfg.label}</div>
+                    <div className={`text-[8px] font-black uppercase tracking-widest leading-tight ${type === key ? "text-accent-bright" : "text-subtle"}`}>{cfg.label}</div>
                   </button>
                 ))}
               </div>
@@ -108,10 +108,10 @@ export default function FeedbackButton() {
               {/* Rating (for love/suggestion types) */}
               {(type === "love" || type === "suggestion") && (
                 <div className="flex items-center gap-1.5">
-                  <span className="text-[9px] font-black uppercase tracking-widest text-white/25 mr-1">Rate:</span>
+                  <span className="text-[9px] font-black uppercase tracking-widest text-subtle mr-1">Rate:</span>
                   {[1,2,3,4,5].map(n => (
                     <button key={n} onMouseEnter={() => setHoverRating(n)} onMouseLeave={() => setHoverRating(0)} onClick={() => setRating(n)}>
-                      <Star size={16} className={`transition-colors ${n <= (hoverRating || rating) ? "text-amber-400 fill-amber-400" : "text-white/20"}`} />
+                      <Star size={16} className={`transition-colors ${n <= (hoverRating || rating) ? "text-accent-bright fill-amber-400" : "text-subtle"}`} />
                     </button>
                   ))}
                 </div>
@@ -124,11 +124,11 @@ export default function FeedbackButton() {
                 placeholder={type === "bug" ? "Describe what broke and how to reproduce it…" : type === "suggestion" ? "What would make Kaiveron better?" : type === "love" ? "What do you love about Kaiveron?" : "What's on your mind?"}
                 rows={4}
                 maxLength={1000}
-                className="w-full px-4 py-3 rounded-xl bg-white/[0.03] border border-white/8 text-sm text-white placeholder:text-white/20 focus:outline-none focus:border-amber-500/30 resize-none transition-all"
+                className="w-full px-4 py-3 rounded-xl bg-surface border border-border text-sm text-foreground placeholder:text-subtle focus:outline-none focus:border-accent/30 resize-none transition-all"
               />
 
               <div className="flex items-center justify-between">
-                <span className="text-[9px] text-white/20">{text.length}/1000</span>
+                <span className="text-[9px] text-subtle">{text.length}/1000</span>
                 <button
                   onClick={handleSubmit}
                   disabled={sending || !text.trim()}

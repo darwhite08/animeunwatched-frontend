@@ -78,7 +78,7 @@ const SORTS: { id: Sort; label: string }[] = [
 /* ── Avatar colours ── */
 const AVATAR_COLORS = [
   "from-indigo-500 to-violet-600",
-  "from-amber-500 to-orange-600",
+  "from-accent to-orange-600",
   "from-emerald-500 to-teal-600",
   "from-rose-500 to-pink-600",
   "from-sky-500 to-blue-600",
@@ -92,7 +92,7 @@ export default function AnimeReviewsPage({ params }: { params: Promise<{ id: str
   const allAnime = (browseData?.data ?? []).map(mapDTO)
   const anime = allAnime.find(a => a.id === id)
   if (!isLoading && !anime) notFound()
-  if (isLoading || !anime) return <div className="min-h-screen bg-[#020202] flex items-center justify-center text-white/30 text-sm">Loading…</div>
+  if (isLoading || !anime) return <div className="min-h-screen bg-background flex items-center justify-center text-subtle text-sm">Loading…</div>
 
   const { push } = useToast()
   const [sort, setSort] = useState<Sort>("helpful")
@@ -124,52 +124,52 @@ export default function AnimeReviewsPage({ params }: { params: Promise<{ id: str
   }
 
   const scoreColor = (s: number) =>
-    s >= 9 ? "text-emerald-400" : s >= 7 ? "text-amber-400" : "text-rose-400"
+    s >= 9 ? "text-emerald-400" : s >= 7 ? "text-accent-bright" : "text-rose-400"
 
   return (
-    <div className="min-h-screen bg-[#020202] text-white pb-32">
+    <div className="min-h-screen bg-background text-foreground pb-32">
       <div className="max-w-4xl mx-auto px-6 pt-28 pb-10">
 
         {/* Breadcrumb */}
-        <nav className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-white/25 mb-8">
-          <Link href="/bestanimelist" className="hover:text-white/60 transition-colors">Anime Archive</Link>
-          <ChevronRight size={11} className="text-white/15" />
-          <Link href={`/anime/${anime.id}`} className="hover:text-white/60 transition-colors truncate max-w-[180px]">
+        <nav className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-subtle mb-8">
+          <Link href="/bestanimelist" className="hover:text-muted transition-colors">Anime Archive</Link>
+          <ChevronRight size={11} className="text-subtle" />
+          <Link href={`/anime/${anime.id}`} className="hover:text-muted transition-colors truncate max-w-[180px]">
             {anime.title}
           </Link>
-          <ChevronRight size={11} className="text-white/15" />
-          <span className="text-amber-400">Reviews</span>
+          <ChevronRight size={11} className="text-subtle" />
+          <span className="text-accent-bright">Reviews</span>
         </nav>
 
         {/* Anime mini header */}
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          className="flex items-center gap-5 p-5 rounded-2xl bg-white/[0.02] border border-white/8 mb-10"
+          className="flex items-center gap-5 p-5 rounded-2xl bg-surface border border-border mb-10"
         >
           <Link href={`/anime/${anime.id}`} className="relative h-20 w-14 rounded-xl overflow-hidden shrink-0 group">
             <Image src={anime.image} alt={anime.title} fill className="object-cover group-hover:scale-105 transition-transform duration-300" sizes="56px" />
           </Link>
           <div className="flex-1 min-w-0">
             <Link href={`/anime/${anime.id}`}>
-              <h1 className="text-xl font-black uppercase italic tracking-tighter text-white hover:text-amber-300 transition-colors leading-tight truncate">
+              <h1 className="text-xl font-black uppercase italic tracking-tighter text-foreground hover:text-accent-bright transition-colors leading-tight truncate">
                 {anime.title}
               </h1>
             </Link>
-            <p className="text-[10px] text-white/30 mt-0.5 font-mono">{anime.titleJapanese}</p>
+            <p className="text-[10px] text-subtle mt-0.5 font-mono">{anime.titleJapanese}</p>
             <div className="flex items-center gap-3 mt-2">
-              <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20">
-                <Star size={11} fill="#f59e0b" className="text-amber-400" />
-                <span className="text-xs font-black text-amber-400">{anime.rating.toFixed(1)}</span>
+              <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-accent/10 border border-accent/20">
+                <Star size={11} fill="#f59e0b" className="text-accent-bright" />
+                <span className="text-xs font-black text-accent-bright">{anime.rating.toFixed(1)}</span>
               </div>
-              <span className="text-[10px] text-white/30">{anime.studio} · {anime.year}</span>
+              <span className="text-[10px] text-subtle">{anime.studio} · {anime.year}</span>
             </div>
           </div>
 
           {/* Write review CTA */}
           <Link
             href="/rate"
-            className="flex items-center gap-2 px-4 py-3 rounded-2xl bg-amber-500 hover:bg-amber-400 text-[10px] font-black uppercase tracking-widest text-white transition-all shrink-0 shadow-[0_0_20px_rgba(99,102,241,0.3)]"
+            className="flex items-center gap-2 px-4 py-3 rounded-2xl bg-accent hover:bg-accent-bright text-[10px] font-black uppercase tracking-widest text-foreground transition-all shrink-0 shadow-[0_0_20px_rgba(99,102,241,0.3)]"
           >
             <PenSquare size={12} /> Write a Review
           </Link>
@@ -178,22 +178,22 @@ export default function AnimeReviewsPage({ params }: { params: Promise<{ id: str
         {/* Section heading + sort */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
           <div>
-            <h2 className="text-3xl font-black uppercase italic tracking-tighter text-white leading-none">
+            <h2 className="text-3xl font-black uppercase italic tracking-tighter text-foreground leading-none">
               Reviews<span style={{color:"#f59e0b"}}>.</span>
             </h2>
-            <p className="text-white/25 text-xs mt-1">{reviews.length} reviews · Page 1 of 3</p>
+            <p className="text-subtle text-xs mt-1">{reviews.length} reviews · Page 1 of 3</p>
           </div>
 
           <div className="flex items-center gap-2 flex-wrap">
-            <Filter size={12} className="text-white/20" />
+            <Filter size={12} className="text-subtle" />
             {SORTS.map(s => (
               <button
                 key={s.id}
                 onClick={() => setSort(s.id)}
                 className={`px-3 py-1.5 rounded-full text-[9px] font-black uppercase tracking-wider transition-all ${
                   sort === s.id
-                    ? "bg-amber-500 text-black"
-                    : "bg-white/5 text-white/35 hover:bg-white/8 border border-white/5"
+                    ? "bg-accent text-black"
+                    : "bg-surface text-subtle hover:bg-surface border border-border"
                 }`}
               >
                 {s.label}
@@ -216,17 +216,17 @@ export default function AnimeReviewsPage({ params }: { params: Promise<{ id: str
                   initial={{ opacity: 0, y: 12 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.04 }}
-                  className="p-6 rounded-2xl bg-white/[0.02] border border-white/8 hover:border-white/15 transition-colors space-y-4"
+                  className="p-6 rounded-2xl bg-surface border border-border hover:border-border transition-colors space-y-4"
                 >
                   {/* Author row */}
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-3">
-                      <div className={`h-9 w-9 rounded-xl bg-gradient-to-br ${AVATAR_COLORS[i % AVATAR_COLORS.length]} flex items-center justify-center text-sm font-black text-white shrink-0`}>
+                      <div className={`h-9 w-9 rounded-xl bg-gradient-to-br ${AVATAR_COLORS[i % AVATAR_COLORS.length]} flex items-center justify-center text-sm font-black text-foreground shrink-0`}>
                         {r.avatar}
                       </div>
                       <div>
-                        <p className="text-sm font-black text-white">{r.author}</p>
-                        <p className="text-[9px] text-white/25 mt-0.5">{r.date}</p>
+                        <p className="text-sm font-black text-foreground">{r.author}</p>
+                        <p className="text-[9px] text-subtle mt-0.5">{r.date}</p>
                       </div>
                     </div>
 
@@ -238,14 +238,14 @@ export default function AnimeReviewsPage({ params }: { params: Promise<{ id: str
                             key={star}
                             size={11}
                             fill={star <= Math.round(r.score / 2) ? "#f59e0b" : "none"}
-                            className={star <= Math.round(r.score / 2) ? "text-amber-400" : "text-white/15"}
+                            className={star <= Math.round(r.score / 2) ? "text-accent-bright" : "text-subtle"}
                           />
                         ))}
                       </div>
                       <span className={`text-sm font-black ${scoreColor(r.score)}`}>{r.score}</span>
-                      <span className="text-[10px] text-white/25">/10</span>
+                      <span className="text-[10px] text-subtle">/10</span>
                       {r.hasSpoilers && (
-                        <span className="ml-1 text-[8px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded-full bg-amber-500/15 text-amber-400 border border-amber-500/20">
+                        <span className="ml-1 text-[8px] font-black uppercase tracking-wider px-1.5 py-0.5 rounded-full bg-accent/15 text-accent-bright border border-accent/20">
                           Spoilers
                         </span>
                       )}
@@ -256,17 +256,17 @@ export default function AnimeReviewsPage({ params }: { params: Promise<{ id: str
                   <div>
                     {r.hasSpoilers && !isRevealed ? (
                       <div className="relative">
-                        <p className="text-sm text-white/40 leading-relaxed blur-[4px] select-none line-clamp-3">{r.body}</p>
+                        <p className="text-sm text-muted leading-relaxed blur-[4px] select-none line-clamp-3">{r.body}</p>
                         <button
                           onClick={() => setRevealed(s => new Set([...s, r.id]))}
-                          className="absolute inset-0 flex items-center justify-center gap-2 bg-black/20 rounded-xl text-xs font-black uppercase tracking-widest text-amber-400 hover:text-amber-300 transition-colors"
+                          className="absolute inset-0 flex items-center justify-center gap-2 bg-black/20 rounded-xl text-xs font-black uppercase tracking-widest text-accent-bright hover:text-accent-bright transition-colors"
                         >
                           <EyeOff size={13} /> Reveal Spoilers
                         </button>
                       </div>
                     ) : (
                       <div>
-                        <p className="text-sm text-white/60 leading-relaxed">
+                        <p className="text-sm text-muted leading-relaxed">
                           {isExpanded || r.body.length <= TRUNCATE
                             ? r.body
                             : r.body.slice(0, TRUNCATE) + "…"}
@@ -280,7 +280,7 @@ export default function AnimeReviewsPage({ params }: { params: Promise<{ id: str
                                 return n
                               })
                             }
-                            className="text-[10px] font-black text-amber-400 hover:text-amber-300 mt-1.5 transition-colors"
+                            className="text-[10px] font-black text-accent-bright hover:text-accent-bright mt-1.5 transition-colors"
                           >
                             {isExpanded ? "Show less" : "Read more"}
                           </button>
@@ -290,11 +290,11 @@ export default function AnimeReviewsPage({ params }: { params: Promise<{ id: str
                   </div>
 
                   {/* Footer */}
-                  <div className="flex items-center justify-between pt-2 border-t border-white/5">
+                  <div className="flex items-center justify-between pt-2 border-t border-border">
                     <button
                       onClick={() => toggleHelp(r.id)}
                       className={`flex items-center gap-1.5 text-[10px] font-black transition-colors ${
-                        r.helpedByMe ? "text-emerald-400" : "text-white/25 hover:text-white/50"
+                        r.helpedByMe ? "text-emerald-400" : "text-subtle hover:text-muted"
                       }`}
                     >
                       <ThumbsUp size={12} fill={r.helpedByMe ? "currentColor" : "none"} />
@@ -302,7 +302,7 @@ export default function AnimeReviewsPage({ params }: { params: Promise<{ id: str
                     </button>
                     <Link
                       href={`/u/${r.author}`}
-                      className="text-[9px] font-black uppercase tracking-widest text-white/20 hover:text-white/50 transition-colors"
+                      className="text-[9px] font-black uppercase tracking-widest text-subtle hover:text-muted transition-colors"
                     >
                       View Profile →
                     </Link>
@@ -313,14 +313,14 @@ export default function AnimeReviewsPage({ params }: { params: Promise<{ id: str
           </AnimatePresence>
         </div>
 
-        <p className="text-center text-[9px] text-white/15 mt-10 font-mono">{reviews.length} {reviews.length === 1 ? "review" : "reviews"} shown</p>
+        <p className="text-center text-[9px] text-subtle mt-10 font-mono">{reviews.length} {reviews.length === 1 ? "review" : "reviews"} shown</p>
 
         {/* Write review CTA footer */}
         <div className="mt-12 flex flex-col items-center gap-3 text-center">
-          <p className="text-white/30 text-sm">Watched this anime? Share your take.</p>
+          <p className="text-subtle text-sm">Watched this anime? Share your take.</p>
           <Link
             href="/rate"
-            className="flex items-center gap-2.5 px-7 py-3.5 rounded-2xl bg-amber-500 hover:bg-amber-400 text-xs font-black uppercase tracking-widest text-white transition-all shadow-[0_0_24px_rgba(99,102,241,0.3)]"
+            className="flex items-center gap-2.5 px-7 py-3.5 rounded-2xl bg-accent hover:bg-accent-bright text-xs font-black uppercase tracking-widest text-foreground transition-all shadow-[0_0_24px_rgba(99,102,241,0.3)]"
           >
             <PenSquare size={14} /> Write a Review
           </Link>

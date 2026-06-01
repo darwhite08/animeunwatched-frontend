@@ -56,28 +56,28 @@ My only minor criticism is that the middle section has a few episodes that feel 
     setHelpCount(c => liked ? c - 1 : c + 1)
   }
 
-  if (isLoading) return <div className="min-h-screen bg-[#020202] text-white flex items-center justify-center text-white/30">Loading…</div>
+  if (isLoading) return <div className="min-h-screen bg-background text-foreground flex items-center justify-center text-subtle">Loading…</div>
 
   return (
-    <div className="min-h-screen bg-[#020202] text-white pb-32">
+    <div className="min-h-screen bg-background text-foreground pb-32">
       <div className="max-w-3xl mx-auto px-6 pt-32 space-y-8">
         {/* Breadcrumb */}
-        <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-white/30">
-          <Link href={`/anime/${id}`} className="hover:text-white transition-colors">{anime?.title ?? id}</Link>
+        <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-subtle">
+          <Link href={`/anime/${id}`} className="hover:text-foreground transition-colors">{anime?.title ?? id}</Link>
           <span>·</span>
-          <Link href={`/anime/${id}/reviews`} className="hover:text-white transition-colors">Reviews</Link>
+          <Link href={`/anime/${id}/reviews`} className="hover:text-foreground transition-colors">Reviews</Link>
           <span>·</span>
-          <span className="text-white/60">#{reviewId}</span>
+          <span className="text-muted">#{reviewId}</span>
         </div>
 
         {/* Anime mini header */}
-        <div className="flex items-center gap-4 p-5 rounded-2xl bg-white/[0.02] border border-white/8">
+        <div className="flex items-center gap-4 p-5 rounded-2xl bg-surface border border-border">
           <div className="relative h-14 w-10 rounded-xl overflow-hidden shrink-0">
             <Image src={anime?.image ?? ""} alt={anime?.title ?? ""} fill className="object-cover" sizes="40px" />
           </div>
           <div>
-            <Link href={`/anime/${id}`} className="font-black text-white hover:text-amber-300 transition-colors">{anime?.title ?? id}</Link>
-            <p className="text-[10px] text-white/35 mt-0.5">{anime?.studio} · {anime?.year}</p>
+            <Link href={`/anime/${id}`} className="font-black text-foreground hover:text-accent-bright transition-colors">{anime?.title ?? id}</Link>
+            <p className="text-[10px] text-subtle mt-0.5">{anime?.studio} · {anime?.year}</p>
           </div>
         </div>
 
@@ -90,20 +90,20 @@ My only minor criticism is that the middle section has a few episodes that feel 
                 {review.author[0]}
               </Link>
               <div>
-                <Link href={`/u/${review.author}`} className="font-black text-white hover:text-amber-300 transition-colors">{review.author}</Link>
-                <p className="text-[10px] text-white/30 mt-0.5">{review.date}</p>
+                <Link href={`/u/${review.author}`} className="font-black text-foreground hover:text-accent-bright transition-colors">{review.author}</Link>
+                <p className="text-[10px] text-subtle mt-0.5">{review.date}</p>
               </div>
             </div>
-            <div className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-amber-500/10 border border-amber-500/20">
-              <Star size={16} fill="#f59e0b" className="text-amber-400" />
-              <span className="text-xl font-black text-amber-400">{review.score}</span>
-              <span className="text-white/30 text-sm">/10</span>
+            <div className="flex items-center gap-2 px-4 py-2 rounded-2xl bg-accent/10 border border-accent/20">
+              <Star size={16} fill="#f59e0b" className="text-accent-bright" />
+              <span className="text-xl font-black text-accent-bright">{review.score}</span>
+              <span className="text-subtle text-sm">/10</span>
             </div>
           </div>
 
           {/* Spoiler badge */}
           {review.hasSpoilers && (
-            <div className="flex items-center gap-2 p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-xs font-bold text-amber-400">
+            <div className="flex items-center gap-2 p-3 rounded-xl bg-accent/10 border border-accent/20 text-xs font-bold text-accent-bright">
               ⚠️ This review contains spoilers
             </div>
           )}
@@ -112,7 +112,7 @@ My only minor criticism is that the middle section has a few episodes that feel 
           <div className="prose prose-invert max-w-none">
             {review.body.split("\n\n").map((para, i) => (
               <motion.p key={i} initial={{ opacity:0, y:8 }} animate={{ opacity:1, y:0 }} transition={{ delay:i*0.08 }}
-                className="text-white/70 leading-relaxed text-base mb-4"
+                className="text-muted leading-relaxed text-base mb-4"
               >
                 {para}
               </motion.p>
@@ -120,21 +120,21 @@ My only minor criticism is that the middle section has a few episodes that feel 
           </div>
 
           {/* Actions */}
-          <div className="flex items-center gap-4 pt-4 border-t border-white/5">
+          <div className="flex items-center gap-4 pt-4 border-t border-border">
             <button onClick={toggleLike}
               className={`flex items-center gap-2 px-4 py-2.5 rounded-xl border font-bold text-xs uppercase tracking-widest transition-all ${
-                liked ? "bg-emerald-500/15 border-emerald-500/30 text-emerald-400" : "border-white/10 bg-white/5 text-white/50 hover:text-white"
+                liked ? "bg-emerald-500/15 border-emerald-500/30 text-emerald-400" : "border-border bg-surface text-muted hover:text-foreground"
               }`}
             >
               <ThumbsUp size={14} fill={liked?"currentColor":"none"} />
               {helpCount} Helpful
             </button>
             <button onClick={() => push("Report submitted. Thank you.", "success")}
-              className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-white/8 bg-white/[0.02] text-white/30 hover:text-red-400 hover:border-red-500/20 font-bold text-xs uppercase tracking-widest transition-all"
+              className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-border bg-surface text-subtle hover:text-red-400 hover:border-red-500/20 font-bold text-xs uppercase tracking-widest transition-all"
             >
               <Flag size={13}/> Report
             </button>
-            <Link href={`/anime/${id}/reviews`} className="ml-auto flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-amber-400 hover:text-amber-300 transition-colors">
+            <Link href={`/anime/${id}/reviews`} className="ml-auto flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-accent-bright hover:text-accent-bright transition-colors">
               <ChevronLeft size={11}/> All Reviews
             </Link>
           </div>

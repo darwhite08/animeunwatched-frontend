@@ -163,10 +163,10 @@ export default function RegisterPage() {
         })
       }}
     />
-    <main className="relative min-h-screen bg-[#020202] text-white flex items-center justify-center px-6 py-20">
+    <main className="relative min-h-screen bg-background text-foreground flex items-center justify-center px-6 py-20">
       {/* Background glows */}
       <div className="absolute inset-0 -z-10 pointer-events-none">
-        <div className="absolute top-[-200px] left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-amber-600/15 blur-[150px] rounded-full" />
+        <div className="absolute top-[-200px] left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-accent/15 blur-[150px] rounded-full" />
         <div className="absolute bottom-0 right-0 w-[400px] h-[400px] bg-violet-700/10 blur-[120px] rounded-full" />
       </div>
 
@@ -191,10 +191,10 @@ export default function RegisterPage() {
               fill="url(#registerKGold)"/>
           </svg>
           <div className="text-center">
-            <span className="text-xl font-black tracking-tighter uppercase italic text-white">
+            <span className="text-xl font-black tracking-tighter uppercase italic text-foreground">
               KAIVERON<span style={{ color: "#f59e0b" }}>.</span>
             </span>
-            <p className="text-[10px] font-black uppercase tracking-[0.35em] text-white/25 mt-0.5">
+            <p className="text-[10px] font-black uppercase tracking-[0.35em] text-subtle mt-0.5">
               Neural Anime Archive
             </p>
           </div>
@@ -209,12 +209,12 @@ export default function RegisterPage() {
           </div>
         )}
 
-        <div className="border border-white/10 bg-white/[0.03] backdrop-blur-xl rounded-3xl p-8 shadow-[0_0_60px_rgba(99,102,241,0.1)]">
+        <div className="border border-border bg-surface backdrop-blur-xl rounded-3xl p-8 shadow-[0_0_60px_rgba(99,102,241,0.1)]">
           <div className="text-center mb-8">
-            <h1 className="text-2xl font-black uppercase italic tracking-tighter text-white">
+            <h1 className="text-2xl font-black uppercase italic tracking-tighter text-foreground">
               Initialize Account
             </h1>
-            <p className="text-sm text-white/40 mt-2">Join 12,402 Shinobi on the Neural Network</p>
+            <p className="text-sm text-muted mt-2">Join 12,402 Shinobi on the Neural Network</p>
           </div>
 
           {/* OAuth */}
@@ -224,7 +224,7 @@ export default function RegisterPage() {
               href="/api/v1/auth/google/redirect"
               whileHover={{ scale: 1.015 }}
               whileTap={{ scale: 0.985 }}
-              className="w-full h-12 rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 transition-all flex items-center justify-center gap-3 text-sm font-bold"
+              className="w-full h-12 rounded-2xl border border-border bg-surface hover:bg-surface transition-all flex items-center justify-center gap-3 text-sm font-bold"
             >
               <Image src="/assets/icons/google.png" alt="google" width={22} height={22} className="object-contain" />
               Continue with Google
@@ -235,7 +235,7 @@ export default function RegisterPage() {
               whileTap={{ scale: 0.985 }}
               onClick={() => handleOAuth("apple")}
               disabled={isDisabled}
-              className="w-full h-12 rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 transition-all flex items-center justify-center gap-3 text-sm font-bold disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full h-12 rounded-2xl border border-border bg-surface hover:bg-surface transition-all flex items-center justify-center gap-3 text-sm font-bold disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <Image src="/assets/icons/apple.png" alt="apple" width={22} height={22} className="object-contain" />
               {oauthLoading === "apple" ? "Connecting…" : "Continue with Apple"}
@@ -244,15 +244,15 @@ export default function RegisterPage() {
 
           {/* Divider */}
           <div className="flex items-center gap-4 mb-6">
-            <div className="flex-1 h-px bg-white/5" />
-            <span className="text-[10px] font-black text-white/20 uppercase tracking-widest">or</span>
-            <div className="flex-1 h-px bg-white/5" />
+            <div className="flex-1 h-px bg-surface" />
+            <span className="text-[10px] font-black text-subtle uppercase tracking-widest">or</span>
+            <div className="flex-1 h-px bg-surface" />
           </div>
 
           {/* Email form */}
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label className="block text-[10px] font-black uppercase tracking-[0.2em] text-white/40 mb-2">
+              <label className="block text-[10px] font-black uppercase tracking-[0.2em] text-muted mb-2">
                 Username
               </label>
               <input
@@ -263,8 +263,8 @@ export default function RegisterPage() {
                 minLength={3}
                 maxLength={30}
                 disabled={isDisabled}
-                className={`w-full h-12 rounded-2xl bg-white/5 border px-4 text-sm text-white placeholder:text-white/20 outline-none focus:border-amber-500/50 focus:bg-white/[0.07] transition-all disabled:opacity-50 ${
-                  form.username && form.username.length < 3 ? "border-red-500/50" : "border-white/10"
+                className={`w-full h-12 rounded-2xl bg-surface border px-4 text-sm text-foreground placeholder:text-subtle outline-none focus:border-accent/50 focus:bg-surface transition-all disabled:opacity-50 ${
+                  form.username && form.username.length < 3 ? "border-red-500/50" : "border-border"
                 }`}
               />
               {form.username.length > 0 && form.username.length < 3 && (
@@ -280,7 +280,7 @@ export default function RegisterPage() {
             </div>
 
             <div>
-              <label className="block text-[10px] font-black uppercase tracking-[0.2em] text-white/40 mb-2">
+              <label className="block text-[10px] font-black uppercase tracking-[0.2em] text-muted mb-2">
                 Email
               </label>
               <input
@@ -290,12 +290,12 @@ export default function RegisterPage() {
                 placeholder="you@domain.com"
                 autoComplete="email"
                 disabled={isDisabled}
-                className="w-full h-12 rounded-2xl bg-white/5 border border-white/10 px-4 text-sm text-white placeholder:text-white/20 outline-none focus:border-amber-500/50 focus:bg-white/[0.07] transition-all disabled:opacity-50"
+                className="w-full h-12 rounded-2xl bg-surface border border-border px-4 text-sm text-foreground placeholder:text-subtle outline-none focus:border-accent/50 focus:bg-surface transition-all disabled:opacity-50"
               />
             </div>
 
             <div>
-              <label className="block text-[10px] font-black uppercase tracking-[0.2em] text-white/40 mb-2">
+              <label className="block text-[10px] font-black uppercase tracking-[0.2em] text-muted mb-2">
                 Password
               </label>
               <div className="relative">
@@ -306,12 +306,12 @@ export default function RegisterPage() {
                   placeholder="Min. 8 characters"
                   autoComplete="new-password"
                   disabled={isDisabled}
-                  className="w-full h-12 rounded-2xl bg-white/5 border border-white/10 px-4 pr-12 text-sm text-white placeholder:text-white/20 outline-none focus:border-amber-500/50 focus:bg-white/[0.07] transition-all disabled:opacity-50"
+                  className="w-full h-12 rounded-2xl bg-surface border border-border px-4 pr-12 text-sm text-foreground placeholder:text-subtle outline-none focus:border-accent/50 focus:bg-surface transition-all disabled:opacity-50"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPass(p => !p)}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 text-white/30 hover:text-white transition-colors"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-subtle hover:text-foreground transition-colors"
                 >
                   {showPass ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
@@ -341,8 +341,8 @@ export default function RegisterPage() {
                     key={level}
                     className={`h-1 flex-1 rounded-full transition-colors duration-300 ${
                       form.password.length >= level * 3
-                        ? level <= 2 ? "bg-amber-500" : "bg-emerald-500"
-                        : "bg-white/10"
+                        ? level <= 2 ? "bg-accent" : "bg-emerald-500"
+                        : "bg-surface"
                     }`}
                   />
                 ))}
@@ -362,16 +362,16 @@ export default function RegisterPage() {
             </motion.button>
           </form>
 
-          <p className="mt-6 text-xs text-center text-white/30">
+          <p className="mt-6 text-xs text-center text-subtle">
             By registering, you agree to our{" "}
-            <Link href="/terms" className="text-white/60 hover:text-white transition-colors">Terms</Link>
+            <Link href="/terms" className="text-muted hover:text-foreground transition-colors">Terms</Link>
             {" "}&{" "}
-            <Link href="/privacy" className="text-white/60 hover:text-white transition-colors">Privacy Policy</Link>
+            <Link href="/privacy" className="text-muted hover:text-foreground transition-colors">Privacy Policy</Link>
           </p>
 
-          <p className="mt-4 text-sm text-center text-white/40">
+          <p className="mt-4 text-sm text-center text-muted">
             Already have an account?{" "}
-            <Link href="/login" className="text-amber-400 hover:text-amber-300 font-bold transition-colors">
+            <Link href="/login" className="text-accent-bright hover:text-accent-bright font-bold transition-colors">
               Sign in
             </Link>
           </p>

@@ -11,9 +11,9 @@ const CONTENT_TYPES = [
     label:   "Feed Post",
     desc:    "Share a theory, hot take, or anime reaction with your followers.",
     color:   "from-indigo-600/30 to-indigo-800/10",
-    border:  "hover:border-amber-500/50",
+    border:  "hover:border-accent/50",
     glow:    "hover:shadow-[0_0_40px_rgba(99,102,241,0.15)]",
-    badge:   "text-amber-400 bg-amber-500/10 border-amber-500/20",
+    badge:   "text-accent-bright bg-accent/10 border-accent/20",
     tag:     "Quick",
   },
   {
@@ -32,10 +32,10 @@ const CONTENT_TYPES = [
     icon:    Vote,
     label:   "Community Poll",
     desc:    "Ask the community a question and collect votes for up to 6 options.",
-    color:   "from-amber-600/30 to-amber-800/10",
-    border:  "hover:border-amber-500/50",
+    color:   "from-accent/30 to-amber-800/10",
+    border:  "hover:border-accent/50",
     glow:    "hover:shadow-[0_0_40px_rgba(245,158,11,0.15)]",
-    badge:   "text-amber-400 bg-amber-500/10 border-amber-500/20",
+    badge:   "text-accent-bright bg-accent/10 border-accent/20",
     tag:     "Interactive",
   },
 ]
@@ -45,12 +45,12 @@ export default function CreateLandingPage() {
     <div className="max-w-2xl space-y-10">
       {/* Header */}
       <div className="flex items-center gap-3">
-        <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center">
-          <Sparkles size={18} className="text-white/60" />
+        <div className="w-10 h-10 rounded-xl bg-surface border border-border flex items-center justify-center">
+          <Sparkles size={18} className="text-muted" />
         </div>
         <div>
           <h1 className="text-2xl font-semibold">Create Content</h1>
-          <p className="text-sm text-white/40">Choose what you want to publish</p>
+          <p className="text-sm text-muted">Choose what you want to publish</p>
         </div>
       </div>
 
@@ -65,28 +65,28 @@ export default function CreateLandingPage() {
           >
             <Link
               href={href}
-              className={`group flex items-center gap-6 p-6 rounded-2xl bg-zinc-900 border border-white/10 ${border} ${glow} transition-all duration-300`}
+              className={`group flex items-center gap-6 p-6 rounded-2xl bg-zinc-900 border border-border ${border} ${glow} transition-all duration-300`}
             >
               {/* Icon with gradient */}
               <div className={`shrink-0 w-14 h-14 rounded-2xl bg-gradient-to-br ${color} flex items-center justify-center`}>
-                <Icon size={24} className="text-white/80" />
+                <Icon size={24} className="text-muted" />
               </div>
 
               {/* Info */}
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-1">
-                  <h3 className="font-semibold text-white">{label}</h3>
+                  <h3 className="font-semibold text-foreground">{label}</h3>
                   <span className={`text-[9px] font-black uppercase tracking-wider border px-2 py-0.5 rounded-full ${badge}`}>
                     {tag}
                   </span>
                 </div>
-                <p className="text-sm text-white/45 leading-snug">{desc}</p>
+                <p className="text-sm text-muted leading-snug">{desc}</p>
               </div>
 
               {/* Arrow */}
               <ArrowRight
                 size={18}
-                className="shrink-0 text-white/20 group-hover:text-white group-hover:translate-x-1 transition-all"
+                className="shrink-0 text-subtle group-hover:text-foreground group-hover:translate-x-1 transition-all"
               />
             </Link>
           </motion.div>
@@ -94,13 +94,13 @@ export default function CreateLandingPage() {
       </div>
 
       {/* AI tip */}
-      <div className="flex items-start gap-3 p-5 rounded-2xl bg-white/[0.02] border border-white/5">
-        <Sparkles size={16} className="text-amber-400 shrink-0 mt-0.5" />
+      <div className="flex items-start gap-3 p-5 rounded-2xl bg-surface border border-border">
+        <Sparkles size={16} className="text-accent-bright shrink-0 mt-0.5" />
         <div>
-          <p className="text-xs font-bold text-white/60">Tip — Generate with AI</p>
-          <p className="text-xs text-white/30 mt-0.5">
+          <p className="text-xs font-bold text-muted">Tip — Generate with AI</p>
+          <p className="text-xs text-subtle mt-0.5">
             Inside the blog or feed editor, click{" "}
-            <span className="text-amber-400">"Generate with AI"</span> to get a draft based on any anime title or topic.
+            <span className="text-accent-bright">"Generate with AI"</span> to get a draft based on any anime title or topic.
           </p>
         </div>
       </div>

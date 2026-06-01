@@ -63,7 +63,7 @@ export default function LoginPage() {
     setUser(user)
     connectSocket(accessToken)
     qc.invalidateQueries({ queryKey: ["auth/me"] })
-    router.push("/dashboard")
+    router.push("/")
   }
 
   /* ── Google — renderButton (stays on login page, no redirect) ──────── */
@@ -136,7 +136,7 @@ export default function LoginPage() {
     login.mutate(
       { email: form.email, password: form.password },
       {
-        onSuccess: () => router.push("/dashboard"),
+        onSuccess: () => router.push("/"),
         onError: (err) => {
           if (err instanceof ApiError) {
             setFormError(err.code === "VALIDATION"
@@ -200,9 +200,9 @@ export default function LoginPage() {
         strategy="afterInteractive"
       />
 
-      <main className="relative min-h-screen bg-black text-white flex items-center justify-center px-6">
+      <main className="relative min-h-screen bg-background text-foreground flex items-center justify-center px-6">
         <div className="absolute inset-0 -z-10">
-          <div className="absolute top-[-200px] left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-amber-600/20 blur-[140px] rounded-full" />
+          <div className="absolute top-[-200px] left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-accent/20 blur-[140px] rounded-full" />
         </div>
 
         <motion.section
@@ -211,7 +211,7 @@ export default function LoginPage() {
           transition={{ duration: 0.6 }}
           className="w-full max-w-md"
         >
-          <div className="border border-white/10 bg-white/5 backdrop-blur-xl rounded-2xl p-10"
+          <div className="border border-border bg-surface backdrop-blur-xl rounded-2xl p-10"
             style={{ boxShadow: "0 0 40px rgba(245,158,11,0.1), 0 20px 60px rgba(0,0,0,0.5)" }}>
 
             {/* Logo */}
@@ -229,20 +229,20 @@ export default function LoginPage() {
                   fill="url(#loginKGold)"/>
               </svg>
               <div className="text-center">
-                <p className="text-lg font-black tracking-tight text-white uppercase italic">
+                <p className="text-lg font-black tracking-tight text-foreground uppercase italic">
                   KAIVERON<span style={{ color: "#f59e0b" }}>.</span>
                 </p>
-                <p className="text-[10px] font-black uppercase tracking-[0.35em] text-white/25 mt-0.5">
+                <p className="text-[10px] font-black uppercase tracking-[0.35em] text-subtle mt-0.5">
                   Neural Anime Archive
                 </p>
               </div>
             </div>
 
             <div className="text-center space-y-2 mb-8">
-              <h1 className="text-2xl font-black tracking-tighter text-white italic uppercase">
+              <h1 className="text-2xl font-black tracking-tighter text-foreground italic uppercase">
                 Welcome Back
               </h1>
-              <p className="text-sm text-white/50">Continue your anime journey</p>
+              <p className="text-sm text-muted">Continue your anime journey</p>
             </div>
 
             {/* Hidden Google renderButton container — our visible button triggers it */}
@@ -256,7 +256,7 @@ export default function LoginPage() {
                 href="/api/v1/auth/google/redirect"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className="w-full h-12 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition flex items-center justify-center gap-3 font-medium focus:outline-none focus:ring-2 focus:ring-amber-500"
+                className="w-full h-12 rounded-xl border border-border bg-surface hover:bg-surface transition flex items-center justify-center gap-3 font-medium focus:outline-none focus:ring-2 focus:ring-accent"
               >
                 {false
                   ? <><Loader2 size={16} className="animate-spin" /> Signing in...</>
@@ -273,7 +273,7 @@ export default function LoginPage() {
                 disabled={isDisabled}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className="w-full h-12 rounded-xl border border-white/10 bg-white/5 hover:bg-white/10 transition flex items-center justify-center gap-3 font-medium focus:outline-none focus:ring-2 focus:ring-amber-500 disabled:opacity-60 disabled:cursor-not-allowed"
+                className="w-full h-12 rounded-xl border border-border bg-surface hover:bg-surface transition flex items-center justify-center gap-3 font-medium focus:outline-none focus:ring-2 focus:ring-accent disabled:opacity-60 disabled:cursor-not-allowed"
               >
                 {oauthLoading === "apple"
                   ? <><Loader2 size={16} className="animate-spin" /> Signing in...</>
@@ -287,17 +287,17 @@ export default function LoginPage() {
 
             {/* Divider */}
             <div className="flex items-center gap-4 mt-8 mb-6">
-              <div className="flex-1 h-px bg-white/10" />
-              <span className="text-xs text-white/30 uppercase tracking-widest font-semibold">
+              <div className="flex-1 h-px bg-surface" />
+              <span className="text-xs text-subtle uppercase tracking-widest font-semibold">
                 or continue with email
               </span>
-              <div className="flex-1 h-px bg-white/10" />
+              <div className="flex-1 h-px bg-surface" />
             </div>
 
             {/* Email + password form */}
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-[10px] font-bold uppercase tracking-[0.2em] text-white/40 mb-2">
+                <label className="block text-[10px] font-bold uppercase tracking-[0.2em] text-muted mb-2">
                   Email
                 </label>
                 <input
@@ -307,16 +307,16 @@ export default function LoginPage() {
                   placeholder="you@domain.com"
                   autoComplete="email"
                   disabled={isDisabled}
-                  className="w-full h-12 rounded-xl bg-white/5 border border-white/10 px-4 text-sm text-white placeholder:text-white/20 outline-none focus:border-amber-500/50 focus:bg-white/[0.07] transition-all disabled:opacity-50"
+                  className="w-full h-12 rounded-xl bg-surface border border-border px-4 text-sm text-foreground placeholder:text-subtle outline-none focus:border-accent/50 focus:bg-surface transition-all disabled:opacity-50"
                 />
               </div>
 
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <label className="block text-[10px] font-bold uppercase tracking-[0.2em] text-white/40">
+                  <label className="block text-[10px] font-bold uppercase tracking-[0.2em] text-muted">
                     Password
                   </label>
-                  <Link href="/forgot-password" className="text-[10px] font-bold text-amber-400/60 hover:text-amber-400 transition-colors">
+                  <Link href="/forgot-password" className="text-[10px] font-bold text-accent-bright/60 hover:text-accent-bright transition-colors">
                     Forgot password?
                   </Link>
                 </div>
@@ -328,12 +328,12 @@ export default function LoginPage() {
                     placeholder="Your password"
                     autoComplete="current-password"
                     disabled={isDisabled}
-                    className="w-full h-12 rounded-xl bg-white/5 border border-white/10 px-4 pr-12 text-sm text-white placeholder:text-white/20 outline-none focus:border-amber-500/50 focus:bg-white/[0.07] transition-all disabled:opacity-50"
+                    className="w-full h-12 rounded-xl bg-surface border border-border px-4 pr-12 text-sm text-foreground placeholder:text-subtle outline-none focus:border-accent/50 focus:bg-surface transition-all disabled:opacity-50"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPass(p => !p)}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-white/30 hover:text-white transition-colors"
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-subtle hover:text-foreground transition-colors"
                   >
                     {showPass ? <EyeOff size={16} /> : <Eye size={16} />}
                   </button>
@@ -364,15 +364,15 @@ export default function LoginPage() {
               </motion.button>
             </form>
 
-            <p className="mt-8 text-xs text-center text-white/40">
+            <p className="mt-8 text-xs text-center text-muted">
               By continuing, you agree to our{" "}
-              <Link href="/terms" className="text-white/70 hover:text-white transition">Terms</Link>{" "}
+              <Link href="/terms" className="text-muted hover:text-foreground transition">Terms</Link>{" "}
               &{" "}
-              <Link href="/privacy" className="text-white/70 hover:text-white transition">Privacy Policy</Link>
+              <Link href="/privacy" className="text-muted hover:text-foreground transition">Privacy Policy</Link>
             </p>
-            <p className="mt-6 text-sm text-center text-white/50">
+            <p className="mt-6 text-sm text-center text-muted">
               Don&apos;t have an account?{" "}
-              <Link href="/register" className="text-amber-400 hover:text-amber-300 transition font-bold">
+              <Link href="/register" className="text-accent-bright hover:text-accent-bright transition font-bold">
                 Sign up
               </Link>
             </p>

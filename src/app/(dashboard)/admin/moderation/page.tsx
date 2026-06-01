@@ -105,8 +105,8 @@ const FILTER_TABS: { id: FilterTab; label: string }[] = [
 ]
 
 const CONTENT_TYPE_CONFIG: Record<ContentType, { label: string; color: string; icon: typeof FileText }> = {
-  post:   { label: "Post",   color: "bg-amber-500/15 text-amber-300 border-amber-500/25",   icon: FileText },
-  review: { label: "Review", color: "bg-amber-500/15 text-amber-300 border-amber-500/25",      icon: Star     },
+  post:   { label: "Post",   color: "bg-accent/15 text-accent-bright border-accent/25",   icon: FileText },
+  review: { label: "Review", color: "bg-accent/15 text-accent-bright border-accent/25",      icon: Star     },
   blog:   { label: "Blog",   color: "bg-violet-500/15 text-violet-300 border-violet-500/25",   icon: BookOpen },
   user:   { label: "User",   color: "bg-rose-500/15 text-rose-300 border-rose-500/25",         icon: User     },
 }
@@ -172,10 +172,10 @@ export default function ModerationPage() {
       {/* Header */}
       <div className="flex items-start justify-between">
         <div>
-          <p className="text-[9px] font-mono font-black uppercase tracking-[0.4em] text-amber-400/60 mb-2">
+          <p className="text-[9px] font-mono font-black uppercase tracking-[0.4em] text-accent-bright/60 mb-2">
             Admin Panel
           </p>
-          <h1 className="text-4xl font-black tracking-tighter text-white uppercase italic">
+          <h1 className="text-4xl font-black tracking-tighter text-foreground uppercase italic">
             Moderation Queue
           </h1>
         </div>
@@ -210,15 +210,15 @@ export default function ModerationPage() {
       </div>
 
       {/* Filter tabs */}
-      <div className="flex items-center gap-1 p-1 rounded-2xl bg-white/[0.03] border border-white/8 w-fit">
+      <div className="flex items-center gap-1 p-1 rounded-2xl bg-surface border border-border w-fit">
         {FILTER_TABS.map(tab => (
           <button
             key={tab.id}
             onClick={() => setActiveFilter(tab.id)}
             className={`px-5 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition-all ${
               activeFilter === tab.id
-                ? "bg-amber-600 text-white shadow-lg shadow-indigo-600/20"
-                : "text-white/40 hover:text-white hover:bg-white/5"
+                ? "bg-accent text-foreground shadow-lg shadow-indigo-600/20"
+                : "text-muted hover:text-foreground hover:bg-surface"
             }`}
           >
             {tab.label}
@@ -235,7 +235,7 @@ export default function ModerationPage() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="py-20 text-center text-white/20 text-sm font-bold"
+              className="py-20 text-center text-subtle text-sm font-bold"
             >
               No reports in this category.
             </motion.div>
@@ -254,7 +254,7 @@ export default function ModerationPage() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.97 }}
                 transition={{ duration: 0.2 }}
-                className="group flex items-start gap-5 p-5 rounded-2xl bg-white/[0.02] border border-white/8 hover:border-white/15 hover:bg-white/[0.035] transition-all"
+                className="group flex items-start gap-5 p-5 rounded-2xl bg-surface border border-border hover:border-border hover:bg-white/[0.035] transition-all"
               >
                 {/* Content type badge */}
                 <div className="flex-shrink-0 pt-0.5">
@@ -265,12 +265,12 @@ export default function ModerationPage() {
 
                 {/* Main info */}
                 <div className="flex-1 min-w-0 space-y-1.5">
-                  <p className="text-sm text-white/80 font-medium leading-snug">
-                    <span className="font-black text-white">@{report.reporter}</span>
-                    <span className="text-white/40"> reported · </span>
-                    <span className="italic text-white/60 truncate">&ldquo;{report.targetPreview}&rdquo;</span>
+                  <p className="text-sm text-muted font-medium leading-snug">
+                    <span className="font-black text-foreground">@{report.reporter}</span>
+                    <span className="text-muted"> reported · </span>
+                    <span className="italic text-muted truncate">&ldquo;{report.targetPreview}&rdquo;</span>
                   </p>
-                  <div className="flex items-center gap-4 text-[10px] text-white/30 font-bold uppercase tracking-wider">
+                  <div className="flex items-center gap-4 text-[10px] text-subtle font-bold uppercase tracking-wider">
                     <span>{report.reason}</span>
                     <span className="w-1 h-1 rounded-full bg-white/20 inline-block" />
                     <span>{report.date}</span>
@@ -326,8 +326,8 @@ function StatCard({
         <Icon size={20} />
       </div>
       <div>
-        <p className="text-3xl font-black text-white tracking-tighter leading-none">{count}</p>
-        <p className="text-[10px] font-black uppercase tracking-[0.25em] text-white/30 mt-1">{label}</p>
+        <p className="text-3xl font-black text-foreground tracking-tighter leading-none">{count}</p>
+        <p className="text-[10px] font-black uppercase tracking-[0.25em] text-subtle mt-1">{label}</p>
       </div>
     </div>
   )

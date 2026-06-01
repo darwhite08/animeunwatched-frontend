@@ -15,9 +15,9 @@ function mapBrowse(a: AnimeDTO, i: number) {
 
 /* ── Score dot colour ── */
 function scoreColour(score: number) {
-  if (score >= 9) return "text-amber-400"
-  if (score >= 7) return "text-amber-300"
-  return "text-white/60"
+  if (score >= 9) return "text-accent-bright"
+  if (score >= 7) return "text-accent-bright"
+  return "text-muted"
 }
 
 /* ── Component ── */
@@ -55,28 +55,28 @@ export default function TopAnimeCard() {
 
   if (isLoading) {
     return (
-      <div className="p-8 rounded-[2.5rem] border border-white/5 bg-[#0a0a0a] relative overflow-hidden h-48 flex items-center justify-center">
-        <div className="w-8 h-8 rounded-full border-2 border-amber-500/30 border-t-amber-500 animate-spin" />
+      <div className="p-8 rounded-[2.5rem] border border-border bg-surface relative overflow-hidden h-48 flex items-center justify-center">
+        <div className="w-8 h-8 rounded-full border-2 border-accent/30 border-t-amber-500 animate-spin" />
       </div>
     )
   }
 
   return (
-    <div className="p-8 rounded-[2.5rem] border border-white/5 bg-[#0a0a0a] relative overflow-hidden">
+    <div className="p-8 rounded-[2.5rem] border border-border bg-surface relative overflow-hidden">
       {/* Glow */}
-      <div className="absolute -top-8 -right-8 w-40 h-40 bg-amber-500/5 blur-[60px] rounded-full pointer-events-none" />
+      <div className="absolute -top-8 -right-8 w-40 h-40 bg-accent/5 blur-[60px] rounded-full pointer-events-none" />
 
       {/* Header */}
       <div className="flex items-center justify-between mb-7 relative z-10">
         <div className="flex items-center gap-2">
-          <Star size={14} className="text-amber-400" fill="currentColor" />
-          <h4 className="text-xs font-black uppercase tracking-[0.28em] text-white/30">
+          <Star size={14} className="text-accent-bright" fill="currentColor" />
+          <h4 className="text-xs font-black uppercase tracking-[0.28em] text-subtle">
             {completed.length > 0 ? "Your Top Rated" : "Top Anime"}
           </h4>
         </div>
         <Link
           href="/rate"
-          className="flex items-center gap-1 text-[9px] font-black uppercase tracking-widest text-amber-400/60 hover:text-amber-400 transition-colors"
+          className="flex items-center gap-1 text-[9px] font-black uppercase tracking-widest text-accent-bright/60 hover:text-accent-bright transition-colors"
         >
           Rate Another <ChevronRight size={10} />
         </Link>
@@ -85,9 +85,9 @@ export default function TopAnimeCard() {
       {/* Empty state */}
       {TOP_FIVE.length === 0 && (
         <div className="py-6 text-center">
-          <Star size={20} className="mx-auto mb-2 text-white/10" fill="currentColor" />
-          <p className="text-[10px] text-white/20 font-black uppercase tracking-widest">No rated anime yet</p>
-          <Link href="/bestanimelist" className="mt-2 block text-[9px] text-amber-400 hover:text-amber-300 font-black uppercase tracking-widest">
+          <Star size={20} className="mx-auto mb-2 text-subtle" fill="currentColor" />
+          <p className="text-[10px] text-subtle font-black uppercase tracking-widest">No rated anime yet</p>
+          <Link href="/bestanimelist" className="mt-2 block text-[9px] text-accent-bright hover:text-accent-bright font-black uppercase tracking-widest">
             Browse & Rate →
           </Link>
         </div>
@@ -107,17 +107,17 @@ export default function TopAnimeCard() {
             >
               <Link
                 href={`/anime/${anime.id}`}
-                className="group flex items-center gap-4 p-3 rounded-2xl hover:bg-white/[0.03] transition-colors"
+                className="group flex items-center gap-4 p-3 rounded-2xl hover:bg-surface transition-colors"
               >
                 {/* Rank */}
                 <span className={`w-5 text-center text-xs font-black shrink-0 ${
-                  i === 0 ? "text-amber-400" : "text-white/20"
+                  i === 0 ? "text-accent-bright" : "text-subtle"
                 }`}>
                   #{i + 1}
                 </span>
 
                 {/* Cover thumbnail */}
-                <div className="h-10 w-8 rounded-xl overflow-hidden shrink-0 bg-white/5">
+                <div className="h-10 w-8 rounded-xl overflow-hidden shrink-0 bg-surface">
                   <img
                     src={anime.image}
                     alt={anime.title}
@@ -127,10 +127,10 @@ export default function TopAnimeCard() {
 
                 {/* Title + studio */}
                 <div className="flex-1 min-w-0">
-                  <p className="text-sm font-black text-white/80 group-hover:text-white transition-colors truncate leading-tight">
+                  <p className="text-sm font-black text-muted group-hover:text-foreground transition-colors truncate leading-tight">
                     {anime.title}
                   </p>
-                  <p className="text-[9px] text-white/25 uppercase tracking-widest mt-0.5 truncate">
+                  <p className="text-[9px] text-subtle uppercase tracking-widest mt-0.5 truncate">
                     {anime.studio}
                   </p>
                 </div>
@@ -140,7 +140,7 @@ export default function TopAnimeCard() {
                   <span className={`text-base font-black leading-none ${scoreColour(personal)}`}>
                     {personal.toFixed(1)}
                   </span>
-                  <span className="text-[8px] font-bold uppercase tracking-widest text-white/20">
+                  <span className="text-[8px] font-bold uppercase tracking-widest text-subtle">
                     {completed.length > 0 ? "Rated" : "Score"}
                   </span>
                 </div>

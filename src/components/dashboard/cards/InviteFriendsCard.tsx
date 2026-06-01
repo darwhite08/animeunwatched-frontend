@@ -36,31 +36,31 @@ export default function InviteFriendsCard() {
   }
 
   return (
-    <div className="p-8 rounded-[2.5rem] border border-white/5 bg-[#0a0a0a] relative overflow-hidden group">
+    <div className="p-8 rounded-[2.5rem] border border-border bg-surface relative overflow-hidden group">
       {/* Glow */}
       <div className="absolute -bottom-10 -right-10 w-40 h-40 bg-emerald-500/5 blur-[50px] rounded-full pointer-events-none group-hover:bg-emerald-500/10 transition-colors duration-700" />
 
       <div className="flex items-center gap-2 mb-5 relative z-10">
         <UserPlus size={14} className="text-emerald-400" />
-        <h4 className="text-xs font-black uppercase tracking-[0.28em] text-white/30">Invite Shinobi</h4>
+        <h4 className="text-xs font-black uppercase tracking-[0.28em] text-subtle">Invite Shinobi</h4>
       </div>
 
       <div className="relative z-10 space-y-4">
-        <p className="text-xs text-white/40 leading-relaxed">
+        <p className="text-xs text-muted leading-relaxed">
           Invite friends to Kaiveron. When they sign up using your link, you both earn bonus XP.
         </p>
 
         {/* Referral link display */}
-        <div className="flex items-center gap-2 p-3 rounded-2xl bg-white/[0.03] border border-white/8">
+        <div className="flex items-center gap-2 p-3 rounded-2xl bg-surface border border-border">
           <Zap size={11} className="text-emerald-400 shrink-0" />
-          <code className="flex-1 text-[10px] text-white/50 font-mono truncate">
+          <code className="flex-1 text-[10px] text-muted font-mono truncate">
             kaiveron.app/register?ref={user?.username ?? "you"}
           </code>
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={handleCopy}
-            className={`shrink-0 p-1.5 rounded-lg transition-colors ${copied ? "text-emerald-400" : "text-white/30 hover:text-white"}`}
+            className={`shrink-0 p-1.5 rounded-lg transition-colors ${copied ? "text-emerald-400" : "text-subtle hover:text-foreground"}`}
           >
             {copied ? <CheckCircle2 size={13} /> : <Copy size={13} />}
           </motion.button>

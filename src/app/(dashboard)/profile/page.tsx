@@ -126,10 +126,10 @@ function DNABar({ label, percent, colors }: { label: string; percent: number; co
   return (
     <div className="space-y-4">
       <div className="flex justify-between items-end">
-        <span className="text-sm font-black uppercase tracking-widest text-white/80">{label}</span>
-        <span className="text-xs font-medium text-white/30 tracking-tighter">{percent}% saturation</span>
+        <span className="text-sm font-black uppercase tracking-widest text-muted">{label}</span>
+        <span className="text-xs font-medium text-subtle tracking-tighter">{percent}% saturation</span>
       </div>
-      <div className="h-4 w-full bg-white/5 rounded-full overflow-hidden p-1 border border-white/5 shadow-inner">
+      <div className="h-4 w-full bg-surface rounded-full overflow-hidden p-1 border border-border shadow-inner">
         <motion.div
           initial={{ width: 0 }}
           whileInView={{ width: `${percent}%` }}
@@ -150,11 +150,11 @@ function StarRating({ score }: { score: number }) {
         <Star
           key={i}
           size={10}
-          className={i < score ? "text-amber-400" : "text-white/15"}
+          className={i < score ? "text-accent-bright" : "text-subtle"}
           fill={i < score ? "#f59e0b" : "none"}
         />
       ))}
-      <span className="ml-1.5 text-[10px] font-black text-white/50">{score}/10</span>
+      <span className="ml-1.5 text-[10px] font-black text-muted">{score}/10</span>
     </div>
   )
 }
@@ -181,15 +181,15 @@ function ActivityTab() {
           transition={{ delay: i * 0.1 }}
           className="relative pl-20 group cursor-pointer"
         >
-          <div className="absolute left-0 top-1/2 -translate-y-1/2 w-16 h-16 rounded-2xl bg-zinc-900 border border-white/5 flex items-center justify-center z-10 group-hover:border-amber-500/50 transition-all shadow-xl">
-            <item.icon size={22} className="text-amber-400" />
+          <div className="absolute left-0 top-1/2 -translate-y-1/2 w-16 h-16 rounded-2xl bg-zinc-900 border border-border flex items-center justify-center z-10 group-hover:border-accent/50 transition-all shadow-xl">
+            <item.icon size={22} className="text-accent-bright" />
           </div>
-          <div className="p-8 rounded-[2rem] bg-white/[0.02] border border-white/5 group-hover:bg-white/[0.04] transition-all flex justify-between items-center">
+          <div className="p-8 rounded-[2rem] bg-surface border border-border group-hover:bg-white/[0.04] transition-all flex justify-between items-center">
             <div>
               <h3 className="text-lg font-black text-white/90">{item.title}</h3>
-              <p className="text-sm text-white/40 font-medium mt-1">{item.sub}</p>
+              <p className="text-sm text-muted font-medium mt-1">{item.sub}</p>
             </div>
-            <span className="text-[10px] font-black text-white/20 uppercase tracking-widest">{item.time} ago</span>
+            <span className="text-[10px] font-black text-subtle uppercase tracking-widest">{item.time} ago</span>
           </div>
         </motion.div>
       ))}
@@ -207,18 +207,18 @@ function WatchlistTab() {
     rating: e.anime?.score ?? 0,
     status: e.status,
   }))
-  if (isLoading) return <div className="text-white/30 text-sm py-10 text-center">Loading…</div>
-  if (!authUser) return <div className="text-white/30 text-sm py-10 text-center">Sign in to see your watchlist</div>
+  if (isLoading) return <div className="text-subtle text-sm py-10 text-center">Loading…</div>
+  if (!authUser) return <div className="text-subtle text-sm py-10 text-center">Sign in to see your watchlist</div>
   if (watchlistAnime.length === 0) return (
     <div className="py-16 text-center flex flex-col items-center gap-4">
-      <div className="h-16 w-16 rounded-2xl bg-white/[0.03] border border-white/8 flex items-center justify-center">
+      <div className="h-16 w-16 rounded-2xl bg-surface border border-border flex items-center justify-center">
         <span className="text-2xl">📺</span>
       </div>
       <div className="space-y-1">
-        <p className="text-sm font-black uppercase tracking-widest text-white/30">No anime tracked yet</p>
-        <p className="text-xs text-white/20">Add anime to your watchlist to start building your profile.</p>
+        <p className="text-sm font-black uppercase tracking-widest text-subtle">No anime tracked yet</p>
+        <p className="text-xs text-subtle">Add anime to your watchlist to start building your profile.</p>
       </div>
-      <a href="/bestanimelist" className="text-xs font-black uppercase tracking-widest text-amber-400 hover:text-amber-300 transition-colors">Browse Anime →</a>
+      <a href="/bestanimelist" className="text-xs font-black uppercase tracking-widest text-accent-bright hover:text-accent-bright transition-colors">Browse Anime →</a>
     </div>
   )
   return (
@@ -232,7 +232,7 @@ function WatchlistTab() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: i * 0.05 }}
-            className="group relative rounded-2xl overflow-hidden border border-white/8 hover:border-amber-500/30 bg-[#0a0a0a] transition-all duration-400"
+            className="group relative rounded-2xl overflow-hidden border border-border hover:border-accent/30 bg-surface transition-all duration-400"
           >
             {/* Cover */}
             <div className="relative aspect-[2/3] w-full">
@@ -249,7 +249,7 @@ function WatchlistTab() {
                   className={`px-2 py-0.5 rounded-md text-[8px] font-black uppercase tracking-widest ${
                     isWatching
                       ? "bg-emerald-500/25 text-emerald-400 border border-emerald-500/30"
-                      : "bg-amber-500/25 text-amber-400 border border-amber-500/30"
+                      : "bg-accent/25 text-accent-bright border border-accent/30"
                   }`}
                 >
                   {isWatching ? "● Watching" : "✓ Completed"}
@@ -257,15 +257,15 @@ function WatchlistTab() {
               </div>
               {/* Rating badge */}
               <div className="absolute bottom-2 right-2 flex items-center gap-1 px-2 py-0.5 rounded-lg bg-black/60 backdrop-blur-md">
-                <Star size={9} fill="#f59e0b" className="text-amber-400" />
-                <span className="text-[9px] font-black text-white">{anime.rating.toFixed(1)}</span>
+                <Star size={9} fill="#f59e0b" className="text-accent-bright" />
+                <span className="text-[9px] font-black text-foreground">{anime.rating.toFixed(1)}</span>
               </div>
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
             </div>
 
             {/* Title */}
             <div className="p-3">
-              <p className="text-[10px] font-black text-white uppercase italic tracking-tighter line-clamp-2 leading-tight">
+              <p className="text-[10px] font-black text-foreground uppercase italic tracking-tighter line-clamp-2 leading-tight">
                 {anime.title}
               </p>
             </div>
@@ -299,10 +299,10 @@ function ReviewsTab() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: i * 0.07 }}
-            className="group flex gap-5 p-7 rounded-[2rem] bg-white/[0.02] border border-white/5 hover:border-white/10 hover:bg-white/[0.04] transition-all"
+            className="group flex gap-5 p-7 rounded-[2rem] bg-surface border border-border hover:border-border hover:bg-white/[0.04] transition-all"
           >
             {/* Thumbnail */}
-            <div className="relative w-16 h-24 shrink-0 rounded-xl overflow-hidden border border-white/10">
+            <div className="relative w-16 h-24 shrink-0 rounded-xl overflow-hidden border border-border">
               <Image
                 src={review.animeImage}
                 alt={review.animeTitle}
@@ -315,23 +315,23 @@ function ReviewsTab() {
             {/* Content */}
             <div className="flex-1 space-y-3 min-w-0">
               <div>
-                <h3 className="text-sm font-black text-white uppercase italic tracking-tight line-clamp-1">
+                <h3 className="text-sm font-black text-foreground uppercase italic tracking-tight line-clamp-1">
                   {review.animeTitle}
                 </h3>
                 <StarRating score={review.score} />
               </div>
 
-              <p className="text-sm text-white/55 leading-relaxed line-clamp-3">{review.excerpt}</p>
+              <p className="text-sm text-muted leading-relaxed line-clamp-3">{review.excerpt}</p>
 
               <div className="flex items-center gap-4 pt-1">
-                <span className="text-[9px] font-black text-white/25 uppercase tracking-widest flex items-center gap-1">
+                <span className="text-[9px] font-black text-subtle uppercase tracking-widest flex items-center gap-1">
                   <CalendarDays size={10} />
                   {review.date}
                 </span>
                 <button
                   onClick={() => toggleLike(review.id)}
                   className={`flex items-center gap-1 text-[10px] font-black uppercase tracking-widest transition-colors ${
-                    liked ? "text-rose-400" : "text-white/25 hover:text-rose-400"
+                    liked ? "text-rose-400" : "text-subtle hover:text-rose-400"
                   }`}
                 >
                   <ThumbsUp size={11} fill={liked ? "currentColor" : "none"} />
@@ -356,13 +356,13 @@ function BlogsTab() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ delay: i * 0.08 }}
-          className="group flex flex-col rounded-[2rem] overflow-hidden border border-white/5 bg-[#0a0a0a] hover:border-amber-500/30 hover:bg-zinc-900/50 transition-all duration-400 cursor-pointer"
+          className="group flex flex-col rounded-[2rem] overflow-hidden border border-border bg-surface hover:border-accent/30 hover:bg-zinc-900/50 transition-all duration-400 cursor-pointer"
         >
           {/* Gradient banner */}
           <div className="h-32 bg-gradient-to-br from-indigo-600/30 via-purple-700/20 to-violet-900/30 relative">
             <div className="absolute inset-0 opacity-30 mix-blend-overlay bg-[url('https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/hero/bg-gradient-3.svg')] bg-cover" />
             <div className="absolute top-4 left-4">
-              <span className="px-2.5 py-1 rounded-lg bg-black/50 backdrop-blur-md border border-white/10 text-[8px] font-black uppercase tracking-widest text-amber-400">
+              <span className="px-2.5 py-1 rounded-lg bg-black/50 backdrop-blur-md border border-border text-[8px] font-black uppercase tracking-widest text-accent-bright">
                 {blog.category}
               </span>
             </div>
@@ -370,13 +370,13 @@ function BlogsTab() {
 
           {/* Body */}
           <div className="flex-1 p-6 space-y-3 flex flex-col">
-            <h3 className="text-sm font-black text-white uppercase italic tracking-tight leading-tight line-clamp-2 group-hover:text-amber-300 transition-colors">
+            <h3 className="text-sm font-black text-foreground uppercase italic tracking-tight leading-tight line-clamp-2 group-hover:text-accent-bright transition-colors">
               {blog.title}
             </h3>
-            <p className="text-[11px] text-white/45 leading-relaxed line-clamp-3 flex-1">{blog.excerpt}</p>
+            <p className="text-[11px] text-muted leading-relaxed line-clamp-3 flex-1">{blog.excerpt}</p>
 
-            <div className="flex items-center justify-between pt-2 border-t border-white/5">
-              <div className="flex items-center gap-3 text-[9px] font-black text-white/25 uppercase tracking-widest">
+            <div className="flex items-center justify-between pt-2 border-t border-border">
+              <div className="flex items-center gap-3 text-[9px] font-black text-subtle uppercase tracking-widest">
                 <span className="flex items-center gap-1">
                   <CalendarDays size={9} />
                   {blog.date}
@@ -386,7 +386,7 @@ function BlogsTab() {
                   {blog.readTime}
                 </span>
               </div>
-              <span className="flex items-center gap-1 text-[9px] font-black text-white/25 uppercase tracking-widest">
+              <span className="flex items-center gap-1 text-[9px] font-black text-subtle uppercase tracking-widest">
                 <Eye size={9} />
                 {blog.views.toLocaleString()}
               </span>
@@ -407,7 +407,7 @@ export default function WorldClassProfile() {
   const authUser = useAuthStore(s => s.user)
 
   const stats = [
-    { label: "Archive",  value: String(authUser ? "..." : "0"),   icon: Bookmark,    color: "text-amber-400", sub: "Anime cataloged" },
+    { label: "Archive",  value: String(authUser ? "..." : "0"),   icon: Bookmark,    color: "text-accent-bright", sub: "Anime cataloged" },
     { label: "Momentum", value: "22",                              icon: Flame,        color: "text-orange-500", sub: "Day watch streak" },
     { label: "Standing", value: "812",                             icon: Globe,        color: "text-blue-400",   sub: "Global percentile" },
     { label: "Trust",    value: String(authUser?.reputation ?? 0), icon: ShieldCheck,  color: "text-emerald-400",sub: "Reputation score" },
@@ -417,10 +417,10 @@ export default function WorldClassProfile() {
     <div className="max-w-[1400px] mx-auto space-y-16 pb-32 px-6">
 
       {/* 1. MASTER HEADER: THE INFINITY CANVAS */}
-      <section className="relative min-h-[450px] flex items-end overflow-hidden rounded-[3rem] border border-white/5 bg-[#050505] shadow-2xl">
+      <section className="relative min-h-[450px] flex items-end overflow-hidden rounded-[3rem] border border-border bg-surface shadow-2xl">
         {/* Animated Mesh Gradient Background */}
         <div className="absolute inset-0 z-0">
-          <div className="absolute top-[-10%] right-[-5%] w-[60%] h-[80%] bg-amber-600/20 blur-[120px] rounded-full animate-pulse" />
+          <div className="absolute top-[-10%] right-[-5%] w-[60%] h-[80%] bg-accent/20 blur-[120px] rounded-full animate-pulse" />
           <div className="absolute bottom-[-20%] left-[-10%] w-[50%] h-[70%] bg-purple-900/10 blur-[100px] rounded-full" />
           <div className="absolute inset-0 bg-[url('https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/hero/bg-gradient-3.svg')] bg-cover opacity-20 mix-blend-overlay" />
         </div>
@@ -434,7 +434,7 @@ export default function WorldClassProfile() {
                 whileHover={{ scale: 1.02, rotate: -2 }}
                 className="h-44 w-44 md:h-56 md:w-56 rounded-[2.5rem] p-1 bg-gradient-to-br from-indigo-500 via-white/20 to-purple-500 shadow-2xl"
               >
-                <div className="relative h-full w-full rounded-[2.2rem] overflow-hidden bg-[#0a0a0a]">
+                <div className="relative h-full w-full rounded-[2.2rem] overflow-hidden bg-surface">
                   <Image
                     src="/assets/png/tanjiro.png"
                     alt="Master Designer Profile"
@@ -456,16 +456,16 @@ export default function WorldClassProfile() {
             <div className="text-center md:text-left space-y-4">
               <div className="space-y-1">
                 <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} className="flex items-center justify-center md:justify-start gap-4">
-                  <h1 className="text-6xl md:text-7xl font-black tracking-tighter text-white">
+                  <h1 className="text-6xl md:text-7xl font-black tracking-tighter text-foreground">
                     {authUser?.displayName ?? authUser?.username ?? "Shinobi"}
                   </h1>
                   <div className="p-[1px] rounded-full bg-gradient-to-r from-indigo-500 to-purple-500">
-                    <span className="px-4 py-1 rounded-full bg-black text-amber-400 text-[10px] font-black uppercase tracking-[0.2em] block">
+                    <span className="px-4 py-1 rounded-full bg-background text-accent-bright text-[10px] font-black uppercase tracking-[0.2em] block">
                       Elite Grade
                     </span>
                   </div>
                 </motion.div>
-                <p className="text-white/40 text-xl font-light tracking-wide italic">Level 20 • Visionary Curator</p>
+                <p className="text-muted text-xl font-light tracking-wide italic">Level 20 • Visionary Curator</p>
               </div>
 
               <div className="flex items-center justify-center md:justify-start gap-6 pt-2">
@@ -475,11 +475,11 @@ export default function WorldClassProfile() {
                       <Zap size={14} className="text-yellow-500" />
                     </div>
                   ))}
-                  <div className="w-10 h-10 rounded-full border-2 border-black bg-amber-500 flex items-center justify-center text-[10px] font-bold text-black">
+                  <div className="w-10 h-10 rounded-full border-2 border-black bg-accent flex items-center justify-center text-[10px] font-bold text-black">
                     +12
                   </div>
                 </div>
-                <span className="text-xs font-bold text-white/60 uppercase tracking-tighter">Rare Badges Earned</span>
+                <span className="text-xs font-bold text-muted uppercase tracking-tighter">Rare Badges Earned</span>
               </div>
             </div>
           </div>
@@ -493,7 +493,7 @@ export default function WorldClassProfile() {
               </button>
               <button
                 onClick={() => setShareOpen(true)}
-                className="h-14 px-6 flex items-center gap-2 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all backdrop-blur-md text-white/70 hover:text-white text-sm font-bold"
+                className="h-14 px-6 flex items-center gap-2 rounded-2xl bg-surface border border-border hover:bg-surface transition-all backdrop-blur-md text-muted hover:text-foreground text-sm font-bold"
               >
                 <Share2 size={18} />
                 Share Profile
@@ -501,14 +501,14 @@ export default function WorldClassProfile() {
               <Link
                 href="/me/settings"
                 title="Settings"
-                className="h-14 w-14 flex items-center justify-center rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 transition-all backdrop-blur-md"
+                className="h-14 w-14 flex items-center justify-center rounded-2xl bg-surface border border-border hover:bg-surface transition-all backdrop-blur-md"
               >
-                <Settings size={20} className="text-white/60" />
+                <Settings size={20} className="text-muted" />
               </Link>
             </div>
             <Link
               href="/profile/wrapped"
-              className="flex items-center justify-center gap-2 h-11 px-6 rounded-2xl bg-gradient-to-r from-violet-600/30 to-indigo-600/30 border border-violet-500/30 hover:border-violet-500/60 text-violet-300 hover:text-white text-sm font-black uppercase tracking-widest transition-all hover:-translate-y-0.5"
+              className="flex items-center justify-center gap-2 h-11 px-6 rounded-2xl bg-gradient-to-r from-violet-600/30 to-indigo-600/30 border border-violet-500/30 hover:border-violet-500/60 text-violet-300 hover:text-foreground text-sm font-black uppercase tracking-widest transition-all hover:-translate-y-0.5"
             >
               See My 2024 Wrapped
             </Link>
@@ -525,20 +525,20 @@ export default function WorldClassProfile() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: i * 0.1, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="group relative overflow-hidden p-10 rounded-[2.5rem] border border-white/5 bg-[#0a0a0a] hover:bg-zinc-900/50 transition-all duration-500"
+            className="group relative overflow-hidden p-10 rounded-[2.5rem] border border-border bg-surface hover:bg-zinc-900/50 transition-all duration-500"
           >
             <div className={`mb-8 ${stat.color} opacity-80 group-hover:opacity-100 transition-opacity`}>
               <stat.icon size={32} strokeWidth={1.5} />
             </div>
             <div className="space-y-1">
-              <p className="text-5xl font-black text-white tracking-tighter">
+              <p className="text-5xl font-black text-foreground tracking-tighter">
                 {stat.value}
-                <span className="text-lg text-white/20 ml-1 font-medium">{stat.label === "Trust" ? "%" : ""}</span>
+                <span className="text-lg text-subtle ml-1 font-medium">{stat.label === "Trust" ? "%" : ""}</span>
               </p>
-              <p className="text-xs font-bold text-white/30 uppercase tracking-[0.2em]">{stat.label}</p>
+              <p className="text-xs font-bold text-subtle uppercase tracking-[0.2em]">{stat.label}</p>
             </div>
-            <p className="mt-6 text-sm text-white/40 font-medium">{stat.sub}</p>
-            <div className="absolute -bottom-4 -right-4 w-24 h-24 bg-white/5 rounded-full blur-2xl group-hover:bg-amber-500/10 transition-all" />
+            <p className="mt-6 text-sm text-muted font-medium">{stat.sub}</p>
+            <div className="absolute -bottom-4 -right-4 w-24 h-24 bg-surface rounded-full blur-2xl group-hover:bg-accent/10 transition-all" />
           </motion.div>
         ))}
       </section>
@@ -546,13 +546,13 @@ export default function WorldClassProfile() {
       {/* 3. TAB SECTION */}
       <section className="space-y-10">
         {/* Tab nav */}
-        <div className="relative flex items-center gap-1 p-1 rounded-2xl bg-white/[0.03] border border-white/5 w-fit">
+        <div className="relative flex items-center gap-1 p-1 rounded-2xl bg-surface border border-border w-fit">
           {TABS.map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
               className={`relative px-8 py-3 rounded-xl text-sm font-black uppercase tracking-widest transition-colors duration-200 ${
-                activeTab === tab ? "text-white" : "text-white/35 hover:text-white/70"
+                activeTab === tab ? "text-foreground" : "text-subtle hover:text-muted"
               }`}
             >
               {activeTab === tab && (
@@ -593,7 +593,7 @@ export default function WorldClassProfile() {
         {/* ANIME DNA (GENRES) */}
         <div className="lg:col-span-5 space-y-10">
           <h2 className="text-4xl font-black tracking-tighter">Anime DNA</h2>
-          <div className="p-12 rounded-[3rem] border border-white/5 bg-gradient-to-br from-zinc-900/80 to-black backdrop-blur-3xl space-y-10 relative shadow-2xl">
+          <div className="p-12 rounded-[3rem] border border-border bg-gradient-to-br from-zinc-900/80 to-black backdrop-blur-3xl space-y-10 relative shadow-2xl">
             <div className="absolute top-8 right-12 opacity-10">
               <Award size={80} strokeWidth={1} />
             </div>
@@ -602,18 +602,18 @@ export default function WorldClassProfile() {
               <DNABar label="Shonen" percent={85} colors="from-indigo-600 via-blue-500 to-cyan-400" />
               <DNABar label="Psychological" percent={64} colors="from-purple-600 via-pink-500 to-rose-400" />
               <DNABar label="Seinen" percent={42} colors="from-emerald-600 via-teal-500 to-green-400" />
-              <DNABar label="Fantasy" percent={30} colors="from-orange-600 via-yellow-500 to-amber-400" />
+              <DNABar label="Fantasy" percent={30} colors="from-orange-600 via-yellow-500 to-accent-bright" />
             </div>
 
-            <div className="pt-10 border-t border-white/5 flex flex-col gap-6">
+            <div className="pt-10 border-t border-border flex flex-col gap-6">
               <div className="flex justify-between items-end">
                 <div className="space-y-1">
-                  <p className="text-[10px] font-black text-white/30 uppercase tracking-[0.2em]">Runtime Exposure</p>
-                  <p className="text-3xl font-black text-white">
-                    1,420<span className="text-sm font-medium text-white/40 ml-1 italic">hours</span>
+                  <p className="text-[10px] font-black text-subtle uppercase tracking-[0.2em]">Runtime Exposure</p>
+                  <p className="text-3xl font-black text-foreground">
+                    1,420<span className="text-sm font-medium text-muted ml-1 italic">hours</span>
                   </p>
                 </div>
-                <Clock size={40} className="text-amber-500 opacity-20" strokeWidth={1} />
+                <Clock size={40} className="text-accent opacity-20" strokeWidth={1} />
               </div>
             </div>
           </div>

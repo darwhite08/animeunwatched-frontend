@@ -282,14 +282,14 @@ export default function HistoryPage() {
           <motion.p
             initial={{ opacity: 0, x: -16 }}
             animate={{ opacity: 1, x: 0 }}
-            className="flex items-center gap-2 text-amber-400 font-black uppercase tracking-[0.4em] text-[10px]"
+            className="flex items-center gap-2 text-accent-bright font-black uppercase tracking-[0.4em] text-[10px]"
           >
             <History size={13} /> Viewing Log
           </motion.p>
-          <h1 className="text-6xl md:text-7xl font-black tracking-tighter text-white italic leading-none">
+          <h1 className="text-6xl md:text-7xl font-black tracking-tighter text-foreground italic leading-none">
             Watch<span style={{color:"#f59e0b"}}>.</span>
             <br />
-            <span className="text-white/20">History</span>
+            <span className="text-subtle">History</span>
           </h1>
         </div>
 
@@ -316,15 +316,15 @@ export default function HistoryPage() {
         ].map(({ label, value, icon }) => (
           <div
             key={label}
-            className="rounded-2xl border border-white/5 bg-white/[0.02] p-5"
+            className="rounded-2xl border border-border bg-surface p-5"
           >
-            <div className="flex items-center gap-2 text-amber-400 mb-2">
+            <div className="flex items-center gap-2 text-accent-bright mb-2">
               {icon}
-              <span className="text-[9px] font-black uppercase tracking-widest text-white/30">
+              <span className="text-[9px] font-black uppercase tracking-widest text-subtle">
                 {label}
               </span>
             </div>
-            <p className="text-2xl font-black text-white italic">{value}</p>
+            <p className="text-2xl font-black text-foreground italic">{value}</p>
           </div>
         ))}
       </motion.div>
@@ -334,19 +334,19 @@ export default function HistoryPage() {
         <div className="relative group flex-1">
           <Search
             size={14}
-            className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-amber-400 transition-colors"
+            className="absolute left-4 top-1/2 -translate-y-1/2 text-subtle group-focus-within:text-accent-bright transition-colors"
           />
           <input
             type="text"
             placeholder="Filter by anime name…"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            className="w-full pl-11 pr-10 py-3 rounded-2xl bg-white/[0.03] border border-white/10 text-white placeholder:text-white/20 focus:outline-none focus:border-amber-500/40 transition-all text-sm"
+            className="w-full pl-11 pr-10 py-3 rounded-2xl bg-surface border border-border text-foreground placeholder:text-subtle focus:outline-none focus:border-accent/40 transition-all text-sm"
           />
           {query && (
             <button
               onClick={() => setQuery("")}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-white/30 hover:text-white transition-colors"
+              className="absolute right-4 top-1/2 -translate-y-1/2 text-subtle hover:text-foreground transition-colors"
             >
               <X size={14} />
             </button>
@@ -355,7 +355,7 @@ export default function HistoryPage() {
 
         <Link
           href="/watchlist"
-          className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-amber-500 hover:bg-amber-400 text-black font-black text-[10px] uppercase tracking-widest transition-all whitespace-nowrap"
+          className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-accent hover:bg-accent-bright text-black font-black text-[10px] uppercase tracking-widest transition-all whitespace-nowrap"
         >
           Continue Watching <ArrowRight size={13} />
         </Link>
@@ -366,10 +366,10 @@ export default function HistoryPage() {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="py-32 text-center border border-dashed border-white/5 rounded-[2rem]"
+          className="py-32 text-center border border-dashed border-border rounded-[2rem]"
         >
-          <History size={28} className="mx-auto mb-3 text-white/10" />
-          <p className="text-white/20 font-black uppercase tracking-widest text-xs">
+          <History size={28} className="mx-auto mb-3 text-subtle" />
+          <p className="text-subtle font-black uppercase tracking-widest text-xs">
             No watch history yet
           </p>
         </motion.div>
@@ -377,14 +377,14 @@ export default function HistoryPage() {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="py-20 text-center border border-dashed border-white/5 rounded-[2rem]"
+          className="py-20 text-center border border-dashed border-border rounded-[2rem]"
         >
-          <p className="text-white/20 font-black uppercase tracking-widest text-xs">
+          <p className="text-subtle font-black uppercase tracking-widest text-xs">
             No results for &ldquo;{query}&rdquo;
           </p>
           <button
             onClick={() => setQuery("")}
-            className="mt-4 text-xs text-amber-400 hover:text-amber-300 font-black uppercase tracking-widest"
+            className="mt-4 text-xs text-accent-bright hover:text-accent-bright font-black uppercase tracking-widest"
           >
             Clear search
           </button>
@@ -395,11 +395,11 @@ export default function HistoryPage() {
             <div key={dayLabel}>
               {/* Day label */}
               <div className="flex items-center gap-3 mb-4">
-                <span className="text-[10px] font-black text-white/30 uppercase tracking-widest">
+                <span className="text-[10px] font-black text-subtle uppercase tracking-widest">
                   {dayLabel}
                 </span>
-                <div className="flex-1 h-px bg-white/5" />
-                <span className="text-[9px] font-black text-white/15 uppercase tracking-widest">
+                <div className="flex-1 h-px bg-surface" />
+                <span className="text-[9px] font-black text-subtle uppercase tracking-widest">
                   {dayEntries.length} ep
                 </span>
               </div>
@@ -439,33 +439,33 @@ function HistoryEntryRow({
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: 12 }}
       transition={{ delay: index * 0.03 }}
-      className="flex items-center gap-4 px-4 py-3.5 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-white/10 hover:bg-white/[0.04] transition-all group"
+      className="flex items-center gap-4 px-4 py-3.5 rounded-2xl bg-surface border border-border hover:border-border hover:bg-white/[0.04] transition-all group"
     >
       {/* Cover thumbnail */}
       <div
         className={`relative w-12 h-14 rounded-xl overflow-hidden shrink-0 bg-gradient-to-br ${entry.coverGradient}`}
       >
         <div className="absolute inset-0 flex items-center justify-center">
-          <MonitorPlay size={16} className="text-white/30" />
+          <MonitorPlay size={16} className="text-subtle" />
         </div>
       </div>
 
       {/* Info */}
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-black text-white uppercase italic tracking-tight truncate">
+        <p className="text-sm font-black text-foreground uppercase italic tracking-tight truncate">
           {entry.animeTitle}
         </p>
-        <p className="text-[10px] font-bold text-white/30 uppercase tracking-widest mt-0.5">
+        <p className="text-[10px] font-bold text-subtle uppercase tracking-widest mt-0.5">
           {entry.episode}
         </p>
       </div>
 
       {/* Time */}
       <div className="hidden sm:flex flex-col items-end gap-1 shrink-0">
-        <span className="text-[10px] font-black text-white/25 uppercase tracking-widest">
+        <span className="text-[10px] font-black text-subtle uppercase tracking-widest">
           {formatTime(entry.watchedAt)}
         </span>
-        <span className="text-[9px] font-black text-white/15 flex items-center gap-1">
+        <span className="text-[9px] font-black text-subtle flex items-center gap-1">
           <Clock size={9} /> {entry.duration}
         </span>
       </div>
@@ -474,7 +474,7 @@ function HistoryEntryRow({
       <span
         className={`px-2.5 py-1 rounded-full text-[8px] font-black uppercase tracking-widest border shrink-0 ${
           PLATFORM_COLOR[entry.platform] ??
-          "bg-white/5 text-white/30 border-white/10"
+          "bg-surface text-subtle border-border"
         }`}
       >
         {entry.platform}

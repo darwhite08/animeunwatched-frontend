@@ -56,13 +56,13 @@ export default function FloatingActions({ anime, onReview }: FloatingActionsProp
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 20 }}
-          className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[80] flex items-center gap-2 px-3 py-3 bg-[#0c0c0c]/90 backdrop-blur-xl border border-white/10 rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.6)]"
+          className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[80] flex items-center gap-2 px-3 py-3 bg-[#0c0c0c]/90 backdrop-blur-xl border border-border rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.6)]"
         >
           {/* Anime title pill */}
-          <span className="text-[10px] font-black uppercase tracking-widest text-white/50 px-2 max-w-[140px] truncate hidden sm:block">
+          <span className="text-[10px] font-black uppercase tracking-widest text-muted px-2 max-w-[140px] truncate hidden sm:block">
             {anime.title}
           </span>
-          <div className="w-px h-4 bg-white/10 hidden sm:block" />
+          <div className="w-px h-4 bg-surface hidden sm:block" />
 
           {/* Add to watchlist */}
           <motion.button
@@ -71,8 +71,8 @@ export default function FloatingActions({ anime, onReview }: FloatingActionsProp
             onClick={toggle}
             className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${
               inList
-                ? "bg-emerald-600 text-white"
-                : "bg-amber-500 text-black shadow-[0_0_16px_rgba(245,158,11,0.4)]"
+                ? "bg-emerald-600 text-foreground"
+                : "bg-accent text-black shadow-[0_0_16px_rgba(245,158,11,0.4)]"
             }`}
           >
             {inList ? <Check size={13} /> : <Plus size={13} />}
@@ -85,7 +85,7 @@ export default function FloatingActions({ anime, onReview }: FloatingActionsProp
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.93 }}
               onClick={onReview}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-xl border border-white/10 bg-white/5 text-xs font-black uppercase tracking-widest text-white/60 hover:text-white hover:bg-white/10 transition-all"
+              className="flex items-center gap-1.5 px-4 py-2 rounded-xl border border-border bg-surface text-xs font-black uppercase tracking-widest text-muted hover:text-foreground hover:bg-surface transition-all"
             >
               <PenSquare size={12} /> Review
             </motion.button>
@@ -96,7 +96,7 @@ export default function FloatingActions({ anime, onReview }: FloatingActionsProp
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.93 }}
             onClick={share}
-            className="p-2 rounded-xl border border-white/10 bg-white/5 text-white/40 hover:text-white hover:bg-white/10 transition-all"
+            className="p-2 rounded-xl border border-border bg-surface text-muted hover:text-foreground hover:bg-surface transition-all"
           >
             <Share2 size={13} />
           </motion.button>

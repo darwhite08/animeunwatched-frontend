@@ -50,7 +50,7 @@ export default function AIDiscoverPage() {
   void isFetching
 
   return (
-    <main className="min-h-screen flex flex-col bg-black text-white w-full">
+    <main className="min-h-screen flex flex-col bg-background text-foreground w-full">
       <AIDiscoverHero />
       <div className="bg-[#030303] pt-0 pb-16 px-6 -mt-8 relative z-10">
         <div className="max-w-5xl mx-auto">

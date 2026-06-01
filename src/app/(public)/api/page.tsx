@@ -31,8 +31,8 @@ const ENDPOINTS: Endpoint[] = [
 
 const METHOD_STYLE: Record<HttpMethod, { bg: string; text: string; border: string }> = {
   GET:    { bg: "bg-emerald-500/10", text: "text-emerald-400", border: "border-emerald-500/20" },
-  POST:   { bg: "bg-amber-500/10",  text: "text-amber-400",  border: "border-amber-500/20"  },
-  PATCH:  { bg: "bg-amber-500/10",   text: "text-amber-400",   border: "border-amber-500/20"   },
+  POST:   { bg: "bg-accent/10",  text: "text-accent-bright",  border: "border-accent/20"  },
+  PATCH:  { bg: "bg-accent/10",   text: "text-accent-bright",   border: "border-accent/20"   },
   DELETE: { bg: "bg-rose-500/10",    text: "text-rose-400",    border: "border-rose-500/20"    },
 }
 
@@ -76,7 +76,7 @@ function CopyButton({ text, label = "Copy" }: { text: string; label?: string }) 
   return (
     <button
       onClick={handleCopy}
-      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/8 border border-white/8 text-[10px] font-black uppercase tracking-widest text-white/50 hover:text-white/80 transition-all"
+      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface hover:bg-surface border border-border text-[10px] font-black uppercase tracking-widest text-muted hover:text-muted transition-all"
     >
       {copied ? (
         <><Check size={11} className="text-emerald-400" /> Copied</>
@@ -90,14 +90,14 @@ function CopyButton({ text, label = "Copy" }: { text: string; label?: string }) 
 /* ─── Code block ─── */
 function CodeBlock({ code, label }: { code: string; label?: string }) {
   return (
-    <div className="relative rounded-2xl bg-[#0a0a0a] border border-white/8 overflow-hidden">
+    <div className="relative rounded-2xl bg-surface border border-border overflow-hidden">
       {label && (
-        <div className="flex items-center justify-between px-5 py-3 border-b border-white/5">
-          <span className="text-[10px] font-black uppercase tracking-widest text-white/30">{label}</span>
+        <div className="flex items-center justify-between px-5 py-3 border-b border-border">
+          <span className="text-[10px] font-black uppercase tracking-widest text-subtle">{label}</span>
           <CopyButton text={code} />
         </div>
       )}
-      <pre className="p-5 overflow-x-auto text-xs text-white/65 leading-relaxed font-mono">
+      <pre className="p-5 overflow-x-auto text-xs text-muted leading-relaxed font-mono">
         <code>{code}</code>
       </pre>
     </div>
@@ -107,12 +107,12 @@ function CodeBlock({ code, label }: { code: string; label?: string }) {
 /* ─── Page ─── */
 export default function ApiDocsPage() {
   return (
-    <div className="min-h-screen bg-[#020202] text-white pb-32">
+    <div className="min-h-screen bg-background text-foreground pb-32">
 
       {/* ── Header ── */}
-      <section className="relative overflow-hidden border-b border-white/5">
+      <section className="relative overflow-hidden border-b border-border">
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-amber-600/7 blur-[130px] rounded-full" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-accent/7 blur-[130px] rounded-full" />
         </div>
 
         <div className="relative z-10 max-w-4xl mx-auto px-6 pt-24 pb-16">
@@ -121,10 +121,10 @@ export default function ApiDocsPage() {
             animate={{ opacity: 1, y: 0 }}
             className="flex items-center gap-3 mb-6"
           >
-            <div className="p-2 rounded-xl bg-amber-500/10 border border-amber-500/20">
-              <Code2 size={18} className="text-amber-400" />
+            <div className="p-2 rounded-xl bg-accent/10 border border-accent/20">
+              <Code2 size={18} className="text-accent-bright" />
             </div>
-            <span className="px-3 py-1 rounded-full bg-amber-600/15 border border-amber-500/25 text-xs font-black font-mono text-amber-400">
+            <span className="px-3 py-1 rounded-full bg-accent/15 border border-accent/25 text-xs font-black font-mono text-accent-bright">
               v1.0.0
             </span>
           </motion.div>
@@ -133,16 +133,16 @@ export default function ApiDocsPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.05 }}
-            className="text-5xl md:text-6xl font-black tracking-tighter uppercase italic leading-[0.95] text-white mb-5"
+            className="text-5xl md:text-6xl font-black tracking-tighter uppercase italic leading-[0.95] text-foreground mb-5"
           >
-            Developer<span className="text-amber-400"> API</span><span className="text-white">.</span>
+            Developer<span className="text-accent-bright"> API</span><span className="text-foreground">.</span>
           </motion.h1>
 
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.1 }}
-            className="text-white/45 text-base max-w-2xl leading-relaxed"
+            className="text-muted text-base max-w-2xl leading-relaxed"
           >
             Build anime apps on the Kaiveron infrastructure. Access the full catalog,
             community data, and analytics via a clean REST API with JWT authentication.
@@ -162,17 +162,17 @@ export default function ApiDocsPage() {
             <div className="p-2 rounded-xl bg-violet-500/10 border border-violet-500/20">
               <Shield size={16} className="text-violet-400" />
             </div>
-            <h2 className="text-xl font-black tracking-tighter uppercase italic text-white">
+            <h2 className="text-xl font-black tracking-tighter uppercase italic text-foreground">
               Authentication
             </h2>
           </div>
 
-          <p className="text-sm text-white/45 leading-relaxed mb-5">
-            Protected endpoints require a <span className="font-mono text-amber-300 text-xs">Bearer</span> token
-            in the <span className="font-mono text-amber-300 text-xs">Authorization</span> header.
-            Obtain a token via <span className="font-mono text-amber-300 text-xs">POST /api/v1/auth/login</span>.
+          <p className="text-sm text-muted leading-relaxed mb-5">
+            Protected endpoints require a <span className="font-mono text-accent-bright text-xs">Bearer</span> token
+            in the <span className="font-mono text-accent-bright text-xs">Authorization</span> header.
+            Obtain a token via <span className="font-mono text-accent-bright text-xs">POST /api/v1/auth/login</span>.
             Tokens expire in 15 minutes — your client should use the httpOnly refresh cookie
-            (<span className="font-mono text-amber-300 text-xs">credentials: &quot;include&quot;</span>) to rotate automatically.
+            (<span className="font-mono text-accent-bright text-xs">credentials: &quot;include&quot;</span>) to rotate automatically.
           </p>
 
           <CodeBlock code={AUTH_EXAMPLE} label="Bearer auth example — JavaScript" />
@@ -185,20 +185,20 @@ export default function ApiDocsPage() {
           transition={{ delay: 0.18 }}
         >
           <div className="flex items-center gap-3 mb-6">
-            <div className="p-2 rounded-xl bg-amber-500/10 border border-amber-500/20">
-              <BookOpen size={16} className="text-amber-400" />
+            <div className="p-2 rounded-xl bg-accent/10 border border-accent/20">
+              <BookOpen size={16} className="text-accent-bright" />
             </div>
-            <h2 className="text-xl font-black tracking-tighter uppercase italic text-white">
+            <h2 className="text-xl font-black tracking-tighter uppercase italic text-foreground">
               Endpoint Reference
             </h2>
           </div>
 
-          <div className="rounded-2xl border border-white/8 bg-[#0a0a0a] overflow-hidden">
+          <div className="rounded-2xl border border-border bg-surface overflow-hidden">
             {/* Table header */}
-            <div className="grid grid-cols-[80px_1fr_1fr] gap-4 px-5 py-3 border-b border-white/5 bg-white/[0.015]">
-              <span className="text-[9px] font-black uppercase tracking-[0.3em] text-white/25">Method</span>
-              <span className="text-[9px] font-black uppercase tracking-[0.3em] text-white/25">Endpoint</span>
-              <span className="text-[9px] font-black uppercase tracking-[0.3em] text-white/25">Description</span>
+            <div className="grid grid-cols-[80px_1fr_1fr] gap-4 px-5 py-3 border-b border-border bg-white/[0.015]">
+              <span className="text-[9px] font-black uppercase tracking-[0.3em] text-subtle">Method</span>
+              <span className="text-[9px] font-black uppercase tracking-[0.3em] text-subtle">Endpoint</span>
+              <span className="text-[9px] font-black uppercase tracking-[0.3em] text-subtle">Description</span>
             </div>
 
             {/* Rows */}
@@ -207,17 +207,17 @@ export default function ApiDocsPage() {
               return (
                 <div
                   key={ep.path}
-                  className={`grid grid-cols-[80px_1fr_1fr] gap-4 px-5 py-4 items-start transition-colors hover:bg-white/[0.02] ${
+                  className={`grid grid-cols-[80px_1fr_1fr] gap-4 px-5 py-4 items-start transition-colors hover:bg-surface ${
                     i < ENDPOINTS.length - 1 ? "border-b border-white/4" : ""
                   }`}
                 >
                   <span className={`inline-flex items-center justify-center px-2 py-0.5 rounded-lg border text-[9px] font-black font-mono tracking-widest w-fit ${m.bg} ${m.text} ${m.border}`}>
                     {ep.method}
                   </span>
-                  <code className="text-xs font-mono text-white/70 break-all leading-relaxed">
+                  <code className="text-xs font-mono text-muted break-all leading-relaxed">
                     {ep.path}
                   </code>
-                  <span className="text-xs text-white/40 leading-relaxed">{ep.description}</span>
+                  <span className="text-xs text-muted leading-relaxed">{ep.description}</span>
                 </div>
               )
             })}
@@ -234,7 +234,7 @@ export default function ApiDocsPage() {
             <div className="p-2 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
               <Terminal size={16} className="text-emerald-400" />
             </div>
-            <h2 className="text-xl font-black tracking-tighter uppercase italic text-white">
+            <h2 className="text-xl font-black tracking-tighter uppercase italic text-foreground">
               Quick Example
             </h2>
           </div>
@@ -247,15 +247,15 @@ export default function ApiDocsPage() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.26 }}
-          className="rounded-2xl border border-amber-500/20 bg-amber-600/5 p-7 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5"
+          className="rounded-2xl border border-accent/20 bg-accent/5 p-7 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-5"
         >
           <div className="flex items-center gap-4">
-            <div className="p-2.5 rounded-xl bg-amber-500/15 border border-amber-500/25">
-              <ExternalLink size={16} className="text-amber-400" />
+            <div className="p-2.5 rounded-xl bg-accent/15 border border-accent/25">
+              <ExternalLink size={16} className="text-accent-bright" />
             </div>
             <div>
-              <p className="text-sm font-black text-white">Full OpenAPI Specification</p>
-              <p className="text-xs text-white/35 mt-0.5 font-mono">{OPENAPI_URL}</p>
+              <p className="text-sm font-black text-foreground">Full OpenAPI Specification</p>
+              <p className="text-xs text-subtle mt-0.5 font-mono">{OPENAPI_URL}</p>
             </div>
           </div>
           <div className="flex items-center gap-3">
@@ -264,7 +264,7 @@ export default function ApiDocsPage() {
               href={OPENAPI_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-xs font-black uppercase tracking-widest text-white transition-all"
+              className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-accent hover:bg-accent-bright text-xs font-black uppercase tracking-widest text-foreground transition-all"
             >
               Open Spec <ChevronRight size={12} />
             </a>
@@ -278,29 +278,29 @@ export default function ApiDocsPage() {
           transition={{ delay: 0.3 }}
         >
           <div className="flex items-center gap-3 mb-6">
-            <div className="p-2 rounded-xl bg-amber-500/10 border border-amber-500/20">
-              <Zap size={16} className="text-amber-400" />
+            <div className="p-2 rounded-xl bg-accent/10 border border-accent/20">
+              <Zap size={16} className="text-accent-bright" />
             </div>
-            <h2 className="text-xl font-black tracking-tighter uppercase italic text-white">
+            <h2 className="text-xl font-black tracking-tighter uppercase italic text-foreground">
               SDKs
             </h2>
           </div>
 
-          <div className="rounded-2xl border border-white/8 bg-[#0a0a0a] p-7 space-y-4">
+          <div className="rounded-2xl border border-border bg-surface p-7 space-y-4">
             <div className="flex items-center gap-3">
-              <span className="px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-[10px] font-black uppercase tracking-widest text-amber-400">
+              <span className="px-3 py-1 rounded-full bg-accent/10 border border-accent/20 text-[10px] font-black uppercase tracking-widest text-accent-bright">
                 Coming Soon
               </span>
-              <p className="text-sm font-black text-white/70">TypeScript SDK</p>
+              <p className="text-sm font-black text-muted">TypeScript SDK</p>
             </div>
-            <p className="text-sm text-white/35 leading-relaxed max-w-xl">
+            <p className="text-sm text-subtle leading-relaxed max-w-xl">
               An official TypeScript / JavaScript SDK is in development. It will provide type-safe
               wrappers for every endpoint, built-in token refresh, and React hooks for common queries.
               Star the repo to get notified on launch.
             </p>
-            <div className="flex items-center gap-2 text-[10px] text-white/20 font-mono mt-2">
-              <Code2 size={10} className="text-amber-500/50" />
-              npm install @kaiveron/sdk <span className="text-white/10">— arriving Q3 2026</span>
+            <div className="flex items-center gap-2 text-[10px] text-subtle font-mono mt-2">
+              <Code2 size={10} className="text-accent/50" />
+              npm install @kaiveron/sdk <span className="text-subtle">— arriving Q3 2026</span>
             </div>
           </div>
         </motion.section>

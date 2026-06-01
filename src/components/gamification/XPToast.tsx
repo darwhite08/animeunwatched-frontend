@@ -60,7 +60,7 @@ export default function XPToast({ fromLevel, toLevel, newTitle, onDismiss }: XPT
             <div className="relative px-6 py-4 flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-8">
               {/* Level up text */}
               <div className="flex items-center gap-3 flex-shrink-0">
-                <span className="text-2xl sm:text-3xl font-black tracking-tighter italic text-white drop-shadow-lg">
+                <span className="text-2xl sm:text-3xl font-black tracking-tighter italic text-foreground drop-shadow-lg">
                   ⚡ LEVEL UP!
                 </span>
               </div>
@@ -73,11 +73,11 @@ export default function XPToast({ fromLevel, toLevel, newTitle, onDismiss }: XPT
                 <motion.span
                   animate={{ x: [0, 4, 0] }}
                   transition={{ duration: 0.6, repeat: Infinity }}
-                  className="text-amber-300 font-black text-xl"
+                  className="text-accent-bright font-black text-xl"
                 >
                   →
                 </motion.span>
-                <span className="text-lg font-black text-white">
+                <span className="text-lg font-black text-foreground">
                   Level {toLevel}
                 </span>
               </div>
@@ -87,7 +87,7 @@ export default function XPToast({ fromLevel, toLevel, newTitle, onDismiss }: XPT
                 <span className="text-amber-200/70 text-sm font-bold uppercase tracking-tighter">
                   You are now:
                 </span>
-                <span className="text-white font-black text-sm tracking-tight">
+                <span className="text-foreground font-black text-sm tracking-tight">
                   {newTitle}
                 </span>
               </div>
@@ -95,7 +95,7 @@ export default function XPToast({ fromLevel, toLevel, newTitle, onDismiss }: XPT
               {/* Dismiss button */}
               <button
                 onClick={() => { setVisible(false); onDismiss?.() }}
-                className="sm:ml-auto text-amber-200/60 hover:text-white font-black text-xs uppercase tracking-tighter transition-colors flex-shrink-0"
+                className="sm:ml-auto text-amber-200/60 hover:text-foreground font-black text-xs uppercase tracking-tighter transition-colors flex-shrink-0"
               >
                 Dismiss
               </button>

@@ -36,7 +36,7 @@ export default function AIDiscoverHero() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
-          className="text-6xl md:text-8xl font-black tracking-tighter text-white leading-[0.9] mb-8"
+          className="text-6xl md:text-8xl font-black tracking-tighter text-foreground leading-[0.9] mb-8"
         >
           Find Your Next{" "}
           <span className="italic" style={{
@@ -53,7 +53,7 @@ export default function AIDiscoverHero() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.35, duration: 0.6 }}
-          className="text-white/40 max-w-xl mx-auto text-lg font-medium leading-relaxed tracking-tight"
+          className="text-muted max-w-xl mx-auto text-lg font-medium leading-relaxed tracking-tight"
         >
           Describe what you're in the mood for — our AI searches 30,000+ anime to find your perfect match.
         </motion.p>
@@ -67,7 +67,7 @@ export default function AIDiscoverHero() {
         >
           {["Mood-based search", "Genre matching", "Hidden gems", "Studio filtering", "Era selection"].map((chip, i) => (
             <span key={chip}
-              className="px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest text-white/30"
+              className="px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest text-subtle"
               style={{ border: "1px solid rgba(255,255,255,0.07)", background: "rgba(255,255,255,0.03)" }}>
               {chip}
             </span>

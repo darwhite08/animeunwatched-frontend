@@ -52,17 +52,17 @@ export default function ReportModal({ isOpen, onClose, contentType, contentId }:
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.93 }}
             transition={{ type: "spring", damping: 26, stiffness: 280 }}
-            className="relative w-full max-w-md bg-[#0c0c0c] rounded-3xl border border-white/10 p-7 shadow-2xl"
+            className="relative w-full max-w-md bg-[#0c0c0c] rounded-3xl border border-border p-7 shadow-2xl"
           >
-            <button onClick={onClose} className="absolute top-5 right-5 p-2 rounded-full bg-white/5 border border-white/10 text-white/40 hover:text-white transition-colors">
+            <button onClick={onClose} className="absolute top-5 right-5 p-2 rounded-full bg-surface border border-border text-muted hover:text-foreground transition-colors">
               <X size={15} />
             </button>
 
             {submitted ? (
               <motion.div initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} className="text-center py-6 space-y-4">
                 <CheckCircle2 size={40} className="mx-auto text-emerald-400" />
-                <p className="font-black text-white text-lg">Report Received</p>
-                <p className="text-sm text-white/40">Our moderators will review this shortly.</p>
+                <p className="font-black text-foreground text-lg">Report Received</p>
+                <p className="text-sm text-muted">Our moderators will review this shortly.</p>
               </motion.div>
             ) : (
               <div className="space-y-6">
@@ -71,7 +71,7 @@ export default function ReportModal({ isOpen, onClose, contentType, contentId }:
                     <Flag size={14} className="text-red-400" />
                     <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-red-400/70">Report {contentType}</p>
                   </div>
-                  <h2 className="text-xl font-black text-white tracking-tighter">Why are you reporting this?</h2>
+                  <h2 className="text-xl font-black text-foreground tracking-tighter">Why are you reporting this?</h2>
                 </div>
 
                 <div className="space-y-2">
@@ -81,8 +81,8 @@ export default function ReportModal({ isOpen, onClose, contentType, contentId }:
                       onClick={() => setReason(r)}
                       className={`w-full text-left px-4 py-3 rounded-xl border text-sm transition-all ${
                         reason === r
-                          ? "bg-red-500/10 border-red-500/30 text-white font-bold"
-                          : "border-white/8 bg-white/[0.02] text-white/50 hover:border-white/20 hover:text-white"
+                          ? "bg-red-500/10 border-red-500/30 text-foreground font-bold"
+                          : "border-border bg-surface text-muted hover:border-border hover:text-foreground"
                       }`}
                     >
                       {r}
@@ -91,20 +91,20 @@ export default function ReportModal({ isOpen, onClose, contentType, contentId }:
                 </div>
 
                 <div>
-                  <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/30 mb-2">Additional context (optional)</p>
+                  <p className="text-[10px] font-black uppercase tracking-[0.2em] text-subtle mb-2">Additional context (optional)</p>
                   <textarea
                     value={note}
                     onChange={e => setNote(e.target.value)}
                     placeholder="Describe the issue in more detail…"
                     rows={3}
-                    className="w-full rounded-2xl bg-white/[0.03] border border-white/10 px-4 py-3 text-sm text-white placeholder:text-white/20 outline-none focus:border-red-500/30 resize-none"
+                    className="w-full rounded-2xl bg-surface border border-border px-4 py-3 text-sm text-foreground placeholder:text-subtle outline-none focus:border-red-500/30 resize-none"
                   />
                 </div>
 
                 <button
                   onClick={handleSubmit}
                   disabled={!reason || submitting}
-                  className="w-full py-3.5 rounded-2xl bg-red-600 hover:bg-red-500 disabled:opacity-40 disabled:cursor-not-allowed font-black text-xs uppercase tracking-widest text-white transition-all flex items-center justify-center gap-2"
+                  className="w-full py-3.5 rounded-2xl bg-red-600 hover:bg-red-500 disabled:opacity-40 disabled:cursor-not-allowed font-black text-xs uppercase tracking-widest text-foreground transition-all flex items-center justify-center gap-2"
                 >
                   {submitting ? <><Loader2 size={13} className="animate-spin" /> Submitting…</> : <><Flag size={13} /> Submit Report</>}
                 </button>

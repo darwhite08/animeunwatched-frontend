@@ -140,7 +140,7 @@ export default function RatePage() {
   if (isLoading) return null
 
   return (
-    <main className="min-h-screen bg-[#020202] text-white pb-32">
+    <main className="min-h-screen bg-background text-foreground pb-32">
       {/* Anime hero background */}
       <AnimatePresence>
         {anime && (
@@ -163,14 +163,14 @@ export default function RatePage() {
           <motion.div
             initial={{ opacity:0, y:-12 }}
             animate={{ opacity:1, y:0 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-amber-500/10 border border-amber-500/20 text-[10px] font-black uppercase tracking-[0.3em] text-amber-400"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-accent/10 border border-accent/20 text-[10px] font-black uppercase tracking-[0.3em] text-accent-bright"
           >
             <ShieldCheck size={12} /> Verified Rating System
           </motion.div>
-          <h1 className="text-4xl md:text-5xl font-black tracking-tighter uppercase italic text-white">
+          <h1 className="text-4xl md:text-5xl font-black tracking-tighter uppercase italic text-foreground">
             Rate & Verify<span style={{color:"#f59e0b"}}>.</span>
           </h1>
-          <p className="text-white/40 text-sm max-w-md mx-auto">
+          <p className="text-muted text-sm max-w-md mx-auto">
             Your rating is weighted by credibility. Prove you've actually watched it to increase its impact.
           </p>
         </div>
@@ -180,14 +180,14 @@ export default function RatePage() {
           {(["select","rate","verify","result"] as Step[]).map((s, i, arr) => (
             <div key={s} className="flex items-center gap-2">
               <div className={`w-7 h-7 rounded-full flex items-center justify-center text-[10px] font-black border transition-all ${
-                s === step                             ? "bg-amber-500 border-amber-400 text-black" :
+                s === step                             ? "bg-accent border-accent text-black" :
                 arr.indexOf(step) > i                  ? "bg-emerald-600/20 border-emerald-500/30 text-emerald-400" :
-                                                         "bg-white/5 border-white/10 text-white/20"
+                                                         "bg-surface border-border text-subtle"
               }`}>
                 {arr.indexOf(step) > i ? <CheckCircle2 size={13} /> : i + 1}
               </div>
               {i < arr.length - 1 && (
-                <div className={`w-8 h-px ${arr.indexOf(step) > i ? "bg-emerald-500/40" : "bg-white/10"}`} />
+                <div className={`w-8 h-px ${arr.indexOf(step) > i ? "bg-emerald-500/40" : "bg-surface"}`} />
               )}
             </div>
           ))}
@@ -202,13 +202,13 @@ export default function RatePage() {
               className="space-y-5"
             >
               <div className="relative">
-                <Search size={15} className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30" />
+                <Search size={15} className="absolute left-4 top-1/2 -translate-y-1/2 text-subtle" />
                 <input
                   value={query}
                   onChange={e => setQuery(e.target.value)}
                   placeholder="Search anime to rate…"
                   autoFocus
-                  className="w-full pl-11 pr-4 py-4 bg-white/5 border border-white/10 rounded-2xl text-white placeholder:text-white/25 outline-none focus:border-amber-500/50 text-sm"
+                  className="w-full pl-11 pr-4 py-4 bg-surface border border-border rounded-2xl text-foreground placeholder:text-subtle outline-none focus:border-accent/50 text-sm"
                 />
               </div>
 
@@ -219,16 +219,16 @@ export default function RatePage() {
                     whileHover={{ scale:1.02 }}
                     whileTap={{ scale:0.97 }}
                     onClick={() => selectAnime(a)}
-                    className="flex items-center gap-3 p-3 rounded-2xl bg-white/[0.03] border border-white/8 hover:border-amber-500/30 hover:bg-amber-500/8 transition-all text-left group"
+                    className="flex items-center gap-3 p-3 rounded-2xl bg-surface border border-border hover:border-accent/30 hover:bg-accent/8 transition-all text-left group"
                   >
                     <div className="relative h-12 w-9 rounded-lg overflow-hidden shrink-0">
                       <Image src={a.image} alt={a.title} fill className="object-cover" sizes="36px" />
                     </div>
                     <div className="min-w-0">
-                      <p className="text-xs font-black text-white/70 group-hover:text-white transition-colors truncate">{a.title}</p>
+                      <p className="text-xs font-black text-muted group-hover:text-foreground transition-colors truncate">{a.title}</p>
                       <div className="flex items-center gap-1 mt-0.5">
-                        <Star size={9} fill="#f59e0b" className="text-amber-400" />
-                        <span className="text-[9px] text-white/30">{a.rating.toFixed(1)}</span>
+                        <Star size={9} fill="#f59e0b" className="text-accent-bright" />
+                        <span className="text-[9px] text-subtle">{a.rating.toFixed(1)}</span>
                       </div>
                     </div>
                   </motion.button>
@@ -242,18 +242,18 @@ export default function RatePage() {
             <motion.div key="rate" initial={{ opacity:0, y:16 }} animate={{ opacity:1, y:0 }} exit={{ opacity:0, y:-16 }}
               className="space-y-6"
             >
-              <div className="flex items-center gap-4 p-5 rounded-2xl bg-white/[0.03] border border-white/8">
+              <div className="flex items-center gap-4 p-5 rounded-2xl bg-surface border border-border">
                 <div className="relative h-16 w-12 rounded-xl overflow-hidden shrink-0">
                   <Image src={anime.image} alt={anime.title} fill className="object-cover" sizes="48px" />
                 </div>
                 <div>
-                  <p className="font-black text-white text-lg leading-tight">{anime.title}</p>
-                  <p className="text-xs text-white/35 mt-0.5">{anime.studio} · {anime.year}</p>
+                  <p className="font-black text-foreground text-lg leading-tight">{anime.title}</p>
+                  <p className="text-xs text-subtle mt-0.5">{anime.studio} · {anime.year}</p>
                 </div>
               </div>
 
               <div>
-                <p className="text-center text-sm font-bold text-white/50 mb-5">Select your rating</p>
+                <p className="text-center text-sm font-bold text-muted mb-5">Select your rating</p>
                 <div className="grid grid-cols-5 md:grid-cols-10 gap-2">
                   {[1,2,3,4,5,6,7,8,9,10].map(n => (
                     <motion.button
@@ -263,10 +263,10 @@ export default function RatePage() {
                       onClick={() => setRating(n)}
                       className={`aspect-square rounded-xl border font-black text-sm transition-all ${
                         rating === n
-                          ? "bg-amber-500 border-amber-400 text-black shadow-[0_0_20px_rgba(99,102,241,0.4)]"
+                          ? "bg-accent border-accent text-black shadow-[0_0_20px_rgba(99,102,241,0.4)]"
                           : rating && n <= rating
-                          ? "bg-amber-600/20 border-amber-500/30 text-amber-400"
-                          : "bg-white/5 border-white/8 text-white/30 hover:border-amber-500/30 hover:text-white"
+                          ? "bg-accent/20 border-accent/30 text-accent-bright"
+                          : "bg-surface border-border text-subtle hover:border-accent/30 hover:text-foreground"
                       }`}
                     >
                       {n}
@@ -276,10 +276,10 @@ export default function RatePage() {
 
                 {rating && (
                   <motion.div initial={{ opacity:0 }} animate={{ opacity:1 }} className="text-center mt-4">
-                    <p className="text-3xl font-black text-white">{rating}<span className="text-white/30 text-lg">/10</span></p>
+                    <p className="text-3xl font-black text-foreground">{rating}<span className="text-subtle text-lg">/10</span></p>
                     <div className="flex items-center justify-center gap-1 mt-1">
                       {[...Array(Math.round(rating/2))].map((_,i) => (
-                        <Star key={i} size={14} fill="#f59e0b" className="text-amber-400" />
+                        <Star key={i} size={14} fill="#f59e0b" className="text-accent-bright" />
                       ))}
                     </div>
                   </motion.div>
@@ -289,7 +289,7 @@ export default function RatePage() {
               <button
                 onClick={submitRating}
                 disabled={!rating}
-                className="w-full py-4 rounded-2xl bg-amber-500 hover:bg-amber-400 disabled:opacity-40 disabled:cursor-not-allowed font-black text-xs uppercase tracking-widest transition-all flex items-center justify-center gap-2"
+                className="w-full py-4 rounded-2xl bg-accent hover:bg-accent-bright disabled:opacity-40 disabled:cursor-not-allowed font-black text-xs uppercase tracking-widest transition-all flex items-center justify-center gap-2"
               >
                 Next: Verify Your Watch <ChevronRight size={14} />
               </button>
@@ -302,8 +302,8 @@ export default function RatePage() {
               className="space-y-6"
             >
               <div className="text-center">
-                <p className="text-sm font-bold text-white/50">Prove you've watched <span className="text-white">{anime.title}</span></p>
-                <p className="text-xs text-white/25 mt-1">Your credibility score boosts your rating's weight on the platform</p>
+                <p className="text-sm font-bold text-muted">Prove you've watched <span className="text-foreground">{anime.title}</span></p>
+                <p className="text-xs text-subtle mt-1">Your credibility score boosts your rating's weight on the platform</p>
               </div>
 
               {questions.map((q, qi) => (
@@ -314,7 +314,7 @@ export default function RatePage() {
                   transition={{ delay: qi * 0.08 }}
                   className="space-y-3"
                 >
-                  <p className="text-sm font-bold text-white/80">{q.q}</p>
+                  <p className="text-sm font-bold text-muted">{q.q}</p>
                   <div className="grid grid-cols-2 gap-2">
                     {q.opts.map(opt => (
                       <button
@@ -322,8 +322,8 @@ export default function RatePage() {
                         onClick={() => setAnswers(prev => ({ ...prev, [q.id]: opt }))}
                         className={`px-4 py-3 rounded-xl border text-sm text-left transition-all ${
                           answers[q.id] === opt
-                            ? "bg-amber-600/20 border-amber-500 text-white"
-                            : "border-white/10 bg-white/[0.02] text-white/50 hover:border-amber-500/30 hover:text-white"
+                            ? "bg-accent/20 border-accent text-foreground"
+                            : "border-border bg-surface text-muted hover:border-accent/30 hover:text-foreground"
                         }`}
                       >
                         {opt}
@@ -336,7 +336,7 @@ export default function RatePage() {
               <button
                 onClick={submitVerify}
                 disabled={Object.keys(answers).length < questions.length}
-                className="w-full py-4 rounded-2xl bg-amber-500 hover:bg-amber-400 disabled:opacity-40 disabled:cursor-not-allowed font-black text-xs uppercase tracking-widest transition-all"
+                className="w-full py-4 rounded-2xl bg-accent hover:bg-accent-bright disabled:opacity-40 disabled:cursor-not-allowed font-black text-xs uppercase tracking-widest transition-all"
               >
                 Submit Rating
               </button>
@@ -354,43 +354,43 @@ export default function RatePage() {
                   animate={{ scale:1 }}
                   transition={{ type:"spring", stiffness:200, damping:15, delay:0.1 }}
                   className={`w-20 h-20 mx-auto rounded-[2rem] flex items-center justify-center text-3xl ${
-                    cred === 100 ? "bg-amber-500/20 text-amber-400" :
+                    cred === 100 ? "bg-accent/20 text-accent-bright" :
                     cred >= 50  ? "bg-emerald-500/20 text-emerald-400" :
-                                   "bg-white/10 text-white/50"
+                                   "bg-surface text-muted"
                   }`}
                 >
                   {cred === 100 ? <Trophy size={36} /> : cred >= 50 ? <CheckCircle2 size={36} /> : <Sparkles size={36} />}
                 </motion.div>
 
-                <p className="text-2xl font-black text-white">{credLabel(cred)}</p>
-                <p className="text-white/40 text-sm">Your rating for <span className="text-white font-bold">{anime.title}</span></p>
+                <p className="text-2xl font-black text-foreground">{credLabel(cred)}</p>
+                <p className="text-muted text-sm">Your rating for <span className="text-foreground font-bold">{anime.title}</span></p>
 
                 <div className="flex items-center justify-center gap-2 mt-4">
                   {[...Array(Math.round((rating ?? 0)/2))].map((_,i) => (
-                    <Star key={i} size={20} fill="#f59e0b" className="text-amber-400" />
+                    <Star key={i} size={20} fill="#f59e0b" className="text-accent-bright" />
                   ))}
-                  <span className="text-2xl font-black text-white ml-2">{rating}/10</span>
+                  <span className="text-2xl font-black text-foreground ml-2">{rating}/10</span>
                 </div>
               </div>
 
               {/* Credibility bar */}
               <div className="space-y-3">
-                <div className="flex justify-between text-xs font-black uppercase tracking-widest text-white/30">
+                <div className="flex justify-between text-xs font-black uppercase tracking-widest text-subtle">
                   <span>Credibility Score</span><span>{cred.toFixed(0)}%</span>
                 </div>
-                <div className="h-3 w-full bg-white/5 rounded-full overflow-hidden">
+                <div className="h-3 w-full bg-surface rounded-full overflow-hidden">
                   <motion.div
                     initial={{ width:0 }}
                     animate={{ width:`${cred}%` }}
                     transition={{ duration:0.8, ease:"easeOut", delay:0.3 }}
                     className={`h-full rounded-full ${
-                      cred === 100 ? "bg-gradient-to-r from-amber-500 to-yellow-400" :
+                      cred === 100 ? "bg-gradient-to-r from-accent to-yellow-400" :
                       cred >= 50   ? "bg-gradient-to-r from-emerald-500 to-teal-400" :
                                      "bg-gradient-to-r from-indigo-500 to-indigo-400"
                     }`}
                   />
                 </div>
-                <p className="text-xs text-white/25">
+                <p className="text-xs text-subtle">
                   {cred === 100
                     ? "Perfect score! Your rating carries maximum weight."
                     : cred >= 50
@@ -402,7 +402,7 @@ export default function RatePage() {
               <div className="flex gap-3">
                 <button
                   onClick={reset}
-                  className="flex-1 py-3.5 rounded-2xl border border-white/10 bg-white/5 hover:bg-white/10 text-xs font-black uppercase tracking-widest text-white/60 hover:text-white transition-all flex items-center justify-center gap-2"
+                  className="flex-1 py-3.5 rounded-2xl border border-border bg-surface hover:bg-surface text-xs font-black uppercase tracking-widest text-muted hover:text-foreground transition-all flex items-center justify-center gap-2"
                 >
                   <RotateCcw size={13} /> Rate Another
                 </button>

@@ -62,7 +62,7 @@ const MOCK_POLLS: Poll[] = [
 const STATUS_BADGE: Record<PollStatus, { label: string; cls: string }> = {
   active:  { label: "Active",  cls: "bg-emerald-600/20 text-emerald-400 border-emerald-500/30" },
   closed:  { label: "Closed",  cls: "bg-zinc-600/20 text-zinc-400 border-zinc-500/30" },
-  draft:   { label: "Draft",   cls: "bg-amber-600/20 text-amber-400 border-amber-500/30" },
+  draft:   { label: "Draft",   cls: "bg-accent/20 text-accent-bright border-accent/30" },
 }
 
 type Filter = "all" | PollStatus
@@ -76,18 +76,18 @@ export default function PollsPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-amber-600/20 border border-amber-500/30 flex items-center justify-center">
-            <Vote size={18} className="text-amber-400" />
+          <div className="w-10 h-10 rounded-xl bg-accent/20 border border-accent/30 flex items-center justify-center">
+            <Vote size={18} className="text-accent-bright" />
           </div>
           <div>
             <h1 className="text-2xl font-semibold">Your Polls</h1>
-            <p className="text-sm text-white/40">{MOCK_POLLS.length} polls total</p>
+            <p className="text-sm text-muted">{MOCK_POLLS.length} polls total</p>
           </div>
         </div>
 
         <Link
           href="/creators/create/polls"
-          className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-amber-600 hover:bg-amber-700 transition text-sm font-medium"
+          className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-accent hover:bg-accent transition text-sm font-medium"
         >
           <Plus size={15} />
           New Poll
@@ -97,7 +97,7 @@ export default function PollsPage() {
       {/* Stats row */}
       <div className="grid grid-cols-3 gap-4">
         <StatCard icon={Flame} label="Total Votes" value="7,400" color="text-orange-400" />
-        <StatCard icon={Users} label="Avg Participation" value="2.5k" color="text-amber-400" />
+        <StatCard icon={Users} label="Avg Participation" value="2.5k" color="text-accent-bright" />
         <StatCard icon={CheckCircle2} label="Polls Run" value="2" color="text-emerald-400" />
       </div>
 
@@ -109,8 +109,8 @@ export default function PollsPage() {
             onClick={() => setFilter(f)}
             className={`px-4 py-2 rounded-xl text-sm capitalize transition ${
               filter === f
-                ? "bg-white/10 text-white"
-                : "text-white/40 hover:bg-white/5 hover:text-white"
+                ? "bg-surface text-foreground"
+                : "text-muted hover:bg-surface hover:text-foreground"
             }`}
           >
             {f}
@@ -125,7 +125,7 @@ export default function PollsPage() {
         ))}
 
         {visible.length === 0 && (
-          <div className="text-center py-16 text-white/30">
+          <div className="text-center py-16 text-subtle">
             <Vote size={32} className="mx-auto mb-3 opacity-30" />
             <p className="text-sm">No polls in this category</p>
           </div>
@@ -144,7 +144,7 @@ function PollCard({ poll, index }: { poll: Poll; index: number }) {
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.04 }}
-      className="bg-zinc-900 border border-white/10 hover:border-white/20 rounded-2xl p-5 space-y-4 transition cursor-pointer"
+      className="bg-zinc-900 border border-border hover:border-border rounded-2xl p-5 space-y-4 transition cursor-pointer"
     >
       {/* Top row */}
       <div className="flex items-start justify-between gap-4">
@@ -162,17 +162,17 @@ function PollCard({ poll, index }: { poll: Poll; index: number }) {
           return (
             <div key={opt.label} className="space-y-1">
               <div className="flex justify-between text-xs">
-                <span className={isWinner ? "text-amber-400 font-medium" : "text-white/60"}>
+                <span className={isWinner ? "text-accent-bright font-medium" : "text-muted"}>
                   {opt.label}
                 </span>
-                <span className="text-white/40">{pct}%</span>
+                <span className="text-muted">{pct}%</span>
               </div>
               <div className="h-1.5 bg-zinc-800 rounded-full overflow-hidden">
                 <motion.div
                   initial={{ width: 0 }}
                   animate={{ width: `${pct}%` }}
                   transition={{ duration: 0.6, ease: "easeOut" }}
-                  className={`h-full rounded-full ${isWinner ? "bg-amber-500" : "bg-amber-500"}`}
+                  className={`h-full rounded-full ${isWinner ? "bg-accent" : "bg-accent"}`}
                 />
               </div>
             </div>
@@ -181,7 +181,7 @@ function PollCard({ poll, index }: { poll: Poll; index: number }) {
       </div>
 
       {/* Footer */}
-      <div className="flex items-center gap-4 text-xs text-white/30 pt-1 border-t border-white/5">
+      <div className="flex items-center gap-4 text-xs text-subtle pt-1 border-t border-border">
         <span className="flex items-center gap-1.5">
           <Users size={11} />
           {poll.totalVotes.toLocaleString()} votes
@@ -211,11 +211,11 @@ function StatCard({
   color: string
 }) {
   return (
-    <div className="bg-zinc-900 border border-white/10 rounded-2xl p-4 flex items-center gap-3">
+    <div className="bg-zinc-900 border border-border rounded-2xl p-4 flex items-center gap-3">
       <Icon size={18} className={color} />
       <div>
         <p className="text-lg font-semibold">{value}</p>
-        <p className="text-xs text-white/40">{label}</p>
+        <p className="text-xs text-muted">{label}</p>
       </div>
     </div>
   )

@@ -148,7 +148,7 @@ function ClubCard({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.95 }}
       transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-      className="group relative overflow-hidden rounded-3xl border border-white/10 bg-zinc-900/60 hover:border-white/20 transition-all duration-300"
+      className="group relative overflow-hidden rounded-3xl border border-border bg-zinc-900/60 hover:border-border transition-all duration-300"
     >
       {/* Cover gradient strip */}
       <div
@@ -156,7 +156,7 @@ function ClubCard({
       >
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(255,255,255,0.06),transparent_60%)]" />
         <div className="absolute bottom-3 left-4">
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-black/40 backdrop-blur border border-white/10 text-[9px] font-black uppercase tracking-widest text-white/60">
+          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-black/40 backdrop-blur border border-border text-[9px] font-black uppercase tracking-widest text-muted">
             <Icon size={9} />
             {club.category}
           </span>
@@ -165,34 +165,34 @@ function ClubCard({
 
       <div className="p-5 space-y-4">
         {/* Name */}
-        <h3 className="text-base font-black uppercase italic tracking-tight text-white leading-snug group-hover:text-amber-300 transition-colors">
+        <h3 className="text-base font-black uppercase italic tracking-tight text-foreground leading-snug group-hover:text-accent-bright transition-colors">
           {club.name}
         </h3>
 
         {/* Description */}
-        <p className="text-xs text-white/50 leading-relaxed line-clamp-2">
+        <p className="text-xs text-muted leading-relaxed line-clamp-2">
           {club.description}
         </p>
 
         {/* Stats row */}
         <div className="flex items-center gap-4">
-          <span className="flex items-center gap-1.5 text-[10px] font-bold text-white/40">
+          <span className="flex items-center gap-1.5 text-[10px] font-bold text-muted">
             <Users size={11} />
             {club.memberCount.toLocaleString()} members
           </span>
-          <span className="flex items-center gap-1.5 text-[10px] font-bold text-white/40">
+          <span className="flex items-center gap-1.5 text-[10px] font-bold text-muted">
             <MessageSquare size={11} />
             {club.threadCount} threads
           </span>
         </div>
 
         {/* Actions */}
-        <div className="flex items-center gap-2 pt-1 border-t border-white/5">
+        <div className="flex items-center gap-2 pt-1 border-t border-border">
           <button
             onClick={() => onToggleJoin(club.id)}
             className={`flex-1 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-200 ${
               club.isJoined
-                ? "bg-white/8 border border-white/10 text-white/50 hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/20"
+                ? "bg-surface border border-border text-muted hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/20"
                 : "text-black shadow-[0_0_20px_rgba(245,158,11,0.3)]" // gold
             }`}
           >
@@ -200,7 +200,7 @@ function ClubCard({
           </button>
           <Link
             href={`/clubs/${club.slug}`}
-            className="flex items-center gap-1 px-3 py-2 rounded-xl bg-white/5 border border-white/8 text-[10px] font-black uppercase tracking-widest text-white/50 hover:text-white hover:border-white/15 transition-all"
+            className="flex items-center gap-1 px-3 py-2 rounded-xl bg-surface border border-border text-[10px] font-black uppercase tracking-widest text-muted hover:text-foreground hover:border-border transition-all"
           >
             View <ChevronRight size={11} />
           </Link>
@@ -244,9 +244,9 @@ export default function ClubsPage() {
   })
 
   return (
-    <div className="min-h-screen bg-[#020202] text-white pb-32">
+    <div className="min-h-screen bg-background text-foreground pb-32">
       {/* Hero header */}
-      <div className="relative overflow-hidden border-b border-white/5">
+      <div className="relative overflow-hidden border-b border-border">
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-[-30%] right-[-5%] w-[40%] h-[200%] bg-indigo-700/15 blur-[120px] rounded-full" />
           <div className="absolute bottom-[-20%] left-[-10%] w-[35%] h-[150%] bg-violet-900/10 blur-[100px] rounded-full" />
@@ -260,13 +260,13 @@ export default function ClubsPage() {
           >
             <div className="flex items-end justify-between gap-6 flex-wrap">
               <div>
-                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-amber-400/70 mb-3">
+                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-accent-bright/70 mb-3">
                   Community
                 </p>
-                <h1 className="text-6xl font-black uppercase italic tracking-tighter text-white leading-none">
+                <h1 className="text-6xl font-black uppercase italic tracking-tighter text-foreground leading-none">
                   Clubs<span style={{color:"#f59e0b"}}>.</span>
                 </h1>
-                <p className="mt-3 text-white/40 text-sm max-w-md">
+                <p className="mt-3 text-muted text-sm max-w-md">
                   Join the conversation, build your community. Find your people.
                 </p>
               </div>
@@ -292,14 +292,14 @@ export default function ClubsPage() {
           <div className="relative flex-1">
             <Search
               size={14}
-              className="absolute left-4 top-1/2 -translate-y-1/2 text-white/30 pointer-events-none"
+              className="absolute left-4 top-1/2 -translate-y-1/2 text-subtle pointer-events-none"
             />
             <input
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search clubs…"
-              className="w-full pl-10 pr-4 py-3 rounded-xl bg-white/[0.03] border border-white/8 text-sm text-white placeholder:text-white/25 focus:outline-none focus:border-amber-500/40 focus:bg-white/[0.05] transition-all"
+              className="w-full pl-10 pr-4 py-3 rounded-xl bg-surface border border-border text-sm text-foreground placeholder:text-subtle focus:outline-none focus:border-accent/40 focus:bg-surface transition-all"
             />
           </div>
           <div className="flex items-center gap-2 flex-wrap">
@@ -310,7 +310,7 @@ export default function ClubsPage() {
                 className={`px-4 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all ${
                   activeCategory === cat
                     ? "text-black shadow-[0_0_16px_rgba(245,158,11,0.3)]"
-                    : "bg-white/[0.03] border border-white/8 text-white/40 hover:text-white/70 hover:border-white/15"
+                    : "bg-surface border border-border text-muted hover:text-muted hover:border-border"
                 }`}
               >
                 {cat}
@@ -320,7 +320,7 @@ export default function ClubsPage() {
         </motion.div>
 
         {/* Results count */}
-        <p className="text-[10px] font-black uppercase tracking-[0.2em] text-white/20 mb-6">
+        <p className="text-[10px] font-black uppercase tracking-[0.2em] text-subtle mb-6">
           {filtered.length} club{filtered.length !== 1 ? "s" : ""} found
         </p>
 
@@ -343,13 +343,13 @@ export default function ClubsPage() {
               exit={{ opacity: 0 }}
               className="flex flex-col items-center justify-center py-32 space-y-4"
             >
-              <div className="h-20 w-20 rounded-3xl bg-white/[0.03] border border-white/8 flex items-center justify-center">
-                <Users size={28} className="text-white/20" />
+              <div className="h-20 w-20 rounded-3xl bg-surface border border-border flex items-center justify-center">
+                <Users size={28} className="text-subtle" />
               </div>
-              <p className="text-lg font-black uppercase italic text-white/30">
+              <p className="text-lg font-black uppercase italic text-subtle">
                 No clubs found
               </p>
-              <p className="text-xs text-white/20">
+              <p className="text-xs text-subtle">
                 Try a different search or category
               </p>
               <button
@@ -357,7 +357,7 @@ export default function ClubsPage() {
                   setSearch("")
                   setActiveCategory("All")
                 }}
-                className="mt-2 px-5 py-2.5 rounded-xl bg-amber-600/20 border border-amber-500/20 text-xs font-black uppercase tracking-widest text-amber-400 hover:bg-amber-600/30 transition-all"
+                className="mt-2 px-5 py-2.5 rounded-xl bg-accent/20 border border-accent/20 text-xs font-black uppercase tracking-widest text-accent-bright hover:bg-accent/30 transition-all"
               >
                 Clear filters
               </button>

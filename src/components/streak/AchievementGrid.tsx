@@ -13,13 +13,13 @@ export const AchievementGrid = () => {
       <h4 className="text-xl font-black tracking-tighter px-2 italic">Milestones</h4>
       <div className="grid gap-4">
         {achievements.map((item) => (
-          <div key={item.title} className="p-6 rounded-[2rem] border border-white/5 bg-white/[0.02] flex items-center gap-5 group hover:bg-white/[0.05] transition-all">
-            <div className={`p-4 rounded-2xl bg-black border border-white/10 ${item.color} group-hover:scale-110 transition-transform`}>
+          <div key={item.title} className="p-6 rounded-[2rem] border border-border bg-surface flex items-center gap-5 group hover:bg-surface transition-all">
+            <div className={`p-4 rounded-2xl bg-background border border-border ${item.color} group-hover:scale-110 transition-transform`}>
               <item.icon size={20} />
             </div>
             <div>
               <p className="font-black text-white/90">{item.title}</p>
-              <p className="text-xs text-white/30 uppercase font-bold tracking-tighter">{item.desc}</p>
+              <p className="text-xs text-subtle uppercase font-bold tracking-tighter">{item.desc}</p>
             </div>
           </div>
         ))}

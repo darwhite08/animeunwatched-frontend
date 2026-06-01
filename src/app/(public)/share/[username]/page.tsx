@@ -72,19 +72,19 @@ export default function ShareProfilePage({ params }: { params: Promise<{ usernam
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-[#020202] flex items-center justify-center">
-        <div className="h-8 w-8 rounded-full border-2 border-amber-500/30 border-t-amber-500 animate-spin" />
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="h-8 w-8 rounded-full border-2 border-accent/30 border-t-amber-500 animate-spin" />
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-[#020202] text-white pb-32 pt-16">
+    <div className="min-h-screen bg-background text-foreground pb-32 pt-16">
       <div className="max-w-xl mx-auto px-6 space-y-8">
 
         {/* Label */}
         <div className="text-center">
-          <p className="text-[9px] font-black uppercase tracking-[0.4em] text-amber-400/60">Kaiveron Profile</p>
+          <p className="text-[9px] font-black uppercase tracking-[0.4em] text-accent-bright/60">Kaiveron Profile</p>
         </div>
 
         {/* Profile Card */}
@@ -92,7 +92,7 @@ export default function ShareProfilePage({ params }: { params: Promise<{ usernam
           initial={{ opacity: 0, y: 20, scale: 0.97 }}
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-          className="relative overflow-hidden rounded-[2.5rem] border border-white/10"
+          className="relative overflow-hidden rounded-[2.5rem] border border-border"
           style={{ background: "linear-gradient(160deg,#0f0f0f,#080808)" }}
         >
           {/* Background glow */}
@@ -113,8 +113,8 @@ export default function ShareProfilePage({ params }: { params: Promise<{ usernam
                 }
               </div>
               <div className="flex-1 min-w-0">
-                <h1 className="text-2xl font-black tracking-tighter text-white uppercase italic truncate">{displayName}</h1>
-                <p className="text-xs text-white/40 mt-0.5">@{username}</p>
+                <h1 className="text-2xl font-black tracking-tighter text-foreground uppercase italic truncate">{displayName}</h1>
+                <p className="text-xs text-muted mt-0.5">@{username}</p>
                 <div className="flex items-center gap-2 mt-2">
                   <span className="px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-widest"
                     style={{ background: `${color}20`, border: `1px solid ${color}40`, color }}>
@@ -133,13 +133,13 @@ export default function ShareProfilePage({ params }: { params: Promise<{ usernam
             <div className="grid grid-cols-3 gap-3">
               {[
                 { label: "Watched",  value: stats.completed, icon: CheckCircle2, color: "text-emerald-400" },
-                { label: "Watching", value: stats.watching,  icon: Star,         color: "text-amber-400"   },
+                { label: "Watching", value: stats.watching,  icon: Star,         color: "text-accent-bright"   },
                 { label: "Avg Score", value: stats.avgScore, icon: Trophy,       color: "text-violet-400"  },
               ].map(({ label, value, icon: Icon, color: c }) => (
-                <div key={label} className="text-center p-4 rounded-2xl bg-white/[0.03] border border-white/5 space-y-1">
+                <div key={label} className="text-center p-4 rounded-2xl bg-surface border border-border space-y-1">
                   <Icon size={14} className={`mx-auto ${c}`} />
-                  <p className="text-xl font-black text-white">{value}</p>
-                  <p className="text-[9px] font-black uppercase tracking-widest text-white/30">{label}</p>
+                  <p className="text-xl font-black text-foreground">{value}</p>
+                  <p className="text-[9px] font-black uppercase tracking-widest text-subtle">{label}</p>
                 </div>
               ))}
             </div>
@@ -147,10 +147,10 @@ export default function ShareProfilePage({ params }: { params: Promise<{ usernam
             {/* Top genres */}
             {stats.top3Genres.length > 0 && (
               <div className="space-y-2">
-                <p className="text-[9px] font-black uppercase tracking-[0.3em] text-white/25">Anime DNA</p>
+                <p className="text-[9px] font-black uppercase tracking-[0.3em] text-subtle">Anime DNA</p>
                 <div className="flex flex-wrap gap-2">
                   {stats.top3Genres.map(g => (
-                    <span key={g} className="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-white/5 border border-white/8 text-white/50">
+                    <span key={g} className="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest bg-surface border border-border text-muted">
                       {g}
                     </span>
                   ))}
@@ -161,13 +161,13 @@ export default function ShareProfilePage({ params }: { params: Promise<{ usernam
             {/* Top rated anime */}
             {stats.topAnime.length > 0 && (
               <div className="space-y-2">
-                <p className="text-[9px] font-black uppercase tracking-[0.3em] text-white/25">Top Picks</p>
+                <p className="text-[9px] font-black uppercase tracking-[0.3em] text-subtle">Top Picks</p>
                 <div className="space-y-2">
                   {stats.topAnime.map((a, i) => (
                     <div key={a.title} className="flex items-center gap-3 text-sm">
                       <span className="text-[9px] font-black" style={{ color }}>{i + 1}</span>
-                      <span className="flex-1 text-white/70 truncate font-medium">{a.title}</span>
-                      <span className="flex items-center gap-0.5 text-[10px] font-black text-amber-400">
+                      <span className="flex-1 text-muted truncate font-medium">{a.title}</span>
+                      <span className="flex items-center gap-0.5 text-[10px] font-black text-accent-bright">
                         <Star size={9} className="fill-amber-400" /> {a.score}/10
                       </span>
                     </div>
@@ -177,10 +177,10 @@ export default function ShareProfilePage({ params }: { params: Promise<{ usernam
             )}
 
             {/* Kaiveron watermark */}
-            <div className="flex items-center gap-2 pt-2 border-t border-white/5">
-              <span className="text-xs font-black italic text-white/15">Kaiveron</span>
-              <span className="flex-1 h-px bg-white/5" />
-              <span className="text-[9px] text-white/10 uppercase tracking-widest">kaiveron.app</span>
+            <div className="flex items-center gap-2 pt-2 border-t border-border">
+              <span className="text-xs font-black italic text-subtle">Kaiveron</span>
+              <span className="flex-1 h-px bg-surface" />
+              <span className="text-[9px] text-subtle uppercase tracking-widest">kaiveron.app</span>
             </div>
           </div>
         </motion.div>
@@ -189,7 +189,7 @@ export default function ShareProfilePage({ params }: { params: Promise<{ usernam
         <div className="flex items-center gap-3">
           <button
             onClick={handleCopyLink}
-            className="flex-1 flex items-center justify-center gap-2 py-3 rounded-2xl bg-white/5 border border-white/8 text-xs font-black uppercase tracking-widest text-white/50 hover:text-white hover:border-white/15 transition-all"
+            className="flex-1 flex items-center justify-center gap-2 py-3 rounded-2xl bg-surface border border-border text-xs font-black uppercase tracking-widest text-muted hover:text-foreground hover:border-border transition-all"
           >
             <Copy size={12} /> Copy Link
           </button>
@@ -203,10 +203,10 @@ export default function ShareProfilePage({ params }: { params: Promise<{ usernam
         </div>
 
         {/* CTA for non-users */}
-        <div className="p-5 rounded-2xl border border-white/5 bg-white/[0.02] text-center space-y-3">
+        <div className="p-5 rounded-2xl border border-border bg-surface text-center space-y-3">
           <div className="flex items-center justify-center gap-2">
-            <Users size={14} className="text-amber-400" />
-            <p className="text-xs font-black text-white/50">Build your own anime profile</p>
+            <Users size={14} className="text-accent-bright" />
+            <p className="text-xs font-black text-muted">Build your own anime profile</p>
           </div>
           <Link
             href="/register"

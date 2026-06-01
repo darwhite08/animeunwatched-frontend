@@ -30,8 +30,8 @@ export default function EpisodeTracker({ totalEpisodes, currentEpisode: initialE
   /* Ongoing series */
   if (totalEpisodes === null) {
     return (
-      <div className="p-5 rounded-2xl bg-white/[0.02] border border-white/8 flex items-center justify-between">
-        <p className="text-sm font-bold text-white/60">Ongoing series</p>
+      <div className="p-5 rounded-2xl bg-surface border border-border flex items-center justify-between">
+        <p className="text-sm font-bold text-muted">Ongoing series</p>
         <span className="px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-[10px] font-black uppercase tracking-wider text-emerald-400">
           ● Currently Airing
         </span>
@@ -66,10 +66,10 @@ export default function EpisodeTracker({ totalEpisodes, currentEpisode: initialE
   }
 
   return (
-    <div className="p-5 rounded-2xl bg-white/[0.02] border border-white/8 space-y-4">
+    <div className="p-5 rounded-2xl bg-surface border border-border space-y-4">
       {/* Progress label */}
       <div className="flex items-center justify-between">
-        <span className="text-xs font-bold text-white/50">
+        <span className="text-xs font-bold text-muted">
           {isCompleted ? (
             <span className="flex items-center gap-1.5 text-emerald-400">
               <Trophy size={13} /> Completed!
@@ -78,15 +78,15 @@ export default function EpisodeTracker({ totalEpisodes, currentEpisode: initialE
             `${current} / ${totalEpisodes} episodes`
           )}
         </span>
-        <span className="text-[10px] font-mono text-white/25">{Math.round(progress)}%</span>
+        <span className="text-[10px] font-mono text-subtle">{Math.round(progress)}%</span>
       </div>
 
       {/* Progress bar */}
-      <div className="h-1.5 w-full bg-white/8 rounded-full overflow-hidden">
+      <div className="h-1.5 w-full bg-surface rounded-full overflow-hidden">
         <motion.div
           animate={{ width: `${progress}%` }}
           transition={{ type: "spring", stiffness: 120, damping: 20 }}
-          className={`h-full rounded-full ${isCompleted ? "bg-emerald-400" : "bg-amber-500"}`}
+          className={`h-full rounded-full ${isCompleted ? "bg-emerald-400" : "bg-accent"}`}
         />
       </div>
 
@@ -95,19 +95,19 @@ export default function EpisodeTracker({ totalEpisodes, currentEpisode: initialE
         <button
           onClick={decrement}
           disabled={current <= 0}
-          className="h-9 w-9 rounded-xl border border-white/10 bg-white/[0.04] flex items-center justify-center text-white/40 hover:text-white hover:bg-white/[0.08] disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+          className="h-9 w-9 rounded-xl border border-border bg-white/[0.04] flex items-center justify-center text-muted hover:text-foreground hover:bg-white/[0.08] disabled:opacity-30 disabled:cursor-not-allowed transition-all"
         >
           <Minus size={14} />
         </button>
 
-        <div className={`flex-1 text-center text-2xl font-black tracking-tighter ${isCompleted ? "text-emerald-400" : "text-white"}`}>
+        <div className={`flex-1 text-center text-2xl font-black tracking-tighter ${isCompleted ? "text-emerald-400" : "text-foreground"}`}>
           {isCompleted ? <Trophy size={22} className="mx-auto text-emerald-400" /> : current}
         </div>
 
         <button
           onClick={increment}
           disabled={isCompleted}
-          className="h-9 w-9 rounded-xl border border-amber-500/30 bg-amber-500/10 flex items-center justify-center text-amber-400 hover:bg-amber-500/20 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+          className="h-9 w-9 rounded-xl border border-accent/30 bg-accent/10 flex items-center justify-center text-accent-bright hover:bg-accent/20 disabled:opacity-30 disabled:cursor-not-allowed transition-all"
         >
           <Plus size={14} />
         </button>
@@ -117,7 +117,7 @@ export default function EpisodeTracker({ totalEpisodes, currentEpisode: initialE
       {current > 0 && !isCompleted && (
         <button
           onClick={markAll}
-          className="w-full text-center text-[10px] font-black uppercase tracking-widest text-white/25 hover:text-amber-400 transition-colors pt-1"
+          className="w-full text-center text-[10px] font-black uppercase tracking-widest text-subtle hover:text-accent-bright transition-colors pt-1"
         >
           Mark all complete
         </button>

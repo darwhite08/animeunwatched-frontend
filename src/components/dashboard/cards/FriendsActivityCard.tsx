@@ -24,7 +24,7 @@ function timeAgo(iso: string) {
 }
 
 const AVATAR_GRADIENTS = [
-  "from-amber-500 to-orange-600", "from-violet-500 to-purple-600",
+  "from-accent to-orange-600", "from-violet-500 to-purple-600",
   "from-emerald-500 to-teal-600", "from-rose-500 to-pink-600",
   "from-sky-500 to-blue-600",
 ]
@@ -45,17 +45,17 @@ export default function FriendsActivityCard() {
   const activities = data?.data ?? []
 
   return (
-    <div className="p-8 rounded-[2.5rem] border border-white/5 bg-[#0a0a0a] relative overflow-hidden group">
-      <div className="absolute -right-6 -bottom-6 w-32 h-32 bg-amber-500/5 blur-[40px] rounded-full pointer-events-none group-hover:bg-amber-500/10 transition-colors duration-700" />
+    <div className="p-8 rounded-[2.5rem] border border-border bg-surface relative overflow-hidden group">
+      <div className="absolute -right-6 -bottom-6 w-32 h-32 bg-accent/5 blur-[40px] rounded-full pointer-events-none group-hover:bg-accent/10 transition-colors duration-700" />
 
       <div className="flex items-center justify-between mb-6 relative z-10">
         <div className="flex items-center gap-2">
-          <Users size={14} className="text-amber-400" />
-          <h4 className="text-xs font-black uppercase tracking-[0.28em] text-white/30">
+          <Users size={14} className="text-accent-bright" />
+          <h4 className="text-xs font-black uppercase tracking-[0.28em] text-subtle">
             Friends Watching
           </h4>
         </div>
-        <Link href="/following" className="text-[9px] font-black uppercase tracking-widest text-amber-400/60 hover:text-amber-400 transition-colors flex items-center gap-1">
+        <Link href="/following" className="text-[9px] font-black uppercase tracking-widest text-accent-bright/60 hover:text-accent-bright transition-colors flex items-center gap-1">
           All <ChevronRight size={10} />
         </Link>
       </div>
@@ -64,10 +64,10 @@ export default function FriendsActivityCard() {
         <div className="space-y-4">
           {Array.from({ length: 3 }).map((_, i) => (
             <div key={i} className="flex items-center gap-3 animate-pulse">
-              <div className="h-8 w-8 rounded-lg bg-white/10 shrink-0" />
+              <div className="h-8 w-8 rounded-lg bg-surface shrink-0" />
               <div className="flex-1 space-y-1.5">
-                <div className="h-2.5 w-2/3 bg-white/10 rounded-full" />
-                <div className="h-2 w-1/2 bg-white/5 rounded-full" />
+                <div className="h-2.5 w-2/3 bg-surface rounded-full" />
+                <div className="h-2 w-1/2 bg-surface rounded-full" />
               </div>
             </div>
           ))}
@@ -76,8 +76,8 @@ export default function FriendsActivityCard() {
 
       {!isLoading && activities.length === 0 && (
         <div className="text-center py-8 space-y-3">
-          <Users size={24} className="mx-auto text-white/15" />
-          <p className="text-xs text-white/25 font-black uppercase tracking-widest">
+          <Users size={24} className="mx-auto text-subtle" />
+          <p className="text-xs text-subtle font-black uppercase tracking-widest">
             Follow Shinobi to see their activity
           </p>
           <Link href="/users"
@@ -104,15 +104,15 @@ export default function FriendsActivityCard() {
                   </span>
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-[11px] font-bold text-white/80 group-hover/item:text-white transition-colors leading-tight">
-                    <span className="text-amber-400/80">{name}</span>
+                  <p className="text-[11px] font-bold text-muted group-hover/item:text-foreground transition-colors leading-tight">
+                    <span className="text-accent-bright/80">{name}</span>
                     {" "}{statusLabel}
                   </p>
-                  <p className="text-[10px] font-black uppercase text-white/25 tracking-tighter truncate mt-0.5">
+                  <p className="text-[10px] font-black uppercase text-subtle tracking-tighter truncate mt-0.5">
                     {a.anime.title}
                   </p>
                 </div>
-                <span className="text-[9px] font-medium text-white/15 italic shrink-0">{timeAgo(a.updatedAt)}</span>
+                <span className="text-[9px] font-medium text-subtle italic shrink-0">{timeAgo(a.updatedAt)}</span>
               </Link>
             </motion.div>
           )

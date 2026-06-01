@@ -48,13 +48,13 @@ export default function ListShareCard() {
       <div className="relative rounded-3xl overflow-hidden border border-zinc-700/60 bg-[#0d0d0d] shadow-2xl select-none">
         {/* Ambient glow */}
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-0 right-0 w-56 h-56 bg-amber-600/15 blur-[80px] rounded-full" />
+          <div className="absolute top-0 right-0 w-56 h-56 bg-accent/15 blur-[80px] rounded-full" />
           <div className="absolute bottom-0 left-0 w-40 h-40 bg-violet-700/10 blur-[60px] rounded-full" />
         </div>
 
         {/* Header bar */}
         <div className="relative z-10 flex items-center justify-between px-5 py-4 border-b border-zinc-800/80">
-          <span className="font-black uppercase tracking-widest text-amber-400 text-sm">
+          <span className="font-black uppercase tracking-widest text-accent-bright text-sm">
             KAIVERON.
           </span>
           <span className="text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full bg-violet-500/20 text-violet-300 border border-violet-500/30">
@@ -64,7 +64,7 @@ export default function ListShareCard() {
 
         {/* Heading */}
         <div className="relative z-10 px-5 pt-5 pb-3">
-          <h2 className="font-black uppercase text-2xl text-white leading-tight tracking-tight">
+          <h2 className="font-black uppercase text-2xl text-foreground leading-tight tracking-tight">
             My {PROFILE.year} Anime List
           </h2>
           <p className="text-zinc-400 text-sm mt-1">
@@ -99,9 +99,9 @@ export default function ListShareCard() {
           <div className="mt-3 space-y-1">
             {TOP_5.map((anime, i) => (
               <div key={anime.id} className="flex items-center gap-2">
-                <span className="text-[9px] font-black text-amber-400/60 w-3 shrink-0">{i + 1}</span>
+                <span className="text-[9px] font-black text-accent-bright/60 w-3 shrink-0">{i + 1}</span>
                 <span className="text-[11px] font-bold text-zinc-300 truncate">{anime.title}</span>
-                <span className="ml-auto text-[9px] font-bold text-amber-400/70 shrink-0">
+                <span className="ml-auto text-[9px] font-bold text-accent-bright/70 shrink-0">
                   ★ {anime.rating}
                 </span>
               </div>
@@ -121,7 +121,7 @@ export default function ListShareCard() {
         {/* Twitter / X */}
         <button
           onClick={handleTwitter}
-          className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-2xl border border-amber-500/40 bg-amber-500/10 text-amber-300 hover:border-indigo-400 hover:bg-amber-500/20 transition-all duration-200 group"
+          className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-2xl border border-accent/40 bg-accent/10 text-accent-bright hover:border-indigo-400 hover:bg-accent/20 transition-all duration-200 group"
         >
           <Share2 className="w-4 h-4 transition-transform duration-200 group-hover:scale-110" />
           <span className="text-[10px] font-black uppercase tracking-widest">Share on Twitter</span>

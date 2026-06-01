@@ -78,10 +78,10 @@ function buildCalendarMap(): Map<number, number> {
 }
 
 function calColor(count: number): string {
-  if (count === 0) return "bg-white/5 border-white/5"
+  if (count === 0) return "bg-surface border-border"
   if (count === 1) return "bg-amber-900/70 border-indigo-700/30"
-  if (count === 2) return "bg-amber-700/80 border-amber-500/30"
-  return "bg-amber-500 border-indigo-400/50"
+  if (count === 2) return "bg-accent/80 border-accent/30"
+  return "bg-accent border-indigo-400/50"
 }
 
 function CalendarGrid() {
@@ -92,16 +92,16 @@ function CalendarGrid() {
   return (
     <div className="space-y-3">
       <div className="flex items-center gap-2">
-        <CalendarDays size={13} className="text-amber-400" />
-        <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-white/30">
+        <CalendarDays size={13} className="text-accent-bright" />
+        <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-subtle">
           Last 30 Days
         </h3>
-        <div className="flex-1 h-px bg-white/5" />
-        <div className="flex items-center gap-1.5 text-[9px] text-white/20 font-bold">
-          <span className="w-3 h-3 rounded-sm bg-white/5 border border-white/5 inline-block" /> 0
+        <div className="flex-1 h-px bg-surface" />
+        <div className="flex items-center gap-1.5 text-[9px] text-subtle font-bold">
+          <span className="w-3 h-3 rounded-sm bg-surface border border-border inline-block" /> 0
           <span className="w-3 h-3 rounded-sm bg-amber-900/70 border-indigo-700/30 inline-block ml-2" /> 1
-          <span className="w-3 h-3 rounded-sm bg-amber-700/80 border-amber-500/30 inline-block ml-2" /> 2
-          <span className="w-3 h-3 rounded-sm bg-amber-500 border-indigo-400/50 inline-block ml-2" /> 3+
+          <span className="w-3 h-3 rounded-sm bg-accent/80 border-accent/30 inline-block ml-2" /> 2
+          <span className="w-3 h-3 rounded-sm bg-accent border-indigo-400/50 inline-block ml-2" /> 3+
         </div>
       </div>
       <div className="grid grid-cols-[repeat(30,1fr)] gap-1">
@@ -118,7 +118,7 @@ function CalendarGrid() {
           )
         })}
       </div>
-      <div className="flex justify-between text-[9px] text-white/20 font-bold">
+      <div className="flex justify-between text-[9px] text-subtle font-bold">
         <span>30 days ago</span>
         <span>Today</span>
       </div>
@@ -134,36 +134,36 @@ function EpisodeRow({ entry, index }: { entry: EpisodeEntry; index: number }) {
       initial={{ opacity: 0, x: -12 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay: index * 0.03 }}
-      className="flex items-center gap-4 px-4 py-3.5 rounded-2xl bg-white/[0.02] border border-white/5 hover:border-white/10 hover:bg-white/[0.04] transition-all group"
+      className="flex items-center gap-4 px-4 py-3.5 rounded-2xl bg-surface border border-border hover:border-border hover:bg-white/[0.04] transition-all group"
     >
       {/* Cover thumbnail */}
       <div className={`relative w-10 h-12 rounded-xl overflow-hidden shrink-0 bg-gradient-to-br ${entry.coverGradient} flex items-center justify-center`}>
-        <MonitorPlay size={14} className="text-white/30" />
+        <MonitorPlay size={14} className="text-subtle" />
       </div>
 
       {/* Info */}
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-black text-white uppercase italic tracking-tight truncate">
+        <p className="text-sm font-black text-foreground uppercase italic tracking-tight truncate">
           {entry.animeTitle}
         </p>
-        <p className="text-[10px] font-bold text-white/30 uppercase tracking-widest mt-0.5">
+        <p className="text-[10px] font-bold text-subtle uppercase tracking-widest mt-0.5">
           {entry.episode}
         </p>
       </div>
 
       {/* Time */}
       <div className="hidden sm:flex flex-col items-end gap-1 shrink-0">
-        <span className="text-[10px] font-black text-white/25 uppercase tracking-widest">
+        <span className="text-[10px] font-black text-subtle uppercase tracking-widest">
           {formatTime(entry.watchedAt)}
         </span>
-        <span className="text-[9px] font-black text-white/15 flex items-center gap-1">
+        <span className="text-[9px] font-black text-subtle flex items-center gap-1">
           <Clock size={9} /> {entry.duration}
         </span>
       </div>
 
       {/* Platform badge */}
       <span className={`px-2.5 py-1 rounded-full text-[8px] font-black uppercase tracking-widest border shrink-0 ${
-        PLATFORM_COLOR[entry.platform] ?? "bg-white/5 text-white/30 border-white/10"
+        PLATFORM_COLOR[entry.platform] ?? "bg-surface text-subtle border-border"
       }`}>
         {entry.platform}
       </span>
@@ -208,12 +208,12 @@ export default function WatchlistHistoryPage() {
     <div className="max-w-5xl mx-auto px-6 py-12 pb-32 space-y-10">
 
       {/* Breadcrumb */}
-      <nav className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-white/25">
-        <Link href="/watchlist" className="hover:text-amber-400 transition-colors">
+      <nav className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-subtle">
+        <Link href="/watchlist" className="hover:text-accent-bright transition-colors">
           Watchlist
         </Link>
-        <ChevronRight size={11} className="text-white/15" />
-        <span className="text-white/50">Episode History</span>
+        <ChevronRight size={11} className="text-subtle" />
+        <span className="text-muted">Episode History</span>
       </nav>
 
       {/* Header */}
@@ -221,14 +221,14 @@ export default function WatchlistHistoryPage() {
         <motion.p
           initial={{ opacity: 0, x: -16 }}
           animate={{ opacity: 1, x: 0 }}
-          className="flex items-center gap-2 text-amber-400 font-black uppercase tracking-[0.4em] text-[10px]"
+          className="flex items-center gap-2 text-accent-bright font-black uppercase tracking-[0.4em] text-[10px]"
         >
           <MonitorPlay size={13} /> Episode Log
         </motion.p>
-        <h1 className="text-6xl md:text-7xl font-black tracking-tighter text-white italic leading-none">
+        <h1 className="text-6xl md:text-7xl font-black tracking-tighter text-foreground italic leading-none">
           Episode<span style={{color:"#f59e0b"}}>.</span>
           <br />
-          <span className="text-white/20">History</span>
+          <span className="text-subtle">History</span>
         </h1>
       </header>
 
@@ -240,18 +240,18 @@ export default function WatchlistHistoryPage() {
         className="grid grid-cols-3 gap-3"
       >
         {[
-          { label: "This Week",  value: thisWeek,  icon: <TrendingUp size={14} />,  color: "text-amber-400" },
+          { label: "This Week",  value: thisWeek,  icon: <TrendingUp size={14} />,  color: "text-accent-bright" },
           { label: "This Month", value: thisMonth, icon: <CalendarDays size={14} />, color: "text-violet-400" },
-          { label: "All Time",   value: total.toLocaleString(), icon: <MonitorPlay size={14} />, color: "text-amber-400" },
+          { label: "All Time",   value: total.toLocaleString(), icon: <MonitorPlay size={14} />, color: "text-accent-bright" },
         ].map(({ label, value, icon, color }) => (
-          <div key={label} className="rounded-2xl border border-white/5 bg-white/[0.02] p-5">
+          <div key={label} className="rounded-2xl border border-border bg-surface p-5">
             <div className={`flex items-center gap-2 ${color} mb-2`}>
               {icon}
-              <span className="text-[9px] font-black uppercase tracking-widest text-white/30">
+              <span className="text-[9px] font-black uppercase tracking-widest text-subtle">
                 {label}
               </span>
             </div>
-            <p className="text-2xl font-black text-white italic">{value}</p>
+            <p className="text-2xl font-black text-foreground italic">{value}</p>
           </div>
         ))}
       </motion.div>
@@ -261,7 +261,7 @@ export default function WatchlistHistoryPage() {
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.14 }}
-        className="p-6 rounded-2xl bg-white/[0.02] border border-white/5"
+        className="p-6 rounded-2xl bg-surface border border-border"
       >
         <CalendarGrid />
       </motion.div>
@@ -269,11 +269,11 @@ export default function WatchlistHistoryPage() {
       {/* Episode list */}
       <div className="space-y-8">
         <div className="flex items-center gap-3">
-          <h2 className="text-[10px] font-black uppercase tracking-[0.4em] text-white/30">
+          <h2 className="text-[10px] font-black uppercase tracking-[0.4em] text-subtle">
             Episode Log
           </h2>
-          <div className="flex-1 h-px bg-white/5" />
-          <span className="text-[9px] font-black text-white/15 uppercase tracking-widest">
+          <div className="flex-1 h-px bg-surface" />
+          <span className="text-[9px] font-black text-subtle uppercase tracking-widest">
             {EPISODE_LOG.length} entries
           </span>
         </div>
@@ -283,11 +283,11 @@ export default function WatchlistHistoryPage() {
             <div key={dayLabel}>
               {/* Day label */}
               <div className="flex items-center gap-3 mb-3">
-                <span className="text-[10px] font-black text-white/30 uppercase tracking-widest">
+                <span className="text-[10px] font-black text-subtle uppercase tracking-widest">
                   {dayLabel}
                 </span>
-                <div className="flex-1 h-px bg-white/5" />
-                <span className="text-[9px] font-black text-white/15 uppercase tracking-widest">
+                <div className="flex-1 h-px bg-surface" />
+                <span className="text-[9px] font-black text-subtle uppercase tracking-widest">
                   {dayEntries.length} ep
                 </span>
               </div>
@@ -303,10 +303,10 @@ export default function WatchlistHistoryPage() {
       </div>
 
       {/* Back link */}
-      <div className="flex items-center gap-3 pt-4 border-t border-white/5">
+      <div className="flex items-center gap-3 pt-4 border-t border-border">
         <Link
           href="/watchlist"
-          className="flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-white/30 hover:text-amber-400 transition-colors"
+          className="flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-subtle hover:text-accent-bright transition-colors"
         >
           ← Back to Watchlist
         </Link>

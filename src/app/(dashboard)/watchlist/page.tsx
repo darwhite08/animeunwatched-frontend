@@ -80,9 +80,9 @@ export default function WatchlistPage() {
   if (!isAuthenticated) {
     return (
       <div className="max-w-[1440px] mx-auto px-8 py-32 flex flex-col items-center justify-center min-h-[60vh] space-y-6">
-        <MonitorPlay size={48} className="text-white/10" />
-        <h2 className="text-3xl font-black text-white tracking-tighter">Your Archives Await</h2>
-        <p className="text-white/40 text-sm max-w-xs text-center">Sign in to track your anime journey, manage your watchlist, and sync across devices.</p>
+        <MonitorPlay size={48} className="text-subtle" />
+        <h2 className="text-3xl font-black text-foreground tracking-tighter">Your Archives Await</h2>
+        <p className="text-muted text-sm max-w-xs text-center">Sign in to track your anime journey, manage your watchlist, and sync across devices.</p>
         <Link href="/login"
           className="flex items-center gap-2 px-8 py-4 rounded-2xl font-black text-sm uppercase tracking-widest transition-all text-black" style={{background:"linear-gradient(135deg,#fbbf24,#f59e0b)",boxShadow:"0 4px 20px rgba(245,158,11,0.35)"}}>
           <LogIn size={15} /> Sign In
@@ -97,23 +97,23 @@ export default function WatchlistPage() {
       <header className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-8">
         <div className="space-y-3">
           <motion.p initial={{ opacity: 0, x: -16 }} animate={{ opacity: 1, x: 0 }}
-            className="flex items-center gap-2 text-amber-400 font-black uppercase tracking-[0.4em] text-[10px]">
+            className="flex items-center gap-2 text-accent-bright font-black uppercase tracking-[0.4em] text-[10px]">
             <MonitorPlay size={13} /> Neural Transmission • Active
           </motion.p>
-          <h1 className="text-6xl md:text-7xl font-black tracking-tighter text-white leading-none">
+          <h1 className="text-6xl md:text-7xl font-black tracking-tighter text-foreground leading-none">
             Archives<span style={{color:"#f59e0b"}}>.</span>
           </h1>
-          <p className="text-white/35 text-sm">{items.length} anime tracked</p>
+          <p className="text-subtle text-sm">{items.length} anime tracked</p>
         </div>
 
         <div className="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
           <div className="relative group flex-1 sm:w-72">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-white/20 group-focus-within:text-amber-400 transition-colors" size={16} />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-subtle group-focus-within:text-accent-bright transition-colors" size={16} />
             <input type="text" placeholder="Search watchlist…"
-              className="w-full pl-11 pr-10 py-3.5 rounded-2xl bg-white/[0.03] border border-white/10 text-white placeholder:text-white/20 focus:outline-none focus:border-amber-500/40 transition-all text-sm"
+              className="w-full pl-11 pr-10 py-3.5 rounded-2xl bg-surface border border-border text-foreground placeholder:text-subtle focus:outline-none focus:border-accent/40 transition-all text-sm"
               value={query} onChange={e => setQuery(e.target.value)} />
             {query && (
-              <button onClick={() => setQuery("")} className="absolute right-4 top-1/2 -translate-y-1/2 text-white/30 hover:text-white transition-colors">
+              <button onClick={() => setQuery("")} className="absolute right-4 top-1/2 -translate-y-1/2 text-subtle hover:text-foreground transition-colors">
                 <X size={14} />
               </button>
             )}
@@ -132,8 +132,8 @@ export default function WatchlistPage() {
             <div className="flex items-center justify-between gap-4 px-5 py-3.5 rounded-2xl"
               style={{ background: "rgba(245,158,11,0.08)", border: "1px solid rgba(245,158,11,0.2)" }}>
               <div className="flex items-center gap-3 min-w-0">
-                <Share2 size={15} className="text-amber-400 shrink-0" />
-                <p className="text-sm font-bold text-white/80 truncate">Share your anime list and grow the community ↗</p>
+                <Share2 size={15} className="text-accent-bright shrink-0" />
+                <p className="text-sm font-bold text-muted truncate">Share your anime list and grow the community ↗</p>
               </div>
               <div className="flex items-center gap-2 shrink-0">
                 <button onClick={() => setShareModalOpen(true)}
@@ -142,7 +142,7 @@ export default function WatchlistPage() {
                   Share List
                 </button>
                 <button onClick={() => { localStorage.setItem(SHARE_KEY, "1"); setBannerVisible(false) }}
-                  className="p-1.5 rounded-lg text-white/30 hover:text-white/70 transition-colors">
+                  className="p-1.5 rounded-lg text-subtle hover:text-muted transition-colors">
                   <X size={14} />
                 </button>
               </div>
@@ -159,14 +159,14 @@ export default function WatchlistPage() {
             className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: "rgba(0,0,0,0.80)", backdropFilter: "blur(8px)" }}>
             <motion.div initial={{ opacity: 0, scale: 0.93, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.93, y: 20 }}
               onClick={e => e.stopPropagation()}
-              className="relative w-full max-w-md bg-[#0a0a0a] border border-zinc-800 rounded-3xl p-6 shadow-2xl">
+              className="relative w-full max-w-md bg-surface border border-zinc-800 rounded-3xl p-6 shadow-2xl">
               <div className="flex items-center justify-between mb-5">
                 <div>
-                  <h2 className="font-black uppercase text-base text-white tracking-tight">Share Your List</h2>
+                  <h2 className="font-black uppercase text-base text-foreground tracking-tight">Share Your List</h2>
                   <p className="text-zinc-500 text-xs mt-0.5">Let the world see your taste</p>
                 </div>
                 <button onClick={() => setShareModalOpen(false)}
-                  className="w-8 h-8 rounded-xl border border-zinc-700 flex items-center justify-center text-zinc-400 hover:text-white hover:border-zinc-500 transition-colors">
+                  className="w-8 h-8 rounded-xl border border-zinc-700 flex items-center justify-center text-zinc-400 hover:text-foreground hover:border-zinc-500 transition-colors">
                   <X className="w-4 h-4" />
                 </button>
               </div>
@@ -180,8 +180,8 @@ export default function WatchlistPage() {
       {isLoading && (
         <div className="flex items-center justify-center py-24">
           <div className="flex flex-col items-center gap-4">
-            <Loader2 size={28} className="animate-spin text-amber-400" />
-            <p className="text-white/30 text-xs font-black uppercase tracking-widest">Loading your archives…</p>
+            <Loader2 size={28} className="animate-spin text-accent-bright" />
+            <p className="text-subtle text-xs font-black uppercase tracking-widest">Loading your archives…</p>
           </div>
         </div>
       )}
@@ -189,7 +189,7 @@ export default function WatchlistPage() {
       {/* Error */}
       {isError && !isLoading && (
         <div className="py-24 text-center">
-          <p className="text-white/30 font-black uppercase tracking-widest text-xs">Failed to load watchlist</p>
+          <p className="text-subtle font-black uppercase tracking-widest text-xs">Failed to load watchlist</p>
         </div>
       )}
 
@@ -197,20 +197,20 @@ export default function WatchlistPage() {
       {!isLoading && !isError && (
         <>
           {/* Status filter tabs */}
-          <nav className="flex gap-2 overflow-x-auto pb-3 no-scrollbar border-b border-white/5">
+          <nav className="flex gap-2 overflow-x-auto pb-3 no-scrollbar border-b border-border">
             {TABS.map(t => (
               (COUNTS[t] > 0 || t === "All") && (
                 <button key={t} onClick={() => setTab(t)}
                   className={`relative flex items-center gap-2 px-5 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest whitespace-nowrap transition-all ${
                     tab === t
                       ? "text-black shadow-[0_0_20px_rgba(245,158,11,0.3)]"
-                      : "bg-white/5 text-white/40 hover:bg-white/8 border border-white/5"
+                      : "bg-surface text-muted hover:bg-surface border border-border"
                   }`}
                   style={tab === t ? { background: "linear-gradient(135deg,#fbbf24,#f59e0b)" } : undefined}
                 >
                   {t}
                   {COUNTS[t] > 0 && (
-                    <span className={`text-[8px] font-black ${tab === t ? "text-black/60" : "text-white/20"}`}>{COUNTS[t]}</span>
+                    <span className={`text-[8px] font-black ${tab === t ? "text-black/60" : "text-subtle"}`}>{COUNTS[t]}</span>
                   )}
                 </button>
               )
@@ -226,8 +226,8 @@ export default function WatchlistPage() {
             >
               {/* Visual */}
               <div className="relative">
-                <div className="h-28 w-28 rounded-[2rem] bg-white/[0.03] border border-white/8 flex items-center justify-center">
-                  <MonitorPlay size={36} className="text-white/15" />
+                <div className="h-28 w-28 rounded-[2rem] bg-surface border border-border flex items-center justify-center">
+                  <MonitorPlay size={36} className="text-subtle" />
                 </div>
                 <div className="absolute -bottom-2 -right-2 h-8 w-8 rounded-xl flex items-center justify-center text-black text-xs font-black" style={{ background: "linear-gradient(135deg, #fbbf24, #f59e0b)" }}>
                   <Plus size={14} />
@@ -235,8 +235,8 @@ export default function WatchlistPage() {
               </div>
 
               <div className="max-w-xs space-y-2">
-                <p className="text-xl font-black uppercase italic tracking-tight text-white">Start your archive</p>
-                <p className="text-sm text-white/35 leading-relaxed">
+                <p className="text-xl font-black uppercase italic tracking-tight text-foreground">Start your archive</p>
+                <p className="text-sm text-subtle leading-relaxed">
                   Track anime you&apos;re watching, completed, or planning. Your list = your anime identity.
                 </p>
               </div>
@@ -249,7 +249,7 @@ export default function WatchlistPage() {
                   <MonitorPlay size={14} /> Browse Anime
                 </Link>
                 <Link href="/ai-discover"
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl text-sm font-black uppercase tracking-widest border border-white/10 text-white/50 hover:text-white hover:border-white/20 transition-all"
+                  className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl text-sm font-black uppercase tracking-widest border border-border text-muted hover:text-foreground hover:border-border transition-all"
                 >
                   AI Discover
                 </Link>
@@ -262,8 +262,8 @@ export default function WatchlistPage() {
                   { label: "Compare lists", sub: "With your friends" },
                 ].map(({ label, sub }) => (
                   <div key={label} className="space-y-0.5">
-                    <p className="text-[10px] font-black uppercase tracking-widest text-white/40">{label}</p>
-                    <p className="text-[9px] text-white/20">{sub}</p>
+                    <p className="text-[10px] font-black uppercase tracking-widest text-muted">{label}</p>
+                    <p className="text-[9px] text-subtle">{sub}</p>
                   </div>
                 ))}
               </div>
@@ -282,13 +282,13 @@ export default function WatchlistPage() {
           )}
 
           {filtered.length === 0 && items.length > 0 && (
-            <div className="py-24 text-center border border-dashed border-white/5 rounded-[3rem]">
-              <MonitorPlay size={28} className="mx-auto mb-3 text-white/15" />
-              <p className="text-white/20 font-black uppercase tracking-widest text-xs">
+            <div className="py-24 text-center border border-dashed border-border rounded-[3rem]">
+              <MonitorPlay size={28} className="mx-auto mb-3 text-subtle" />
+              <p className="text-subtle font-black uppercase tracking-widest text-xs">
                 {query ? `No anime matched "${query}"` : "No anime in this category"}
               </p>
               {query && (
-                <button onClick={() => setQuery("")} className="mt-4 text-xs text-amber-400 hover:text-amber-300 font-black uppercase tracking-widest transition-colors">
+                <button onClick={() => setQuery("")} className="mt-4 text-xs text-accent-bright hover:text-accent-bright font-black uppercase tracking-widest transition-colors">
                   Clear search
                 </button>
               )}

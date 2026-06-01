@@ -100,7 +100,7 @@ export default function AnimeModal({ isOpen, onClose, anime }: AnimeModalProps) 
               <div className="p-8 lg:p-12 flex flex-col justify-between">
                 <button
                   onClick={onClose}
-                  className="absolute top-6 right-6 p-2 rounded-full bg-white/5 border border-white/10 text-white/40 hover:text-white hover:bg-white/10 transition-all"
+                  className="absolute top-6 right-6 p-2 rounded-full bg-surface border border-border text-muted hover:text-foreground hover:bg-surface transition-all"
                 >
                   <X size={18} />
                 </button>
@@ -110,33 +110,33 @@ export default function AnimeModal({ isOpen, onClose, anime }: AnimeModalProps) 
                   <div className="flex flex-wrap items-center gap-2">
                     <div className="flex items-center gap-1.5 px-3 py-1 rounded-full"
                       style={{ background: "rgba(245,158,11,0.12)", border: "1px solid rgba(245,158,11,0.3)" }}>
-                      <Star size={12} weight="fill" className="text-amber-400" />
-                      <span className="text-xs font-black text-amber-300">{anime.rating.toFixed(1)}</span>
+                      <Star size={12} weight="fill" className="text-accent-bright" />
+                      <span className="text-xs font-black text-accent-bright">{anime.rating.toFixed(1)}</span>
                     </div>
                     <span className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-wider border ${
                       anime.status === "airing"
                         ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
-                        : "bg-white/5 border-white/10 text-white/40"
+                        : "bg-surface border-border text-muted"
                     }`}>
                       {anime.status === "airing" ? "Airing" : "Completed"}
                     </span>
-                    <span className="px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-wider bg-amber-500/10 border border-amber-500/20 text-amber-400">
+                    <span className="px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-wider bg-accent/10 border border-accent/20 text-accent-bright">
                       {anime.type}
                     </span>
                   </div>
 
                   {/* Title */}
                   <div>
-                    <p className="text-[10px] font-black text-white/30 uppercase tracking-widest mb-1">
+                    <p className="text-[10px] font-black text-subtle uppercase tracking-widest mb-1">
                       {anime.titleJapanese}
                     </p>
-                    <h2 className="text-4xl lg:text-5xl font-black text-white uppercase italic tracking-tighter leading-none">
+                    <h2 className="text-4xl lg:text-5xl font-black text-foreground uppercase italic tracking-tighter leading-none">
                       {anime.title}
                     </h2>
                   </div>
 
                   {/* Meta row */}
-                  <div className="flex flex-wrap gap-x-5 gap-y-1.5 text-[10px] font-black text-white/40 uppercase tracking-widest">
+                  <div className="flex flex-wrap gap-x-5 gap-y-1.5 text-[10px] font-black text-muted uppercase tracking-widest">
                     <span className="flex items-center gap-1.5">
                       <Clock size={11} />
                       {anime.episodes ? `${anime.episodes} Episodes` : "Ongoing"}
@@ -145,31 +145,31 @@ export default function AnimeModal({ isOpen, onClose, anime }: AnimeModalProps) 
                       <Monitor size={11} />
                       {anime.studio}
                     </span>
-                    <span className="text-white/20">{anime.year}</span>
+                    <span className="text-subtle">{anime.year}</span>
                   </div>
 
                   {/* Genres */}
                   <div className="flex flex-wrap gap-2">
                     {anime.genres.map(g => (
-                      <span key={g} className="px-3 py-1 rounded-full bg-white/5 border border-white/10 text-[9px] font-black uppercase tracking-wider text-white/50">
+                      <span key={g} className="px-3 py-1 rounded-full bg-surface border border-border text-[9px] font-black uppercase tracking-wider text-muted">
                         {g}
                       </span>
                     ))}
                   </div>
 
                   {/* Synopsis */}
-                  <p className="text-white/60 text-sm leading-relaxed font-medium">
+                  <p className="text-muted text-sm leading-relaxed font-medium">
                     {anime.synopsis}
                   </p>
                 </div>
 
                 {/* Actions */}
-                <div className="flex flex-wrap gap-3 pt-6 border-t border-white/5 mt-6">
+                <div className="flex flex-wrap gap-3 pt-6 border-t border-border mt-6">
                   <button
                     onClick={handleToggleList}
                     className={`flex-1 min-w-[140px] py-3.5 rounded-2xl font-black uppercase tracking-widest text-xs flex items-center justify-center gap-2.5 transition-all ${
                       inList
-                        ? "bg-emerald-600 text-white hover:bg-emerald-700"
+                        ? "bg-emerald-600 text-foreground hover:bg-emerald-700"
                         : ""
                     }`}
                     style={!inList ? {
@@ -183,14 +183,14 @@ export default function AnimeModal({ isOpen, onClose, anime }: AnimeModalProps) 
 
                   <Link
                     href={`/anime/${anime.id}`}
-                    className="flex items-center gap-2 px-4 py-3.5 rounded-2xl border border-white/10 bg-white/5 text-white/50 hover:bg-white/10 hover:text-white transition-all text-xs font-black uppercase tracking-widest"
+                    className="flex items-center gap-2 px-4 py-3.5 rounded-2xl border border-border bg-surface text-muted hover:bg-surface hover:text-foreground transition-all text-xs font-black uppercase tracking-widest"
                   >
                     <ArrowUpRight size={14} weight="bold" /> Full Page
                   </Link>
 
                   <button
                     onClick={handleShare}
-                    className="p-3.5 bg-white/5 border border-white/10 rounded-2xl text-white/50 hover:bg-white/10 hover:text-white transition-all"
+                    className="p-3.5 bg-surface border border-border rounded-2xl text-muted hover:bg-surface hover:text-foreground transition-all"
                     title="Copy to clipboard"
                   >
                     <ShareNetwork size={18} weight="duotone" />

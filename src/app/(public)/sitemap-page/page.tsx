@@ -20,8 +20,8 @@ interface SiteSection {
 const SECTIONS: SiteSection[] = [
   {
     title: "Discovery",
-    color: "text-amber-400",
-    border: "border-amber-500/20",
+    color: "text-accent-bright",
+    border: "border-accent/20",
     links: [
       { label: "Home",          href: "/" },
       { label: "Browse",        href: "/discover" },
@@ -86,12 +86,12 @@ const SECTIONS: SiteSection[] = [
 /* ─── Page ─── */
 export default function SitemapPage() {
   return (
-    <div className="min-h-screen bg-[#020202] text-white pb-32">
+    <div className="min-h-screen bg-background text-foreground pb-32">
 
       {/* ── Header ── */}
-      <section className="relative overflow-hidden border-b border-white/5">
+      <section className="relative overflow-hidden border-b border-border">
         <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-amber-600/6 blur-[130px] rounded-full" />
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-accent/6 blur-[130px] rounded-full" />
         </div>
 
         <div className="relative z-10 max-w-5xl mx-auto px-6 pt-24 pb-16">
@@ -100,10 +100,10 @@ export default function SitemapPage() {
             animate={{ opacity: 1, y: 0 }}
             className="flex items-center gap-3 mb-6"
           >
-            <div className="p-2 rounded-xl bg-amber-500/10 border border-amber-500/20">
-              <Map size={18} className="text-amber-400" />
+            <div className="p-2 rounded-xl bg-accent/10 border border-accent/20">
+              <Map size={18} className="text-accent-bright" />
             </div>
-            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-amber-400/70">
+            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-accent-bright/70">
               Navigation
             </span>
           </motion.div>
@@ -112,16 +112,16 @@ export default function SitemapPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.05 }}
-            className="text-5xl md:text-7xl font-black tracking-tighter uppercase italic leading-[0.92] text-white mb-5"
+            className="text-5xl md:text-7xl font-black tracking-tighter uppercase italic leading-[0.92] text-foreground mb-5"
           >
-            Site<span className="text-amber-400"> Map</span><span className="text-white">.</span>
+            Site<span className="text-accent-bright"> Map</span><span className="text-foreground">.</span>
           </motion.h1>
 
           <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.1 }}
-            className="text-white/40 text-base max-w-xl leading-relaxed"
+            className="text-muted text-base max-w-xl leading-relaxed"
           >
             Every page on Kaiveron, organized by section. Find what you need — fast.
           </motion.p>
@@ -137,7 +137,7 @@ export default function SitemapPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: si * 0.07 }}
-              className={`rounded-3xl border ${section.border} bg-[#0a0a0a] p-7`}
+              className={`rounded-3xl border ${section.border} bg-surface p-7`}
             >
               {/* Section heading */}
               <h2 className={`text-[10px] font-black uppercase tracking-[0.35em] ${section.color} mb-5`}>
@@ -155,9 +155,9 @@ export default function SitemapPage() {
                   >
                     <Link
                       href={link.href}
-                      className="group flex items-center gap-2 py-1.5 text-sm text-white/40 hover:text-white transition-colors duration-150"
+                      className="group flex items-center gap-2 py-1.5 text-sm text-muted hover:text-foreground transition-colors duration-150"
                     >
-                      <span className="opacity-0 group-hover:opacity-100 transition-opacity text-[10px] text-amber-400">
+                      <span className="opacity-0 group-hover:opacity-100 transition-opacity text-[10px] text-accent-bright">
                         →
                       </span>
                       <span className="group-hover:translate-x-0.5 transition-transform duration-150">
@@ -178,7 +178,7 @@ export default function SitemapPage() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.6 }}
-          className="text-[10px] text-white/20 font-mono text-center"
+          className="text-[10px] text-subtle font-mono text-center"
         >
           {SECTIONS.reduce((acc, s) => acc + s.links.length, 0)} pages · updated with every release
         </motion.p>

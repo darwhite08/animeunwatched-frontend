@@ -9,7 +9,7 @@ export default function CreatorDashboard() {
         <h1 className="text-3xl font-semibold">
           Welcome back, Creator 👋
         </h1>
-        <p className="text-white/50 mt-2">
+        <p className="text-muted mt-2">
           You’ve gained 1,240 reads this week.
         </p>
       </div>
@@ -38,9 +38,9 @@ export default function CreatorDashboard() {
 
 function ActionCard({ title }: { title: string }) {
   return (
-    <div className="bg-zinc-900 border border-white/10 rounded-2xl p-6 hover:border-amber-500 transition cursor-pointer">
+    <div className="bg-zinc-900 border border-border rounded-2xl p-6 hover:border-accent transition cursor-pointer">
       <h3 className="font-medium">{title}</h3>
-      <p className="text-sm text-white/50 mt-2">
+      <p className="text-sm text-muted mt-2">
         Create anime content instantly.
       </p>
     </div>

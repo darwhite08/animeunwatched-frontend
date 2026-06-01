@@ -41,8 +41,8 @@ function apiStatusToUI(s: string): WatchStatus {
 
 const STATUS_COLORS: Record<WatchStatus, string> = {
   "Watching":       "bg-emerald-500/20 text-emerald-400 border-emerald-500/30",
-  "Completed":      "bg-amber-500/20 text-amber-400 border-amber-500/30",
-  "Plan to Watch":  "bg-amber-500/20 text-amber-400 border-amber-500/30",
+  "Completed":      "bg-accent/20 text-accent-bright border-accent/30",
+  "Plan to Watch":  "bg-accent/20 text-accent-bright border-accent/30",
   "On Hold":        "bg-rose-500/20 text-rose-400 border-rose-500/30",
 }
 
@@ -108,7 +108,7 @@ function ListCard({ entry, index, onAdd }: ListCardProps) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay: Math.min(index * 0.04, 0.4), duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
-      className="group relative rounded-2xl overflow-hidden border border-white/5 bg-[#0a0a0a] hover:border-amber-500/25 hover:bg-zinc-900/60 transition-all duration-400"
+      className="group relative rounded-2xl overflow-hidden border border-border bg-surface hover:border-accent/25 hover:bg-zinc-900/60 transition-all duration-400"
     >
       {/* Cover */}
       <div className="relative aspect-[2/3] w-full">
@@ -131,8 +131,8 @@ function ListCard({ entry, index, onAdd }: ListCardProps) {
         {/* Rating */}
         <div className="absolute top-2.5 right-2.5">
           <div className="flex items-center gap-1 px-2 py-0.5 rounded-lg bg-black/60 backdrop-blur-md">
-            <Star size={9} fill="#f59e0b" className="text-amber-400" />
-            <span className="text-[9px] font-black text-white">{anime.rating.toFixed(1)}</span>
+            <Star size={9} fill="#f59e0b" className="text-accent-bright" />
+            <span className="text-[9px] font-black text-foreground">{anime.rating.toFixed(1)}</span>
           </div>
         </div>
 
@@ -140,7 +140,7 @@ function ListCard({ entry, index, onAdd }: ListCardProps) {
         <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
           <button
             onClick={() => onAdd(anime.title)}
-            className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-black text-[10px] font-black uppercase tracking-widest transition-colors shadow-lg"
+            className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-accent hover:bg-accent-bright text-black text-[10px] font-black uppercase tracking-widest transition-colors shadow-lg"
           >
             <Plus size={12} />
             Add to My List
@@ -152,7 +152,7 @@ function ListCard({ entry, index, onAdd }: ListCardProps) {
 
       {/* Info */}
       <div className="p-3 space-y-2">
-        <h3 className="text-[10px] font-black text-white uppercase italic tracking-tight leading-tight line-clamp-2">
+        <h3 className="text-[10px] font-black text-foreground uppercase italic tracking-tight leading-tight line-clamp-2">
           {anime.title}
         </h3>
 
@@ -160,12 +160,12 @@ function ListCard({ entry, index, onAdd }: ListCardProps) {
         {totalEps > 0 && (
           <div className="space-y-1">
             <div className="flex justify-between items-center">
-              <span className="text-[8px] font-bold text-white/30">
+              <span className="text-[8px] font-bold text-subtle">
                 {episodesWatched}/{totalEps} eps
               </span>
-              <span className="text-[8px] font-bold text-white/30">{Math.round(progress)}%</span>
+              <span className="text-[8px] font-bold text-subtle">{Math.round(progress)}%</span>
             </div>
-            <div className="h-1 w-full bg-white/8 rounded-full overflow-hidden">
+            <div className="h-1 w-full bg-surface rounded-full overflow-hidden">
               <motion.div
                 initial={{ width: 0 }}
                 whileInView={{ width: `${progress}%` }}
@@ -217,16 +217,16 @@ export default function UserListPage({
   const totalHours      = calcHours(LIST_DATA)
 
   const statCards = [
-    { label: "Total",     value: LIST_DATA.length,  icon: BarChart2,  color: "text-amber-400" },
+    { label: "Total",     value: LIST_DATA.length,  icon: BarChart2,  color: "text-accent-bright" },
     { label: "Watching",  value: watchingCount,      icon: PlayCircle, color: "text-emerald-400" },
     { label: "Completed", value: completedCount,     icon: CheckCircle2, color: "text-violet-400" },
-    { label: "Hours",     value: totalHours,         icon: Clock,      color: "text-amber-400" },
+    { label: "Hours",     value: totalHours,         icon: Clock,      color: "text-accent-bright" },
   ]
 
-  if (isLoading) return <div className="min-h-screen bg-[#020202] text-white flex items-center justify-center text-white/30">Loading list…</div>
+  if (isLoading) return <div className="min-h-screen bg-background text-foreground flex items-center justify-center text-subtle">Loading list…</div>
 
   return (
-    <div className="min-h-screen bg-[#020202] text-white pb-32">
+    <div className="min-h-screen bg-background text-foreground pb-32">
       {/* Mesh glow */}
       <div className="fixed inset-0 pointer-events-none z-0">
         <div className="absolute top-[-10%] right-[-5%] w-[55%] h-[60%] bg-indigo-700/10 blur-[150px] rounded-full" />
@@ -238,7 +238,7 @@ export default function UserListPage({
         {/* Back link */}
         <Link
           href={`/u/${username}`}
-          className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-widest text-white/35 hover:text-white transition-colors group"
+          className="inline-flex items-center gap-2 text-xs font-black uppercase tracking-widest text-subtle hover:text-foreground transition-colors group"
         >
           <ArrowLeft size={14} className="group-hover:-translate-x-0.5 transition-transform" />
           @{username} Profile
@@ -252,7 +252,7 @@ export default function UserListPage({
           className="text-5xl md:text-7xl font-black tracking-tighter uppercase italic"
         >
           @{username}&apos;s<br />
-          <span className="text-amber-400">Anime List</span>
+          <span className="text-accent-bright">Anime List</span>
         </motion.h1>
 
         {/* Stat row */}
@@ -263,13 +263,13 @@ export default function UserListPage({
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.07 + 0.1 }}
-              className="group p-6 rounded-2xl border border-white/5 bg-[#0a0a0a] hover:bg-zinc-900/50 transition-all"
+              className="group p-6 rounded-2xl border border-border bg-surface hover:bg-zinc-900/50 transition-all"
             >
               <div className={`mb-3 ${s.color} opacity-80`}>
                 <s.icon size={22} strokeWidth={1.5} />
               </div>
-              <p className="text-3xl font-black text-white tracking-tighter">{s.value}</p>
-              <p className="text-[9px] font-black text-white/30 uppercase tracking-[0.2em] mt-1">{s.label}</p>
+              <p className="text-3xl font-black text-foreground tracking-tighter">{s.value}</p>
+              <p className="text-[9px] font-black text-subtle uppercase tracking-[0.2em] mt-1">{s.label}</p>
             </motion.div>
           ))}
         </div>
@@ -284,8 +284,8 @@ export default function UserListPage({
                 onClick={() => setFilterStatus(tab)}
                 className={`relative px-5 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-200 ${
                   filterStatus === tab
-                    ? "bg-amber-500 text-black shadow-[0_4px_16px_rgba(245,158,11,0.3)]"
-                    : "bg-white/[0.04] border border-white/8 text-white/40 hover:text-white/80 hover:bg-white/8"
+                    ? "bg-accent text-black shadow-[0_4px_16px_rgba(245,158,11,0.3)]"
+                    : "bg-white/[0.04] border border-border text-muted hover:text-muted hover:bg-surface"
                 }`}
               >
                 {tab}
@@ -295,15 +295,15 @@ export default function UserListPage({
 
           {/* Sort buttons */}
           <div className="flex items-center gap-2">
-            <SortAsc size={13} className="text-white/25 shrink-0" />
+            <SortAsc size={13} className="text-subtle shrink-0" />
             {(["name", "rating", "date"] as const).map((key) => (
               <button
                 key={key}
                 onClick={() => setSortKey(key)}
                 className={`px-4 py-2 rounded-xl text-[9px] font-black uppercase tracking-widest transition-all ${
                   sortKey === key
-                    ? "bg-white/10 text-white border border-white/15"
-                    : "text-white/30 hover:text-white/60"
+                    ? "bg-surface text-foreground border border-border"
+                    : "text-subtle hover:text-muted"
                 }`}
               >
                 By {key === "name" ? "Name" : key === "rating" ? "Rating" : "Date"}
@@ -337,8 +337,8 @@ export default function UserListPage({
                 animate={{ opacity: 1 }}
                 className="col-span-full py-24 text-center space-y-3"
               >
-                <Eye size={36} className="text-white/15 mx-auto" />
-                <p className="text-sm font-black text-white/20 uppercase tracking-widest">No anime in this category yet</p>
+                <Eye size={36} className="text-subtle mx-auto" />
+                <p className="text-sm font-black text-subtle uppercase tracking-widest">No anime in this category yet</p>
               </motion.div>
             )}
           </motion.div>

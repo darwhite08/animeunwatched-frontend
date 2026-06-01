@@ -16,7 +16,7 @@ const PERIOD_LABELS: Record<Period, string> = {
 }
 
 const RANK_STYLES = [
-  { color: "text-amber-400",  bg: "bg-amber-500/15", border: "border-amber-500/30" },
+  { color: "text-accent-bright",  bg: "bg-accent/15", border: "border-accent/30" },
   { color: "text-slate-300",  bg: "bg-slate-500/10", border: "border-slate-500/20" },
   { color: "text-orange-400", bg: "bg-orange-500/10", border: "border-orange-500/20" },
 ]
@@ -29,18 +29,18 @@ export default function LeaderboardPeriodPage({ params }: { params: Promise<{ pe
   const users = data?.data ?? []
 
   return (
-    <div className="min-h-screen bg-[#020202] text-white pb-32 pt-8">
+    <div className="min-h-screen bg-background text-foreground pb-32 pt-8">
       <div className="max-w-4xl mx-auto px-6">
         {/* Back + period tabs */}
         <Link href="/leaderboard"
-          className="inline-flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-white/40 hover:text-white/70 transition-colors mb-6 group">
+          className="inline-flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-muted hover:text-muted transition-colors mb-6 group">
           <ArrowLeft size={11} className="group-hover:-translate-x-0.5 transition-transform" /> All Rankings
         </Link>
 
         <div className="flex items-center justify-between mb-8 flex-wrap gap-4">
           <div className="flex items-center gap-3">
-            <Trophy size={22} className="text-amber-400" />
-            <h1 className="text-3xl font-black tracking-tighter uppercase italic text-white">
+            <Trophy size={22} className="text-accent-bright" />
+            <h1 className="text-3xl font-black tracking-tighter uppercase italic text-foreground">
               {PERIOD_LABELS[validPeriod]}<span style={{ color: "#f59e0b" }}>.</span>
             </h1>
           </div>
@@ -48,7 +48,7 @@ export default function LeaderboardPeriodPage({ params }: { params: Promise<{ pe
             {VALID_PERIODS.map(p => (
               <Link key={p} href={`/leaderboard/${p}`}
                 className={`px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${
-                  p === validPeriod ? "text-black" : "bg-white/5 border border-white/8 text-white/40 hover:text-white/70"
+                  p === validPeriod ? "text-black" : "bg-surface border border-border text-muted hover:text-muted"
                 }`}
                 style={p === validPeriod ? { background: "linear-gradient(135deg,#fbbf24,#f59e0b)" } : undefined}>
                 {PERIOD_LABELS[p]}
@@ -58,20 +58,20 @@ export default function LeaderboardPeriodPage({ params }: { params: Promise<{ pe
         </div>
 
         {isLoading ? (
-          <div className="flex items-center justify-center py-24"><Loader2 size={28} className="animate-spin text-amber-400" /></div>
+          <div className="flex items-center justify-center py-24"><Loader2 size={28} className="animate-spin text-accent-bright" /></div>
         ) : users.length === 0 ? (
-          <p className="text-center py-24 text-white/30 text-sm">No data for this period yet.</p>
+          <p className="text-center py-24 text-subtle text-sm">No data for this period yet.</p>
         ) : (
           <div className="space-y-2">
             {users.map((u, i) => {
-              const rs = RANK_STYLES[i] ?? { color: "text-white/30", bg: "bg-white/5", border: "border-white/8" }
+              const rs = RANK_STYLES[i] ?? { color: "text-subtle", bg: "bg-surface", border: "border-border" }
               return (
                 <motion.div key={u.username}
                   initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.025 }}>
                   <Link href={`/u/${u.username}`}
-                    className={`flex items-center gap-4 p-4 rounded-2xl border bg-white/[0.02] hover:bg-white/[0.04] transition-all ${i < 3 ? rs.border : "border-white/8 hover:border-white/15"}`}>
+                    className={`flex items-center gap-4 p-4 rounded-2xl border bg-surface hover:bg-white/[0.04] transition-all ${i < 3 ? rs.border : "border-border hover:border-border"}`}>
                     {/* Rank */}
-                    <div className={`h-9 w-9 rounded-xl flex items-center justify-center text-sm font-black shrink-0 border ${i < 3 ? `${rs.bg} ${rs.border} ${rs.color}` : "bg-white/5 border-white/8 text-white/30"}`}>
+                    <div className={`h-9 w-9 rounded-xl flex items-center justify-center text-sm font-black shrink-0 border ${i < 3 ? `${rs.bg} ${rs.border} ${rs.color}` : "bg-surface border-border text-subtle"}`}>
                       {u.rank}
                     </div>
                     {/* Avatar */}
@@ -80,13 +80,13 @@ export default function LeaderboardPeriodPage({ params }: { params: Promise<{ pe
                     </div>
                     {/* Info */}
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-black text-white">{u.displayName}</p>
-                      <p className="text-[9px] text-white/35">@{u.username} · Lv.{u.level}</p>
+                      <p className="text-sm font-black text-foreground">{u.displayName}</p>
+                      <p className="text-[9px] text-subtle">@{u.username} · Lv.{u.level}</p>
                     </div>
                     {/* Stats */}
-                    <div className="hidden sm:flex items-center gap-5 text-xs text-white/30 shrink-0">
-                      <span className="flex items-center gap-1"><Trophy size={11} className="text-amber-400" />{u.reputation.toLocaleString()}</span>
-                      <span className="flex items-center gap-1"><Star size={11} className="text-amber-400" />{u.archived}</span>
+                    <div className="hidden sm:flex items-center gap-5 text-xs text-subtle shrink-0">
+                      <span className="flex items-center gap-1"><Trophy size={11} className="text-accent-bright" />{u.reputation.toLocaleString()}</span>
+                      <span className="flex items-center gap-1"><Star size={11} className="text-accent-bright" />{u.archived}</span>
                       <span className="flex items-center gap-1"><Flame size={11} className="text-orange-400" />{u.reviews}</span>
                     </div>
                   </Link>

@@ -76,20 +76,20 @@ export default function FeedPage() {
       {/* Header */}
       <div className="flex items-start justify-between gap-4">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-amber-600/20 border border-amber-500/30 flex items-center justify-center">
-            <Rss size={18} className="text-amber-400" />
+          <div className="w-10 h-10 rounded-xl bg-accent/20 border border-accent/30 flex items-center justify-center">
+            <Rss size={18} className="text-accent-bright" />
           </div>
           <div>
             <h1 className="text-2xl font-semibold">
               {folderId ? "Folder" : "Feed Content"}
             </h1>
-            <p className="text-sm text-white/40">{visible.length} posts</p>
+            <p className="text-sm text-muted">{visible.length} posts</p>
           </div>
         </div>
 
         <Link
           href="/creators/create/feed"
-          className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 transition text-sm font-medium"
+          className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-accent hover:bg-accent-bright transition text-sm font-medium"
         >
           <Plus size={15} />
           New Post
@@ -98,20 +98,20 @@ export default function FeedPage() {
 
       {/* Stats row */}
       <div className="grid grid-cols-3 gap-4">
-        <StatCard icon={Eye} label="Total Views" value={totalViews.toLocaleString()} color="text-amber-400" />
+        <StatCard icon={Eye} label="Total Views" value={totalViews.toLocaleString()} color="text-accent-bright" />
         <StatCard icon={Heart} label="Total Likes" value={totalLikes.toLocaleString()} color="text-rose-400" />
-        <StatCard icon={MessageCircle} label="Comments" value={ENHANCED_FEED.reduce((s, p) => s + p.comments, 0).toString()} color="text-amber-400" />
+        <StatCard icon={MessageCircle} label="Comments" value={ENHANCED_FEED.reduce((s, p) => s + p.comments, 0).toString()} color="text-accent-bright" />
       </div>
 
       {/* Search + filter */}
       <div className="flex flex-col sm:flex-row gap-3">
         <div className="relative flex-1 max-w-xs">
-          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-white/30" />
+          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-subtle" />
           <input
             value={query}
             onChange={e => setQuery(e.target.value)}
             placeholder="Search posts…"
-            className="w-full pl-9 pr-4 py-2.5 bg-zinc-800 rounded-xl text-sm outline-none placeholder:text-white/30 focus:ring-1 focus:ring-indigo-500/50"
+            className="w-full pl-9 pr-4 py-2.5 bg-zinc-800 rounded-xl text-sm outline-none placeholder:text-subtle focus:ring-1 focus:ring-indigo-500/50"
           />
         </div>
 
@@ -121,7 +121,7 @@ export default function FeedPage() {
               key={f}
               onClick={() => setStatusFilter(f)}
               className={`px-4 py-2.5 rounded-xl text-sm capitalize transition ${
-                statusFilter === f ? "bg-white/10 text-white" : "text-white/40 hover:bg-white/5 hover:text-white"
+                statusFilter === f ? "bg-surface text-foreground" : "text-muted hover:bg-surface hover:text-foreground"
               }`}
             >
               {f}
@@ -139,7 +139,7 @@ export default function FeedPage() {
         </AnimatePresence>
 
         {visible.length === 0 && (
-          <div className="text-center py-16 text-white/30">
+          <div className="text-center py-16 text-subtle">
             <Rss size={32} className="mx-auto mb-3 opacity-30" />
             <p className="text-sm">No posts in this view</p>
           </div>
@@ -170,25 +170,25 @@ function FeedPostRow({ post, index }: { post: FeedPost; index: number }) {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.97 }}
       transition={{ delay: index * 0.03 }}
-      className="group bg-zinc-900 border border-white/10 hover:border-white/20 rounded-2xl px-5 py-4 transition flex items-center gap-4"
+      className="group bg-zinc-900 border border-border hover:border-border rounded-2xl px-5 py-4 transition flex items-center gap-4"
     >
       {/* Post info */}
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 mb-1">
           <span className={`text-xs border px-2.5 py-0.5 rounded-full ${cls}`}>{label}</span>
           {post.anime && (
-            <span className="text-xs text-amber-400/80 bg-amber-600/10 px-2.5 py-0.5 rounded-full">
+            <span className="text-xs text-accent-bright/80 bg-accent/10 px-2.5 py-0.5 rounded-full">
               {post.anime}
             </span>
           )}
         </div>
-        <h3 className="font-medium text-sm truncate group-hover:text-amber-300 transition">
+        <h3 className="font-medium text-sm truncate group-hover:text-accent-bright transition">
           {post.title}
         </h3>
       </div>
 
       {/* Stats */}
-      <div className="hidden sm:flex items-center gap-5 text-xs text-white/30 shrink-0">
+      <div className="hidden sm:flex items-center gap-5 text-xs text-subtle shrink-0">
         {post.views > 0 && (
           <span className="flex items-center gap-1.5">
             <Eye size={12} /> {(post.views / 1000).toFixed(1)}k
@@ -213,7 +213,7 @@ function FeedPostRow({ post, index }: { post: FeedPost; index: number }) {
       <div className="flex items-center gap-2 opacity-0 group-hover:opacity-100 transition">
         <Link
           href={`/creators/create/feed?id=${post.id}`}
-          className="p-2 rounded-lg text-white/40 hover:text-white hover:bg-white/5 transition"
+          className="p-2 rounded-lg text-muted hover:text-foreground hover:bg-surface transition"
         >
           <Edit2 size={14} />
         </Link>
@@ -222,7 +222,7 @@ function FeedPostRow({ post, index }: { post: FeedPost; index: number }) {
           onClick={onDelete}
           disabled={deletePost.isPending}
           title="Delete post"
-          className="p-2 rounded-lg text-white/40 hover:text-red-400 hover:bg-white/5 transition disabled:opacity-50"
+          className="p-2 rounded-lg text-muted hover:text-red-400 hover:bg-surface transition disabled:opacity-50"
         >
           <Trash2 size={14} />
         </button>
@@ -233,11 +233,11 @@ function FeedPostRow({ post, index }: { post: FeedPost; index: number }) {
 
 function StatCard({ icon: Icon, label, value, color }: { icon: any; label: string; value: string; color: string }) {
   return (
-    <div className="bg-zinc-900 border border-white/10 rounded-2xl p-4 flex items-center gap-3">
+    <div className="bg-zinc-900 border border-border rounded-2xl p-4 flex items-center gap-3">
       <Icon size={18} className={color} />
       <div>
         <p className="text-lg font-semibold">{value}</p>
-        <p className="text-xs text-white/40">{label}</p>
+        <p className="text-xs text-muted">{label}</p>
       </div>
     </div>
   )

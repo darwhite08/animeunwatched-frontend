@@ -97,7 +97,7 @@ export default function CreatorSidebar() {
 
   return (
     <>
-      <aside className="w-80 h-screen sticky top-0 left-0 flex flex-col bg-zinc-900 border-r border-white/10 p-6 overflow-hidden">
+      <aside className="w-80 h-screen sticky top-0 left-0 flex flex-col bg-zinc-900 border-r border-border p-6 overflow-hidden">
 
         {/* HEADER */}
         <div className="space-y-4 h-20">
@@ -123,8 +123,8 @@ export default function CreatorSidebar() {
             onClick={() => router.push("/creator")}
             className={`px-3 py-2 rounded-lg text-sm cursor-pointer
     ${!folderFromUrl
-                ? "bg-amber-600/20 text-white"
-                : "text-white/60 hover:bg-white/5"
+                ? "bg-accent/20 text-foreground"
+                : "text-muted hover:bg-surface"
               }`}
           >
             All Content
@@ -187,8 +187,8 @@ export default function CreatorSidebar() {
           />
 
           {creatingCategory && (
-            <div className="bg-black/30 border border-white/10 rounded-xl p-3 space-y-3">
-              <p className="text-xs text-white/40">
+            <div className="bg-black/30 border border-border rounded-xl p-3 space-y-3">
+              <p className="text-xs text-muted">
                 New {creatingCategory} folder
               </p>
 
@@ -202,7 +202,7 @@ export default function CreatorSidebar() {
               <div className="flex gap-2">
                 <button
                   onClick={handleCreateFolder}
-                  className="flex-1 py-2 rounded-lg bg-amber-500 hover:bg-amber-400 transition text-sm"
+                  className="flex-1 py-2 rounded-lg bg-accent hover:bg-accent-bright transition text-sm"
                 >
                   Create
                 </button>
@@ -219,10 +219,10 @@ export default function CreatorSidebar() {
         </div>
 
         {/* BOTTOM */}
-        <div className="border-t border-white/10 pt-4">
+        <div className="border-t border-border pt-4">
           <Link
             href="/creators/create"
-            className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-amber-500 hover:bg-amber-400 transition"
+            className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-accent hover:bg-accent-bright transition"
           >
             <Plus size={16} />
             Create Content
@@ -259,8 +259,8 @@ function NavItem({
       href={href}
       className={`flex items-center gap-3 px-4 py-3 rounded-xl transition
         ${active
-          ? "bg-amber-600/20 border border-amber-500/40 text-white"
-          : "text-white/60 hover:bg-white/5 hover:text-white"
+          ? "bg-accent/20 border border-accent/40 text-foreground"
+          : "text-muted hover:bg-surface hover:text-foreground"
         }`}
     >
       <Icon size={18} />
@@ -291,7 +291,7 @@ function FolderSection({
       <div className="flex items-center justify-between mb-2">
         <button
           onClick={() => setExpanded(!expanded)}
-          className="flex items-center gap-2 text-xs text-white/50"
+          className="flex items-center gap-2 text-xs text-muted"
         >
           <ChevronDown
             size={14}
@@ -303,7 +303,7 @@ function FolderSection({
         <FolderPlus
           size={14}
           onClick={onCreate}
-          className="cursor-pointer text-white/40 hover:text-white transition"
+          className="cursor-pointer text-muted hover:text-foreground transition"
         />
       </div>
 
@@ -314,8 +314,8 @@ function FolderSection({
               key={folder.id}
               className={`flex items-center justify-between px-3 py-2 rounded-lg text-sm group cursor-pointer
                 ${activeFolder === folder.id
-                  ? "bg-amber-600/20 text-white"
-                  : "text-white/60 hover:bg-white/5"
+                  ? "bg-accent/20 text-foreground"
+                  : "text-muted hover:bg-surface"
                 }`}
             onClick={() =>
   router.push(
@@ -379,9 +379,9 @@ function DeleteModal({
 }) {
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50">
-      <div className="bg-zinc-900 border border-white/10 rounded-2xl p-6 w-80 space-y-4">
+      <div className="bg-zinc-900 border border-border rounded-2xl p-6 w-80 space-y-4">
         <h3 className="text-lg font-semibold">Delete Folder</h3>
-        <p className="text-sm text-white/60">
+        <p className="text-sm text-muted">
           Are you sure you want to delete "{folder.name}"?
         </p>
 

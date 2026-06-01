@@ -37,7 +37,7 @@ export default function ChatEmptyPage() {
         <div className="relative">
           <div className="w-20 h-20 rounded-[28px] flex items-center justify-center shadow-2xl"
             style={{ background: "linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%)", boxShadow: "0 0 60px rgba(99,102,241,0.35)" }}>
-            <Sparkles size={32} className="text-white" />
+            <Sparkles size={32} className="text-foreground" />
           </div>
           <motion.div className="absolute -bottom-2 -right-2 w-8 h-8 rounded-xl flex items-center justify-center border border-white/[0.08]"
             style={{ background: "#1a1a2e" }}
@@ -48,7 +48,7 @@ export default function ChatEmptyPage() {
 
         {/* Copy */}
         <div className="space-y-2">
-          <h2 className="text-[18px] font-bold text-white tracking-tight">Select a conversation</h2>
+          <h2 className="text-[18px] font-bold text-foreground tracking-tight">Select a conversation</h2>
           <p className="text-[12.5px] leading-relaxed" style={{ color: "rgba(255,255,255,0.35)" }}>
             Pick a chat from the left panel or click ✏ to start a new encrypted conversation with any Shinobi on Kaiveron.
           </p>
@@ -61,8 +61,8 @@ export default function ChatEmptyPage() {
               style={{ background: "rgba(255,255,255,0.02)", borderColor: "rgba(255,255,255,0.05)" }}>
               <span className="text-[16px] shrink-0">{icon}</span>
               <div>
-                <p className="text-[11.5px] font-semibold text-white/70">{label}</p>
-                <p className="text-[10.5px] text-white/25 mt-0.5">{desc}</p>
+                <p className="text-[11.5px] font-semibold text-muted">{label}</p>
+                <p className="text-[10.5px] text-subtle mt-0.5">{desc}</p>
               </div>
             </div>
           ))}

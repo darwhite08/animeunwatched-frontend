@@ -22,19 +22,19 @@ export default function DashboardHeader() {
         <h1 className="text-3xl font-semibold">
           Welcome back, Otaku 👋
         </h1>
-        <p className="text-white/50 mt-1">
+        <p className="text-muted mt-1">
           Track your anime journey and discover new worlds.
         </p>
       </div>
 
       <div className="flex items-center gap-4">
         <form onSubmit={submit} className="relative">
-          <Search className="absolute left-3 top-3 text-white/40" size={16} />
+          <Search className="absolute left-3 top-3 text-muted" size={16} />
           <input
             value={query}
             onChange={e => setQuery(e.target.value)}
             placeholder="Search anime..."
-            className="bg-neutral-900 border border-white/10 rounded-xl pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-600"
+            className="bg-neutral-900 border border-border rounded-xl pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-600"
           />
         </form>
 

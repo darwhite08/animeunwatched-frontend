@@ -46,7 +46,7 @@ export default function FAQ() {
           initial={{ opacity: 0, x: -20 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
-          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/5 border border-white/10 text-[10px] font-black uppercase tracking-[0.4em] text-emerald-500"
+          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-surface border border-border text-[10px] font-black uppercase tracking-[0.4em] text-emerald-500"
         >
           <Terminal size={14} /> Query The Oracle
         </motion.div>
@@ -55,7 +55,7 @@ export default function FAQ() {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="text-6xl md:text-7xl lg:text-[6rem] font-black text-white uppercase italic tracking-tighter leading-[0.85]"
+          className="text-6xl md:text-7xl lg:text-[6rem] font-black text-foreground uppercase italic tracking-tighter leading-[0.85]"
         >
           Intelligence <br />
           <span className="text-transparent bg-clip-text bg-gradient-to-b from-white to-white/20">Briefing.</span>
@@ -66,7 +66,7 @@ export default function FAQ() {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ delay: 0.2 }}
-          className="text-white/40 max-w-sm text-lg font-medium leading-relaxed tracking-tight"
+          className="text-muted max-w-sm text-lg font-medium leading-relaxed tracking-tight"
         >
           Decrypting common inquiries regarding the Kaiveron protocol, data sovereignty, and neural syncing.
         </motion.p>
@@ -85,7 +85,7 @@ export default function FAQ() {
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
               className={`group relative overflow-hidden rounded-[2rem] border transition-all duration-500 bg-[#0c0c0c]
-                ${isOpen ? "border-emerald-500/30 shadow-[0_20px_40px_-15px_rgba(16,185,129,0.15)]" : "border-white/5 hover:border-white/15"}
+                ${isOpen ? "border-emerald-500/30 shadow-[0_20px_40px_-15px_rgba(16,185,129,0.15)]" : "border-border hover:border-border"}
               `}
             >
               {/* Active Glow Background */}
@@ -96,16 +96,16 @@ export default function FAQ() {
                 className="w-full relative z-10 p-6 md:p-8 flex items-center justify-between text-left gap-6"
               >
                 <div className="flex flex-col gap-2">
-                   <span className={`text-[10px] font-mono tracking-[0.2em] transition-colors ${isOpen ? "text-emerald-500" : "text-white/20"}`}>
+                   <span className={`text-[10px] font-mono tracking-[0.2em] transition-colors ${isOpen ? "text-emerald-500" : "text-subtle"}`}>
                      FILE_{faq.id} // {faq.clearance}
                    </span>
-                   <span className={`text-xl md:text-2xl font-black uppercase tracking-tight transition-colors duration-300 ${isOpen ? "text-white" : "text-white/60 group-hover:text-white"}`}>
+                   <span className={`text-xl md:text-2xl font-black uppercase tracking-tight transition-colors duration-300 ${isOpen ? "text-foreground" : "text-muted group-hover:text-foreground"}`}>
                      {faq.q}
                    </span>
                 </div>
 
                 {/* Animated Cross Icon */}
-                <div className={`shrink-0 h-12 w-12 rounded-full border flex items-center justify-center transition-all duration-500 ${isOpen ? "bg-emerald-500 text-black border-transparent rotate-90" : "bg-transparent text-white/20 border-white/10 group-hover:border-white/30 group-hover:text-white"}`}>
+                <div className={`shrink-0 h-12 w-12 rounded-full border flex items-center justify-center transition-all duration-500 ${isOpen ? "bg-emerald-500 text-black border-transparent rotate-90" : "bg-transparent text-subtle border-border group-hover:border-white/30 group-hover:text-foreground"}`}>
                    {isOpen ? <X size={20} /> : <Plus size={20} />}
                 </div>
               </button>
@@ -125,7 +125,7 @@ export default function FAQ() {
                          initial={{ y: 10, opacity: 0 }}
                          animate={{ y: 0, opacity: 1 }}
                          transition={{ delay: 0.1, duration: 0.4 }}
-                         className="text-base md:text-lg text-white/50 leading-relaxed font-medium max-w-2xl"
+                         className="text-base md:text-lg text-muted leading-relaxed font-medium max-w-2xl"
                        >
                          {faq.a}
                        </motion.p>

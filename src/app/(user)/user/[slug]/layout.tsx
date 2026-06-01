@@ -48,7 +48,7 @@ export default function UserScopedLayout({ children }: { children: React.ReactNo
   if (user.slug && params.slug !== user.slug) return null
 
   return (
-    <div className="flex min-h-screen bg-[#020202]">
+    <div className="flex min-h-screen bg-background">
       <Sidebar />
       <main className="flex-1 ml-64 min-h-screen overflow-y-auto">
         {children}

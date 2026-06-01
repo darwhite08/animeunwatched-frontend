@@ -50,23 +50,23 @@ export default function TopAnimePage() {
     .sort((a, b) => b.rating - a.rating)
 
   return (
-    <div className="min-h-screen bg-[#020202] text-white pb-32">
+    <div className="min-h-screen bg-background text-foreground pb-32">
       <div className="max-w-7xl mx-auto px-6 pt-32 pb-10">
         <div className="flex items-center gap-3 mb-4">
-          <Trophy size={18} className="text-amber-400" />
-          <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-amber-400/60">Neural Rankings</p>
+          <Trophy size={18} className="text-accent-bright" />
+          <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-accent-bright/60">Neural Rankings</p>
         </div>
-        <h1 className="text-6xl font-black tracking-tighter uppercase italic text-white leading-none mb-2">
-          Top Anime<span className="text-amber-400">.</span>
+        <h1 className="text-6xl font-black tracking-tighter uppercase italic text-foreground leading-none mb-2">
+          Top Anime<span className="text-accent-bright">.</span>
         </h1>
-        <p className="text-white/35 text-sm mb-8">Ranked by community score × credibility weighted ratings</p>
+        <p className="text-subtle text-sm mb-8">Ranked by community score × credibility weighted ratings</p>
 
         {/* #1 Highlight */}
         {filtered[0] && (
           <motion.div
             initial={{ opacity:0, y:20 }} animate={{ opacity:1, y:0 }}
             onClick={() => setSelected(filtered[0])}
-            className="group relative overflow-hidden rounded-[2.5rem] border border-amber-500/20 bg-gradient-to-br from-amber-900/30 to-amber-950/10 p-8 mb-10 cursor-pointer hover:border-amber-500/40 transition-all"
+            className="group relative overflow-hidden rounded-[2.5rem] border border-accent/20 bg-gradient-to-br from-amber-900/30 to-amber-950/10 p-8 mb-10 cursor-pointer hover:border-accent/40 transition-all"
           >
             <div className="flex items-center gap-6">
               <div className="relative h-24 w-16 rounded-2xl overflow-hidden shrink-0 shadow-2xl">
@@ -74,22 +74,22 @@ export default function TopAnimePage() {
               </div>
               <div className="flex-1">
                 <div className="flex items-center gap-3 mb-2">
-                  <span className="text-4xl font-black text-amber-400/20 italic">#1</span>
+                  <span className="text-4xl font-black text-accent-bright/20 italic">#1</span>
                   <div>
-                    <h2 className="text-2xl font-black tracking-tighter text-white uppercase italic">{filtered[0].title}</h2>
-                    <p className="text-white/35 text-sm">{filtered[0].studio} · {filtered[0].year}</p>
+                    <h2 className="text-2xl font-black tracking-tighter text-foreground uppercase italic">{filtered[0].title}</h2>
+                    <p className="text-subtle text-sm">{filtered[0].studio} · {filtered[0].year}</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
-                  <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-500/15 border border-amber-500/25">
-                    <Star size={13} fill="#f59e0b" className="text-amber-400" />
-                    <span className="font-black text-amber-400 text-sm">{filtered[0].rating.toFixed(1)}</span>
+                  <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-accent/15 border border-accent/25">
+                    <Star size={13} fill="#f59e0b" className="text-accent-bright" />
+                    <span className="font-black text-accent-bright text-sm">{filtered[0].rating.toFixed(1)}</span>
                   </div>
-                  <span className="text-[10px] font-black uppercase tracking-widest text-white/30">{filtered[0].type}</span>
-                  <span className="text-[10px] text-white/20">{filtered[0].genres.join(" · ")}</span>
+                  <span className="text-[10px] font-black uppercase tracking-widest text-subtle">{filtered[0].type}</span>
+                  <span className="text-[10px] text-subtle">{filtered[0].genres.join(" · ")}</span>
                 </div>
               </div>
-              <ChevronRight size={20} className="text-white/20 group-hover:text-amber-400 group-hover:translate-x-1 transition-all shrink-0" />
+              <ChevronRight size={20} className="text-subtle group-hover:text-accent-bright group-hover:translate-x-1 transition-all shrink-0" />
             </div>
           </motion.div>
         )}
@@ -99,8 +99,8 @@ export default function TopAnimePage() {
           {CATEGORIES.map(c => (
             <button key={c.id} onClick={() => setCat(c.id)}
               className={`px-5 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${
-                cat === c.id ? "bg-amber-600 text-white shadow-[0_0_20px_rgba(245,158,11,0.3)]"
-                             : "bg-white/5 text-white/40 hover:bg-white/8 border border-white/5"
+                cat === c.id ? "bg-accent text-foreground shadow-[0_0_20px_rgba(245,158,11,0.3)]"
+                             : "bg-surface text-muted hover:bg-surface border border-border"
               }`}
             >{c.label}</button>
           ))}

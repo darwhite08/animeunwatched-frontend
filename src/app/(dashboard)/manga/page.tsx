@@ -18,11 +18,11 @@ export default function MangaPage() {
     <div className="max-w-4xl mx-auto px-6 py-12 space-y-10 pb-32">
       {/* Header */}
       <div>
-        <p className="text-[9px] font-mono font-black uppercase tracking-[0.4em] text-amber-400/60 mb-2">My Space</p>
-        <h1 className="text-5xl font-black tracking-tighter uppercase italic text-white leading-none">
+        <p className="text-[9px] font-mono font-black uppercase tracking-[0.4em] text-accent-bright/60 mb-2">My Space</p>
+        <h1 className="text-5xl font-black tracking-tighter uppercase italic text-foreground leading-none">
           Manga<span style={{ color: "#f59e0b" }}>.</span>
         </h1>
-        <p className="text-white/40 text-sm mt-3 max-w-md leading-relaxed">
+        <p className="text-muted text-sm mt-3 max-w-md leading-relaxed">
           Manga tracking is launching in Q3 2026 with full chapter progress, reading lists, and publisher integration.
         </p>
       </div>
@@ -32,7 +32,7 @@ export default function MangaPage() {
         initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
         className="relative overflow-hidden rounded-[2.5rem] border p-10 space-y-6"
         style={{ borderColor: "rgba(139,92,246,0.3)", background: "linear-gradient(160deg,rgba(139,92,246,0.06),rgba(139,92,246,0.02))", boxShadow: "0 0 60px rgba(139,92,246,0.08)" }}>
-        <div className="absolute -top-3 left-8 px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest text-white"
+        <div className="absolute -top-3 left-8 px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest text-foreground"
           style={{ background: "linear-gradient(135deg,#8b5cf6,#6d28d9)" }}>
           Q3 2026
         </div>
@@ -41,8 +41,8 @@ export default function MangaPage() {
             <BookMarked size={24} className="text-violet-400" />
           </div>
           <div>
-            <p className="text-xl font-black text-white uppercase italic tracking-tight">Manga Tracker</p>
-            <p className="text-xs text-white/35 mt-1">Chapter-level progress · Reading lists · Publisher deeplinks</p>
+            <p className="text-xl font-black text-foreground uppercase italic tracking-tight">Manga Tracker</p>
+            <p className="text-xs text-subtle mt-1">Chapter-level progress · Reading lists · Publisher deeplinks</p>
           </div>
         </div>
 
@@ -52,16 +52,16 @@ export default function MangaPage() {
             { icon: Sparkles,   label: "AI recommendations",  desc: "Manga suggestions based on your taste" },
             { icon: ExternalLink, label: "Publisher links",    desc: "Deep links to Manga Plus and VIZ Media" },
           ].map(({ icon: Icon, label, desc }) => (
-            <div key={label} className="p-4 rounded-2xl bg-white/[0.03] border border-white/5 space-y-2">
+            <div key={label} className="p-4 rounded-2xl bg-surface border border-border space-y-2">
               <Icon size={16} className="text-violet-400" />
-              <p className="text-xs font-black text-white">{label}</p>
-              <p className="text-[9px] text-white/30 leading-relaxed">{desc}</p>
+              <p className="text-xs font-black text-foreground">{label}</p>
+              <p className="text-[9px] text-subtle leading-relaxed">{desc}</p>
             </div>
           ))}
         </div>
 
         <a href="mailto:kaiveron@gmail.com?subject=Manga Tracker Waitlist"
-          className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl text-sm font-black uppercase tracking-widest text-white transition-all hover:-translate-y-0.5"
+          className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl text-sm font-black uppercase tracking-widest text-foreground transition-all hover:-translate-y-0.5"
           style={{ background: "linear-gradient(135deg,#8b5cf6,#6d28d9)", boxShadow: "0 4px 20px rgba(139,92,246,0.35)" }}>
           Join Waitlist
         </a>
@@ -69,22 +69,22 @@ export default function MangaPage() {
 
       {/* Popular manga browseable now via AniList */}
       <div className="space-y-4">
-        <p className="text-[10px] font-black uppercase tracking-[0.3em] text-white/25">Popular Manga — Browse on AniList</p>
+        <p className="text-[10px] font-black uppercase tracking-[0.3em] text-subtle">Popular Manga — Browse on AniList</p>
         <div className="grid sm:grid-cols-2 gap-3">
           {POPULAR_MANGA.map((m, i) => (
             <motion.a key={m.title}
               href={`https://anilist.co/search/manga?search=${encodeURIComponent(m.title)}`}
               target="_blank" rel="noopener noreferrer"
               initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}
-              className="flex items-center gap-4 p-4 rounded-2xl border border-white/8 bg-white/[0.02] hover:border-amber-500/20 hover:bg-white/[0.04] transition-all group">
+              className="flex items-center gap-4 p-4 rounded-2xl border border-border bg-surface hover:border-accent/20 hover:bg-white/[0.04] transition-all group">
               <div className="h-10 w-10 rounded-xl bg-violet-500/10 border border-violet-500/15 flex items-center justify-center shrink-0">
                 <BookOpen size={14} className="text-violet-400" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-black text-white group-hover:text-amber-300 transition-colors">{m.title}</p>
-                <p className="text-[9px] text-white/30 truncate">{m.author} · {m.genre} · {m.year}</p>
+                <p className="text-sm font-black text-foreground group-hover:text-accent-bright transition-colors">{m.title}</p>
+                <p className="text-[9px] text-subtle truncate">{m.author} · {m.genre} · {m.year}</p>
               </div>
-              <ExternalLink size={12} className="text-white/20 group-hover:text-amber-400 transition-colors shrink-0" />
+              <ExternalLink size={12} className="text-subtle group-hover:text-accent-bright transition-colors shrink-0" />
             </motion.a>
           ))}
         </div>

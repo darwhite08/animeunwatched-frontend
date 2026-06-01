@@ -1,13 +1,26 @@
 import type { NextConfig } from "next";
 import { withSentryConfig } from "@sentry/nextjs";
 
-const RENDER_BACKEND = "https://kaiveron-backend.onrender.com"
+// Backend origins permitted by CSP connect-src. During the Render → AWS
+// cutover we allow BOTH so the frontend can fall back to Render if needed.
+// Drop the Render URL once AWS migration is verified for ~1 week.
+const BACKEND_ORIGINS = [
+  "https://kaiveron-backend.onrender.com", // legacy (Render) — remove after cutover
+  "https://api.kaiveron.com",              // new production (AWS App Runner via Hostinger CNAME)
+].join(" ")
 
 const securityHeaders = [
+  // HSTS — 2y + includeSubDomains + preload. Vercel adds its own too but
+  // explicit beats implicit. Safe because all kaiveron domains are TLS-only.
+  { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
   { key: "X-DNS-Prefetch-Control",  value: "on" },
   { key: "X-Frame-Options",         value: "SAMEORIGIN" },
   { key: "X-Content-Type-Options",  value: "nosniff" },
   { key: "Referrer-Policy",         value: "strict-origin-when-cross-origin" },
+  // COOP isolates the top-level browsing context (Spectre defense). Google
+  // OAuth popup still works via FedCM (use_fedcm_for_prompt: true) which
+  // doesn't rely on window.opener.
+  { key: "Cross-Origin-Opener-Policy", value: "same-origin-allow-popups" },
   // camera=(self) and microphone=(self): allow only the same origin (the Vercel app)
   // Required for WebRTC audio/video calls — empty () would block them entirely
   { key: "Permissions-Policy",      value: "camera=(self), microphone=(self), geolocation=()" },
@@ -21,13 +34,14 @@ const securityHeaders = [
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://accounts.google.com",
       "font-src 'self' https://fonts.gstatic.com data:",
       "img-src 'self' data: blob: https://cdn.myanimelist.net https://myanimelist.net https://images.unsplash.com https://img.anisearch.com https://cdn.noitatnemucod.net https://img1.ak.crunchyroll.com https://encrypted-tbn0.gstatic.com https://s4.anilist.co https://media.kitsu.app https://lh3.googleusercontent.com https://lh4.googleusercontent.com https://lh5.googleusercontent.com https://lh6.googleusercontent.com https://avatars.githubusercontent.com https://*.r2.dev https://*.r2.cloudflarestorage.com",
-      // Render backend (HTTPS for polling, wss/ws for WebSocket upgrade)
-      // Removed: https://*.up.railway.app (old Railway URL, backend is now on Render)
-      `connect-src 'self' http://localhost:4000 http://192.168.31.167:4000 ${RENDER_BACKEND} https://api.jikan.moe https://accounts.google.com https://sentry.io https://*.sentry.io https://*.r2.cloudflarestorage.com https://*.r2.dev wss: ws:`,
+      // Backend origins (HTTPS for polling, wss/ws for WebSocket upgrade)
+      `connect-src 'self' http://localhost:4000 http://192.168.31.167:4000 ${BACKEND_ORIGINS} https://api.jikan.moe https://accounts.google.com https://sentry.io https://*.sentry.io https://*.r2.cloudflarestorage.com https://*.r2.dev wss: ws:`,
       "frame-src 'self' https://accounts.google.com https://www.youtube.com https://youtube.com",
       "object-src 'none'",
       "base-uri 'self'",
       "form-action 'self'",
+      // Force any http:// asset reference to https:// — defense in depth
+      "upgrade-insecure-requests",
     ].join("; "),
   },
 ];

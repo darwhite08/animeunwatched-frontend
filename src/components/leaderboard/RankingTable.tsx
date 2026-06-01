@@ -33,7 +33,7 @@ export const RankingTable = () => {
 
               {/* Identity */}
               <div className="flex items-center gap-5">
-                <div className="h-14 w-14 rounded-2xl bg-zinc-900 border border-border flex-shrink-0 relative overflow-hidden">
+                <div className="h-14 w-14 rounded-2xl bg-surface-2 border border-border flex-shrink-0 relative overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/20 to-transparent" />
                 </div>
                 <div className="space-y-1">

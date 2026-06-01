@@ -107,7 +107,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
               exit={{ scale: 0.96, y: -16, opacity: 0 }}
               transition={{ type: "spring", damping: 22, stiffness: 320 }}
               onClick={e => e.stopPropagation()}
-              className="w-full max-w-2xl bg-[#0c0c0c]/95 backdrop-blur-3xl rounded-3xl border border-border shadow-[0_30px_100px_rgba(0,0,0,0.8)] overflow-hidden"
+              className="w-full max-w-2xl bg-background/95 backdrop-blur-3xl rounded-3xl border border-border shadow-[0_30px_100px_rgba(0,0,0,0.8)] overflow-hidden"
             >
               {/* Input */}
               <div className="flex items-center gap-4 px-6 py-4 border-b border-border">
@@ -189,7 +189,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                               className={`group w-full flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-surface transition-all text-left ${cursor === i ? "bg-surface" : ""}`}
                             >
                               <div className="relative h-10 w-8 shrink-0 rounded-lg overflow-hidden bg-surface">
-                                {anime.image && <img src={anime.image} alt={anime.title} className="w-full h-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = "none" }} />}
+                                {anime.image && <img loading="lazy" decoding="async" src={anime.image} alt={anime.title} className="w-full h-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = "none" }} />}
                               </div>
                               <div className="flex-1 min-w-0">
                                 <p className="text-sm font-black text-muted group-hover:text-foreground truncate uppercase tracking-tight">

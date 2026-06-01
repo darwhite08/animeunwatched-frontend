@@ -114,7 +114,7 @@ const CONTENT_TYPE_CONFIG: Record<ContentType, { label: string; color: string; i
 const STATUS_CONFIG: Record<ReportStatus, { label: string; color: string }> = {
   open:      { label: "Open",      color: "bg-yellow-500/15 text-yellow-300 border-yellow-500/25" },
   resolved:  { label: "Resolved",  color: "bg-emerald-500/15 text-emerald-300 border-emerald-500/25" },
-  dismissed: { label: "Dismissed", color: "bg-slate-500/15 text-slate-400 border-slate-500/25" },
+  dismissed: { label: "Dismissed", color: "bg-surface-2 text-muted border-border" },
 }
 
 export default function ModerationPage() {
@@ -204,8 +204,8 @@ export default function ModerationPage() {
           label="Dismissed"
           count={dismissed}
           icon={XCircle}
-          color="text-slate-400"
-          bg="bg-slate-500/8 border-slate-500/15"
+          color="text-muted"
+          bg="bg-surface-2 border-border"
         />
       </div>
 
@@ -295,7 +295,7 @@ export default function ModerationPage() {
                       </button>
                       <button
                         onClick={() => dismiss(report.id)}
-                        className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-slate-500/10 border border-slate-500/20 text-slate-400 text-[10px] font-black uppercase tracking-wider hover:bg-slate-500/20 hover:border-slate-500/40 transition-all"
+                        className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-surface-2 border border-border text-muted text-[10px] font-black uppercase tracking-wider hover:bg-surface-2 hover:border-border transition-all"
                       >
                         <XCircle size={12} /> Dismiss
                       </button>

@@ -159,9 +159,9 @@ export default function AnimeDiscussPage({ params }: { params: Promise<{ id: str
               initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.05 }}>
               <Link href={`/threads/${thread.id}`}
-                className="block p-5 rounded-2xl border border-border bg-surface hover:border-accent/20 hover:bg-white/[0.04] transition-all group">
+                className="block p-5 rounded-2xl border border-border bg-surface hover:border-accent/20 hover:bg-surface transition-all group">
                 <div className="flex items-start justify-between gap-3 mb-2">
-                  <p className="text-[13px] font-bold text-white/85 group-hover:text-foreground transition-colors leading-snug">
+                  <p className="text-[13px] font-bold text-foreground group-hover:text-foreground transition-colors leading-snug">
                     {thread.title}
                   </p>
                   <span className="text-[9px] text-subtle shrink-0">{timeAgo(thread.createdAt)}</span>

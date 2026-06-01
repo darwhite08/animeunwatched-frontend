@@ -13,6 +13,7 @@ import {
 import Link from "next/link"
 import { useToast } from "@/stores/toast.store"
 import { PostMenu } from "@/components/ui/PostMenu"
+import { CommentRow } from "@/components/posts/CommentRow"
 
 /* ── Types ── */
 type PostDetail = {
@@ -346,7 +347,7 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
             <motion.div
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-zinc-900/60 border border-border rounded-2xl p-6 space-y-5"
+              className="bg-surface-2 border border-border rounded-2xl p-6 space-y-5"
             >
               <div className="flex items-start justify-between">
                 <div className="flex items-center gap-3">
@@ -421,20 +422,25 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
                 Comments ({visibleComments.length})
               </h2>
 
-              <div className="space-y-3">
-                {visibleComments.length === 0 ? (
+              <div className="space-y-4">
+                {(commentsData?.data?.length ?? 0) === 0 ? (
                   <div className="text-center py-10 text-subtle text-sm border border-dashed border-border rounded-2xl">
                     Be the first to comment.
                   </div>
                 ) : (
-                  visibleComments.map((comment, i) => (
-                    <CommentCard key={comment.id} comment={comment} index={i} />
+                  commentsData!.data.map(c => (
+                    <CommentRow
+                      key={c.id}
+                      comment={c}
+                      postId={id}
+                      maxDepth={Number.POSITIVE_INFINITY}
+                    />
                   ))
                 )}
               </div>
 
               {/* Add comment */}
-              <div className="bg-zinc-900/60 border border-border rounded-2xl p-5 space-y-4">
+              <div className="bg-surface-2 border border-border rounded-2xl p-5 space-y-4">
                 <p className="text-[10px] font-black uppercase tracking-[0.3em] text-subtle">
                   Add a Comment
                 </p>
@@ -473,7 +479,7 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
                 >
                   <Link
                     href={`/posts/${rp.id}`}
-                    className="block p-4 rounded-2xl bg-surface border border-border hover:border-accent/25 hover:bg-white/[0.04] transition-all group"
+                    className="block p-4 rounded-2xl bg-surface border border-border hover:border-accent/25 hover:bg-surface transition-all group"
                   >
                     {rp.anime && (
                       <span className="inline-flex items-center gap-1 mb-2 text-[9px] font-bold text-accent-bright/60">

@@ -186,7 +186,7 @@ function SearchContent() {
                   initial={{ opacity: 0, y: 6 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.05 }}
-                  className="flex items-center gap-4 p-5 rounded-2xl bg-surface border border-border hover:border-border hover:bg-white/[0.04] transition-all group cursor-pointer"
+                  className="flex items-center gap-4 p-5 rounded-2xl bg-surface border border-border hover:border-border hover:bg-surface transition-all group cursor-pointer"
                 >
                   <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-lg font-black shrink-0">
                     {u.name[0]}

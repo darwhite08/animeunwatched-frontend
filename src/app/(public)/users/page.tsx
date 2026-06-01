@@ -85,7 +85,7 @@ export default function UsersPage() {
           {sorted.map((user, i) => (
             <motion.div key={user.id} initial={{ opacity:0, y:8 }} animate={{ opacity:1, y:0 }} transition={{ delay: i*0.04 }}>
               <Link href={`/u/${user.username}`}
-                className="flex items-center gap-4 p-4 rounded-2xl bg-surface border border-border hover:border-accent/20 hover:bg-white/[0.04] transition-all group"
+                className="flex items-center gap-4 p-4 rounded-2xl bg-surface border border-border hover:border-accent/20 hover:bg-surface transition-all group"
               >
                 <span className="text-sm font-black text-subtle w-6 shrink-0">#{i+1}</span>
                 <div className="relative shrink-0">

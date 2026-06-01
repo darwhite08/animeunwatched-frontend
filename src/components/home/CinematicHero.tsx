@@ -117,7 +117,7 @@ export default function CinematicHero() {
   }
 
   return (
-    <section ref={ref} className="relative w-full min-h-screen" style={{ overflow: "clip", background: "#06060f" }}>
+    <section ref={ref} className="relative w-full min-h-screen" style={{ overflow: "clip", background: "var(--app-bg)" }}>
 
       {/* Ambient background — subtle, not distracting */}
       <div className="absolute inset-0 pointer-events-none select-none">
@@ -128,7 +128,7 @@ export default function CinematicHero() {
           backgroundImage: "radial-gradient(circle, color-mix(in srgb, var(--app-fg) 90%, transparent) 1px, transparent 1px)",
           backgroundSize: "44px 44px",
         }} />
-        <div className="absolute bottom-0 inset-x-0 h-40 bg-gradient-to-t from-[#06060f] to-transparent" />
+        <div className="absolute bottom-0 inset-x-0 h-40 bg-gradient-to-t from-[var(--app-bg)] to-transparent" />
       </div>
 
       {/* Main layout */}
@@ -297,8 +297,8 @@ export default function CinematicHero() {
             </div>
 
             {/* Right + bottom edge fades to clip overhang */}
-            <div className="absolute inset-y-0 right-0 w-8 bg-gradient-to-r from-transparent to-[#06060f] pointer-events-none z-20" />
-            <div className="absolute inset-x-0 bottom-0 h-8 bg-gradient-to-t from-[#06060f] to-transparent pointer-events-none z-20" />
+            <div className="absolute inset-y-0 right-0 w-8 bg-gradient-to-r from-transparent to-[var(--app-bg)] pointer-events-none z-20" />
+            <div className="absolute inset-x-0 bottom-0 h-8 bg-gradient-to-t from-[var(--app-bg)] to-transparent pointer-events-none z-20" />
           </div>
         </motion.div>
       </div>

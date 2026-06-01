@@ -118,7 +118,7 @@ const SkyLayer = memo(function SkyLayer({ mouseX, mouseY, scrollProgress }: SkyL
 
   return (
     <motion.div className="absolute inset-0 pointer-events-none" style={{ opacity: skyOpacity }}>
-      <div className="absolute inset-0 bg-gradient-to-b from-[#000208] via-[#020818] to-[#040a1a]" />
+      <div className="absolute inset-0 bg-gradient-to-b from-[var(--app-bg)] via-[var(--app-bg)] to-[var(--app-bg)]" />
       <div className="absolute bottom-[35%] left-0 right-0 h-[25%] bg-gradient-to-t from-[#0d1b3e]/60 to-transparent" />
       <Aurora mouseX={mx} />
       <StarCanvas />

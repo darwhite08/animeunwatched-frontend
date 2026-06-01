@@ -101,7 +101,7 @@ export default function NowPlayingCard() {
       {/* Background cover */}
       <div className="absolute inset-0">
         <Image src={subject.image} alt={subject.title} fill className="object-cover opacity-25 blur-sm scale-110" sizes="600px" />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 to-[#0a0a0a]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 to-[var(--app-bg)]" />
       </div>
 
       <div className="relative z-10 p-8 space-y-5">

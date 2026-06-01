@@ -61,7 +61,7 @@ function SocialRail() {
           target="_blank"
           rel="noopener noreferrer"
           aria-label={k === "tw" ? "Twitter" : k === "ig" ? "Instagram" : "YouTube"}
-          className="group w-9 h-9 rounded-full bg-white/0 hover:bg-white/15 transition flex items-center justify-center text-white/85 hover:text-foreground"
+          className="group w-9 h-9 rounded-full bg-white/0 hover:bg-surface transition flex items-center justify-center text-foreground hover:text-foreground"
         >
           <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
             {k==="tw" && <path d="M19 5.5c-.6.3-1.3.5-2 .6.7-.4 1.3-1.1 1.6-1.9-.7.4-1.5.7-2.3.9C15.6 4.4 14.7 4 13.7 4c-1.9 0-3.5 1.6-3.5 3.5 0 .3 0 .5.1.8C7.3 8.1 4.7 6.7 3 4.7c-.3.5-.5 1.1-.5 1.8 0 1.2.6 2.3 1.6 2.9-.6 0-1.1-.2-1.6-.4 0 1.7 1.2 3.1 2.8 3.4-.3.1-.6.1-.9.1-.2 0-.5 0-.7-.1.5 1.4 1.8 2.4 3.3 2.4-1.2 1-2.8 1.5-4.5 1.5H2c1.5 1 3.4 1.6 5.3 1.6 6.4 0 9.9-5.3 9.9-9.9v-.5c.7-.5 1.3-1.1 1.8-1.8z"/>}
@@ -136,7 +136,7 @@ function TopNav() {
       <ul className="hidden lg:flex items-center gap-9 font-ui font-bold text-foreground text-[13px] tracking-[0.18em]">
         {links.map((l) => (
           <li key={l}>
-            <button onClick={() => setActive(l)} className="relative py-2 transition hover:text-[#f7c33d]">
+            <button onClick={() => setActive(l)} className="relative py-2 transition hover:text-accent-bright">
               <span style={{ color: active===l ? "#f7c33d" : undefined }}>{l}</span>
               {active===l && <span className="absolute left-0 right-0 -bottom-0.5 h-[3px] rounded-full" style={{ background:"#f7c33d" }} />}
             </button>
@@ -243,7 +243,7 @@ export default function AnimeHero() {
             </h1>
 
             {/* Sub-copy */}
-            <p className="mt-12 sm:mt-14 text-white/95 text-base sm:text-lg leading-relaxed font-ui font-medium max-w-[460px] drop-shadow-[0_2px_8px_rgba(8,20,42,.6)] fade-in-up"
+            <p className="mt-12 sm:mt-14 text-foreground text-base sm:text-lg leading-relaxed font-ui font-medium max-w-[460px] drop-shadow-[0_2px_8px_rgba(8,20,42,.6)] fade-in-up"
               style={{ animationDelay:"0.7s" }}>
               Track every anime, log every chapter, and chart your own voyage through every world
               you&apos;ve ever sworn you&apos;d finish.
@@ -266,12 +266,12 @@ export default function AnimeHero() {
                 href="/ai-discover"
                 className="group flex items-center gap-3 text-foreground transition hover:translate-x-0.5"
               >
-                <span className="relative w-12 h-12 rounded-full border-2 border-white/85 flex items-center justify-center group-hover:border-[#f7c33d] group-hover:bg-surface transition">
+                <span className="relative w-12 h-12 rounded-full border-2 border-white/85 flex items-center justify-center group-hover:border-accent-bright group-hover:bg-surface transition">
                   <svg width="14" height="16" viewBox="0 0 14 16" fill="white" className="ml-0.5">
                     <polygon points="0,0 14,8 0,16" />
                   </svg>
                 </span>
-                <span className="font-display text-[13px] tracking-[0.32em] border-b-2 border-white/70 pb-0.5 group-hover:text-[#f7c33d] group-hover:border-[#f7c33d] transition">
+                <span className="font-display text-[13px] tracking-[0.32em] border-b-2 border-white/70 pb-0.5 group-hover:text-accent-bright group-hover:border-accent-bright transition">
                   EXPLORE
                 </span>
               </Link>

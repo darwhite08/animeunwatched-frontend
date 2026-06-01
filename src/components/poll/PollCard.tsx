@@ -46,7 +46,7 @@ export const PollCard = ({ poll }: { poll: any }) => {
                 className={`relative w-full text-left p-6 rounded-2xl border transition-all duration-500 group/opt ${
                   isSelected 
                   ? "border-accent/50 bg-accent/5" 
-                  : "border-border bg-surface hover:bg-white/[0.04]"
+                  : "border-border bg-surface hover:bg-surface"
                 } ${voted && !isSelected ? "opacity-50 grayscale" : ""}`}
               >
                 {/* Progress Background (Shows after voting) */}
@@ -61,7 +61,7 @@ export const PollCard = ({ poll }: { poll: any }) => {
                 <div className="relative z-10 flex justify-between items-center">
                   <div className="flex items-center gap-4">
                     <div className={`h-2 w-2 rounded-full ${option.color} ${voted ? 'shadow-[0_0_10px_currentColor]' : ''}`} />
-                    <span className="font-bold text-white/90">{option.text}</span>
+                    <span className="font-bold text-foreground">{option.text}</span>
                   </div>
                   {voted ? (
                     <span className="text-sm font-black text-foreground italic">{percentage}%</span>

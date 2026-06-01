@@ -83,13 +83,13 @@ export default function NewBlogPage() {
         </div>
 
         {/* Editor card */}
-        <div className="bg-zinc-900 border border-border rounded-2xl overflow-hidden">
+        <div className="bg-surface-2 border border-border rounded-2xl overflow-hidden">
           {/* Cover URL */}
           <div className="px-6 pt-6">
             <input value={coverUrl} onChange={e=>setCoverUrl(e.target.value)} placeholder="Cover image URL (optional)"
-              className="w-full bg-zinc-800 rounded-xl px-4 py-3 text-sm outline-none placeholder:text-subtle focus:ring-1 focus:ring-purple-500/50 transition-all"
+              className="w-full bg-surface-2 rounded-xl px-4 py-3 text-sm outline-none placeholder:text-subtle focus:ring-1 focus:ring-purple-500/50 transition-all"
             />
-            {coverUrl && <div className="mt-3 rounded-xl overflow-hidden h-40 bg-zinc-800"><img src={coverUrl} alt="cover" className="w-full h-full object-cover"/></div>}
+            {coverUrl && <div className="mt-3 rounded-xl overflow-hidden h-40 bg-surface-2"><img loading="lazy" decoding="async" src={coverUrl} alt="cover" className="w-full h-full object-cover"/></div>}
           </div>
 
           {/* Title */}
@@ -140,7 +140,7 @@ export default function NewBlogPage() {
           {/* Actions */}
           <div className="flex items-center justify-end gap-3 px-6 py-4 border-t border-border">
             <button onClick={() => handleAction("draft")} disabled={!canSave||saving}
-              className="flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-zinc-700 hover:bg-zinc-600 disabled:opacity-40 disabled:cursor-not-allowed text-sm font-bold transition-all"
+              className="flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-surface-2 hover:bg-surface-2 disabled:opacity-40 disabled:cursor-not-allowed text-sm font-bold transition-all"
             >
               {saving?<Loader2 size={14} className="animate-spin"/>:<Save size={14}/>} Save Draft
             </button>

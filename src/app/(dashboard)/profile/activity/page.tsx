@@ -118,7 +118,7 @@ export default function ActivityPage() {
             const Icon = cfg.icon
             return (
               <motion.div key={ev.id} layout initial={{ opacity:0, y:8 }} animate={{ opacity:1, y:0 }} exit={{ opacity:0 }} transition={{ delay:i*0.03 }}>
-                <Link href={ev.link} className="flex items-center gap-4 p-4 rounded-2xl bg-surface border border-border hover:border-border hover:bg-white/[0.04] transition-all group">
+                <Link href={ev.link} className="flex items-center gap-4 p-4 rounded-2xl bg-surface border border-border hover:border-border hover:bg-surface transition-all group">
                   <div className={`w-9 h-9 rounded-xl ${cfg.bg} flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform`}>
                     <Icon size={15} className={cfg.color} />
                   </div>

@@ -6,9 +6,9 @@ import AIPromptInput from "../ai-discover/AIPromptInput";
 
 export default function NeuralDiscovery() {
   return (
-    <section className="py-32 bg-[#030303] relative overflow-hidden border-y border-white/[0.03]">
+    <section className="py-32 bg-background relative overflow-hidden border-y border-white/[0.03]">
       {/* 1. DYNAMIC ARCHITECTURAL GRID */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff0a_1px,transparent_1px),linear-gradient(to_bottom,#ffffff0a_1px,transparent_1px)] bg-[size:3rem_3rem] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_50%,#000_20%,transparent_100%)] pointer-events-none" />
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff0a_1px,transparent_1px),linear-gradient(to_bottom,#ffffff0a_1px,transparent_1px)] bg-[size:3rem_3rem] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_50%,var(--app-bg)_20%,transparent_100%)] pointer-events-none" />
 
       {/* 2. BREATHING VOLUMETRIC GLOWS */}
       <motion.div
@@ -66,7 +66,7 @@ export default function NeuralDiscovery() {
             transition={{ delay: 0.2, duration: 0.8, ease: "easeOut" }}
             className="text-muted max-w-2xl text-sm md:text-lg font-medium leading-relaxed"
           >
-            Stop searching by generic tags. Start searching by <span className="text-white/90 italic font-bold">soul</span>. Define complex character scenarios and let our neural interface find your exact obsession.
+            Stop searching by generic tags. Start searching by <span className="text-foreground italic font-bold">soul</span>. Define complex character scenarios and let our neural interface find your exact obsession.
           </motion.p>
         </div>
         

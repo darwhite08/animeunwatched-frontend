@@ -172,7 +172,7 @@ function SelectField({
         className="w-full px-4 py-2.5 rounded-xl bg-white/[0.04] border border-border text-sm text-foreground outline-none focus:border-accent/40 transition-colors appearance-none"
       >
         {options.map((o) => (
-          <option key={o.value} value={o.value} className="bg-[#111]">
+          <option key={o.value} value={o.value} className="bg-surface-2">
             {o.label}
           </option>
         ))}
@@ -513,7 +513,7 @@ function AdvancedSearchContent() {
                 initial={{ opacity: 0, y: 6 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.05 }}
-                className="flex items-center gap-4 p-5 rounded-2xl bg-surface border border-border hover:border-border hover:bg-white/[0.04] transition-all group cursor-pointer"
+                className="flex items-center gap-4 p-5 rounded-2xl bg-surface border border-border hover:border-border hover:bg-surface transition-all group cursor-pointer"
               >
                 <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-lg font-black shrink-0">
                   {u.name[0]}
@@ -591,7 +591,7 @@ function AdvancedSearchContent() {
                 transition={{ delay: i * 0.06 }}
                 className="p-5 rounded-2xl bg-surface border border-border hover:border-border transition-all cursor-pointer"
               >
-                <p className="font-black text-white/90">{b.title}</p>
+                <p className="font-black text-foreground">{b.title}</p>
                 <div className="flex items-center gap-4 mt-2 text-xs text-subtle">
                   <span>{b.author}</span>
                   <span>{b.reads.toLocaleString()} reads</span>

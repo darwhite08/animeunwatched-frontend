@@ -60,7 +60,7 @@ export default function StudioPage({ params }: { params: Promise<{ name: string 
                 <p className="text-[9px] font-black uppercase tracking-widest text-accent-bright/60 mb-2">Top Rated by {studioName}</p>
                 <div className="flex items-center gap-4">
                   <div className="relative h-16 w-12 rounded-xl overflow-hidden shrink-0">
-                    <img src={anime[0].image} alt={anime[0].title} className="w-full h-full object-cover" />
+                    <img loading="lazy" decoding="async" src={anime[0].image} alt={anime[0].title} className="w-full h-full object-cover" />
                   </div>
                   <div>
                     <p className="text-xl font-black text-foreground uppercase italic">{anime[0].title}</p>

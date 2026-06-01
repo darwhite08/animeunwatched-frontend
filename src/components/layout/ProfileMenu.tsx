@@ -35,7 +35,7 @@ export default function ProfileMenu({ user, isOpen, onClose, onLogout }: Profile
           transition={{ duration: 0.18, ease: [0.32, 0.72, 0, 1] }}
           className="absolute right-0 mt-3 w-52 rounded-2xl p-1.5 backdrop-blur-2xl z-50"
           style={{
-            background: "linear-gradient(160deg, rgba(12,10,22,0.98), rgba(8,7,18,0.99))",
+            background: "linear-gradient(160deg, color-mix(in srgb, var(--app-bg) 98%, transparent), color-mix(in srgb, var(--app-bg) 99%, transparent))",
             border: "1px solid color-mix(in srgb, var(--app-fg) 7%, transparent)",
             boxShadow: "0 20px 60px rgba(0,0,0,0.7), 0 0 0 0.5px color-mix(in srgb, var(--app-accent) 10%, transparent) inset",
           }}
@@ -53,7 +53,7 @@ export default function ProfileMenu({ user, isOpen, onClose, onLogout }: Profile
 
           {LINKS.map(({ href, icon: Icon, label }) => (
             <Link key={label} href={href} onClick={onClose}
-              className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-[10px] font-black text-muted uppercase tracking-widest hover:text-foreground hover:bg-white/[0.04] transition-all group"
+              className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-[10px] font-black text-muted uppercase tracking-widest hover:text-foreground hover:bg-surface transition-all group"
             >
               <Icon size={14} weight="duotone" className="text-accent-bright/60 group-hover:text-accent-bright transition-colors" />
               {label}

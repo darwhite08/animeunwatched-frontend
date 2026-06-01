@@ -312,7 +312,7 @@ export default function HelpPage() {
                     href="https://github.com/darwhite08"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-3 px-4 py-3.5 rounded-xl border border-border bg-surface hover:border-accent/30 hover:bg-white/[0.04] transition-all group"
+                    className="flex items-center gap-3 px-4 py-3.5 rounded-xl border border-border bg-surface hover:border-accent/30 hover:bg-surface transition-all group"
                   >
                     <Github size={16} className="text-muted group-hover:text-foreground transition-colors" />
                     <div>
@@ -325,7 +325,7 @@ export default function HelpPage() {
                     href="https://discord.gg/kaiveron"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-3 px-4 py-3.5 rounded-xl border border-border bg-surface hover:border-violet-500/30 hover:bg-white/[0.04] transition-all group"
+                    className="flex items-center gap-3 px-4 py-3.5 rounded-xl border border-border bg-surface hover:border-violet-500/30 hover:bg-surface transition-all group"
                   >
                     <Users size={16} className="text-muted group-hover:text-violet-400 transition-colors" />
                     <div>
@@ -336,7 +336,7 @@ export default function HelpPage() {
 
                   <a
                     href="mailto:info@athavita.com"
-                    className="flex items-center gap-3 px-4 py-3.5 rounded-xl border border-border bg-surface hover:border-accent/30 hover:bg-white/[0.04] transition-all group"
+                    className="flex items-center gap-3 px-4 py-3.5 rounded-xl border border-border bg-surface hover:border-accent/30 hover:bg-surface transition-all group"
                   >
                     <Mail size={16} className="text-muted group-hover:text-accent-bright transition-colors" />
                     <div>

@@ -65,7 +65,7 @@ export default function CreateLandingPage() {
           >
             <Link
               href={href}
-              className={`group flex items-center gap-6 p-6 rounded-2xl bg-zinc-900 border border-border ${border} ${glow} transition-all duration-300`}
+              className={`group flex items-center gap-6 p-6 rounded-2xl bg-surface-2 border border-border ${border} ${glow} transition-all duration-300`}
             >
               {/* Icon with gradient */}
               <div className={`shrink-0 w-14 h-14 rounded-2xl bg-gradient-to-br ${color} flex items-center justify-center`}>

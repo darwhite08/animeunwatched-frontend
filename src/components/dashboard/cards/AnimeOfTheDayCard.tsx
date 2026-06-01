@@ -67,8 +67,8 @@ export default function AnimeOfTheDayCard() {
           sizes="(max-width: 768px) 100vw, 50vw"
           priority
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/60 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0a0a0a]/80 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[var(--app-bg)] via-[var(--app-bg)]/60 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[var(--app-bg)]/80 to-transparent" />
       </div>
 
       {/* Content */}
@@ -91,7 +91,7 @@ export default function AnimeOfTheDayCard() {
           <div>
             {/* Label */}
             <div className="flex items-center gap-2 mb-4">
-              <span className="px-3 py-1.5 rounded-full bg-accent/15 border border-accent/25 text-[9px] font-black uppercase tracking-[0.4em] text-accent-bright">
+              <span className="px-3 py-1.5 rounded-full bg-accent/15 border border-accent/40 text-[9px] font-black uppercase tracking-[0.4em] text-accent">
                 Anime of the Day
               </span>
               {anime.status === "airing" && (

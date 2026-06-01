@@ -119,13 +119,13 @@ export default function MyListsPage() {
               <div className="flex -space-x-2">
                 {animes.slice(0,6).map(a => (
                   <button key={a.id} onClick={() => setSelectedAnime(a)}
-                    className="relative h-12 w-9 rounded-lg overflow-hidden border-2 border-[#0a0a0a] hover:scale-110 hover:z-10 transition-transform"
+                    className="relative h-12 w-9 rounded-lg overflow-hidden border-2 border-[var(--app-bg)] hover:scale-110 hover:z-10 transition-transform"
                   >
                     <Image src={a.image} alt={a.title} fill className="object-cover" sizes="36px" />
                   </button>
                 ))}
                 {animes.length > 6 && (
-                  <div className="relative h-12 w-9 rounded-lg bg-surface border-2 border-[#0a0a0a] flex items-center justify-center text-[10px] font-black text-muted">
+                  <div className="relative h-12 w-9 rounded-lg bg-surface border-2 border-[var(--app-bg)] flex items-center justify-center text-[10px] font-black text-muted">
                     +{animes.length-6}
                   </div>
                 )}

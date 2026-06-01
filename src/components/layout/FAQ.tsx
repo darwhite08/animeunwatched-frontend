@@ -84,7 +84,7 @@ export default function FAQ() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.1 }}
-              className={`group relative overflow-hidden rounded-[2rem] border transition-all duration-500 bg-[#0c0c0c]
+              className={`group relative overflow-hidden rounded-[2rem] border transition-all duration-500 bg-background
                 ${isOpen ? "border-emerald-500/30 shadow-[0_20px_40px_-15px_rgba(16,185,129,0.15)]" : "border-border hover:border-border"}
               `}
             >

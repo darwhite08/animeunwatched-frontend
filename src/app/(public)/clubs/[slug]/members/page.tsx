@@ -119,7 +119,7 @@ function MemberCard({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.95 }}
       transition={{ duration: 0.3, delay: index * 0.04 }}
-      className="group p-5 rounded-2xl bg-surface border border-border hover:border-border hover:bg-white/[0.04] transition-all duration-300 flex flex-col items-center gap-4 text-center"
+      className="group p-5 rounded-2xl bg-surface border border-border hover:border-border hover:bg-surface transition-all duration-300 flex flex-col items-center gap-4 text-center"
     >
       {/* Avatar */}
       <div

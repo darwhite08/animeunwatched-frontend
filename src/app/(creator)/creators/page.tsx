@@ -88,7 +88,7 @@ export default function BlogPage() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.06 }}
-                className="bg-zinc-900 border border-border rounded-2xl p-4 flex items-center gap-4"
+                className="bg-surface-2 border border-border rounded-2xl p-4 flex items-center gap-4"
               >
                 <div className={`w-9 h-9 rounded-xl ${s.bg} flex items-center justify-center shrink-0`}>
                   <s.icon size={16} className={s.color} />
@@ -117,7 +117,7 @@ export default function BlogPage() {
           </div>
 
           {/* Recent Performance mini-chart */}
-          <div className="bg-zinc-900 border border-border rounded-2xl p-6 space-y-5">
+          <div className="bg-surface-2 border border-border rounded-2xl p-6 space-y-5">
             <div className="flex items-center justify-between">
               <h2 className="font-semibold text-foreground">Recent Performance</h2>
               <Link
@@ -188,7 +188,7 @@ function ContentCard({
   type: "Feed" | "Blog" | "Poll"
 }) {
   return (
-    <div className="bg-zinc-900 border border-border rounded-2xl p-5 hover:border-accent transition cursor-pointer">
+    <div className="bg-surface-2 border border-border rounded-2xl p-5 hover:border-accent transition cursor-pointer">
       <span className="text-xs bg-accent/20 text-accent-bright px-3 py-1 rounded-full">
         {type}
       </span>

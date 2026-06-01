@@ -47,7 +47,7 @@ export default function DojoLeaderboard() {
       
       {/* 1. BACKGROUND GRID & TOP SCANLINE */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[1px] bg-gradient-to-r from-transparent via-indigo-500/50 to-transparent shadow-[0_0_15px_rgba(99,102,241,0.8)]" />
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_50%,#000_20%,transparent_100%)] pointer-events-none" />
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_50%,var(--app-bg)_20%,transparent_100%)] pointer-events-none" />
 
       {/* 2. ATMOSPHERIC GLOW */}
       <div className="absolute top-1/2 right-0 -translate-y-1/2 w-[800px] h-[800px] bg-amber-900/10 blur-[150px] rounded-full pointer-events-none" />
@@ -107,7 +107,7 @@ export default function DojoLeaderboard() {
                 whileInView={{ opacity: 1, y: 0, scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.15, duration: 0.6, type: "spring", stiffness: 60 }}
-                className={`group relative flex items-center justify-between p-6 rounded-[2rem] bg-surface border ${user.border} backdrop-blur-xl transition-all hover:bg-white/[0.04] hover:-translate-y-1 ${user.glow}`}
+                className={`group relative flex items-center justify-between p-6 rounded-[2rem] bg-surface border ${user.border} backdrop-blur-xl transition-all hover:bg-surface hover:-translate-y-1 ${user.glow}`}
               >
                 {/* Background Gradient Hover Sweep */}
                 <div className="absolute inset-0 rounded-[2rem] bg-gradient-to-r from-white/[0.01] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
@@ -118,7 +118,7 @@ export default function DojoLeaderboard() {
                     <span className="absolute -inset-2 bg-gradient-to-b from-white/10 to-transparent blur-sm text-transparent bg-clip-text font-black text-4xl italic">
                       0{user.rank}
                     </span>
-                    <span className="relative text-3xl font-black italic text-white/90">
+                    <span className="relative text-3xl font-black italic text-foreground">
                       0{user.rank}
                     </span>
                   </div>

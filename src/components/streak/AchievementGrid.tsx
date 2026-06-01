@@ -18,7 +18,7 @@ export const AchievementGrid = () => {
               <item.icon size={20} />
             </div>
             <div>
-              <p className="font-black text-white/90">{item.title}</p>
+              <p className="font-black text-foreground">{item.title}</p>
               <p className="text-xs text-subtle uppercase font-bold tracking-tighter">{item.desc}</p>
             </div>
           </div>

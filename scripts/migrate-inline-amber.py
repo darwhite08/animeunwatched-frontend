@@ -52,7 +52,34 @@ RULES = [
     (re.compile(r'rgba\(\s*255\s*,\s*255\s*,\s*255\s*,\s*([0-9.]+)\s*\)'), repl_rgba_fg, 'rgba(255,255,255,A) → color-mix fg-tint'),
     (re.compile(r'#[fF]{6}\b'),  'var(--app-fg)', '#ffffff → var(--app-fg)'),
     (re.compile(r'#[fF]{3}(?![\dA-Fa-f])'), 'var(--app-fg)', '#fff → var(--app-fg)'),
+
+    # Near-black backgrounds used as inline style values — must flip to bg-var
+    # so light theme actually shows light. Match #0XXXXX / #1XXXXX where each
+    # component is 0-31 (first hex digit 0 or 1).
+    (re.compile(r'(?<!\w)#[01][0-9a-fA-F][01][0-9a-fA-F][01][0-9a-fA-F](?![0-9a-fA-F])'), 'var(--app-bg)', '#near-black 6-char → var(--app-bg)'),
+    (re.compile(r'(?<!\w)#0[0-9a-fA-F]{2}(?![0-9a-fA-F])'), 'var(--app-bg)', '#0XY → var(--app-bg)'),
 ]
+
+
+# ─── Dark tinted rgba (panel/navbar backgrounds, NOT shadows) ──────────
+# Pure rgba(0,0,0,A) is left alone (drop shadows). Anything where any
+# component is > 0 and all components are ≤ 22 (i.e. very dark, slight
+# tint) is treated as a dark-mode-only background that should flip with
+# the theme. Components above 22 are likely brand colors (navy section
+# themes etc.) and are left alone.
+def _build_dark_rgba_rule():
+    rgba = re.compile(r'rgba\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*([0-9.]+)\s*\)')
+    def repl(m: re.Match) -> str:
+        r, g, b = int(m.group(1)), int(m.group(2)), int(m.group(3))
+        a = float(m.group(4))
+        if r == 0 and g == 0 and b == 0:
+            return m.group(0)              # pure-black: leave (shadow)
+        if max(r, g, b) > 22:
+            return m.group(0)              # navy/brand tints: leave
+        return f'color-mix(in srgb, var(--app-bg) {a*100:g}%, transparent)'
+    RULES.append((rgba, repl, 'rgba(dark-tinted,A) → color-mix bg'))
+
+_build_dark_rgba_rule()
 
 def should_skip(path: Path) -> bool:
     rel = str(path.relative_to(ROOT))

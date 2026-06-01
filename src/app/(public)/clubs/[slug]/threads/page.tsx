@@ -198,7 +198,7 @@ function ThreadRow({ thread, index }: { thread: Thread; index: number }) {
     >
       <Link
         href={`/threads/${thread.id}`}
-        className="group flex gap-5 p-5 rounded-2xl bg-surface border border-border hover:border-accent/25 hover:bg-white/[0.04] transition-all duration-300"
+        className="group flex gap-5 p-5 rounded-2xl bg-surface border border-border hover:border-accent/25 hover:bg-surface transition-all duration-300"
       >
         {/* Left: content */}
         <div className="flex-1 min-w-0 space-y-2">
@@ -225,7 +225,7 @@ function ThreadRow({ thread, index }: { thread: Thread; index: number }) {
           </div>
 
           {/* Title */}
-          <h3 className="text-sm font-bold text-white/85 group-hover:text-foreground transition-colors leading-snug line-clamp-2">
+          <h3 className="text-sm font-bold text-foreground group-hover:text-foreground transition-colors leading-snug line-clamp-2">
             {thread.title}
           </h3>
 
@@ -413,7 +413,7 @@ export default function ClubThreadsPage({
         {composerOpen && (
           <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }}
             className="overflow-hidden mb-6">
-            <div className="bg-zinc-900/80 border border-accent/20 rounded-2xl p-5 space-y-4">
+            <div className="bg-surface-2 border border-accent/20 rounded-2xl p-5 space-y-4">
               <input type="text" value={newTitle} onChange={e => setNewTitle(e.target.value)} placeholder="Thread title…"
                 className="w-full bg-transparent border-b border-border text-sm font-bold text-foreground placeholder:text-subtle outline-none py-2" />
               <textarea value={newContent} onChange={e => setNewContent(e.target.value)} rows={4} placeholder="Share your thoughts…"

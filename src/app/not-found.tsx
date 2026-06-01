@@ -22,7 +22,7 @@ export default function NotFound() {
       />
 
       {/* Grid */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:52px_52px] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_50%,#000_20%,transparent_100%)] pointer-events-none" />
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:52px_52px] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_50%,var(--app-bg)_20%,transparent_100%)] pointer-events-none" />
 
       <div className="relative z-10 text-center max-w-lg">
         <motion.p
@@ -79,7 +79,7 @@ export default function NotFound() {
             <Home size={13} /> Go Home
           </Link>
           <Link href="/bestanimelist"
-            className="flex items-center gap-2.5 px-6 py-3.5 rounded-2xl border border-border bg-white/[0.04] text-xs font-black uppercase tracking-widest text-muted hover:text-foreground hover:bg-white/[0.08] transition-all hover:-translate-y-0.5"
+            className="flex items-center gap-2.5 px-6 py-3.5 rounded-2xl border border-border bg-white/[0.04] text-xs font-black uppercase tracking-widest text-muted hover:text-foreground hover:bg-surface transition-all hover:-translate-y-0.5"
           >
             <Search size={13} /> Browse Anime
           </Link>

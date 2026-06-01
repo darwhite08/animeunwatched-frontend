@@ -140,7 +140,7 @@ export default function ProfileSettingsIndex() {
           {section.items.map((item, i) => (
             <motion.div key={item.href} initial={{ opacity:0, y:8 }} animate={{ opacity:1, y:0 }} transition={{ delay:(si*2+i)*0.05 }}>
               <Link href={item.href}
-                className="flex items-center gap-4 p-5 rounded-2xl bg-surface border border-border hover:border-white/18 hover:bg-white/[0.04] transition-all group"
+                className="flex items-center gap-4 p-5 rounded-2xl bg-surface border border-border hover:border-white/18 hover:bg-surface transition-all group"
               >
                 <div className={`w-10 h-10 rounded-xl ${item.bg} flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform`}>
                   <item.icon size={18} className={item.color} />

@@ -56,7 +56,7 @@ export default function GlobalError({ error, reset }: { error: Error & { digest?
           </button>
           <Link
             href="/"
-            className="flex items-center gap-2 px-6 py-3.5 rounded-2xl border border-border bg-white/[0.04] text-xs font-black uppercase tracking-widest text-muted hover:text-foreground hover:bg-white/[0.08] transition-all"
+            className="flex items-center gap-2 px-6 py-3.5 rounded-2xl border border-border bg-white/[0.04] text-xs font-black uppercase tracking-widest text-muted hover:text-foreground hover:bg-surface transition-all"
           >
             <Home size={13} /> Go Home
           </Link>

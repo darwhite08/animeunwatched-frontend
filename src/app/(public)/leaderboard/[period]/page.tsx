@@ -17,7 +17,7 @@ const PERIOD_LABELS: Record<Period, string> = {
 
 const RANK_STYLES = [
   { color: "text-accent-bright",  bg: "bg-accent/15", border: "border-accent/30" },
-  { color: "text-slate-300",  bg: "bg-slate-500/10", border: "border-slate-500/20" },
+  { color: "text-muted",  bg: "bg-surface-2", border: "border-border" },
   { color: "text-orange-400", bg: "bg-orange-500/10", border: "border-orange-500/20" },
 ]
 
@@ -69,7 +69,7 @@ export default function LeaderboardPeriodPage({ params }: { params: Promise<{ pe
                 <motion.div key={u.username}
                   initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.025 }}>
                   <Link href={`/u/${u.username}`}
-                    className={`flex items-center gap-4 p-4 rounded-2xl border bg-surface hover:bg-white/[0.04] transition-all ${i < 3 ? rs.border : "border-border hover:border-border"}`}>
+                    className={`flex items-center gap-4 p-4 rounded-2xl border bg-surface hover:bg-surface transition-all ${i < 3 ? rs.border : "border-border hover:border-border"}`}>
                     {/* Rank */}
                     <div className={`h-9 w-9 rounded-xl flex items-center justify-center text-sm font-black shrink-0 border ${i < 3 ? `${rs.bg} ${rs.border} ${rs.color}` : "bg-surface border-border text-subtle"}`}>
                       {u.rank}

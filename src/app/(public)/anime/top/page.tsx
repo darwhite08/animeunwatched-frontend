@@ -70,7 +70,7 @@ export default function TopAnimePage() {
           >
             <div className="flex items-center gap-6">
               <div className="relative h-24 w-16 rounded-2xl overflow-hidden shrink-0 shadow-2xl">
-                <img src={filtered[0].image} alt={filtered[0].title} className="w-full h-full object-cover" />
+                <img loading="lazy" decoding="async" src={filtered[0].image} alt={filtered[0].title} className="w-full h-full object-cover" />
               </div>
               <div className="flex-1">
                 <div className="flex items-center gap-3 mb-2">

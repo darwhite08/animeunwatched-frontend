@@ -153,7 +153,7 @@ export default function ContactPage() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="rounded-[2.5rem] border border-border bg-[#080808] p-8 md:p-12"
+          className="rounded-[2.5rem] border border-border bg-background p-8 md:p-12"
         >
           <div className="mb-8">
             <p className="text-[10px] font-black uppercase tracking-[0.35em] text-subtle mb-2">Direct Message</p>
@@ -206,7 +206,7 @@ export default function ContactPage() {
                 className="w-full bg-surface border border-border rounded-xl px-4 py-3.5 text-sm text-foreground focus:outline-none focus:border-accent/50 focus:bg-surface transition-all appearance-none cursor-pointer"
               >
                 {CATEGORIES.map((c) => (
-                  <option key={c} value={c} className="bg-[#111] text-foreground">
+                  <option key={c} value={c} className="bg-surface-2 text-foreground">
                     {c}
                   </option>
                 ))}

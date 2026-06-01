@@ -38,7 +38,7 @@ export default function CreatorDashboard() {
 
 function ActionCard({ title }: { title: string }) {
   return (
-    <div className="bg-zinc-900 border border-border rounded-2xl p-6 hover:border-accent transition cursor-pointer">
+    <div className="bg-surface-2 border border-border rounded-2xl p-6 hover:border-accent transition cursor-pointer">
       <h3 className="font-medium">{title}</h3>
       <p className="text-sm text-muted mt-2">
         Create anime content instantly.

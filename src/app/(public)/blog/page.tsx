@@ -164,7 +164,7 @@ function BlogCard({ blog, index }: { blog: Blog; index: number }) {
     >
       <Link
         href={`/blog/${blog.slug}`}
-        className="group block bg-zinc-900/60 border border-border hover:border-accent/30 rounded-2xl overflow-hidden transition-all"
+        className="group block bg-surface-2 border border-border hover:border-accent/30 rounded-2xl overflow-hidden transition-all"
       >
         {/* Cover gradient */}
         <div className={`h-40 w-full bg-gradient-to-br ${blog.coverGradient} relative`}>

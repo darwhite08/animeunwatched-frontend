@@ -3,6 +3,7 @@ import type {
   AuthResponse, RefreshResponse, User, UserProfile,
   AnimeDTO, ListEntry, WatchStatus,
   Post, PostComment, Paginated, CursorPaginated,
+  Activity, ActivityKind, ListActivityVerb, Reply,
   Notification,
   ConversationSummary, ConversationDetail, DirectMessage,
 } from "./types"
@@ -123,11 +124,20 @@ export const unlikePost = (id: string) =>
 export const getComments = (postId: string, page = 1) =>
   api<Paginated<PostComment>>(`/posts/${postId}/comments?page=${page}`)
 
-export const createComment = (postId: string, content: string) =>
+export const createComment = (postId: string, content: string, parentCommentId?: string) =>
   api<{ comment: PostComment }>(`/posts/${postId}/comments`, {
     method: "POST",
-    body: JSON.stringify({ content }),
+    body: JSON.stringify({ content, parentCommentId }),
   })
+
+export const getCommentReplies = (commentId: string, page = 1) =>
+  api<Paginated<PostComment>>(`/posts/comments/${commentId}/replies?page=${page}`)
+
+export const likeComment = (commentId: string) =>
+  api<void>(`/posts/comments/${commentId}/like`, { method: "POST" })
+
+export const unlikeComment = (commentId: string) =>
+  api<void>(`/posts/comments/${commentId}/like`, { method: "DELETE" })
 
 /* ── Notifications ── */
 export const listNotifications = (page = 1) =>
@@ -253,3 +263,57 @@ export const search = (
   type: "anime" | "posts" | "threads" | "users" | "blogs" = "anime",
   page = 1,
 ) => api<Paginated<unknown>>(`/search?q=${encodeURIComponent(q)}&type=${type}&page=${page}`)
+
+/* ── Activities (feed §12 MVP) ── */
+export type FeedType = "following" | "global" | "profile"
+
+export interface CreateActivityBody {
+  kind: ActivityKind
+  body?: string
+  linkedAnimeId?: string
+  verb?: ListActivityVerb
+  episodeNumber?: number
+  score?: number
+  wallOwnerId?: string
+  hasSpoiler?: boolean
+}
+
+export const getActivityFeed = (type: FeedType = "global", cursor?: string, userId?: string, limit = 20) => {
+  const qs = new URLSearchParams({ type, limit: String(limit) })
+  if (cursor) qs.set("cursor", cursor)
+  if (userId) qs.set("userId", userId)
+  return api<CursorPaginated<Activity>>(`/activities/feed?${qs.toString()}`)
+}
+
+export const getActivity = (id: string) =>
+  api<{ activity: Activity }>(`/activities/${id}`)
+
+export const createActivity = (body: CreateActivityBody) =>
+  api<{ activity: Activity }>("/activities", { method: "POST", body: JSON.stringify(body) })
+
+export const deleteActivity = (id: string) =>
+  api<void>(`/activities/${id}`, { method: "DELETE" })
+
+export const likeActivity = (id: string) =>
+  api<void>(`/activities/${id}/like`, { method: "POST" })
+
+export const unlikeActivity = (id: string) =>
+  api<void>(`/activities/${id}/like`, { method: "DELETE" })
+
+export const repostActivity = (id: string, body?: string) =>
+  api<{ activity: Activity }>(`/activities/${id}/repost`, {
+    method: "POST",
+    body: JSON.stringify(body !== undefined ? { body } : {}),
+  })
+
+export const unrepostActivity = (id: string) =>
+  api<void>(`/activities/${id}/repost`, { method: "DELETE" })
+
+export const getReplies = (activityId: string, cursor?: string) =>
+  api<CursorPaginated<Reply>>(`/activities/${activityId}/replies${cursor ? `?cursor=${cursor}` : ""}`)
+
+export const createReply = (activityId: string, body: { body: string; parentReplyId?: string; hasSpoiler?: boolean }) =>
+  api<{ reply: Reply }>(`/activities/${activityId}/replies`, {
+    method: "POST",
+    body: JSON.stringify(body),
+  })

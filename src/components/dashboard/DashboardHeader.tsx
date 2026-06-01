@@ -34,7 +34,7 @@ export default function DashboardHeader() {
             value={query}
             onChange={e => setQuery(e.target.value)}
             placeholder="Search anime..."
-            className="bg-neutral-900 border border-border rounded-xl pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-600"
+            className="bg-surface-2 border border-border rounded-xl pl-10 pr-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-600"
           />
         </form>
 

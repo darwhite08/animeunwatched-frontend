@@ -223,7 +223,7 @@ function CreatorGridCard({ creator, index }: { creator: Creator; index: number }
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.1 + index * 0.07 }}
-      className="p-5 rounded-2xl border border-border bg-zinc-900/40 hover:border-border hover:bg-zinc-900/60 transition-all space-y-4 group"
+      className="p-5 rounded-2xl border border-border bg-surface-2 hover:border-border hover:bg-surface-2 transition-all space-y-4 group"
     >
       {/* Header */}
       <div className="flex items-start gap-3">

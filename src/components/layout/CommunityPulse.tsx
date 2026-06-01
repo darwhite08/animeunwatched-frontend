@@ -19,7 +19,7 @@ export default function CommunityPulse() {
       {/* 1. ARCHITECTURAL BACKGROUND & RADAR SWEEP */}
       <div className="absolute inset-0 pointer-events-none">
         {/* Radar/Grid overlay */}
-        <div className="absolute inset-0 bg-[linear-gradient(color-mix(in srgb, var(--app-fg) 2%, transparent)_1px,transparent_1px),linear-gradient(90deg,color-mix(in srgb, var(--app-fg) 2%, transparent)_1px,transparent_1px)] bg-[size:3rem_3rem] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_50%,#000_60%,transparent_100%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(color-mix(in srgb, var(--app-fg) 2%, transparent)_1px,transparent_1px),linear-gradient(90deg,color-mix(in srgb, var(--app-fg) 2%, transparent)_1px,transparent_1px)] bg-[size:3rem_3rem] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_50%,var(--app-bg)_60%,transparent_100%)]" />
         
         {/* Core Glowing Orbs */}
         <div className="absolute top-1/2 left-1/4 -translate-y-1/2 w-[600px] h-[600px] bg-accent/10 blur-[150px] rounded-full mix-blend-screen animate-pulse" />
@@ -60,7 +60,7 @@ export default function CommunityPulse() {
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="lg:col-span-7 relative p-8 md:p-12 rounded-[2.5rem] bg-[#080808]/80 backdrop-blur-2xl border border-border overflow-hidden group"
+            className="lg:col-span-7 relative p-8 md:p-12 rounded-[2.5rem] bg-background/80 backdrop-blur-2xl border border-border overflow-hidden group"
           >
             {/* Feed Background Glow */}
             <div className="absolute top-0 right-0 w-96 h-96 bg-accent/5 blur-[100px] rounded-full pointer-events-none opacity-50 group-hover:opacity-100 transition-opacity duration-700" />
@@ -85,7 +85,7 @@ export default function CommunityPulse() {
                   className="relative group/item cursor-pointer"
                 >
                   {/* Timeline Dot */}
-                  <div className={`absolute -left-[37px] md:-left-[45px] top-1 h-3 w-3 rounded-full border-2 border-[#080808] ${event.bg} ${event.color} ring-1 ring-white/10 group-hover/item:scale-150 transition-transform duration-300 shadow-[0_0_10px_currentColor]`} />
+                  <div className={`absolute -left-[37px] md:-left-[45px] top-1 h-3 w-3 rounded-full border-2 border-[var(--app-bg)] ${event.bg} ${event.color} ring-1 ring-white/10 group-hover/item:scale-150 transition-transform duration-300 shadow-[0_0_10px_currentColor]`} />
 
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 rounded-2xl border border-transparent hover:bg-surface hover:border-border transition-colors duration-300">
                     <div className="flex items-center gap-4">
@@ -111,7 +111,7 @@ export default function CommunityPulse() {
             </div>
 
             {/* Fade Out Gradient at bottom of feed */}
-            <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[#080808] to-transparent pointer-events-none" />
+            <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-[var(--app-bg)] to-transparent pointer-events-none" />
           </motion.div>
 
           {/* RIGHT: COMMAND MODULES (5 Cols) */}
@@ -123,7 +123,7 @@ export default function CommunityPulse() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.2 }}
-              className="flex-1 p-8 md:p-10 rounded-[2.5rem] bg-[#080808]/80 backdrop-blur-2xl border border-border group hover:border-accent/30 transition-colors duration-500 flex flex-col justify-center relative overflow-hidden"
+              className="flex-1 p-8 md:p-10 rounded-[2.5rem] bg-background/80 backdrop-blur-2xl border border-border group hover:border-accent/30 transition-colors duration-500 flex flex-col justify-center relative overflow-hidden"
             >
               <div className="absolute -right-10 -top-10 text-white/[0.02] group-hover:text-white/[0.05] transition-colors duration-700 pointer-events-none transform group-hover:scale-110 group-hover:-rotate-12">
                   <Globe size={180} strokeWidth={1} />
@@ -164,7 +164,7 @@ export default function CommunityPulse() {
                    <h4 className="text-3xl font-black tracking-tighter italic text-foreground leading-none">
                      Join the Global <br/> Consensus.
                    </h4>
-                   <p className="text-amber-100/70 text-sm font-medium leading-relaxed max-w-[240px]">
+                   <p className="text-accent-bright/70 text-sm font-medium leading-relaxed max-w-[240px]">
                      Influence the seasonal Hall of Fame and forge your standing in the Dojo.
                    </p>
                  </div>

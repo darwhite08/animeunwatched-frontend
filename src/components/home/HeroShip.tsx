@@ -90,7 +90,7 @@ export function HeroShip({ className, style }: { className?: string; style?: Rea
         const grad = ctx.createLinearGradient(0, 0, 0, 512)
         grad.addColorStop(0, "#fff7dc"); grad.addColorStop(1, "#d9bd7a")
         ctx.fillStyle = grad; ctx.fillRect(0, 0, 512, 512)
-        ctx.globalAlpha = 0.07; ctx.fillStyle = "#000"
+        ctx.globalAlpha = 0.07; ctx.fillStyle = "var(--app-bg)"
         for (let i = 0; i < 512; i += 6) ctx.fillRect(0, i, 512, 1)
         ctx.globalAlpha = 1
         ctx.strokeStyle = "#8a5a18"; ctx.lineWidth = 6; ctx.strokeRect(8, 8, 496, 496)

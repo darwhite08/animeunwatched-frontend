@@ -71,7 +71,7 @@ export default function KeyboardShortcutsOverlay() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.93 }}
             transition={{ type: "spring", damping: 26, stiffness: 280 }}
-            className="relative w-full max-w-lg bg-[#0c0c0c] rounded-3xl border border-border p-7 shadow-2xl"
+            className="relative w-full max-w-lg bg-background rounded-3xl border border-border p-7 shadow-2xl"
           >
             <button
               onClick={() => setOpen(false)}

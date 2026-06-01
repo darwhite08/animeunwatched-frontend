@@ -74,8 +74,36 @@ export function useComments(postId: string) {
 export function useCreateComment(postId: string) {
   const qc = useQueryClient()
   return useMutation({
-    mutationFn: (content: string) => ep.createComment(postId, content),
+    mutationFn: (input: string | { content: string; parentCommentId?: string }) => {
+      const dto = typeof input === "string" ? { content: input } : input
+      return ep.createComment(postId, dto.content, dto.parentCommentId)
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: commentsKey(postId) }),
+  })
+}
+
+/** Like a comment with optimistic counter bump. */
+export function useLikeComment(postId: string) {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (commentId: string) => ep.likeComment(commentId),
     onSuccess:  () => qc.invalidateQueries({ queryKey: commentsKey(postId) }),
+  })
+}
+
+export function useUnlikeComment(postId: string) {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: (commentId: string) => ep.unlikeComment(commentId),
+    onSuccess:  () => qc.invalidateQueries({ queryKey: commentsKey(postId) }),
+  })
+}
+
+export function useCommentReplies(commentId: string | null) {
+  return useQuery({
+    queryKey: ["comment-replies", commentId],
+    queryFn:  () => ep.getCommentReplies(commentId as string),
+    enabled:  !!commentId,
   })
 }
 

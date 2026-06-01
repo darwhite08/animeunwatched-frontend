@@ -294,7 +294,7 @@ function ChallengeCard({ challenge, onAccept, accepted }: { challenge: Challenge
         {/* Anime thumbnail */}
         <div className="shrink-0 w-20 h-28 rounded-xl overflow-hidden bg-surface border border-border">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
+          <img loading="lazy" decoding="async"
             src={challenge.imageUrl}
             alt={challenge.animeTitle}
             className="w-full h-full object-cover"
@@ -400,7 +400,7 @@ function CreateChallengeModal({ slug, onClose }: { slug: string; onClose: () => 
         initial={{ scale: 0.95, y: 20 }}
         animate={{ scale: 1, y: 0 }}
         exit={{ scale: 0.95, y: 20 }}
-        className="w-full max-w-md bg-[#0f0f0f] border border-border rounded-[2rem] p-7 space-y-5"
+        className="w-full max-w-md bg-background border border-border rounded-[2rem] p-7 space-y-5"
       >
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -562,7 +562,7 @@ export default function ClubDetailPage({
         style={{ minHeight: "260px" }}
       >
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,color-mix(in srgb, var(--app-fg) 5%, transparent),transparent_60%)]" />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/30 to-[#020202]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/30 to-[var(--app-bg)]" />
 
         <div className="relative z-10 max-w-6xl mx-auto px-6 pt-10 pb-16">
           {/* Back */}
@@ -673,7 +673,7 @@ export default function ClubDetailPage({
                 >
                   <Link
                     href={`/threads/${thread.id}`}
-                    className="group flex items-center justify-between gap-4 p-5 rounded-2xl bg-surface border border-border hover:border-accent/25 hover:bg-white/[0.04] transition-all"
+                    className="group flex items-center justify-between gap-4 p-5 rounded-2xl bg-surface border border-border hover:border-accent/25 hover:bg-surface transition-all"
                   >
                     <div className="flex-1 min-w-0 space-y-1.5">
                       <div className="flex items-center gap-2 flex-wrap">
@@ -682,7 +682,7 @@ export default function ClubDetailPage({
                             <TrendingUp size={8} /> Trending
                           </span>
                         )}
-                        <h3 className="text-sm font-bold text-white/85 group-hover:text-foreground transition-colors line-clamp-1">
+                        <h3 className="text-sm font-bold text-foreground group-hover:text-foreground transition-colors line-clamp-1">
                           {thread.title}
                         </h3>
                       </div>

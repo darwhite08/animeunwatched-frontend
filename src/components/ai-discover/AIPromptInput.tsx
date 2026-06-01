@@ -54,7 +54,7 @@ export default function AIPromptInput({ onSearch }: AIPromptInputProps) {
 
       <div className="relative rounded-[1.8rem] p-2 backdrop-blur-3xl"
         style={{
-          background: "linear-gradient(160deg, #0c0c18 0%, #080810 100%)",
+          background: "linear-gradient(160deg, var(--app-bg) 0%, var(--app-bg) 100%)",
           border: "1px solid color-mix(in srgb, var(--app-accent) 18%, transparent)",
           boxShadow: "0 24px 80px rgba(0,0,0,0.6), 0 0 0 0.5px color-mix(in srgb, var(--app-accent) 8%, transparent) inset",
         }}>

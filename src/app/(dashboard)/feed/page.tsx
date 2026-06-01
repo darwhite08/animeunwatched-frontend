@@ -103,7 +103,7 @@ function RealPostCard({ post, index }: { post: Post; index: number }) {
     <motion.article key={post.id} layout
       initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.04 }}
-      className="bg-zinc-900/60 border border-white/[0.08] hover:border-accent/10 rounded-2xl p-6 space-y-4 transition-all duration-300"
+      className="bg-surface-2 border border-white/[0.08] hover:border-accent/10 rounded-2xl p-6 space-y-4 transition-all duration-300"
     >
       <div className="flex items-start justify-between">
         <div className="flex items-center gap-3">
@@ -329,7 +329,7 @@ export default function FeedPage() {
           <motion.div
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-zinc-900/70 border border-accent/20 rounded-2xl p-5 space-y-4"
+            className="bg-surface-2 border border-accent/20 rounded-2xl p-5 space-y-4"
           >
             <div className="flex items-start gap-3">
               <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center font-black text-sm shrink-0">
@@ -373,7 +373,7 @@ export default function FeedPage() {
           {isLoading && (
             <div className="space-y-5">
               {Array.from({ length: 4 }).map((_, i) => (
-                <div key={i} className="bg-zinc-900/60 border border-border rounded-2xl p-6 space-y-3 animate-pulse" style={{ animationDelay: `${i * 100}ms` }}>
+                <div key={i} className="bg-surface-2 border border-border rounded-2xl p-6 space-y-3 animate-pulse" style={{ animationDelay: `${i * 100}ms` }}>
                   <div className="flex items-center gap-3">
                     <div className="h-10 w-10 rounded-xl bg-surface" />
                     <div className="space-y-1.5 flex-1">

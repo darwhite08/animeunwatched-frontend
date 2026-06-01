@@ -51,12 +51,12 @@ const COMMUNITY_LINKS = [
 /* ── Homepage section themes ────────────────────────────────── */
 
 const SECTION_THEMES = [
-  { bg: "rgba(5,5,20,0.90)",  border: "rgba(99,102,241,0.45)", glow: "0 0 60px rgba(99,102,241,0.18),0 2px 0 rgba(99,102,241,0.5)",  dotColor: "#6366f1", accent: "text-accent-bright",  label: "Ch.01 — Hero" },
-  { bg: "rgba(15,10,5,0.90)", border: "color-mix(in srgb, var(--app-accent) 45%, transparent)", glow: "0 0 60px color-mix(in srgb, var(--app-accent) 12%, transparent),0 2px 0 color-mix(in srgb, var(--app-accent) 50%, transparent)",  dotColor: "var(--app-accent)", accent: "text-accent-bright",   label: "Ch.02 — Discovery" },
-  { bg: "rgba(8,5,20,0.92)",  border: "rgba(139,92,246,0.55)", glow: "0 0 80px rgba(139,92,246,0.22),0 2px 0 rgba(139,92,246,0.6)",  dotColor: "#8b5cf6", accent: "text-violet-400",  label: "Ch.03 — AI Oracle" },
-  { bg: "rgba(2,12,8,0.92)",  border: "rgba(16,185,129,0.45)", glow: "0 0 60px rgba(16,185,129,0.15),0 2px 0 rgba(16,185,129,0.5)",  dotColor: "#10b981", accent: "text-emerald-400", label: "Ch.04 — Community" },
-  { bg: "rgba(5,2,18,0.94)",  border: "rgba(99,102,241,0.35)", glow: "0 0 50px rgba(99,102,241,0.15),0 2px 0 rgba(99,102,241,0.4)",  dotColor: "#4f46e5", accent: "text-accent-bright",  label: "Ch.05 — Showcase" },
-  { bg: "rgba(2,2,15,0.94)",  border: "rgba(99,102,241,0.70)", glow: "0 0 80px rgba(99,102,241,0.30),0 2px 0 rgba(99,102,241,0.8)",  dotColor: "#818cf8", accent: "text-accent-bright",  label: "Ch.06 — Begin" },
+  { bg: "color-mix(in srgb, var(--app-bg) 90%, transparent)",  border: "rgba(99,102,241,0.45)", glow: "0 0 60px rgba(99,102,241,0.18),0 2px 0 rgba(99,102,241,0.5)",  dotColor: "#6366f1", accent: "text-accent-bright",  label: "Ch.01 — Hero" },
+  { bg: "color-mix(in srgb, var(--app-bg) 90%, transparent)", border: "color-mix(in srgb, var(--app-accent) 45%, transparent)", glow: "0 0 60px color-mix(in srgb, var(--app-accent) 12%, transparent),0 2px 0 color-mix(in srgb, var(--app-accent) 50%, transparent)",  dotColor: "var(--app-accent)", accent: "text-accent-bright",   label: "Ch.02 — Discovery" },
+  { bg: "color-mix(in srgb, var(--app-bg) 92%, transparent)",  border: "rgba(139,92,246,0.55)", glow: "0 0 80px rgba(139,92,246,0.22),0 2px 0 rgba(139,92,246,0.6)",  dotColor: "#8b5cf6", accent: "text-violet-400",  label: "Ch.03 — AI Oracle" },
+  { bg: "color-mix(in srgb, var(--app-bg) 92%, transparent)",  border: "rgba(16,185,129,0.45)", glow: "0 0 60px rgba(16,185,129,0.15),0 2px 0 rgba(16,185,129,0.5)",  dotColor: "#10b981", accent: "text-emerald-400", label: "Ch.04 — Community" },
+  { bg: "color-mix(in srgb, var(--app-bg) 94%, transparent)",  border: "rgba(99,102,241,0.35)", glow: "0 0 50px rgba(99,102,241,0.15),0 2px 0 rgba(99,102,241,0.4)",  dotColor: "#4f46e5", accent: "text-accent-bright",  label: "Ch.05 — Showcase" },
+  { bg: "color-mix(in srgb, var(--app-bg) 94%, transparent)",  border: "rgba(99,102,241,0.70)", glow: "0 0 80px rgba(99,102,241,0.30),0 2px 0 rgba(99,102,241,0.8)",  dotColor: "#818cf8", accent: "text-accent-bright",  label: "Ch.06 — Begin" },
 ];
 
 /* ── Reusable dropdown panel ─────────────────────────────────── */
@@ -79,7 +79,7 @@ function NavDropdown({ items, onClose }: { items: DropItem[]; onClose: () => voi
       <div
         className="rounded-2xl overflow-hidden border border-white/[0.07]"
         style={{
-          background: "linear-gradient(160deg, rgba(12,10,22,0.98) 0%, rgba(8,7,18,0.99) 100%)",
+          background: "linear-gradient(160deg, color-mix(in srgb, var(--app-bg) 98%, transparent) 0%, color-mix(in srgb, var(--app-bg) 99%, transparent) 100%)",
           boxShadow: "0 24px 80px rgba(0,0,0,0.7), 0 0 0 0.5px color-mix(in srgb, var(--app-accent) 12%, transparent) inset, 0 1px 0 color-mix(in srgb, var(--app-accent) 15%, transparent) inset",
           backdropFilter: "blur(32px) saturate(180%)",
         }}
@@ -214,7 +214,7 @@ export default function Navbar() {
       {/* Nav pill */}
       <motion.nav
         animate={{
-          backgroundColor: scrolled ? "rgba(5,5,10,0.92)" : "rgba(0,0,0,0.08)",
+          backgroundColor: scrolled ? "color-mix(in srgb, var(--app-bg) 92%, transparent)" : "color-mix(in srgb, var(--app-surface) 70%, transparent)",
           borderColor:     scrolled ? "color-mix(in srgb, var(--app-fg) 18%, transparent)" : "color-mix(in srgb, var(--app-fg) 6%, transparent)",
           boxShadow:       "none",
         }}
@@ -228,8 +228,8 @@ export default function Navbar() {
             style={{ boxShadow: "0 0 18px color-mix(in srgb, var(--app-fg) 15%, transparent)" }}>
             {/* Kaiveron K mark */}
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="32" height="32">
-              <rect width="100" height="100" rx="18" fill="#0A0F1E"/>
-              <path d="M 30 28 L 40 28 L 40 46 L 47 46 L 54 28 L 64 28 L 53 50 L 50 50 L 60 72 L 50 72 L 44 60 L 40 60 L 40 72 L 30 72 Z" fill="#F4F2EC"/>
+              <rect width="100" height="100" rx="18" fill="var(--app-bg)"/>
+              <path d="M 30 28 L 40 28 L 40 46 L 47 46 L 54 28 L 64 28 L 53 50 L 50 50 L 60 72 L 50 72 L 44 60 L 40 60 L 40 72 L 30 72 Z" fill="var(--app-fg)"/>
             </svg>
           </div>
           <span className="text-lg font-black tracking-tight text-foreground uppercase italic hidden sm:block">
@@ -270,21 +270,6 @@ export default function Navbar() {
               {openDropdown === "community" && <NavDropdown items={COMMUNITY_LINKS} onClose={() => setOpenDropdown(null)} />}
             </AnimatePresence>
           </div>
-
-          {/* My List dropdown — authenticated only */}
-          {isHydrated && isAuthenticated && (
-            <div className="relative" onMouseEnter={() => enterDropdown("my")} onMouseLeave={leaveDropdown}>
-              <button
-                className={`whitespace-nowrap flex items-center gap-1 px-4 py-2 text-[10px] font-black uppercase tracking-widest rounded-full transition-all ${isMyPath || openDropdown === "my" ? "text-foreground bg-surface" : "text-muted hover:text-foreground hover:bg-surface"}`}
-                aria-expanded={openDropdown === "my"} aria-haspopup="menu">
-                My List
-                <ChevronDown size={11} className={`transition-transform duration-200 ${openDropdown === "my" ? "rotate-180" : ""}`} />
-              </button>
-              <AnimatePresence>
-                {openDropdown === "my" && <NavDropdown items={MY_LINKS} onClose={() => setOpenDropdown(null)} />}
-              </AnimatePresence>
-            </div>
-          )}
 
           <Link href="/leaderboard"
             className={`whitespace-nowrap flex items-center gap-1.5 px-4 py-2 text-[10px] font-black uppercase tracking-widest rounded-full transition-all ${pathname.startsWith("/leaderboard") ? "text-foreground bg-surface" : "text-muted hover:text-foreground hover:bg-surface"}`}>
@@ -380,7 +365,7 @@ export default function Navbar() {
             animate={{ opacity: 1, y: 0   }}
             exit={{    opacity: 0, y: -10  }}
             transition={{ duration: 0.2, ease: [0.32, 0.72, 0, 1] }}
-            className="fixed inset-x-4 top-24 z-[90] lg:hidden bg-[#0a0a12]/97 backdrop-blur-2xl rounded-3xl border border-border shadow-2xl overflow-hidden"
+            className="fixed inset-x-4 top-24 z-[90] lg:hidden bg-background/97 backdrop-blur-2xl rounded-3xl border border-border shadow-2xl overflow-hidden"
           >
             <div className="p-4 max-h-[80vh] overflow-y-auto space-y-4">
 
@@ -430,7 +415,7 @@ function MobileSection({ title, links, onClose }: { title: string; links: DropIt
         const Icon = l.icon;
         return (
           <Link key={l.href} href={l.href} onClick={onClose}
-            className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold text-muted hover:text-foreground hover:bg-white/[0.04] transition-all group">
+            className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold text-muted hover:text-foreground hover:bg-surface transition-all group">
             <div className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 transition-all group-hover:scale-110"
               style={{
                 background: "linear-gradient(135deg, color-mix(in srgb, var(--app-accent) 12%, transparent) 0%, color-mix(in srgb, var(--app-accent-bright) 6%, transparent) 100%)",

@@ -110,7 +110,7 @@ export default function AnimeBrowsePage() {
                 <p className="text-[10px] font-black uppercase tracking-widest text-subtle">{SEASON_LABELS[s]}</p>
                 {SEASONAL_YEARS.map(y => (
                   <Link key={y} href={`/anime/season/${y}/${s}`}
-                    className="flex items-center justify-between px-4 py-2.5 rounded-xl bg-surface border border-border hover:border-accent/25 hover:bg-white/[0.04] transition-all group"
+                    className="flex items-center justify-between px-4 py-2.5 rounded-xl bg-surface border border-border hover:border-accent/25 hover:bg-surface transition-all group"
                   >
                     <span className="text-sm font-bold text-muted group-hover:text-foreground transition-colors">{y}</span>
                     <span className="text-[9px] text-subtle group-hover:text-accent-bright transition-colors font-mono">

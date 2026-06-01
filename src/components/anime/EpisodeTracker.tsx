@@ -95,7 +95,7 @@ export default function EpisodeTracker({ totalEpisodes, currentEpisode: initialE
         <button
           onClick={decrement}
           disabled={current <= 0}
-          className="h-9 w-9 rounded-xl border border-border bg-white/[0.04] flex items-center justify-center text-muted hover:text-foreground hover:bg-white/[0.08] disabled:opacity-30 disabled:cursor-not-allowed transition-all"
+          className="h-9 w-9 rounded-xl border border-border bg-white/[0.04] flex items-center justify-center text-muted hover:text-foreground hover:bg-surface disabled:opacity-30 disabled:cursor-not-allowed transition-all"
         >
           <Minus size={14} />
         </button>

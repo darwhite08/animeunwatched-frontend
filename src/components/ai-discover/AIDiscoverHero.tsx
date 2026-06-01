@@ -4,7 +4,7 @@ import { motion } from "framer-motion"
 
 export default function AIDiscoverHero() {
   return (
-    <section className="relative pt-32 pb-16 flex flex-col items-center justify-center overflow-hidden w-full bg-[#030303]">
+    <section className="relative pt-32 pb-16 flex flex-col items-center justify-center overflow-hidden w-full bg-background">
       {/* Background glows */}
       <div className="absolute top-20 left-1/2 -translate-x-1/2 w-[700px] h-[400px] blur-[140px] rounded-full pointer-events-none"
         style={{ background: "radial-gradient(ellipse, color-mix(in srgb, var(--app-accent) 8%, transparent) 0%, rgba(99,102,241,0.06) 50%, transparent 70%)" }} />

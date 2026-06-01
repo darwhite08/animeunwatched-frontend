@@ -41,7 +41,7 @@ export default function CookieConsent() {
         >
           <div className="rounded-2xl border border-border p-5 backdrop-blur-2xl"
             style={{
-              background: "linear-gradient(160deg, rgba(12,10,22,0.97), rgba(8,7,18,0.99))",
+              background: "linear-gradient(160deg, color-mix(in srgb, var(--app-bg) 97%, transparent), color-mix(in srgb, var(--app-bg) 99%, transparent))",
               boxShadow: "0 20px 60px rgba(0,0,0,0.7), 0 0 0 0.5px color-mix(in srgb, var(--app-accent) 10%, transparent) inset",
             }}>
             {/* Header */}

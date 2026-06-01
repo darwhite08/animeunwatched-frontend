@@ -93,7 +93,7 @@ export default function ShareProfilePage({ params }: { params: Promise<{ usernam
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
           className="relative overflow-hidden rounded-[2.5rem] border border-border"
-          style={{ background: "linear-gradient(160deg,#0f0f0f,#080808)" }}
+          style={{ background: "linear-gradient(160deg,var(--app-bg),var(--app-bg))" }}
         >
           {/* Background glow */}
           <div className="absolute -top-20 -right-20 w-80 h-80 rounded-full blur-[100px] opacity-30"
@@ -108,7 +108,7 @@ export default function ShareProfilePage({ params }: { params: Promise<{ usernam
               <div className="h-20 w-20 rounded-3xl flex items-center justify-center text-3xl font-black shrink-0"
                 style={{ background: grad(displayName) }}>
                 {user?.avatarUrl
-                  ? <img src={user.avatarUrl} alt={displayName} className="w-full h-full rounded-3xl object-cover" />
+                  ? <img loading="lazy" decoding="async" src={user.avatarUrl} alt={displayName} className="w-full h-full rounded-3xl object-cover" />
                   : displayName[0]?.toUpperCase()
                 }
               </div>

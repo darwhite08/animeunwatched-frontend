@@ -49,7 +49,7 @@ export default function StaffPage({ params }: { params: Promise<{ id: string }> 
                 className="flex items-center gap-4 p-4 rounded-2xl border border-border bg-surface hover:border-accent/20 transition-all">
                 <div className="h-14 w-10 rounded-xl overflow-hidden bg-surface shrink-0">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={s.person.images.jpg.image_url} alt={s.person.name}
+                  <img loading="lazy" decoding="async" src={s.person.images.jpg.image_url} alt={s.person.name}
                     className="w-full h-full object-cover"
                     onError={(e) => { (e.target as HTMLImageElement).style.display = "none" }} />
                 </div>

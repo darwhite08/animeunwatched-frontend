@@ -67,7 +67,7 @@ function PostCard({
       layout
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-zinc-900/60 border border-border hover:border-border rounded-2xl p-6 space-y-4 transition-colors"
+      className="bg-surface-2 border border-border hover:border-border rounded-2xl p-6 space-y-4 transition-colors"
     >
       {/* Author */}
       <div className="flex items-start justify-between">

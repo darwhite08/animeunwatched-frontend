@@ -152,7 +152,7 @@ export default function RatePage() {
             className="fixed inset-0 -z-10"
           >
             <Image src={anime.image} alt="" fill className="object-cover brightness-[0.12] blur-sm" />
-            <div className="absolute inset-0 bg-gradient-to-b from-[#020202]/80 via-[#020202]/90 to-[#020202]" />
+            <div className="absolute inset-0 bg-gradient-to-b from-[var(--app-bg)]/80 via-[var(--app-bg)]/90 to-[var(--app-bg)]" />
           </motion.div>
         )}
       </AnimatePresence>

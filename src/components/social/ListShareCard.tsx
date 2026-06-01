@@ -45,7 +45,7 @@ export default function ListShareCard() {
   return (
     <div className="w-full max-w-md mx-auto space-y-4">
       {/* ── The shareable card ── */}
-      <div className="relative rounded-3xl overflow-hidden border border-zinc-700/60 bg-[#0d0d0d] shadow-2xl select-none">
+      <div className="relative rounded-3xl overflow-hidden border border-border bg-background shadow-2xl select-none">
         {/* Ambient glow */}
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-0 right-0 w-56 h-56 bg-accent/15 blur-[80px] rounded-full" />
@@ -53,7 +53,7 @@ export default function ListShareCard() {
         </div>
 
         {/* Header bar */}
-        <div className="relative z-10 flex items-center justify-between px-5 py-4 border-b border-zinc-800/80">
+        <div className="relative z-10 flex items-center justify-between px-5 py-4 border-b border-border">
           <span className="font-black uppercase tracking-widest text-accent-bright text-sm">
             KAIVERON.
           </span>
@@ -67,7 +67,7 @@ export default function ListShareCard() {
           <h2 className="font-black uppercase text-2xl text-foreground leading-tight tracking-tight">
             My {PROFILE.year} Anime List
           </h2>
-          <p className="text-zinc-400 text-sm mt-1">
+          <p className="text-muted text-sm mt-1">
             @{PROFILE.username} · {PROFILE.totalCount} anime tracked
           </p>
         </div>
@@ -78,7 +78,7 @@ export default function ListShareCard() {
             {TOP_5.map((anime) => (
               <div
                 key={anime.id}
-                className="relative aspect-[2/3] rounded-xl overflow-hidden border border-zinc-700/50 bg-zinc-900"
+                className="relative aspect-[2/3] rounded-xl overflow-hidden border border-border bg-surface-2"
                 title={anime.title}
               >
                 <Image
@@ -100,7 +100,7 @@ export default function ListShareCard() {
             {TOP_5.map((anime, i) => (
               <div key={anime.id} className="flex items-center gap-2">
                 <span className="text-[9px] font-black text-accent-bright/60 w-3 shrink-0">{i + 1}</span>
-                <span className="text-[11px] font-bold text-zinc-300 truncate">{anime.title}</span>
+                <span className="text-[11px] font-bold text-muted truncate">{anime.title}</span>
                 <span className="ml-auto text-[9px] font-bold text-accent-bright/70 shrink-0">
                   ★ {anime.rating}
                 </span>
@@ -110,9 +110,9 @@ export default function ListShareCard() {
         </div>
 
         {/* Footer bar */}
-        <div className="relative z-10 flex items-center justify-between px-5 py-3 bg-zinc-900/60 border-t border-zinc-800/60">
-          <span className="text-zinc-500 text-xs">kaiveron.app</span>
-          <span className="text-zinc-600 text-[10px] font-mono">Track. Share. Flex.</span>
+        <div className="relative z-10 flex items-center justify-between px-5 py-3 bg-surface-2 border-t border-border">
+          <span className="text-muted text-xs">kaiveron.app</span>
+          <span className="text-muted text-[10px] font-mono">Track. Share. Flex.</span>
         </div>
       </div>
 
@@ -130,7 +130,7 @@ export default function ListShareCard() {
         {/* Copy Link */}
         <button
           onClick={handleCopyLink}
-          className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-2xl border border-zinc-700/60 bg-zinc-900/60 text-zinc-400 hover:border-zinc-500 hover:text-zinc-200 hover:bg-zinc-800/60 transition-all duration-200 group"
+          className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-2xl border border-border bg-surface-2 text-muted hover:border-border hover:text-muted hover:bg-surface-2 transition-all duration-200 group"
         >
           <Link2 className="w-4 h-4 transition-transform duration-200 group-hover:scale-110" />
           <span className="text-[10px] font-black uppercase tracking-widest">
@@ -141,7 +141,7 @@ export default function ListShareCard() {
         {/* Download (coming soon) */}
         <button
           disabled
-          className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-2xl border border-zinc-800 bg-zinc-900/40 text-zinc-700 cursor-not-allowed"
+          className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-2xl border border-border bg-surface-2 text-muted cursor-not-allowed"
         >
           <Download className="w-4 h-4" />
           <span className="text-[10px] font-black uppercase tracking-widest">Download</span>

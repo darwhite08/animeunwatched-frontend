@@ -387,7 +387,7 @@ export default function BlogReaderPage({ params }: { params: Promise<{ slug: str
       {/* Hero banner */}
       <div className={`relative h-[45vh] min-h-[320px] w-full bg-gradient-to-br ${meta.coverGradient} overflow-hidden`}>
         <div className="absolute inset-0 bg-black/50" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#020202] via-[#020202]/40 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[var(--app-bg)] via-[var(--app-bg)]/40 to-transparent" />
 
         {/* Back */}
         <Link
@@ -457,7 +457,7 @@ export default function BlogReaderPage({ params }: { params: Promise<{ slug: str
           {/* Share */}
           <button
             onClick={share}
-            className="ml-auto flex items-center gap-2 px-4 py-2 rounded-xl border border-border bg-white/[0.04] text-[10px] font-black uppercase tracking-widest text-muted hover:text-foreground hover:bg-white/[0.08] transition-all"
+            className="ml-auto flex items-center gap-2 px-4 py-2 rounded-xl border border-border bg-white/[0.04] text-[10px] font-black uppercase tracking-widest text-muted hover:text-foreground hover:bg-surface transition-all"
           >
             <Share2 size={12} /> Share
           </button>
@@ -488,7 +488,7 @@ export default function BlogReaderPage({ params }: { params: Promise<{ slug: str
 
           <button
             onClick={share}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/[0.04] border border-border text-xs font-black uppercase tracking-widest text-muted hover:text-foreground hover:bg-white/[0.08] transition-all"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/[0.04] border border-border text-xs font-black uppercase tracking-widest text-muted hover:text-foreground hover:bg-surface transition-all"
           >
             <Share2 size={14} /> Share
           </button>
@@ -516,7 +516,7 @@ export default function BlogReaderPage({ params }: { params: Promise<{ slug: str
               <Link
                 key={rp.slug}
                 href={`/blog/${rp.slug}`}
-                className="group block rounded-2xl overflow-hidden bg-zinc-900/60 border border-border hover:border-accent/30 transition-all"
+                className="group block rounded-2xl overflow-hidden bg-surface-2 border border-border hover:border-accent/30 transition-all"
               >
                 <div className={`h-28 bg-gradient-to-br ${rp.coverGradient} relative`}>
                   <div className="absolute inset-0 bg-black/30" />

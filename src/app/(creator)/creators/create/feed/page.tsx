@@ -77,7 +77,7 @@ export default function CreateFeedPage() {
       )}
 
       {/* Composer */}
-      <div className="bg-zinc-900 border border-border rounded-2xl p-6 space-y-5">
+      <div className="bg-surface-2 border border-border rounded-2xl p-6 space-y-5">
         {/* Text area */}
         <div className="relative">
           <textarea
@@ -85,7 +85,7 @@ export default function CreateFeedPage() {
             onChange={e => setContent(e.target.value)}
             placeholder="What's on your mind? Share a theory, hot take, or anime reaction…"
             rows={6}
-            className="w-full bg-zinc-800 rounded-xl px-4 py-3 text-sm resize-none outline-none placeholder:text-subtle focus:ring-1 focus:ring-indigo-500/50"
+            className="w-full bg-surface-2 rounded-xl px-4 py-3 text-sm resize-none outline-none placeholder:text-subtle focus:ring-1 focus:ring-indigo-500/50"
           />
           <span
             className={`absolute bottom-3 right-4 text-xs ${
@@ -102,7 +102,7 @@ export default function CreateFeedPage() {
           <div className="relative">
             <button
               onClick={() => setAnimeOpen(o => !o)}
-              className="flex items-center justify-between w-full bg-zinc-800 rounded-xl px-4 py-3 text-sm text-left"
+              className="flex items-center justify-between w-full bg-surface-2 rounded-xl px-4 py-3 text-sm text-left"
             >
               <span className={selectedAnime ? "text-foreground" : "text-subtle"}>
                 {selectedAnime ?? "Select anime…"}
@@ -114,7 +114,7 @@ export default function CreateFeedPage() {
               <motion.div
                 initial={{ opacity: 0, y: -4 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="absolute top-full mt-1 left-0 right-0 bg-zinc-800 border border-border rounded-xl overflow-hidden z-10"
+                className="absolute top-full mt-1 left-0 right-0 bg-surface-2 border border-border rounded-xl overflow-hidden z-10"
               >
                 {ANIME_TAGS.map(anime => (
                   <button
@@ -150,11 +150,11 @@ export default function CreateFeedPage() {
               onChange={e => setTagInput(e.target.value)}
               onKeyDown={e => e.key === "Enter" && addTag()}
               placeholder="Add tag…"
-              className="flex-1 bg-zinc-800 rounded-xl px-4 py-2.5 text-sm outline-none placeholder:text-subtle focus:ring-1 focus:ring-indigo-500/50"
+              className="flex-1 bg-surface-2 rounded-xl px-4 py-2.5 text-sm outline-none placeholder:text-subtle focus:ring-1 focus:ring-indigo-500/50"
             />
             <button
               onClick={addTag}
-              className="px-4 py-2.5 bg-zinc-700 hover:bg-zinc-600 rounded-xl text-sm transition"
+              className="px-4 py-2.5 bg-surface-2 hover:bg-surface-2 rounded-xl text-sm transition"
             >
               <Hash size={14} />
             </button>

@@ -111,7 +111,7 @@ function StepIdentity({
         <h2 className="font-black uppercase text-3xl tracking-tight text-foreground leading-tight">
           What kind of watcher<br />are you?
         </h2>
-        <p className="text-zinc-400 text-sm mt-2">
+        <p className="text-muted text-sm mt-2">
           Your identity shapes your archive. Choose wisely.
         </p>
       </div>
@@ -126,13 +126,13 @@ function StepIdentity({
                 "relative text-left rounded-2xl border p-4 transition-all duration-200 cursor-pointer group",
                 isSelected
                   ? "border-accent bg-accent/10 shadow-[0_0_20px_color-mix(in srgb, var(--app-accent) 25%, transparent)]"
-                  : "border-zinc-800 bg-zinc-900/60 hover:border-zinc-600",
+                  : "border-border bg-surface-2 hover:border-border",
               ].join(" ")}
             >
               <div
                 className={[
                   "mb-3 transition-colors duration-200",
-                  isSelected ? "text-accent-bright" : "text-zinc-400 group-hover:text-zinc-300",
+                  isSelected ? "text-accent-bright" : "text-muted group-hover:text-muted",
                 ].join(" ")}
               >
                 {wt.icon}
@@ -145,7 +145,7 @@ function StepIdentity({
               >
                 {wt.label}
               </p>
-              <p className="text-zinc-400 text-xs mt-1 leading-relaxed">
+              <p className="text-muted text-xs mt-1 leading-relaxed">
                 {wt.description}
               </p>
               {isSelected && (
@@ -185,7 +185,7 @@ function StepPickAnime({
         <h2 className="font-black uppercase text-3xl tracking-tight text-foreground leading-tight">
           Pick your first 5 anime
         </h2>
-        <p className="text-zinc-400 text-sm mt-2">
+        <p className="text-muted text-sm mt-2">
           Your list is your personality. Start strong.
         </p>
       </div>
@@ -197,7 +197,7 @@ function StepPickAnime({
             "px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest transition-colors",
             count >= min
               ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
-              : "bg-zinc-800 text-zinc-400 border border-zinc-700",
+              : "bg-surface-2 text-muted border border-border",
           ].join(" ")}
         >
           {count}/{min} selected
@@ -288,7 +288,7 @@ function StepGenres({
         <h2 className="font-black uppercase text-3xl tracking-tight text-foreground leading-tight">
           What keeps you up<br />at night?
         </h2>
-        <p className="text-zinc-400 text-sm mt-2">
+        <p className="text-muted text-sm mt-2">
           Pick at least 2 genres. We use this to sharpen your archive.
         </p>
       </div>
@@ -304,7 +304,7 @@ function StepGenres({
                 "px-5 py-2.5 rounded-full border font-bold uppercase text-sm tracking-wide transition-all duration-200 cursor-pointer",
                 isSelected
                   ? "border-accent bg-accent/20 text-accent-bright shadow-[0_0_12px_rgba(99,102,241,0.25)]"
-                  : "border-zinc-700 bg-zinc-900/60 text-zinc-400 hover:border-zinc-500 hover:text-zinc-300",
+                  : "border-border bg-surface-2 text-muted hover:border-border hover:text-muted",
               ].join(" ")}
             >
               {genre}
@@ -561,19 +561,19 @@ export default function OnboardingModal({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 16 }}
             transition={{ duration: 0.3, ease: [0.32, 0.72, 0, 1] }}
-            className="relative w-full max-w-lg bg-surface border border-zinc-800 rounded-3xl overflow-hidden shadow-2xl"
+            className="relative w-full max-w-lg bg-surface border border-border rounded-3xl overflow-hidden shadow-2xl"
           >
             {/* Header */}
-            <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-zinc-800/60">
+            <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-border">
               <ProgressDots current={step} total={totalSteps} />
               <div className="flex items-center gap-3">
-                <span className="text-zinc-600 text-xs font-mono">
+                <span className="text-muted text-xs font-mono">
                   {step}/{totalSteps}
                 </span>
                 {step < 4 && (
                   <button
                     onClick={handleSkip}
-                    className="text-zinc-500 hover:text-zinc-300 text-xs uppercase tracking-widest font-bold transition-colors"
+                    className="text-muted hover:text-muted text-xs uppercase tracking-widest font-bold transition-colors"
                   >
                     Skip
                   </button>
@@ -629,7 +629,7 @@ export default function OnboardingModal({
                 <button
                   onClick={goBack}
                   disabled={step === 1}
-                  className="px-4 py-2 rounded-xl border border-zinc-700 text-zinc-400 text-sm font-bold uppercase tracking-wide disabled:opacity-30 hover:border-zinc-500 hover:text-zinc-300 transition-all"
+                  className="px-4 py-2 rounded-xl border border-border text-muted text-sm font-bold uppercase tracking-wide disabled:opacity-30 hover:border-border hover:text-muted transition-all"
                 >
                   Back
                 </button>
@@ -640,7 +640,7 @@ export default function OnboardingModal({
                     "flex items-center gap-2 px-5 py-2 rounded-xl font-black uppercase tracking-wide text-sm transition-all duration-200",
                     canProceed()
                       ? "bg-accent hover:bg-accent-bright text-black shadow-[0_0_16px_rgba(99,102,241,0.3)]"
-                      : "bg-zinc-800 text-zinc-600 cursor-not-allowed",
+                      : "bg-surface-2 text-muted cursor-not-allowed",
                   ].join(" ")}
                 >
                   {step === 3 ? "Almost there" : "Next"}

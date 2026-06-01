@@ -68,7 +68,7 @@ export default function ReviewComposer({ isOpen, onClose, animeTitle, animeId }:
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.93, y: 20 }}
             transition={{ type: "spring", damping: 26, stiffness: 260 }}
-            className="relative w-full max-w-lg bg-[#0c0c0c] rounded-3xl border border-border p-8 shadow-2xl space-y-7"
+            className="relative w-full max-w-lg bg-background rounded-3xl border border-border p-8 shadow-2xl space-y-7"
           >
             <button
               onClick={onClose}

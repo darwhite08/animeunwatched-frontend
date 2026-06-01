@@ -1,6 +1,6 @@
 export default function BlogCard({ status }: { status: string }) {
   return (
-    <div className="bg-zinc-900 border border-border rounded-2xl overflow-hidden hover:border-accent transition cursor-pointer">
+    <div className="bg-surface-2 border border-border rounded-2xl overflow-hidden hover:border-accent transition cursor-pointer">
 
       <div className="h-40 bg-gradient-to-br from-indigo-600/30 to-purple-600/20" />
 

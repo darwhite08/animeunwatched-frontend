@@ -55,7 +55,7 @@ export default function PressPage() {
               <a
                 key={item}
                 href="mailto:press@kaiveron.com?subject=Brand%20Assets%20Request"
-                className="p-5 rounded-2xl bg-surface border border-border flex items-center justify-between hover:border-accent/30 hover:bg-white/[0.04] transition-colors"
+                className="p-5 rounded-2xl bg-surface border border-border flex items-center justify-between hover:border-accent/30 hover:bg-surface transition-colors"
               >
                 <div className="flex items-center gap-3">
                   <FileText size={16} className="text-accent-bright" />
@@ -73,7 +73,7 @@ export default function PressPage() {
               {[
                 { color: "#4f46e5", name: "Indigo 600", hex: "#4f46e5" },
                 { color: "#7c3aed", name: "Violet 600", hex: "#7c3aed" },
-                { color: "#020202", name: "Neural Black", hex: "#020202" },
+                { color: "var(--app-bg)", name: "Neural Black", hex: "var(--app-bg)" },
                 { color: "var(--app-fg)", name: "Pure White", hex: "var(--app-fg)" },
               ].map(c => (
                 <div key={c.name} className="flex items-center gap-2">

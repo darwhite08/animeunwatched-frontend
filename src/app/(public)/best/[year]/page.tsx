@@ -21,7 +21,7 @@ function HeroCard({ anime, rank }: { anime: Anime; rank: number }) {
       initial={{ opacity: 0, y: 24 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-      className="relative w-full overflow-hidden rounded-3xl border border-accent/20 bg-zinc-900/60"
+      className="relative w-full overflow-hidden rounded-3xl border border-accent/20 bg-surface-2"
     >
       {/* Background image */}
       <div className="absolute inset-0">
@@ -32,7 +32,7 @@ function HeroCard({ anime, rank }: { anime: Anime; rank: number }) {
           className="object-cover opacity-20 scale-105"
           sizes="100vw"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#020202] via-[#020202]/80 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[var(--app-bg)] via-[var(--app-bg)]/80 to-transparent" />
       </div>
 
       <div className="relative z-10 flex flex-col md:flex-row items-start md:items-center gap-8 p-8 md:p-12">
@@ -92,7 +92,7 @@ function HeroCard({ anime, rank }: { anime: Anime; rank: number }) {
 }
 
 const MEDAL_ICONS = [
-  <Medal key="2" size={14} className="text-slate-300" />,
+  <Medal key="2" size={14} className="text-muted" />,
   <Medal key="3" size={14} className="text-accent" />,
   <Award key="4" size={14} className="text-accent-bright" />,
   <Award key="5" size={14} className="text-accent-bright" />,
@@ -104,7 +104,7 @@ function RankedRow({ anime, rank, index }: { anime: Anime; rank: number; index: 
       initial={{ opacity: 0, x: -16 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay: index * 0.07 }}
-      className="flex items-center gap-5 p-4 rounded-2xl bg-surface border border-border hover:border-border hover:bg-white/[0.04] transition-all group"
+      className="flex items-center gap-5 p-4 rounded-2xl bg-surface border border-border hover:border-border hover:bg-surface transition-all group"
     >
       {/* Rank badge */}
       <div className="flex items-center justify-center w-8 h-8 shrink-0">
@@ -143,7 +143,7 @@ function AnimeGridCard({ anime, index }: { anime: Anime; index: number }) {
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.05 }}
-      className="group relative rounded-2xl overflow-hidden border border-border hover:border-border bg-zinc-900/40 transition-all"
+      className="group relative rounded-2xl overflow-hidden border border-border hover:border-border bg-surface-2 transition-all"
     >
       <div className="relative h-40 w-full">
         <Image src={anime.image} alt={anime.title} fill className="object-cover group-hover:scale-105 transition-transform duration-500" sizes="(max-width: 768px) 100vw, 25vw" />

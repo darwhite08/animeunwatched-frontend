@@ -60,7 +60,7 @@ export default function CalendarPage() {
 
       {/* Sticky header */}
       <div className="sticky top-[72px] z-30 border-b border-border backdrop-blur-xl"
-        style={{ background: "rgba(2,2,2,0.92)" }}>
+        style={{ background: "color-mix(in srgb, var(--app-bg) 92%, transparent)" }}>
         <div className="max-w-6xl mx-auto px-6 py-5">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             {/* Title */}

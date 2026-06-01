@@ -23,7 +23,7 @@ const OceanLayer = memo(function OceanLayer({ mouseX }: OceanLayerProps) {
           className="absolute top-0 left-1/2 -translate-x-1/2 w-24 bottom-0 bg-gradient-to-b from-blue-200/20 via-indigo-200/10 to-transparent blur-sm" />
       </div>
 
-      <div className="absolute inset-0 bg-gradient-to-t from-[#020c18] via-[#061428] to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-t from-[var(--app-bg)] via-[#061428] to-transparent" />
 
       <motion.div className="absolute inset-0" style={{ x: waterX }}>
         <motion.svg viewBox="0 0 1800 200" preserveAspectRatio="none" className="absolute bottom-[52%] left-0 w-[200%] h-[30%]"
@@ -35,7 +35,7 @@ const OceanLayer = memo(function OceanLayer({ mouseX }: OceanLayerProps) {
           <path d={WAVE_BACK} fill="rgba(10,30,60,0.7)" />
         </motion.svg>
 
-        <div className="absolute bottom-0 top-[55%] left-0 right-0 bg-gradient-to-b from-[#0a1e3c]/90 to-[#020c18]" />
+        <div className="absolute bottom-0 top-[55%] left-0 right-0 bg-gradient-to-b from-[#0a1e3c]/90 to-[var(--app-bg)]" />
 
         <motion.svg viewBox="0 0 1800 200" preserveAspectRatio="none" className="absolute bottom-[35%] left-0 w-[200%] h-[28%]"
           animate={{ x: [0, -900] }} transition={{ duration: 12, repeat: Infinity, ease: "linear" }}>
@@ -68,7 +68,7 @@ const OceanLayer = memo(function OceanLayer({ mouseX }: OceanLayerProps) {
       </motion.div>
 
       <div className="absolute bottom-[14%] top-0 left-0 right-0 bg-gradient-to-t from-[#0a1529]/60 via-transparent to-transparent" />
-      <div className="absolute bottom-0 left-0 right-0 h-[18%] bg-gradient-to-t from-[#020c18] to-[#0a1e3c]/80" />
+      <div className="absolute bottom-0 left-0 right-0 h-[18%] bg-gradient-to-t from-[var(--app-bg)] to-[#0a1e3c]/80" />
 
       {Array.from({ length: 10 }).map((_, i) => (
         <motion.div key={i}

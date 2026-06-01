@@ -118,7 +118,7 @@ export default function TopAnimeCard() {
 
                 {/* Cover thumbnail */}
                 <div className="h-10 w-8 rounded-xl overflow-hidden shrink-0 bg-surface">
-                  <img
+                  <img loading="lazy" decoding="async"
                     src={anime.image}
                     alt={anime.title}
                     className="w-full h-full object-cover brightness-75 group-hover:brightness-90 transition-all"

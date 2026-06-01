@@ -225,7 +225,7 @@ export default function BadgeDetailPage({ params }: { params: Promise<{ id: stri
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-          className="relative overflow-hidden rounded-3xl border border-border bg-zinc-900/60 p-8 md:p-12"
+          className="relative overflow-hidden rounded-3xl border border-border bg-surface-2 p-8 md:p-12"
         >
           {/* Background glow */}
           <div className="absolute -top-20 -right-20 h-64 w-64 rounded-full bg-accent/8 blur-3xl pointer-events-none" />
@@ -324,7 +324,7 @@ export default function BadgeDetailPage({ params }: { params: Promise<{ id: stri
                     initial={{ opacity: 0, scale: 0.94 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: 0.15 + i * 0.06 }}
-                    className="p-4 rounded-2xl bg-surface border border-border hover:border-accent/20 hover:bg-white/[0.04] transition-all flex flex-col items-center gap-3 text-center group"
+                    className="p-4 rounded-2xl bg-surface border border-border hover:border-accent/20 hover:bg-surface transition-all flex flex-col items-center gap-3 text-center group"
                   >
                     <div className={`h-12 w-12 rounded-xl bg-gradient-to-br ${earner.avatarColor} flex items-center justify-center font-black text-lg text-foreground group-hover:scale-105 transition-transform`}>
                       {earner.avatar}

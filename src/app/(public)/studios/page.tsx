@@ -154,7 +154,7 @@ export default function StudiosPage() {
                   initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.04 }}
                   onClick={() => toggleStudio(s.name)}
-                  className={`w-full text-left rounded-2xl border bg-surface overflow-hidden transition-all duration-300 hover:border-border hover:bg-white/[0.04] ${
+                  className={`w-full text-left rounded-2xl border bg-surface overflow-hidden transition-all duration-300 hover:border-border hover:bg-surface ${
                     isOpen ? "ring-1 ring-violet-500/30 border-violet-900/40" : "border-border"
                   }`}
                 >

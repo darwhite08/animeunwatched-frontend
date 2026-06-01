@@ -81,7 +81,7 @@ export function IncomingCallCard({
       style={{
         position: "fixed", top: 20, right: 20, zIndex: 9999,
         width: 320, padding: "20px 20px 16px",
-        background: "linear-gradient(160deg, #1a1b2e 0%, #13141f 100%)",
+        background: "linear-gradient(160deg, #1a1b2e 0%, var(--app-bg) 100%)",
         border: "1px solid color-mix(in srgb, var(--app-fg) 10%, transparent)",
         borderRadius: 20,
         boxShadow: "0 20px 60px rgba(0,0,0,0.7)",
@@ -182,7 +182,7 @@ export function ActiveCallModal({
     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
       style={{
         position: "fixed", inset: 0, zIndex: 9998,
-        background: callType === "video" ? "#000" : "linear-gradient(160deg, #0e0e1a 0%, #0a0a14 100%)",
+        background: callType === "video" ? "var(--app-bg)" : "linear-gradient(160deg, var(--app-bg) 0%, var(--app-bg) 100%)",
         display: "flex", flexDirection: "column",
         alignItems: "center", justifyContent: "space-between",
         paddingBottom: 48, paddingTop: 60,

@@ -40,9 +40,9 @@ function CardPreview({
   rating?: number
 }) {
   return (
-    <div className="w-full rounded-2xl overflow-hidden border border-zinc-700/60 bg-[#0d0d0d] shadow-2xl select-none">
+    <div className="w-full rounded-2xl overflow-hidden border border-border bg-background shadow-2xl select-none">
       {/* Top bar */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-zinc-800">
+      <div className="flex items-center justify-between px-4 py-3 border-b border-border">
         <span className="font-black uppercase tracking-widest text-accent-bright text-sm">
           KAIVERON.
         </span>
@@ -57,14 +57,14 @@ function CardPreview({
           {title}
         </h3>
         {subtitle && (
-          <p className="text-zinc-400 text-sm mt-1.5 leading-relaxed">
+          <p className="text-muted text-sm mt-1.5 leading-relaxed">
             {subtitle}
           </p>
         )}
       </div>
 
       {/* Bottom bar */}
-      <div className="flex items-center justify-between px-4 py-3 bg-zinc-900/60 border-t border-zinc-800">
+      <div className="flex items-center justify-between px-4 py-3 bg-surface-2 border-t border-border">
         {type === "anime" || type === "review" ? (
           <div className="flex items-center gap-1.5">
             {rating !== undefined ? (
@@ -73,13 +73,13 @@ function CardPreview({
                 <span className="text-accent-bright font-bold text-sm">{rating}/10</span>
               </>
             ) : (
-              <span className="text-zinc-500 text-xs">No rating yet</span>
+              <span className="text-muted text-xs">No rating yet</span>
             )}
           </div>
         ) : (
-          <span className="text-zinc-500 text-xs">kaiveron.app</span>
+          <span className="text-muted text-xs">kaiveron.app</span>
         )}
-        <span className="text-zinc-600 text-[10px] font-mono">
+        <span className="text-muted text-[10px] font-mono">
           Track it on Kaiveron
         </span>
       </div>
@@ -109,9 +109,9 @@ function ShareButton({
       className={[
         "flex-1 flex flex-col items-center gap-2 px-3 py-3 rounded-2xl border transition-all duration-200 cursor-pointer group",
         disabled
-          ? "border-zinc-800 bg-zinc-900/40 text-zinc-700 cursor-not-allowed"
+          ? "border-border bg-surface-2 text-muted cursor-not-allowed"
           : muted
-          ? "border-zinc-700/60 bg-zinc-900/60 text-zinc-400 hover:border-zinc-500 hover:text-zinc-200 hover:bg-zinc-800/60"
+          ? "border-border bg-surface-2 text-muted hover:border-border hover:text-muted hover:bg-surface-2"
           : "border-accent/40 bg-accent/10 text-accent-bright hover:border-indigo-400 hover:bg-accent/20",
       ].join(" ")}
     >
@@ -194,7 +194,7 @@ export default function ShareCard({
             exit={{ opacity: 0, scale: 0.93, y: 20 }}
             transition={{ duration: 0.25, ease: [0.32, 0.72, 0, 1] }}
             onClick={(e) => e.stopPropagation()}
-            className="relative w-full max-w-sm bg-surface border border-zinc-800 rounded-3xl overflow-hidden shadow-2xl"
+            className="relative w-full max-w-sm bg-surface border border-border rounded-3xl overflow-hidden shadow-2xl"
           >
             {/* Modal header */}
             <div className="flex items-center justify-between px-5 pt-5 pb-4">
@@ -202,13 +202,13 @@ export default function ShareCard({
                 <h2 className="font-black uppercase text-base text-foreground tracking-tight">
                   Share
                 </h2>
-                <p className="text-zinc-500 text-xs mt-0.5">
+                <p className="text-muted text-xs mt-0.5">
                   Drop it into the void
                 </p>
               </div>
               <button
                 onClick={onClose}
-                className="w-8 h-8 rounded-xl border border-zinc-700 flex items-center justify-center text-zinc-400 hover:text-foreground hover:border-zinc-500 transition-colors"
+                className="w-8 h-8 rounded-xl border border-border flex items-center justify-center text-muted hover:text-foreground hover:border-border transition-colors"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -226,9 +226,9 @@ export default function ShareCard({
 
             {/* URL preview */}
             <div className="px-5 mt-3">
-              <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-zinc-900/80 border border-zinc-800">
-                <Link2 className="w-3 h-3 text-zinc-500 shrink-0" />
-                <p className="text-zinc-500 text-xs truncate font-mono">{url}</p>
+              <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-surface-2 border border-border">
+                <Link2 className="w-3 h-3 text-muted shrink-0" />
+                <p className="text-muted text-xs truncate font-mono">{url}</p>
               </div>
             </div>
 

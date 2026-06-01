@@ -25,7 +25,7 @@ export default function AiringNow() {
   return (
     <section className="py-24 bg-background relative overflow-hidden border-y border-white/[0.03]">
       {/* Grid */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:52px_52px] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_50%,#000_20%,transparent_100%)] pointer-events-none" />
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:52px_52px] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_50%,var(--app-bg)_20%,transparent_100%)] pointer-events-none" />
 
       {/* Glow */}
       <motion.div
@@ -59,7 +59,7 @@ export default function AiringNow() {
 
           <Link
             href="/anime/season/2024/fall"
-            className="hidden md:flex items-center gap-2 px-5 py-3 rounded-2xl border border-border bg-surface text-xs font-black uppercase tracking-widest text-muted hover:text-foreground hover:bg-white/[0.06] transition-all"
+            className="hidden md:flex items-center gap-2 px-5 py-3 rounded-2xl border border-border bg-surface text-xs font-black uppercase tracking-widest text-muted hover:text-foreground hover:bg-surface transition-all"
           >
             Full Season <ChevronRight size={13} />
           </Link>

@@ -67,7 +67,7 @@ export default function XPToast({ fromLevel, toLevel, newTitle, onDismiss }: XPT
 
               {/* Level transition */}
               <div className="flex items-center gap-3">
-                <span className="text-lg font-black text-amber-200">
+                <span className="text-lg font-black text-accent-bright">
                   Level {fromLevel}
                 </span>
                 <motion.span
@@ -84,7 +84,7 @@ export default function XPToast({ fromLevel, toLevel, newTitle, onDismiss }: XPT
 
               {/* New title */}
               <div className="flex items-center gap-2">
-                <span className="text-amber-200/70 text-sm font-bold uppercase tracking-tighter">
+                <span className="text-accent-bright/70 text-sm font-bold uppercase tracking-tighter">
                   You are now:
                 </span>
                 <span className="text-foreground font-black text-sm tracking-tight">
@@ -95,7 +95,7 @@ export default function XPToast({ fromLevel, toLevel, newTitle, onDismiss }: XPT
               {/* Dismiss button */}
               <button
                 onClick={() => { setVisible(false); onDismiss?.() }}
-                className="sm:ml-auto text-amber-200/60 hover:text-foreground font-black text-xs uppercase tracking-tighter transition-colors flex-shrink-0"
+                className="sm:ml-auto text-accent-bright/60 hover:text-foreground font-black text-xs uppercase tracking-tighter transition-colors flex-shrink-0"
               >
                 Dismiss
               </button>

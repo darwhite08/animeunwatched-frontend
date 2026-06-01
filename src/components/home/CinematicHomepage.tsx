@@ -57,7 +57,7 @@ function DiscoverySection() {
     .map(mapDTO)
 
   return (
-    <section className="min-h-screen py-24 bg-[#08080f] relative z-[1] overflow-hidden flex items-center">
+    <section className="min-h-screen py-24 bg-background relative z-[1] overflow-hidden flex items-center">
       <div className="max-w-7xl mx-auto px-6 w-full space-y-16">
 
         {/* Header */}
@@ -93,7 +93,7 @@ function DiscoverySection() {
               viewport={{ once: true }}
               transition={{ delay: i * 0.08 }}
               whileHover={{ y: -6, scale: 1.02 }}
-              className="group relative p-7 rounded-[2rem] bg-surface border border-white/[0.06] hover:border-white/[0.12] hover:bg-white/[0.04] cursor-pointer overflow-hidden h-48 transition-all duration-300"
+              className="group relative p-7 rounded-[2rem] bg-surface border border-white/[0.06] hover:border-white/[0.12] hover:bg-surface cursor-pointer overflow-hidden h-48 transition-all duration-300"
             >
               <AnimatedCounterText value={count} className="text-5xl font-black tracking-tighter text-foreground mb-1" />
               <p className="text-[9px] text-subtle font-mono mb-2">anime</p>
@@ -212,7 +212,7 @@ function AIResultRow({
       </div>
 
       <div className="flex-1 min-w-0">
-        <p className="text-[13.5px] font-bold text-white/90 truncate mb-1 group-hover:text-amber-200 transition-colors">{title}</p>
+        <p className="text-[13.5px] font-bold text-foreground truncate mb-1 group-hover:text-accent-bright transition-colors">{title}</p>
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-1">
             <Star size={9} className="fill-accent-bright text-accent-bright" />
@@ -229,7 +229,7 @@ function AIResultRow({
           WebkitBackgroundClip: "text",
           WebkitTextFillColor: "transparent",
         }}>{match}<span className="text-[10px]">%</span></p>
-        <div className="mt-1.5 h-[3px] w-12 rounded-full bg-white/[0.06] overflow-hidden">
+        <div className="mt-1.5 h-[3px] w-12 rounded-full bg-surface overflow-hidden">
           <motion.div
             initial={{ width: 0 }}
             animate={{ width: `${match}%` }}
@@ -275,7 +275,7 @@ function AIOracleSection() {
   }, [PROMPTS.length])
 
   return (
-    <section className="min-h-screen py-28 relative z-[2] overflow-hidden bg-[#050509] flex items-center">
+    <section className="min-h-screen py-28 relative z-[2] overflow-hidden bg-background flex items-center">
       {/* Ambient backdrop */}
       <div className="absolute inset-0 pointer-events-none" style={{
         background: "radial-gradient(ellipse 60% 70% at 78% 50%, color-mix(in srgb, var(--app-accent) 6%, transparent) 0%, transparent 60%), radial-gradient(ellipse 40% 50% at 10% 30%, rgba(99,102,241,0.04) 0%, transparent 55%)",
@@ -314,7 +314,7 @@ function AIOracleSection() {
                 <span
                   className="italic"
                   style={{
-                    backgroundImage: "linear-gradient(135deg, var(--app-accent-bright) 0%, var(--app-accent) 50%, #fde68a 100%)",
+                    backgroundImage: "linear-gradient(135deg, var(--app-accent-bright) 0%, var(--app-accent) 100%)",
                     WebkitBackgroundClip: "text",
                     WebkitTextFillColor: "transparent",
                   }}
@@ -350,7 +350,7 @@ function AIOracleSection() {
                     onClick={() => setActive(i)}
                     className={`group w-full text-left pl-4 pr-5 py-3.5 rounded-xl border transition-all flex items-center gap-3.5 relative overflow-hidden ${
                       active === i
-                        ? "border-accent/30 bg-gradient-to-r from-accent/[0.06] to-transparent text-white/90"
+                        ? "border-accent/30 bg-gradient-to-r from-accent/[0.06] to-transparent text-foreground"
                         : "border-white/[0.06] bg-white/[0.015] text-muted hover:border-white/[0.12] hover:bg-surface hover:text-muted"
                     }`}
                   >
@@ -397,7 +397,7 @@ function AIOracleSection() {
               filter: "blur(2px)",
             }} />
 
-            <div className="relative rounded-[18px] bg-gradient-to-b from-[#0d0d18]/95 to-[#08080f]/95 border border-white/[0.08] overflow-hidden backdrop-blur-xl"
+            <div className="relative rounded-[18px] bg-gradient-to-b from-[var(--app-bg)]/95 to-[var(--app-bg)]/95 border border-white/[0.08] overflow-hidden backdrop-blur-xl"
               style={{ boxShadow: "0 50px 100px -20px rgba(0,0,0,0.7), 0 0 0 1px color-mix(in srgb, var(--app-fg) 2%, transparent) inset" }}
             >
 
@@ -408,7 +408,7 @@ function AIOracleSection() {
                     <Sparkles size={12} className="text-accent-bright" />
                   </div>
                   <div className="flex flex-col leading-none">
-                    <span className="text-[11.5px] font-bold text-white/85">Neural Oracle</span>
+                    <span className="text-[11.5px] font-bold text-foreground">Neural Oracle</span>
                     <span className="text-[8.5px] font-medium uppercase tracking-[0.2em] text-subtle mt-0.5">v2.4 · matching engine</span>
                   </div>
                 </div>
@@ -432,7 +432,7 @@ function AIOracleSection() {
                     transition={{ duration: 0.28 }}
                     className="flex items-start gap-2"
                   >
-                    <p className="text-[15.5px] font-semibold text-white/95 leading-snug tracking-[-0.01em]">
+                    <p className="text-[15.5px] font-semibold text-foreground leading-snug tracking-[-0.01em]">
                       &ldquo;{PROMPTS[active].full}&rdquo;
                     </p>
                     <motion.span
@@ -453,7 +453,7 @@ function AIOracleSection() {
                     className={`px-3 py-1.5 rounded-lg text-[10.5px] font-bold uppercase tracking-[0.04em] transition-all ${
                       active === i
                         ? "bg-accent text-black shadow-[0_2px_12px_color-mix(in srgb, var(--app-accent) 35%, transparent)]"
-                        : "bg-white/[0.025] text-muted border border-white/[0.07] hover:bg-white/[0.06] hover:text-muted hover:border-white/[0.12]"
+                        : "bg-white/[0.025] text-muted border border-white/[0.07] hover:bg-surface hover:text-muted hover:border-white/[0.12]"
                     }`}
                   >
                     {p.short}
@@ -507,7 +507,7 @@ function CommunitySection() {
   const animeTotalApprox = discoverPosts?.meta?.total ?? 30161
 
   return (
-    <section className="min-h-screen py-28 bg-[#06060d] relative z-[2] overflow-hidden flex items-center">
+    <section className="min-h-screen py-28 bg-background relative z-[2] overflow-hidden flex items-center">
       <div className="absolute inset-0 pointer-events-none" style={{
         background: "radial-gradient(ellipse 60% 70% at 88% 50%, color-mix(in srgb, var(--app-accent) 5%, transparent) 0%, transparent 60%), radial-gradient(ellipse 40% 50% at 8% 30%, rgba(99,102,241,0.04) 0%, transparent 55%)",
       }} />
@@ -544,7 +544,7 @@ function CommunitySection() {
                 <span
                   className="italic"
                   style={{
-                    backgroundImage: "linear-gradient(135deg, var(--app-accent-bright) 0%, var(--app-accent) 50%, #fde68a 100%)",
+                    backgroundImage: "linear-gradient(135deg, var(--app-accent-bright) 0%, var(--app-accent) 100%)",
                     WebkitBackgroundClip: "text",
                     WebkitTextFillColor: "transparent",
                   }}
@@ -585,7 +585,7 @@ function CommunitySection() {
                   <div className={`w-9 h-9 rounded-xl bg-gradient-to-br ${iconBg} border ${ring} flex items-center justify-center mb-3.5 shadow-[inset_0_1px_0_color-mix(in srgb, var(--app-fg) 6%, transparent)]`}>
                     <Icon size={14} className={iconColor} />
                   </div>
-                  <p className="text-[13px] font-bold text-white/90 mb-1 tracking-[-0.005em]">{label}</p>
+                  <p className="text-[13px] font-bold text-foreground mb-1 tracking-[-0.005em]">{label}</p>
                   <p className="text-[11px] text-muted leading-snug">{desc}</p>
                 </motion.div>
               ))}
@@ -628,7 +628,7 @@ function CommunitySection() {
                 <ArrowRight size={12} className="group-hover:translate-x-0.5 transition-transform" />
               </Link>
               <Link href="/register"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-white/[0.1] text-[12px] font-bold uppercase tracking-[0.18em] text-muted hover:text-foreground hover:border-border hover:bg-white/[0.04] transition-all"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-white/[0.1] text-[12px] font-bold uppercase tracking-[0.18em] text-muted hover:text-foreground hover:border-border hover:bg-surface transition-all"
               >
                 Join Free
               </Link>
@@ -653,10 +653,10 @@ function CommunitySection() {
             <div className="relative flex items-center gap-4 p-5 rounded-2xl bg-gradient-to-r from-accent/[0.10] via-accent/[0.04] to-transparent border border-accent/[0.18] overflow-hidden">
               <div className="absolute -right-10 -top-10 w-32 h-32 rounded-full bg-accent/8 blur-3xl pointer-events-none" />
               <div className="relative shrink-0">
-                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-accent-bright/30 to-orange-500/15 border border-accent/25 flex items-center justify-center text-lg font-black text-amber-200 shadow-[0_0_20px_color-mix(in srgb, var(--app-accent) 25%, transparent)]">
+                <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-accent-bright/30 to-orange-500/15 border border-accent/25 flex items-center justify-center text-lg font-black text-accent-bright shadow-[0_0_20px_color-mix(in srgb, var(--app-accent) 25%, transparent)]">
                   O
                 </div>
-                <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-gradient-to-br from-accent-bright to-orange-500 border-2 border-[#06060d] flex items-center justify-center shadow-md">
+                <div className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-gradient-to-br from-accent-bright to-orange-500 border-2 border-[var(--app-bg)] flex items-center justify-center shadow-md">
                   <span className="text-[8.5px] font-black text-black">1</span>
                 </div>
               </div>
@@ -681,7 +681,7 @@ function CommunitySection() {
             </div>
 
             {/* Leaderboard */}
-            <div className="relative rounded-2xl bg-gradient-to-b from-[#0d0d18]/95 to-[#08080f]/95 border border-white/[0.08] overflow-hidden backdrop-blur-xl"
+            <div className="relative rounded-2xl bg-gradient-to-b from-[var(--app-bg)]/95 to-[var(--app-bg)]/95 border border-white/[0.08] overflow-hidden backdrop-blur-xl"
               style={{ boxShadow: "0 50px 100px -20px rgba(0,0,0,0.7), 0 0 0 1px color-mix(in srgb, var(--app-fg) 2%, transparent) inset" }}
             >
               <div className="px-6 py-4 border-b border-white/[0.06] flex items-center justify-between bg-gradient-to-b from-white/[0.02] to-transparent">
@@ -710,14 +710,14 @@ function CommunitySection() {
                     }`}>{rank}</span>
 
                     <div className={`relative w-9 h-9 rounded-xl border flex items-center justify-center text-[11px] font-black shrink-0 ${
-                      rank === 1 ? "bg-gradient-to-br from-accent/20 to-accent/5 border-accent/20 text-accent-bright" : "bg-white/[0.04] border-white/[0.08] text-muted"
+                      rank === 1 ? "bg-gradient-to-br from-accent/20 to-accent/5 border-accent/20 text-accent-bright" : "bg-surface border-white/[0.08] text-muted"
                     }`}>
                       {name[0]}
                     </div>
 
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1.5">
-                        <p className="text-[12.5px] font-bold text-white/85 group-hover:text-amber-200 transition-colors tracking-[-0.005em]">{name}</p>
+                        <p className="text-[12.5px] font-bold text-foreground group-hover:text-accent-bright transition-colors tracking-[-0.005em]">{name}</p>
                         <span className="text-[8px] font-bold uppercase tracking-[0.1em] text-subtle bg-surface border border-white/[0.06] px-1.5 py-0.5 rounded shrink-0">{title}</span>
                       </div>
                       <div className="flex items-center gap-2">
@@ -784,7 +784,7 @@ function ShowcaseSection() {
                   <span className="text-[10px] font-medium text-muted truncate">{title}</span>
                   <span className="text-[8px] text-subtle shrink-0 ml-2">{ep}</span>
                 </div>
-                <div className="h-1 bg-white/[0.06] rounded-full">
+                <div className="h-1 bg-surface rounded-full">
                   <div className={`h-full rounded-full ${pct === 100 ? "bg-emerald-500/70" : "bg-accent/70"}`} style={{ width: `${pct}%` }} />
                 </div>
               </div>
@@ -809,7 +809,7 @@ function ShowcaseSection() {
           ].map(({ rank, name, xp, delta }) => (
             <div key={name} className={`flex items-center gap-3 px-3 py-2.5 rounded-xl ${name === "You" ? "bg-accent/[0.08] border border-accent/[0.15]" : "bg-surface"}`}>
               <span className="text-[11px] font-bold text-subtle w-4 text-right">{rank}</span>
-              <div className="w-6 h-6 rounded-lg bg-white/[0.06] flex items-center justify-center text-[9px] font-bold text-muted">{name[0]}</div>
+              <div className="w-6 h-6 rounded-lg bg-surface flex items-center justify-center text-[9px] font-bold text-muted">{name[0]}</div>
               <span className="flex-1 text-[11px] font-medium text-muted">{name}</span>
               {delta && <span className="text-[9px] text-accent-bright font-bold">{delta}</span>}
               <span className="text-[9px] text-subtle font-mono">{xp}</span>
@@ -836,7 +836,7 @@ function ShowcaseSection() {
           </div>
           <div className="flex gap-2">
             {["Blog", "Poll", "Review"].map(t => (
-              <span key={t} className="px-2.5 py-1 rounded-md bg-white/[0.04] border border-white/[0.06] text-[9px] text-subtle">{t}</span>
+              <span key={t} className="px-2.5 py-1 rounded-md bg-surface border border-white/[0.06] text-[9px] text-subtle">{t}</span>
             ))}
           </div>
         </div>
@@ -845,7 +845,7 @@ function ShowcaseSection() {
   ]
 
   return (
-    <section className="py-32 bg-[#06060d] relative z-[2] overflow-hidden">
+    <section className="py-32 bg-background relative z-[2] overflow-hidden">
       {/* Ambient backdrop */}
       <div className="absolute inset-0 pointer-events-none" style={{
         background: "radial-gradient(ellipse 50% 50% at 50% 30%, color-mix(in srgb, var(--app-accent) 4%, transparent) 0%, transparent 60%)",
@@ -880,7 +880,7 @@ function ShowcaseSection() {
             <span
               className="italic"
               style={{
-                backgroundImage: "linear-gradient(135deg, var(--app-accent-bright) 0%, var(--app-accent) 50%, #fde68a 100%)",
+                backgroundImage: "linear-gradient(135deg, var(--app-accent-bright) 0%, var(--app-accent) 100%)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
               }}
@@ -919,7 +919,7 @@ function ShowcaseSection() {
                 filter: "blur(2px)",
               }} />
 
-              <div className="relative h-full p-7 rounded-2xl bg-gradient-to-b from-[#0d0d18]/95 to-[#08080f]/95 border border-white/[0.08] backdrop-blur-xl transition-colors group-hover:border-white/[0.14] flex flex-col gap-6"
+              <div className="relative h-full p-7 rounded-2xl bg-gradient-to-b from-[var(--app-bg)]/95 to-[var(--app-bg)]/95 border border-white/[0.08] backdrop-blur-xl transition-colors group-hover:border-white/[0.14] flex flex-col gap-6"
                 style={{ boxShadow: "0 30px 60px -20px rgba(0,0,0,0.55), 0 0 0 1px color-mix(in srgb, var(--app-fg) 2%, transparent) inset" }}
               >
                 {/* Top edge accent */}
@@ -950,7 +950,7 @@ function ShowcaseSection() {
                 </div>
 
                 {/* Mock preview */}
-                <div className="flex-1 p-4 rounded-xl bg-black/30 border border-white/[0.05] backdrop-blur-sm">
+                <div className="flex-1 p-4 rounded-xl bg-surface-2 border border-border backdrop-blur-sm">
                   {preview}
                 </div>
 
@@ -958,7 +958,7 @@ function ShowcaseSection() {
                   href={href}
                   className={`group/link inline-flex items-center gap-1.5 text-[11px] font-black uppercase tracking-[0.22em] transition-all ${
                     accent === "indigo" ? "text-indigo-300/80 hover:text-indigo-200" :
-                    accent === "amber" ? "text-accent-bright/80 hover:text-amber-200" :
+                    accent === "amber" ? "text-accent-bright/80 hover:text-accent-bright" :
                     "text-violet-300/80 hover:text-violet-200"
                   }`}
                 >
@@ -991,7 +991,7 @@ function FinalCTASection() {
   ]
 
   return (
-    <section ref={ref} className="py-36 flex items-center justify-center bg-[#06060f] relative z-[2] overflow-hidden">
+    <section ref={ref} className="py-36 flex items-center justify-center bg-background relative z-[2] overflow-hidden">
       {/* Ambient glow */}
       <motion.div
         animate={{ scale: [1, 1.1, 1], opacity: [0.07, 0.13, 0.07] }}
@@ -1005,7 +1005,7 @@ function FinalCTASection() {
 
         {/* Platform badge */}
         <div className="flex justify-center mb-10">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/[0.04] border border-white/[0.08]">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-surface border border-white/[0.08]">
             <Sparkles size={11} className="text-accent-bright" />
             <span className="text-[11px] font-medium text-muted">Kaiveron · Open Beta</span>
           </div>
@@ -1025,7 +1025,7 @@ function FinalCTASection() {
         {/* Feature pills */}
         <div className="flex flex-wrap justify-center gap-2 mb-10">
           {FEATURES.map((f) => (
-            <span key={f} className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.07] text-[11px] font-medium text-muted">
+            <span key={f} className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-surface border border-white/[0.07] text-[11px] font-medium text-muted">
               <span className="w-1 h-1 rounded-full bg-indigo-400/70 shrink-0" />
               {f}
             </span>
@@ -1058,7 +1058,7 @@ function FinalCTASection() {
             <div className="flex items-center gap-3">
               <div className="flex -space-x-2.5">
                 {["O","S","V","N","C"].map((l, i) => (
-                  <div key={i} className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-600/40 to-violet-600/30 border-2 border-[#06060f] flex items-center justify-center text-[9px] font-bold text-muted">
+                  <div key={i} className="w-8 h-8 rounded-full bg-gradient-to-br from-indigo-600/40 to-violet-600/30 border-2 border-[var(--app-bg)] flex items-center justify-center text-[9px] font-bold text-muted">
                     {l}
                   </div>
                 ))}
@@ -1091,7 +1091,7 @@ function FinalCTASection() {
 /* ─── ROOT ─── */
 export default function CinematicHomepage() {
   return (
-    <main className="bg-[#06060f] text-foreground overflow-x-hidden">
+    <main className="bg-background text-foreground overflow-x-hidden">
       <ScrollProgressBar />
       <CinematicHero />
       <DiscoverySection />

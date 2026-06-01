@@ -127,7 +127,7 @@ export default function RecentlyReviewedCard() {
               {/* Top row: anime info + date */}
               <div className="flex items-start justify-between gap-3 mb-2">
                 <div className="min-w-0">
-                  <p className="text-sm font-black text-white/85 group-hover:text-foreground transition-colors truncate leading-tight">
+                  <p className="text-sm font-black text-foreground group-hover:text-foreground transition-colors truncate leading-tight">
                     {review.animeTitle}
                   </p>
                   <p className="text-[9px] text-subtle uppercase tracking-widest mt-0.5">{review.studio}</p>

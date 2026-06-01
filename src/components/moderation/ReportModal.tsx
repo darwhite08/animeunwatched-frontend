@@ -52,7 +52,7 @@ export default function ReportModal({ isOpen, onClose, contentType, contentId }:
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.93 }}
             transition={{ type: "spring", damping: 26, stiffness: 280 }}
-            className="relative w-full max-w-md bg-[#0c0c0c] rounded-3xl border border-border p-7 shadow-2xl"
+            className="relative w-full max-w-md bg-background rounded-3xl border border-border p-7 shadow-2xl"
           >
             <button onClick={onClose} className="absolute top-5 right-5 p-2 rounded-full bg-surface border border-border text-muted hover:text-foreground transition-colors">
               <X size={15} />

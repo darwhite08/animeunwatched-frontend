@@ -133,7 +133,7 @@ export default function RankingsPage() {
                           <span className="text-2xl">{medals[i]}</span>
                           <span className="text-[10px] font-black text-subtle font-mono">#{pos + 1}</span>
                         </div>
-                        <p className="font-black text-white/90 group-hover:text-foreground text-sm leading-tight line-clamp-2">
+                        <p className="font-black text-foreground group-hover:text-foreground text-sm leading-tight line-clamp-2">
                           {anime.title}
                         </p>
                         <div className="flex items-center gap-2 mt-2">

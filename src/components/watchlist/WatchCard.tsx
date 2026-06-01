@@ -41,7 +41,7 @@ export const WatchCard = ({ anime, onRemove, onEdit }: { anime: WatchItem; onRem
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.9 }}
-      className="group relative rounded-[2.5rem] border border-border bg-[#080808] overflow-hidden flex flex-col h-full hover:border-accent/30 transition-all duration-500 shadow-[0_20px_40px_-10px_rgba(0,0,0,0.5)]"
+      className="group relative rounded-[2.5rem] border border-border bg-background overflow-hidden flex flex-col h-full hover:border-accent/30 transition-all duration-500 shadow-[0_20px_40px_-10px_rgba(0,0,0,0.5)]"
       style={{ transformStyle: "preserve-3d" }}
     >
       {/* IMAGE */}
@@ -53,7 +53,7 @@ export const WatchCard = ({ anime, onRemove, onEdit }: { anime: WatchItem; onRem
           className="object-cover transition-transform duration-700 group-hover:scale-105 brightness-75 group-hover:brightness-90"
           sizes="(max-width: 768px) 100vw, 33vw"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#080808] via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[var(--app-bg)] via-transparent to-transparent" />
 
         {/* Status badge */}
         <div className="absolute top-5 left-5 z-10">
@@ -77,7 +77,7 @@ export const WatchCard = ({ anime, onRemove, onEdit }: { anime: WatchItem; onRem
                 initial={{ opacity: 0, scale: 0.9, y: -4 }}
                 animate={{ opacity: 1, scale: 1, y: 0 }}
                 exit={{ opacity: 0, scale: 0.9 }}
-                className="absolute right-0 top-10 w-40 bg-[#0c0c0c] border border-border rounded-2xl overflow-hidden shadow-2xl z-20"
+                className="absolute right-0 top-10 w-40 bg-background border border-border rounded-2xl overflow-hidden shadow-2xl z-20"
               >
                 <button onClick={handleMarkDone} className="flex items-center gap-2 w-full px-4 py-3 text-xs font-bold text-muted hover:bg-surface hover:text-emerald-400 transition-colors">
                   <Check size={13} /> Mark Done

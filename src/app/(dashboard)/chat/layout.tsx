@@ -18,7 +18,7 @@ import { format, isToday, isYesterday } from "date-fns"
 const GLOBAL_CSS = `
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap');
   :root {
-    --bg-0:#0a0c12; --bg-1:#0f121b; --bg-2:#151926; --bg-3:#1c2132; --bg-elev:#1f2438;
+    --bg-0:var(--app-bg); --bg-1:var(--app-bg); --bg-2:#151926; --bg-3:#1c2132; --bg-elev:#1f2438;
     --line:color-mix(in srgb, var(--app-fg) 5.5%, transparent); --line-strong:color-mix(in srgb, var(--app-fg) 10%, transparent);
     --ink:#ECEEF5; --ink-2:#B8BDD0; --ink-3:#8088A0; --ink-4:#545B73;
     --indigo:oklch(0.66 0.18 282); --indigo-soft:oklch(0.66 0.18 282/0.16); --indigo-ring:oklch(0.66 0.18 282/0.35);

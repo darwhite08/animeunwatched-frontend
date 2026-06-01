@@ -87,7 +87,7 @@ function TrendingCard({
           className="object-cover transition-transform duration-700 group-hover:scale-105 brightness-75 group-hover:brightness-90"
           sizes="144px"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent to-[#0a0a0a]" />
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent to-[var(--app-bg)]" />
         {/* Rank */}
         <div className="absolute top-3 left-3 px-2 py-1 bg-black/70 backdrop-blur border border-accent/30 rounded-lg text-[9px] font-black text-accent-bright uppercase italic">
           #{anime.rank}
@@ -116,7 +116,7 @@ function TrendingCard({
             <span className="text-[9px] font-black text-subtle uppercase">{anime.year}</span>
           </div>
 
-          <h3 className="text-base font-black text-foreground uppercase italic tracking-tighter leading-tight line-clamp-2 group-hover:text-amber-200 transition-colors duration-300">
+          <h3 className="text-base font-black text-foreground uppercase italic tracking-tighter leading-tight line-clamp-2 group-hover:text-accent-bright transition-colors duration-300">
             {anime.title}
           </h3>
 

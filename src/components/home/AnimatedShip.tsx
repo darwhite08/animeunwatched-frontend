@@ -31,8 +31,8 @@ export default function AnimatedShip({ mouseX, mouseY, scrollY }: AnimatedShipPr
           <defs>
             <linearGradient id="sg-hull" x1="0%" y1="0%" x2="0%" y2="100%">
               <stop offset="0%" stopColor="#2d1f0e" />
-              <stop offset="60%" stopColor="#1a1108" />
-              <stop offset="100%" stopColor="#0d0905" />
+              <stop offset="60%" stopColor="var(--app-bg)" />
+              <stop offset="100%" stopColor="var(--app-bg)" />
             </linearGradient>
             <linearGradient id="sg-sail" x1="0%" y1="0%" x2="100%" y2="100%">
               <stop offset="0%" stopColor="#e8dfc8" stopOpacity="0.95" />
@@ -62,7 +62,7 @@ export default function AnimatedShip({ mouseX, mouseY, scrollY }: AnimatedShipPr
 
           <motion.g animate={{ rotate: [-4, 4, -4] }} transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }} style={{ transformOrigin: "240px 28px" }}>
             <rect x="239" y="28" width="1.5" height="52" fill="#4a3520" />
-            <path d="M241 30 L282 40 L241 52 Z" fill="#1a0a0a" opacity="0.9" />
+            <path d="M241 30 L282 40 L241 52 Z" fill="var(--app-bg)" opacity="0.9" />
             <circle cx="259" cy="41" r="7" fill="none" stroke="#c8a020" strokeWidth="1.5" />
             <circle cx="259" cy="41" r="3" fill="#c8a020" opacity="0.8" />
           </motion.g>
@@ -111,7 +111,7 @@ export default function AnimatedShip({ mouseX, mouseY, scrollY }: AnimatedShipPr
           ))}
 
           {[148, 178, 208, 300, 330].map((cx, i) => (
-            <circle key={i} cx={cx} cy={390 - i * 0.5} r="7" fill="#0a0905" stroke="#4a3520" strokeWidth="1.5" />
+            <circle key={i} cx={cx} cy={390 - i * 0.5} r="7" fill="var(--app-bg)" stroke="#4a3520" strokeWidth="1.5" />
           ))}
 
           <path d="M98 420 Q240 430 382 420 Q400 445 380 460 Q280 475 240 476 Q200 477 100 462 Q82 447 98 420 Z" fill="url(#sg-water)" />

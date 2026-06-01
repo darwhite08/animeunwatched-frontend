@@ -167,7 +167,7 @@ export default function RecommendationsPage() {
               className={`relative p-5 rounded-2xl border text-left transition-all duration-300 overflow-hidden group ${
                 mode === m.id
                   ? `bg-gradient-to-br ${m.accent} scale-[1.02] shadow-lg shadow-black/40`
-                  : "bg-surface border-border hover:border-border hover:bg-white/[0.04]"
+                  : "bg-surface border-border hover:border-border hover:bg-surface"
               }`}
             >
               {mode === m.id && (

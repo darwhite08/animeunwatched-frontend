@@ -23,7 +23,7 @@ export const MainStreakCard = ({ currentStreak, bestStreak }: { currentStreak: n
 
       <div className="flex flex-col items-center md:items-end gap-2 text-right">
         <p className="text-muted text-xs font-bold uppercase tracking-widest">Personal Legend</p>
-        <p className="text-4xl font-black tracking-tight text-white/90">{bestStreak} Days</p>
+        <p className="text-4xl font-black tracking-tight text-foreground">{bestStreak} Days</p>
         <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 text-[10px] font-black uppercase">
           <TrendingUp size={12} /> Top 2% Globally
         </div>

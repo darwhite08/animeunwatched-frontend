@@ -12,6 +12,7 @@ import { useToast } from "@/stores/toast.store"
 import TrendingWidget from "@/components/social/TrendingWidget"
 import WatchlistPreviewWidget from "@/components/social/WatchlistPreviewWidget"
 import { useDiscover, useCreatePost, useLikePost, useComments, useCreateComment } from "@/hooks/usePosts"
+import { CommentRow } from "@/components/posts/CommentRow"
 import { useLiveFeed } from "@/hooks/useRealtime"
 import { useImageUpload } from "@/hooks/useImageUpload"
 import NextImage from "next/image"
@@ -23,10 +24,82 @@ type FeedTab = "trending" | "following" | "latest"
 
 const TRENDING_TAGS = ["frieren", "attack-on-titan", "one-piece", "demon-slayer", "jjk", "hxh", "monster"]
 
-const ACTIVE_POLLS = [
-  { id: 1, question: "Best anime of 2024?",       votes: 4203, options: ["Dungeon Meshi", "Solo Leveling", "Frieren S2"] },
-  { id: 2, question: "Strongest anime character?", votes: 6841, options: ["Goku", "Saitama", "Anos Voldigoad"] },
+type PollOption = { label: string; votes: number }
+type ActivePoll  = { id: number; question: string; options: PollOption[] }
+
+const ACTIVE_POLLS: ActivePoll[] = [
+  {
+    id: 1, question: "Best anime of 2024?",
+    options: [
+      { label: "Dungeon Meshi",  votes: 1842 },
+      { label: "Solo Leveling",  votes: 1473 },
+      { label: "Frieren S2",     votes: 888  },
+    ],
+  },
+  {
+    id: 2, question: "Strongest anime character?",
+    options: [
+      { label: "Goku",            votes: 2901 },
+      { label: "Saitama",         votes: 2456 },
+      { label: "Anos Voldigoad",  votes: 1484 },
+    ],
+  },
 ]
+
+function ActivePollRow({ poll }: { poll: ActivePoll }) {
+  const [voted, setVoted] = useState<string | null>(null)
+  const total = poll.options.reduce((s, o) => s + o.votes, 0)
+  return (
+    <div className="p-4 rounded-xl bg-surface border border-border hover:border-accent/20 transition-colors space-y-3">
+      <div className="flex items-start justify-between gap-3">
+        <p className="text-sm font-semibold text-foreground leading-tight">{poll.question}</p>
+        <span className="font-mono text-[9px] uppercase tracking-widest text-muted shrink-0 tabular-nums mt-0.5">
+          {total.toLocaleString()} votes
+        </span>
+      </div>
+      <div className="space-y-1.5">
+        {poll.options.map(o => {
+          const pct = total > 0 ? Math.round((o.votes / total) * 100) : 0
+          const mine = voted === o.label
+          return (
+            <button
+              key={o.label}
+              type="button"
+              onClick={() => !voted && setVoted(o.label)}
+              disabled={!!voted && !mine}
+              aria-pressed={mine}
+              className={`relative w-full text-left rounded-lg overflow-hidden border transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 ${
+                mine
+                  ? "border-accent/60 bg-accent/[0.08]"
+                  : voted
+                    ? "border-border bg-surface-2"
+                    : "border-border bg-surface-2 hover:bg-surface hover:border-accent/30 cursor-pointer"
+              }`}
+            >
+              {/* Result fill */}
+              <span
+                aria-hidden
+                className={`absolute inset-y-0 left-0 transition-[width] duration-500 ease-out motion-reduce:transition-none ${
+                  mine ? "bg-accent/30" : "bg-foreground/[0.06]"
+                }`}
+                style={{ width: voted ? `${pct}%` : "0%" }}
+              />
+              <span className="relative flex items-center justify-between px-3 py-2 text-[12px]">
+                <span className={`font-bold ${mine ? "text-foreground" : "text-muted"}`}>
+                  {o.label}
+                  {mine && <span className="ml-2 font-mono text-[9px] uppercase tracking-widest text-accent-bright">your vote</span>}
+                </span>
+                {voted && (
+                  <span className="font-mono tabular-nums font-black text-foreground">{pct}%</span>
+                )}
+              </span>
+            </button>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
 
 // Deterministic avatar gradient from author username initial
 const AVATAR_GRADIENTS = [
@@ -51,26 +124,6 @@ function timeAgo(iso: string) {
   return `${Math.floor(diff / 86400000)}d ago`
 }
 
-/* ── Comment row ── */
-function CommentRow({ comment }: { comment: PostComment }) {
-  const name   = comment.author?.displayName ?? comment.author?.username ?? "?"
-  const letter = name[0]?.toUpperCase() ?? "?"
-  const grad   = avatarGradient(name)
-  return (
-    <div className="flex gap-3">
-      <div className={`h-7 w-7 rounded-lg bg-gradient-to-br ${grad} flex items-center justify-center font-black text-[11px] shrink-0`}>
-        {letter}
-      </div>
-      <div className="flex-1 min-w-0">
-        <div className="flex items-baseline gap-2">
-          <span className="text-[11px] font-black text-muted">{name}</span>
-          <span className="text-[9px] text-subtle">{timeAgo(comment.createdAt)}</span>
-        </div>
-        <p className="text-[12px] text-muted leading-relaxed mt-0.5">{comment.content}</p>
-      </div>
-    </div>
-  )
-}
 
 /* ── Spoiler block — blurs content until user clicks to reveal ── */
 function SpoilerBlock({ text }: { text: string }) {
@@ -78,7 +131,7 @@ function SpoilerBlock({ text }: { text: string }) {
   return (
     <div className="relative">
       <p className={`text-[15px] leading-relaxed transition-all duration-300 ${
-        revealed ? "text-white/85 blur-none" : "text-subtle blur-md select-none"
+        revealed ? "text-foreground blur-none" : "text-subtle blur-md select-none"
       }`}>
         {text}
       </p>
@@ -152,9 +205,8 @@ function PostCard({ post }: { post: Post }) {
 
   return (
     <motion.article layout initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
-      className="border border-border hover:border-border rounded-2xl overflow-hidden transition-colors"
+      className="bg-surface border border-border rounded-2xl overflow-hidden transition-all hover:border-accent/20 hover:shadow-[0_8px_24px_color-mix(in_srgb,var(--app-fg)_6%,transparent)] focus-within:ring-2 focus-within:ring-accent/40"
       style={{
-        background: "linear-gradient(160deg, rgba(15,15,25,0.9), rgba(10,10,18,0.95))",
         scrollMarginTop: "160px",  // account for sticky navbar + community header
       }}
     >
@@ -168,10 +220,10 @@ function PostCard({ post }: { post: Post }) {
               </div>
             </Link>
             <div>
-              <Link href={`/u/${post.author?.username ?? ""}`}>
-                <p className="text-[15px] font-black text-foreground hover:text-accent-bright transition-colors leading-tight">{authorName}</p>
+              <Link href={`/u/${post.author?.username ?? ""}`} className="rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60">
+                <p className="text-[15px] font-semibold text-foreground hover:text-accent-bright transition-colors leading-tight">{authorName}</p>
               </Link>
-              <p className="text-[10px] text-subtle mt-0.5">{timeAgo(post.createdAt)}</p>
+              <p className="text-[11px] text-muted mt-0.5 tabular-nums">{timeAgo(post.createdAt)}</p>
             </div>
           </div>
           <PostMenu postId={post.id} />
@@ -192,7 +244,7 @@ function PostCard({ post }: { post: Post }) {
           if (spoilerMatch) {
             return <SpoilerBlock text={spoilerMatch[1]} />
           }
-          return <p className="text-[15px] text-white/85 leading-relaxed">{post.content}</p>
+          return <p className="text-[15px] text-foreground leading-[1.6] max-w-[65ch]">{post.content}</p>
         })()}
 
         {/* Image attachment */}
@@ -209,25 +261,33 @@ function PostCard({ post }: { post: Post }) {
           </a>
         )}
 
-        {/* Actions */}
-        <div className="flex items-center gap-1 pt-1 border-t border-border">
+        {/* Actions — 40px hit targets, AA-compliant contrast, focus-visible ring */}
+        <div className="flex items-center gap-1 pt-2 border-t border-border">
           {/* Like */}
           <button onClick={handleLike} disabled={likePost.isPending}
-            className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-black transition-all ${
-              liked ? "text-rose-400 bg-rose-500/10" : "text-subtle hover:text-rose-400 hover:bg-rose-500/8"
+            aria-label={liked ? `Unlike (${likeCount} likes)` : `Like (${likeCount} likes)`}
+            aria-pressed={liked}
+            className={`flex items-center gap-2 min-h-10 px-3 rounded-xl text-sm font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 disabled:opacity-50 ${
+              liked
+                ? "text-rose-400 bg-rose-500/15"
+                : "text-muted hover:text-rose-400 hover:bg-rose-500/10"
             }`}>
-            <Heart size={14} fill={liked ? "currentColor" : "none"} className="transition-transform active:scale-90" />
-            {likeCount > 0 && <span>{likeCount}</span>}
+            <Heart size={16} fill={liked ? "currentColor" : "none"} className="transition-transform active:scale-90 motion-reduce:transform-none" />
+            {likeCount > 0 && <span className="tabular-nums">{likeCount}</span>}
           </button>
 
           {/* Comment toggle */}
           <button onClick={handleToggleComments}
-            className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-black transition-all ${
-              showComments ? "text-accent-bright bg-accent/10" : "text-subtle hover:text-accent-bright hover:bg-accent/8"
+            aria-label={`${commentCount} comments — ${showComments ? "hide" : "show"}`}
+            aria-expanded={showComments}
+            className={`flex items-center gap-2 min-h-10 px-3 rounded-xl text-sm font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 ${
+              showComments
+                ? "text-accent-bright bg-accent/15"
+                : "text-muted hover:text-accent-bright hover:bg-accent/10"
             }`}>
-            <MessageSquare size={14} />
-            {commentCount > 0 && <span>{commentCount}</span>}
-            <ChevronDown size={10} className={`transition-transform ${showComments ? "rotate-180" : ""}`} />
+            <MessageSquare size={16} />
+            {commentCount > 0 && <span className="tabular-nums">{commentCount}</span>}
+            <ChevronDown size={12} className={`transition-transform motion-reduce:transition-none ${showComments ? "rotate-180" : ""}`} />
           </button>
 
           {/* Share */}
@@ -235,8 +295,9 @@ function PostCard({ post }: { post: Post }) {
             navigator.clipboard.writeText(window.location.origin + `/posts/${post.id}`).catch(() => {})
             push("Link copied!", "success")
           }}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-black text-subtle hover:text-muted hover:bg-surface transition-all ml-auto">
-            <Share2 size={13} />
+            aria-label="Copy post link"
+            className="flex items-center gap-1.5 min-h-10 min-w-10 justify-center px-3 rounded-xl text-sm font-bold text-muted hover:text-foreground hover:bg-surface-2 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 ml-auto">
+            <Share2 size={15} />
           </button>
         </div>
       </div>
@@ -266,7 +327,7 @@ function PostCard({ post }: { post: Post }) {
               )}
 
               <div className="space-y-4">
-                {comments.map(c => <CommentRow key={c.id} comment={c} />)}
+                {comments.map(c => <CommentRow key={c.id} comment={c} postId={post.id} />)}
               </div>
 
               {/* New comment input */}
@@ -358,39 +419,44 @@ export default function CommunityPage() {
 
   return (
     <div className="min-h-screen bg-background text-foreground pb-32">
-      {/* Page header — scrolls naturally, never blocks post cards */}
-      <div className="max-w-6xl mx-auto px-6 pt-8 pb-3 flex items-start justify-between gap-4">
-        <div>
+      {/* Sticky page header — title + New Post + tabs + counter.
+          Sticks at top-0 and pads its content down past the floating navbar
+          (z-100, ~110px tall). The header's own opaque bg covers the entire
+          strip from top of viewport to bottom of the tabs, so scrolling
+          content cannot peek through the navbar's transparent margins. */}
+      <div className="sticky top-0 z-40 bg-background border-b border-border shadow-[0_4px_12px_color-mix(in_srgb,var(--app-fg)_4%,transparent)]">
+        <div className="max-w-6xl mx-auto px-6 pt-[120px] pb-0 flex items-start justify-between gap-4">
           <h1 className="text-3xl font-black tracking-tighter uppercase italic text-foreground">
             Community<span style={{ color: "var(--app-accent)" }}>.</span>
           </h1>
-          <p className="text-xs text-subtle mt-1">
-            {posts.length > 0 ? `${posts.length}+ posts from the Shinobi` : "The Dojo — share your thoughts"}
-          </p>
+          <button onClick={() => setComposing(c => !c)}
+            className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest text-black transition-all hover:scale-[1.03] motion-reduce:transform-none shrink-0 mt-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70"
+            style={{ background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))", boxShadow: "0 4px 16px color-mix(in srgb, var(--app-accent) 35%, transparent)" }}>
+            <Plus size={13} /> New Post
+          </button>
         </div>
-        {/* New Post visible on initial load; floating button handles scroll */}
-        <button onClick={() => setComposing(c => !c)}
-          className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest text-black transition-all hover:scale-105 shrink-0 mt-1"
-          style={{ background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))", boxShadow: "0 4px 16px color-mix(in srgb, var(--app-accent) 35%, transparent)" }}>
-          <Plus size={13} /> New Post
-        </button>
-      </div>
-
-      {/* Tabs only — very thin sticky bar (~42px), won't cover card content */}
-      <div className="sticky top-[72px] z-30 bg-background/95 backdrop-blur-xl border-b border-white/[0.06]">
-        <div className="max-w-6xl mx-auto px-6 flex items-center gap-1">
-          {(["trending", "following", "latest"] as FeedTab[]).map(t => (
-            <button key={t} onClick={() => setFeedTab(t)}
-              className={`relative px-5 py-3 text-[11px] font-black uppercase tracking-widest capitalize transition-colors ${
-                feedTab === t ? "text-foreground" : "text-subtle hover:text-muted"
-              }`}>
-              {t}
-              {feedTab === t && (
-                <motion.div layoutId="feed-tab-line"
-                  className="absolute bottom-0 left-0 right-0 h-[2px] bg-accent rounded-full" />
-              )}
-            </button>
-          ))}
+        <div className="max-w-6xl mx-auto px-6 mt-3 flex items-center justify-between gap-4">
+          <div className="flex items-center gap-1">
+            {(["trending", "following", "latest"] as FeedTab[]).map(t => (
+              <button key={t} onClick={() => setFeedTab(t)}
+                aria-pressed={feedTab === t}
+                className={`relative px-5 py-3 text-[11px] font-black uppercase tracking-widest capitalize transition-colors rounded-t-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 ${
+                  feedTab === t
+                    ? "text-foreground"
+                    : "text-muted hover:text-foreground hover:bg-surface/60"
+                }`}>
+                {t}
+                {feedTab === t && (
+                  <motion.div layoutId="feed-tab-line"
+                    transition={{ type: "spring", stiffness: 320, damping: 28 }}
+                    className="absolute bottom-0 left-3 right-3 h-[2px] bg-accent rounded-full motion-reduce:transition-none" />
+                )}
+              </button>
+            ))}
+          </div>
+          <p className="text-[11px] text-muted font-mono uppercase tracking-widest tabular-nums shrink-0">
+            {posts.length > 0 ? `${posts.length}+ posts · The Dojo` : "The Dojo — share your thoughts"}
+          </p>
         </div>
       </div>
 
@@ -414,7 +480,7 @@ export default function CommunityPage() {
           <AnimatePresence>
             {composing && (
               <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} className="overflow-hidden">
-                <div className="bg-zinc-900 border border-accent/20 rounded-2xl p-5 space-y-4">
+                <div className="bg-surface-2 border border-accent/20 rounded-2xl p-5 space-y-4">
                   <textarea value={draft} onChange={e => setDraft(e.target.value)}
                     placeholder={isAuthenticated ? "Share a theory, hot take, or reaction…" : "Sign in to post…"}
                     rows={4} autoFocus disabled={!isAuthenticated}
@@ -514,7 +580,7 @@ export default function CommunityPage() {
           {isLoading && (
             <div className="space-y-5">
               {Array.from({ length: 4 }).map((_, i) => (
-                <div key={i} className="bg-zinc-900/60 border border-border rounded-2xl p-6 space-y-3 animate-pulse" style={{ animationDelay: `${i * 100}ms` }}>
+                <div key={i} className="bg-surface-2 border border-border rounded-2xl p-6 space-y-3 animate-pulse" style={{ animationDelay: `${i * 100}ms` }}>
                   <div className="flex items-center gap-3">
                     <div className="h-10 w-10 rounded-xl bg-surface" />
                     <div className="space-y-1.5 flex-1">
@@ -561,8 +627,12 @@ export default function CommunityPage() {
           )}
         </div>
 
-        {/* Sidebar */}
-        <div className="space-y-6">
+        {/* Sidebar — sticky + independent scroll. Lenis-prevent so wheel
+            scrolling here only moves the sidebar, not the page. */}
+        <aside
+          data-lenis-prevent
+          className="lg:sticky lg:top-[220px] lg:self-start lg:max-h-[calc(100vh-240px)] lg:overflow-y-auto lg:overscroll-contain space-y-6 lg:pr-2"
+        >
           <div className="p-5 rounded-2xl bg-surface border border-border space-y-4">
             <div className="flex items-center gap-2">
               <TrendingUp size={14} className="text-accent-bright" />
@@ -583,18 +653,7 @@ export default function CommunityPage() {
               <Vote size={14} className="text-accent-bright" />
               <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-muted">Active Polls</h3>
             </div>
-            {ACTIVE_POLLS.map(poll => (
-              <Link key={poll.id} href="/poll"
-                className="block p-4 rounded-xl bg-surface border border-border hover:border-accent/20 hover:bg-white/[0.04] transition-all group">
-                <p className="text-sm font-bold text-muted group-hover:text-foreground transition-colors">{poll.question}</p>
-                <p className="text-[10px] text-subtle mt-1">{poll.votes.toLocaleString()} votes</p>
-                <div className="flex flex-wrap gap-1 mt-2">
-                  {poll.options.map(o => (
-                    <span key={o} className="text-[9px] px-2 py-0.5 rounded-full bg-accent/8 text-accent-bright/60">{o}</span>
-                  ))}
-                </div>
-              </Link>
-            ))}
+            {ACTIVE_POLLS.map(poll => <ActivePollRow key={poll.id} poll={poll} />)}
           </div>
 
           <WatchlistPreviewWidget />
@@ -627,7 +686,7 @@ export default function CommunityPage() {
               <p className="text-[10px] text-subtle mt-0.5">Publish blogs, polls, and feeds</p>
             </div>
           </Link>
-        </div>
+        </aside>
       </div>
     </div>
   )

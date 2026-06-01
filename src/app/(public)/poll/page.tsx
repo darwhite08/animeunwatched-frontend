@@ -256,7 +256,7 @@ function PollCard({ poll }: { poll: Poll }) {
                     ? "border-accent/50 bg-accent/5"
                     : isWinner && poll.status === "ended"
                     ? "border-accent/30 bg-accent/5"
-                    : "border-border bg-surface hover:bg-white/[0.04] disabled:cursor-default"
+                    : "border-border bg-surface hover:bg-surface disabled:cursor-default"
                 } ${showBars && !isSelected && !isWinner ? "opacity-60" : ""}`}
               >
                 {/* Animated progress bar behind */}
@@ -286,7 +286,7 @@ function PollCard({ poll }: { poll: Poll }) {
                     {!showBars && (
                       <div className="h-1.5 w-1.5 rounded-full bg-white/20 shrink-0" />
                     )}
-                    <span className="text-sm font-bold text-white/85 truncate">{opt.label}</span>
+                    <span className="text-sm font-bold text-foreground truncate">{opt.label}</span>
                   </div>
 
                   {showBars ? (

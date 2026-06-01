@@ -71,7 +71,7 @@ const MOCK_BLOGS: Blog[] = [
 
 const STATUS_CONFIG: Record<BlogStatus, { label: string; cls: string }> = {
   published:    { label: "Published",    cls: "bg-emerald-600/20 text-emerald-400 border-emerald-500/30" },
-  draft:        { label: "Draft",        cls: "bg-zinc-600/20 text-zinc-400 border-zinc-500/30" },
+  draft:        { label: "Draft",        cls: "bg-surface-2 text-muted border-border" },
   under_review: { label: "Under Review", cls: "bg-accent/20 text-accent-bright border-accent/30" },
 }
 
@@ -145,7 +145,7 @@ export default function BlogListPage() {
             value={query}
             onChange={e => setQuery(e.target.value)}
             placeholder="Search articles…"
-            className="w-full pl-9 pr-4 py-2.5 bg-zinc-800 rounded-xl text-sm outline-none placeholder:text-subtle focus:ring-1 focus:ring-purple-500/50"
+            className="w-full pl-9 pr-4 py-2.5 bg-surface-2 rounded-xl text-sm outline-none placeholder:text-subtle focus:ring-1 focus:ring-purple-500/50"
           />
         </div>
 
@@ -205,7 +205,7 @@ function BlogCard({ blog, index }: { blog: Blog; index: number }) {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.96 }}
       transition={{ delay: index * 0.04 }}
-      className="bg-zinc-900 border border-border hover:border-border rounded-2xl overflow-hidden transition group"
+      className="bg-surface-2 border border-border hover:border-border rounded-2xl overflow-hidden transition group"
     >
       {/* Cover */}
       <div className={`h-32 bg-gradient-to-br ${blog.coverGradient} relative`}>
@@ -269,7 +269,7 @@ function BlogCard({ blog, index }: { blog: Blog; index: number }) {
 
 function StatCard({ icon: Icon, label, value, color }: { icon: any; label: string; value: string; color: string }) {
   return (
-    <div className="bg-zinc-900 border border-border rounded-2xl p-4 flex items-center gap-3">
+    <div className="bg-surface-2 border border-border rounded-2xl p-4 flex items-center gap-3">
       <Icon size={18} className={color} />
       <div>
         <p className="text-lg font-semibold">{value}</p>

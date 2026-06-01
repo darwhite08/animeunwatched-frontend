@@ -22,7 +22,7 @@ export default function AIResultsGrid({ results, hasSearched, query }: AIResults
   if (!hasSearched) {
     // Default teaser grid
     return (
-      <section className="py-24 bg-[#030303] px-6">
+      <section className="py-24 bg-background px-6">
         <div className="max-w-7xl mx-auto">
           <div className="flex items-end justify-between mb-12">
             <h2 className="text-4xl font-black text-foreground italic uppercase tracking-tighter">
@@ -45,7 +45,7 @@ export default function AIResultsGrid({ results, hasSearched, query }: AIResults
 
   return (
     <>
-      <section className="py-24 bg-[#030303] px-6">
+      <section className="py-24 bg-background px-6">
         <div className="max-w-7xl mx-auto">
           <div className="flex items-end justify-between mb-12">
             <div>
@@ -98,7 +98,7 @@ export default function AIResultsGrid({ results, hasSearched, query }: AIResults
                       className="group relative aspect-[16/10] bg-surface rounded-[2rem] border border-border hover:border-accent/30 overflow-hidden p-1 cursor-pointer transition-colors duration-300"
                     >
                       <div className="relative h-full w-full rounded-[1.8rem] overflow-hidden flex flex-col justify-end p-5">
-                        <img
+                        <img loading="lazy" decoding="async"
                           src={anime.image}
                           alt={anime.title}
                           className="absolute inset-0 w-full h-full object-cover scale-105 group-hover:scale-100 transition-transform duration-700 brightness-50 group-hover:brightness-75"

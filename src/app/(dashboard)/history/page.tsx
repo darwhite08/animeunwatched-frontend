@@ -439,7 +439,7 @@ function HistoryEntryRow({
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: 12 }}
       transition={{ delay: index * 0.03 }}
-      className="flex items-center gap-4 px-4 py-3.5 rounded-2xl bg-surface border border-border hover:border-border hover:bg-white/[0.04] transition-all group"
+      className="flex items-center gap-4 px-4 py-3.5 rounded-2xl bg-surface border border-border hover:border-border hover:bg-surface transition-all group"
     >
       {/* Cover thumbnail */}
       <div

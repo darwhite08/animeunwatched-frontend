@@ -368,7 +368,7 @@ export default function UserProfilePage({
           <div className="absolute top-[-20%] right-[-10%] w-[55%] h-[120%] bg-accent/20 blur-[140px] rounded-full animate-pulse" />
           <div className="absolute top-[10%] left-[-15%] w-[45%] h-[90%] bg-violet-900/15 blur-[120px] rounded-full" />
           <div className="absolute bottom-[-10%] right-[20%] w-[30%] h-[60%] bg-blue-800/10 blur-[100px] rounded-full animate-pulse [animation-delay:1.5s]" />
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[#020202]/40 to-[#020202]" />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--app-bg)]/40 to-[var(--app-bg)]" />
         </div>
 
         <div className="relative z-10 max-w-6xl mx-auto px-6 pt-20 pb-16">
@@ -452,7 +452,7 @@ export default function UserProfilePage({
                 {!isOwnProfile && (
                 <button
                   onClick={handleMessage}
-                  className="flex items-center gap-2 px-5 py-3 rounded-2xl text-sm font-black uppercase tracking-widest bg-surface border border-border text-muted hover:bg-white/12 hover:text-foreground transition-all duration-300"
+                  className="flex items-center gap-2 px-5 py-3 rounded-2xl text-sm font-black uppercase tracking-widest bg-surface border border-border text-muted hover:bg-surface hover:text-foreground transition-all duration-300"
                 >
                   <Mail size={15} /> Message
                 </button>
@@ -478,7 +478,7 @@ export default function UserProfilePage({
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.08, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-              className={`group relative overflow-hidden p-7 rounded-[2rem] border border-border bg-surface hover:bg-zinc-900/50 transition-all duration-500 cursor-default`}
+              className={`group relative overflow-hidden p-7 rounded-[2rem] border border-border bg-surface hover:bg-surface-2 transition-all duration-500 cursor-default`}
             >
               <div className={`mb-5 ${stat.color} opacity-80 group-hover:opacity-100 transition-opacity`}>
                 <stat.icon size={26} strokeWidth={1.5} />
@@ -548,7 +548,7 @@ export default function UserProfilePage({
 
           <Link
             href={`/u/${user.username}/list`}
-            className="flex items-center justify-between p-4 rounded-xl bg-surface border border-border hover:border-accent/20 hover:bg-white/[0.04] transition-all group"
+            className="flex items-center justify-between p-4 rounded-xl bg-surface border border-border hover:border-accent/20 hover:bg-surface transition-all group"
           >
             <div className="flex items-center gap-3">
               <BookOpen size={15} className="text-accent-bright" />
@@ -592,12 +592,12 @@ export default function UserProfilePage({
                   transition={{ delay: i * 0.08 }}
                   className="relative pl-20 group"
                 >
-                  <div className="absolute left-0 top-1/2 -translate-y-1/2 w-16 h-16 rounded-2xl bg-zinc-900 border border-border flex items-center justify-center z-10 group-hover:border-accent/40 transition-all shadow-lg">
+                  <div className="absolute left-0 top-1/2 -translate-y-1/2 w-16 h-16 rounded-2xl bg-surface-2 border border-border flex items-center justify-center z-10 group-hover:border-accent/40 transition-all shadow-lg">
                     <evt.icon size={20} className="text-accent-bright" />
                   </div>
                   <div className="p-5 rounded-[1.5rem] bg-surface border border-border group-hover:bg-white/[0.04] transition-all flex justify-between items-center">
                     <div>
-                      <h3 className="text-sm font-black text-white/90">{evt.text}</h3>
+                      <h3 className="text-sm font-black text-foreground">{evt.text}</h3>
                       <p className="text-xs text-muted font-medium mt-0.5">{evt.sub}</p>
                     </div>
                     <span className="text-[9px] font-black text-subtle uppercase tracking-widest shrink-0 ml-4">
@@ -625,7 +625,7 @@ export default function UserProfilePage({
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
                     transition={{ delay: i * 0.07 }}
-                    className="p-6 rounded-2xl bg-zinc-900/60 border border-border hover:border-border transition-colors space-y-4"
+                    className="p-6 rounded-2xl bg-surface-2 border border-border hover:border-border transition-colors space-y-4"
                   >
                     {post.anime && (
                       <Link
@@ -745,7 +745,7 @@ export default function UserProfilePage({
             {/* Reading list CTA */}
             <Link
               href="/bestanimelist"
-              className="flex items-center justify-between p-5 rounded-2xl bg-surface border border-border hover:border-accent/20 hover:bg-white/[0.04] transition-all group"
+              className="flex items-center justify-between p-5 rounded-2xl bg-surface border border-border hover:border-accent/20 hover:bg-surface transition-all group"
             >
               <div className="flex items-center gap-3">
                 <BookOpen size={18} className="text-accent-bright" />

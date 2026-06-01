@@ -26,6 +26,7 @@ NO_RIGHT = r'(?![\w\-])'          # not followed by word char or dash
 RULES = [
     # ── text-white variants ────────────────────────────────────────────
     # Higher opacities = muted; lowest = subtle; bare = foreground
+    (rf'{NO_LEFT}text-white/(?:85|90|95){NO_RIGHT}',                   'text-foreground','text-white/85-95 → text-foreground'),
     (rf'{NO_LEFT}text-white/(?:40|45|50|55|60|65|70|75|80){NO_RIGHT}', 'text-muted',     'text-white/40-80 → text-muted'),
     (rf'{NO_LEFT}text-white/(?:5|10|15|20|25|30|35){NO_RIGHT}',       'text-subtle',    'text-white/5-35 → text-subtle'),
     (rf'{NO_LEFT}text-white{NO_RIGHT}(?!/)',                          'text-foreground','text-white → text-foreground'),
@@ -35,13 +36,54 @@ RULES = [
     (rf'{NO_LEFT}bg-white/(?:5|7|8|10){NO_RIGHT}',                    'bg-surface',     'bg-white/5-10 → bg-surface'),
     (rf'{NO_LEFT}bg-white/(?:\[0\.02\]|\[0\.03\]|\[0\.05\]|\[0\.07\]){NO_RIGHT}', 'bg-surface', 'bg-white/[0.0X] → bg-surface'),
     (rf'{NO_LEFT}bg-black{NO_RIGHT}(?!/)',                            'bg-background',  'bg-black → bg-background'),
-    (rf'{NO_LEFT}bg-\[#020202\]{NO_RIGHT}',                           'bg-background',  'bg-[#020202] → bg-background'),
-    (rf'{NO_LEFT}bg-\[#050505\]{NO_RIGHT}',                           'bg-surface',     'bg-[#050505] → bg-surface'),
-    (rf'{NO_LEFT}bg-\[#0a0a0a\]{NO_RIGHT}',                           'bg-surface',     'bg-[#0a0a0a] → bg-surface'),
-    (rf'{NO_LEFT}bg-\[#111120\]{NO_RIGHT}',                           'bg-surface-2',   'bg-[#111120] → bg-surface-2'),
+    # All near-black arbitrary-hex backgrounds (#0xxxxx 3-char or 6-char,
+    # any of the typical "background tint" shades) → bg-background.
+    # These were used in dark-only mode to create per-section depth;
+    # they will not flip in light theme without this rewrite.
+    # All 6-char near-black hex (each component 0–15, i.e. first hex digit 0 or 1)
+    # Catches: #020202, #030303, #050505, #050509, #06060d, #06060f, #08080f,
+    # #080808, #0a0a0a, #0a0a12, #0c0c0c, #0d0d0d, #0e1a30, #0f0f0f, #100118 ...
+    (rf'{NO_LEFT}bg-\[#[01][0-9a-fA-F][01][0-9a-fA-F][01][0-9a-fA-F]\]{NO_RIGHT}', 'bg-background', 'bg-[#near-black 6-char] → bg-background'),
+    # 3-char form: #fff/#000 already covered elsewhere; near-black 3-char = #0XX
+    (rf'{NO_LEFT}bg-\[#0[0-9a-fA-F]{{2}}\]{NO_RIGHT}',                              'bg-background', 'bg-[#0XY] (3-char near-black) → bg-background'),
+    (rf'{NO_LEFT}bg-\[#1[01][01][01][01][01]\]{NO_RIGHT}',                    'bg-surface-2',  'bg-[#1X1X1X very-dark gray] → bg-surface-2'),
+    (rf'{NO_LEFT}bg-\[#111\]{NO_RIGHT}',                                       'bg-surface-2',  'bg-[#111] → bg-surface-2'),
+    (rf'{NO_LEFT}bg-\[#111120\]{NO_RIGHT}',                                    'bg-surface-2',  'bg-[#111120] → bg-surface-2'),
+    (rf'{NO_LEFT}bg-\[#0a0a0a\]{NO_RIGHT}',                                    'bg-surface',    'bg-[#0a0a0a] → bg-surface'),
 
     # ── border ──────────────────────────────────────────────────────────
     (rf'{NO_LEFT}border-white/(?:5|6|8|10|12|15|20){NO_RIGHT}',       'border-border',  'border-white/5-20 → border-border'),
+
+    # ── zinc/neutral/slate/gray/stone dark shades → surface tokens ──────
+    # Persistent dark cards/buttons that don't flip; map to surface-2 (darker
+    # surface) so they remain "elevated panel" in any theme.
+    (rf'{NO_LEFT}(bg|hover:bg)-(zinc|neutral|slate|gray|stone)-(?:900|800|700)(?:/\d+)?{NO_RIGHT}', r'\1-surface-2', 'bg-zinc-700/800/900 (and hover:) → bg-surface-2'),
+    (rf'{NO_LEFT}border-(zinc|neutral|slate|gray|stone)-(?:900|800|700)(?:/\d+)?{NO_RIGHT}',         'border-border',   'border-zinc/etc-900-700 → border-border'),
+
+    # ── white-opacity hover backgrounds → surface (flips in light) ──────
+    (rf'{NO_LEFT}hover:bg-white/\[0?\.0[0-9]\]{NO_RIGHT}', 'hover:bg-surface', 'hover:bg-white/[0.0X] → hover:bg-surface'),
+    (rf'{NO_LEFT}hover:bg-white/\d{{1,2}}{NO_RIGHT}',     'hover:bg-surface', 'hover:bg-white/N → hover:bg-surface'),
+
+    # ── Mid-range zinc/slate/neutral/gray/stone TEXT → muted ───────────
+    # These don't flip in light theme; muted tokens flip correctly.
+    (rf'{NO_LEFT}text-(zinc|neutral|slate|gray|stone)-(?:200|300|400|500|600|700){NO_RIGHT}',  'text-muted', 'text-zinc/slate-200-700 → text-muted'),
+    (rf'{NO_LEFT}text-(zinc|neutral|slate|gray|stone)-(?:100|150){NO_RIGHT}',                   'text-foreground', 'text-zinc/slate-100/150 → text-foreground'),
+    (rf'{NO_LEFT}text-(zinc|neutral|slate|gray|stone)-(?:50){NO_RIGHT}',                        'text-foreground', 'text-zinc/slate-50 → text-foreground'),
+    # Mid-range bg → surface
+    (rf'{NO_LEFT}bg-(zinc|neutral|slate|gray|stone)-(?:500|600)/(\d+){NO_RIGHT}',               r'bg-surface-2',  'bg-zinc/slate-500/600 + opacity → bg-surface-2'),
+    (rf'{NO_LEFT}bg-(zinc|neutral|slate|gray|stone)-(?:500|600){NO_RIGHT}',                      'bg-surface-2',   'bg-zinc/slate-500/600 → bg-surface-2'),
+    # Mid-range border → border token
+    (rf'{NO_LEFT}border-(zinc|neutral|slate|gray|stone)-(?:200|300|400|500|600)/(\d+){NO_RIGHT}', 'border-border', 'border-zinc/slate mid + opacity → border-border'),
+    (rf'{NO_LEFT}border-(zinc|neutral|slate|gray|stone)-(?:200|300|400|500|600){NO_RIGHT}',       'border-border', 'border-zinc/slate mid → border-border'),
+
+    # ── Light amber shades → accent-bright ──────────────────────────────
+    (rf'{NO_LEFT}text-amber-(?:50|100|200)/(\d+){NO_RIGHT}', r'text-accent-bright/\1', 'text-amber-50/100/200 + opacity → text-accent-bright'),
+    (rf'{NO_LEFT}text-amber-(?:50|100|200){NO_RIGHT}',       'text-accent-bright',    'text-amber-50/100/200 → text-accent-bright'),
+
+    # ── Arbitrary-hex amber-300 alias (#f7c33d) → accent-bright ─────────
+    (r'text-\[#[fF]7[cC]33[dD]\]',    'text-accent-bright',   'text-[#f7c33d] → text-accent-bright'),
+    (r'border-\[#[fF]7[cC]33[dD]\]',  'border-accent-bright', 'border-[#f7c33d] → border-accent-bright'),
+    (r'bg-\[#[fF]7[cC]33[dD]\]',      'bg-accent-bright',     'bg-[#f7c33d] → bg-accent-bright'),
 
     # ── amber → accent  (with opacity modifier, keep the modifier) ──────
     (rf'{NO_LEFT}text-amber-(?:300|400)/(\d+){NO_RIGHT}',             r'text-accent-bright/\1', 'text-amber-300/400 + opacity → text-accent-bright/N'),

@@ -141,13 +141,13 @@ const BADGES: Badge[] = [
 const RARITY_CONFIG = {
   common: {
     label: "Common",
-    color: "text-slate-300",
-    borderEarned: "border-slate-500/60",
-    borderLocked: "border-slate-700/30",
+    color: "text-muted",
+    borderEarned: "border-border",
+    borderLocked: "border-border",
     glow: "hover:shadow-slate-500/25",
-    bg: "bg-slate-500/10",
+    bg: "bg-surface-2",
     bar: "bg-slate-400",
-    pill: "bg-slate-700/60 text-slate-300",
+    pill: "bg-surface-2 text-muted",
   },
   rare: {
     label: "Rare",
@@ -219,7 +219,7 @@ export default function BadgeShowcase() {
         </div>
         {/* mini legend */}
         <div className="hidden sm:flex items-center gap-4 text-xs font-bold uppercase tracking-tighter">
-          <span className="text-slate-400">Common</span>
+          <span className="text-muted">Common</span>
           <span className="text-accent-bright">Rare</span>
           <span className="text-accent-bright">Legendary</span>
         </div>
@@ -272,7 +272,7 @@ export default function BadgeShowcase() {
                   badge.earned
                     ? `${cfg.borderEarned} ${cfg.bg} hover:shadow-xl ${cfg.glow}`
                     : isInProgress
-                    ? `border-border bg-surface hover:bg-white/[0.04]`
+                    ? `border-border bg-surface hover:bg-surface`
                     : `border-border bg-white/[0.01] opacity-50`
                 }`}
               >

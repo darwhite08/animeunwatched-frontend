@@ -114,13 +114,63 @@ export interface Post {
   liked?: boolean
 }
 
+/* Activity feed (FEED_FEATURES §12 — MVP) */
+export type ActivityKind = "TEXT" | "LIST_UPDATE" | "MESSAGE"
+export type ListActivityVerb =
+  | "WATCHED_EPISODE" | "COMPLETED" | "ADDED_TO_PLAN"
+  | "DROPPED" | "RATED" | "STARTED" | "REWATCHING"
+
+export interface Activity {
+  id: string
+  authorId: string
+  kind: ActivityKind
+  body: string | null
+  linkedAnimeId: string | null
+  verb: ListActivityVerb | null
+  episodeNumber: number | null
+  score: number | null
+  wallOwnerId: string | null
+  hasSpoiler: boolean
+  repostOfId: string | null
+  likeCount: number
+  repostCount: number
+  replyCount: number
+  createdAt: string
+  updatedAt: string
+  deletedAt: string | null
+  author: Pick<User, "id" | "username" | "displayName" | "avatarUrl"> & { slug: string | null }
+  linkedAnime: Pick<AnimeDTO, "id" | "malId" | "title" | "imageUrl"> | null
+  repostOf: Activity | null
+  isLikedByMe: boolean
+  isRepostedByMe: boolean
+}
+
+export interface Reply {
+  id: string
+  activityId: string
+  authorId: string
+  body: string
+  hasSpoiler: boolean
+  replyCount: number
+  likeCount: number
+  parentReplyId: string | null
+  createdAt: string
+  author: Pick<User, "id" | "username" | "displayName" | "avatarUrl"> & { slug: string | null }
+}
+
 export interface PostComment {
   id: string
   postId: string
   authorId: string
   content: string
+  parentCommentId: string | null
+  likeCount: number
+  replyCount: number
   createdAt: string
   author: Pick<User, "id" | "username" | "displayName" | "avatarUrl">
+  isLikedByMe?: boolean
+  /** First N nested replies, only present on top-level comments returned by GET /posts/:id/comments. */
+  replies?: PostComment[]
 }
 
 export interface UserProfile extends User {

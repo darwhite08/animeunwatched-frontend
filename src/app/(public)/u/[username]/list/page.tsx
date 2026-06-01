@@ -108,7 +108,7 @@ function ListCard({ entry, index, onAdd }: ListCardProps) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay: Math.min(index * 0.04, 0.4), duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
-      className="group relative rounded-2xl overflow-hidden border border-border bg-surface hover:border-accent/25 hover:bg-zinc-900/60 transition-all duration-400"
+      className="group relative rounded-2xl overflow-hidden border border-border bg-surface hover:border-accent/25 hover:bg-surface-2 transition-all duration-400"
     >
       {/* Cover */}
       <div className="relative aspect-[2/3] w-full">
@@ -263,7 +263,7 @@ export default function UserListPage({
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.07 + 0.1 }}
-              className="group p-6 rounded-2xl border border-border bg-surface hover:bg-zinc-900/50 transition-all"
+              className="group p-6 rounded-2xl border border-border bg-surface hover:bg-surface-2 transition-all"
             >
               <div className={`mb-3 ${s.color} opacity-80`}>
                 <s.icon size={22} strokeWidth={1.5} />

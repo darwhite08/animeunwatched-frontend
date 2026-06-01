@@ -44,13 +44,13 @@ export default function HeroSection() {
   return (
     <section
       ref={ref}
-      className="relative w-full min-h-screen overflow-hidden bg-[#050508] flex flex-col"
+      className="relative w-full min-h-screen overflow-hidden bg-background flex flex-col"
     >
       {/* ── BACKGROUND ── */}
 
       {/* grid */}
       <div className="absolute inset-0 pointer-events-none select-none">
-        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff06_1px,transparent_1px),linear-gradient(to_bottom,#ffffff06_1px,transparent_1px)] bg-[size:52px_52px] [mask-image:radial-gradient(ellipse_70%_90%_at_55%_50%,#000_10%,transparent_100%)]" />
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff06_1px,transparent_1px),linear-gradient(to_bottom,#ffffff06_1px,transparent_1px)] bg-[size:52px_52px] [mask-image:radial-gradient(ellipse_70%_90%_at_55%_50%,var(--app-bg)_10%,transparent_100%)]" />
       </div>
 
       {/* indigo glow — mid-left */}
@@ -128,7 +128,7 @@ export default function HeroSection() {
             {[
               { text:"Track",    color:"text-foreground",   dot:"text-accent", italic:false },
               { text:"Rate",     color:"text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-violet-300 to-purple-400", dot:"text-violet-400", italic:true  },
-              { text:"Discover", color:"text-white/90", dot:"text-accent", italic:false },
+              { text:"Discover", color:"text-foreground", dot:"text-accent", italic:false },
             ].map(({ text, color, dot, italic }, i) => (
               <div key={text} className="overflow-hidden leading-none">
                 <motion.h1
@@ -167,13 +167,13 @@ export default function HeroSection() {
               href="/ai-discover"
               className="group inline-flex items-center gap-2.5 rounded-2xl px-6 py-3.5 text-[11px] font-black uppercase tracking-widest text-black hover:-translate-y-0.5 transition-all active:scale-[0.98]" style={{background:"linear-gradient(135deg,var(--app-accent-bright),var(--app-accent))",boxShadow:"0 0 36px color-mix(in srgb, var(--app-accent) 40%, transparent)"}}
             >
-              <Zap size={13} className="text-amber-200" />
+              <Zap size={13} className="text-accent-bright" />
               Enter Neural Oracle
               <ArrowRight size={12} className="transition-transform group-hover:translate-x-1" />
             </Link>
             <Link
               href="/bestanimelist"
-              className="inline-flex items-center gap-2.5 rounded-2xl border border-border bg-white/[0.04] px-6 py-3.5 text-[11px] font-black uppercase tracking-widest text-muted backdrop-blur-md hover:bg-white/[0.08] hover:text-foreground hover:border-border hover:-translate-y-0.5 transition-all"
+              className="inline-flex items-center gap-2.5 rounded-2xl border border-border bg-white/[0.04] px-6 py-3.5 text-[11px] font-black uppercase tracking-widest text-muted backdrop-blur-md hover:bg-surface hover:text-foreground hover:border-border hover:-translate-y-0.5 transition-all"
             >
               <Play size={12} />
               Best Anime List
@@ -269,7 +269,7 @@ export default function HeroSection() {
       </motion.div>
 
       {/* bottom fade */}
-      <div className="absolute bottom-0 inset-x-0 h-28 bg-gradient-to-t from-[#030303] to-transparent pointer-events-none z-10" />
+      <div className="absolute bottom-0 inset-x-0 h-28 bg-gradient-to-t from-[var(--app-bg)] to-transparent pointer-events-none z-10" />
     </section>
   );
 }

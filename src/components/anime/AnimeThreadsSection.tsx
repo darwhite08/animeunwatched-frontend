@@ -153,7 +153,7 @@ export function AnimeThreadsSection({ animeId, animeTitle }: AnimeThreadsSection
             <Link
               key={thread.id}
               href={`/threads/${thread.id}`}
-              className="flex items-start gap-3 p-4 rounded-2xl bg-surface border border-border hover:border-border hover:bg-white/[0.04] transition-all group"
+              className="flex items-start gap-3 p-4 rounded-2xl bg-surface border border-border hover:border-border hover:bg-surface transition-all group"
             >
               {/* Pin icon */}
               <div className="shrink-0 mt-0.5">

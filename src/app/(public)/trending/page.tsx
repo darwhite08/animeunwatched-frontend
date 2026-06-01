@@ -114,7 +114,7 @@ export default function TrendingPage() {
               return (
               <motion.article key={post.id}
                 initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}
-                className="p-5 rounded-2xl bg-zinc-900/60 border border-border hover:border-border transition-colors space-y-3 cursor-pointer">
+                className="p-5 rounded-2xl bg-surface-2 border border-border hover:border-border transition-colors space-y-3 cursor-pointer">
                 <div className="flex items-center gap-2.5">
                   <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center font-black text-xs shrink-0">
                     {author[0]?.toUpperCase()}
@@ -155,7 +155,7 @@ export default function TrendingPage() {
               >
                 <Link
                   href={`/anime/${anime.malId}`}
-                  className="flex gap-5 p-4 rounded-2xl bg-zinc-900/60 border border-border hover:border-border transition-colors group"
+                  className="flex gap-5 p-4 rounded-2xl bg-surface-2 border border-border hover:border-border transition-colors group"
                 >
                   {/* Cover image */}
                   <div className="relative h-24 w-16 rounded-xl overflow-hidden shrink-0">

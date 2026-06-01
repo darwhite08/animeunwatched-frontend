@@ -114,7 +114,7 @@ function RoadmapCard({
       initial={{ opacity: 0, y: 14 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.06 }}
-      className={`group relative rounded-2xl border ${col.border} bg-[#0c0c0c] p-5 hover:bg-[#111] transition-all overflow-hidden`}
+      className={`group relative rounded-2xl border ${col.border} bg-background p-5 hover:bg-surface-2 transition-all overflow-hidden`}
     >
       {/* Hover glow */}
       <div className={`absolute -bottom-4 -right-4 w-20 h-20 rounded-full blur-2xl opacity-0 group-hover:opacity-30 transition-opacity ${col.glow}`} />
@@ -132,7 +132,7 @@ function RoadmapCard({
         </div>
 
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-bold text-white/85 leading-snug">{item.title}</p>
+          <p className="text-sm font-bold text-foreground leading-snug">{item.title}</p>
           {item.note && (
             <p className="text-[11px] text-subtle mt-1 leading-relaxed">{item.note}</p>
           )}

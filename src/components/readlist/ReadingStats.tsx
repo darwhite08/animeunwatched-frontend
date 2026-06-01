@@ -19,7 +19,7 @@ export const ReadingStats = () => (
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: i * 0.07 }}
-        className="p-6 rounded-[2rem] border border-border bg-surface hover:bg-zinc-900/60 transition-all group"
+        className="p-6 rounded-[2rem] border border-border bg-surface hover:bg-surface-2 transition-all group"
       >
         <div className={`p-2.5 rounded-xl ${stat.bg} w-fit mb-4 group-hover:scale-110 transition-transform`}>
           <stat.icon size={17} className={stat.color} />

@@ -56,7 +56,7 @@ export default function RecommendationCard() {
           >
             <Link href={`/anime/${anime.id}`} className="group/card block">
               <div className="relative aspect-[2/3] rounded-2xl overflow-hidden mb-2">
-                <img
+                <img loading="lazy" decoding="async"
                   src={anime.image}
                   alt={anime.title}
                   className="w-full h-full object-cover brightness-75 group-hover/card:brightness-90 transition-all duration-500 scale-105 group-hover/card:scale-100"

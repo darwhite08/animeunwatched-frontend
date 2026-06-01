@@ -60,7 +60,7 @@ export const StreakInsights = () => {
         {/* Action Suggestion */}
         <div className="p-6 rounded-[2rem] bg-accent/10 border border-accent/20 flex items-center gap-4 group cursor-pointer hover:bg-accent/20 transition-all">
           <AlertCircle className="text-accent-bright shrink-0" size={20} />
-          <p className="text-[11px] font-bold text-amber-200 leading-tight">
+          <p className="text-[11px] font-bold text-accent-bright leading-tight">
             Verify today's episode of <span className="text-foreground">One Piece</span> to maintain your standing.
           </p>
         </div>

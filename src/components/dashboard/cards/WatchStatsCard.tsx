@@ -31,7 +31,7 @@ export const WatchStatsCard = () => {
     <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
       {stats.map((stat, i) => (
         <motion.div key={stat.label} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}
-          className="group relative p-8 rounded-[2.5rem] border border-border bg-surface hover:bg-zinc-900/50 transition-all duration-500 overflow-hidden">
+          className="group relative p-8 rounded-[2.5rem] border border-border bg-surface hover:bg-surface-2 transition-all duration-500 overflow-hidden">
           <div className={`absolute -right-4 -bottom-4 w-24 h-24 rounded-full blur-3xl opacity-0 group-hover:opacity-20 transition-opacity ${stat.bg}`} />
           <div className={`p-3 rounded-2xl ${stat.bg} ${stat.color} w-fit mb-6 group-hover:scale-110 transition-transform`}>
             <stat.icon size={24} />

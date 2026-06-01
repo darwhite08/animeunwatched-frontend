@@ -14,7 +14,7 @@ export default function NotificationDropdown({ notifications, onClose, onClear, 
 
   return (
     /* FIXED: Reduced opacity to /70 and added backdrop-saturate for a better glass effect */
-    <div className="bg-[#0c0c0c] backdrop-blur-2xl backdrop-saturate-150 rounded-[2rem] border border-border shadow-[0_30px_100px_rgba(0,0,0,0.8)] overflow-hidden">
+    <div className="bg-background backdrop-blur-2xl backdrop-saturate-150 rounded-[2rem] border border-border shadow-[0_30px_100px_rgba(0,0,0,0.8)] overflow-hidden">
       {/* HUD Header */}
       <div className="flex items-center justify-between px-6 py-5 border-b border-border bg-surface">
         <div className="flex items-center gap-2">

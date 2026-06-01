@@ -21,7 +21,7 @@ const GRADIENT_MAP: Record<number, string> = {
 
 const TITLE_MAP: Record<number, { label: string; color: string }> = {
   1:  { label: "Legendary Shinobi", color: "text-accent-bright"   },
-  2:  { label: "Arch-Mage",         color: "text-slate-300"   },
+  2:  { label: "Arch-Mage",         color: "text-muted"   },
   3:  { label: "Elite Jonin",       color: "text-accent"   },
   4:  { label: "Shadow Watcher",    color: "text-accent-bright"  },
   5:  { label: "Binge Master",      color: "text-purple-400"  },
@@ -156,7 +156,7 @@ export default function PublicLeaderboardPage() {
                   <p className="text-[9px] text-subtle uppercase tracking-widest">XP</p>
                   <div className={`w-full mt-4 ${heights[colIdx]} bg-gradient-to-t ${
                     user.rank===1 ? "from-accent/40 to-accent/10 border-accent/30" :
-                    user.rank===2 ? "from-slate-600/40 to-slate-400/10 border-slate-500/30" :
+                    user.rank===2 ? "from-slate-600/40 to-slate-400/10 border-border" :
                                     "from-amber-800/40 to-accent/10 border-accent/30"
                   } border border-b-0 rounded-t-2xl flex items-center justify-center`}>
                     <span className="text-3xl font-black text-subtle">#{user.rank}</span>

@@ -76,7 +76,7 @@ export default function MangaPage() {
               href={`https://anilist.co/search/manga?search=${encodeURIComponent(m.title)}`}
               target="_blank" rel="noopener noreferrer"
               initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}
-              className="flex items-center gap-4 p-4 rounded-2xl border border-border bg-surface hover:border-accent/20 hover:bg-white/[0.04] transition-all group">
+              className="flex items-center gap-4 p-4 rounded-2xl border border-border bg-surface hover:border-accent/20 hover:bg-surface transition-all group">
               <div className="h-10 w-10 rounded-xl bg-violet-500/10 border border-violet-500/15 flex items-center justify-center shrink-0">
                 <BookOpen size={14} className="text-violet-400" />
               </div>

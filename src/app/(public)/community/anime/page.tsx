@@ -133,7 +133,7 @@ function FeaturedAnimeCard({ anime, index }: { anime: Anime; index: number }) {
           className="object-cover brightness-[0.15] blur-sm scale-110"
           sizes="(max-width: 768px) 100vw, 33vw"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/70 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[var(--app-bg)] via-[var(--app-bg)]/70 to-transparent" />
       </div>
 
       <div className="relative z-10 p-6 flex gap-5">

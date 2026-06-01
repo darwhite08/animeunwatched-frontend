@@ -96,7 +96,7 @@ export default function Footer() {
           <div className="col-span-2 md:col-span-2 space-y-6 lg:col-span-2">
             <Link href="/" className="flex items-center gap-2.5 group w-fit">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="36" height="36" className="group-hover:scale-110 transition-transform flex-shrink-0">
-                <rect width="100" height="100" rx="18" fill="#0A0F1E"/>
+                <rect width="100" height="100" rx="18" fill="var(--app-bg)"/>
                 <path d="M 30 28 L 40 28 L 40 46 L 47 46 L 54 28 L 64 28 L 53 50 L 50 50 L 60 72 L 50 72 L 44 60 L 40 60 L 40 72 L 30 72 Z" fill="#F4F2EC"/>
               </svg>
               <span className="text-lg font-black tracking-tight text-foreground uppercase italic">

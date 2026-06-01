@@ -81,7 +81,7 @@ export default function FollowingPage() {
             Connections<span style={{color:"var(--app-accent)"}}>.</span>
           </h1>
         </div>
-        <Link href="/users" className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-border bg-surface text-xs font-black uppercase tracking-widest text-muted hover:text-foreground hover:bg-white/[0.06] transition-all mt-2">
+        <Link href="/users" className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-border bg-surface text-xs font-black uppercase tracking-widest text-muted hover:text-foreground hover:bg-surface transition-all mt-2">
           <Users size={13} /> Find Shinobi
         </Link>
       </div>

@@ -286,11 +286,11 @@ export default function NewClubPage() {
                     getFieldError("category") ? "border-red-500/40" : ""
                   } ${!form.category ? "text-subtle" : ""}`}
                 >
-                  <option value="" disabled className="bg-zinc-900 text-muted">
+                  <option value="" disabled className="bg-surface-2 text-muted">
                     Select a category
                   </option>
                   {CATEGORIES.map((cat) => (
-                    <option key={cat} value={cat} className="bg-zinc-900 text-foreground">
+                    <option key={cat} value={cat} className="bg-surface-2 text-foreground">
                       {cat}
                     </option>
                   ))}

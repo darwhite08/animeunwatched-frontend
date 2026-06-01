@@ -43,7 +43,7 @@ function BlogCard({ post, index }: { post: BlogPost; index: number }) {
       initial={{ opacity: 0, y: 18 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.07, duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
-      className="group block bg-zinc-900/60 border border-border hover:border-accent/30 rounded-2xl overflow-hidden transition-all"
+      className="group block bg-surface-2 border border-border hover:border-accent/30 rounded-2xl overflow-hidden transition-all"
     >
       {/* Cover gradient */}
       <div className={`h-40 w-full bg-gradient-to-br ${post.coverGradient} relative`}>

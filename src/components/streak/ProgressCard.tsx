@@ -3,7 +3,7 @@ import { motion } from "framer-motion"
 import { Target } from "lucide-react"
 
 export const ProgressCard = () => (
-  <div className="relative overflow-hidden p-8 rounded-[2.5rem] border border-border bg-zinc-900/20 backdrop-blur-3xl group">
+  <div className="relative overflow-hidden p-8 rounded-[2.5rem] border border-border bg-surface-2 backdrop-blur-3xl group">
     {/* Background Glow */}
     <div className="absolute -top-10 -right-10 w-32 h-32 bg-purple-600/20 blur-[60px] rounded-full group-hover:bg-purple-500/30 transition-all" />
 

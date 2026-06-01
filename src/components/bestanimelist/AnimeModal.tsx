@@ -67,7 +67,7 @@ export default function AnimeModal({ isOpen, onClose, anime }: AnimeModalProps) 
             transition={{ type: "spring", damping: 26, stiffness: 260 }}
             className="relative w-full max-w-5xl rounded-[2.5rem] border border-white/[0.08] overflow-hidden"
             style={{
-              background: "linear-gradient(160deg, #0a0a14 0%, #070710 100%)",
+              background: "linear-gradient(160deg, var(--app-bg) 0%, var(--app-bg) 100%)",
               boxShadow: "0 0 120px color-mix(in srgb, var(--app-accent) 8%, transparent), 0 0 60px rgba(99,102,241,0.12), 0 40px 80px rgba(0,0,0,0.8)",
             }}
           >
@@ -81,8 +81,8 @@ export default function AnimeModal({ isOpen, onClose, anime }: AnimeModalProps) 
                   className="object-cover"
                   sizes="(max-width: 1024px) 100vw, 50vw"
                 />
-                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-[#0a0a0a]" />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-[var(--app-bg)]" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[var(--app-bg)] via-transparent to-transparent" />
 
                 {/* Rank badge — gold */}
                 <div className="absolute top-6 left-6 px-3 py-1.5 backdrop-blur-md rounded-xl text-[10px] font-black uppercase italic"
@@ -174,7 +174,7 @@ export default function AnimeModal({ isOpen, onClose, anime }: AnimeModalProps) 
                     }`}
                     style={!inList ? {
                       background: "linear-gradient(135deg, var(--app-accent), #d97706)",
-                      color: "#000",
+                      color: "var(--app-bg)",
                       boxShadow: "0 4px 20px color-mix(in srgb, var(--app-accent) 35%, transparent)",
                     } : undefined}
                   >

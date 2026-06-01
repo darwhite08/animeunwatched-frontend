@@ -61,7 +61,7 @@ const MOCK_POLLS: Poll[] = [
 
 const STATUS_BADGE: Record<PollStatus, { label: string; cls: string }> = {
   active:  { label: "Active",  cls: "bg-emerald-600/20 text-emerald-400 border-emerald-500/30" },
-  closed:  { label: "Closed",  cls: "bg-zinc-600/20 text-zinc-400 border-zinc-500/30" },
+  closed:  { label: "Closed",  cls: "bg-surface-2 text-muted border-border" },
   draft:   { label: "Draft",   cls: "bg-accent/20 text-accent-bright border-accent/30" },
 }
 
@@ -144,7 +144,7 @@ function PollCard({ poll, index }: { poll: Poll; index: number }) {
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.04 }}
-      className="bg-zinc-900 border border-border hover:border-border rounded-2xl p-5 space-y-4 transition cursor-pointer"
+      className="bg-surface-2 border border-border hover:border-border rounded-2xl p-5 space-y-4 transition cursor-pointer"
     >
       {/* Top row */}
       <div className="flex items-start justify-between gap-4">
@@ -167,7 +167,7 @@ function PollCard({ poll, index }: { poll: Poll; index: number }) {
                 </span>
                 <span className="text-muted">{pct}%</span>
               </div>
-              <div className="h-1.5 bg-zinc-800 rounded-full overflow-hidden">
+              <div className="h-1.5 bg-surface-2 rounded-full overflow-hidden">
                 <motion.div
                   initial={{ width: 0 }}
                   animate={{ width: `${pct}%` }}
@@ -211,7 +211,7 @@ function StatCard({
   color: string
 }) {
   return (
-    <div className="bg-zinc-900 border border-border rounded-2xl p-4 flex items-center gap-3">
+    <div className="bg-surface-2 border border-border rounded-2xl p-4 flex items-center gap-3">
       <Icon size={18} className={color} />
       <div>
         <p className="text-lg font-semibold">{value}</p>

@@ -174,7 +174,7 @@ function InlineReply({
       exit={{ opacity: 0, height: 0 }}
       className="overflow-hidden mt-3"
     >
-      <div className="p-4 rounded-xl bg-zinc-900/80 border border-accent/20 space-y-3">
+      <div className="p-4 rounded-xl bg-surface-2 border border-accent/20 space-y-3">
         <p className="text-[10px] font-black uppercase tracking-widest text-accent-bright">
           Replying to {authorName}
         </p>
@@ -382,7 +382,7 @@ export default function ThreadDetailPage({
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.15 }}
-          className="p-5 rounded-2xl bg-zinc-900/60 border border-border mb-8 space-y-4"
+          className="p-5 rounded-2xl bg-surface-2 border border-border mb-8 space-y-4"
           id="composer"
         >
           <p className="text-[10px] font-black uppercase tracking-[0.2em] text-subtle">

@@ -97,7 +97,7 @@ export default function CreatorSidebar() {
 
   return (
     <>
-      <aside className="w-80 h-screen sticky top-0 left-0 flex flex-col bg-zinc-900 border-r border-border p-6 overflow-hidden">
+      <aside className="w-80 h-screen sticky top-0 left-0 flex flex-col bg-surface-2 border-r border-border p-6 overflow-hidden">
 
         {/* HEADER */}
         <div className="space-y-4 h-20">
@@ -196,7 +196,7 @@ export default function CreatorSidebar() {
                 value={newFolderName}
                 onChange={(e) => setNewFolderName(e.target.value)}
                 placeholder="Folder name"
-                className="w-full bg-zinc-800 rounded-lg px-3 py-2 text-sm outline-none"
+                className="w-full bg-surface-2 rounded-lg px-3 py-2 text-sm outline-none"
               />
 
               <div className="flex gap-2">
@@ -209,7 +209,7 @@ export default function CreatorSidebar() {
 
                 <button
                   onClick={() => setCreatingCategory(null)}
-                  className="flex-1 py-2 rounded-lg bg-zinc-700 hover:bg-zinc-600 transition text-sm"
+                  className="flex-1 py-2 rounded-lg bg-surface-2 hover:bg-surface-2 transition text-sm"
                 >
                   Cancel
                 </button>
@@ -333,7 +333,7 @@ function FolderSection({
                     onKeyDown={(e) =>
                       e.key === "Enter" && onRename(folder.id)
                     }
-                    className="bg-zinc-800 px-2 py-1 text-sm rounded outline-none"
+                    className="bg-surface-2 px-2 py-1 text-sm rounded outline-none"
                     autoFocus
                   />
                 ) : (
@@ -379,7 +379,7 @@ function DeleteModal({
 }) {
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50">
-      <div className="bg-zinc-900 border border-border rounded-2xl p-6 w-80 space-y-4">
+      <div className="bg-surface-2 border border-border rounded-2xl p-6 w-80 space-y-4">
         <h3 className="text-lg font-semibold">Delete Folder</h3>
         <p className="text-sm text-muted">
           Are you sure you want to delete "{folder.name}"?
@@ -395,7 +395,7 @@ function DeleteModal({
 
           <button
             onClick={onCancel}
-            className="flex-1 py-2 bg-zinc-700 hover:bg-zinc-600 rounded-lg text-sm"
+            className="flex-1 py-2 bg-surface-2 hover:bg-surface-2 rounded-lg text-sm"
           >
             Cancel
           </button>

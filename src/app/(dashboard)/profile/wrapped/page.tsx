@@ -234,7 +234,7 @@ export default function WrappedPage() {
             whileHover={{ scale:1.05 }}
             whileTap={{ scale:0.95 }}
             onClick={() => setSlide(s => s + 1)}
-            className="flex items-center gap-2 px-8 py-3.5 rounded-2xl bg-surface border border-border font-black text-xs uppercase tracking-widest hover:bg-white/20 transition-all backdrop-blur-md"
+            className="flex items-center gap-2 px-8 py-3.5 rounded-2xl bg-surface border border-border font-black text-xs uppercase tracking-widest hover:bg-surface transition-all backdrop-blur-md"
           >
             Next <ChevronRight size={13} />
           </motion.button>

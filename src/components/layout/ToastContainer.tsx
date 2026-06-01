@@ -61,7 +61,7 @@ export default function ToastContainer() {
               style={cfg.containerStyle}
             >
               <Icon size={16} weight="duotone" className={`shrink-0 ${cfg.iconClass}`} />
-              <p className="text-[11px] font-bold flex-1 leading-snug text-white/85">{toast.message}</p>
+              <p className="text-[11px] font-bold flex-1 leading-snug text-foreground">{toast.message}</p>
               <button
                 onClick={() => dismiss(toast.id)}
                 className="shrink-0 text-subtle hover:text-muted transition-colors ml-1"

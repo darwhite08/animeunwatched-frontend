@@ -50,7 +50,7 @@ function MarkdownPreview({ source }: { source: string }) {
         }
         if (line.startsWith("## ")) {
           return (
-            <h2 key={i} className="text-lg font-black uppercase italic text-white/90">
+            <h2 key={i} className="text-lg font-black uppercase italic text-foreground">
               {line.slice(3)}
             </h2>
           )

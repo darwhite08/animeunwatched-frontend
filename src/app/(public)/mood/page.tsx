@@ -88,8 +88,8 @@ const MOODS = [
     desc: "Horror. Seinen. No happy endings.",
     icon: Ghost,
     color: "from-slate-600/20 to-zinc-800/15",
-    border: "border-slate-500/30",
-    accent: "text-slate-300",
+    border: "border-border",
+    accent: "text-muted",
     params: { q: "Horror" },
   },
   {
@@ -193,7 +193,7 @@ export default function MoodPage() {
                 transition={{ delay: i * 0.04 }}
                 onClick={() => setSelected(active ? null : m.id)}
                 className={`relative text-left p-5 rounded-2xl border transition-all duration-300 group ${
-                  active ? `bg-gradient-to-br ${m.color} ${m.border} scale-[1.02]` : "bg-surface border-border hover:border-border hover:bg-white/[0.04]"
+                  active ? `bg-gradient-to-br ${m.color} ${m.border} scale-[1.02]` : "bg-surface border-border hover:border-border hover:bg-surface"
                 }`}
               >
                 <div className="flex items-center gap-3 mb-3">

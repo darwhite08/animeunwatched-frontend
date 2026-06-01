@@ -11,7 +11,7 @@ const FEATURES = [
 
 export default function ChatEmptyPage() {
   return (
-    <div className="flex-1 flex flex-col items-center justify-center select-none relative overflow-hidden" style={{ background: "#0a0a0c" }}>
+    <div className="flex-1 flex flex-col items-center justify-center select-none relative overflow-hidden" style={{ background: "var(--app-bg)" }}>
 
       {/* Background glow */}
       <div className="absolute inset-0 pointer-events-none">

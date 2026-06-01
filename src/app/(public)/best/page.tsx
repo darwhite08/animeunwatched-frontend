@@ -41,7 +41,7 @@ function YearCard({ year, index, allAnime }: { year: number; index: number; allA
               <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
             </>
           ) : (
-            <div className="absolute inset-0 bg-zinc-900" />
+            <div className="absolute inset-0 bg-surface-2" />
           )}
 
           {/* Year badge */}

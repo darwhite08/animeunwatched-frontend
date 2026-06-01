@@ -224,7 +224,7 @@ export default function StatsPage() {
         <Link href="/watchlist" className="px-6 py-3 rounded-2xl bg-accent hover:bg-accent-bright text-xs font-black uppercase tracking-widest text-foreground transition-all">
           View Watchlist
         </Link>
-        <Link href="/profile/wrapped" className="px-6 py-3 rounded-2xl border border-border bg-surface text-xs font-black uppercase tracking-widest text-muted hover:text-foreground hover:bg-white/[0.06] transition-all">
+        <Link href="/profile/wrapped" className="px-6 py-3 rounded-2xl border border-border bg-surface text-xs font-black uppercase tracking-widest text-muted hover:text-foreground hover:bg-surface transition-all">
           2024 Wrapped 🎉
         </Link>
       </div>

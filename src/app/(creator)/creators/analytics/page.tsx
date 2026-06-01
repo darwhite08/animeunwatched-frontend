@@ -95,7 +95,7 @@ export default function AnalyticsPage() {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.06 }}
-            className="bg-zinc-900 border border-border rounded-2xl p-5 space-y-3"
+            className="bg-surface-2 border border-border rounded-2xl p-5 space-y-3"
           >
             <div className={`w-9 h-9 rounded-xl ${m.bg} flex items-center justify-center`}>
               <m.icon size={16} className={m.color} />
@@ -113,7 +113,7 @@ export default function AnalyticsPage() {
       </div>
 
       {/* Views chart */}
-      <div className="bg-zinc-900 border border-border rounded-2xl p-6 space-y-6">
+      <div className="bg-surface-2 border border-border rounded-2xl p-6 space-y-6">
         <div className="flex items-center justify-between">
           <h2 className="font-semibold text-foreground">Views — Last 7 Days</h2>
           <span className="text-xs text-subtle uppercase tracking-widest">Daily</span>
@@ -143,7 +143,7 @@ export default function AnalyticsPage() {
       </div>
 
       {/* Top content */}
-      <div className="bg-zinc-900 border border-border rounded-2xl p-6 space-y-4">
+      <div className="bg-surface-2 border border-border rounded-2xl p-6 space-y-4">
         <h2 className="font-semibold text-foreground">Top Performing Content</h2>
 
         <div className="space-y-2">

@@ -48,7 +48,7 @@ export const TopThree = () => {
                 <div className={`absolute inset-0 rounded-[2.5rem] rotate-6 group-hover:rotate-0 transition-transform duration-500 border-2 ${
                    user.pos === 1 ? 'border-yellow-500/50 shadow-[0_0_30px_rgba(234,179,8,0.2)]' : 'border-border'
                 }`} />
-                <div className="relative h-full w-full rounded-[2.2rem] overflow-hidden bg-zinc-900 border border-border">
+                <div className="relative h-full w-full rounded-[2.2rem] overflow-hidden bg-surface-2 border border-border">
                   <Image src={user.img} alt={user.name} fill className="object-cover" />
                 </div>
               </div>

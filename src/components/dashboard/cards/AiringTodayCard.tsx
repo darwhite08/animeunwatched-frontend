@@ -79,7 +79,7 @@ export default function AiringTodayCard() {
                 className="group/item flex items-center gap-3 p-2 rounded-xl hover:bg-surface transition-colors cursor-pointer">
                 {anime.imageUrl ? (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img
+                  <img loading="lazy" decoding="async"
                     src={anime.imageUrl}
                     alt={anime.title}
                     className="h-10 w-7 rounded-lg object-cover shrink-0"

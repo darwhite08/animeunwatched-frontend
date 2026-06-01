@@ -24,7 +24,7 @@ function hashMessage(str: string): string {
 const TYPE_STYLES = {
   new: {
     bg: "bg-gradient-to-r from-indigo-600 via-violet-600 to-indigo-600",
-    text: "text-amber-100",
+    text: "text-accent-bright",
     linkClass: "text-foreground underline-offset-2 hover:underline font-black",
     icon: Sparkles,
     iconClass: "text-violet-300",
@@ -33,21 +33,21 @@ const TYPE_STYLES = {
   },
   event: {
     bg: "bg-gradient-to-r from-accent via-orange-500 to-accent",
-    text: "text-amber-50",
+    text: "text-accent-bright",
     linkClass: "text-foreground underline-offset-2 hover:underline font-black",
     icon: Calendar,
-    iconClass: "text-amber-200",
+    iconClass: "text-accent-bright",
     badge: "Event",
     badgeBg: "bg-white/20 text-foreground",
   },
   info: {
-    bg: "bg-slate-800",
-    text: "text-slate-200",
-    linkClass: "text-slate-100 underline-offset-2 hover:underline font-black",
+    bg: "bg-surface-2",
+    text: "text-muted",
+    linkClass: "text-foreground underline-offset-2 hover:underline font-black",
     icon: Info,
-    iconClass: "text-slate-400",
+    iconClass: "text-muted",
     badge: "Info",
-    badgeBg: "bg-surface text-slate-300",
+    badgeBg: "bg-surface text-muted",
   },
 }
 

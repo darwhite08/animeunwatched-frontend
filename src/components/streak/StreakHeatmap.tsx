@@ -26,7 +26,7 @@ export const StreakHeatmap = () => {
             transition={{ delay: i * 0.002 }}
             whileHover={{ scale: 1.5, zIndex: 50 }}
             className={`h-3.5 w-3.5 md:h-4 md:w-4 rounded-[4px] cursor-pointer transition-colors duration-500 shadow-sm
-              ${d.intensity === 0 ? "bg-surface hover:bg-white/20" : ""}
+              ${d.intensity === 0 ? "bg-surface hover:bg-surface" : ""}
               ${d.intensity === 1 ? "bg-indigo-900/40" : ""}
               ${d.intensity === 2 ? "bg-indigo-700/60" : ""}
               ${d.intensity === 3 ? "bg-accent" : ""}

@@ -159,14 +159,14 @@ export default function WatchlistPage() {
             className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ backgroundColor: "rgba(0,0,0,0.80)", backdropFilter: "blur(8px)" }}>
             <motion.div initial={{ opacity: 0, scale: 0.93, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.93, y: 20 }}
               onClick={e => e.stopPropagation()}
-              className="relative w-full max-w-md bg-surface border border-zinc-800 rounded-3xl p-6 shadow-2xl">
+              className="relative w-full max-w-md bg-surface border border-border rounded-3xl p-6 shadow-2xl">
               <div className="flex items-center justify-between mb-5">
                 <div>
                   <h2 className="font-black uppercase text-base text-foreground tracking-tight">Share Your List</h2>
-                  <p className="text-zinc-500 text-xs mt-0.5">Let the world see your taste</p>
+                  <p className="text-muted text-xs mt-0.5">Let the world see your taste</p>
                 </div>
                 <button onClick={() => setShareModalOpen(false)}
-                  className="w-8 h-8 rounded-xl border border-zinc-700 flex items-center justify-center text-zinc-400 hover:text-foreground hover:border-zinc-500 transition-colors">
+                  className="w-8 h-8 rounded-xl border border-border flex items-center justify-center text-muted hover:text-foreground hover:border-border transition-colors">
                   <X className="w-4 h-4" />
                 </button>
               </div>

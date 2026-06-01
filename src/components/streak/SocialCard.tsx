@@ -9,7 +9,7 @@ export const SocialCard = () => (
       </div>
       <div className="flex -space-x-2">
         {[1,2,3].map(i => (
-          <div key={i} className="w-8 h-8 rounded-full border-2 border-[#0a0a0a] bg-zinc-800" />
+          <div key={i} className="w-8 h-8 rounded-full border-2 border-[var(--app-bg)] bg-surface-2" />
         ))}
       </div>
     </div>

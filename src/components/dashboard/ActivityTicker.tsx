@@ -55,7 +55,7 @@ function ActivityRow({ a }: { a: PlatformActivity }) {
       </Link>
       <span className="text-[11px] text-muted">{verb}</span>
       {a.target && (
-        <Link href={targetHref} className="text-[11px] font-bold text-accent-bright/80 hover:text-amber-200 transition-colors max-w-[180px] truncate">
+        <Link href={targetHref} className="text-[11px] font-bold text-accent-bright/80 hover:text-accent-bright transition-colors max-w-[180px] truncate">
           {a.target.label}
         </Link>
       )}
@@ -69,8 +69,8 @@ export function ActivityTicker({ maxItems = 8 }: { maxItems?: number }) {
 
   return (
     <div className="relative overflow-hidden w-full" aria-label="Live community activity">
-      <div className="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-[#020202] to-transparent z-10 pointer-events-none" />
-      <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-[#020202] to-transparent z-10 pointer-events-none" />
+      <div className="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-[var(--app-bg)] to-transparent z-10 pointer-events-none" />
+      <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-[var(--app-bg)] to-transparent z-10 pointer-events-none" />
       <div className="flex gap-2 overflow-x-auto no-scrollbar py-2 px-2">
         <AnimatePresence initial={false}>
           {activity.map(a => (

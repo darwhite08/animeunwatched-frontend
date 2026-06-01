@@ -1,5 +1,6 @@
 "use client"
 
+import { useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { X, RotateCcw, SlidersHorizontal } from "lucide-react"
 import { filterSections } from "./filterData"
@@ -27,6 +28,25 @@ export default function FilterDrawer({
   const statusSection = filterSections.find(s => s.id === "status")!
 
   const totalActive = selectedGenres.length + (selectedType ? 1 : 0)
+
+  // Lock body scroll while drawer is open; restore on close/unmount.
+  // Preserve the scroll position by pinning the body in place.
+  useEffect(() => {
+    if (!isOpen) return
+    const scrollY = window.scrollY
+    const { overflow, position, top, width } = document.body.style
+    document.body.style.overflow = "hidden"
+    document.body.style.position = "fixed"
+    document.body.style.top = `-${scrollY}px`
+    document.body.style.width = "100%"
+    return () => {
+      document.body.style.overflow = overflow
+      document.body.style.position = position
+      document.body.style.top = top
+      document.body.style.width = width
+      window.scrollTo(0, scrollY)
+    }
+  }, [isOpen])
 
   return (
     <AnimatePresence>
@@ -66,7 +86,7 @@ export default function FilterDrawer({
             </div>
 
             {/* Filters */}
-            <div className="flex-1 overflow-y-auto px-8 no-scrollbar">
+            <div data-lenis-prevent className="flex-1 overflow-y-auto px-8 overscroll-contain">
               <FilterCheckboxGroup
                 title={genreSection.title}
                 options={genreSection.options}

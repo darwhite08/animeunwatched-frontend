@@ -61,7 +61,7 @@ export default function ProfilePostsPage() {
           {posts.map((post, i) => (
             <motion.div key={post.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.04 }}>
               <Link href={`/posts/${post.id}`}
-                className="block p-5 rounded-2xl border border-border bg-surface hover:border-accent/20 hover:bg-white/[0.04] transition-all group">
+                className="block p-5 rounded-2xl border border-border bg-surface hover:border-accent/20 hover:bg-surface transition-all group">
                 <p className="text-sm text-muted leading-relaxed group-hover:text-foreground transition-colors line-clamp-3">{post.content}</p>
                 <div className="flex items-center gap-4 mt-3 text-[9px] text-subtle font-bold">
                   <span>{timeAgo(post.createdAt)}</span>

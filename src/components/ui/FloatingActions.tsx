@@ -56,7 +56,7 @@ export default function FloatingActions({ anime, onReview }: FloatingActionsProp
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 20 }}
-          className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[80] flex items-center gap-2 px-3 py-3 bg-[#0c0c0c]/90 backdrop-blur-xl border border-border rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.6)]"
+          className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[80] flex items-center gap-2 px-3 py-3 bg-background/90 backdrop-blur-xl border border-border rounded-2xl shadow-[0_8px_32px_rgba(0,0,0,0.6)]"
         >
           {/* Anime title pill */}
           <span className="text-[10px] font-black uppercase tracking-widest text-muted px-2 max-w-[140px] truncate hidden sm:block">

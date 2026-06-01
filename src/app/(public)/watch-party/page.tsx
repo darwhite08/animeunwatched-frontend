@@ -49,7 +49,7 @@ export default function WatchPartyPage() {
             >
               <Play size={14} /> Get Early Access
             </button>
-            <Link href="/community" className="flex items-center gap-2 px-8 py-4 rounded-2xl border border-border bg-white/[0.04] text-sm font-black uppercase tracking-widest text-muted hover:text-foreground hover:bg-white/[0.08] transition-all">
+            <Link href="/community" className="flex items-center gap-2 px-8 py-4 rounded-2xl border border-border bg-white/[0.04] text-sm font-black uppercase tracking-widest text-muted hover:text-foreground hover:bg-surface transition-all">
               <Users size={14} /> Join Community
             </Link>
           </motion.div>

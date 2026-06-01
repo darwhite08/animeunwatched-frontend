@@ -48,7 +48,7 @@ function StreakBento({ reputation }: { reputation: number }) {
         whileHover={{ y: -5 }}
         className="p-10 rounded-[2.5rem] border transition-all duration-500 group relative overflow-hidden cursor-pointer h-full"
         style={{
-          background: "linear-gradient(160deg, #0a0a14 0%, #070710 100%)",
+          background: "linear-gradient(160deg, var(--app-bg) 0%, var(--app-bg) 100%)",
           borderColor: "rgba(249,115,22,0.15)",
         }}
       >
@@ -158,7 +158,7 @@ export default function DashboardPage() {
       {/* ── HEADER ── */}
       <header className="relative overflow-hidden rounded-[2.5rem] border p-10 shadow-2xl"
         style={{
-          background: "linear-gradient(160deg, #0a0a14 0%, #070710 100%)",
+          background: "linear-gradient(160deg, var(--app-bg) 0%, var(--app-bg) 100%)",
           borderColor: "color-mix(in srgb, var(--app-accent) 15%, transparent)",
           boxShadow: "0 0 80px color-mix(in srgb, var(--app-accent) 6%, transparent)",
         }}>

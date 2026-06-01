@@ -148,7 +148,7 @@ function ClubCard({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.95 }}
       transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-      className="group relative overflow-hidden rounded-3xl border border-border bg-zinc-900/60 hover:border-border transition-all duration-300"
+      className="group relative overflow-hidden rounded-3xl border border-border bg-surface-2 hover:border-border transition-all duration-300"
     >
       {/* Cover gradient strip */}
       <div
@@ -307,11 +307,15 @@ export default function ClubsPage() {
               <button
                 key={cat}
                 onClick={() => setActiveCategory(cat)}
-                className={`px-4 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all ${
+                aria-pressed={activeCategory === cat}
+                className={`px-4 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 ${
                   activeCategory === cat
-                    ? "text-black shadow-[0_0_16px_color-mix(in srgb, var(--app-accent) 30%, transparent)]"
-                    : "bg-surface border border-border text-muted hover:text-muted hover:border-border"
+                    ? "text-black border border-accent/60 shadow-[0_4px_16px_color-mix(in_srgb,var(--app-accent)_35%,transparent)]"
+                    : "bg-surface border border-border text-muted hover:text-foreground hover:border-accent/30 hover:bg-surface-2"
                 }`}
+                style={activeCategory === cat ? {
+                  background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))",
+                } : undefined}
               >
                 {cat}
               </button>

@@ -103,9 +103,9 @@ export default function SeasonalPage() {
                 {yearOpen && (
                   <motion.div
                     initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }}
-                    className="absolute top-full mt-2 left-0 z-50 w-32 bg-[#111] border border-border rounded-2xl overflow-hidden shadow-2xl"
+                    className="absolute top-full mt-2 left-0 z-50 w-32 bg-surface-2 border border-border rounded-2xl overflow-hidden shadow-2xl"
                   >
-                    <div className="max-h-64 overflow-y-auto scrollbar-hide">
+                    <div data-lenis-prevent className="max-h-64 overflow-y-auto overscroll-contain scrollbar-hide">
                       {YEAR_LIST.map(y => (
                         <button key={y} onClick={() => { setYear(y); setYearOpen(false) }}
                           className={`w-full text-left px-4 py-2 text-sm font-bold transition-colors ${
@@ -137,7 +137,7 @@ export default function SeasonalPage() {
               return (
                 <button key={s} onClick={() => setSeason(s)}
                   className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${
-                    active ? "bg-white/12 text-foreground shadow-sm" : "text-subtle hover:text-foreground hover:bg-white/6"
+                    active ? "bg-white/12 text-foreground shadow-sm" : "text-subtle hover:text-foreground hover:bg-surface"
                   }`}
                 >
                   <span>{m.emoji}</span>

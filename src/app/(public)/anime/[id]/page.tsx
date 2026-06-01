@@ -150,8 +150,8 @@ function AnimeDetail({ anime, rawAnime }: { anime: Anime; rawAnime?: AnimeDTO })
           priority
         />
         {/* gradient overlays */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#020202] via-[#020202]/60 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#020202] via-transparent to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-r from-[var(--app-bg)] via-[var(--app-bg)]/60 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[var(--app-bg)] via-transparent to-transparent" />
 
         {/* Rank chip */}
         <div className="absolute top-6 left-6 md:left-[max(1.5rem,calc((100vw-1280px)/2+1.5rem))]">
@@ -260,14 +260,14 @@ function AnimeDetail({ anime, rawAnime }: { anime: Anime; rawAnime?: AnimeDTO })
 
             <button
               onClick={() => setReviewOpen(true)}
-              className="flex items-center gap-2 px-4 py-3 rounded-2xl border border-border bg-white/[0.04] text-muted hover:text-foreground hover:bg-white/[0.08] transition-all text-xs font-black uppercase tracking-widest"
+              className="flex items-center gap-2 px-4 py-3 rounded-2xl border border-border bg-white/[0.04] text-muted hover:text-foreground hover:bg-surface transition-all text-xs font-black uppercase tracking-widest"
             >
               <PenSquare size={14} /> Review
             </button>
 
             <button
               onClick={share}
-              className="p-3 rounded-2xl border border-border bg-white/[0.04] text-muted hover:text-foreground hover:bg-white/[0.08] transition-all"
+              className="p-3 rounded-2xl border border-border bg-white/[0.04] text-muted hover:text-foreground hover:bg-surface transition-all"
             >
               <Share2 size={16} />
             </button>

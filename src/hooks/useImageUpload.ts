@@ -58,24 +58,22 @@ export function useImageUpload(scope: UploadScope) {
     try {
       const intent = await presign(scope, file.type, file.size)
 
-      // Use XMLHttpRequest so we can report upload progress
-      await new Promise<void>((resolve, reject) => {
-        const xhr = new XMLHttpRequest()
-        xhr.open("PUT", intent.uploadUrl, true)
-        xhr.setRequestHeader("Content-Type", file.type)
-        xhr.upload.onprogress = (e) => {
-          if (e.lengthComputable) setProgress(Math.round((e.loaded / e.total) * 100))
-        }
-        xhr.onload = () => {
-          if (xhr.status >= 200 && xhr.status < 300) resolve()
-          else reject(new Error(`Upload failed (${xhr.status})`))
-        }
-        xhr.onerror = () => reject(new Error("Network error during upload"))
-        xhr.send(file)
-      })
+      // Try direct presigned PUT to S3 first (fast, no backend bandwidth).
+      try {
+        await directPut(intent.uploadUrl, file, setProgress)
+        setProgress(100)
+        return { publicUrl: intent.publicUrl, key: intent.key }
+      } catch (err) {
+        // Direct upload failed (extension blocker, strict CSP, corporate proxy).
+        // Fall back to the server-side proxy at /api/v1/uploads/proxy — same
+        // backend, but the bytes go through our app and S3 only sees our IP.
+        console.warn("[upload] direct PUT failed, retrying via proxy:", err)
+        setProgress(10)
+      }
 
+      const proxied = await proxyUpload(scope, file, setProgress)
       setProgress(100)
-      return { publicUrl: intent.publicUrl, key: intent.key }
+      return proxied
     } catch (err) {
       let msg = "Could not upload image"
       if (err instanceof ApiError) {
@@ -97,4 +95,54 @@ export function useImageUpload(scope: UploadScope) {
   }, [scope])
 
   return { upload, isUploading, error, progress, reset: () => { setError(null); setProgress(0) } }
+}
+
+// Direct presigned PUT to S3.
+async function directPut(url: string, file: File, setProgress: (n: number) => void): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest()
+    xhr.open("PUT", url, true)
+    xhr.setRequestHeader("Content-Type", file.type)
+    xhr.upload.onprogress = (e) => {
+      if (e.lengthComputable) setProgress(Math.round((e.loaded / e.total) * 100))
+    }
+    xhr.onload = () => {
+      if (xhr.status >= 200 && xhr.status < 300) resolve()
+      else reject(new Error(`S3 PUT returned ${xhr.status}`))
+    }
+    xhr.onerror = () => reject(new Error("Direct upload blocked"))
+    xhr.send(file)
+  })
+}
+
+// Server-side proxy fallback — POSTs raw bytes to /api/v1/uploads/proxy
+// which uploads to S3 with credentials and returns the public URL.
+async function proxyUpload(
+  scope: UploadScope,
+  file: File,
+  setProgress: (n: number) => void,
+): Promise<UploadResult> {
+  const { useAuthStore } = await import("@/stores/auth.store")
+  const token = useAuthStore.getState().accessToken
+
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest()
+    xhr.open("POST", `/api/v1/uploads/proxy?scope=${scope}`, true)
+    xhr.setRequestHeader("Content-Type", file.type)
+    if (token) xhr.setRequestHeader("Authorization", `Bearer ${token}`)
+    xhr.withCredentials = true
+    xhr.upload.onprogress = (e) => {
+      if (e.lengthComputable) setProgress(Math.round((e.loaded / e.total) * 100))
+    }
+    xhr.onload = () => {
+      if (xhr.status >= 200 && xhr.status < 300) {
+        try { resolve(JSON.parse(xhr.responseText) as UploadResult) }
+        catch { reject(new Error("Proxy returned malformed response")) }
+      } else {
+        reject(new Error(`Proxy upload returned ${xhr.status}`))
+      }
+    }
+    xhr.onerror = () => reject(new Error("Proxy upload network error"))
+    xhr.send(file)
+  })
 }

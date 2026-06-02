@@ -140,18 +140,22 @@ function AnimeDetail({ anime, rawAnime }: { anime: Anime; rawAnime?: AnimeDTO })
       />
 
       {/* ── HERO ── */}
-      <div className="relative h-[52vh] min-h-[380px] w-full overflow-hidden">
+      <div className="relative h-[46vh] min-h-[340px] w-full overflow-hidden">
         <Image
           src={anime.image}
           alt={anime.title}
           fill
-          className="object-cover object-center brightness-[0.35]"
+          className="object-cover object-center brightness-[0.75]"
           sizes="100vw"
           priority
         />
-        {/* gradient overlays */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[var(--app-bg)] via-[var(--app-bg)]/60 to-transparent" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[var(--app-bg)] via-transparent to-transparent" />
+        {/* Left-to-right fade — keeps the right ~40% of the image bright
+            so the user actually sees the cover art, while the left side
+            stays readable behind the title. */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[var(--app-bg)] from-0% via-[var(--app-bg)]/70 via-35% to-transparent to-70%" />
+        {/* Soft bottom fade only — much lighter than before so the image
+            still reads at the bottom of the hero. */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[var(--app-bg)] from-0% via-transparent via-30% to-transparent" />
 
         {/* Rank chip */}
         <div className="absolute top-6 left-6 md:left-[max(1.5rem,calc((100vw-1280px)/2+1.5rem))]">

@@ -146,7 +146,12 @@ export default function NewClubPage() {
         },
         onError: (e: Error) => {
           setSubmitting(false)
-          push(e.message?.includes("CONFLICT") ? "That slug is already taken" : "Failed to create club", "error")
+          // Surface the real backend message (e.g. "You need at least 50
+          // reputation to create a club") instead of a generic toast.
+          const msg = e.message?.includes("CONFLICT")
+            ? "That slug is already taken"
+            : (e.message || "Failed to create club")
+          push(msg, "error")
         },
       }
     )

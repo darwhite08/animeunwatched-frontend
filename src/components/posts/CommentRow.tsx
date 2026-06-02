@@ -140,7 +140,7 @@ export function CommentRow({
           src={comment.author?.avatarUrl}
           name={name}
           size={32}
-          className="rounded-xl shadow-sm"
+          className="shadow-sm"
           fallbackClassName={`bg-gradient-to-br ${grad}`}
         />
       </Link>

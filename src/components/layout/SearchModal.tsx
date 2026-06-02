@@ -217,7 +217,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                               onClick={onClose}
                               className="group w-full flex items-center gap-3 px-4 py-2.5 rounded-xl hover:bg-surface transition-all"
                             >
-                              <Avatar src={u.avatarUrl} name={u.displayName} size={32} className="rounded-xl" />
+                              <Avatar src={u.avatarUrl} name={u.displayName} size={32} />
 
                               <div>
                                 <p className="text-sm font-black text-muted group-hover:text-foreground">{u.displayName}</p>

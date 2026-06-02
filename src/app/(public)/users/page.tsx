@@ -92,7 +92,7 @@ export default function UsersPage() {
               >
                 <span className="text-sm font-black text-subtle w-6 shrink-0">#{i+1}</span>
                 <div className="relative shrink-0">
-                  <Avatar src={user.avatarUrl} name={user.displayName} size={48} className="rounded-2xl group-hover:scale-105 transition-transform" />
+                  <Avatar src={user.avatarUrl} name={user.displayName} size={48} className="group-hover:scale-105 transition-transform" />
                   <span className="absolute -bottom-0.5 -right-0.5">
                     <PresenceDot userId={user.id} size={11} />
                   </span>

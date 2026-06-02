@@ -390,7 +390,7 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
             >
               <div className="flex items-start justify-between">
                 <div className="flex items-center gap-3">
-                  <Avatar src={post.avatarUrl} name={post.author} size={48} className="rounded-xl" fallbackClassName={`bg-gradient-to-br ${post.avatarColor}`} />
+                  <Avatar src={post.avatarUrl} name={post.author} size={48} fallbackClassName={`bg-gradient-to-br ${post.avatarColor}`} />
 
                   <div>
                     <p className="text-sm font-black text-foreground">{post.author}</p>

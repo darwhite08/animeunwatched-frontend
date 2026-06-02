@@ -273,7 +273,7 @@ function PostCard({ post }: { post: Post }) {
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3">
             <Link href={`/u/${post.author?.username ?? ""}`} className="shrink-0 hover:scale-105 transition-transform">
-              <Avatar src={post.author?.avatarUrl} name={authorName} size={40} className="rounded-xl" fallbackClassName={`bg-gradient-to-br ${grad}`} />
+              <Avatar src={post.author?.avatarUrl} name={authorName} size={40} fallbackClassName={`bg-gradient-to-br ${grad}`} />
             </Link>
             <div>
               <Link href={`/u/${post.author?.username ?? ""}`} className="rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60">
@@ -392,7 +392,6 @@ function PostCard({ post }: { post: Post }) {
                   src={useAuthStore.getState().user?.avatarUrl}
                   name={useAuthStore.getState().user?.displayName ?? useAuthStore.getState().user?.username ?? "?"}
                   size={28}
-                  className="rounded-lg"
                   fallbackClassName={`bg-gradient-to-br ${avatarGradient(useAuthStore.getState().user?.displayName ?? "U")}`}
                 />
                 <div className="flex-1 min-w-0">

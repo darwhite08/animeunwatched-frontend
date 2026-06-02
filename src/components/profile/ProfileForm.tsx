@@ -60,7 +60,7 @@ export default function ProfileForm() {
       {/* Avatar + name */}
       <div className="flex items-center gap-6 p-8 rounded-[2rem] bg-surface border border-border">
         <div className="relative group shrink-0">
-          <Avatar src={form.avatarUrl || null} name={form.displayName} size={80} className="rounded-2xl shadow-[0_0_20px_rgba(99,102,241,0.3)]" />
+          <Avatar src={form.avatarUrl || null} name={form.displayName} size={80} className="shadow-[0_0_20px_rgba(99,102,241,0.3)]" />
 
           <button
             type="button"

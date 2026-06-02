@@ -76,7 +76,7 @@ export default function LeaderboardPeriodPage({ params }: { params: Promise<{ pe
                       {u.rank}
                     </div>
                     {/* Avatar */}
-                    <Avatar src={(u as { avatarUrl?: string | null }).avatarUrl} name={u.displayName} size={40} className="rounded-2xl" />
+                    <Avatar src={(u as { avatarUrl?: string | null }).avatarUrl} name={u.displayName} size={40} />
 
                     {/* Info */}
                     <div className="flex-1 min-w-0">

@@ -116,7 +116,7 @@ function RealPostCard({ post, index }: { post: Post; index: number }) {
       <div className="flex items-start justify-between">
         <div className="flex items-center gap-3">
           <Link href={`/u/${post.author?.username ?? ""}`} className="shrink-0 hover:opacity-80 transition-opacity">
-            <Avatar src={post.author?.avatarUrl} name={authorName} size={40} className="rounded-xl" fallbackClassName={`bg-gradient-to-br ${gradClass}`} />
+            <Avatar src={post.author?.avatarUrl} name={authorName} size={40} fallbackClassName={`bg-gradient-to-br ${gradClass}`} />
           </Link>
           <div>
             <Link href={`/u/${post.author?.username ?? ""}`}

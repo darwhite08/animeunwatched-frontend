@@ -126,7 +126,7 @@ export default function FollowingPage() {
                 className="flex items-center gap-4 p-4 rounded-2xl bg-surface border border-border hover:border-border transition-colors group"
               >
                 <Link href={`/u/${u.username}`} className="shrink-0 group-hover:scale-105 transition-transform">
-                  <Avatar src={u.avatarUrl} name={u.displayName} size={48} className="rounded-2xl" />
+                  <Avatar src={u.avatarUrl} name={u.displayName} size={48} />
                 </Link>
                 <div className="flex-1 min-w-0">
                   <Link href={`/u/${u.username}`}>

@@ -7,6 +7,7 @@ import { useToast } from "@/stores/toast.store"
 import { useWatchlist } from "@/stores/watchlist.store"
 import { useAuthStore } from "@/stores/auth.store"
 import { useUpdateMe } from "@/hooks/useUsers"
+import { Avatar } from "@/components/ui/Avatar"
 
 export default function ProfileForm() {
   const { push } = useToast()
@@ -59,9 +60,8 @@ export default function ProfileForm() {
       {/* Avatar + name */}
       <div className="flex items-center gap-6 p-8 rounded-[2rem] bg-surface border border-border">
         <div className="relative group shrink-0">
-          <div className="h-20 w-20 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-2xl font-black shadow-[0_0_20px_rgba(99,102,241,0.3)]">
-            {form.displayName[0]}
-          </div>
+          <Avatar src={form.avatarUrl || null} name={form.displayName} size={80} className="rounded-2xl shadow-[0_0_20px_rgba(99,102,241,0.3)]" />
+
           <button
             type="button"
             onClick={() => push("Avatar upload coming soon", "info")}

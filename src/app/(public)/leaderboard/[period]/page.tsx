@@ -5,6 +5,7 @@ import { motion } from "framer-motion"
 import Link from "next/link"
 import { Trophy, Flame, Star, ArrowLeft, Loader2 } from "lucide-react"
 import { useLeaderboard } from "@/hooks/useLeaderboard"
+import { Avatar } from "@/components/ui/Avatar"
 
 const VALID_PERIODS = ["weekly", "monthly", "all-time"] as const
 type Period = typeof VALID_PERIODS[number]
@@ -75,9 +76,8 @@ export default function LeaderboardPeriodPage({ params }: { params: Promise<{ pe
                       {u.rank}
                     </div>
                     {/* Avatar */}
-                    <div className="h-10 w-10 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center font-black shrink-0">
-                      {u.displayName[0]?.toUpperCase() ?? "?"}
-                    </div>
+                    <Avatar src={(u as { avatarUrl?: string | null }).avatarUrl} name={u.displayName} size={40} className="rounded-2xl" />
+
                     {/* Info */}
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-black text-foreground">{u.displayName}</p>

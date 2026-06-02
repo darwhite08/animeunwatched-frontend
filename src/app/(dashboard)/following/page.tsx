@@ -7,9 +7,11 @@ import { Users, Search, Check, UserPlus, ArrowRight } from "lucide-react"
 import { useToast } from "@/stores/toast.store"
 import { useAuthStore } from "@/stores/auth.store"
 import { useFollowers, useFollowing } from "@/hooks/useUsers"
+import { Avatar } from "@/components/ui/Avatar"
 
 type UserCard = {
   id: string; username: string; displayName: string
+  avatarUrl?: string | null
   reputation: number; level: number; title: string
   anime: number; isFollowing: boolean
 }
@@ -44,12 +46,12 @@ export default function FollowingPage() {
 
   // Map API users to local UserCard type
   const apiFollowing: UserCard[] = (followingData?.data ?? []).map((u: any) => ({
-    id: u.id, username: u.username, displayName: u.displayName,
+    id: u.id, username: u.username, displayName: u.displayName, avatarUrl: u.avatarUrl ?? null,
     reputation: u.reputation ?? 0, level: Math.max(1, Math.floor(Math.sqrt((u.reputation ?? 0) * 100 / 1000))),
     title: "Shinobi", anime: 0, isFollowing: true,
   }))
   const apiFollowers: UserCard[] = (followersData?.data ?? []).map((u: any) => ({
-    id: u.id, username: u.username, displayName: u.displayName,
+    id: u.id, username: u.username, displayName: u.displayName, avatarUrl: u.avatarUrl ?? null,
     reputation: u.reputation ?? 0, level: Math.max(1, Math.floor(Math.sqrt((u.reputation ?? 0) * 100 / 1000))),
     title: "Shinobi", anime: 0, isFollowing: followed.has(u.id),
   }))
@@ -123,10 +125,8 @@ export default function FollowingPage() {
               <motion.div key={u.id} initial={{ opacity:0, y:8 }} animate={{ opacity:1, y:0 }} transition={{ delay: i*0.05 }}
                 className="flex items-center gap-4 p-4 rounded-2xl bg-surface border border-border hover:border-border transition-colors group"
               >
-                <Link href={`/u/${u.username}`}
-                  className="h-12 w-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center font-black text-xl shrink-0 group-hover:scale-105 transition-transform"
-                >
-                  {u.displayName[0]}
+                <Link href={`/u/${u.username}`} className="shrink-0 group-hover:scale-105 transition-transform">
+                  <Avatar src={u.avatarUrl} name={u.displayName} size={48} className="rounded-2xl" />
                 </Link>
                 <div className="flex-1 min-w-0">
                   <Link href={`/u/${u.username}`}>

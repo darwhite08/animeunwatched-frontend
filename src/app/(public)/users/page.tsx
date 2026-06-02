@@ -6,11 +6,13 @@ import Link from "next/link"
 import { Users, Search, Trophy, Flame, Star, TrendingUp } from "lucide-react"
 import { useLeaderboard } from "@/hooks/useLeaderboard"
 import { PresenceDot } from "@/components/ui/PresenceDot"
+import { Avatar } from "@/components/ui/Avatar"
 
 type User = {
   id: string; username: string; displayName: string
   reputation: number; level: number; title: string
   anime: number; streak: number; avatar: string
+  avatarUrl?: string | null
 }
 
 const USERS: User[] = [
@@ -32,6 +34,7 @@ export default function UsersPage() {
 
   const apiUsers: User[] = (lbData?.data ?? []).map(u => ({
     id: u.id ?? u.username, username: u.username, displayName: u.displayName,
+    avatarUrl: (u as { avatarUrl?: string | null }).avatarUrl ?? null,
     reputation: u.reputation, level: u.level,
     title: u.level >= 10 ? "Legendary" : u.level >= 7 ? "Kage" : u.level >= 5 ? "Elite Jonin" : u.level >= 3 ? "Jonin" : "Shinobi",
     anime: u.archived, streak: 0, avatar: u.displayName[0]?.toUpperCase() ?? "?",
@@ -89,9 +92,7 @@ export default function UsersPage() {
               >
                 <span className="text-sm font-black text-subtle w-6 shrink-0">#{i+1}</span>
                 <div className="relative shrink-0">
-                  <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-lg font-black group-hover:scale-105 transition-transform">
-                    {user.avatar}
-                  </div>
+                  <Avatar src={user.avatarUrl} name={user.displayName} size={48} className="rounded-2xl group-hover:scale-105 transition-transform" />
                   <span className="absolute -bottom-0.5 -right-0.5">
                     <PresenceDot userId={user.id} size={11} />
                   </span>

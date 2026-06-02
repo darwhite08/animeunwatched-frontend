@@ -9,6 +9,7 @@ import type { AnimeDTO } from "@/lib/api/types"
 import AnimeModal from "@/components/bestanimelist/AnimeModal"
 import { useRouter } from "next/navigation"
 import { useSearchAnimeApi } from "@/hooks/useAnime"
+import { Avatar } from "@/components/ui/Avatar"
 
 function mapDTO(a: AnimeDTO, i: number): Anime {
   return {
@@ -35,7 +36,7 @@ const QUICK_ACTIONS = [
 
 const RECENT = ["Frieren", "Chainsaw Man", "Solo Leveling", "Monster"]
 
-type UserSuggestion = { username: string; displayName: string }
+type UserSuggestion = { username: string; displayName: string; avatarUrl?: string | null }
 
 export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
   const [query, setQuery] = useState("")
@@ -216,9 +217,8 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                               onClick={onClose}
                               className="group w-full flex items-center gap-3 px-4 py-2.5 rounded-xl hover:bg-surface transition-all"
                             >
-                              <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-xs font-black shrink-0">
-                                {u.displayName[0]}
-                              </div>
+                              <Avatar src={u.avatarUrl} name={u.displayName} size={32} className="rounded-xl" />
+
                               <div>
                                 <p className="text-sm font-black text-muted group-hover:text-foreground">{u.displayName}</p>
                                 <p className="text-[9px] text-subtle">@{u.username}</p>

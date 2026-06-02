@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
@@ -20,6 +19,7 @@ import { disconnectSocket } from "@/lib/socket";
 import { logout } from "@/lib/api/endpoints";
 import NotificationBell from "@/components/notifications/NotificationBell";
 import { OnlineCountBadge } from "@/components/ui/OnlineCountBadge";
+import { Avatar } from "@/components/ui/Avatar";
 import SearchModal from "./SearchModal";
 import ProfileMenu from "./ProfileMenu";
 
@@ -312,19 +312,12 @@ export default function Navbar() {
             <div className="relative" ref={profileRef}>
               <button onClick={() => setProfileOpen(!profileOpen)}
                 className="flex items-center gap-2 rounded-full border border-border p-1 pr-3 bg-surface hover:bg-surface transition-all">
-                {storeUser.avatarUrl ? (
-                  <Image
-                    src={storeUser.avatarUrl}
-                    alt={storeUser.displayName ?? storeUser.username}
-                    width={28}
-                    height={28}
-                    className="h-7 w-7 rounded-full object-cover"
-                  />
-                ) : (
-                  <div className="h-7 w-7 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center text-[10px] font-bold text-foreground shrink-0">
-                    {(storeUser.displayName ?? storeUser.username)[0].toUpperCase()}
-                  </div>
-                )}
+                <Avatar
+                  src={storeUser.avatarUrl}
+                  name={storeUser.displayName ?? storeUser.username}
+                  size={28}
+                />
+                {/* Lint: Image import retained for other usages below */}
                 <span className="text-[10px] font-black text-muted hidden xl:block uppercase tracking-wide max-w-[72px] truncate">
                   {storeUser.displayName ?? storeUser.username}
                 </span>

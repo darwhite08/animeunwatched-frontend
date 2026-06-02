@@ -7,9 +7,6 @@ import { useAuthStore } from "@/stores/auth.store"
 import { useUserList } from "@/hooks/useLists"
 import { useMemo } from "react"
 
-/* ── Visual placeholder — no per-month tracking in backend yet ── */
-const MONTHLY_HOURS = [98, 112, 87, 134, 156, 102, 89, 143, 167, 89, 78, 165]
-const MAX_H = Math.max(...MONTHLY_HOURS)
 const MONTHS = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
 
 /* ── Colour palette for genre bars ── */
@@ -75,6 +72,18 @@ export default function StatsPage() {
 
     const maxStudioHours = topStudios[0]?.hours || 1
 
+    // Monthly hours for the current year — derived from updatedAt of
+    // entries. Approximation but uses only real signals: each entry's
+    // episodes are attributed to the month of its most recent update.
+    const thisYear = new Date().getFullYear()
+    const monthlyHours = new Array(12).fill(0) as number[]
+    for (const e of entries) {
+      const d = new Date(e.updatedAt)
+      if (d.getFullYear() !== thisYear) continue
+      monthlyHours[d.getMonth()] += Math.round(e.episodesSeen * 24 / 60)
+    }
+    const maxMonth = Math.max(1, ...monthlyHours)
+
     return {
       totalHrs,
       totalEps,
@@ -84,6 +93,9 @@ export default function StatsPage() {
       genreData,
       topStudios,
       maxStudioHours,
+      monthlyHours,
+      maxMonth,
+      thisYear,
     }
   }, [listData])
 
@@ -121,23 +133,25 @@ export default function StatsPage() {
         ))}
       </div>
 
-      {/* Monthly bar chart — visual placeholder (no per-month tracking yet) */}
+      {/* Monthly bar chart — derived from your list entries' updatedAt */}
       <div className="p-7 rounded-[2rem] bg-surface border border-border space-y-6">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-sm font-black uppercase tracking-[0.3em] text-muted">Monthly Hours — 2024</h2>
-            <p className="text-[9px] text-subtle mt-0.5">Visual overview — per-month tracking coming soon</p>
+            <h2 className="text-sm font-black uppercase tracking-[0.3em] text-muted">Monthly Hours — {stats.thisYear}</h2>
+            <p className="text-[9px] text-subtle mt-0.5">Episodes × 24 min, bucketed by last-update month</p>
           </div>
-          <span className="text-xs text-subtle font-mono">{MONTHLY_HOURS.reduce((a,b)=>a+b,0)}h total</span>
+          <span className="text-xs text-subtle font-mono">
+            {stats.monthlyHours.reduce((a, b) => a + b, 0)}h total
+          </span>
         </div>
         <div className="flex items-end gap-2 h-36">
-          {MONTHLY_HOURS.map((h, i) => (
+          {stats.monthlyHours.map((h, i) => (
             <div key={i} className="flex-1 flex flex-col items-center gap-1.5">
               <span className="text-[8px] font-mono text-subtle">{h}</span>
               <div className="w-full relative" style={{ height:"100px" }}>
                 <motion.div
                   initial={{ height:0 }}
-                  animate={{ height:`${(h/MAX_H)*100}%` }}
+                  animate={{ height:`${(h / stats.maxMonth) * 100}%` }}
                   transition={{ delay: i*0.04, duration:0.6, ease:"easeOut" }}
                   className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-accent to-accent-bright rounded-t-lg min-h-[2px]"
                 />

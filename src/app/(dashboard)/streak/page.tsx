@@ -20,14 +20,15 @@ export default function StreakPage() {
   const { data: listData } = useUserList(user?.username ?? "")
 
   const streakStats = useMemo(() => {
-    const entries = listData?.data ?? []
+    const entries   = listData?.data ?? []
     const completed = entries.filter(e => e.status === "COMPLETED").length
-    const watching = entries.filter(e => e.status === "WATCHING").length
-    const totalEps = entries.reduce((sum, e) => sum + e.episodesSeen, 0)
-    // Use real streak from DB; fallback to rep-estimate for legacy users
-    const rep = user?.reputation ?? 0
-    const estStreak = user?.streakDays ?? Math.min(365, Math.floor(rep / 10))
-    const bestStreak = user?.bestStreak ?? Math.min(365, Math.floor(rep / 6))
+    const watching  = entries.filter(e => e.status === "WATCHING").length
+    const totalEps  = entries.reduce((sum, e) => sum + e.episodesSeen, 0)
+    // Real streak numbers — show 0 when the user hasn't built one yet
+    // rather than a fabricated rep-based estimate.
+    const u = user as { streakDays?: number; bestStreak?: number } | null
+    const estStreak  = u?.streakDays ?? 0
+    const bestStreak = u?.bestStreak ?? u?.streakDays ?? 0
     return { estStreak, bestStreak, completed, watching, totalEps }
   }, [listData, user])
 

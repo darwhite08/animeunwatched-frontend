@@ -10,6 +10,8 @@ import {
 } from "lucide-react"
 import { useAuthStore } from "@/stores/auth.store"
 import { useUserList } from "@/hooks/useLists"
+import { useUserProfile } from "@/hooks/useUsers"
+import { useActivityFeed } from "@/hooks/useActivityFeed"
 
 /* ──────────────────────────────────────────────────────────────────────
    count-up hook — animates a number from 0 → target
@@ -119,6 +121,9 @@ function ProfileAvatar({ size = 128, progress, level, name, avatarUrl }: {
    ────────────────────────────────────────────────────────────────────── */
 function Hero({ isOwner }: { isOwner: boolean }) {
   const user = useAuthStore(s => s.user)
+  const { data: profileData } = useUserProfile(user?.username ?? "")
+  const profile = profileData?.user
+  const { data: listData } = useUserList(user?.username ?? "")
   const [following, setFollowing] = useState(false)
   const reputation = user?.reputation ?? 0
   const level = Math.max(1, Math.floor(reputation / 500) + 1)
@@ -131,6 +136,12 @@ function Hero({ isOwner }: { isOwner: boolean }) {
   const displayName = user?.displayName || user?.username || "Admin"
   const handle = user?.username ? `@${user.username}` : "@admin"
   const bio = user?.bio || "Cataloguing the canon. Welcome to the archive."
+
+  // Real social + curation counts. Curations = items in this user's
+  // public watchlist (lists are public in this app).
+  const followers  = profile?.stats?.followers ?? 0
+  const followingN = profile?.stats?.following ?? 0
+  const curations  = listData?.data?.length ?? 0
 
   return (
     <section className="relative rounded-[22px] bg-surface border border-border overflow-hidden">
@@ -181,9 +192,9 @@ function Hero({ isOwner }: { isOwner: boolean }) {
           <p className="text-sm text-muted mt-3 max-w-prose leading-relaxed">{bio}</p>
           <div className="flex items-center flex-wrap gap-x-5 gap-y-2 mt-4">
             {[
-              { n: "12.4K", l: "Followers" },
-              { n: "312", l: "Following" },
-              { n: "48", l: "Curations" },
+              { n: followers.toLocaleString(),  l: "Followers"  },
+              { n: followingN.toLocaleString(), l: "Following"  },
+              { n: curations.toLocaleString(),  l: "Curations"  },
             ].map(it => (
               <button key={it.l} className="flex items-baseline gap-1.5 group">
                 <span className="text-base font-black text-foreground tabular-nums">{it.n}</span>
@@ -335,8 +346,37 @@ function Heatmap() {
    Now Watching
    ────────────────────────────────────────────────────────────────────── */
 function NowWatching() {
-  const w = { title: "Frieren: Beyond Journey's End", ep: "EP 18 / 28", progress: 0.64 }
-  const r = 26, c = 2 * Math.PI * r, off = c * (1 - w.progress)
+  const user = useAuthStore(s => s.user)
+  const { data: listData } = useUserList(user?.username ?? "")
+
+  // Pick the user's most recent WATCHING / REWATCHING entry. If they
+  // haven't started anything, render an empty CTA.
+  const entries = listData?.data ?? []
+  const current = entries
+    .filter(e => e.status === "WATCHING" || e.status === "REWATCHING")
+    .sort((a, b) => new Date(b.updatedAt ?? 0).getTime() - new Date(a.updatedAt ?? 0).getTime())[0]
+
+  if (!current) {
+    return (
+      <section className="rounded-[22px] bg-surface border border-border p-6 flex flex-col gap-4 items-start">
+        <div className="flex items-center gap-2 text-sm font-bold text-foreground">
+          <Play size={14} className="text-accent" /> Now watching
+        </div>
+        <div className="text-xs text-muted">Nothing on the screen right now.</div>
+        <Link href="/discover" className="mt-auto flex items-center gap-2 px-4 py-2.5 rounded-xl text-[11px] font-black uppercase tracking-widest text-black bg-accent hover:bg-accent-bright transition-colors">
+          <Sparkles size={13} /> Find something
+        </Link>
+      </section>
+    )
+  }
+
+  const totalEps = current.anime?.episodes ?? 0
+  const watched  = current.episodesSeen ?? 0
+  const progress = totalEps > 0 ? Math.min(1, watched / totalEps) : 0
+  const r = 26, c = 2 * Math.PI * r, off = c * (1 - progress)
+  const title = current.anime?.title ?? "Unknown title"
+  const malId = current.anime?.malId
+
   return (
     <section className="rounded-[22px] bg-surface border border-border p-6 flex flex-col gap-4">
       <div className="flex items-center justify-between">
@@ -346,25 +386,31 @@ function NowWatching() {
         </div>
         <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
       </div>
-      <div className="relative aspect-[16/9] rounded-xl overflow-hidden"
-        style={{ background: "linear-gradient(135deg, color-mix(in srgb, var(--app-accent) 40%, var(--app-surface-2)), var(--app-surface-2))" }}>
-        <span className="absolute top-2 left-2 font-mono text-[9px] uppercase tracking-widest text-subtle">KEY ART</span>
+      <div className="relative aspect-[16/9] rounded-xl overflow-hidden bg-surface-2">
+        {current.anime?.imageUrl
+          ? /* eslint-disable-next-line @next/next/no-img-element */
+            <img src={current.anime.imageUrl} alt={title} className="absolute inset-0 w-full h-full object-cover opacity-70" />
+          : <span className="absolute top-2 left-2 font-mono text-[9px] uppercase tracking-widest text-subtle">{title}</span>
+        }
         <svg className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2" width="68" height="68" viewBox="0 0 68 68">
           <circle cx="34" cy="34" r={r} fill="rgba(0,0,0,0.5)" stroke="rgba(255,255,255,0.18)" strokeWidth={4} />
           <circle cx="34" cy="34" r={r} fill="none" stroke="#fff" strokeWidth={4} strokeLinecap="round"
             strokeDasharray={c} strokeDashoffset={off} transform="rotate(-90 34 34)" />
           <text x="34" y="38" textAnchor="middle" fontSize={14} fontWeight={800} fill="#fff">
-            {Math.round(w.progress * 100)}
+            {Math.round(progress * 100)}
           </text>
         </svg>
       </div>
       <div>
-        <div className="text-sm font-bold text-foreground line-clamp-1">{w.title}</div>
-        <div className="font-mono text-[10px] uppercase tracking-widest text-subtle mt-1">{w.ep}</div>
+        <div className="text-sm font-bold text-foreground line-clamp-1">{title}</div>
+        <div className="font-mono text-[10px] uppercase tracking-widest text-subtle mt-1">
+          EP {watched}{totalEps > 0 ? ` / ${totalEps}` : ""}
+        </div>
       </div>
-      <button className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-[11px] font-black uppercase tracking-widest text-black bg-accent hover:bg-accent-bright transition-colors">
+      <Link href={malId ? `/anime/${malId}` : "/watchlist"}
+        className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-[11px] font-black uppercase tracking-widest text-black bg-accent hover:bg-accent-bright transition-colors">
         <Play size={13} /> Continue
-      </button>
+      </Link>
     </section>
   )
 }
@@ -373,11 +419,18 @@ function NowWatching() {
    Stat band
    ────────────────────────────────────────────────────────────────────── */
 function StatBand({ archiveCount }: { archiveCount: number }) {
+  const user = useAuthStore(s => s.user)
+  const streakDays = (user as { streakDays?: number } | null)?.streakDays ?? 0
+  const bestStreak = (user as { bestStreak?: number } | null)?.bestStreak ?? streakDays
+  const reputation = user?.reputation ?? 0
+
+  // Series shapes are still illustrative (we don't yet store daily history
+  // for arbitrary metrics) — but every headline value is real.
   const stats = [
-    { id: "archive",  icon: Bookmark, value: archiveCount.toLocaleString(), label: "Archive",   sub: "Anime catalogued",      delta: "+18 this month",     up: true, color: "var(--app-accent)",      series: [12, 18, 15, 22, 19, 26, 24, 31] },
-    { id: "streak",   icon: Flame,    value: "365",                          label: "Day streak", sub: "Flame Grade IV",        delta: "Personal best",      up: true, color: "#F0883E",                 series: [40, 80, 120, 180, 220, 280, 320, 365] },
-    { id: "standing", icon: Globe2,   value: "Top 4%",                        label: "Standing",   sub: "Global percentile",     delta: "+1.2% this season",  up: true, color: "var(--app-accent-bright)", series: [9, 8, 8, 7, 6, 6, 5, 4] },
-    { id: "trust",    icon: ShieldCheck, value: "99",                         label: "Trust score", sub: "Reviewer reputation",   delta: "Verified curator",   up: true, color: "#3FB950",                 series: [82, 85, 88, 90, 93, 95, 97, 99] },
+    { id: "archive",  icon: Bookmark, value: archiveCount.toLocaleString(), label: "Archive",   sub: "Anime catalogued",      delta: archiveCount > 0 ? `${archiveCount} total` : "Empty",  up: true, color: "var(--app-accent)",      series: Array.from({ length: 8 }, (_, i) => Math.round(archiveCount * (i + 1) / 8)) },
+    { id: "streak",   icon: Flame,    value: streakDays.toString(),         label: "Day streak", sub: bestStreak > streakDays ? `Best: ${bestStreak}` : "Personal best", delta: bestStreak > streakDays ? `Best ${bestStreak}` : "Current run", up: true, color: "#F0883E",                 series: Array.from({ length: 8 }, (_, i) => Math.round(streakDays * (i + 1) / 8)) },
+    { id: "rep",      icon: Globe2,   value: reputation.toLocaleString(),    label: "Reputation",  sub: "XP from activity",     delta: reputation > 0 ? `${reputation} XP` : "Get started",  up: true, color: "var(--app-accent-bright)", series: Array.from({ length: 8 }, (_, i) => Math.round(reputation * (i + 1) / 8)) },
+    { id: "trust",    icon: ShieldCheck, value: Math.min(99, 50 + Math.floor(reputation / 20)).toString(), label: "Trust score", sub: "Reviewer reputation",   delta: "From your activity", up: true, color: "#3FB950",                 series: [50, 60, 70, 75, 80, 85, 90, 95] },
   ]
   return (
     <section className="grid grid-cols-2 lg:grid-cols-4 rounded-[22px] bg-surface border border-border overflow-hidden divide-x divide-y lg:divide-y-0 divide-border">
@@ -408,14 +461,36 @@ function StatBand({ archiveCount }: { archiveCount: number }) {
    Favorites wall
    ────────────────────────────────────────────────────────────────────── */
 function Favorites() {
-  const list = [
-    { id: "f1", rank: 1, title: "Frieren",       sub: "Beyond Journey's End", score: 9.4 },
-    { id: "f2", rank: 2, title: "Monster",       sub: "Naoki Urasawa",         score: 9.3 },
-    { id: "f3", rank: 3, title: "Vinland Saga",  sub: "Season 1",              score: 9.1 },
-    { id: "f4", rank: 4, title: "Mushishi",      sub: "Complete Series",       score: 9.0 },
-    { id: "f5", rank: 5, title: "Steins;Gate",   sub: "El Psy Kongroo",        score: 8.9 },
-    { id: "f6", rank: 6, title: "Cowboy Bebop",  sub: "See you, space cowboy", score: 8.8 },
-  ]
+  const user = useAuthStore(s => s.user)
+  const { data: listData } = useUserList(user?.username ?? "")
+
+  // Top 6 from the user's own list ranked by their personal score. Falls
+  // back to "no favourites" if the user hasn't scored anything yet.
+  const list = (listData?.data ?? [])
+    .filter(e => (e.score ?? 0) > 0)
+    .sort((a, b) => (b.score ?? 0) - (a.score ?? 0))
+    .slice(0, 6)
+    .map((e, i) => ({
+      id:    e.animeId,
+      rank:  i + 1,
+      title: e.anime?.title ?? "Unknown",
+      sub:   e.anime?.titleEnglish ?? e.anime?.type ?? "—",
+      score: (e.score ?? 0) / 10 * 10,  // 1-10 scale already
+      image: e.anime?.imageUrl ?? null,
+      malId: e.anime?.malId ?? null,
+    }))
+
+  if (list.length === 0) {
+    return (
+      <section className="rounded-[22px] bg-surface border border-border p-6">
+        <div className="flex items-center gap-2 text-sm font-bold text-foreground mb-3">
+          <Crown size={15} className="text-accent" /> All-time favorites
+        </div>
+        <div className="text-xs text-muted">Score some anime in your watchlist to see your top picks here.</div>
+      </section>
+    )
+  }
+
   return (
     <section className="rounded-[22px] bg-surface border border-border p-6">
       <div className="flex items-center justify-between mb-4">
@@ -427,20 +502,28 @@ function Favorites() {
         </button>
       </div>
       <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
-        {list.map(f => (
-          <div key={f.id} className="flex flex-col gap-2">
-            <div className="relative aspect-[2/3] rounded-xl overflow-hidden border border-border"
-              style={{ background: `linear-gradient(135deg, color-mix(in srgb, var(--app-accent) ${(7 - f.rank) * 8}%, var(--app-surface-2)), var(--app-surface-2))` }}>
-              <span className="absolute top-1.5 left-1.5 font-mono text-[8px] uppercase tracking-widest text-subtle">POSTER</span>
-              <span className="absolute top-1.5 right-1.5 px-1.5 py-0.5 rounded-md text-[9px] font-black bg-background/60 backdrop-blur text-foreground">#{f.rank}</span>
-              <span className="absolute bottom-1.5 left-1.5 flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[9px] font-black bg-background/60 backdrop-blur text-accent-bright">
-                <Star size={9} fill="currentColor" /> {f.score}
-              </span>
-            </div>
-            <div className="text-xs font-bold text-foreground line-clamp-1">{f.title}</div>
-            <div className="font-mono text-[9px] uppercase tracking-widest text-subtle line-clamp-1">{f.sub}</div>
-          </div>
-        ))}
+        {list.map(f => {
+          const card = (
+            <>
+              <div className="relative aspect-[2/3] rounded-xl overflow-hidden border border-border bg-surface-2">
+                {f.image
+                  /* eslint-disable-next-line @next/next/no-img-element */
+                  ? <img src={f.image} alt={f.title} loading="lazy" className="absolute inset-0 w-full h-full object-cover" />
+                  : <span className="absolute top-1.5 left-1.5 font-mono text-[8px] uppercase tracking-widest text-subtle">POSTER</span>
+                }
+                <span className="absolute top-1.5 right-1.5 px-1.5 py-0.5 rounded-md text-[9px] font-black bg-background/60 backdrop-blur text-foreground">#{f.rank}</span>
+                <span className="absolute bottom-1.5 left-1.5 flex items-center gap-1 px-1.5 py-0.5 rounded-md text-[9px] font-black bg-background/60 backdrop-blur text-accent-bright">
+                  <Star size={9} fill="currentColor" /> {f.score}
+                </span>
+              </div>
+              <div className="text-xs font-bold text-foreground line-clamp-1">{f.title}</div>
+              <div className="font-mono text-[9px] uppercase tracking-widest text-subtle line-clamp-1">{f.sub}</div>
+            </>
+          )
+          return f.malId
+            ? <Link key={f.id} href={`/anime/${f.malId}`} className="flex flex-col gap-2 hover:opacity-90 transition-opacity">{card}</Link>
+            : <div key={f.id} className="flex flex-col gap-2">{card}</div>
+        })}
       </div>
     </section>
   )
@@ -450,14 +533,42 @@ function Favorites() {
    Taste radar
    ────────────────────────────────────────────────────────────────────── */
 function TasteRadar() {
-  const data = [
-    { label: "Psych",   val: 0.95 },
-    { label: "Drama",   val: 0.82 },
-    { label: "Seinen",  val: 0.74 },
-    { label: "Fantasy", val: 0.58 },
-    { label: "Action",  val: 0.66 },
-    { label: "Slice",   val: 0.80 },
-  ]
+  const user = useAuthStore(s => s.user)
+  const { data: listData } = useUserList(user?.username ?? "")
+
+  // Derive top genres from the user's actual list. Each genre's value is
+  // the share of total tagged entries, capped at 1.0.
+  const tally = new Map<string, number>()
+  let totalTags = 0
+  for (const e of listData?.data ?? []) {
+    const gs = e.anime?.genres ?? []
+    for (const g of gs) {
+      const label = typeof g === "string" ? g : (g as { name?: string }).name
+      if (!label) continue
+      tally.set(label, (tally.get(label) ?? 0) + 1)
+      totalTags++
+    }
+  }
+  const top = Array.from(tally.entries())
+    .sort(([, a], [, b]) => b - a)
+    .slice(0, 6)
+  const data = top.length >= 3
+    ? top.map(([label, count]) => ({
+        label: label.length > 9 ? label.slice(0, 8) + "…" : label,
+        val:   Math.min(1, count / (totalTags / Math.max(3, top.length))),
+      }))
+    : []
+
+  if (data.length === 0) {
+    return (
+      <section className="rounded-[22px] bg-surface border border-border p-6">
+        <div className="flex items-center gap-2 text-sm font-bold text-foreground mb-3">
+          <Heart size={14} className="text-accent" /> Taste profile
+        </div>
+        <div className="text-xs text-muted">Add a few anime to your list to see your taste DNA.</div>
+      </section>
+    )
+  }
   const cx = 120, cy = 116, R = 86, N = data.length
   const ang = (i: number) => -Math.PI / 2 + i * (2 * Math.PI / N)
   const pt = (i: number, rad: number) => [cx + Math.cos(ang(i)) * rad, cy + Math.sin(ang(i)) * rad] as [number, number]
@@ -469,7 +580,7 @@ function TasteRadar() {
         <div className="flex items-center gap-2 text-sm font-bold text-foreground">
           <Heart size={14} className="text-accent" /> Taste profile
         </div>
-        <span className="font-mono text-[10px] uppercase tracking-widest text-subtle">6 dimensions</span>
+        <span className="font-mono text-[10px] uppercase tracking-widest text-subtle">{data.length} dimensions</span>
       </div>
       <div className="flex justify-center">
         <svg viewBox="0 0 240 232" className="w-full max-w-[260px]">
@@ -512,25 +623,38 @@ function TasteRadar() {
    Achievements
    ────────────────────────────────────────────────────────────────────── */
 function Achievements() {
-  const list = [
-    { id: "a1", icon: Flame,    name: "Eternal Flame", desc: "365-day watch streak",   rarity: "Legendary", tint: "#F0883E" },
-    { id: "a2", icon: Crown,    name: "Completionist", desc: "Finished 500 series",     rarity: "Epic",       tint: "#F2C94C" },
-    { id: "a3", icon: Medal,    name: "Tastemaker",    desc: "50 curated lists liked",  rarity: "Rare",       tint: "var(--app-accent-bright)" },
-    { id: "a4", icon: Sparkles, name: "Day One",       desc: "Founding member 2019",    rarity: "Mythic",     tint: "var(--app-accent)" },
+  const user        = useAuthStore(s => s.user)
+  const { data: listData } = useUserList(user?.username ?? "")
+  const reputation  = user?.reputation ?? 0
+  const streakDays  = (user as { streakDays?: number } | null)?.streakDays ?? 0
+  const archiveLen  = listData?.data?.length ?? 0
+  const completed   = (listData?.data ?? []).filter(e => e.status === "COMPLETED").length
+
+  // Derived from live counters. Each achievement is unlocked when the
+  // user meets its threshold; locked ones are dimmed.
+  const defs: Array<{ id: string; icon: typeof Flame; name: string; desc: string; rarity: string; tint: string; unlocked: boolean }> = [
+    { id: "a1", icon: Flame,    name: "Streak Spark",   desc: "7-day watch streak",       rarity: "Common",    tint: "#F0883E", unlocked: streakDays >= 7 },
+    { id: "a2", icon: Flame,    name: "Eternal Flame",  desc: "365-day watch streak",     rarity: "Legendary", tint: "#F0883E", unlocked: streakDays >= 365 },
+    { id: "a3", icon: Crown,    name: "Completionist",  desc: "Finish 50 series",         rarity: "Epic",      tint: "#F2C94C", unlocked: completed >= 50 },
+    { id: "a4", icon: Bookmark, name: "Archivist",      desc: "Catalogue 100 anime",      rarity: "Rare",      tint: "var(--app-accent)", unlocked: archiveLen >= 100 },
+    { id: "a5", icon: Medal,    name: "Tastemaker",     desc: "Earn 500 reputation",      rarity: "Rare",      tint: "var(--app-accent-bright)", unlocked: reputation >= 500 },
+    { id: "a6", icon: Sparkles, name: "Founding Shinobi", desc: "Joined Kaiveron — welcome.", rarity: "Mythic", tint: "var(--app-accent)", unlocked: !!user },
   ]
+  const unlocked = defs.filter(a => a.unlocked).length
+
   return (
     <section className="rounded-[22px] bg-surface border border-border p-6">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2 text-sm font-bold text-foreground">
           <Medal size={15} className="text-accent" /> Achievements
         </div>
-        <span className="font-mono text-[10px] uppercase tracking-widest text-subtle">16 unlocked</span>
+        <span className="font-mono text-[10px] uppercase tracking-widest text-subtle">{unlocked} / {defs.length} unlocked</span>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        {list.map(a => {
+        {defs.map(a => {
           const Icon = a.icon
           return (
-            <div key={a.id} className="flex items-center gap-3 p-3 rounded-xl border border-border bg-surface-2">
+            <div key={a.id} className={`flex items-center gap-3 p-3 rounded-xl border border-border bg-surface-2 transition-opacity ${a.unlocked ? "" : "opacity-40"}`}>
               <div className="w-10 h-10 rounded-lg grid place-items-center shrink-0"
                 style={{ background: `color-mix(in srgb, ${a.tint} 18%, transparent)`, color: a.tint }}>
                 <Icon size={18} />
@@ -551,14 +675,54 @@ function Achievements() {
 /* ──────────────────────────────────────────────────────────────────────
    Activity feed
    ────────────────────────────────────────────────────────────────────── */
+function timeShort(iso: string): string {
+  const diff = Date.now() - new Date(iso).getTime()
+  if (diff < 60_000)     return "now"
+  if (diff < 3_600_000)  return `${Math.floor(diff / 60_000)}m`
+  if (diff < 86_400_000) return `${Math.floor(diff / 3_600_000)}h`
+  return `${Math.floor(diff / 86_400_000)}d`
+}
+
 function ActivityFeed() {
-  const events = [
-    { id: "e1", icon: Star,     tint: "#F2C94C",                 text: "Rated",     strong: "Frieren EP 18",   meta: "9.4 ★",      time: "2h" },
-    { id: "e2", icon: Check,    tint: "#3FB950",                 text: "Completed", strong: "Monster",          meta: "74 episodes", time: "1d" },
-    { id: "e3", icon: Medal,    tint: "var(--app-accent-bright)", text: "Earned",    strong: "Tastemaker",       meta: "Rare badge",  time: "2d" },
-    { id: "e4", icon: Pencil,   tint: "var(--app-accent)",        text: "Reviewed",  strong: "Vinland Saga",     meta: "+128 likes",  time: "3d" },
-    { id: "e5", icon: Bookmark, tint: "#8B5CF6",                 text: "Added 6 titles to", strong: "Winter '26 Watch", meta: "List", time: "4d" },
-  ]
+  const user = useAuthStore(s => s.user)
+  const { data: activityData } = useActivityFeed("profile", user?.id)
+
+  type ActivityRow = {
+    id:           string
+    kind:         string
+    verb?:        string | null
+    body?:        string | null
+    score?:       number | null
+    linkedAnime?: { title?: string | null; episodes?: number | null } | null
+    createdAt:    string
+  }
+
+  const events = ((activityData?.pages.flatMap(p => p.data) ?? []) as ActivityRow[])
+    .slice(0, 6)
+    .map((a) => {
+      const animeTitle = a.linkedAnime?.title ?? ""
+      if (a.kind === "LIST_UPDATE") {
+        if (a.verb === "RATED")     return { id: a.id, icon: Star,     tint: "#F2C94C",                  text: "Rated",      strong: animeTitle, meta: `${a.score ?? "?"} ★`,           time: timeShort(a.createdAt) }
+        if (a.verb === "COMPLETED") return { id: a.id, icon: Check,    tint: "#3FB950",                  text: "Completed",  strong: animeTitle, meta: a.linkedAnime?.episodes ? `${a.linkedAnime.episodes} episodes` : "", time: timeShort(a.createdAt) }
+        if (a.verb === "STARTED")   return { id: a.id, icon: Play,     tint: "var(--app-accent)",         text: "Started",    strong: animeTitle, meta: "Watching",                       time: timeShort(a.createdAt) }
+        return { id: a.id, icon: Bookmark, tint: "#8B5CF6",                  text: "Updated",    strong: animeTitle, meta: a.verb ?? "",                     time: timeShort(a.createdAt) }
+      }
+      if (a.kind === "REVIEW") return { id: a.id, icon: Pencil,   tint: "var(--app-accent)",        text: "Reviewed",   strong: animeTitle, meta: a.body ? `"${a.body.slice(0, 60)}…"` : "", time: timeShort(a.createdAt) }
+      if (a.kind === "TEXT")   return { id: a.id, icon: Pencil,   tint: "var(--app-accent)",        text: "Posted",     strong: (a.body ?? "").slice(0, 60),  meta: "",                              time: timeShort(a.createdAt) }
+      return                     { id: a.id, icon: Sparkles, tint: "var(--app-accent-bright)", text: "Activity",   strong: animeTitle || (a.body ?? "").slice(0, 60), meta: "",            time: timeShort(a.createdAt) }
+    })
+
+  if (events.length === 0) {
+    return (
+      <section className="rounded-[22px] bg-surface border border-border p-6">
+        <div className="flex items-center gap-2 text-sm font-bold text-foreground mb-3">
+          <Clock size={14} className="text-accent" /> Recent activity
+        </div>
+        <div className="text-xs text-muted">Your activity will appear here as you watch + rate + post.</div>
+      </section>
+    )
+  }
+
   return (
     <section className="rounded-[22px] bg-surface border border-border p-6">
       <div className="flex items-center justify-between mb-3">

@@ -1,8 +1,11 @@
 "use client"
 
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import { motion, AnimatePresence, type Variants } from "framer-motion"
 import { Lock } from "lucide-react"
+import { useAuthStore } from "@/stores/auth.store"
+import { useUserList } from "@/hooks/useLists"
+import { useUserProfile } from "@/hooks/useUsers"
 
 type Badge = {
   id: string
@@ -16,127 +19,42 @@ type Badge = {
   progress?: number
 }
 
-const BADGES: Badge[] = [
-  // Common
-  {
-    id: "first-blood",
-    name: "First Blood",
-    description: "Added your first anime to the list.",
-    icon: "🎯",
-    rarity: "common",
-    earned: true,
-    earnedAt: "Jan 12, 2026",
-    requirement: "Add your first anime",
-  },
-  {
-    id: "social-butterfly",
-    name: "Social Butterfly",
-    description: "Built your first community connections.",
-    icon: "🦋",
-    rarity: "common",
-    earned: true,
-    earnedAt: "Jan 18, 2026",
-    requirement: "Follow 5 users",
-  },
-  {
-    id: "voice-of-the-people",
-    name: "Voice of the People",
-    description: "Made your opinion heard across 10 polls.",
-    icon: "🗳️",
-    rarity: "common",
-    earned: false,
-    requirement: "Vote in 10 polls",
-    progress: 70,
-  },
-  {
-    id: "critic",
-    name: "Critic",
-    description: "Penned your very first review.",
-    icon: "📝",
-    rarity: "common",
-    earned: true,
-    earnedAt: "Feb 3, 2026",
-    requirement: "Write your first review",
-  },
-  // Rare
-  {
-    id: "centurion",
-    name: "Centurion",
-    description: "A true veteran — 100 anime archived.",
-    icon: "⚔️",
-    rarity: "rare",
-    earned: true,
-    earnedAt: "Mar 15, 2026",
-    requirement: "Archive 100 anime",
-  },
-  {
-    id: "fire-walker",
-    name: "Fire Walker",
-    description: "Kept the flame alive for 10 straight days.",
-    icon: "🔥",
-    rarity: "rare",
-    earned: true,
-    earnedAt: "Apr 2, 2026",
-    requirement: "Maintain a 10-day streak",
-  },
-  {
-    id: "the-dedicated",
-    name: "The Dedicated",
-    description: "A month of unwavering dedication.",
-    icon: "💎",
-    rarity: "rare",
-    earned: false,
-    requirement: "Maintain a 30-day streak",
-    progress: 60,
-  },
-  {
-    id: "binge-master",
-    name: "Binge Master",
-    description: "12 episodes in a single legendary session.",
-    icon: "📺",
-    rarity: "rare",
-    earned: false,
-    requirement: "Watch 12 episodes in one day",
-    progress: 40,
-  },
-  // Legendary
-  {
-    id: "neural-oracle",
-    name: "Neural Oracle",
-    description: "You have transcended. Level 9 achieved.",
-    icon: "🧠",
-    rarity: "legendary",
-    earned: false,
-    requirement: "Reach level 9",
-  },
-  {
-    id: "legendary-shinobi",
-    name: "Legendary Shinobi",
-    description: "Reputation of a thousand — feared and respected.",
-    icon: "👑",
-    rarity: "legendary",
-    earned: false,
-    requirement: "Reach 1000 reputation",
-  },
-  {
-    id: "completionist",
-    name: "Completionist",
-    description: "500 anime archived. There are no more worlds to conquer.",
-    icon: "🏆",
-    rarity: "legendary",
-    earned: false,
-    requirement: "Archive 500 anime",
-  },
-  {
-    id: "first-reviewer",
-    name: "First Reviewer",
-    description: "100 people found your review helpful. You matter.",
-    icon: "🌟",
-    rarity: "legendary",
-    earned: false,
-    requirement: "Get 100 helpful votes on a review",
-  },
-]
+/* Build the live badge list from real counters. */
+function buildBadges(input: {
+  archiveCount:  number
+  reviewCount:   number
+  followingN:    number
+  streakDays:    number
+  bestStreak:    number
+  reputation:    number
+  level:         number
+  joinedAt?:     string
+}): Badge[] {
+  const earnedAt = (cond: boolean): string | undefined =>
+    cond && input.joinedAt
+      ? new Date(input.joinedAt).toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric" })
+      : undefined
+
+  function pct(numer: number, denom: number): number {
+    return Math.min(99, Math.max(1, Math.round((numer / denom) * 100)))
+  }
+
+  return [
+    // Common
+    { id: "first-blood",        name: "First Blood",        description: "Added your first anime to the list.",  icon: "🎯", rarity: "common",   requirement: "Add your first anime",      earned: input.archiveCount >= 1,  earnedAt: earnedAt(input.archiveCount >= 1) },
+    { id: "social-butterfly",   name: "Social Butterfly",   description: "Built your first community connections.", icon: "🦋", rarity: "common",   requirement: "Follow 5 users",            earned: input.followingN >= 5,    earnedAt: earnedAt(input.followingN >= 5),    progress: input.followingN < 5  ? pct(input.followingN, 5)  : undefined },
+    { id: "critic",             name: "Critic",             description: "Penned your very first review.",       icon: "📝", rarity: "common",   requirement: "Write your first review",   earned: input.reviewCount >= 1,   earnedAt: earnedAt(input.reviewCount >= 1) },
+    // Rare
+    { id: "centurion",          name: "Centurion",          description: "A true veteran — 100 anime archived.", icon: "⚔️", rarity: "rare",     requirement: "Archive 100 anime",         earned: input.archiveCount >= 100, earnedAt: earnedAt(input.archiveCount >= 100), progress: input.archiveCount < 100 ? pct(input.archiveCount, 100) : undefined },
+    { id: "fire-walker",        name: "Fire Walker",        description: "Kept the flame alive for 10 days.",    icon: "🔥", rarity: "rare",     requirement: "Maintain a 10-day streak",  earned: input.bestStreak >= 10,    earnedAt: earnedAt(input.bestStreak >= 10),     progress: input.bestStreak < 10 ? pct(input.bestStreak, 10) : undefined },
+    { id: "the-dedicated",      name: "The Dedicated",      description: "A month of unwavering dedication.",    icon: "💎", rarity: "rare",     requirement: "Maintain a 30-day streak",  earned: input.bestStreak >= 30,    earnedAt: earnedAt(input.bestStreak >= 30),     progress: input.bestStreak < 30 ? pct(input.bestStreak, 30) : undefined },
+    // Legendary
+    { id: "neural-oracle",      name: "Neural Oracle",      description: "You have transcended. Level 9 achieved.", icon: "🧠", rarity: "legendary", requirement: "Reach level 9",          earned: input.level >= 9,         earnedAt: earnedAt(input.level >= 9),          progress: input.level < 9 ? pct(input.level, 9) : undefined },
+    { id: "legendary-shinobi",  name: "Legendary Shinobi",  description: "Reputation of a thousand.",            icon: "👑", rarity: "legendary", requirement: "Reach 1000 reputation",     earned: input.reputation >= 1000, earnedAt: earnedAt(input.reputation >= 1000), progress: input.reputation < 1000 ? pct(input.reputation, 1000) : undefined },
+    { id: "completionist",      name: "Completionist",      description: "500 anime archived.",                 icon: "🏆", rarity: "legendary", requirement: "Archive 500 anime",          earned: input.archiveCount >= 500, earnedAt: earnedAt(input.archiveCount >= 500), progress: input.archiveCount < 500 ? pct(input.archiveCount, 500) : undefined },
+    { id: "eternal-flame",      name: "Eternal Flame",      description: "365-day streak — the ultimate test.",  icon: "🌟", rarity: "legendary", requirement: "Maintain a 365-day streak", earned: input.bestStreak >= 365,   earnedAt: earnedAt(input.bestStreak >= 365),  progress: input.bestStreak < 365 ? pct(input.bestStreak, 365) : undefined },
+  ]
+}
 
 const RARITY_CONFIG = {
   common: {
@@ -195,9 +113,24 @@ const cardVariants: Variants = {
 
 export default function BadgeShowcase() {
   const [activeTab, setActiveTab] = useState<FilterTab>("all")
+  const user = useAuthStore(s => s.user)
+  const { data: profileData } = useUserProfile(user?.username ?? "")
+  const { data: listData }    = useUserList(user?.username ?? "")
+
+  const BADGES = useMemo(() => buildBadges({
+    archiveCount: listData?.data?.length ?? 0,
+    reviewCount:  profileData?.user?.stats?.reviewCount ?? 0,
+    followingN:   profileData?.user?.stats?.following   ?? 0,
+    streakDays:   (user as { streakDays?: number } | null)?.streakDays ?? 0,
+    bestStreak:   (user as { bestStreak?: number } | null)?.bestStreak
+      ?? (user as { streakDays?: number } | null)?.streakDays ?? 0,
+    reputation:   user?.reputation ?? 0,
+    level:        Math.max(1, Math.floor(Math.sqrt((user?.reputation ?? 0) * 100 / 1000))),
+    joinedAt:     user?.createdAt,
+  }), [user, profileData, listData])
 
   const earnedCount = BADGES.filter((b) => b.earned).length
-  const totalCount = BADGES.length
+  const totalCount  = BADGES.length
 
   const filtered = BADGES.filter((b) => {
     if (activeTab === "all") return true

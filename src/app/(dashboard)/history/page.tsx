@@ -233,7 +233,17 @@ export default function HistoryPage() {
       coverGradient: `from-indigo-${6 + (i % 4) * 100}/30 to-purple-${6 + (i % 3) * 100}/20`,
     }))
 
-  const [entries, setEntries] = useState<HistoryEntry[]>(() => apiHistory.length > 0 ? apiHistory : HISTORY_ENTRIES)
+  // Realtime: keep local entries in sync with the API. When listData
+  // refetches (e.g. after the user logs an episode), this re-derives.
+  const [removedIds, setRemovedIds] = useState<Set<number>>(new Set())
+  const entries = apiHistory.filter(e => !removedIds.has(e.id))
+  const setEntries = (updater: (prev: HistoryEntry[]) => HistoryEntry[]) => {
+    const next = updater(entries)
+    const removed = new Set(
+      apiHistory.filter(e => !next.find(n => n.id === e.id)).map(e => e.id),
+    )
+    setRemovedIds(removed)
+  }
   const [query, setQuery] = useState("")
 
   const filtered = useMemo(() => {
@@ -270,8 +280,8 @@ export default function HistoryPage() {
       : "0m"
 
   const handleClearAll = () => {
-    setEntries([])
-    push("Watch history cleared", "info")
+    setEntries(() => [])
+    push("Watch history cleared (local view only)", "info")
   }
 
   return (

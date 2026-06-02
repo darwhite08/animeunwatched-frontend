@@ -6,8 +6,9 @@ import Link from "next/link"
 import { Users, Search, Check, UserPlus, ArrowRight } from "lucide-react"
 import { useToast } from "@/stores/toast.store"
 import { useAuthStore } from "@/stores/auth.store"
-import { useFollowers, useFollowing } from "@/hooks/useUsers"
+import { useFollowers, useFollowing, useFollow } from "@/hooks/useUsers"
 import { Avatar } from "@/components/ui/Avatar"
+import { useQueryClient } from "@tanstack/react-query"
 
 type UserCard = {
   id: string; username: string; displayName: string
@@ -16,21 +17,7 @@ type UserCard = {
   anime: number; isFollowing: boolean
 }
 
-const FOLLOWING_DATA: UserCard[] = [
-  { id:"1", username:"otaku_arch",     displayName:"Otaku Arch",      reputation:1240, level:12, title:"Neural Oracle",  anime:412, isFollowing:true  },
-  { id:"2", username:"shadow_watcher", displayName:"Shadow Watcher",  reputation:840,  level:9,  title:"Legendary",      anime:298, isFollowing:true  },
-  { id:"3", username:"void_seeker",    displayName:"Void Seeker",     reputation:620,  level:7,  title:"Kage",            anime:256, isFollowing:true  },
-  { id:"4", username:"cipher_ronin",   displayName:"Cipher Ronin",    reputation:320,  level:5,  title:"Anbu",            anime:178, isFollowing:true  },
-  { id:"5", username:"neural_ghost",   displayName:"Neural Ghost",    reputation:480,  level:6,  title:"Elite Jonin",    anime:201, isFollowing:false },
-  { id:"6", username:"alpha_watcher",  displayName:"Alpha Watcher",   reputation:240,  level:4,  title:"Jonin",           anime:156, isFollowing:false },
-]
-
-const FOLLOWERS_DATA: UserCard[] = [
-  { id:"7",  username:"delta_weeb",     displayName:"Delta Weeb",      reputation:180, level:3, title:"Shinobi",         anime:134, isFollowing:false },
-  { id:"8",  username:"kurosaki_fan",   displayName:"Kurosaki Fan",    reputation:140, level:3, title:"Shinobi",         anime:112, isFollowing:true  },
-  { id:"9",  username:"titan_slayer",   displayName:"Titan Slayer",    reputation:110, level:2, title:"Apprentice",      anime:98,  isFollowing:false },
-  { id:"10", username:"anime_oracle",   displayName:"Anime Oracle",    reputation:88,  level:2, title:"Apprentice",      anime:87,  isFollowing:true  },
-]
+// No more mock fallbacks — empty list renders an empty-state CTA.
 
 type Tab = "following" | "followers"
 
@@ -56,22 +43,50 @@ export default function FollowingPage() {
     title: "Shinobi", anime: 0, isFollowing: followed.has(u.id),
   }))
 
-  const base = tab === "following"
-    ? (apiFollowing.length > 0 ? apiFollowing : FOLLOWING_DATA)
-    : (apiFollowers.length > 0 ? apiFollowers : FOLLOWERS_DATA)
+  const base = tab === "following" ? apiFollowing : apiFollowers
   const filtered = useMemo(() => base.filter(u =>
     !query || u.displayName.toLowerCase().includes(query.toLowerCase()) ||
     u.username.toLowerCase().includes(query.toLowerCase())
   ), [base, query])
 
+  // Real follow/unfollow against the backend, with cache invalidation so
+  // the lists update immediately for both tabs.
+  const qc = useQueryClient()
+  const followMut = useFollow("")  // we'll target via username below
   const toggle = (u: UserCard) => {
+    const wasFollowing = (tab === "following") || followed.has(u.id)
+    // Optimistic local toggle
     setFollowed(s => {
       const n = new Set(s)
-      if (n.has(u.id)) { n.delete(u.id); push(`Unfollowed @${u.username}`, "info") }
-      else { n.add(u.id); push(`Now following @${u.username}! 🎌`, "success") }
+      if (n.has(u.id)) n.delete(u.id)
+      else             n.add(u.id)
       return n
     })
+    void import("@/lib/api/endpoints").then(ep => {
+      const promise = wasFollowing
+        ? ep.unfollow(u.username)
+        : ep.follow(u.username)
+      promise
+        .then(() => {
+          push(wasFollowing ? `Unfollowed @${u.username}` : `Now following @${u.username}! 🎌`,
+               wasFollowing ? "info" : "success")
+          // Invalidate so the lists refetch with the new follow state
+          qc.invalidateQueries({ queryKey: ["users", authUser?.username, "followers"] })
+          qc.invalidateQueries({ queryKey: ["users", authUser?.username, "following"] })
+        })
+        .catch(() => {
+          // Revert optimistic state
+          setFollowed(s => {
+            const n = new Set(s)
+            if (n.has(u.id)) n.delete(u.id)
+            else             n.add(u.id)
+            return n
+          })
+          push("Could not update follow — try again.", "error")
+        })
+    })
   }
+  void followMut  // silence unused — we go via direct endpoint for flexibility
 
   return (
     <div className="max-w-3xl mx-auto px-6 py-12 pb-32 space-y-8">
@@ -96,7 +111,7 @@ export default function FollowingPage() {
           >
             {t}
             <span className="ml-2 text-[9px] text-subtle font-mono">
-              {t === "following" ? (apiFollowing.length || FOLLOWING_DATA.length) : (apiFollowers.length || FOLLOWERS_DATA.length)}
+              {t === "following" ? apiFollowing.length : apiFollowers.length}
             </span>
             {tab === t && (
               <motion.div layoutId="follow-tab-line"

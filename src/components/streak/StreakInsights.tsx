@@ -1,31 +1,70 @@
+"use client"
+
 // src/components/streak/StreakInsights.tsx
-import { motion } from "framer-motion";
-import { Zap, Target, TrendingUp, AlertCircle } from "lucide-react";
+//
+// All insights are derived from real signals: list activity hour
+// distribution → "Prime Viewing"; current streak → "Next Milestone";
+// archive size → "Community Rank" (rough percentile placeholder until
+// we have a real leaderboard rank endpoint).
+import { motion } from "framer-motion"
+import { Zap, Target, TrendingUp, AlertCircle } from "lucide-react"
+import { useAuthStore } from "@/stores/auth.store"
+import { useUserList } from "@/hooks/useLists"
+
+function nextMilestone(streak: number): { days: number; label: string } {
+  if (streak < 7)   return { days: 7,   label: "Streak Spark" }
+  if (streak < 30)  return { days: 30,  label: "Fire Walker" }
+  if (streak < 100) return { days: 100, label: "Century Flame" }
+  if (streak < 365) return { days: 365, label: "Eternal Flame" }
+  return { days: streak, label: "Eternal Flame" }
+}
 
 export const StreakInsights = () => {
+  const user = useAuthStore(s => s.user)
+  const { data: listData } = useUserList(user?.username ?? "")
+  const streak = (user as { streakDays?: number } | null)?.streakDays ?? 0
+  const entries = listData?.data ?? []
+
+  // Prime viewing — most common hour-of-day across all list updates
+  const hourCounts = new Array(24).fill(0) as number[]
+  for (const e of entries) hourCounts[new Date(e.updatedAt).getHours()]++
+  const peakHour = hourCounts.reduce((best, c, i) => c > hourCounts[best] ? i : best, 0)
+  const peakLabel = entries.length === 0
+    ? "—"
+    : new Date(2025, 0, 1, peakHour).toLocaleTimeString(undefined, { hour: "numeric", hour12: true })
+
+  // Next milestone derived from current streak
+  const next = nextMilestone(streak)
+  const toGo = Math.max(0, next.days - streak)
+
+  // Most recent WATCHING entry — used as the "verify today's episode" prompt
+  const watching = entries
+    .filter(e => e.status === "WATCHING" || e.status === "REWATCHING")
+    .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())[0]
+
   const insights = [
     {
       title: "Prime Viewing",
-      value: "8:00 PM",
-      desc: "Your peak consistency time.",
-      icon: Zap,
+      value: peakLabel,
+      desc:  entries.length > 0 ? "Your peak consistency time." : "Update some entries to see this.",
+      icon:  Zap,
       color: "text-yellow-400",
     },
     {
       title: "Next Milestone",
-      value: "30 Days",
-      desc: "8 days until 'Fire Walker' badge.",
-      icon: Target,
+      value: toGo > 0 ? `${toGo}d` : "Achieved",
+      desc:  toGo > 0 ? `${toGo} day${toGo === 1 ? "" : "s"} until '${next.label}'.` : `'${next.label}' unlocked.`,
+      icon:  Target,
       color: "text-accent-bright",
     },
     {
-      title: "Community Rank",
-      value: "Top 4%",
-      desc: "You're outpacing 96% of users.",
-      icon: TrendingUp,
+      title: "Archive Size",
+      value: entries.length.toLocaleString(),
+      desc:  entries.length === 0 ? "Start your archive to see this grow." : `${entries.length} entr${entries.length === 1 ? "y" : "ies"} catalogued.`,
+      icon:  TrendingUp,
       color: "text-emerald-400",
     },
-  ];
+  ]
 
   return (
     <div className="space-y-6">
@@ -43,28 +82,29 @@ export const StreakInsights = () => {
               <div className={`p-3 rounded-xl bg-black/40 ${item.color}`}>
                 <item.icon size={20} />
               </div>
-              <span className="text-[10px] font-black text-subtle uppercase tracking-[0.2em]">Verified</span>
+              <span className="text-[10px] font-black text-subtle uppercase tracking-[0.2em]">Live</span>
             </div>
-            
+
             <div className="space-y-1">
               <p className="text-2xl font-black text-foreground tracking-tight">{item.value}</p>
               <p className="text-xs font-bold text-muted uppercase tracking-tighter">{item.title}</p>
             </div>
-            
+
             <p className="mt-4 text-[11px] text-subtle font-medium leading-relaxed">
               {item.desc}
             </p>
           </motion.div>
         ))}
 
-        {/* Action Suggestion */}
-        <div className="p-6 rounded-[2rem] bg-accent/10 border border-accent/20 flex items-center gap-4 group cursor-pointer hover:bg-accent/20 transition-all">
-          <AlertCircle className="text-accent-bright shrink-0" size={20} />
-          <p className="text-[11px] font-bold text-accent-bright leading-tight">
-            Verify today's episode of <span className="text-foreground">One Piece</span> to maintain your standing.
-          </p>
-        </div>
+        {watching && (
+          <div className="p-6 rounded-[2rem] bg-accent/10 border border-accent/20 flex items-center gap-4 group cursor-pointer hover:bg-accent/20 transition-all">
+            <AlertCircle className="text-accent-bright shrink-0" size={20} />
+            <p className="text-[11px] font-bold text-accent-bright leading-tight">
+              Log today&apos;s episode of <span className="text-foreground">{watching.anime?.title ?? "your current show"}</span> to keep your streak alive.
+            </p>
+          </div>
+        )}
       </div>
     </div>
-  );
-};
+  )
+}

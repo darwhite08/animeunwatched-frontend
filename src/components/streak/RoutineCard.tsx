@@ -1,9 +1,29 @@
+"use client"
+
 // src/components/streak/RoutineCard.tsx
+//
+// Peak-activity bars are derived from the current user's actual list
+// entries: each entry's `updatedAt` hour is the proxy for "I was active
+// at this hour". The 12 bars represent paired 2-hour windows across a
+// 24-hour day so the chart stays readable.
 import { motion } from "framer-motion"
 import { Clock } from "lucide-react"
+import { useAuthStore } from "@/stores/auth.store"
+import { useUserList } from "@/hooks/useLists"
 
 export const RoutineCard = () => {
-  const hourlyData = [20, 40, 10, 5, 15, 80, 95, 40, 30, 10, 5, 2] // Mock intensity
+  const user = useAuthStore(s => s.user)
+  const { data: listData } = useUserList(user?.username ?? "")
+
+  const hourlyData = (() => {
+    const buckets = new Array(12).fill(0) as number[]
+    for (const e of listData?.data ?? []) {
+      const hr = new Date(e.updatedAt).getHours()
+      buckets[Math.floor(hr / 2)]++
+    }
+    const max = Math.max(1, ...buckets)
+    return buckets.map(b => Math.round((b / max) * 100))
+  })()
 
   return (
     <div className="p-8 rounded-[2.5rem] border border-border bg-surface shadow-2xl space-y-6 group">
@@ -27,7 +47,7 @@ export const RoutineCard = () => {
           />
         ))}
       </div>
-      
+
       <div className="flex justify-between text-[10px] font-bold text-subtle uppercase tracking-tighter">
         <span>Morning</span>
         <span>Evening</span>

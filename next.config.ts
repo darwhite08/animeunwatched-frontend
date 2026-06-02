@@ -92,10 +92,16 @@ const nextConfig: NextConfig = {
   // backend through port 3000 (Next.js) without needing direct access to port 4000.
   async rewrites() {
     const backendUrl = process.env.API_BASE ?? "http://localhost:4000";
+    const s3Origin   = process.env.NEXT_PUBLIC_S3_ORIGIN ?? "https://kaiveron-uploads.s3.us-east-1.amazonaws.com";
     return [
       { source: "/api/v1/:path*",  destination: `${backendUrl}/api/v1/:path*` },
       { source: "/health",         destination: `${backendUrl}/health` },
       { source: "/sitemap.xml",    destination: `${backendUrl}/sitemap.xml` },
+      // Proxy uploaded media through kaiveron.com so privacy-focused
+      // browser extensions don't block direct S3 URLs. Backend's
+      // S3_PUBLIC_URL is set to https://kaiveron.com/cdn so every new
+      // upload's publicUrl already points here.
+      { source: "/cdn/:path*",     destination: `${s3Origin}/:path*` },
       // NOTE: Socket.IO WebSockets CANNOT be proxied through Next.js rewrites.
       // The socket connects directly to the backend (port 4000) from the client.
       // On LAN (phone), port 4000 must be reachable — see socket.ts for the URL logic.

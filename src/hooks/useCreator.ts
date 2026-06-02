@@ -38,3 +38,20 @@ export function useCreatorContent() {
     staleTime: 60_000,
   })
 }
+
+export type CreatorDailyPoint = {
+  day:      string  // YYYY-MM-DD
+  posts:    number
+  likes:    number
+  comments: number
+}
+
+export function useCreatorDaily() {
+  const isAuth = useAuthStore(s => s.isAuthenticated)
+  return useQuery({
+    queryKey: ["creator/daily"],
+    queryFn:  () => api<{ data: CreatorDailyPoint[] }>("/creator/daily"),
+    enabled:  isAuth,
+    staleTime: 60_000,
+  })
+}

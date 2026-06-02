@@ -1,18 +1,15 @@
-import type { Metadata } from "next"
+"use client"
+
 import Link from "next/link"
 import { FileText, Download, Mail } from "lucide-react"
+import { useQuery } from "@tanstack/react-query"
+import { api } from "@/lib/api/client"
 
-export const metadata: Metadata = {
-  title: "Press Kit | Kaiveron",
-  description: "Media resources, brand assets, and press contact for Kaiveron.",
+function formatBig(n: number): string {
+  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1)}M+`
+  if (n >= 1_000)     return n.toLocaleString()
+  return String(n)
 }
-
-const STATS = [
-  { value: "12,402", label: "Monthly Active Users" },
-  { value: "1.2M+",  label: "Anime Archives Logged" },
-  { value: "3,842",  label: "Community Reviews" },
-  { value: "76",     label: "Platform Pages" },
-]
 
 const PRESS = [
   { date: "May 2026",   title: "Kaiveron launches Neural Oracle AI discovery engine", type: "Product Launch" },
@@ -21,7 +18,32 @@ const PRESS = [
   { date: "Feb 2026",   title: "Kaiveron v3.0 — Full platform rebuild",               type: "Major Release"  },
 ]
 
+interface PlatformStats {
+  users:    number
+  posts:    number
+  reviews:  number
+  anime:    number
+  clubs:    number
+  blogs:    number
+}
+
 export default function PressPage() {
+  // Live numbers from /analytics/stats — page is no longer a server
+  // component but the SEO loss is small (this is a press page, not a
+  // ranking-critical entrypoint).
+  const { data: stats } = useQuery<PlatformStats>({
+    queryKey: ["press-stats"],
+    queryFn:  () => api<PlatformStats>("/analytics/stats"),
+    staleTime: 60_000,
+  })
+
+  const STATS = [
+    { value: stats ? formatBig(stats.users)   : "—", label: "Registered Users"     },
+    { value: stats ? formatBig(stats.anime)   : "—", label: "Anime in Catalog"     },
+    { value: stats ? formatBig(stats.reviews) : "—", label: "Community Reviews"    },
+    { value: stats ? formatBig(stats.posts)   : "—", label: "Posts & Discussions"  },
+  ]
+
   return (
     <div className="min-h-screen bg-background text-foreground pb-32">
       <div className="max-w-4xl mx-auto px-6 pt-32 space-y-16">

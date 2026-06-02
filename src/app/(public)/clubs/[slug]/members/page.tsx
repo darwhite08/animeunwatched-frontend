@@ -15,6 +15,7 @@ import {
   Tv2,
 } from "lucide-react"
 import { useToast } from "@/stores/toast.store"
+import { useClub, useClubMembers } from "@/hooks/useClubs"
 
 /* ── Types ── */
 type Role = "ADMIN" | "MOD" | "USER"
@@ -196,9 +197,39 @@ export default function ClubMembersPage({
 }) {
   const { slug } = use(params)
   const { push } = useToast()
-  const clubName = slugToName(slug)
+  const { data: clubData } = useClub(slug)
+  const { data: membersData } = useClubMembers(slug)
+  const clubName = clubData?.club.name ?? slugToName(slug)
 
-  const [members, setMembers] = useState<Member[]>(() => buildMembers(slug))
+  // Map backend members → local Member shape. Avatar gradient is a stable
+  // hash of the username so the same user always renders the same colour.
+  const apiMembers: Member[] = (membersData?.data ?? []).map((m: {
+    userId: string
+    role: "ADMIN" | "MOD" | "USER"
+    joinedAt: string
+    user: { username: string; displayName: string; avatarUrl?: string | null; reputation?: number }
+  }) => {
+    const hash = Array.from(m.user.username).reduce((a, c) => a + c.charCodeAt(0), 0)
+    return {
+      id:             m.userId,
+      username:       m.user.username,
+      displayName:    m.user.displayName,
+      role:           m.role,
+      joinDate:       new Date(m.joinedAt).toLocaleDateString(undefined, { month: "short", year: "numeric" }),
+      reputation:     m.user.reputation ?? 0,
+      animeCount:     0,
+      avatarGradient: AVATAR_GRADIENTS[hash % AVATAR_GRADIENTS.length],
+      isFollowed:     false,
+    }
+  })
+
+  const [followedIds, setFollowedIds] = useState<Set<string>>(new Set())
+  const members: Member[] = apiMembers.map(m => ({ ...m, isFollowed: followedIds.has(m.id) }))
+  const setMembers = (updater: (prev: Member[]) => Member[]) => {
+    // Maintain follow toggles locally; the page is otherwise driven by the API
+    const next = updater(members)
+    setFollowedIds(new Set(next.filter(m => m.isFollowed).map(m => m.id)))
+  }
   const [search, setSearch] = useState("")
   const [isJoined, setIsJoined] = useState(false)
 

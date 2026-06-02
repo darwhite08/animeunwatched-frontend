@@ -17,17 +17,6 @@ type Review = {
   body: string; hasSpoilers: boolean; date: string; helpful: number; helpedByMe: boolean
 }
 
-const MOCK_REVIEWS: Review[] = [
-  { id:1,  animeId:"fullmetal-alchemist-brotherhood", author:"Otaku_Arch",    score:10, body:"A perfect anime in every sense. The pacing is flawless, every character has an arc, and the final act delivers on every promise made in episode one. The alchemy system is clever without being overly complicated. Required watching.",                    hasSpoilers:false, date:"2d ago",  helpful:312, helpedByMe:false },
-  { id:2,  animeId:"steins-gate",                     author:"ShadowWatcher", score:9,  body:"Starts slow — intentionally so. The first half feels like a comedy about time travel nerds. Then episode 12 happens and the show completely changes what it is. The emotional devastation in the second half earns every minute of setup.",                  hasSpoilers:false, date:"5d ago",  helpful:187, helpedByMe:true  },
-  { id:3,  animeId:"monster",                         author:"NeuralBot_X",   score:10, body:"Johan Liebert is the greatest villain in anime history. Not because he's powerful — because he's philosophically terrifying. This show will haunt you. Every episode tightens the knot. 74 episodes and not one is wasted.",                             hasSpoilers:false, date:"1w ago",  helpful:245, helpedByMe:false },
-  { id:4,  animeId:"attack-on-titan",                 author:"VoidSeeker",    score:9,  body:"The first season was lightning in a bottle. What follows is one of the most ambitious political narratives in the medium. The final arc is controversial but the journey to get there is unmatched. [SPOILER WARNING — The ending subverts everything you thought this show was about.]", hasSpoilers:true, date:"1w ago",  helpful:134, helpedByMe:false },
-  { id:5,  animeId:"cowboy-bebop",                    author:"Cipher_Ronin",  score:10, body:"Space, jazz, loneliness, and the best English dub ever recorded. Each episode is a short film. The show never explains itself or panders to the audience. Spike Spiegel is one of the most elegantly written protagonists in fiction.",                   hasSpoilers:false, date:"2w ago",  helpful:298, helpedByMe:true  },
-  { id:6,  animeId:"vinland-saga",                    author:"AlphaWatcher",  score:9,  body:"Season 1 is a masterclass in setting up a character study. Season 2 pays it off. Thorfinn's arc is one of the most emotionally mature character developments I've seen. The pacifism theme lands because the show made you feel the violence first.", hasSpoilers:false, date:"2w ago",  helpful:156, helpedByMe:false },
-  { id:7,  animeId:"frieren",                         author:"DeltaWeeb",     score:10, body:"Quiet, melancholic, and deeply moving. Frieren made me think about mortality and what it means to love people who don't live as long as you do. The magic system is elegant. A rare anime that improves on reflection.",                               hasSpoilers:false, date:"3w ago",  helpful:421, helpedByMe:false },
-  { id:8,  animeId:"death-note",                      author:"Kurosaki_Fan",  score:8,  body:"The first arc is a perfect thriller — the smartest battle of wits in anime. The second half loses momentum after the midpoint but gets enough right to still be exceptional. Light Yagami remains one of the most compelling anti-heroes ever.",        hasSpoilers:true,  date:"1m ago",  helpful:89,  helpedByMe:true  },
-]
-
 type Sort = "helpful" | "recent" | "highest" | "lowest"
 
 export default function ReviewsPage() {
@@ -59,7 +48,6 @@ export default function ReviewsPage() {
   }))
 
   const baseReviews = apiReviews
-  void MOCK_REVIEWS
   const [helpOverrides, setHelpOverrides] = useState<Record<number, { helpful: number; helpedByMe: boolean }>>({})
   const reviews = baseReviews.map(r => helpOverrides[r.id] ? { ...r, ...helpOverrides[r.id] } : r)
 

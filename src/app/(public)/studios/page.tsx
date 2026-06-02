@@ -8,6 +8,8 @@ import AnimeModal from "@/components/bestanimelist/AnimeModal"
 import type { Anime } from "@/lib/data/anime"
 import type { AnimeDTO } from "@/lib/api/types"
 import { useBrowseAnime } from "@/hooks/useAnime"
+import { useQuery } from "@tanstack/react-query"
+import { api } from "@/lib/api/client"
 
 function mapDTO(a: AnimeDTO, i: number): Anime {
   return {
@@ -21,32 +23,60 @@ function mapDTO(a: AnimeDTO, i: number): Anime {
   }
 }
 
-const STUDIOS = [
-  { name: "MAPPA",            monogram: "MA", colors: ["#ef4444","#f97316"], known: "Jujutsu Kaisen, Chainsaw Man, AoT Final Season" },
-  { name: "Madhouse",         monogram: "MH", colors: ["#8b5cf6","#6366f1"], known: "Hunter x Hunter, Death Note, OPM S1" },
-  { name: "Bones",            monogram: "BO", colors: ["var(--app-accent)","#d97706"], known: "Fullmetal Alchemist, My Hero Academia, SK8 the Infinity" },
-  { name: "ufotable",         monogram: "UF", colors: ["#06b6d4","#0891b2"], known: "Demon Slayer, Fate/Zero, Fate/UBW, Tales of Zestiria" },
-  { name: "Kyoto Animation",  monogram: "KA", colors: ["#10b981","#059669"], known: "Violet Evergarden, K-On!, Clannad, Tamako Market" },
-  { name: "Trigger",          monogram: "TR", colors: ["#ec4899","#db2777"], known: "Kill la Kill, Promare, Little Witch Academia, Cyberpunk" },
-  { name: "Wit Studio",       monogram: "WS", colors: ["#64748b","#475569"], known: "Vinland Saga, AoT S1-3, Spy x Family, Great Pretender" },
-  { name: "A-1 Pictures",     monogram: "A1", colors: ["#6366f1","#4f46e5"], known: "SAO, Kaguya-sama, Your Lie in April, Fairy Tail" },
-  { name: "Shaft",            monogram: "SH", colors: ["#a855f7","#7c3aed"], known: "Monogatari Series, Madoka Magica, Nisekoi, 3-gatsu" },
-  { name: "Sunrise",          monogram: "SR", colors: ["#f97316","#ea580c"], known: "Gundam, Code Geass, Cowboy Bebop, Love Live!" },
-  { name: "White Fox",        monogram: "WF", colors: ["#e2e8f0","#94a3b8"], known: "Re:Zero, Steins;Gate, Goblin Slayer, Katanagatari" },
-  { name: "Gainax",           monogram: "GX", colors: ["#0ea5e9","#0284c7"], known: "Neon Genesis Evangelion, FLCL, Gurren Lagann, Gunbuster" },
-  { name: "J.C.Staff",        monogram: "JC", colors: ["#84cc16","#65a30d"], known: "Toradora, Food Wars, DanMachi, Shakugan no Shana" },
-  { name: "Production I.G",   monogram: "IG", colors: ["#14b8a6","#0d9488"], known: "Ghost in the Shell, Haikyuu!!, Attack on Titan, Eden of East" },
-  { name: "CloverWorks",      monogram: "CW", colors: ["#f43f5e","#e11d48"], known: "Oshi no Ko, The Promised Neverland S2, Spy x Family S2" },
-  { name: "David Production", monogram: "DP", colors: ["var(--app-accent-bright)","var(--app-accent)"], known: "JoJo's Bizarre Adventure, Dr. Stone, Cells at Work!" },
-  { name: "OLM",              monogram: "OL", colors: ["#22d3ee","#06b6d4"], known: "Pokémon, Inazuma Eleven, Berserk (1997)" },
-  { name: "Doga Kobo",        monogram: "DK", colors: ["#fb7185","#f43f5e"], known: "Himouto Umaru-chan, Gabriel DropOut, Yuruyuri" },
-  { name: "Silver Link",      monogram: "SL", colors: ["#c0c0c0","#9ca3af"], known: "Non Non Biyori, Chivalry of a Failed Knight, Strike the Blood" },
-  { name: "Toei Animation",   monogram: "TA", colors: ["#ef4444","#b91c1c"], known: "Dragon Ball, One Piece, Sailor Moon, Digimon, Pretty Cure" },
-  { name: "Brain's Base",     monogram: "BB", colors: ["#7c3aed","#5b21b6"], known: "Durarara!!, Natsume's Book of Friends, Baccano!" },
-  { name: "Lerche",           monogram: "LE", colors: ["#2dd4bf","#14b8a6"], known: "Assassination Classroom, Danganronpa, Toilet-bound Hanako-kun" },
-] as const
+type Studio = { name: string; monogram: string; colors: [string, string]; known: string }
+type StudioName = string
 
-type StudioName = typeof STUDIOS[number]["name"]
+// Curated branding for studios we want to spotlight. Any studio returned
+// from the catalog that's not in here gets a deterministic monogram +
+// color treatment so the page always looks intentional.
+const STUDIO_BRAND: Record<string, Omit<Studio, "name">> = {
+  "MAPPA":            { monogram: "MA", colors: ["#ef4444","#f97316"], known: "Jujutsu Kaisen, Chainsaw Man, AoT Final Season" },
+  "Madhouse":         { monogram: "MH", colors: ["#8b5cf6","#6366f1"], known: "Hunter x Hunter, Death Note, OPM S1" },
+  "Bones":            { monogram: "BO", colors: ["var(--app-accent)","#d97706"], known: "Fullmetal Alchemist, My Hero Academia, SK8 the Infinity" },
+  "ufotable":         { monogram: "UF", colors: ["#06b6d4","#0891b2"], known: "Demon Slayer, Fate/Zero, Fate/UBW, Tales of Zestiria" },
+  "Kyoto Animation":  { monogram: "KA", colors: ["#10b981","#059669"], known: "Violet Evergarden, K-On!, Clannad, Tamako Market" },
+  "Trigger":          { monogram: "TR", colors: ["#ec4899","#db2777"], known: "Kill la Kill, Promare, Little Witch Academia, Cyberpunk" },
+  "Wit Studio":       { monogram: "WS", colors: ["#64748b","#475569"], known: "Vinland Saga, AoT S1-3, Spy x Family, Great Pretender" },
+  "A-1 Pictures":     { monogram: "A1", colors: ["#6366f1","#4f46e5"], known: "SAO, Kaguya-sama, Your Lie in April, Fairy Tail" },
+  "Shaft":            { monogram: "SH", colors: ["#a855f7","#7c3aed"], known: "Monogatari Series, Madoka Magica, Nisekoi, 3-gatsu" },
+  "Sunrise":          { monogram: "SR", colors: ["#f97316","#ea580c"], known: "Gundam, Code Geass, Cowboy Bebop, Love Live!" },
+  "White Fox":        { monogram: "WF", colors: ["#e2e8f0","#94a3b8"], known: "Re:Zero, Steins;Gate, Goblin Slayer, Katanagatari" },
+  "Gainax":           { monogram: "GX", colors: ["#0ea5e9","#0284c7"], known: "Neon Genesis Evangelion, FLCL, Gurren Lagann, Gunbuster" },
+  "J.C.Staff":        { monogram: "JC", colors: ["#84cc16","#65a30d"], known: "Toradora, Food Wars, DanMachi, Shakugan no Shana" },
+  "Production I.G":   { monogram: "IG", colors: ["#14b8a6","#0d9488"], known: "Ghost in the Shell, Haikyuu!!, Attack on Titan, Eden of East" },
+  "CloverWorks":      { monogram: "CW", colors: ["#f43f5e","#e11d48"], known: "Oshi no Ko, The Promised Neverland S2, Spy x Family S2" },
+  "David Production": { monogram: "DP", colors: ["var(--app-accent-bright)","var(--app-accent)"], known: "JoJo's Bizarre Adventure, Dr. Stone, Cells at Work!" },
+  "OLM":              { monogram: "OL", colors: ["#22d3ee","#06b6d4"], known: "Pokémon, Inazuma Eleven, Berserk (1997)" },
+  "Doga Kobo":        { monogram: "DK", colors: ["#fb7185","#f43f5e"], known: "Himouto Umaru-chan, Gabriel DropOut, Yuruyuri" },
+  "Silver Link":      { monogram: "SL", colors: ["#c0c0c0","#9ca3af"], known: "Non Non Biyori, Chivalry of a Failed Knight, Strike the Blood" },
+  "Toei Animation":   { monogram: "TA", colors: ["#ef4444","#b91c1c"], known: "Dragon Ball, One Piece, Sailor Moon, Digimon, Pretty Cure" },
+  "Brain's Base":     { monogram: "BB", colors: ["#7c3aed","#5b21b6"], known: "Durarara!!, Natsume's Book of Friends, Baccano!" },
+  "Lerche":           { monogram: "LE", colors: ["#2dd4bf","#14b8a6"], known: "Assassination Classroom, Danganronpa, Toilet-bound Hanako-kun" },
+}
+
+const DEFAULT_PALETTES: Array<[string, string]> = [
+  ["#6366f1","#4f46e5"], ["#10b981","#059669"], ["#f97316","#ea580c"],
+  ["#ec4899","#db2777"], ["#06b6d4","#0891b2"], ["#a855f7","#7c3aed"],
+]
+
+function brandFor(name: string, count: number): Studio {
+  const existing = STUDIO_BRAND[name]
+  if (existing) return { name, ...existing }
+  const initials = name
+    .split(/\s+/)
+    .map(w => w[0]?.toUpperCase() ?? "")
+    .join("")
+    .slice(0, 2)
+    .padEnd(2, "·")
+  const hash = Array.from(name).reduce((a, c) => a + c.charCodeAt(0), 0)
+  const palette = DEFAULT_PALETTES[hash % DEFAULT_PALETTES.length]
+  return {
+    name,
+    monogram: initials,
+    colors:   palette,
+    known:    `${count} title${count === 1 ? "" : "s"} in catalog`,
+  }
+}
 
 const LIMIT = 24
 
@@ -56,7 +86,7 @@ function StudioPanel({ studio, onAnimeClick }: { studio: StudioName; onAnimeClic
   const anime = (data?.data ?? []).map(mapDTO)
   const totalPages = data?.meta?.pages ?? 1
   const totalAnime = data?.meta?.total ?? 0
-  const s = STUDIOS.find(x => x.name === studio)!
+  const s = brandFor(studio, totalAnime)
 
   return (
     <div className="mt-4 p-6 rounded-2xl bg-surface border border-border">
@@ -118,6 +148,15 @@ function StudioPanel({ studio, onAnimeClick }: { studio: StudioName; onAnimeClic
 export default function StudiosPage() {
   const [activeStudio, setActiveStudio] = useState<StudioName | null>(null)
   const [selectedAnime, setSelectedAnime] = useState<Anime | null>(null)
+
+  // Live catalog: top 24 studios by anime count. Each gets curated branding
+  // when we have it, otherwise auto-generated initials + palette.
+  const { data: studiosData } = useQuery({
+    queryKey: ["catalog-studios", 24],
+    queryFn:  () => api<{ data: Array<{ name: string; count: number }> }>("/anime/studios?limit=24"),
+    staleTime: 60_000,
+  })
+  const STUDIOS: Studio[] = (studiosData?.data ?? []).map(s => brandFor(s.name, s.count))
 
   function toggleStudio(name: StudioName) {
     setActiveStudio(prev => prev === name ? null : name)

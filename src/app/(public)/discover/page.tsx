@@ -10,6 +10,8 @@ import { useWatchlist } from "@/stores/watchlist.store"
 import { useToast } from "@/stores/toast.store"
 import AnimeCard from "@/components/bestanimelist/AnimeCard"
 import AnimeModal from "@/components/bestanimelist/AnimeModal"
+import { useQuery } from "@tanstack/react-query"
+import { api } from "@/lib/api/client"
 import { useBrowseAnime } from "@/hooks/useAnime"
 import type { AnimeDTO } from "@/lib/api/types"
 
@@ -33,14 +35,9 @@ const mapDTO = (a: AnimeDTO, i: number): Anime => ({
 
 /* ── Data slices are computed inside the component from API data ── */
 
-const GENRES = ["Action", "Psychological", "Romance", "Fantasy", "Sci-Fi"] as const
-type Genre = (typeof GENRES)[number]
-
-const STUDIOS = [
-  { name: "MAPPA",    description: "Cinematic powerhouse behind AOT & JJK"   },
-  { name: "Madhouse", description: "Legendary studio of HxH, Death Note & Monster" },
-  { name: "Bones",    description: "Action legends behind FMA:B & Mob Psycho" },
-] as const
+// Genres + studios come from the live catalog. Empty arrays initially
+// while the queries load — the page handles the empty case gracefully.
+type Genre = string
 
 /* ── Trending Card ────────────────────────────────────────────────────── */
 function TrendingCard({
@@ -232,9 +229,22 @@ export default function DiscoverPage() {
     ? animeList.filter((a) => a.studio === selectedStudio)
     : []
 
-  const studioCounts = STUDIOS.map((s) => ({
-    ...s,
-    count: animeList.filter((a) => a.studio === s.name).length,
+  // Real genres + studios from /anime/genres + /anime/studios — top 6 each
+  const { data: genresData }  = useQuery({
+    queryKey: ["catalog-genres"],
+    queryFn:  () => api<{ data: Array<{ name: string; count: number }> }>("/anime/genres?limit=6"),
+    staleTime: 60_000,
+  })
+  const { data: studiosData } = useQuery({
+    queryKey: ["catalog-studios"],
+    queryFn:  () => api<{ data: Array<{ name: string; count: number }> }>("/anime/studios?limit=6"),
+    staleTime: 60_000,
+  })
+  const GENRES: Genre[] = (genresData?.data ?? []).map(g => g.name)
+  const studioCounts = (studiosData?.data ?? []).map(s => ({
+    name:        s.name,
+    description: `${s.count} title${s.count === 1 ? "" : "s"} in catalog`,
+    count:       animeList.filter((a) => a.studio === s.name).length || s.count,
   }))
 
   const openModal = (anime: Anime) => {

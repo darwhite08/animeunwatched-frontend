@@ -227,7 +227,8 @@ export default function ClubsPage() {
     reputation: c.reputation, isJoined: false,
   }))
 
-  const clubs: Club[] = apiClubs.length > 0 ? apiClubs : INITIAL_CLUBS
+  // API-only. Empty list is rendered as an empty-state below.
+  const clubs: Club[] = apiClubs
 
   const toggleJoin = (id: string) => {
     const c = clubs.find(x => x.id === id)

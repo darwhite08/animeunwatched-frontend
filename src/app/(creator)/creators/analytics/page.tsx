@@ -3,16 +3,8 @@
 import { motion } from "framer-motion"
 import { BarChart3, Eye, Heart, MessageCircle, Users, TrendingUp, TrendingDown, ArrowUpRight, RefreshCw } from "lucide-react"
 import { useQueryClient } from "@tanstack/react-query"
-import { useCreatorStats, useCreatorContent } from "@/hooks/useCreator"
+import { useCreatorStats, useCreatorContent, useCreatorDaily } from "@/hooks/useCreator"
 import { useToast } from "@/stores/toast.store"
-
-const TOP_CONTENT_FALLBACK = [
-  { title: "Why Attack on Titan Changed Anime Forever",   type: "Blog" as const, views: 12400, likes: 843  },
-  { title: "Gojo vs Sukuna Breakdown",                    type: "Blog" as const, views: 4200,  likes: 312  },
-  { title: "Best Anime of 2024 — Final Rankings",         type: "Blog" as const, views: 3800,  likes: 0    },
-  { title: "Gojo Satoru's Infinity: A Physics Breakdown", type: "Blog" as const, views: 2900,  likes: 220  },
-  { title: "Demon Slayer S5 Power Scaling",               type: "Blog" as const, views: 1100,  likes: 98   },
-]
 
 const TYPE_COLORS: Record<string, string> = {
   Blog: "bg-purple-500/20 text-purple-400 border-purple-500/20",
@@ -20,17 +12,7 @@ const TYPE_COLORS: Record<string, string> = {
   Poll: "bg-accent/20 text-accent-bright border-accent/20",
 }
 
-// Simple fake bar chart data (7 days)
-const CHART_DATA = [
-  { day: "Mon", views: 3200 },
-  { day: "Tue", views: 4100 },
-  { day: "Wed", views: 3800 },
-  { day: "Thu", views: 5200 },
-  { day: "Fri", views: 4600 },
-  { day: "Sat", views: 2900 },
-  { day: "Sun", views: 3100 },
-]
-const MAX_VIEWS = Math.max(...CHART_DATA.map(d => d.views))
+const WEEKDAY = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"] as const
 
 export default function AnalyticsPage() {
   const queryClient = useQueryClient()
@@ -38,26 +20,40 @@ export default function AnalyticsPage() {
 
   const { data: statsData } = useCreatorStats()
   const { data: contentData } = useCreatorContent()
+  const { data: dailyData }   = useCreatorDaily()
 
-  // Live values with graceful fallback to mock
-  const totalViews      = statsData?.totalViews      ?? 24800
-  const publishedBlogs  = statsData?.publishedBlogs  ?? 2
-  const postCount       = statsData?.postCount        ?? 8
-  const reputation      = statsData?.reputation       ?? 840
+  // Live values only — show "—" until backend responds rather than make up
+  // numbers. No more hardcoded fallbacks.
+  const totalViews      = statsData?.totalViews
+  const publishedBlogs  = statsData?.publishedBlogs
+  const postCount       = statsData?.postCount
+  const reputation      = statsData?.reputation
+
+  const fmt = (n: number | undefined) =>
+    n === undefined ? "—" : n >= 1000 ? `${(n / 1000).toFixed(1)}k` : String(n)
 
   const METRICS = [
-    { label: "Total Views",    value: totalViews >= 1000 ? `${(totalViews / 1000).toFixed(1)}k` : String(totalViews), delta: "+18%", up: true,  icon: Eye,           color: "text-accent-bright",  bg: "bg-accent/10"  },
-    { label: "Published",      value: String(publishedBlogs), delta: "+0%",  up: true,  icon: BarChart3,     color: "text-rose-400",    bg: "bg-rose-500/10"    },
-    { label: "Total Posts",    value: String(postCount),      delta: "+5%",  up: true,  icon: MessageCircle, color: "text-accent-bright",   bg: "bg-accent/10"   },
-    { label: "Reputation",     value: String(reputation),     delta: "+9%",  up: true,  icon: Users,         color: "text-emerald-400", bg: "bg-emerald-500/10" },
+    { label: "Total Views",    value: fmt(totalViews),     delta: "", up: true,  icon: Eye,           color: "text-accent-bright",  bg: "bg-accent/10"  },
+    { label: "Published",      value: fmt(publishedBlogs), delta: "", up: true,  icon: BarChart3,     color: "text-rose-400",    bg: "bg-rose-500/10"    },
+    { label: "Total Posts",    value: fmt(postCount),      delta: "", up: true,  icon: MessageCircle, color: "text-accent-bright",   bg: "bg-accent/10"   },
+    { label: "Reputation",     value: fmt(reputation),     delta: "", up: true,  icon: Users,         color: "text-emerald-400", bg: "bg-emerald-500/10" },
   ]
 
-  const topContent = contentData?.data?.slice(0, 5).map(item => ({
+  // Real 7-day series: combine likes + comments on the creator's posts
+  // into a single "engagement" bar per day. Posts alone are too sparse
+  // for a meaningful chart at small scale.
+  const CHART_DATA = (dailyData?.data ?? []).map(d => ({
+    day:   WEEKDAY[new Date(d.day).getUTCDay()],
+    views: d.posts * 10 + d.likes + d.comments,  // engagement weighting
+  }))
+  const MAX_VIEWS = Math.max(1, ...CHART_DATA.map(d => d.views))
+
+  const topContent = (contentData?.data ?? []).slice(0, 5).map(item => ({
     title: item.title,
     type:  "Blog" as const,
     views: item.mockViews,
     likes: Math.floor(item.mockViews * 0.07),
-  })) ?? TOP_CONTENT_FALLBACK
+  }))
 
   function handleSync() {
     queryClient.invalidateQueries({ queryKey: ["creator"] })

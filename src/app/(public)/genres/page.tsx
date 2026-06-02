@@ -8,6 +8,8 @@ import AnimeModal from "@/components/bestanimelist/AnimeModal"
 import type { Anime } from "@/lib/data/anime"
 import type { AnimeDTO } from "@/lib/api/types"
 import { useBrowseAnime } from "@/hooks/useAnime"
+import { useQuery } from "@tanstack/react-query"
+import { api } from "@/lib/api/client"
 
 function mapDTO(a: AnimeDTO, i: number): Anime {
   return {
@@ -21,7 +23,9 @@ function mapDTO(a: AnimeDTO, i: number): Anime {
   }
 }
 
-const GENRES = [
+type GenreBrand = { name: string; gradient: string; border: string; accent: string; emoji: string }
+
+const GENRE_BRAND_LIST: GenreBrand[] = [
   { name: "Action",       gradient: "from-red-900/40 to-red-950/10",        border: "border-red-900/30",      accent: "text-red-400",      emoji: "⚔️" },
   { name: "Adventure",    gradient: "from-green-900/40 to-green-950/10",    border: "border-green-900/30",    accent: "text-green-400",    emoji: "🗺️" },
   { name: "Avant Garde",  gradient: "from-fuchsia-900/40 to-fuchsia-950/10",border: "border-fuchsia-900/30",  accent: "text-fuchsia-400",  emoji: "🎭" },
@@ -53,9 +57,25 @@ const GENRES = [
   { name: "Space",        gradient: "from-indigo-950/50 to-blue-950/20",    border: "border-indigo-900/30",   accent: "text-accent-bright",   emoji: "🌌" },
   { name: "Vampire",      gradient: "from-red-900/50 to-zinc-950/30",       border: "border-red-900/30",      accent: "text-red-400",      emoji: "🧛" },
   { name: "Historical",   gradient: "from-amber-900/40 to-amber-950/10",    border: "border-amber-900/30",    accent: "text-accent-bright",    emoji: "🏯" },
-] as const
+]
 
-type GenreName = typeof GENRES[number]["name"]
+const GENRE_BRAND: Record<string, GenreBrand> = Object.fromEntries(
+  GENRE_BRAND_LIST.map(g => [g.name, g]),
+)
+
+const DEFAULT_GENRE_BRAND: GenreBrand = {
+  name:     "",
+  gradient: "from-slate-900/40 to-slate-950/10",
+  border:   "border-border",
+  accent:   "text-muted",
+  emoji:    "✨",
+}
+
+function brandForGenre(name: string): GenreBrand {
+  return GENRE_BRAND[name] ?? { ...DEFAULT_GENRE_BRAND, name }
+}
+
+type GenreName = string
 
 const LIMIT = 24
 
@@ -65,7 +85,7 @@ function GenrePanel({ genre, onAnimeClick }: { genre: GenreName; onAnimeClick: (
   const anime = (data?.data ?? []).map(mapDTO)
   const totalPages = data?.meta?.pages ?? 1
   const totalAnime = data?.meta?.total ?? 0
-  const g = GENRES.find(x => x.name === genre)!
+  const g = brandForGenre(genre)
 
   return (
     <div className="mt-4 p-6 rounded-2xl bg-surface border border-border">
@@ -130,6 +150,15 @@ function GenrePanel({ genre, onAnimeClick }: { genre: GenreName; onAnimeClick: (
 export default function GenresPage() {
   const [activeGenre, setActiveGenre] = useState<GenreName | null>(null)
   const [selectedAnime, setSelectedAnime] = useState<Anime | null>(null)
+
+  // Live catalog genres — top 32 by anime count. Each gets curated branding
+  // when available, otherwise the default slate treatment.
+  const { data: genresData } = useQuery({
+    queryKey: ["catalog-genres", 32],
+    queryFn:  () => api<{ data: Array<{ name: string; count: number }> }>("/anime/genres?limit=32"),
+    staleTime: 60_000,
+  })
+  const GENRES: GenreBrand[] = (genresData?.data ?? []).map(g => brandForGenre(g.name))
 
   function toggleGenre(name: GenreName) {
     setActiveGenre(prev => prev === name ? null : name)

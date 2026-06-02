@@ -26,9 +26,18 @@ import {
 import { useToast } from "@/stores/toast.store"
 import { useUserProfile, useFollow } from "@/hooks/useUsers"
 import { useUserList } from "@/hooks/useLists"
+import { useActivityFeed } from "@/hooks/useActivityFeed"
 import { useAuthStore } from "@/stores/auth.store"
 import { usePresence } from "@/hooks/useRealtime"
 import { PresenceDot } from "@/components/ui/PresenceDot"
+
+function timeAgo(iso: string): string {
+  const diff = Date.now() - new Date(iso).getTime()
+  if (diff < 60_000)     return "just now"
+  if (diff < 3_600_000)  return `${Math.floor(diff / 60_000)}m ago`
+  if (diff < 86_400_000) return `${Math.floor(diff / 3_600_000)}h ago`
+  return `${Math.floor(diff / 86_400_000)}d ago`
+}
 
 // Inline label next to @username on profile pages — shows green-dot Active /
 // grey dot Offline based on the user's real socket connection state.
@@ -80,69 +89,72 @@ type MockPost = {
   time: string
 }
 
-/* ─────────────────────────────────────────────
-   Mock data factory
-───────────────────────────────────────────── */
-const USER_TEMPLATES: Record<string, Partial<MockUser>> = {
-  otaku_arch: {
-    displayName: "Otaku Arch",
-    bio: "Cataloging anime since 2009. Psychological and seinen enjoyer. Will recommend Monster to everyone I meet.",
-    grade: "Crimson Shinobi",
-    level: 38,
-    stats: { archived: 312, streak: 47, rank: 228, followers: 1_840 },
-    dna: [
-      { label: "Psychological", percent: 91, colors: "from-purple-600 via-pink-500 to-rose-400" },
-      { label: "Seinen",        percent: 78, colors: "from-indigo-600 via-blue-500 to-cyan-400" },
-      { label: "Thriller",      percent: 62, colors: "from-red-600 via-orange-500 to-accent-bright" },
-      { label: "Fantasy",       percent: 34, colors: "from-emerald-600 via-teal-500 to-green-400" },
-    ],
-  },
-  shadowwatcher: {
-    displayName: "ShadowWatcher",
-    bio: "MAPPA defender. Chainsaw Man is a religious experience. Hot takes are my love language.",
-    grade: "Void Sentinel",
-    level: 22,
-    stats: { archived: 184, streak: 12, rank: 1_204, followers: 720 },
-    dna: [
-      { label: "Action",    percent: 88, colors: "from-red-600 via-orange-500 to-accent-bright" },
-      { label: "Shonen",    percent: 74, colors: "from-indigo-600 via-blue-500 to-cyan-400" },
-      { label: "Horror",    percent: 55, colors: "from-purple-600 via-pink-500 to-rose-400" },
-      { label: "Sci-Fi",    percent: 28, colors: "from-emerald-600 via-teal-500 to-green-400" },
-    ],
-  },
+/* Derive a "grade" + level from raw reputation rather than carrying any
+   hardcoded user templates around. Mirrors the leaderboard logic. */
+function gradeForLevel(level: number): string {
+  if (level >= 30) return "Crimson Shinobi"
+  if (level >= 20) return "Void Sentinel"
+  if (level >= 12) return "Neural Oracle"
+  if (level >= 7)  return "Elite Jonin"
+  if (level >= 4)  return "Jonin"
+  return "Iron Shinobi"
+}
+function levelFromRep(rep: number): number {
+  // Same curve used elsewhere: level = floor(sqrt(rep * 100 / 1000))
+  return Math.max(1, Math.floor(Math.sqrt(Math.max(0, rep) * 100 / 1000)))
 }
 
-function buildMockUser(username: string): MockUser {
-  const slug = username.toLowerCase().replace(/[^a-z0-9_]/g, "")
-  const template = USER_TEMPLATES[slug] ?? {}
-  const initials = username.slice(0, 2).toUpperCase()
+/* Compute the user's anime-DNA from their actual watchlist genre frequencies. */
+const DNA_GRADIENTS = [
+  "from-indigo-600 via-blue-500 to-cyan-400",
+  "from-emerald-600 via-teal-500 to-green-400",
+  "from-red-600 via-orange-500 to-accent-bright",
+  "from-purple-600 via-pink-500 to-rose-400",
+  "from-pink-600 via-rose-500 to-fuchsia-400",
+] as const
 
-  return {
-    username,
-    displayName: template.displayName ?? username,
-    bio:
-      template.bio ??
-      "Anime archivist. Watcher of worlds. Building the ultimate watchlist one episode at a time.",
-    grade: template.grade ?? "Iron Shinobi",
-    level: template.level ?? 7,
-    avatar: initials,
-    joined: "March 2023",
-    stats: template.stats ?? {
-      archived: 64,
-      streak: 8,
-      rank: 4_200,
-      followers: 210,
-    },
-    dna: template.dna ?? [
-      { label: "Shonen",  percent: 72, colors: "from-indigo-600 via-blue-500 to-cyan-400" },
-      { label: "Fantasy", percent: 55, colors: "from-emerald-600 via-teal-500 to-green-400" },
-      { label: "Action",  percent: 48, colors: "from-red-600 via-orange-500 to-accent-bright" },
-      { label: "Romance", percent: 20, colors: "from-pink-600 via-rose-500 to-fuchsia-400" },
-    ],
+function dnaFromList(entries: Array<{ anime?: { genres?: Array<{ name?: string } | string> } | null }>): MockUser["dna"] {
+  if (!entries.length) return []
+  const tally = new Map<string, number>()
+  for (const e of entries) {
+    const gs = e.anime?.genres ?? []
+    for (const g of gs) {
+      const label = typeof g === "string" ? g : g?.name
+      if (!label) continue
+      tally.set(label, (tally.get(label) ?? 0) + 1)
+    }
   }
+  const total = Array.from(tally.values()).reduce((a, b) => a + b, 0) || 1
+  return Array.from(tally.entries())
+    .sort(([, a], [, b]) => b - a)
+    .slice(0, 4)
+    .map(([label, count], i) => ({
+      label,
+      percent: Math.round((count / total) * 100),
+      colors:  DNA_GRADIENTS[i % DNA_GRADIENTS.length],
+    }))
 }
 
-const ACTIVITY_EVENTS: ActivityEvent[] = [
+/* Map a backend Activity kind/verb to the icon + label this UI used to
+   render statically. Keeps the visual language identical. */
+function mapActivityToTimeline(a: {
+  id: string; kind: string; body?: string | null; verb?: string | null
+  linkedAnime?: { title?: string | null } | null; createdAt: string
+}): ActivityEvent {
+  const animeTitle = a.linkedAnime?.title ?? a.body ?? ""
+  if (a.kind === "LIST_UPDATE") {
+    const verb = a.verb ?? "UPDATED"
+    if (verb === "RATED")     return { id: a.id as unknown as number, type: "review",    text: "Rated an Anime",      sub: animeTitle, time: timeAgo(a.createdAt), icon: Star }
+    if (verb === "COMPLETED") return { id: a.id as unknown as number, type: "milestone", text: "Completed",           sub: animeTitle, time: timeAgo(a.createdAt), icon: Trophy }
+    if (verb === "STARTED")   return { id: a.id as unknown as number, type: "added",     text: "Started Watching",    sub: animeTitle, time: timeAgo(a.createdAt), icon: Zap }
+    return                     { id: a.id as unknown as number, type: "added",     text: "Added to Archive",    sub: animeTitle, time: timeAgo(a.createdAt), icon: Bookmark }
+  }
+  if (a.kind === "TEXT")   return { id: a.id as unknown as number, type: "review",    text: "Posted",             sub: (a.body ?? "").slice(0, 80), time: timeAgo(a.createdAt), icon: MessageSquare }
+  if (a.kind === "REVIEW") return { id: a.id as unknown as number, type: "review",    text: "Posted a Review",    sub: animeTitle, time: timeAgo(a.createdAt), icon: Star }
+  return                    { id: a.id as unknown as number, type: "added",     text: "Activity",           sub: (a.body ?? "").slice(0, 80), time: timeAgo(a.createdAt), icon: Zap }
+}
+
+const ACTIVITY_EVENTS_FALLBACK: ActivityEvent[] = [
   {
     id: 1, type: "added",
     text: "Added to Archive",
@@ -256,25 +268,35 @@ export default function UserProfilePage({
   const { push } = useToast()
   const currentUser = useAuthStore(s => s.user)
 
-  // Try real API first, fall back to mock if not found
   const { data: profileData } = useUserProfile(username)
-  const { data: listData } = useUserList(username)
-  const followMut = useFollow(username)
+  const { data: listData }    = useUserList(username)
+  const followMut             = useFollow(username)
+  const realUser              = profileData?.user
 
-  const realUser = profileData?.user
-  const user = realUser
-    ? {
-        ...buildMockUser(username),
-        username: realUser.username,
-        displayName: realUser.displayName,
-        bio: realUser.bio ?? buildMockUser(username).bio,
-        stats: {
-          ...buildMockUser(username).stats,
-          archived: realUser.stats?.listCount ?? buildMockUser(username).stats.archived,
-          followers: realUser.stats?.followers ?? buildMockUser(username).stats.followers,
-        },
-      }
-    : buildMockUser(username)
+  // User is derived 100% from the live API — no mock templates, no
+  // hand-curated fallbacks. Anything missing renders as the empty value.
+  const repField = (realUser as { reputation?: number } | undefined)?.reputation ?? 0
+  const level    = levelFromRep(repField)
+  const dna      = dnaFromList(listData?.data ?? [])
+  const user = {
+    username,
+    displayName: realUser?.displayName ?? username,
+    bio:         realUser?.bio ?? "",
+    grade:       gradeForLevel(level),
+    level,
+    avatar:      (realUser?.displayName ?? username).slice(0, 2).toUpperCase(),
+    avatarUrl:   realUser?.avatarUrl ?? null,
+    joined:      realUser?.createdAt
+      ? new Date(realUser.createdAt).toLocaleDateString(undefined, { month: "long", year: "numeric" })
+      : "",
+    stats: {
+      archived:  realUser?.stats?.listCount ?? 0,
+      streak:    (realUser as { streakDays?: number } | undefined)?.streakDays ?? 0,
+      rank:      0,
+      followers: realUser?.stats?.followers ?? 0,
+    },
+    dna,
+  } as MockUser & { avatarUrl: string | null }
 
   const isOwnProfile = currentUser?.username === username
   const [following, setFollowing] = useState(false)
@@ -287,6 +309,20 @@ export default function UserProfilePage({
     image: e.anime?.imageUrl ?? "",
     rating: e.anime?.score ?? 0,
   }))
+
+  // Real activity timeline for this profile — falls back to the
+  // illustrative placeholders only when the user has no activity yet
+  // AND we haven't loaded the feed (avoids a flash of empty state).
+  const { data: activityData } = useActivityFeed("profile", realUser?.id)
+  const liveActivities = (activityData?.pages.flatMap(p => p.data) ?? [])
+    .slice(0, 6)
+    .map(mapActivityToTimeline)
+  const activityEvents: ActivityEvent[] =
+    liveActivities.length > 0
+      ? liveActivities
+      : realUser && activityData
+        ? []  // confirmed user, no activity yet
+        : ACTIVITY_EVENTS_FALLBACK  // loading or unknown user
 
   const toggleFollow = () => {
     if (!currentUser) { push("Sign in to follow users", "info"); return }
@@ -583,7 +619,7 @@ export default function UserProfilePage({
             <div className="relative space-y-3">
               <div className="absolute left-8 top-0 bottom-0 w-px bg-gradient-to-b from-indigo-500/50 via-white/5 to-transparent" />
 
-              {ACTIVITY_EVENTS.map((evt, i) => (
+              {activityEvents.map((evt, i) => (
                 <motion.div
                   key={evt.id}
                   initial={{ opacity: 0, x: -12 }}

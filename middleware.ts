@@ -34,14 +34,19 @@ export function middleware(req: NextRequest) {
 
   // ── Host-based routing ────────────────────────────────────────────────────
   if (isAdminHost) {
-    // Already inside /admin → just continue (allows the rewrite below to be a no-op)
+    // Already inside /admin → just continue
     if (pathname.startsWith("/admin")) {
-      return guardAdminCookie(req)
+      return NextResponse.next()
     }
     // Map root → /admin, everything else → /admin/<path>
     const target = req.nextUrl.clone()
     target.pathname = "/admin" + (pathname === "/" ? "" : pathname)
-    return guardAdminCookie(req, NextResponse.rewrite(target))
+    return NextResponse.rewrite(target)
+    // Note: we do NOT check the refresh cookie here because it is path-scoped
+    // to /api/v1/auth so the browser doesn't send it on /admin requests.
+    // The AdminLayout component runs SessionProvider's bootstrap (which DOES
+    // hit /api/v1/auth/refresh where the cookie is sent), then enforces the
+    // ADMIN role check before rendering anything sensitive.
   }
 
   // Direct hits to /admin on the marketing host → not exposed here
@@ -63,27 +68,6 @@ export function middleware(req: NextRequest) {
   }
 
   return NextResponse.next()
-}
-
-function guardAdminCookie(req: NextRequest, fallback?: NextResponse): NextResponse {
-  // Skip cookie check on the login page itself + on Next internals
-  const p = req.nextUrl.pathname
-  if (p.startsWith("/admin/login") || p.startsWith("/_next") || p.startsWith("/admin/_next")) {
-    return fallback ?? NextResponse.next()
-  }
-
-  // The backend refresh cookie is `aw_refresh`, set with domain=".kaiveron.com"
-  // in production so it's shared across all subdomains. If it's missing the
-  // user has never logged in (or it expired) — bounce them to the admin
-  // login page where they get redirected to the main site to authenticate.
-  const refreshToken = req.cookies.get("aw_refresh")?.value
-  if (!refreshToken) {
-    const loginUrl = req.nextUrl.clone()
-    loginUrl.pathname = "/admin/login"
-    loginUrl.searchParams.set("returnTo", p)
-    return NextResponse.redirect(loginUrl)
-  }
-  return fallback ?? NextResponse.next()
 }
 
 export const config = {

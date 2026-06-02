@@ -116,10 +116,10 @@ export const deletePost = (id: string) =>
   api<void>(`/posts/${id}`, { method: "DELETE" })
 
 export const likePost = (id: string) =>
-  api<void>(`/posts/${id}/like`, { method: "POST" })
+  api<{ liked: boolean; count: number }>(`/posts/${id}/like`, { method: "POST" })
 
 export const unlikePost = (id: string) =>
-  api<void>(`/posts/${id}/like`, { method: "DELETE" })
+  api<{ liked: boolean; count: number }>(`/posts/${id}/like`, { method: "DELETE" })
 
 export const getComments = (postId: string, page = 1) =>
   api<Paginated<PostComment>>(`/posts/${postId}/comments?page=${page}`)

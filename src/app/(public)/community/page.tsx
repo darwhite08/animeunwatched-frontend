@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useCallback, useRef, useMemo } from "react"
+import { useState, useCallback, useRef, useMemo, useEffect } from "react"
 import { useQuery } from "@tanstack/react-query"
 import { api } from "@/lib/api/client"
 import { motion, AnimatePresence } from "framer-motion"
@@ -14,6 +14,7 @@ import { useToast } from "@/stores/toast.store"
 import TrendingWidget from "@/components/social/TrendingWidget"
 import WatchlistPreviewWidget from "@/components/social/WatchlistPreviewWidget"
 import { useDiscover, useCreatePost, useLikePost, useComments, useCreateComment } from "@/hooks/usePosts"
+import { Avatar } from "@/components/ui/Avatar"
 import { CommentRow } from "@/components/posts/CommentRow"
 import { useLiveFeed } from "@/hooks/useRealtime"
 import { useImageUpload } from "@/hooks/useImageUpload"
@@ -198,10 +199,17 @@ function PostCard({ post }: { post: Post }) {
   const { push }       = useToast()
   const isAuthenticated = useAuthStore(s => s.isAuthenticated)
 
-  // Like state — initialised from API's isLikedByMe so it's correct on load
+  // Like state — initialised from API's isLikedByMe and resynced whenever
+  // the underlying post object changes (refetch, socket invalidation, etc.)
   const [liked, setLiked]       = useState(post.isLikedByMe ?? false)
   const [likeCount, setLikeCount] = useState(post._count?.likes ?? 0)
   const likePost                 = useLikePost(post.id)
+
+  // Keep local state in sync with prop — prevents drift after refresh/refetch
+  useEffect(() => {
+    setLiked(post.isLikedByMe ?? false)
+    setLikeCount(post._count?.likes ?? 0)
+  }, [post.isLikedByMe, post._count?.likes])
 
   // Comment expansion
   const [showComments, setShowComments] = useState(false)
@@ -215,12 +223,14 @@ function PostCard({ post }: { post: Post }) {
 
   const handleLike = useCallback(() => {
     if (!isAuthenticated) { push("Sign in to like posts", "info"); return }
+    // Use the server's authoritative response — fixes "I can like twice
+    // after refresh" where local state was out of sync with the DB.
     likePost.mutate(
       { like: !liked },
       {
-        onSuccess: () => {
-          setLiked(l => !l)
-          setLikeCount(c => liked ? c - 1 : c + 1)
+        onSuccess: (res) => {
+          setLiked(res.liked)
+          setLikeCount(res.count)
         },
         onError: () => push("Could not update like. Try again.", "error"),
       }
@@ -262,10 +272,8 @@ function PostCard({ post }: { post: Post }) {
         {/* Author row */}
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3">
-            <Link href={`/u/${post.author?.username ?? ""}`}>
-              <div className={`h-10 w-10 rounded-xl bg-gradient-to-br ${grad} flex items-center justify-center font-black text-sm hover:scale-105 transition-transform shrink-0`}>
-                {avatarLetter}
-              </div>
+            <Link href={`/u/${post.author?.username ?? ""}`} className="shrink-0 hover:scale-105 transition-transform">
+              <Avatar src={post.author?.avatarUrl} name={authorName} size={40} className="rounded-xl" fallbackClassName={`bg-gradient-to-br ${grad}`} />
             </Link>
             <div>
               <Link href={`/u/${post.author?.username ?? ""}`} className="rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60">
@@ -380,9 +388,13 @@ function PostCard({ post }: { post: Post }) {
 
               {/* New comment input */}
               <div className="flex gap-3 pt-2 border-t border-border">
-                <div className={`h-7 w-7 rounded-lg bg-gradient-to-br ${avatarGradient(useAuthStore.getState().user?.displayName ?? "U")} flex items-center justify-center font-black text-[11px] shrink-0`}>
-                  {(useAuthStore.getState().user?.displayName ?? "?")[0]?.toUpperCase()}
-                </div>
+                <Avatar
+                  src={useAuthStore.getState().user?.avatarUrl}
+                  name={useAuthStore.getState().user?.displayName ?? useAuthStore.getState().user?.username ?? "?"}
+                  size={28}
+                  className="rounded-lg"
+                  fallbackClassName={`bg-gradient-to-br ${avatarGradient(useAuthStore.getState().user?.displayName ?? "U")}`}
+                />
                 <div className="flex-1 min-w-0">
                   <textarea
                     ref={commentInputRef}

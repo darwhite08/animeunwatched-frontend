@@ -7,6 +7,7 @@ import { Heart, MessageSquare, Send, X, MoreHorizontal } from "lucide-react"
 import type { PostComment } from "@/lib/api/types"
 import { useAuthStore } from "@/stores/auth.store"
 import { useToast } from "@/stores/toast.store"
+import { Avatar } from "@/components/ui/Avatar"
 import {
   useLikeComment, useUnlikeComment, useCreateComment, useCommentReplies,
 } from "@/hooks/usePosts"
@@ -134,13 +135,14 @@ export function CommentRow({
 
   return (
     <div className="group/comment flex gap-3">
-      <Link href={`/u/${comment.author?.username ?? ""}`} className="shrink-0">
-        <div
-          className={`h-8 w-8 rounded-xl bg-gradient-to-br ${grad} flex items-center justify-center font-black text-xs text-white shadow-sm transition-transform group-hover/comment:scale-105 motion-reduce:transform-none`}
-          aria-hidden
-        >
-          {letter}
-        </div>
+      <Link href={`/u/${comment.author?.username ?? ""}`} className="shrink-0 transition-transform group-hover/comment:scale-105 motion-reduce:transform-none">
+        <Avatar
+          src={comment.author?.avatarUrl}
+          name={name}
+          size={32}
+          className="rounded-xl shadow-sm"
+          fallbackClassName={`bg-gradient-to-br ${grad}`}
+        />
       </Link>
 
       <div className="flex-1 min-w-0">

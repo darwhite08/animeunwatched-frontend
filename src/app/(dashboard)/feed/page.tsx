@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import {
   Heart,
@@ -21,6 +21,7 @@ import Image from "next/image"
 import { useToast } from "@/stores/toast.store"
 import { useAuthStore } from "@/stores/auth.store"
 import { useFeed, useDiscover, useCreatePost, useLikePost, useDeletePost } from "@/hooks/usePosts"
+import { Avatar } from "@/components/ui/Avatar"
 import { PostMenu } from "@/components/ui/PostMenu"
 import { useBrowseAnime } from "@/hooks/useAnime"
 import { useLeaderboard } from "@/hooks/useLeaderboard"
@@ -85,12 +86,19 @@ function RealPostCard({ post, index }: { post: Post; index: number }) {
   const likePost = useLikePost(post.id)
   const deletePost = useDeletePost(post.id)
 
+  // Resync local state when the post prop changes (refetch / socket invalidation)
+  useEffect(() => {
+    setLiked(post.isLikedByMe ?? false)
+    setLikeCount(post._count?.likes ?? 0)
+  }, [post.isLikedByMe, post._count?.likes])
+
   const handleLike = () => {
     if (!isAuthenticated) { push("Sign in to like posts", "info"); return }
     likePost.mutate(
       { like: !liked },
       {
-        onSuccess: () => { setLiked(l => !l); setLikeCount(c => liked ? c - 1 : c + 1) },
+        // Server-authoritative state — prevents drift after refresh
+        onSuccess: (res) => { setLiked(res.liked); setLikeCount(res.count) },
         onError: () => push("Could not update like", "error"),
       }
     )
@@ -107,10 +115,8 @@ function RealPostCard({ post, index }: { post: Post; index: number }) {
     >
       <div className="flex items-start justify-between">
         <div className="flex items-center gap-3">
-          <Link href={`/u/${post.author?.username ?? ""}`}>
-            <div className={`h-10 w-10 rounded-xl bg-gradient-to-br ${gradClass} flex items-center justify-center font-black text-sm text-foreground hover:opacity-80 transition-opacity shrink-0`}>
-              {authorName[0]?.toUpperCase()}
-            </div>
+          <Link href={`/u/${post.author?.username ?? ""}`} className="shrink-0 hover:opacity-80 transition-opacity">
+            <Avatar src={post.author?.avatarUrl} name={authorName} size={40} className="rounded-xl" fallbackClassName={`bg-gradient-to-br ${gradClass}`} />
           </Link>
           <div>
             <Link href={`/u/${post.author?.username ?? ""}`}

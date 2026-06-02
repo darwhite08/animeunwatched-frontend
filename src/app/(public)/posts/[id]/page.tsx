@@ -4,6 +4,7 @@ import { use, useState, useMemo } from "react"
 import { useQuery } from "@tanstack/react-query"
 import { api } from "@/lib/api/client"
 import { usePost, useLikePost, useCreateComment, useComments } from "@/hooks/usePosts"
+import { Avatar } from "@/components/ui/Avatar"
 import { useLivePost } from "@/hooks/useRealtime"
 import { useAuthStore } from "@/stores/auth.store"
 import { Loader2 } from "lucide-react"
@@ -280,6 +281,7 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
         id: apiPost.id,
         author: apiPost.author?.displayName ?? apiPost.author?.username ?? "Anonymous",
         avatar: (apiPost.author?.displayName ?? apiPost.author?.username ?? "?")[0].toUpperCase(),
+        avatarUrl: apiPost.author?.avatarUrl ?? null,
         time: timeAgo(apiPost.createdAt),
         anime: apiPost.anime?.title,
         content: apiPost.content,
@@ -326,7 +328,9 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
     if (!authUser) { push("Sign in to like posts", "info"); return }
     const next = !liked
     likeMut.mutate({ like: next }, {
-      onSuccess: () => { setLiked(next); setLikeCount(c => next ? c + 1 : c - 1) },
+      // Use the server's authoritative response so the displayed count
+      // never drifts from the DB (e.g. after a refresh that lost local state).
+      onSuccess: (res) => { setLiked(res.liked); setLikeCount(res.count) },
     })
   }
 
@@ -386,9 +390,8 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
             >
               <div className="flex items-start justify-between">
                 <div className="flex items-center gap-3">
-                  <div className={`h-12 w-12 rounded-xl bg-gradient-to-br ${post.avatarColor} flex items-center justify-center font-black text-base shrink-0`}>
-                    {post.avatar}
-                  </div>
+                  <Avatar src={post.avatarUrl} name={post.author} size={48} className="rounded-xl" fallbackClassName={`bg-gradient-to-br ${post.avatarColor}`} />
+
                   <div>
                     <p className="text-sm font-black text-foreground">{post.author}</p>
                     <p className="text-[10px] text-subtle">{post.time}</p>

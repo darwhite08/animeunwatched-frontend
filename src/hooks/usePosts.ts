@@ -60,7 +60,13 @@ export function useLikePost(postId: string) {
   return useMutation({
     mutationFn: ({ like }: { like: boolean }) =>
       like ? ep.likePost(postId) : ep.unlikePost(postId),
-    onSuccess: () => qc.invalidateQueries({ queryKey: postKey(postId) }),
+    onSuccess: () => {
+      // Invalidate both the single post + any feed queries that include it
+      // so the authoritative count from /like trickles everywhere.
+      qc.invalidateQueries({ queryKey: postKey(postId) })
+      qc.invalidateQueries({ queryKey: feedKey })
+      qc.invalidateQueries({ queryKey: discoverKey })
+    },
   })
 }
 

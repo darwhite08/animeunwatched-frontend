@@ -15,13 +15,20 @@
  * sent to the server.
  */
 
-// ── Secure-context guard ──────────────────────────────────────────────────────
-// crypto.subtle (Web Crypto API) is ONLY available on secure contexts:
-// https, localhost, or 127.0.0.1. When accessed via a LAN IP over HTTP
-// (e.g. from a phone on http://192.168.x.x), SubtleCrypto is unavailable.
-// We detect this and export a flag so the UI can show a clear warning.
+// ── E2E mode ──────────────────────────────────────────────────────────────────
+// E2E is currently disabled platform-wide — too many "Could not decrypt"
+// edge cases (private key lost on new browser, cleared storage, key
+// rotation when someone re-logs). With E2E off, every message rides the
+// existing { ciphertext, iv } shape but the ciphertext is just base64 of
+// the plaintext. TLS still protects messages in transit; the backend can
+// read them at rest. Flip this back to `true` only after we wire a real
+// key-recovery flow.
+const E2E_ENABLED = false
+
+// Secure-context guard kept for the legacy path. When E2E is disabled
+// we ignore this entirely.
 export const isE2EAvailable: boolean =
-  typeof window !== "undefined" && !!window.crypto?.subtle
+  E2E_ENABLED && typeof window !== "undefined" && !!window.crypto?.subtle
 
 // Use localStorage so keys persist across browser sessions, tabs, and refreshes.
 // Without this, closing a tab generates a new key pair, making all old messages
@@ -168,8 +175,10 @@ export async function decryptMessage(
   ciphertext: string,
   iv: string,
 ): Promise<string> {
-  // If this message was sent without E2E (plain marker), just base64-decode it
-  if (iv === PLAIN_IV_MARKER) {
+  // If this message was sent without E2E (plain marker), just base64-decode it.
+  // Also attempt this path when we have NO sharedKey OR no E2E available, so
+  // messages from the previous E2E era still surface text where possible.
+  if (iv === PLAIN_IV_MARKER || !sharedKey || !isE2EAvailable) {
     try {
       return decodeURIComponent(escape(atob(ciphertext)))
     } catch {

@@ -17,6 +17,9 @@ const MessagesButton       = lazy(() => import("@/components/ui/MessagesButton")
 const GoogleAnalytics      = lazy(() =>
   import("@/components/analytics/GoogleAnalytics").then(m => ({ default: m.GoogleAnalytics }))
 )
+const PageviewPinger       = lazy(() =>
+  import("@/components/analytics/PageviewPinger").then(m => ({ default: m.PageviewPinger }))
+)
 
 export const viewport = {
   themeColor: "var(--app-accent)",
@@ -121,6 +124,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     AND the user has accepted the cookie banner */}
                 <Suspense fallback={null}>
                   <GoogleAnalytics />
+                </Suspense>
+                {/* Self-hosted pageview ping → backend in-memory analytics →
+                    drives the admin dashboard's realtime visitor tile */}
+                <Suspense fallback={null}>
+                  <PageviewPinger />
                 </Suspense>
               </KeyboardShortcuts>
             </LenisProvider>

@@ -246,7 +246,7 @@ export default function WrappedPage() {
         onClose={() => setShareOpen(false)}
         title={`My ${CURRENT_YEAR} Anime Wrapped`}
         subtitle={`${realStats.totalHrs}h watched · ${realStats.totalEps} episodes · ${realStats.bestStreak}-day streak`}
-        url={`https://kaiveron.app/wrapped`}
+        url={`https://kaiveron.com/wrapped`}
         type="profile"
       />
     </div>

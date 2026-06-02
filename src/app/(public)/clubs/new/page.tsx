@@ -256,7 +256,7 @@ export default function NewClubPage() {
             <Field
               label="Slug"
               error={getFieldError("slug")}
-              hint="URL: kaiveron.app/clubs/your-slug"
+              hint="URL: kaiveron.com/clubs/your-slug"
             >
               <div className="relative">
                 <span className="absolute left-4 top-1/2 -translate-y-1/2 text-xs text-subtle font-mono select-none">

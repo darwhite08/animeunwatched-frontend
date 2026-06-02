@@ -38,7 +38,7 @@ const METHOD_STYLE: Record<HttpMethod, { bg: string; text: string; border: strin
 
 /* ─── Code blocks ─── */
 const AUTH_EXAMPLE = `// Every protected request needs a Bearer token
-const response = await fetch("https://api.kaiveron.app/api/v1/users/me", {
+const response = await fetch("https://api.kaiveron.com/api/v1/users/me", {
   headers: {
     Authorization: \`Bearer \${accessToken}\`,
     "Content-Type": "application/json",
@@ -48,7 +48,7 @@ const response = await fetch("https://api.kaiveron.app/api/v1/users/me", {
 
 const { user } = await response.json()`
 
-const CURL_EXAMPLE = `curl -X GET "https://api.kaiveron.app/api/v1/analytics/top-anime" \\
+const CURL_EXAMPLE = `curl -X GET "https://api.kaiveron.com/api/v1/analytics/top-anime" \\
   -H "Accept: application/json"
 
 # Response:

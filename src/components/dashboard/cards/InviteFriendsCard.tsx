@@ -12,8 +12,8 @@ export default function InviteFriendsCard() {
   const [copied, setCopied] = useState(false)
 
   const referralLink = user?.username
-    ? `https://kaiveron.app/register?ref=${user.username}`
-    : "https://kaiveron.app/register"
+    ? `https://kaiveron.com/register?ref=${user.username}`
+    : "https://kaiveron.com/register"
 
   const handleCopy = () => {
     navigator.clipboard.writeText(referralLink).then(() => {
@@ -54,7 +54,7 @@ export default function InviteFriendsCard() {
         <div className="flex items-center gap-2 p-3 rounded-2xl bg-surface border border-border">
           <Zap size={11} className="text-emerald-400 shrink-0" />
           <code className="flex-1 text-[10px] text-muted font-mono truncate">
-            kaiveron.app/register?ref={user?.username ?? "you"}
+            kaiveron.com/register?ref={user?.username ?? "you"}
           </code>
           <motion.button
             whileHover={{ scale: 1.05 }}

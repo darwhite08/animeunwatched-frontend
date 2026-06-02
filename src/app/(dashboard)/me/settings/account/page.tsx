@@ -258,7 +258,7 @@ export default function AccountSettingsPage() {
             <Link2 size={11} /> Profile URL Slug
           </p>
           <span className="text-[9px] font-mono text-subtle">
-            kaiveron.app/user/<span className="text-accent-bright/60">{storeUser?.slug ?? "…"}</span>/dashboard
+            kaiveron.com/user/<span className="text-accent-bright/60">{storeUser?.slug ?? "…"}</span>/dashboard
           </span>
         </div>
 

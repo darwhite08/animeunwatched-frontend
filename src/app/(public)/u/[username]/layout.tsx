@@ -1,6 +1,6 @@
 import type { Metadata } from "next"
 
-const BASE = "https://kaiveron.app"
+const BASE = "https://kaiveron.com"
 
 // Server-side metadata for user profile pages — enables SEO when shared
 export async function generateMetadata({

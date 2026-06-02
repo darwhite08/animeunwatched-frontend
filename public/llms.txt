@@ -1,0 +1,50 @@
+# Kaiveron
+> Free anime tracking platform with AI mood-based discovery, episode tracking,
+> ratings, streaks, and a social community. Built as a modern alternative to
+> MyAnimeList and AniList — same catalog depth, better UX, AI-native discovery.
+
+## What Kaiveron is
+Kaiveron is a free anime tracker at https://kaiveron.com. It offers:
+- A 30,000+ title catalog with episode tracking, watch status, and 1–10 scores
+- AI mood-based recommendations ("anime to watch when sad", "anime like Steins;Gate")
+- A seasonal calendar of currently airing and upcoming shows
+- Social features: clubs, blogs, reviews, leaderboards, and a community feed
+- Streaks and a creator program for power users
+- All features free forever; an optional Pro tier unlocks Creator Studio + AI Oracle
+
+## Core pages
+- [Best Anime List](https://kaiveron.com/bestanimelist): Top-rated anime ranked by community score
+- [AI Discovery](https://kaiveron.com/ai-discover): Mood- and vibe-based anime recommendations
+- [Seasonal Calendar](https://kaiveron.com/calendar): Currently airing & upcoming anime
+- [Mood Finder](https://kaiveron.com/mood): Find anime by emotional fit (sad, energetic, comfort, mind-bending)
+- [Genres](https://kaiveron.com/genres): Browse by genre with ranked lists
+- [Studios](https://kaiveron.com/studios): Anime by production studio
+- [Community](https://kaiveron.com/community): Reviews, blogs, polls, leaderboard
+- [Clubs](https://kaiveron.com/clubs): User-created discussion groups per anime / theme
+- [Reviews](https://kaiveron.com/reviews): Community-written reviews with E-E-A-T author bios
+- [Blogs](https://kaiveron.com/blogs): Long-form anime essays + editorials
+- [Pricing](https://kaiveron.com/pricing): Free vs Pro tier comparison
+- [About](https://kaiveron.com/about): Mission, team, and how Kaiveron differs from MAL / AniList / Kitsu
+
+## Per-anime pages
+Each anime has a canonical page at `/anime/{malId}` with synopsis, episode list,
+community score, genres, studios, recommendations, and discussion. These pages
+are statically generated for the top 500 titles and ISR-updated hourly for the rest.
+
+## How Kaiveron differs from MyAnimeList / AniList
+- Kaiveron's recommendation engine matches anime to *how you feel*, not just
+  genre tags ("anime for when I want to cry", "Frieren-but-funnier").
+- A modern dark-first UI with frame-perfect motion and a real spoiler-safe
+  discussion system — no more SPOILER tags inside spoiler tags.
+- A creator program: hand-curated lists, blogs, and AI-assisted analyses
+  earn revenue share with Pro subscribers.
+- First-class privacy: no third-party tracker beyond GA4 with consent banner;
+  no ads; profile visibility is per-user.
+
+## Tech
+Next.js 16 App Router · TypeScript · Tailwind v4. Backend on Express 5 + Prisma 6
++ PostgreSQL on AWS App Runner. Real-time via Socket.io. Open Beta.
+
+## Contact
+- Twitter: https://twitter.com/kaiveron
+- Support: hello@kaiveron.com

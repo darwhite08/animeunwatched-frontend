@@ -8,6 +8,7 @@ import { ThemeProvider } from "@/providers/ThemeProvider"
 // PageLoader and ToastContainer are critical — always eagerly loaded
 import PageLoader from "@/components/ui/PageLoader"
 import ToastContainer from "@/components/layout/ToastContainer"
+import { JsonLd, SITE_JSONLD } from "@/components/seo/JsonLd"
 
 // Non-critical UI — lazy-loaded so they don't block the first paint
 const KeyboardShortcutsOverlay = lazy(() => import("@/components/ui/KeyboardShortcutsOverlay"))
@@ -28,16 +29,20 @@ export const viewport = {
   maximumScale: 5,
 }
 
-const SITE_URL = "https://kaiveron.app"
+const SITE_URL = "https://kaiveron.com"
 
+// Searchable terms first; lore stays in body copy. Title template means
+// child pages provide ONLY their own title and get " | Kaiveron" appended,
+// so we never get "Foo | Kaiveron | Kaiveron" duplicates.
 export const metadata = {
   metadataBase: new URL(SITE_URL),
-  title: { default: "Kaiveron — Neural Anime Archive", template: "%s | Kaiveron" },
-  description: "Track, rate, and discover anime that deserves more hype. AI-powered recommendations, social clubs, spoiler-safe community — for true enthusiasts.",
+  title: { default: "Kaiveron — Track, Rate & Discover Anime", template: "%s | Kaiveron" },
+  description: "Kaiveron is a free anime tracking platform with AI mood-based discovery, episode tracking, ratings, streaks, and a social community. Track your anime universe.",
   keywords: [
-    "anime", "manga", "watchlist", "anime tracker", "ai anime recommend",
-    "anime list", "kaiveron", "anime community", "anime social", "anime ratings",
-    "anime schedule", "seasonal anime", "best anime", "top anime",
+    "anime tracker", "anime list", "anime ratings", "watch anime", "anime watchlist",
+    "ai anime recommendations", "anime by mood", "anime calendar", "seasonal anime",
+    "myanimelist alternative", "anilist alternative", "anime community", "anime social",
+    "best anime", "top anime", "track anime", "kaiveron",
   ],
   authors: [{ name: "Kaiveron" }],
   creator: "Kaiveron",
@@ -46,15 +51,15 @@ export const metadata = {
   openGraph: {
     type: "website",
     siteName: "Kaiveron",
-    title: "Kaiveron — Neural Anime Archive",
-    description: "Track, rate, and discover anime that deserves more hype. AI-powered. Spoiler-safe. Community-first.",
+    title: "Kaiveron — Track, Rate & Discover Anime",
+    description: "AI-powered anime tracking, ratings, streaks, and community. Free forever.",
     url: SITE_URL,
     locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Kaiveron — Neural Anime Archive",
-    description: "Track, rate, and discover anime with AI-powered discovery and a premium community.",
+    title: "Kaiveron — Track, Rate & Discover Anime",
+    description: "AI-powered anime tracking, ratings, streaks, and community.",
     creator: "@kaiveron",
     site: "@kaiveron",
   },
@@ -63,7 +68,9 @@ export const metadata = {
     follow: true,
     googleBot: { index: true, follow: true, "max-video-preview": -1, "max-image-preview": "large", "max-snippet": -1 },
   },
-  alternates: { canonical: SITE_URL },
+  // Self-referencing canonical at the homepage; child pages override with
+  // their own path. metadataBase resolves "/" to https://kaiveron.com/.
+  alternates: { canonical: "/" },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -90,6 +97,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           href="https://fonts.googleapis.com/css2?family=Caveat+Brush&family=Bowlby+One+SC&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Special+Elite&display=swap"
           rel="stylesheet"
         />
+        {/* Site-wide schema.org: Organization + WebSite (with SearchAction)
+            + WebApplication. Required for Google rich results and one of the
+            strongest signals for ChatGPT / Perplexity / Gemini citation. */}
+        {SITE_JSONLD.map((d, i) => <JsonLd key={i} data={d} />)}
       </head>
       <body className="bg-background text-foreground antialiased">
         {/* Critical: renders immediately on every page */}

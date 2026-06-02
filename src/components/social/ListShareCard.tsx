@@ -22,7 +22,7 @@ export default function ListShareCard() {
 
   const PROFILE = { username: user?.username ?? "shinobi", totalCount: listData?.meta?.total ?? 0, year: new Date().getFullYear() }
 
-  const shareUrl = `https://kaiveron.app/u/${PROFILE.username}`
+  const shareUrl = `https://kaiveron.com/u/${PROFILE.username}`
 
   const handleCopyLink = async () => {
     try {
@@ -111,7 +111,7 @@ export default function ListShareCard() {
 
         {/* Footer bar */}
         <div className="relative z-10 flex items-center justify-between px-5 py-3 bg-surface-2 border-t border-border">
-          <span className="text-muted text-xs">kaiveron.app</span>
+          <span className="text-muted text-xs">kaiveron.com</span>
           <span className="text-muted text-[10px] font-mono">Track. Share. Flex.</span>
         </div>
       </div>

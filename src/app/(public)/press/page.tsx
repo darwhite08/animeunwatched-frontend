@@ -55,7 +55,7 @@ export default function PressPage() {
             Press Kit<span style={{color:"var(--app-accent)"}}>.</span>
           </h1>
           <p className="text-subtle text-sm max-w-xl">
-            Resources for journalists and media covering Kaiveron. For press inquiries, contact us at press@kaiveron.app.
+            Resources for journalists and media covering Kaiveron. For press inquiries, contact us at press@kaiveron.com.
           </p>
         </div>
 

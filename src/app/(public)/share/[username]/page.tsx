@@ -180,7 +180,7 @@ export default function ShareProfilePage({ params }: { params: Promise<{ usernam
             <div className="flex items-center gap-2 pt-2 border-t border-border">
               <span className="text-xs font-black italic text-subtle">Kaiveron</span>
               <span className="flex-1 h-px bg-surface" />
-              <span className="text-[9px] text-subtle uppercase tracking-widest">kaiveron.app</span>
+              <span className="text-[9px] text-subtle uppercase tracking-widest">kaiveron.com</span>
             </div>
           </div>
         </motion.div>

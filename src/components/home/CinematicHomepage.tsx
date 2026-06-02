@@ -10,6 +10,7 @@ import { useBrowseAnime, useAnime } from "@/hooks/useAnime"
 import type { AnimeDTO } from "@/lib/api/types"
 import { AnimatedCounterText } from "@/components/ui/AnimatedCounter"
 import CinematicHero from "@/components/home/CinematicHero"
+import { HomeFaq } from "@/components/seo/HomeFaq"
 
 /* ─── Analytics hook ─── */
 function usePlatformUserCount() {
@@ -1099,6 +1100,8 @@ export default function CinematicHomepage() {
       <CommunitySection />
       <ShowcaseSection />
       <FinalCTASection />
+      {/* GEO: FAQPage schema + answer-first content for AI engine citation */}
+      <HomeFaq />
     </main>
   )
 }

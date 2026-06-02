@@ -324,7 +324,7 @@ export default function PublicFeedPage() {
         onClose={() => setSharingPost(null)}
         title={(sharingPost?.content.slice(0, 60) ?? "") + "…"}
         subtitle={`by @${sharingPost?.author ?? ""}`}
-        url={`https://kaiveron.app/posts/${sharingPost?.id ?? ""}`}
+        url={`https://kaiveron.com/posts/${sharingPost?.id ?? ""}`}
         type="post"
       />
     </div>

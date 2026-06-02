@@ -77,7 +77,7 @@ function CardPreview({
             )}
           </div>
         ) : (
-          <span className="text-muted text-xs">kaiveron.app</span>
+          <span className="text-muted text-xs">kaiveron.com</span>
         )}
         <span className="text-muted text-[10px] font-mono">
           Track it on Kaiveron

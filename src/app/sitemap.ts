@@ -1,6 +1,6 @@
 import type { MetadataRoute } from "next"
 
-const BASE = "https://kaiveron.app"
+const BASE = "https://kaiveron.com"
 
 // Static public routes — always indexed
 const STATIC_ROUTES: MetadataRoute.Sitemap = [

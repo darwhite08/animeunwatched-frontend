@@ -154,23 +154,24 @@ export default function CinematicHero() {
             <span className="text-[11px] text-muted font-medium">Open Beta · Free forever</span>
           </motion.div>
 
-          {/* Headline */}
-          <div className="mb-6">
+          {/* Headline — ONE H1 per page (SEO). Each fragment animates as its
+              own span inside the same h1 so the visual reveal effect stays
+              while Google sees a single keyword-bearing heading. */}
+          <h1 className="mb-6 font-bold tracking-tight leading-[1.06] text-[clamp(2.8rem,5.2vw,5rem)] text-foreground">
+            <span className="sr-only">Track, Rate &amp; Discover Anime — Your AI-Powered Anime Universe</span>
             {["Track. Rate.", "Discover your", "anime universe."].map((line, i) => (
-              <div key={i} className="overflow-hidden">
-                <motion.h1
+              <span key={i} className="block overflow-hidden" aria-hidden="true">
+                <motion.span
                   initial={{ y: "106%", opacity: 0 }}
                   animate={{ y: 0, opacity: 1 }}
                   transition={{ duration: 0.82, delay: 0.28 + i * 0.12, ease: [0.22, 1, 0.36, 1] }}
-                  className={`font-bold tracking-tight leading-[1.06] text-[clamp(2.8rem,5.2vw,5rem)] ${
-                    i === 2 ? "text-accent-bright" : "text-foreground"
-                  }`}
+                  className={`block ${i === 2 ? "text-accent-bright" : "text-foreground"}`}
                 >
                   {line}
-                </motion.h1>
-              </div>
+                </motion.span>
+              </span>
             ))}
-          </div>
+          </h1>
 
           {/* Subtitle */}
           <motion.p

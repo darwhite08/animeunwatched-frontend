@@ -43,10 +43,13 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
     if (!sessionReady) return
     if (!isAuthenticated) return
 
+    // returnTo is the most-trustworthy signal — honor it even if user
+    // hasn't finished loading. The destination doesn't depend on slug.
     const returnTo = safeReturnTo(params.get("returnTo") ?? params.get("next"))
     if (returnTo) {
-      // Absolute URL → cross-subdomain, needs full-page navigation
       if (returnTo.startsWith("http")) {
+        // Cross-subdomain handoff (e.g. admin-dashboard.kaiveron.com) — must
+        // be a full-page navigation so the cookie + middleware fire fresh.
         window.location.href = returnTo
       } else {
         router.replace(returnTo)
@@ -54,7 +57,13 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
       return
     }
 
-    const dest = user?.slug ? `/user/${user.slug}/dashboard` : "/dashboard"
+    // Wait for the user object before falling back so we don't accidentally
+    // redirect to /dashboard when the user actually has a slug — /auth/me
+    // is a separate request after /auth/refresh, and `user` may still be null
+    // on the first tick where `sessionReady` flips true.
+    if (!user) return
+
+    const dest = user.slug ? `/user/${user.slug}/dashboard` : "/dashboard"
     router.replace(dest)
   }, [sessionReady, isAuthenticated, user, params, router])
 

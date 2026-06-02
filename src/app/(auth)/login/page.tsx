@@ -2,7 +2,7 @@
 
 import { useState, useRef } from "react"
 import { motion } from "framer-motion"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
 import Script from "next/script"
 import Image from "next/image"
@@ -14,6 +14,27 @@ import { ApiError, api } from "@/lib/api/client"
 import { connectSocket } from "@/lib/socket"
 import { useQueryClient } from "@tanstack/react-query"
 import type { User } from "@/lib/api/types"
+
+/**
+ * Validate that a returnTo URL is safe to redirect to after login.
+ * Allows:
+ *   - relative paths starting with "/"
+ *   - absolute URLs whose host ends with "kaiveron.com" (covers
+ *     kaiveron.com, www.kaiveron.com, admin-dashboard.kaiveron.com).
+ * Everything else falls back to "/" — defeats open-redirect attacks where
+ * an attacker crafts a returnTo to send the user to evil.example.com.
+ */
+function safeReturnTo(raw: string | null): string {
+  if (!raw) return "/"
+  if (raw.startsWith("/") && !raw.startsWith("//")) return raw
+  try {
+    const u = new URL(raw)
+    if (u.hostname === "kaiveron.com" || u.hostname.endsWith(".kaiveron.com")) {
+      return u.toString()
+    }
+  } catch { /* malformed → fall through */ }
+  return "/"
+}
 
 /* ── Types injected by Google / Apple SDKs ────────────────────────────── */
 declare global {
@@ -42,12 +63,26 @@ declare global {
 
 export default function LoginPage() {
   const router  = useRouter()
+  const params  = useSearchParams()
   const login   = useLogin()
   const { push } = useToast()
   const setAccess = useAuthStore(s => s.setAccess)
   const setUser   = useAuthStore(s => s.setUser)
 
   const qc = useQueryClient()
+
+  // Honor returnTo (or legacy ?next=) from query string. Falls back to "/".
+  const returnTo = safeReturnTo(params.get("returnTo") ?? params.get("next"))
+
+  function goAfterAuth() {
+    // Absolute URL → full-page navigation (needed when returnTo is a
+    // different subdomain so the cookie + middleware fire fresh).
+    if (returnTo.startsWith("http")) {
+      window.location.href = returnTo
+    } else {
+      router.push(returnTo)
+    }
+  }
 
   const [oauthLoading, setOauthLoading] = useState<"google" | "apple" | null>(null)
   const [form, setForm]   = useState({ email: "", password: "" })
@@ -63,7 +98,7 @@ export default function LoginPage() {
     setUser(user)
     connectSocket(accessToken)
     qc.invalidateQueries({ queryKey: ["auth/me"] })
-    router.push("/")
+    goAfterAuth()
   }
 
   /* ── Google — renderButton (stays on login page, no redirect) ──────── */
@@ -136,7 +171,7 @@ export default function LoginPage() {
     login.mutate(
       { email: form.email, password: form.password },
       {
-        onSuccess: () => router.push("/"),
+        onSuccess: () => goAfterAuth(),
         onError: (err) => {
           if (err instanceof ApiError) {
             setFormError(err.code === "VALIDATION"

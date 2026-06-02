@@ -72,7 +72,11 @@ function guardAdminCookie(req: NextRequest, fallback?: NextResponse): NextRespon
     return fallback ?? NextResponse.next()
   }
 
-  const refreshToken = req.cookies.get("refreshToken")?.value
+  // The backend refresh cookie is `aw_refresh`, set with domain=".kaiveron.com"
+  // in production so it's shared across all subdomains. If it's missing the
+  // user has never logged in (or it expired) — bounce them to the admin
+  // login page where they get redirected to the main site to authenticate.
+  const refreshToken = req.cookies.get("aw_refresh")?.value
   if (!refreshToken) {
     const loginUrl = req.nextUrl.clone()
     loginUrl.pathname = "/admin/login"

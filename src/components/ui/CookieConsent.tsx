@@ -4,15 +4,12 @@ import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import Link from "next/link"
 import { Cookie, X } from "lucide-react"
-import { getConsent, setConsent, isAdminHost } from "@/lib/analytics/consent"
+import { getConsent, setConsent } from "@/lib/analytics/consent"
 
 export default function CookieConsent() {
   const [show, setShow] = useState(false)
 
   useEffect(() => {
-    // Never show on the admin subdomain — admins don't need a marketing-site banner
-    if (isAdminHost()) return
-
     // Small delay so it doesn't flash on every page load
     const t = setTimeout(() => {
       if (!getConsent()) setShow(true)

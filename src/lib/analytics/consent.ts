@@ -51,12 +51,3 @@ export function useConsent(): ConsentState {
 
   return state
 }
-
-/**
- * True only on the admin subdomain. Used to suppress GA there — admin
- * activity should never feed product analytics.
- */
-export function isAdminHost(): boolean {
-  if (typeof window === "undefined") return false
-  return window.location.hostname === "admin-dashboard.kaiveron.com"
-}

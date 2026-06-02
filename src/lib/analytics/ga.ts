@@ -1,6 +1,6 @@
 "use client"
 
-import { isAdminHost, getConsent } from "./consent"
+import { getConsent } from "./consent"
 
 declare global {
   interface Window {
@@ -14,7 +14,6 @@ const MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID
 /**
  * Public helper — fire a custom GA4 event. No-op when:
  *   - SSR
- *   - admin subdomain (we never want admin actions skewing product metrics)
  *   - no GA measurement ID configured
  *   - user has not consented to analytics
  *
@@ -24,7 +23,7 @@ const MEASUREMENT_ID = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID
  */
 export function track(event: string, params: Record<string, unknown> = {}): void {
   if (typeof window === "undefined") return
-  if (!MEASUREMENT_ID || isAdminHost()) return
+  if (!MEASUREMENT_ID)                 return
   if (getConsent() !== "accepted")     return
   if (typeof window.gtag !== "function") return
 
@@ -38,7 +37,7 @@ export function track(event: string, params: Record<string, unknown> = {}): void
  */
 export function trackPageView(path: string): void {
   if (typeof window === "undefined") return
-  if (!MEASUREMENT_ID || isAdminHost()) return
+  if (!MEASUREMENT_ID)                 return
   if (getConsent() !== "accepted")     return
   if (typeof window.gtag !== "function") return
 

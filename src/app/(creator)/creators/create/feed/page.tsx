@@ -1,10 +1,11 @@
 "use client"
 
-import { useState } from "react"
+import { useRef, useState } from "react"
 import { motion } from "framer-motion"
 import { useRouter } from "next/navigation"
-import { Rss, ImagePlus, Hash, AtSign, Send, X, ChevronDown } from "lucide-react"
+import { Rss, ImagePlus, Hash, AtSign, Send, X, ChevronDown, Loader2 } from "lucide-react"
 import { useCreatePost } from "@/hooks/usePosts"
+import { useImageUpload } from "@/hooks/useImageUpload"
 import { useToast } from "@/stores/toast.store"
 
 const ANIME_TAGS = [
@@ -22,6 +23,19 @@ export default function CreateFeedPage() {
   const [animeOpen, setAnimeOpen] = useState(false)
   const [tags, setTags] = useState<string[]>([])
   const [tagInput, setTagInput] = useState("")
+  const [attachedImage, setAttachedImage] = useState<string | null>(null)
+
+  const { upload, isUploading, error: uploadError } = useImageUpload("post")
+  const imgInputRef = useRef<HTMLInputElement>(null)
+
+  const handleImagePick = async (file: File) => {
+    try {
+      const { publicUrl } = await upload(file)
+      setAttachedImage(publicUrl)
+    } catch {
+      if (uploadError) push(uploadError, "error")
+    }
+  }
 
   const charLimit = 500
   const remaining = charLimit - content.length
@@ -36,12 +50,13 @@ export default function CreateFeedPage() {
   }
 
   const handleSubmit = () => {
-    if (!content.trim() || overLimit) return
+    if ((!content.trim() && !attachedImage) || overLimit) return
     createPost.mutate(
-      { content: content.trim() },
+      { content: content.trim() || " ", imageUrl: attachedImage ?? undefined },
       {
         onSuccess: () => {
           push("Post published to your feed!", "success")
+          setAttachedImage(null)
           router.push("/creators/feed")
         },
         onError: () => {
@@ -177,16 +192,44 @@ export default function CreateFeedPage() {
           )}
         </div>
 
+        {/* Image preview */}
+        {attachedImage && (
+          <div className="relative inline-block">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={attachedImage} alt="" className="max-h-64 rounded-xl border border-border" />
+            <button
+              type="button"
+              onClick={() => setAttachedImage(null)}
+              className="absolute top-2 right-2 p-1 rounded-full bg-black/60 hover:bg-black/80 text-foreground"
+              aria-label="Remove image"
+            >
+              <X size={12} />
+            </button>
+          </div>
+        )}
+
         {/* Actions */}
         <div className="flex items-center justify-between pt-2 border-t border-border">
           <div className="flex gap-3">
+            <input
+              ref={imgInputRef}
+              type="file"
+              accept="image/jpeg,image/png,image/webp,image/gif"
+              className="sr-only"
+              onChange={(e) => {
+                const f = e.target.files?.[0]
+                if (f) void handleImagePick(f)
+                e.target.value = ""
+              }}
+            />
             <button
               type="button"
-              title="Image uploads coming soon"
-              onClick={() => push("Image uploads coming in the next release", "info")}
-              className="p-2 rounded-lg text-subtle cursor-not-allowed transition"
+              title="Attach image"
+              onClick={() => imgInputRef.current?.click()}
+              disabled={isUploading || !!attachedImage}
+              className="p-2 rounded-lg text-muted hover:text-accent-bright hover:bg-surface transition disabled:opacity-40"
             >
-              <ImagePlus size={16} />
+              {isUploading ? <Loader2 size={16} className="animate-spin" /> : <ImagePlus size={16} />}
             </button>
             <button
               type="button"
@@ -200,7 +243,7 @@ export default function CreateFeedPage() {
 
           <button
             onClick={handleSubmit}
-            disabled={!content.trim() || overLimit || createPost.isPending}
+            disabled={(!content.trim() && !attachedImage) || overLimit || createPost.isPending || isUploading}
             className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-accent hover:bg-accent-bright disabled:opacity-40 disabled:cursor-not-allowed transition text-sm font-medium"
           >
             <Send size={14} />

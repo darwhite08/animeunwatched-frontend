@@ -13,6 +13,7 @@ import { useUserList } from "@/hooks/useLists"
 import { useToast } from "@/stores/toast.store"
 import { useWebRTC } from "@/hooks/useWebRTC"
 import { useMicPermission } from "@/hooks/useMicPermission"
+import { useImageUpload } from "@/hooks/useImageUpload"
 import { IncomingCallCard, ActiveCallModal } from "@/components/chat/CallUI"
 import { Avatar } from "../layout"
 import * as ep from "@/lib/api/endpoints"
@@ -125,7 +126,9 @@ function EmojiPicker({ onPick, onClose }: { onPick:(e:string)=>void; onClose:()=
 }
 
 /* ─── File preview type ──────────────────────────────────────────────────── */
-interface FilePrev { id:string; name:string; size:string; type:string; dataUrl?:string }
+// url is set after the file has been uploaded to S3; sending is blocked until
+// every pending file has its url populated.
+interface FilePrev { id:string; name:string; size:string; type:string; dataUrl?:string; url?:string }
 
 /* ─── AI Response bubble (from chat-thread.jsx AIResponse) ────────────────── */
 interface AIRow { label:string; a:string; b:string; delta:string; good:boolean }
@@ -403,21 +406,23 @@ function ContextRail({ conv, onClose, sharedFiles }: { conv: ConversationDetail;
 /* ─── Parse message content into parts ──────────────────────────────────── */
 type MsgPart =
   | { kind:"text";  content:string }
-  | { kind:"image"; name:string }
-  | { kind:"file";  name:string; size:string }
+  | { kind:"image"; name:string; url?:string }
+  | { kind:"file";  name:string; size:string; url?:string }
 
 function parseParts(text: string): MsgPart[] {
   const parts: MsgPart[] = []
   let buf: string[] = []
   for (const line of text.split("\n")) {
-    const img  = line.match(/^📷 \[Image: (.+)\]$/)
-    const file = line.match(/^📎 \[File: (.+) \((.+)\)\]$/)
+    // New format: "📷 [Image: name | https://…]" — extract URL after the pipe.
+    // Legacy format: "📷 [Image: name]" — no URL, renders as a placeholder card.
+    const img  = line.match(/^📷 \[Image: (.+?)(?: \| (https?:\/\/\S+))?\]$/)
+    const file = line.match(/^📎 \[File: (.+?) \((.+?)\)(?: \| (https?:\/\/\S+))?\]$/)
     if (img) {
       if (buf.length) { parts.push({ kind:"text", content:buf.join("\n") }); buf=[] }
-      parts.push({ kind:"image", name:img[1] })
+      parts.push({ kind:"image", name:img[1], url:img[2] })
     } else if (file) {
       if (buf.length) { parts.push({ kind:"text", content:buf.join("\n") }); buf=[] }
-      parts.push({ kind:"file", name:file[1], size:file[2] })
+      parts.push({ kind:"file", name:file[1], size:file[2], url:file[3] })
     } else { buf.push(line) }
   }
   if (buf.length) parts.push({ kind:"text", content:buf.join("\n") })
@@ -576,8 +581,22 @@ function MsgRow({ m, isMine, text, authorSrc, authorName, onDelete }: { m:GM; is
             </div>
           ) : parts ? (
             parts.map((p, i) => {
-              if (p.kind === "image") return <FileCard key={i} name={p.name} isImage={true} isMine={isMine} />
-              if (p.kind === "file")  return <FileCard key={i} name={p.name} size={p.size} isImage={false} isMine={isMine} />
+              if (p.kind === "image") {
+                // Real image when URL is present; legacy filename-only falls back to FileCard
+                return p.url
+                  ? (
+                    /* eslint-disable-next-line @next/next/no-img-element */
+                    <a key={i} href={p.url} target="_blank" rel="noopener noreferrer" style={{ display:"inline-block" }}>
+                      <img src={p.url} alt={p.name} loading="lazy" style={{ maxWidth:280, maxHeight:280, borderRadius:14, border:"1px solid var(--line)", objectFit:"cover", cursor:"zoom-in" }} />
+                    </a>
+                  )
+                  : <FileCard key={i} name={p.name} isImage={true} isMine={isMine} />
+              }
+              if (p.kind === "file") {
+                return p.url
+                  ? <a key={i} href={p.url} target="_blank" rel="noopener noreferrer"><FileCard name={p.name} size={p.size} isImage={false} isMine={isMine} /></a>
+                  : <FileCard key={i} name={p.name} size={p.size} isImage={false} isMine={isMine} />
+              }
               if (!p.content.trim()) return null
               return (
                 <div key={i} style={{ ...bubble, display:"inline-block", padding:"8px 13px 9px", borderRadius:14, fontSize:14, lineHeight:1.5, letterSpacing:"-0.003em", whiteSpace:"pre-wrap", wordBreak:"break-word" }}>
@@ -856,17 +875,34 @@ export default function ConversationPage() {
     if (!el || el.scrollHeight-el.scrollTop-el.clientHeight<200) scrollToBottom("smooth")
   }, [messages, scrollToBottom])
 
+  const imageUpload = useImageUpload("post")
+
   const handleFilePick = (e: ChangeEvent<HTMLInputElement>) => {
-    Array.from(e.target.files??[]).forEach(file => {
-      const id = Math.random().toString(36).slice(2)
-      const size = file.size>1_048_576?`${(file.size/1_048_576).toFixed(1)} MB`:`${(file.size/1024).toFixed(0)} KB`
-      if (file.type.startsWith("image/")) {
-        const r = new FileReader()
-        r.onload = ev => setPendingFiles(p=>[...p,{id,name:file.name,size,type:"image",dataUrl:ev.target?.result as string}])
-        r.readAsDataURL(file)
-      } else { setPendingFiles(p=>[...p,{id,name:file.name,size,type:"file"}]) }
-    })
+    const files = Array.from(e.target.files ?? [])
     e.target.value = ""
+    files.forEach(file => {
+      const id = Math.random().toString(36).slice(2)
+      const size = file.size > 1_048_576
+        ? `${(file.size / 1_048_576).toFixed(1)} MB`
+        : `${(file.size / 1024).toFixed(0)} KB`
+
+      if (file.type.startsWith("image/")) {
+        // Show local preview while the upload runs in the background.
+        const r = new FileReader()
+        r.onload = ev => setPendingFiles(p => [...p, { id, name:file.name, size, type:"image", dataUrl:ev.target?.result as string }])
+        r.readAsDataURL(file)
+
+        void imageUpload.upload(file).then(({ publicUrl }) => {
+          setPendingFiles(p => p.map(f => f.id === id ? { ...f, url: publicUrl } : f))
+        }).catch(() => {
+          setPendingFiles(p => p.filter(f => f.id !== id))
+          push("Couldn't upload image — try again.", "error")
+        })
+      } else {
+        // Non-image attachments aren't uploaded yet — drop with a notice.
+        push(`Skipped ${file.name}: only images are supported right now.`, "info")
+      }
+    })
   }
 
   const handleSend = useCallback(async () => {
@@ -894,9 +930,19 @@ export default function ConversationPage() {
       return
     }
 
+    // Block send until every pending image has finished uploading
+    if (pendingFiles.some(f => f.type === "image" && !f.url)) {
+      push("Image still uploading — try again in a sec.", "info")
+      return
+    }
+
     let content = text
     if (pendingFiles.length) {
-      const labels = pendingFiles.map(f=>f.type==="image"?`📷 [Image: ${f.name}]`:`📎 [File: ${f.name} (${f.size})]`).join("\n")
+      // Encode URL after the filename: "📷 [Image: name | https://…]"
+      const labels = pendingFiles.map(f => f.type === "image"
+        ? `📷 [Image: ${f.name}${f.url ? ` | ${f.url}` : ""}]`
+        : `📎 [File: ${f.name} (${f.size})${f.url ? ` | ${f.url}` : ""}]`,
+      ).join("\n")
       content = text ? `${labels}\n${text}` : labels
     }
     setInput(""); setPendingFiles([]); setShowEmoji(false); setShowSlash(false)

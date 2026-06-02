@@ -7,7 +7,7 @@
  *   - Navigation (HTML pages): network-first with offline fallback page
  */
 
-const CACHE_NAME = "kaiveron-v1";
+const CACHE_NAME = "kaiveron-v2";
 const OFFLINE_URL = "/offline.html";
 
 const STATIC_ASSETS = [

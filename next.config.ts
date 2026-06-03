@@ -1,12 +1,11 @@
 import type { NextConfig } from "next";
 import { withSentryConfig } from "@sentry/nextjs";
 
-// Backend origins permitted by CSP connect-src. During the Render → AWS
-// cutover we allow BOTH so the frontend can fall back to Render if needed.
-// Drop the Render URL once AWS migration is verified for ~1 week.
+// Backend origins permitted by CSP connect-src. We deploy the backend on AWS
+// App Runner behind the api.kaiveron.com custom domain (CNAME via Hostinger).
+// Add any second backend host here if/when we ever run a hot standby.
 const BACKEND_ORIGINS = [
-  "https://kaiveron-backend.onrender.com", // legacy (Render) — remove after cutover
-  "https://api.kaiveron.com",              // new production (AWS App Runner via Hostinger CNAME)
+  "https://api.kaiveron.com",
 ].join(" ")
 
 const securityHeaders = [

@@ -2,11 +2,13 @@
  * CSP + Security headers regression tests.
  *
  * These tests codify the exact bugs that broke production:
- *  1. connect-src missing the Render backend URL → Socket.io blocked by CSP
+ *  1. connect-src missing the backend URL → Socket.io blocked by CSP
  *  2. Permissions-Policy camera=() microphone=() → getUserMedia() denied for everyone
  *  3. Socket fallback URL was localhost:4000 in production
  *
- * If any of these fail, the fix has been re-introduced — do not merge.
+ * Backend is hosted on AWS App Runner behind the custom domain
+ * api.kaiveron.com (CNAME via Hostinger). If any of these fail, the fix has
+ * been re-introduced — do not merge.
  */
 import { describe, it, expect } from "vitest"
 import { readFileSync } from "fs"
@@ -32,6 +34,7 @@ function stripLineComments(src: string): string {
     })
     .join("\n")
     .replace(/\/\*[\s\S]*?\*\//g, "")  // remove block comments
+
 }
 
 const nextConfig = stripLineComments(nextConfigRaw)
@@ -39,12 +42,12 @@ const socketCode = stripLineComments(socketRaw)
 
 // ── connect-src ───────────────────────────────────────────────────────────────
 
-describe("CSP connect-src — Render backend URL must be explicitly allowed", () => {
+describe("CSP connect-src — backend URL must be explicitly allowed", () => {
 
-  it("file defines RENDER_BACKEND constant pointing to kaiveron-backend.onrender.com", () => {
-    // This constant is used in the connect-src template literal.
-    // If it's missing, the CSP won't allow socket connections to the backend.
-    expect(nextConfigRaw).toContain("kaiveron-backend.onrender.com")
+  it("file declares api.kaiveron.com as a backend origin", () => {
+    // This origin is used in the connect-src template literal.
+    // If it's missing, the CSP will block socket and fetch calls to the backend.
+    expect(nextConfigRaw).toContain("api.kaiveron.com")
   })
 
   it("connect-src includes wss: wildcard for WebSocket upgrade", () => {
@@ -62,20 +65,21 @@ describe("CSP connect-src — Render backend URL must be explicitly allowed", ()
     expect(m?.[0] ?? "").toContain("localhost:4000")
   })
 
-  it("connect-src or its template references the Render backend", () => {
-    // The connect-src line either contains the literal URL or the RENDER_BACKEND constant
+  it("connect-src or its template references the backend domain", () => {
+    // The connect-src line either contains the literal URL or the BACKEND_ORIGINS constant
     const m = nextConfigRaw.match(/connect-src[\s\S]{0,400}?(?=";|`,)/)
     const line = m?.[0] ?? ""
-    const hasLiteral  = line.includes("kaiveron-backend.onrender.com")
-    const hasConstant = line.includes("RENDER_BACKEND")
+    const hasLiteral  = line.includes("api.kaiveron.com")
+    const hasConstant = line.includes("BACKEND_ORIGINS")
     expect(hasLiteral || hasConstant).toBe(true)
   })
 
-  it("does NOT list old Railway URL in the connect-src value (only in comments is ok)", () => {
+  it("does NOT list legacy Render/Railway hosts in the connect-src value (only in comments is ok)", () => {
     // Extract connect-src line — comments stripped so only code remains
     const m = nextConfig.match(/connect-src[\s\S]{0,400}?(?=";|`,)/)
     const line = m?.[0] ?? ""
     expect(line).not.toContain("railway.app")
+    expect(line).not.toContain("onrender.com")
   })
 
   it("includes api.jikan.moe for anime catalog", () => {
@@ -156,8 +160,8 @@ describe("CSP script-src — third-party scripts", () => {
 
 describe("socket.ts — production URL must never fall back to localhost", () => {
 
-  it("defines the Render backend URL as a constant", () => {
-    expect(socketRaw).toContain("kaiveron-backend.onrender.com")
+  it("defines a backend fallback URL pointing at api.kaiveron.com", () => {
+    expect(socketRaw).toContain("api.kaiveron.com")
   })
 
   it("does not use localhost as production fallback in getSocketUrl()", () => {
@@ -167,9 +171,10 @@ describe("socket.ts — production URL must never fall back to localhost", () =>
     expect(badPattern).toBeNull()
   })
 
-  it("uses polling transport before websocket (Render load balancer requirement)", () => {
-    // Render's proxy requires HTTP polling handshake before WebSocket upgrade.
-    // ["websocket"] only → silent failure behind Render's load balancer.
+  it("uses polling transport before websocket (LB-friendly WS upgrade)", () => {
+    // Most managed load balancers — App Runner included — prefer the
+    // WebSocket upgrade to ride on an established HTTP polling connection
+    // rather than opening as websocket-only.
     const m = socketRaw.match(/"polling"[\s\S]{0,50}"websocket"/)
     expect(m).not.toBeNull()
   })
@@ -178,8 +183,8 @@ describe("socket.ts — production URL must never fall back to localhost", () =>
     expect(socketRaw).toContain("reconnection: true")
   })
 
-  it("reconnectionAttempts is Infinity or ≥ 10 (Render cold start = up to 30s)", () => {
-    // 5 attempts × 3s = 15s — not enough for Render's 30s cold start
+  it("reconnectionAttempts is Infinity or ≥ 10 (cold start can be ~30s)", () => {
+    // 5 attempts × 3s = 15s — not enough for a typical cold start
     if (socketRaw.includes("reconnectionAttempts: Infinity")) {
       expect(true).toBe(true)
       return
@@ -214,10 +219,11 @@ describe("next.config.ts rewrites — API proxy via env var", () => {
     expect(nextConfigRaw).toMatch(/API_BASE[^;]{0,50}localhost:4000|localhost:4000[^;]{0,50}API_BASE/)
   })
 
-  it("rewrites do not hardcode a Railway URL", () => {
+  it("rewrites do not hardcode a Render/Railway URL", () => {
     // Find the rewrites() function — strip comments first to avoid comment mentions
     const rewritesFn = nextConfig.match(/async rewrites[\s\S]{0,600}?return \[[\s\S]*?\]/)
     const block = rewritesFn?.[0] ?? nextConfig
     expect(block).not.toContain("railway.app")
+    expect(block).not.toContain("onrender.com")
   })
 })

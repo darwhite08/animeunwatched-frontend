@@ -12,6 +12,7 @@ import {
 import Link from "next/link"
 import { useToast } from "@/stores/toast.store"
 import TrendingWidget from "@/components/social/TrendingWidget"
+import { WhoToFollowWidget } from "@/components/social/WhoToFollowWidget"
 import WatchlistPreviewWidget from "@/components/social/WatchlistPreviewWidget"
 import { useDiscover, useTrending, useFeed, useCreatePost, useLikePost, useComments, useCreateComment } from "@/hooks/usePosts"
 import { Avatar } from "@/components/ui/Avatar"
@@ -825,6 +826,7 @@ export default function CommunityPage() {
           </div>
 
           <WatchlistPreviewWidget />
+          <WhoToFollowWidget />
           <TrendingWidget />
 
           <div className="p-5 rounded-2xl bg-surface border border-border space-y-3">

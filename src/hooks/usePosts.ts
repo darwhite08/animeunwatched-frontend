@@ -61,6 +61,29 @@ export function useUnhidePost(postId: string) {
   })
 }
 
+/** Personalised anime "For You". Auto-refresh every 15 min to match
+ *  backend cache TTL. Disabled when the user isn't authenticated. */
+export function useForYouAnime(limit = 20, enabled = true) {
+  return useQuery({
+    queryKey:        ["anime/for-you", limit],
+    queryFn:         () => ep.getForYouAnime(limit),
+    enabled,
+    staleTime:       15 * 60_000,
+    refetchInterval: 15 * 60_000,
+  })
+}
+
+/** Who-to-follow. 10-min refresh to match backend cache TTL. */
+export function useWhoToFollow(limit = 5, enabled = true) {
+  return useQuery({
+    queryKey:        ["users/suggestions", limit],
+    queryFn:         () => ep.getWhoToFollow(limit),
+    enabled,
+    staleTime:       10 * 60_000,
+    refetchInterval: 10 * 60_000,
+  })
+}
+
 export function usePost(id: string) {
   return useQuery({
     queryKey: postKey(id),

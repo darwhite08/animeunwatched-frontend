@@ -123,6 +123,29 @@ export const hidePost = (id: string) =>
 export const unhidePost = (id: string) =>
   api<{ hidden: false }>(`/posts/${id}/not-interested`, { method: "DELETE" })
 
+/** Personalised "For You" anime recommendations.
+ *  Backend: anime.service.getForYou — builds a taste profile from the
+ *  user's list, scores candidates by genre+studio+era affinity, excludes
+ *  already-listed items, caps 2 per studio. Cold-start (empty list)
+ *  falls back to globally top-rated. */
+export const getForYouAnime = (limit = 20) =>
+  api<{ data: AnimeDTO[]; meta: { algorithm: string } }>(
+    `/anime/for-you?limit=${limit}`,
+  )
+
+/** People-you-may-know suggestions.
+ *  Backend: users.service.whoToFollow — FOAF density + taste similarity
+ *  + recency + reputation. Returns { user, reason } so the UI can show
+ *  why each person was suggested. */
+export const getWhoToFollow = (limit = 10) =>
+  api<{
+    data: Array<{
+      user: Pick<User, "id" | "username" | "displayName" | "avatarUrl" | "bio" | "reputation">
+      reason: string
+    }>
+    meta: { algorithm: string; count: number }
+  }>(`/users/suggestions?limit=${limit}`)
+
 export const getPost = (id: string) =>
   api<{ post: Post; liked: boolean }>(`/posts/${id}`)
 

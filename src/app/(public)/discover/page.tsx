@@ -10,6 +10,7 @@ import { useWatchlist } from "@/stores/watchlist.store"
 import { useToast } from "@/stores/toast.store"
 import AnimeCard from "@/components/bestanimelist/AnimeCard"
 import AnimeModal from "@/components/bestanimelist/AnimeModal"
+import { ForYouSection } from "@/components/discover/ForYouSection"
 import { useQuery } from "@tanstack/react-query"
 import { api } from "@/lib/api/client"
 import { useBrowseAnime } from "@/hooks/useAnime"
@@ -272,6 +273,9 @@ export default function DiscoverPage() {
             Curated anime for every mood. Trending picks, hidden gems, genre deep-dives, and studio spotlights — all in one place.
           </p>
         </motion.div>
+
+        {/* ══ For You — personalised, top of fold for authenticated viewers ══ */}
+        <ForYouSection limit={12} />
 
         {/* ══ Section 1 — Trending This Week ══════════════════════════ */}
         <section className="space-y-6">

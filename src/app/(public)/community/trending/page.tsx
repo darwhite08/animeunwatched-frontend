@@ -10,7 +10,8 @@ import {
 import Link from "next/link"
 import Image from "next/image"
 import { useBrowseAnime } from "@/hooks/useAnime"
-import { useDiscover } from "@/hooks/usePosts"
+// useDiscover removed — this page renders only anime cards now;
+// algorithm-ranked posts live at /trending via useTrending.
 import type { AnimeDTO } from "@/lib/api/types"
 import type { Anime } from "@/lib/data/anime"
 

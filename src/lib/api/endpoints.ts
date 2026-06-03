@@ -106,6 +106,14 @@ export const getFeed = (cursor?: string) =>
 export const getDiscover = (cursor?: string) =>
   api<CursorPaginated<Post>>(`/posts/discover${cursor ? `?cursor=${cursor}` : ""}`)
 
+/** Algorithm-ranked trending feed. Not cursor-paginated — returns top N.
+ *  Backend: see posts.service.getTrending (HN-style score, follow boost,
+ *  diversity cap, 60s cache). Personalized when the viewer is authenticated. */
+export const getTrending = (limit = 20) =>
+  api<{ data: Post[]; meta: { algorithm: string; count: number; personalized: boolean } }>(
+    `/posts/trending?limit=${limit}`,
+  )
+
 export const getPost = (id: string) =>
   api<{ post: Post; liked: boolean }>(`/posts/${id}`)
 

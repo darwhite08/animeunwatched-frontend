@@ -15,7 +15,7 @@ import Link from "next/link"
 import TrendingWidget from "@/components/social/TrendingWidget"
 import WatchlistPreviewWidget from "@/components/social/WatchlistPreviewWidget"
 import ShareCard from "@/components/ui/ShareCard"
-import { useDiscover } from "@/hooks/usePosts"
+import { useDiscover, useTrending } from "@/hooks/usePosts"
 import type { Post as PostDTO } from "@/lib/api/types"
 import { PostMenu } from "@/components/ui/PostMenu"
 
@@ -142,11 +142,20 @@ function PostCard({
 // ─── Page ─────────────────────────────────────────────────────────────────────
 
 export default function PublicFeedPage() {
-  const { data: discoverData, isLoading } = useDiscover()
-  const rawPosts: Post[] = (discoverData?.pages.flatMap(p => p.data) ?? []).map(mapPost)
+  const [feedTab, setFeedTab] = useState<FeedTab>("trending")
+  // "trending" → algorithm-ranked (HN-style score + diversity + follow boost
+  // when authenticated). "latest" → chronological discover. Each tab uses its
+  // own query so cache + refresh cadence are honoured per tab.
+  const { data: trendingData, isLoading: trendingLoading } = useTrending(20)
+  const { data: discoverData, isLoading: discoverLoading } = useDiscover()
+  const isLoading = feedTab === "trending" ? trendingLoading : discoverLoading
+
+  const sourcePosts = feedTab === "trending"
+    ? (trendingData?.data ?? [])
+    : (discoverData?.pages.flatMap(p => p.data) ?? [])
+  const rawPosts: Post[] = sourcePosts.map(mapPost)
 
   const [localLikes, setLocalLikes] = useState<Record<number, boolean>>({})
-  const [feedTab, setFeedTab] = useState<FeedTab>("trending")
   const [sharingPost, setSharingPost] = useState<Post | null>(null)
 
   const posts = rawPosts.map(p => ({ ...p, liked: localLikes[p.id] ?? p.liked }))
@@ -155,7 +164,7 @@ export default function PublicFeedPage() {
     setLocalLikes(prev => ({ ...prev, [id]: !prev[id] }))
   }
 
-  // For "latest" tab, sort by id descending (newest first); trending keeps default order
+  // Trending order comes from the backend ranker; latest sorts client-side.
   const displayPosts =
     feedTab === "latest" ? [...posts].sort((a, b) => b.id - a.id) : posts
 

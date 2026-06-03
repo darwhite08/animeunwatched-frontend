@@ -8,7 +8,7 @@ import {
 } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
-import { useDiscover } from "@/hooks/usePosts"
+import { useTrending } from "@/hooks/usePosts"
 import { useBrowseAnime } from "@/hooks/useAnime"
 
 /* ── Mock data ── */
@@ -68,9 +68,9 @@ const PERCENT_CHANGES: Record<string, string> = {
 
 /* ── Page ── */
 export default function TrendingPage() {
-  const { data: discoverData } = useDiscover()
+  const { data: trendingData } = useTrending(20)
   const { data: browseData }   = useBrowseAnime({ limit: 6 })
-  const apiPosts = discoverData?.pages[0]?.data ?? []
+  const apiPosts = trendingData?.data ?? []
   const apiAnime = browseData?.data?.slice(0, 4) ?? []
   const [votedPolls, setVotedPolls] = useState<Record<number, string>>({})
 

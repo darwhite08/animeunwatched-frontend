@@ -3,6 +3,7 @@ import * as ep from "@/lib/api/endpoints"
 
 export const feedKey     = ["posts/feed"]    as const
 export const discoverKey = ["posts/discover"] as const
+export const trendingKey = (limit: number) => ["posts/trending", limit] as const
 export const postKey     = (id: string)   => ["post", id] as const
 export const commentsKey = (id: string)   => ["post/comments", id] as const
 
@@ -21,6 +22,19 @@ export function useDiscover() {
     queryFn:  ({ pageParam }) => ep.getDiscover(pageParam as string | undefined),
     initialPageParam: undefined as string | undefined,
     getNextPageParam: (last) => last.meta.nextCursor ?? undefined,
+  })
+}
+
+/** Algorithm-ranked trending feed.
+ *  Backend: posts.service.getTrending — HN-style score, follow boost,
+ *  diversity cap, 60s cache. Not cursor-paginated; returns top `limit`.
+ *  Auto-refresh every 60s to match backend cache TTL. */
+export function useTrending(limit = 20) {
+  return useQuery({
+    queryKey:        trendingKey(limit),
+    queryFn:         () => ep.getTrending(limit),
+    staleTime:       60_000,
+    refetchInterval: 60_000,
   })
 }
 

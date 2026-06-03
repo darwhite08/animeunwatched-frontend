@@ -13,7 +13,7 @@ import Link from "next/link"
 import { useToast } from "@/stores/toast.store"
 import TrendingWidget from "@/components/social/TrendingWidget"
 import WatchlistPreviewWidget from "@/components/social/WatchlistPreviewWidget"
-import { useDiscover, useCreatePost, useLikePost, useComments, useCreateComment } from "@/hooks/usePosts"
+import { useDiscover, useTrending, useFeed, useCreatePost, useLikePost, useComments, useCreateComment } from "@/hooks/usePosts"
 import { Avatar } from "@/components/ui/Avatar"
 import { CommentRow } from "@/components/posts/CommentRow"
 import { useLiveFeed } from "@/hooks/useRealtime"
@@ -473,10 +473,50 @@ export default function CommunityPage() {
   // Realtime: new posts prepend, like/comment counts update without refresh
   useLiveFeed()
 
-  const { data, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage } = useDiscover()
+  // Each tab uses the hook that matches what users expect:
+  //   trending  → algorithm-ranked (HN-style score + diversity + follow boost)
+  //   following → in-network chronological feed (requires auth; skips otherwise)
+  //   latest    → global chronological discover
+  // We keep all three queries mounted so switching tabs is instant.
+  const trending  = useTrending(20)
+  const following = useFeed()
+  const discover  = useDiscover()
+
+  const active = feedTab === "trending" ? "trending"
+               : feedTab === "following" ? "following"
+               : "latest"
+
+  const isLoading = active === "trending"
+    ? trending.isLoading
+    : active === "following"
+    ? (isAuthenticated && following.isLoading)
+    : discover.isLoading
+
+  const isError = active === "trending"
+    ? trending.isError
+    : active === "following"
+    ? following.isError
+    : discover.isError
+
+  // Pagination only applies to the cursor-paginated tabs (following / latest).
+  // Trending is a fixed top-N — no fetchNextPage.
+  const fetchNextPage = active === "following" ? following.fetchNextPage : discover.fetchNextPage
+  const hasNextPage   = active === "trending" ? false
+                      : active === "following" ? !!following.hasNextPage
+                      : !!discover.hasNextPage
+  const isFetchingNextPage = active === "following"
+    ? following.isFetchingNextPage
+    : active === "latest"
+    ? discover.isFetchingNextPage
+    : false
+
   const createPost = useCreatePost()
 
-  const posts: Post[] = data?.pages.flatMap(p => p.data) ?? []
+  const posts: Post[] = active === "trending"
+    ? (trending.data?.data ?? [])
+    : active === "following"
+    ? (following.data?.pages.flatMap(p => p.data) ?? [])
+    : (discover.data?.pages.flatMap(p => p.data) ?? [])
 
   // ── Sidebar real-data sources ──────────────────────────────────────
   // Trending tags: derived from the actual #hashtag tokens in the latest

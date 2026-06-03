@@ -552,7 +552,7 @@ export default function UserProfilePage({
             </Link>
           </div>
 
-          <div className="grid grid-cols-4 gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {watchlistAnime.map((anime, i) => (
               <motion.div
                 key={anime.id}

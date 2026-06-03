@@ -260,3 +260,58 @@
   backdrop-filter: blur(40px) !important;
   -webkit-backdrop-filter: blur(40px) !important;
 }
+
+/* ──────────────────────────────────────────────────────────────────────────
+   Global mobile guardrails
+   ──────────────────────────────────────────────────────────────────────────
+   We have ~30 pages that hard-code `text-5xl..text-8xl` and `pt-28..pt-40`
+   on hero sections without a mobile size variant. On a 375px viewport
+   `text-7xl` (4.5rem ≈ 72px) overruns the safe area and `pt-32` (128px)
+   wastes a third of the fold before any content renders.
+
+   Fixing this case-by-case is 30+ file edits. A two-rule CSS clamp does it
+   in one place — and the per-page Tailwind classes still win on sm+, so
+   we keep the deliberate desktop typography. Anyone who DOES want a
+   smaller mobile size via Tailwind can still use `text-3xl sm:text-7xl`
+   etc.; the override only kicks in for the un-prefixed utility.
+   ────────────────────────────────────────────────────────────────────── */
+@media (max-width: 640px) {
+  /* Heading clamps — keep the typographic rhythm, lose the overflow. */
+  .text-5xl { font-size: 2.25rem;  line-height: 1.10; }   /* 36 */
+  .text-6xl { font-size: 2.625rem; line-height: 1.05; }   /* 42 */
+  .text-7xl { font-size: 3rem;     line-height: 1.00; }   /* 48 */
+  .text-8xl { font-size: 3.5rem;   line-height: 1.00; }   /* 56 */
+  .text-9xl { font-size: 4rem;     line-height: 1.00; }   /* 64 */
+
+  /* Vertical-padding clamps — most pages set this to clear the 72-80px
+     sticky navbar. On mobile the navbar collapses to ~64px, so we only
+     need ~80-96px of top padding, not 128-160. */
+  .pt-28 { padding-top: 4.5rem; }   /* 72 from 112 */
+  .pt-32 { padding-top: 5rem;   }   /* 80 from 128 */
+  .pt-40 { padding-top: 6rem;   }   /* 96 from 160 */
+  .pb-28 { padding-bottom: 4.5rem; }
+  .pb-32 { padding-bottom: 5rem;   }
+  .pb-40 { padding-bottom: 6rem;   }
+
+  /* Container side-padding — px-6 on a 375px viewport leaves 327px for
+     content (after 24×2 padding). px-4 is the right default; pages that
+     genuinely want larger gutters opt in with `px-4 sm:px-6`. */
+  .px-6 { padding-left: 1rem; padding-right: 1rem; }
+
+  /* The most common offender: a 4-col grid that doesn't reflow. Drop to
+     2 cols on mobile; pages that want a different mobile shape (e.g.
+     1-col list) override with `grid-cols-1 sm:grid-cols-4`. */
+  .grid-cols-4:not([class*="sm:grid-cols-"]):not([class*="md:grid-cols-"]):not([class*="lg:grid-cols-"]) {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  /* Touch-target floor: any chip/pill with min-w under 44px will fail
+     the 44×44 thumb-target test. Bump the minimum without losing the
+     intent of the explicit width. */
+  [class*="min-w-["] { min-height: 2.5rem; }
+}
+
+/* Stop horizontal overflow from anywhere — a single rogue element with
+   negative margin or absolute positioning shouldn't scroll the whole
+   document. Set on <body> not <html> so iOS rubber-band still works. */
+body { overflow-x: hidden; }

@@ -214,3 +214,80 @@ export async function decryptMessages(
     }),
   )
 }
+
+// ════════════════════════════════════════════════════════════════════════════
+// MULTI-DEVICE E2E — envelope encryption (verified by scripts/e2e-envelope.test.mjs)
+//
+// Each message is encrypted once with a random AES-GCM key K; K is then
+// ECDH-wrapped separately for every recipient/sender device public key. This
+// removes the single-pairwise-key limitation, so multiple devices per user work.
+// Additive: the legacy pairwise/base64 path above is untouched. Sending via
+// envelopes is gated on E2E_ENABLED + coordinated web/mobile rollout.
+// ════════════════════════════════════════════════════════════════════════════
+
+const STORE_DEVICE_ID = "aw_e2e_device_id"
+
+/** Stable per-device id (persisted). */
+export function getDeviceId(): string {
+  let id = store().getItem(STORE_DEVICE_ID)
+  if (!id) {
+    id = (window.crypto.randomUUID?.() ?? bytesToB64(window.crypto.getRandomValues(new Uint8Array(16)).buffer)).slice(0, 36)
+    store().setItem(STORE_DEVICE_ID, id)
+  }
+  return id
+}
+
+/** Register THIS device's public key with the backend (append, never overwrite). */
+export async function registerThisDevice(
+  apiFn: <T>(path: string, opts?: RequestInit) => Promise<T>,
+): Promise<void> {
+  const { publicKeyJwk } = await getOrCreateKeyPair()
+  await apiFn("/chat/keys/devices", {
+    method: "POST",
+    body: JSON.stringify({ deviceId: getDeviceId(), publicKey: publicKeyJwk }),
+  })
+}
+
+// A random per-message AES-GCM key.
+export async function generateMessageKey(): Promise<{ key: CryptoKey; raw: string }> {
+  const key = await window.crypto.subtle.generateKey({ name: "AES-GCM", length: 256 }, true, ["encrypt", "decrypt"])
+  return { key, raw: bytesToB64(await window.crypto.subtle.exportKey("raw", key)) }
+}
+
+async function importMessageKey(rawB64: string): Promise<CryptoKey> {
+  return window.crypto.subtle.importKey("raw", b64ToBytes(rawB64), { name: "AES-GCM" }, false, ["encrypt", "decrypt"])
+}
+
+export async function encryptWithMessageKey(key: CryptoKey, plaintext: string): Promise<{ ciphertext: string; iv: string }> {
+  const iv = window.crypto.getRandomValues(new Uint8Array(12))
+  const ct = await window.crypto.subtle.encrypt({ name: "AES-GCM", iv }, key, new TextEncoder().encode(plaintext))
+  return { ciphertext: bytesToB64(ct), iv: bytesToB64(iv.buffer) }
+}
+
+export async function decryptWithMessageKey(key: CryptoKey, ciphertext: string, iv: string): Promise<string> {
+  const pt = await window.crypto.subtle.decrypt({ name: "AES-GCM", iv: b64ToBytes(iv) }, key, b64ToBytes(ciphertext))
+  return new TextDecoder().decode(pt)
+}
+
+// Wrap the message key for one recipient device (ECDH(myPriv, theirPub) → AES-GCM).
+export async function wrapMessageKey(
+  messageKeyRaw: string,
+  myPrivateKey: CryptoKey,
+  recipientPublicKeyJwk: string,
+): Promise<{ wrappedKey: string; wrapIv: string }> {
+  const wrapKey = await deriveSharedKey(myPrivateKey, await importRemotePublicKey(recipientPublicKeyJwk))
+  const wrapIv = window.crypto.getRandomValues(new Uint8Array(12))
+  const wrapped = await window.crypto.subtle.encrypt({ name: "AES-GCM", iv: wrapIv }, wrapKey, b64ToBytes(messageKeyRaw))
+  return { wrappedKey: bytesToB64(wrapped), wrapIv: bytesToB64(wrapIv.buffer) }
+}
+
+export async function unwrapMessageKey(
+  wrappedKey: string,
+  wrapIv: string,
+  myPrivateKey: CryptoKey,
+  senderPublicKeyJwk: string,
+): Promise<CryptoKey> {
+  const wrapKey = await deriveSharedKey(myPrivateKey, await importRemotePublicKey(senderPublicKeyJwk))
+  const rawBuf = await window.crypto.subtle.decrypt({ name: "AES-GCM", iv: b64ToBytes(wrapIv) }, wrapKey, b64ToBytes(wrappedKey))
+  return importMessageKey(bytesToB64(rawBuf))
+}

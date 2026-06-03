@@ -56,30 +56,40 @@ export function WhoToFollowWidget() {
       )}
 
       {!isLoading && (data?.data ?? []).length > 0 && (
-        <ul className="space-y-3">
+        <ul className="space-y-3.5">
           {(data?.data ?? []).map(({ user, reason }) => {
             const followedHere = followedLocal.has(user.id)
             return (
               <li key={user.id} className="flex items-center gap-3">
-                <Link href={`/u/${user.username}`} className="shrink-0">
+                {/* 44×44 tap target on mobile for the avatar+name region;
+                    shrinks to a compact 36px circle on larger viewports
+                    where pointers replace thumbs. */}
+                <Link
+                  href={`/u/${user.username}`}
+                  className="shrink-0 inline-flex items-center justify-center w-11 h-11 sm:w-9 sm:h-9 -m-1.5 sm:m-0 rounded-full"
+                  aria-label={`Open ${user.displayName}'s profile`}
+                >
                   {user.avatarUrl ? (
                     <Image
                       src={user.avatarUrl}
-                      alt={user.displayName}
-                      width={36} height={36}
-                      className="rounded-full object-cover"
+                      alt=""
+                      width={40} height={40}
+                      className="rounded-full object-cover w-10 h-10 sm:w-9 sm:h-9"
                     />
                   ) : (
-                    <div className="w-9 h-9 rounded-full bg-accent/20 border border-accent/30 flex items-center justify-center text-[11px] font-black text-accent-bright">
+                    <div className="w-10 h-10 sm:w-9 sm:h-9 rounded-full bg-accent/20 border border-accent/30 flex items-center justify-center text-[11px] font-black text-accent-bright">
                       {(user.displayName || user.username).slice(0, 2).toUpperCase()}
                     </div>
                   )}
                 </Link>
                 <div className="flex-1 min-w-0">
-                  <Link href={`/u/${user.username}`} className="block text-xs font-bold text-foreground hover:text-accent-bright transition-colors truncate">
+                  <Link
+                    href={`/u/${user.username}`}
+                    className="block text-sm sm:text-xs font-bold text-foreground hover:text-accent-bright transition-colors truncate py-0.5"
+                  >
                     {user.displayName}
                   </Link>
-                  <p className="text-[10px] text-subtle truncate" title={reason}>
+                  <p className="text-[11px] sm:text-[10px] text-subtle truncate" title={reason}>
                     {reason}
                   </p>
                 </div>
@@ -124,13 +134,15 @@ function FollowButton({ username, initiallyFollowing, onChange }: {
       onClick={handleClick}
       disabled={mut.isPending}
       aria-pressed={following}
-      className={`shrink-0 px-2.5 py-1.5 rounded-lg text-[10px] font-black uppercase tracking-widest transition-colors disabled:opacity-50 inline-flex items-center gap-1 ${
+      // min-h-9 (36px) + larger touch padding on mobile to satisfy the
+      // 44×44 thumb-target heuristic; tightens on sm+ for desktop density.
+      className={`shrink-0 min-h-9 px-3 sm:px-2.5 py-2 sm:py-1.5 rounded-lg text-[11px] sm:text-[10px] font-black uppercase tracking-widest transition-colors disabled:opacity-50 inline-flex items-center gap-1 ${
         following
           ? "border border-border text-muted hover:text-foreground hover:bg-surface-2"
           : "bg-accent text-black hover:bg-accent-bright"
       }`}
     >
-      {following ? <><Check size={10} /> Following</> : <><UserPlus size={10} /> Follow</>}
+      {following ? <><Check size={11} /> Following</> : <><UserPlus size={11} /> Follow</>}
     </button>
   )
 }

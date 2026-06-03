@@ -44,8 +44,11 @@ export function ForYouSection({ limit = 12 }: { limit?: number }) {
         </Link>
       </header>
 
+      {/* Mobile: 2 cols × ~165px posters fit a 375px viewport with room
+          for gaps; gap tightens to 2 on the smallest screens. Each
+          breakpoint adds one column up to 6 on desktop. */}
       {isLoading && (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2 sm:gap-3">
           {Array.from({ length: limit }).map((_, i) => (
             <div key={i} className="aspect-[2/3] rounded-xl bg-surface-2 animate-pulse" />
           ))}
@@ -53,28 +56,28 @@ export function ForYouSection({ limit = 12 }: { limit?: number }) {
       )}
 
       {!isLoading && (data?.data ?? []).length === 0 && (
-        <div className="p-6 rounded-2xl border border-border bg-surface text-xs text-muted">
-          Add a few anime to your list to seed personalised recommendations.
-          <Link href="/bestanimelist" className="ml-1 text-accent-bright hover:underline">
+        <div className="p-5 sm:p-6 rounded-2xl border border-border bg-surface text-sm sm:text-xs text-muted leading-relaxed">
+          Add a few anime to your list to seed personalised recommendations.{" "}
+          <Link href="/bestanimelist" className="text-accent-bright hover:underline whitespace-nowrap">
             Browse the catalog →
           </Link>
         </div>
       )}
 
       {!isLoading && (data?.data ?? []).length > 0 && (
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2 sm:gap-3">
           {(data?.data ?? []).map((a) => (
             <Link
               key={a.malId}
               href={`/anime/${a.malId}`}
-              className="group relative aspect-[2/3] rounded-xl overflow-hidden border border-border bg-surface-2 hover:border-accent/40 transition-colors"
+              className="group relative aspect-[2/3] rounded-xl overflow-hidden border border-border bg-surface-2 active:scale-[0.98] hover:border-accent/40 transition-all touch-manipulation"
             >
               {a.imageUrl ? (
                 <Image
                   src={a.imageUrl}
                   alt={a.title}
                   fill
-                  sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 16vw"
+                  sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 16vw"
                   className="object-cover group-hover:scale-[1.03] transition-transform duration-300"
                 />
               ) : (
@@ -82,12 +85,12 @@ export function ForYouSection({ limit = 12 }: { limit?: number }) {
                   {a.title}
                 </div>
               )}
-              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent p-2.5">
-                <div className="flex items-center gap-1.5 text-[9px] font-black text-accent-bright">
-                  <Star size={9} fill="currentColor" />
+              <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent p-2 sm:p-2.5">
+                <div className="flex items-center gap-1 text-[10px] sm:text-[9px] font-black text-accent-bright">
+                  <Star size={10} fill="currentColor" className="sm:w-[9px] sm:h-[9px]" />
                   {(a.score ?? 0).toFixed(1)}
                 </div>
-                <div className="text-[11px] font-bold text-foreground line-clamp-2 mt-0.5">
+                <div className="text-[11px] sm:text-[11px] font-bold text-foreground line-clamp-2 mt-0.5">
                   {a.title}
                 </div>
               </div>

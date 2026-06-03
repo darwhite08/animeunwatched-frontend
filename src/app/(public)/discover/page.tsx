@@ -254,8 +254,11 @@ export default function DiscoverPage() {
   }
 
   return (
-    <main className="min-h-screen bg-background pt-32 pb-24">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 space-y-24">
+    <main className="min-h-screen bg-background pt-24 sm:pt-32 pb-20 sm:pb-24">
+      {/* Mobile uses 14-unit gap so the page doesn't feel like a slideshow
+          of one-section screens; desktop keeps the deliberate 24-unit
+          breathing room between major sections. */}
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 space-y-14 sm:space-y-24">
 
         {/* ── Page header ─────────────────────────────────────────────── */}
         <motion.div

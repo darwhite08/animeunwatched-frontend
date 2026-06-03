@@ -9,6 +9,8 @@ import {
   getSharedKey,
   encryptMessage,
   decryptMessage,
+  encryptWithMessageKey,
+  decryptWithMessageKey,
 } from "@/lib/e2e-crypto"
 import type { DirectMessage } from "@/lib/api/types"
 
@@ -306,6 +308,13 @@ describe("e2e-crypto: ECDH + AES-GCM", () => {
     }
   })
 
+  // The next two tests assert AES-GCM properties (wrong-key rejection,
+  // per-message random IV). They call the envelope primitives directly
+  // because `encryptMessage`/`decryptMessage` short-circuit to a base64
+  // passthrough while `E2E_ENABLED` is false — those wrappers can't honor
+  // these properties until E2E is flipped on platform-wide. The underlying
+  // AES-GCM path is what production uses for envelope-encrypted DMs.
+
   it("decryption fails with wrong key", async () => {
     localStorage.clear()
     const alice = await getOrCreateKeyPair()
@@ -317,10 +326,10 @@ describe("e2e-crypto: ECDH + AES-GCM", () => {
     const aliceBobKey = await getSharedKey(alice.privateKey, bob.publicKeyJwk)
     const aliceEveKey = await getSharedKey(alice.privateKey, eve.publicKeyJwk)
 
-    const { ciphertext, iv } = await encryptMessage(aliceBobKey, "secret")
+    const { ciphertext, iv } = await encryptWithMessageKey(aliceBobKey, "secret")
 
     // Eve cannot decrypt a message encrypted for Bob
-    await expect(decryptMessage(aliceEveKey, ciphertext, iv)).rejects.toThrow()
+    await expect(decryptWithMessageKey(aliceEveKey, ciphertext, iv)).rejects.toThrow()
   })
 
   it("each encryption uses a unique IV", async () => {
@@ -330,8 +339,8 @@ describe("e2e-crypto: ECDH + AES-GCM", () => {
     const bob   = await getOrCreateKeyPair()
     const key = await getSharedKey(alice.privateKey, bob.publicKeyJwk)
 
-    const r1 = await encryptMessage(key, "same message")
-    const r2 = await encryptMessage(key, "same message")
+    const r1 = await encryptWithMessageKey(key, "same message")
+    const r2 = await encryptWithMessageKey(key, "same message")
 
     expect(r1.iv).not.toBe(r2.iv)
     expect(r1.ciphertext).not.toBe(r2.ciphertext)

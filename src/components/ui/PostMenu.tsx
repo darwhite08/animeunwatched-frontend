@@ -1,9 +1,11 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import { MoreHorizontal, Link2, Share2, Flag, Trash2 } from "lucide-react"
+import { MoreHorizontal, Link2, Share2, Flag, Trash2, EyeOff } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
 import { useToast } from "@/stores/toast.store"
+import { useHidePost } from "@/hooks/usePosts"
+import { useAuthStore } from "@/stores/auth.store"
 
 type Props = {
   postId: string
@@ -20,6 +22,8 @@ export function PostMenu({ postId, postUrl, isOwner, onDelete }: Props) {
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
   const { push } = useToast()
+  const isAuthenticated = useAuthStore(s => s.isAuthenticated)
+  const hide = useHidePost(postId)
 
   useEffect(() => {
     function onClick(e: MouseEvent) {
@@ -59,6 +63,14 @@ export function PostMenu({ postId, postUrl, isOwner, onDelete }: Props) {
     setOpen(false)
   }
 
+  function notInterested() {
+    setOpen(false)
+    hide.mutate(undefined, {
+      onSuccess: () => push("We'll show you less like this", "info"),
+      onError:   () => push("Couldn't hide that post", "error"),
+    })
+  }
+
   function deletePost() {
     setOpen(false)
     onDelete?.()
@@ -91,7 +103,12 @@ export function PostMenu({ postId, postUrl, isOwner, onDelete }: Props) {
             {isOwner && onDelete ? (
               <MenuItem icon={Trash2} label="Delete" onClick={deletePost} danger />
             ) : (
-              <MenuItem icon={Flag} label="Report" onClick={report} danger />
+              <>
+                {isAuthenticated && (
+                  <MenuItem icon={EyeOff} label="Not interested" onClick={notInterested} />
+                )}
+                <MenuItem icon={Flag} label="Report" onClick={report} danger />
+              </>
             )}
           </motion.div>
         )}

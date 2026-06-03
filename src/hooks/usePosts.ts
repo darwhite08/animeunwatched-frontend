@@ -38,6 +38,29 @@ export function useTrending(limit = 20) {
   })
 }
 
+/** "Not interested" — hide a post from the viewer's trending feed.
+ *  Invalidates trending so the hidden post disappears immediately,
+ *  not on the next 60s refresh. */
+export function useHidePost(postId: string) {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: () => ep.hidePost(postId),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["posts/trending"] })
+    },
+  })
+}
+
+export function useUnhidePost(postId: string) {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: () => ep.unhidePost(postId),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["posts/trending"] })
+    },
+  })
+}
+
 export function usePost(id: string) {
   return useQuery({
     queryKey: postKey(id),

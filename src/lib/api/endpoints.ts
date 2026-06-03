@@ -114,6 +114,15 @@ export const getTrending = (limit = 20) =>
     `/posts/trending?limit=${limit}`,
   )
 
+/** "Not interested" — drops the post from this user's trending feed and,
+ *  after 3+ hides of the same author, soft-blocks that author's other posts
+ *  for this viewer. Per X's open-source weights, negative signals dominate. */
+export const hidePost = (id: string) =>
+  api<{ hidden: true }>(`/posts/${id}/not-interested`, { method: "POST" })
+
+export const unhidePost = (id: string) =>
+  api<{ hidden: false }>(`/posts/${id}/not-interested`, { method: "DELETE" })
+
 export const getPost = (id: string) =>
   api<{ post: Post; liked: boolean }>(`/posts/${id}`)
 

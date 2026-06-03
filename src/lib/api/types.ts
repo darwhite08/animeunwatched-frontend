@@ -11,6 +11,9 @@ export interface DirectMessage {
   readAt:         string | null
   deletedAt?:     string | null  // "Delete for everyone" tombstone
   decryptedText?: string        // populated client-side after decryption
+  // Multi-device E2E (present only when the message was envelope-encrypted)
+  senderDeviceKeyId?: string | null
+  envelopes?:     { recipientDeviceKeyId?: string; wrappedKey: string; wrapIv: string }[]
 }
 
 export interface ConversationSummary {
@@ -173,7 +176,16 @@ export interface PostComment {
   replies?: PostComment[]
 }
 
-export interface UserProfile extends User {
+/**
+ * Response shape for `GET /api/v1/users/:username`. The backend returns
+ * `user`, `stats`, and `recentPosts` at the SAME level — `stats` is NOT
+ * nested inside `user`. Until 2026-06-03 the wrong shape (`UserProfile
+ * extends User`) lived here, which silently broke follower/following
+ * counts on every profile surface — they all read `profileData.user.stats`
+ * and got `undefined`. Keep stats at the top level.
+ */
+export interface UserProfile {
+  user: User
   stats: { followers: number; following: number; listCount: number; reviewCount: number }
   recentPosts: Post[]
 }

@@ -290,10 +290,10 @@ export default function UserProfilePage({
       ? new Date(realUser.createdAt).toLocaleDateString(undefined, { month: "long", year: "numeric" })
       : "",
     stats: {
-      archived:  realUser?.stats?.listCount ?? 0,
+      archived:  profileData?.stats?.listCount ?? 0,
       streak:    (realUser as { streakDays?: number } | undefined)?.streakDays ?? 0,
       rank:      0,
-      followers: realUser?.stats?.followers ?? 0,
+      followers: profileData?.stats?.followers ?? 0,
     },
     dna,
   } as MockUser & { avatarUrl: string | null }

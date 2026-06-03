@@ -139,8 +139,8 @@ function Hero({ isOwner }: { isOwner: boolean }) {
 
   // Real social + curation counts. Curations = items in this user's
   // public watchlist (lists are public in this app).
-  const followers  = profile?.stats?.followers ?? 0
-  const followingN = profile?.stats?.following ?? 0
+  const followers  = profileData?.stats?.followers ?? 0
+  const followingN = profileData?.stats?.following ?? 0
   const curations  = listData?.data?.length ?? 0
 
   return (
@@ -173,7 +173,8 @@ function Hero({ isOwner }: { isOwner: boolean }) {
           margin so only IT pokes up over the cover. */}
       <div className="px-6 pb-6 grid gap-6 grid-cols-1 lg:grid-cols-[auto_minmax(0,1fr)_auto] lg:items-start">
         <div className="-mt-[54px] self-start">
-          <ProfileAvatar progress={progress} level={level} name={displayName} avatarUrl={user?.avatarUrl} />
+          <ProfileAvatar progress={progress} level={level} name={displayName}
+            avatarUrl={profile?.avatarUrl ?? user?.avatarUrl} />
         </div>
 
         <div className="min-w-0 pt-4">

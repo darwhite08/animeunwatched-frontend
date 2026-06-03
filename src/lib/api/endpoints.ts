@@ -35,7 +35,7 @@ export const me = () => api<{ user: User }>("/auth/me")
 
 /* ── Users ── */
 export const getUser = (username: string) =>
-  api<{ user: UserProfile }>(`/users/${username}`)
+  api<UserProfile>(`/users/${username}`)
 
 export const updateMe = (body: { displayName?: string; bio?: string; avatarUrl?: string }) =>
   api<{ user: User }>("/users/me", { method: "PATCH", body: JSON.stringify(body) })

@@ -119,8 +119,8 @@ export default function BadgeShowcase() {
 
   const BADGES = useMemo(() => buildBadges({
     archiveCount: listData?.data?.length ?? 0,
-    reviewCount:  profileData?.user?.stats?.reviewCount ?? 0,
-    followingN:   profileData?.user?.stats?.following   ?? 0,
+    reviewCount:  profileData?.stats?.reviewCount ?? 0,
+    followingN:   profileData?.stats?.following   ?? 0,
     streakDays:   (user as { streakDays?: number } | null)?.streakDays ?? 0,
     bestStreak:   (user as { bestStreak?: number } | null)?.bestStreak
       ?? (user as { streakDays?: number } | null)?.streakDays ?? 0,

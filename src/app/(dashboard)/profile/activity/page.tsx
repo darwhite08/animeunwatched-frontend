@@ -62,7 +62,7 @@ export default function ActivityPage() {
       }))
 
     // Supplement with recent list activity from the user profile if available
-    const listEvents: Event[] = (profileData?.user?.recentPosts ?? [])
+    const listEvents: Event[] = (profileData?.recentPosts ?? [])
       .filter(p => p.authorId !== user?.id) // avoid duplicating own posts
       .slice(0, 3)
       .map(p => ({

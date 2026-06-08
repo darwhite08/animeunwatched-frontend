@@ -20,7 +20,7 @@ export default function ProfileMenu({ user, isOpen, onClose, onLogout }: Profile
     { href: slug ? userPath(slug, "dashboard")       : "/dashboard",            icon: SquaresFour,   label: "Dashboard"  },
     { href: slug ? userPath(slug, "profile")         : "/profile",              icon: User,           label: "Profile"    },
     { href: slug ? userPath(slug, "watchlist")       : "/watchlist",            icon: BookmarkSimple, label: "Watchlist"  },
-    { href: "/creators/create/blog",                                             icon: PenNib,         label: "Write Blog" },
+    { href: "https://creator-studio.kaiveron.com",                               icon: PenNib,         label: "Creator Studio" },
     { href: slug ? userPath(slug, "settings/account")    : "/me/settings/account",    icon: Gear,         label: "Settings"    },
     { href: slug ? userPath(slug, "settings/appearance") : "/me/settings/appearance", icon: PaintBrush,   label: "Appearance"  },
   ]

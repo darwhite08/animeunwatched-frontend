@@ -823,7 +823,7 @@ function ShowcaseSection() {
       tag: "Create",
       title: "Publish. Build an audience.",
       desc: "Write reviews, long-form blogs, host polls. The Creator Studio turns your anime knowledge into influence.",
-      href: "/creators",
+      href: "https://creator-studio.kaiveron.com",
       accent: "violet",
       preview: (
         <div className="space-y-3">

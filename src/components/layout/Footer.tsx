@@ -31,13 +31,11 @@ const NAV_COLS = [
     ],
   },
   {
+    // Creator Studio moved to creator-studio.kaiveron.com — not linked from the
+    // main consumer site anymore.
     title: "Creator Studio",
     links: [
-      { label: "Studio Hub",    href: "/creators" },
-      { label: "Write a Blog",  href: "/creators/create/blog" },
-      { label: "Create a Poll", href: "/creators/create/polls" },
-      { label: "Feed Post",     href: "/creators/create/feed" },
-      { label: "Analytics",     href: "/creators/analytics" },
+      { label: "Open Creator Studio", href: "https://creator-studio.kaiveron.com" },
     ],
   },
   {

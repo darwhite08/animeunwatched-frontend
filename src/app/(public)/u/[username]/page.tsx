@@ -25,6 +25,7 @@ import {
 } from "lucide-react"
 import { useToast } from "@/stores/toast.store"
 import { useUserProfile, useFollow } from "@/hooks/useUsers"
+import { SupportCreator } from "@/components/social/SupportCreator"
 import { useUserList } from "@/hooks/useLists"
 import { useActivityFeed } from "@/hooks/useActivityFeed"
 import { useAuthStore } from "@/stores/auth.store"
@@ -484,6 +485,8 @@ export default function UserProfilePage({
                   )}
                 </button>
                 )}
+
+                {!isOwnProfile && <SupportCreator username={username} />}
 
                 {!isOwnProfile && (
                 <button

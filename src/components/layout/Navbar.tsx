@@ -40,6 +40,7 @@ const ANIME_LINKS = [
 
 const COMMUNITY_LINKS = [
   { name: "Feed",        href: "/community",   icon: Newspaper,    desc: "Latest posts" },
+  { name: "Shots",       href: "/shots",       icon: MonitorPlay,  desc: "Short vertical clips" },
   { name: "Clubs",       href: "/clubs",       icon: UsersThree,   desc: "Join a community" },
   { name: "Blog",        href: "/blog",        icon: BookOpenText, desc: "Long-form articles" },
   { name: "Polls",       href: "/poll",        icon: ChartBar,     desc: "Vote & debate" },

@@ -87,6 +87,15 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  // Creator Studio is a gated subdomain for eligible creators — it is NOT part
+  // of the main consumer site. Permanently (308) redirect the entire /creators
+  // tree off the main domain to the studio, which enforces the access gate + SSO.
+  async redirects() {
+    return [
+      { source: "/creators", destination: "https://creator-studio.kaiveron.com", permanent: true },
+      { source: "/creators/:path*", destination: "https://creator-studio.kaiveron.com", permanent: true },
+    ];
+  },
   // Proxy /api/v1/* and /health to the backend — this lets phones/tablets reach the
   // backend through port 3000 (Next.js) without needing direct access to port 4000.
   async rewrites() {

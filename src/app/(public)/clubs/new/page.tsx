@@ -137,7 +137,7 @@ export default function NewClubPage() {
     setErrors({})
     setSubmitting(true)
     createClub.mutate(
-      { name: form.name, slug: form.slug, description: form.description },
+      { name: form.name, slug: form.slug, description: form.description, category: form.category },
       {
         onSuccess: () => {
           setSubmitting(false)

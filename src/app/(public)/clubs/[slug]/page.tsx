@@ -27,9 +27,12 @@ import { useClub, useJoinClub, useClubMembers } from "@/hooks/useClubs"
 import { useClubThreads, useCreateClubThread } from "@/hooks/useThreads"
 import { api } from "@/lib/api/client"
 import { useAuthStore } from "@/stores/auth.store"
+import { ClubEventsTab } from "@/components/clubs/ClubEventsTab"
+import { ClubLeaderboardTab } from "@/components/clubs/ClubLeaderboardTab"
+import { ClubOnboarding } from "@/components/clubs/ClubOnboarding"
 
 /* ── Types ── */
-type ClubTab = "threads" | "challenges" | "members" | "about"
+type ClubTab = "threads" | "events" | "challenges" | "members" | "leaderboard" | "about"
 
 interface ChallengeData {
   type: "WATCH_CHALLENGE"
@@ -514,6 +517,10 @@ export default function ClubDetailPage({
   const [clubState] = useState<ClubData>(() => buildClubData(slug))
   const [activeTab, setActiveTab] = useState<ClubTab>("threads")
   const [joined, setJoined] = useState(false)
+  const [onboardDismissed, setOnboardDismissed] = useState(false)
+  const isMember = !!apiClub?.isMember || joined
+  const isAdmin = apiClub?.myRole === "ADMIN"
+  const showOnboarding = !!apiClub?.isMember && !!apiClub?.needsOnboarding && !onboardDismissed
 
   // Merge real data into club state
   const club: ClubData = apiClub ? {
@@ -620,7 +627,7 @@ export default function ClubDetailPage({
       {/* Tab navigation */}
       <div className="sticky top-[72px] z-30 border-b border-border bg-background/90 backdrop-blur-md">
         <div className="max-w-6xl mx-auto px-6 flex items-center gap-1">
-          {(["threads", "challenges", "members", "about"] as ClubTab[]).map((tab) => (
+          {(["threads", "events", "challenges", "members", "leaderboard", "about"] as ClubTab[]).map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
@@ -818,6 +825,20 @@ export default function ClubDetailPage({
             </motion.div>
           )}
 
+          {/* ── Events ── */}
+          {activeTab === "events" && (
+            <motion.div key="events" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.3 }}>
+              <ClubEventsTab slug={slug} isMember={isMember} isAdmin={isAdmin} />
+            </motion.div>
+          )}
+
+          {/* ── Leaderboard ── */}
+          {activeTab === "leaderboard" && (
+            <motion.div key="leaderboard" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.3 }} className="max-w-2xl">
+              <ClubLeaderboardTab slug={slug} ownerId={apiClub?.ownerId} />
+            </motion.div>
+          )}
+
           {/* ── About ── */}
           {activeTab === "about" && (
             <motion.div
@@ -892,6 +913,10 @@ export default function ClubDetailPage({
           <CreateChallengeModal slug={slug} onClose={() => setShowCreateChallenge(false)} />
         )}
       </AnimatePresence>
+
+      {showOnboarding && apiClub && (
+        <ClubOnboarding slug={slug} club={{ name: apiClub.name, rules: apiClub.rules, welcomeMessage: apiClub.welcomeMessage }} onDone={() => setOnboardDismissed(true)} />
+      )}
     </div>
   )
 }

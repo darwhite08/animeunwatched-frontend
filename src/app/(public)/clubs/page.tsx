@@ -223,7 +223,7 @@ export default function ClubsPage() {
     id: c.id, slug: c.slug, name: c.name,
     description: c.description ?? "A community for anime fans.",
     memberCount: c._count.members, threadCount: c._count.threads,
-    category: "Discussion", coverGradient: "from-indigo-800/30 to-violet-800/20",
+    category: c.category ?? "Other", coverGradient: "from-indigo-800/30 to-violet-800/20",
     reputation: c.reputation, isJoined: false,
   }))
 

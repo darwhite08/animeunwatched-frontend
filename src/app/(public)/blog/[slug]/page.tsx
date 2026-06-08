@@ -12,6 +12,7 @@ import { useBlog } from "@/hooks/useBlogs"
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { api } from "@/lib/api/client"
 import { useAuthStore } from "@/stores/auth.store"
+import { RichArticle, looksLikeHtml } from "@/lib/utils/markdown"
 
 /* ── Types ── */
 type BlogMeta = {
@@ -154,6 +155,11 @@ const RELATED_POSTS: RelatedPost[] = [
 /* ── Article body ── */
 function ArticleBody({ apiContent }: { apiContent?: string }) {
   if (apiContent) {
+    // New blogs are authored as rich HTML in the Creator Studio; legacy blogs
+    // are plain text. Render rich HTML safely, fall back to paragraphs.
+    if (looksLikeHtml(apiContent)) {
+      return <RichArticle html={apiContent} />
+    }
     return (
       <div className="space-y-6 text-muted text-base leading-relaxed">
         {apiContent.split("\n\n").map((para, i) => (

@@ -59,6 +59,18 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
       })
   }, [setAccess, setUser, setSessionReady, clear])
 
+  // Self-heal: a session that predates the user-slug backfill carries slug=null,
+  // which makes every /user/[slug]/* link fall back to /login. Re-fetch /auth/me
+  // once so the now-backfilled slug lands in the store.
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated)
+  const slug = useAuthStore((s) => s.user?.slug)
+  useEffect(() => {
+    if (!isAuthenticated || slug) return
+    ep.me()
+      .then((r) => { if (r?.user?.slug) setUser(r.user) })
+      .catch(() => {})
+  }, [isAuthenticated, slug, setUser])
+
   // Reconnect socket when access token rotates + ensure E2E key is registered
   // when an authenticated session begins (covers cookie bootstrap, login,
   // register, oauth callback — every path that sets accessToken).

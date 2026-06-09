@@ -83,7 +83,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             any stale SW that may have been installed from a prior visit). */}
         <script
           dangerouslySetInnerHTML={{
-            __html: `if('serviceWorker'in navigator){var h=location.hostname;if(h==='localhost'||h==='127.0.0.1'){navigator.serviceWorker.getRegistrations().then(function(rs){rs.forEach(function(r){r.unregister()})});if(window.caches){caches.keys().then(function(ks){ks.forEach(function(k){caches.delete(k)})})}}else{window.addEventListener('load',function(){navigator.serviceWorker.register('/sw.js').catch(function(){})})}}`,
+            __html: `if('serviceWorker'in navigator){var h=location.hostname;if(h==='localhost'||h==='127.0.0.1'){navigator.serviceWorker.getRegistrations().then(function(rs){rs.forEach(function(r){r.unregister()})});if(window.caches){caches.keys().then(function(ks){ks.forEach(function(k){caches.delete(k)})})}}else{var refreshing=false;if(navigator.serviceWorker.controller){navigator.serviceWorker.addEventListener('controllerchange',function(){if(refreshing)return;refreshing=true;location.reload()})}window.addEventListener('load',function(){navigator.serviceWorker.register('/sw.js').then(function(reg){if(reg&&reg.update)reg.update()}).catch(function(){})})}}`,
           }}
         />
         {/* Preconnect to font CDNs before the stylesheet request fires */}

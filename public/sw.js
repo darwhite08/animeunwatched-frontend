@@ -3,11 +3,13 @@
  *
  * Strategy:
  *   - API calls (/api/v1/*): network-first (always try network, fall back to cache)
- *   - Static assets (JS, CSS, images, fonts): cache-first
+ *   - Static assets (JS, CSS, images, fonts): stale-while-revalidate
+ *     (serve cached for speed, but always refetch in the background so a new
+ *     deploy is picked up on the next load — no more stuck-on-old-bundle)
  *   - Navigation (HTML pages): network-first with offline fallback page
  */
 
-const CACHE_NAME = "kaiveron-v2";
+const CACHE_NAME = "kaiveron-v3";
 const OFFLINE_URL = "/offline.html";
 
 const STATIC_ASSETS = [
@@ -54,11 +56,11 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // Static assets (JS, CSS, images, fonts) → cache-first
+  // Static assets (JS, CSS, images, fonts) → stale-while-revalidate
   if (
     url.pathname.match(/\.(js|css|png|jpg|jpeg|svg|gif|webp|avif|ico|woff2?)$/)
   ) {
-    event.respondWith(cacheFirst(request));
+    event.respondWith(staleWhileRevalidate(request));
     return;
   }
 
@@ -88,19 +90,18 @@ async function networkFirst(request) {
   }
 }
 
-async function cacheFirst(request) {
-  const cached = await caches.match(request);
-  if (cached) return cached;
-  try {
-    const response = await fetch(request);
-    if (response.ok) {
-      const cache = await caches.open(CACHE_NAME);
-      cache.put(request, response.clone());
-    }
-    return response;
-  } catch {
-    return new Response("Asset unavailable offline", { status: 503 });
-  }
+async function staleWhileRevalidate(request) {
+  const cache = await caches.open(CACHE_NAME);
+  const cached = await cache.match(request);
+  const network = fetch(request)
+    .then((response) => {
+      if (response.ok) cache.put(request, response.clone());
+      return response;
+    })
+    .catch(() => cached);
+  // Serve cached immediately if present, but always kick off the refetch so the
+  // next navigation gets the latest deploy. No cached copy → wait for network.
+  return cached || network;
 }
 
 async function navigationFetch(request) {

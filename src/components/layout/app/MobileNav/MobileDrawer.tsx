@@ -3,11 +3,18 @@
 import Link from "next/link"
 import { X } from "lucide-react"
 import { useAuthStore } from "@/stores/auth.store"
-import { NAV_ITEMS, ANIME_FLYOUT, LIBRARY_FLYOUT, PROFILE_FLYOUT, resolvePath, type FlyoutLink } from "../sidebarConfig"
+import { NAV_ITEMS, resolvePath, type FlyoutLink } from "../sidebarConfig"
 import { SidebarItem } from "../Sidebar/SidebarItem"
 import { SidebarGamification } from "../Sidebar/SidebarGamification"
 import { useSidebarStore } from "../useSidebarStore"
 import KaiveronLogo from "@/components/ui/KaiveronLogo"
+
+const SECTION_TITLES: Record<string, string> = {
+  feed: "Community",
+  anime: "Explore Anime",
+  library: "My Space",
+  profile: "Account",
+}
 
 /** Full-nav slide-in drawer for <md (overflow + all items). */
 export function MobileDrawer() {
@@ -43,9 +50,9 @@ export function MobileDrawer() {
         </div>
         <div className="flex flex-1 flex-col gap-1 overflow-y-auto" onClick={close}>
           {NAV_ITEMS.map((item) => <SidebarItem key={item.key} item={item} slug={slug} collapsed={false} />)}
-          <Section title="Explore Anime" links={ANIME_FLYOUT} />
-          <Section title="My Space" links={LIBRARY_FLYOUT} />
-          <Section title="Account" links={PROFILE_FLYOUT} />
+          {NAV_ITEMS.filter((i) => i.flyout).map((i) => (
+            <Section key={i.key} title={SECTION_TITLES[i.key] ?? i.label} links={i.flyout!} />
+          ))}
         </div>
         <div className="mt-3"><SidebarGamification slug={slug} collapsed={false} /></div>
       </nav>

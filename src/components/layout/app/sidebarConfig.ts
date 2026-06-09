@@ -5,6 +5,7 @@ import {
   Star, Tag, Buildings, Smiley, MagicWand, SquaresFour,
   MonitorPlay, BookOpen, Books, ClockCounterClockwise, Flame,
   Medal, ChartBar, Users, BellSimple, Gear,
+  Newspaper, TrendUp, Article,
   type Icon as PhosphorIcon,
 } from "@phosphor-icons/react"
 
@@ -47,6 +48,15 @@ export const ANIME_FLYOUT: FlyoutLink[] = [
   { label: "Collections",     desc: "Curated lists",       path: "/collections",    icon: SquaresFour },
 ]
 
+/** Community content types (absolute public routes). */
+export const HOME_FLYOUT: FlyoutLink[] = [
+  { label: "Feed",     desc: "Latest posts",       path: "/community",          icon: Newspaper },
+  { label: "Trending", desc: "What's hot right now", path: "/community/trending", icon: TrendUp },
+  { label: "Reviews",  desc: "Anime reviews",      path: "/reviews",            icon: Star },
+  { label: "Blog",     desc: "Long-form articles", path: "/blog",               icon: Article },
+  { label: "Polls",    desc: "Vote & debate",      path: "/poll",               icon: ChartBar },
+]
+
 /** "My Space" — personal collection + progress (slug-relative routes). */
 export const LIBRARY_FLYOUT: FlyoutLink[] = [
   { label: "Dashboard",    desc: "Your overview",        path: "dashboard",    icon: SquaresFour },
@@ -68,7 +78,7 @@ export const PROFILE_FLYOUT: FlyoutLink[] = [
 ]
 
 export const NAV_ITEMS: NavItem[] = [
-  { key: "feed",        label: "Home",        path: "/community",     icon: House,           mobile: true },
+  { key: "feed",        label: "Home",        path: "/community",     icon: House,           mobile: true, flyout: HOME_FLYOUT },
   { key: "shots",       label: "Shots",       path: "/shots",         icon: FilmReel,       mobile: true },
   { key: "anime",       label: "Anime",       path: "/bestanimelist", icon: Television,     mobile: true, flyout: ANIME_FLYOUT },
   { key: "discover",    label: "Discover",    path: "/ai-discover",   icon: Sparkle },

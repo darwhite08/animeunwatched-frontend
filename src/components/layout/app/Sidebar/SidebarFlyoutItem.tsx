@@ -33,11 +33,11 @@ export function SidebarFlyoutItem({
   const openFlyout = () => {
     if (closeTimer.current) clearTimeout(closeTimer.current)
     const r = ref.current?.getBoundingClientRect()
-    if (r) setPos({ top: Math.max(8, Math.min(r.top, window.innerHeight - 480)), left: r.right + 8 })
+    if (r) setPos({ top: Math.max(8, Math.min(r.top, window.innerHeight - 480)), left: r.right + 2 })
     setOpen(true)
   }
   const scheduleClose = () => {
-    closeTimer.current = setTimeout(() => setOpen(false), 140)
+    closeTimer.current = setTimeout(() => setOpen(false), 260)
   }
 
   return (

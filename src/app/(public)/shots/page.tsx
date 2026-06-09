@@ -41,6 +41,7 @@ export default function ShotsPage() {
   const [muted, setMuted] = useState(true)
   const [active, setActive] = useState(0)
   const loadingRef = useRef(false)
+  const scrollRef = useRef<HTMLDivElement>(null)
 
   const loadShots = useCallback(async (c?: string | null) => {
     if (loadingRef.current) return
@@ -83,14 +84,15 @@ export default function ShotsPage() {
     return out
   }, [shots, trailers, done])
 
-  // Infinite scroll: pull the next page as the user nears the end of the feed.
-  const onActivate = useCallback(
-    (idx: number) => {
-      setActive(idx)
-      if (idx >= feed.length - 2 && !done && cursor) loadShots(cursor)
-    },
-    [feed.length, done, cursor, loadShots],
-  )
+  // Deterministic active-reel detection from scroll position (each reel fills
+  // the scroll container exactly). Drives play/pause + infinite-scroll loading.
+  const handleScroll = useCallback(() => {
+    const el = scrollRef.current
+    if (!el) return
+    const idx = Math.round(el.scrollTop / el.clientHeight)
+    setActive((prev) => (prev === idx ? prev : idx))
+    if (idx >= feed.length - 2 && !done && !loadingRef.current && cursor) loadShots(cursor)
+  }, [feed.length, done, cursor, loadShots])
 
   if (loading) {
     return (
@@ -111,6 +113,8 @@ export default function ShotsPage() {
 
   return (
     <div
+      ref={scrollRef}
+      onScroll={handleScroll}
       style={{ paddingTop: 0 }}
       className="relative h-[calc(100dvh-3.5rem-4rem)] w-full snap-y snap-mandatory overflow-y-scroll bg-black md:h-[calc(100dvh-3.5rem)] [&::-webkit-scrollbar]:hidden"
     >
@@ -124,13 +128,16 @@ export default function ShotsPage() {
       </button>
 
       {feed.map((item, idx) => (
-        <ReelSlot key={item.kind === "shot" ? item.shot.id : `t-${item.trailer.malId}`} index={idx} onActivate={onActivate}>
+        <div
+          key={item.kind === "shot" ? item.shot.id : `t-${item.trailer.malId}`}
+          className="flex h-full w-full snap-start snap-always items-center justify-center p-2 sm:p-4"
+        >
           {item.kind === "shot" ? (
             <ShotReel shot={item.shot} active={active === idx} muted={muted} />
           ) : (
             <TrailerReel trailer={item.trailer} active={active === idx} muted={muted} />
           )}
-        </ReelSlot>
+        </div>
       ))}
 
       {!done && (
@@ -138,26 +145,6 @@ export default function ShotsPage() {
           <Loader2 className="animate-spin text-white/60" size={22} />
         </div>
       )}
-    </div>
-  )
-}
-
-/** One full-height snap slot that reports when it becomes the active reel. */
-function ReelSlot({ index, onActivate, children }: { index: number; onActivate: (i: number) => void; children: React.ReactNode }) {
-  const ref = useRef<HTMLDivElement>(null)
-  useEffect(() => {
-    const el = ref.current
-    if (!el) return
-    const io = new IntersectionObserver(
-      ([e]) => { if (e.isIntersecting && e.intersectionRatio >= 0.6) onActivate(index) },
-      { threshold: [0.6] },
-    )
-    io.observe(el)
-    return () => io.disconnect()
-  }, [index, onActivate])
-  return (
-    <div ref={ref} className="flex h-full w-full snap-start snap-always items-center justify-center p-2 sm:p-4">
-      {children}
     </div>
   )
 }
@@ -283,7 +270,8 @@ function TrailerReel({ trailer, active, muted }: { trailer: Trailer; active: boo
 }
 
 function Poster({ src }: { src: string | null }) {
-  if (!src) return <div className="h-full w-full bg-gradient-to-br from-zinc-900 to-black" />
+  const [failed, setFailed] = useState(false)
+  if (!src || failed) return <div className="h-full w-full bg-gradient-to-br from-zinc-900 to-black" />
   // eslint-disable-next-line @next/next/no-img-element
-  return <img src={src} alt="" className="h-full w-full object-cover" />
+  return <img src={src} alt="" referrerPolicy="no-referrer" onError={() => setFailed(true)} className="h-full w-full object-cover" />
 }

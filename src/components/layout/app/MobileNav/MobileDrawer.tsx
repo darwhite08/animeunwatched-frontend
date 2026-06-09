@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { X } from "lucide-react"
 import { useAuthStore } from "@/stores/auth.store"
-import { NAV_ITEMS, resolvePath } from "../sidebarConfig"
+import { NAV_ITEMS, ANIME_FLYOUT, resolvePath } from "../sidebarConfig"
 import { SidebarItem } from "../Sidebar/SidebarItem"
 import { SidebarGamification } from "../Sidebar/SidebarGamification"
 import { useSidebarStore } from "../useSidebarStore"
@@ -27,6 +27,19 @@ export function MobileDrawer() {
         </div>
         <div className="flex flex-1 flex-col gap-1 overflow-y-auto" onClick={close}>
           {NAV_ITEMS.map((item) => <SidebarItem key={item.key} item={item} slug={slug} collapsed={false} />)}
+
+          {/* Anime sub-sections (the desktop flyout, inlined for touch) */}
+          <p className="px-3 pb-1 pt-4 text-[10px] font-black uppercase tracking-widest text-subtle">Explore Anime</p>
+          {ANIME_FLYOUT.map((l) => {
+            const LIcon = l.icon
+            return (
+              <Link key={l.path} href={l.path} onClick={close} className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-bold text-muted hover:bg-white/5 hover:text-foreground">
+                <LIcon size={18} className="shrink-0 text-accent-bright" />
+                {l.label}
+              </Link>
+            )
+          })}
+
           {/* extra authed destinations not in the primary rail */}
           {slug && (
             <>

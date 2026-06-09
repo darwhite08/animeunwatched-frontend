@@ -55,11 +55,11 @@ export const SITE_JSONLD: Record<string, unknown>[] = [
     operatingSystem:     "Web",
     description:         "Free anime tracking platform with AI mood-based discovery, episode tracking, ratings, streaks, and a social community.",
     offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
-    aggregateRating: {
-      "@type":     "AggregateRating",
-      ratingValue: "4.7",
-      ratingCount: "1",      // placeholder — replace with real review count once collected
-      bestRating:  "5",
-    },
+    // NOTE: no aggregateRating here on purpose. A self-serving, fabricated
+    // rating (Kaiveron rating itself) is exactly what Google's structured-data
+    // policy penalizes with a manual action, and self-reviews are ineligible
+    // for star rich results anyway. Re-add ONLY once we have real, user-
+    // generated ratings of Kaiveron rendered visibly on the page — and even
+    // then it must point at an itemReviewed the site does not control.
   },
 ]

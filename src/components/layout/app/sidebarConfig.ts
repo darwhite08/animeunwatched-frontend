@@ -1,6 +1,8 @@
 import {
-  House, Television, Sparkle, FilmSlate, Newspaper, UsersThree,
+  House, Television, Sparkle, Newspaper, UsersThree,
   Trophy, ChatCircleText, Bookmarks, User,
+  ListBullets, PlayCircle, Robot, CalendarBlank, CalendarCheck,
+  Star, Tag, Buildings, Smiley, MagicWand, SquaresFour,
   type Icon as PhosphorIcon,
 } from "@phosphor-icons/react"
 
@@ -11,6 +13,13 @@ import {
  *   - absolute (starts with "/")  → used as-is (public/dashboard routes)
  *   - slug-relative (no leading /) → resolved to /user/[slug]/[path]
  */
+export interface FlyoutLink {
+  label: string
+  desc: string
+  path: string
+  icon: PhosphorIcon
+}
+
 export interface NavItem {
   key: string
   label: string
@@ -18,13 +27,28 @@ export interface NavItem {
   icon: PhosphorIcon
   badgeKey?: "unreadDms" | "unreadNotifications"
   mobile?: boolean // included in the <md bottom tab bar (5 max)
+  flyout?: FlyoutLink[] // hover panel of sub-destinations (desktop sidebar)
 }
+
+/** Anime section sub-modes — mirrors the marketing ANIME dropdown. */
+export const ANIME_FLYOUT: FlyoutLink[] = [
+  { label: "Browse All",      desc: "All 30,000+ anime",   path: "/bestanimelist",  icon: ListBullets },
+  { label: "Trailers",        desc: "Watch anime trailers", path: "/trailers",      icon: PlayCircle },
+  { label: "AI Discover",     desc: "Neural recommendations", path: "/ai-discover", icon: Robot },
+  { label: "Seasonal",        desc: "Any year & season",   path: "/seasonal",       icon: CalendarBlank },
+  { label: "Calendar",        desc: "Airing schedule",     path: "/calendar",       icon: CalendarCheck },
+  { label: "Top Rated",       desc: "Community ranked",    path: "/rankings",       icon: Star },
+  { label: "Genres",          desc: "Browse by genre",     path: "/genres",         icon: Tag },
+  { label: "Studios",         desc: "Browse by studio",    path: "/studios",        icon: Buildings },
+  { label: "Mood Picker",     desc: "Match your vibe",     path: "/mood",           icon: Smiley },
+  { label: "Recommendations", desc: "Picks for you",       path: "/recommendations", icon: MagicWand },
+  { label: "Collections",     desc: "Curated lists",       path: "/collections",    icon: SquaresFour },
+]
 
 export const NAV_ITEMS: NavItem[] = [
   { key: "feed",        label: "Home",        path: "feed",          icon: House,           mobile: true },
-  { key: "anime",       label: "Anime",       path: "/bestanimelist", icon: Television,     mobile: true },
+  { key: "anime",       label: "Anime",       path: "/bestanimelist", icon: Television,     mobile: true, flyout: ANIME_FLYOUT },
   { key: "discover",    label: "Discover",    path: "/ai-discover",   icon: Sparkle },
-  { key: "trailers",    label: "Trailers",    path: "/trailers",      icon: FilmSlate },
   { key: "community",   label: "Community",   path: "/community",     icon: Newspaper,      mobile: true },
   { key: "clubs",       label: "Clubs",       path: "/clubs",         icon: UsersThree },
   { key: "leaderboard", label: "Leaderboard", path: "/leaderboard",   icon: Trophy },

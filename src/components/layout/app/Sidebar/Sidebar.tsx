@@ -5,6 +5,7 @@ import { PanelLeftClose, PanelLeftOpen } from "lucide-react"
 import { useAuthStore } from "@/stores/auth.store"
 import { NAV_ITEMS } from "../sidebarConfig"
 import { SidebarItem } from "./SidebarItem"
+import { SidebarFlyoutItem } from "./SidebarFlyoutItem"
 import { SidebarGamification } from "./SidebarGamification"
 import { useSidebarStore } from "../useSidebarStore"
 import KaiveronLogo from "@/components/ui/KaiveronLogo"
@@ -36,9 +37,13 @@ export function Sidebar() {
 
       {/* Primary nav */}
       <div className="flex flex-1 flex-col gap-1 overflow-y-auto">
-        {NAV_ITEMS.map((item) => (
-          <SidebarItem key={item.key} item={item} slug={slug} collapsed={collapsed} />
-        ))}
+        {NAV_ITEMS.map((item) =>
+          item.flyout ? (
+            <SidebarFlyoutItem key={item.key} item={item} slug={slug} collapsed={collapsed} />
+          ) : (
+            <SidebarItem key={item.key} item={item} slug={slug} collapsed={collapsed} />
+          )
+        )}
       </div>
 
       {/* Gamification strip */}

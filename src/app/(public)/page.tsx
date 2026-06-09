@@ -1,5 +1,6 @@
 import { Metadata } from "next"
 import CinematicHomepage from "@/components/home/CinematicHomepage"
+import { LandingGate } from "@/components/home/LandingGate"
 
 // Homepage uses the default title from layout (no override here so the
 // layout's "default" wins). The canonical is inherited from layout
@@ -14,5 +15,9 @@ export const metadata: Metadata = {
 }
 
 export default function HomePage() {
-  return <CinematicHomepage />
+  return (
+    <LandingGate>
+      <CinematicHomepage />
+    </LandingGate>
+  )
 }

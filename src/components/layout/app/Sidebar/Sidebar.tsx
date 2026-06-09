@@ -24,7 +24,7 @@ export function Sidebar() {
     >
       {/* Logo + collapse toggle */}
       <div className={`mb-6 flex items-center ${collapsed ? "justify-center" : "justify-between"} px-1`}>
-        <Link href={slug ? `/user/${slug}/dashboard` : "/"} aria-label="Kaiveron home">
+        <Link href={slug ? `/user/${slug}/feed` : "/"} aria-label="Kaiveron home">
           <KaiveronLogo size={collapsed ? 30 : 30} showWordmark={!collapsed} />
         </Link>
         {!collapsed && (

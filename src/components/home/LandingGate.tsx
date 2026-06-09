@@ -18,7 +18,7 @@ export function LandingGate({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (!sessionReady || !isAuthenticated || !user) return
-    router.replace(user.slug ? `/user/${user.slug}/dashboard` : "/dashboard")
+    router.replace(user.slug ? `/user/${user.slug}/feed` : "/dashboard")
   }, [sessionReady, isAuthenticated, user, router])
 
   // Hide the marketing landing for authenticated users while the redirect fires.

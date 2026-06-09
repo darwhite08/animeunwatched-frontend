@@ -22,7 +22,7 @@ export function MobileDrawer() {
       <div className="absolute inset-0 bg-black/60" onClick={close} />
       <nav aria-label="Primary" className="absolute left-0 top-0 flex h-full w-72 flex-col border-r border-border bg-background px-3 py-4">
         <div className="mb-6 flex items-center justify-between px-1">
-          <Link href={slug ? `/user/${slug}/dashboard` : "/"} onClick={close}><KaiveronLogo size={30} /></Link>
+          <Link href={slug ? `/user/${slug}/feed` : "/"} onClick={close}><KaiveronLogo size={30} /></Link>
           <button onClick={close} aria-label="Close menu" className="rounded-lg p-1.5 text-muted hover:text-foreground"><X size={18} /></button>
         </div>
         <div className="flex flex-1 flex-col gap-1 overflow-y-auto" onClick={close}>

@@ -3,6 +3,8 @@ import {
   Trophy, ChatCircleText, Bookmarks, User,
   ListBullets, PlayCircle, Robot, CalendarBlank, CalendarCheck,
   Star, Tag, Buildings, Smiley, MagicWand, SquaresFour,
+  MonitorPlay, BookOpen, Books, ClockCounterClockwise, Flame,
+  Medal, ChartBar, Users, BellSimple, Gear,
   type Icon as PhosphorIcon,
 } from "@phosphor-icons/react"
 
@@ -45,6 +47,26 @@ export const ANIME_FLYOUT: FlyoutLink[] = [
   { label: "Collections",     desc: "Curated lists",       path: "/collections",    icon: SquaresFour },
 ]
 
+/** "My Space" — personal collection + progress (slug-relative routes). */
+export const LIBRARY_FLYOUT: FlyoutLink[] = [
+  { label: "Dashboard",    desc: "Your overview",        path: "dashboard",    icon: SquaresFour },
+  { label: "Watchlist",    desc: "Anime you track",      path: "watchlist",    icon: MonitorPlay },
+  { label: "Readlist",     desc: "Saved to read",        path: "readlist",     icon: BookOpen },
+  { label: "Manga",        desc: "Manga you track",      path: "manga",        icon: Books },
+  { label: "History",      desc: "Recently watched",     path: "history",      icon: ClockCounterClockwise },
+  { label: "Streak",       desc: "Daily momentum",       path: "streak",       icon: Flame },
+  { label: "Achievements", desc: "Badges & milestones",  path: "achievements", icon: Medal },
+  { label: "Watch Stats",  desc: "Your analytics",       path: "stats",        icon: ChartBar },
+]
+
+/** "Account" — identity + settings (slug-relative routes). */
+export const PROFILE_FLYOUT: FlyoutLink[] = [
+  { label: "My Profile",    desc: "Your public page",   path: "profile",          icon: User },
+  { label: "Following",     desc: "People you follow",  path: "following",        icon: Users },
+  { label: "Notifications", desc: "Alerts & activity",  path: "notifications",    icon: BellSimple },
+  { label: "Settings",      desc: "Account & prefs",    path: "settings/account", icon: Gear },
+]
+
 export const NAV_ITEMS: NavItem[] = [
   { key: "feed",        label: "Home",        path: "feed",          icon: House,           mobile: true },
   { key: "anime",       label: "Anime",       path: "/bestanimelist", icon: Television,     mobile: true, flyout: ANIME_FLYOUT },
@@ -53,8 +75,8 @@ export const NAV_ITEMS: NavItem[] = [
   { key: "clubs",       label: "Clubs",       path: "/clubs",         icon: UsersThree },
   { key: "leaderboard", label: "Leaderboard", path: "/leaderboard",   icon: Trophy },
   { key: "chat",        label: "Chat",        path: "/chat",          icon: ChatCircleText, badgeKey: "unreadDms", mobile: true },
-  { key: "library",     label: "Library",     path: "watchlist",      icon: Bookmarks },
-  { key: "profile",     label: "Profile",     path: "profile",        icon: User,           mobile: true },
+  { key: "library",     label: "Library",     path: "watchlist",      icon: Bookmarks,      flyout: LIBRARY_FLYOUT },
+  { key: "profile",     label: "Profile",     path: "profile",        icon: User,           mobile: true, flyout: PROFILE_FLYOUT },
 ]
 
 /** Resolve a NavItem's href given the current user slug. */

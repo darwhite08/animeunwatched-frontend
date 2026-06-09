@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { X } from "lucide-react"
 import { useAuthStore } from "@/stores/auth.store"
-import { NAV_ITEMS, ANIME_FLYOUT, resolvePath } from "../sidebarConfig"
+import { NAV_ITEMS, ANIME_FLYOUT, LIBRARY_FLYOUT, PROFILE_FLYOUT, resolvePath, type FlyoutLink } from "../sidebarConfig"
 import { SidebarItem } from "../Sidebar/SidebarItem"
 import { SidebarGamification } from "../Sidebar/SidebarGamification"
 import { useSidebarStore } from "../useSidebarStore"
@@ -17,6 +17,22 @@ export function MobileDrawer() {
   const slug = user?.slug
 
   if (!open) return null
+
+  const Section = ({ title, links }: { title: string; links: FlyoutLink[] }) => (
+    <>
+      <p className="px-3 pb-1 pt-4 text-[10px] font-black uppercase tracking-widest text-subtle">{title}</p>
+      {links.map((l) => {
+        const LIcon = l.icon
+        return (
+          <Link key={l.label} href={resolvePath(l, slug)} onClick={close} className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-bold text-muted hover:bg-white/5 hover:text-foreground">
+            <LIcon size={18} className="shrink-0 text-accent-bright" />
+            {l.label}
+          </Link>
+        )
+      })}
+    </>
+  )
+
   return (
     <div className="fixed inset-0 z-[60] md:hidden" role="dialog" aria-label="Navigation menu">
       <div className="absolute inset-0 bg-black/60" onClick={close} />
@@ -27,27 +43,9 @@ export function MobileDrawer() {
         </div>
         <div className="flex flex-1 flex-col gap-1 overflow-y-auto" onClick={close}>
           {NAV_ITEMS.map((item) => <SidebarItem key={item.key} item={item} slug={slug} collapsed={false} />)}
-
-          {/* Anime sub-sections (the desktop flyout, inlined for touch) */}
-          <p className="px-3 pb-1 pt-4 text-[10px] font-black uppercase tracking-widest text-subtle">Explore Anime</p>
-          {ANIME_FLYOUT.map((l) => {
-            const LIcon = l.icon
-            return (
-              <Link key={l.path} href={l.path} onClick={close} className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-bold text-muted hover:bg-white/5 hover:text-foreground">
-                <LIcon size={18} className="shrink-0 text-accent-bright" />
-                {l.label}
-              </Link>
-            )
-          })}
-
-          {/* extra authed destinations not in the primary rail */}
-          {slug && (
-            <>
-              <Link href={resolvePath({ path: "readlist" }, slug)} onClick={close} className="rounded-xl px-3 py-2.5 text-sm font-bold text-muted hover:bg-white/5 hover:text-foreground">Manga / Readlist</Link>
-              <Link href={resolvePath({ path: "achievements" }, slug)} onClick={close} className="rounded-xl px-3 py-2.5 text-sm font-bold text-muted hover:bg-white/5 hover:text-foreground">Achievements</Link>
-              <Link href={resolvePath({ path: "settings/account" }, slug)} onClick={close} className="rounded-xl px-3 py-2.5 text-sm font-bold text-muted hover:bg-white/5 hover:text-foreground">Settings</Link>
-            </>
-          )}
+          <Section title="Explore Anime" links={ANIME_FLYOUT} />
+          <Section title="My Space" links={LIBRARY_FLYOUT} />
+          <Section title="Account" links={PROFILE_FLYOUT} />
         </div>
         <div className="mt-3"><SidebarGamification slug={slug} collapsed={false} /></div>
       </nav>

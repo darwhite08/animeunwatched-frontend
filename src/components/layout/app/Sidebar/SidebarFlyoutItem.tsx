@@ -24,11 +24,11 @@ export function SidebarFlyoutItem({
 
   const href = resolvePath(item, slug)
   const Icon = item.icon
-  const links = item.flyout ?? []
+  const links = (item.flyout ?? []).map((l) => ({ ...l, href: resolvePath(l, slug) }))
   const active =
     pathname === href ||
     pathname.startsWith(href + "/") ||
-    links.some((l) => pathname === l.path || pathname.startsWith(l.path + "/"))
+    links.some((l) => pathname === l.href || pathname.startsWith(l.href + "/"))
 
   const openFlyout = () => {
     if (closeTimer.current) clearTimeout(closeTimer.current)
@@ -70,11 +70,11 @@ export function SidebarFlyoutItem({
         >
           {links.map((l) => {
             const LIcon = l.icon
-            const lActive = pathname === l.path || pathname.startsWith(l.path + "/")
+            const lActive = pathname === l.href || pathname.startsWith(l.href + "/")
             return (
               <Link
                 key={l.path}
-                href={l.path}
+                href={l.href}
                 role="menuitem"
                 onClick={() => setOpen(false)}
                 className={`flex items-center gap-3 rounded-xl px-2.5 py-2 transition-colors ${

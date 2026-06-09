@@ -1,17 +1,23 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import * as ep from "@/lib/api/endpoints"
-import type { WatchStatus } from "@/lib/api/types"
+import type { WatchStatus, AnimeDTO, ListEntry } from "@/lib/api/types"
 
 export const animeKey  = (malId: number)   => ["anime",    malId]   as const
 export const browseKey = (params: object)  => ["anime/browse", params] as const
 export const searchKey = (q: string)       => ["anime/search", q]  as const
 export const seasonKey = (y: number, s: string) => ["anime/season", y, s] as const
 
-export function useAnime(malId: number) {
+export function useAnime(
+  malId: number,
+  // Server-fetched seed so the very first (SSR) render shows real content
+  // instead of a spinner — critical for Googlebot indexing the page body.
+  initialData?: { anime: AnimeDTO; listEntry: ListEntry | null },
+) {
   return useQuery({
     queryKey: animeKey(malId),
     queryFn:  () => ep.getAnime(malId),
     enabled:  malId > 0,
+    initialData,
   })
 }
 

@@ -34,7 +34,8 @@ const STATIC_ROUTES: MetadataRoute.Sitemap = [
   { url: `${BASE}/roadmap`,                 changeFrequency: "monthly", priority: 0.5 },
   { url: `${BASE}/changelog`,              changeFrequency: "weekly",  priority: 0.5 },
   { url: `${BASE}/poll`,                    changeFrequency: "daily",   priority: 0.6 },
-  { url: `${BASE}/login`,                   changeFrequency: "yearly",  priority: 0.4 },
+  // /login intentionally omitted — auth pages have no indexing value and
+  // were showing up as "Crawled, currently not indexed" noise in GSC.
   { url: `${BASE}/register`,               changeFrequency: "yearly",  priority: 0.5 },
   { url: `${BASE}/users`,                   changeFrequency: "daily",   priority: 0.6 },
 ]

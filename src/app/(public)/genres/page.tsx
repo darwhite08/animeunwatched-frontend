@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import Link from "next/link"
 import { motion, AnimatePresence } from "framer-motion"
 import { ChevronDown, Layers, ChevronLeft, ChevronRight, Loader2 } from "lucide-react"
 import AnimeCard from "@/components/bestanimelist/AnimeCard"
@@ -10,6 +11,7 @@ import type { AnimeDTO } from "@/lib/api/types"
 import { useBrowseAnime } from "@/hooks/useAnime"
 import { useQuery } from "@tanstack/react-query"
 import { api } from "@/lib/api/client"
+import { GENRES as SEO_GENRES } from "@/lib/seo/taxonomy"
 
 function mapDTO(a: AnimeDTO, i: number): Anime {
   return {
@@ -184,6 +186,21 @@ export default function GenresPage() {
         >
           {GENRES.length} genres · click any to explore
         </motion.p>
+
+        {/* Crawlable links to the per-genre "Best {Genre} Anime" landing pages.
+            These are the programmatic SEO surfaces — real <a> tags so Googlebot
+            and AI crawlers discover and index every genre page. */}
+        <nav aria-label="Best anime by genre" className="mt-8 flex flex-wrap gap-2">
+          {SEO_GENRES.map((g) => (
+            <Link
+              key={g.slug}
+              href={`/genres/${g.slug}`}
+              className="rounded-full border border-border bg-white/[0.02] px-3 py-1.5 text-xs font-semibold text-subtle transition hover:border-accent-bright/40 hover:text-foreground"
+            >
+              {g.emoji} Best {g.name} Anime
+            </Link>
+          ))}
+        </nav>
       </div>
 
       {/* Genre grid */}

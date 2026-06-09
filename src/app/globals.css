@@ -338,3 +338,16 @@ body { overflow-x: hidden; }
 .article-content th { background: rgba(255,255,255,0.05); font-weight: 800; color: var(--app-fg); }
 .article-content ul[data-type="taskList"] { list-style: none; padding-left: 0.25em; }
 .article-content ul[data-type="taskList"] li { display: flex; gap: 0.5em; align-items: flex-start; }
+
+/* ──────────────────────────────────────────────────────────────────────
+   Logged-in app shell wrapping public pages.
+   Public pages bake in fixed-marketing-navbar top clearance (pt-28/32/[120px])
+   and sticky headers pinned for that navbar. Inside the AppShell the slim
+   sticky topbar (56px) provides the offset instead, so we:
+     • neutralise each page root's top padding (specificity beats the utility,
+       no !important needed),
+     • expose --sticky-top / --page-top for pages that opt their sticky headers
+       + inner clearance onto the variables (fallbacks keep logged-out intact).
+   ────────────────────────────────────────────────────────────────────── */
+.app-public-shell { --sticky-top: 3.5rem; --page-top: 1.25rem; }
+.app-public-shell main > * { padding-top: var(--page-top, 1.25rem); }

@@ -10,6 +10,8 @@ import type { AnimeDTO } from "@/lib/api/types"
 import { useBrowseAnime } from "@/hooks/useAnime"
 import { useQuery } from "@tanstack/react-query"
 import { api } from "@/lib/api/client"
+import Link from "next/link"
+import { FEATURED_STUDIOS, toSlug } from "@/lib/seo/taxonomy"
 
 function mapDTO(a: AnimeDTO, i: number): Anime {
   return {
@@ -181,6 +183,20 @@ export default function StudiosPage() {
         >
           {STUDIOS.length} studios · click to explore their catalogue
         </motion.p>
+
+        {/* Crawlable links to per-studio landing pages — programmatic SEO
+            surfaces indexed via real <a> tags. */}
+        <nav aria-label="Anime by studio" className="mt-8 flex flex-wrap gap-2">
+          {FEATURED_STUDIOS.map((name) => (
+            <Link
+              key={name}
+              href={`/studios/${toSlug(name)}`}
+              className="rounded-full border border-border bg-white/[0.02] px-3 py-1.5 text-xs font-semibold text-subtle transition hover:border-violet-500/40 hover:text-foreground"
+            >
+              {name} Anime
+            </Link>
+          ))}
+        </nav>
       </div>
 
       <div className="max-w-7xl mx-auto px-6">

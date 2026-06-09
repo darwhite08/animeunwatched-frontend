@@ -402,7 +402,7 @@ export default function PollsPage() {
     <div className="min-h-screen bg-background text-foreground pb-32">
 
       {/* ── PAGE HEADER ── Sticky from top-0 with opaque bg, collapses on scroll */}
-      <div className="sticky top-0 z-40 bg-background border-b border-border shadow-[0_4px_12px_color-mix(in_srgb,var(--app-fg)_4%,transparent)]">
+      <div className="sticky top-[var(--sticky-top,0px)] z-40 bg-background border-b border-border shadow-[0_4px_12px_color-mix(in_srgb,var(--app-fg)_4%,transparent)]">
         <div className="relative overflow-hidden transition-[padding] duration-300 motion-reduce:transition-none"
           style={{ paddingTop: collapsed ? "92px" : "120px", paddingBottom: collapsed ? "12px" : "20px" }}>
           {!collapsed && (

@@ -5,7 +5,7 @@ import { DatabaseZap } from "lucide-react"
 
 export default function BestAnimeListHeader() {
   return (
-    <div className="relative pt-32 pb-10 px-6 max-w-7xl mx-auto">
+    <div className="relative pt-[var(--page-top,8rem)] pb-10 px-6 max-w-7xl mx-auto">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
         <div className="space-y-4">
           <motion.div

@@ -59,7 +59,7 @@ export default function CalendarPage() {
     <div className="min-h-screen bg-background text-foreground pb-32">
 
       {/* Sticky header */}
-      <div className="sticky top-[72px] z-30 border-b border-border backdrop-blur-xl"
+      <div className="sticky top-[var(--sticky-top,72px)] z-30 border-b border-border backdrop-blur-xl"
         style={{ background: "color-mix(in srgb, var(--app-bg) 92%, transparent)" }}>
         <div className="max-w-6xl mx-auto px-6 py-5">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">

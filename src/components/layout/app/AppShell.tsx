@@ -8,14 +8,18 @@ import { useSidebarStore } from "./useSidebarStore"
 
 /**
  * Authenticated app chrome: collapsible left sidebar + slim utility topbar on
- * ≥md, bottom tab bar + drawer on <md. Wraps the page content. Mount this at
- * the authenticated layout boundary (the (user) and legacy (dashboard) groups).
+ * ≥md, bottom tab bar + drawer on <md. Wraps the page content.
+ *
+ * `publicMode` is set when wrapping pages from the (public) route group for a
+ * logged-in user. Those pages bake in fixed-marketing-navbar top spacing, so we
+ * add the `app-public-shell` class which neutralises that clearance (the sticky
+ * topbar provides the offset) and exposes --sticky-top / --page-top.
  */
-export function AppShell({ children }: { children: React.ReactNode }) {
+export function AppShell({ children, publicMode = false }: { children: React.ReactNode; publicMode?: boolean }) {
   const collapsed = useSidebarStore((s) => s.collapsed)
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className={`min-h-screen bg-background ${publicMode ? "app-public-shell" : ""}`}>
       <Sidebar />
       <MobileDrawer />
 

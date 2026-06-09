@@ -79,7 +79,7 @@ export default function SeasonalPage() {
       </div>
 
       {/* Sticky picker bar */}
-      <div className="sticky top-0 z-30 bg-background/90 backdrop-blur-xl border-b border-border">
+      <div className="sticky top-[var(--sticky-top,0px)] z-30 bg-background/90 backdrop-blur-xl border-b border-border">
         <div className="max-w-7xl mx-auto px-6 py-4 flex flex-wrap items-center gap-4">
 
           {/* Year control */}

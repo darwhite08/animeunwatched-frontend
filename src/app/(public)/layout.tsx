@@ -9,10 +9,13 @@ import { motion, AnimatePresence } from "framer-motion";
 import { usePathname } from "next/navigation";
 import AnnouncementBanner from "@/components/ui/AnnouncementBanner";
 import { useAuthStore } from "@/stores/auth.store";
+import { AppShell } from "@/components/layout/app/AppShell";
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const [showOnboarding, setShowOnboarding] = useState(false);
+  const sessionReady = useAuthStore((s) => s.sessionReady);
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated);
 
   useEffect(() => {
     const alreadyOnboarded = localStorage.getItem("aw_onboarded") === "1";
@@ -24,6 +27,18 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
     localStorage.setItem("aw_onboarded", "1");
     setShowOnboarding(false);
   };
+
+  // Logged-in users browse inside the app shell (sidebar + topbar), so the
+  // experience is consistent with the rest of the app instead of the marketing
+  // topbar. Logged-out visitors keep the marketing chrome below (unchanged).
+  if (sessionReady && isAuthenticated) {
+    return (
+      <AppShell publicMode>
+        {children}
+        <OnboardingModal isOpen={showOnboarding} onComplete={handleOnboardingComplete} />
+      </AppShell>
+    );
+  }
 
   return (
     <SmoothScroll>

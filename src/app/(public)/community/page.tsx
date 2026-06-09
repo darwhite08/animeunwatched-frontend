@@ -582,8 +582,8 @@ export default function CommunityPage() {
           (z-100, ~110px tall). The header's own opaque bg covers the entire
           strip from top of viewport to bottom of the tabs, so scrolling
           content cannot peek through the navbar's transparent margins. */}
-      <div className="sticky top-0 z-40 bg-background border-b border-border shadow-[0_4px_12px_color-mix(in_srgb,var(--app-fg)_4%,transparent)]">
-        <div className="max-w-6xl mx-auto px-6 pt-[120px] pb-0 flex items-start justify-between gap-4">
+      <div className="sticky top-[var(--sticky-top,0px)] z-40 bg-background border-b border-border shadow-[0_4px_12px_color-mix(in_srgb,var(--app-fg)_4%,transparent)]">
+        <div className="max-w-6xl mx-auto px-6 pt-[var(--page-top,120px)] pb-0 flex items-start justify-between gap-4">
           <h1 className="text-3xl font-black tracking-tighter uppercase italic text-foreground">
             Community<span style={{ color: "var(--app-accent)" }}>.</span>
           </h1>

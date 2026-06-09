@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next"
+import { GENRES, FEATURED_STUDIOS, toSlug } from "@/lib/seo/taxonomy"
 
 const BASE = "https://kaiveron.com"
 
@@ -6,7 +7,14 @@ const BASE = "https://kaiveron.com"
 const STATIC_ROUTES: MetadataRoute.Sitemap = [
   { url: BASE,                              changeFrequency: "daily",   priority: 1.0 },
   { url: `${BASE}/bestanimelist`,           changeFrequency: "daily",   priority: 0.9 },
+  { url: `${BASE}/best`,                    changeFrequency: "weekly",  priority: 0.9 },
   { url: `${BASE}/ai-discover`,             changeFrequency: "weekly",  priority: 0.9 },
+  { url: `${BASE}/trending`,                changeFrequency: "daily",   priority: 0.85 },
+  { url: `${BASE}/seasonal`,                changeFrequency: "daily",   priority: 0.85 },
+  { url: `${BASE}/rankings`,                changeFrequency: "daily",   priority: 0.8 },
+  { url: `${BASE}/recommendations`,         changeFrequency: "weekly",  priority: 0.8 },
+  { url: `${BASE}/reviews`,                 changeFrequency: "daily",   priority: 0.75 },
+  { url: `${BASE}/lists`,                   changeFrequency: "daily",   priority: 0.7 },
   { url: `${BASE}/mood`,                    changeFrequency: "weekly",  priority: 0.85 },
   { url: `${BASE}/calendar`,               changeFrequency: "daily",   priority: 0.85 },
   { url: `${BASE}/genres`,                  changeFrequency: "monthly", priority: 0.8 },
@@ -73,6 +81,39 @@ async function fetchTopAnimeIds(): Promise<number[]> {
   }
 }
 
+// Programmatic genre landing pages — /genres/[slug]. High long-tail volume
+// ("best action anime", "best isekai anime", …). One of the strongest
+// new-user acquisition surfaces.
+const GENRE_ROUTES: MetadataRoute.Sitemap = GENRES.map((g) => ({
+  url:             `${BASE}/genres/${g.slug}`,
+  changeFrequency: "weekly",
+  priority:        0.85,
+}))
+
+// Programmatic studio landing pages — /studios/[slug].
+const STUDIO_ROUTES: MetadataRoute.Sitemap = FEATURED_STUDIOS.map((name) => ({
+  url:             `${BASE}/studios/${toSlug(name)}`,
+  changeFrequency: "weekly",
+  priority:        0.7,
+}))
+
+// Recent seasonal pages — /anime/season/[year]/[season] for the last 3 years.
+function seasonRoutes(): MetadataRoute.Sitemap {
+  const thisYear = new Date().getFullYear()
+  const seasons = ["winter", "spring", "summer", "fall"]
+  const routes: MetadataRoute.Sitemap = []
+  for (let y = thisYear; y >= thisYear - 2; y--) {
+    for (const s of seasons) {
+      routes.push({
+        url:             `${BASE}/anime/season/${y}/${s}`,
+        changeFrequency: y === thisYear ? "daily" : "monthly",
+        priority:        y === thisYear ? 0.8 : 0.55,
+      })
+    }
+  }
+  return routes
+}
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const animeIds = await fetchTopAnimeIds()
 
@@ -91,5 +132,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     lastModified:    new Date(),
   }))
 
-  return [...STATIC_ROUTES, ...animeRoutes, ...discussRoutes]
+  return [
+    ...STATIC_ROUTES,
+    ...GENRE_ROUTES,
+    ...STUDIO_ROUTES,
+    ...seasonRoutes(),
+    ...animeRoutes,
+    ...discussRoutes,
+  ]
 }

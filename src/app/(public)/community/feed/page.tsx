@@ -176,7 +176,7 @@ export default function PublicFeedPage() {
   return (
     <div className="min-h-screen bg-background text-foreground pb-32">
       {/* Header */}
-      <div className="border-b border-border bg-black/40 backdrop-blur-md sticky top-[72px] z-30">
+      <div className="border-b border-border bg-black/40 backdrop-blur-md sticky top-[var(--sticky-top,72px)] z-30">
         <div className="max-w-6xl mx-auto px-6 py-5">
           <div className="flex items-center justify-between gap-4">
             <div>

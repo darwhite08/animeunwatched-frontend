@@ -625,7 +625,7 @@ export default function ClubDetailPage({
       </div>
 
       {/* Tab navigation */}
-      <div className="sticky top-[72px] z-30 border-b border-border bg-background/90 backdrop-blur-md">
+      <div className="sticky top-[var(--sticky-top,72px)] z-30 border-b border-border bg-background/90 backdrop-blur-md">
         <div className="max-w-6xl mx-auto px-6 flex items-center gap-1">
           {(["threads", "events", "challenges", "members", "leaderboard", "about"] as ClubTab[]).map((tab) => (
             <button

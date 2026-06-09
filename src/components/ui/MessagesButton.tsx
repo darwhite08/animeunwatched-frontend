@@ -47,10 +47,10 @@ export default function MessagesButton() {
   const pathname = usePathname()
   const { data: unread = 0 } = useUnreadDMs()
 
-  // Hide the floating Messages button when already inside the chat view —
-  // user is already in messages, the button is redundant noise
-  if (!isAuth) return null
-  if (pathname?.startsWith("/chat")) return null
+  // Retired: Chat now lives permanently in the app sidebar (with its own unread
+  // badge), so the floating launcher is redundant and overlaps page content.
+  const RETIRED = true
+  if (RETIRED || !isAuth || pathname?.startsWith("/chat")) return null
 
   return (
     <Link href="/chat">

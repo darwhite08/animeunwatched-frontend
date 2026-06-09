@@ -145,7 +145,7 @@ export default function ChangelogPage() {
     <div className="min-h-screen bg-background text-foreground pb-32">
 
       {/* Header */}
-      <div className="border-b border-border bg-black/30 backdrop-blur-md sticky top-[72px] z-30">
+      <div className="border-b border-border bg-black/30 backdrop-blur-md sticky top-[var(--sticky-top,72px)] z-30">
         <div className="max-w-3xl mx-auto px-6 py-6 flex items-center gap-3">
           <Cpu size={16} className="text-accent-bright" />
           <div>

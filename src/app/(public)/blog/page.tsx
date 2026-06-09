@@ -286,7 +286,7 @@ export default function BlogListingPage() {
       {/* Sticky header — full at top, collapses to a compact "The Chronicle." +
           category pills once the user scrolls past COLLAPSE_AT. Fully opaque
           bg so feed content can't bleed through. */}
-      <div className="sticky top-0 z-40 bg-background border-b border-border shadow-[0_4px_12px_color-mix(in_srgb,var(--app-fg)_4%,transparent)]">
+      <div className="sticky top-[var(--sticky-top,0px)] z-40 bg-background border-b border-border shadow-[0_4px_12px_color-mix(in_srgb,var(--app-fg)_4%,transparent)]">
         {/* The relative wrapper has indigo glow only in the FULL state */}
         <div className="relative overflow-hidden transition-[padding] duration-300 motion-reduce:transition-none"
           style={{ paddingTop: collapsed ? "92px" : "120px", paddingBottom: collapsed ? "12px" : "32px" }}>

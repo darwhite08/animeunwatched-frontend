@@ -36,9 +36,9 @@ export default function UserScopedLayout({ children }: { children: React.ReactNo
       return
     }
 
-    // Guard 2: slug mismatch → bounce to own dashboard silently
+    // Guard 2: slug mismatch → bounce to own feed silently
     if (user.slug && params.slug !== user.slug) {
-      router.replace(`/user/${user.slug}/dashboard`)
+      router.replace(`/user/${user.slug}/feed`)
       return
     }
   }, [sessionReady, isAuthenticated, user, params.slug, router])

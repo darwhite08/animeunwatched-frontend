@@ -55,7 +55,8 @@ export default function RegisterPage() {
     qc.invalidateQueries({ queryKey: ["auth/me"] })
     // New users go through onboarding (existing users skip via localStorage flag)
     const hasOnboarded = typeof window !== "undefined" && localStorage.getItem("aw_onboarded")
-    router.push(hasOnboarded ? "/dashboard" : "/onboarding")
+    // "/" routes through LandingGate → the user's feed (Instagram-style home).
+    router.push(hasOnboarded ? "/" : "/onboarding")
   }
 
   const handleGoogleRegister = () => {

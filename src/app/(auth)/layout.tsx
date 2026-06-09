@@ -63,7 +63,8 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
     // on the first tick where `sessionReady` flips true.
     if (!user) return
 
-    const dest = user.slug ? `/user/${user.slug}/dashboard` : "/dashboard"
+    // Instagram-style: drop users into their feed first, not the stats dashboard.
+    const dest = user.slug ? `/user/${user.slug}/feed` : "/dashboard"
     router.replace(dest)
   }, [sessionReady, isAuthenticated, user, params, router])
 

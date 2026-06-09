@@ -7,7 +7,8 @@ export default function OnboardingPage() {
   const router = useRouter()
 
   const handleComplete = () => {
-    router.push("/dashboard")
+    // "/" routes through LandingGate → the user's feed (Instagram-style home).
+    router.push("/")
   }
 
   return (

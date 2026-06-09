@@ -260,24 +260,30 @@ export default function Navbar() {
             </AnimatePresence>
           </div>
 
-          {/* Community dropdown */}
-          <div className="relative" onMouseEnter={() => enterDropdown("community")} onMouseLeave={leaveDropdown}>
-            <button
-              className={`whitespace-nowrap flex items-center gap-1 px-4 py-2 text-[10px] font-black uppercase tracking-widest rounded-full transition-all ${isCommunityPath || openDropdown === "community" ? "text-foreground bg-surface" : "text-muted hover:text-foreground hover:bg-surface"}`}
-              aria-expanded={openDropdown === "community"} aria-haspopup="menu">
-              Community
-              <ChevronDown size={11} className={`transition-transform duration-200 ${openDropdown === "community" ? "rotate-180" : ""}`} />
-            </button>
-            <AnimatePresence>
-              {openDropdown === "community" && <NavDropdown items={COMMUNITY_LINKS} onClose={() => setOpenDropdown(null)} />}
-            </AnimatePresence>
-          </div>
+          {/* Community + Leaderboard are part of the logged-in experience.
+              Logged-out marketing nav stays minimal: Home + Anime + Search + Sign in. */}
+          {isHydrated && isAuthenticated && (
+            <>
+              {/* Community dropdown */}
+              <div className="relative" onMouseEnter={() => enterDropdown("community")} onMouseLeave={leaveDropdown}>
+                <button
+                  className={`whitespace-nowrap flex items-center gap-1 px-4 py-2 text-[10px] font-black uppercase tracking-widest rounded-full transition-all ${isCommunityPath || openDropdown === "community" ? "text-foreground bg-surface" : "text-muted hover:text-foreground hover:bg-surface"}`}
+                  aria-expanded={openDropdown === "community"} aria-haspopup="menu">
+                  Community
+                  <ChevronDown size={11} className={`transition-transform duration-200 ${openDropdown === "community" ? "rotate-180" : ""}`} />
+                </button>
+                <AnimatePresence>
+                  {openDropdown === "community" && <NavDropdown items={COMMUNITY_LINKS} onClose={() => setOpenDropdown(null)} />}
+                </AnimatePresence>
+              </div>
 
-          <Link href="/leaderboard"
-            className={`whitespace-nowrap flex items-center gap-1.5 px-4 py-2 text-[10px] font-black uppercase tracking-widest rounded-full transition-all ${pathname.startsWith("/leaderboard") ? "text-foreground bg-surface" : "text-muted hover:text-foreground hover:bg-surface"}`}>
-            <TrendingUp size={11} />
-            Leaderboard
-          </Link>
+              <Link href="/leaderboard"
+                className={`whitespace-nowrap flex items-center gap-1.5 px-4 py-2 text-[10px] font-black uppercase tracking-widest rounded-full transition-all ${pathname.startsWith("/leaderboard") ? "text-foreground bg-surface" : "text-muted hover:text-foreground hover:bg-surface"}`}>
+                <TrendingUp size={11} />
+                Leaderboard
+              </Link>
+            </>
+          )}
         </nav>
 
         {/* ── Actions ── */}

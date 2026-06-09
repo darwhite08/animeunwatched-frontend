@@ -1,5 +1,6 @@
 import {
-  House, Sparkle, UsersThree, ChatCircleText, MonitorPlay, User,
+  House, Television, Sparkle, FilmSlate, Newspaper, UsersThree,
+  Trophy, ChatCircleText, Bookmarks, User,
   type Icon as PhosphorIcon,
 } from "@phosphor-icons/react"
 
@@ -20,12 +21,16 @@ export interface NavItem {
 }
 
 export const NAV_ITEMS: NavItem[] = [
-  { key: "feed",     label: "Home",     path: "feed",        icon: House,         mobile: true },
-  { key: "discover", label: "Discover", path: "/ai-discover", icon: Sparkle,      mobile: true },
-  { key: "clubs",    label: "Clubs",    path: "/clubs",       icon: UsersThree,   mobile: true },
-  { key: "chat",     label: "Chat",     path: "/chat",        icon: ChatCircleText, badgeKey: "unreadDms", mobile: true },
-  { key: "library",  label: "Library",  path: "watchlist",    icon: MonitorPlay },
-  { key: "profile",  label: "Profile",  path: "profile",      icon: User,          mobile: true },
+  { key: "feed",        label: "Home",        path: "feed",          icon: House,           mobile: true },
+  { key: "anime",       label: "Anime",       path: "/bestanimelist", icon: Television,     mobile: true },
+  { key: "discover",    label: "Discover",    path: "/ai-discover",   icon: Sparkle },
+  { key: "trailers",    label: "Trailers",    path: "/trailers",      icon: FilmSlate },
+  { key: "community",   label: "Community",   path: "/community",     icon: Newspaper,      mobile: true },
+  { key: "clubs",       label: "Clubs",       path: "/clubs",         icon: UsersThree },
+  { key: "leaderboard", label: "Leaderboard", path: "/leaderboard",   icon: Trophy },
+  { key: "chat",        label: "Chat",        path: "/chat",          icon: ChatCircleText, badgeKey: "unreadDms", mobile: true },
+  { key: "library",     label: "Library",     path: "watchlist",      icon: Bookmarks },
+  { key: "profile",     label: "Profile",     path: "profile",        icon: User,           mobile: true },
 ]
 
 /** Resolve a NavItem's href given the current user slug. */

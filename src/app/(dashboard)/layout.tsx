@@ -3,7 +3,7 @@
 import { useEffect } from "react"
 import { useAuthStore } from "@/stores/auth.store"
 import { useRouter, usePathname } from "next/navigation"
-import Sidebar from "@/components/dashboard/Sidebar"
+import { AppShell } from "@/components/layout/app/AppShell"
 import { motion } from "framer-motion"
 
 /**
@@ -84,14 +84,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
 }
 
 function DashShell({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="flex min-h-screen bg-background text-foreground">
-      <Sidebar />
-      <main className="flex-1 ml-64 min-h-screen">
-        {children}
-      </main>
-    </div>
-  )
+  return <AppShell>{children}</AppShell>
 }
 
 function KLoader() {

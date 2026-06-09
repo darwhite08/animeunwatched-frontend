@@ -3,7 +3,7 @@
 import { useEffect } from "react"
 import { useParams, useRouter } from "next/navigation"
 import { useAuthStore } from "@/stores/auth.store"
-import Sidebar from "@/components/dashboard/Sidebar"
+import { AppShell } from "@/components/layout/app/AppShell"
 
 /**
  * Layer-2 security guard for all /user/[slug]/* routes.
@@ -47,12 +47,5 @@ export default function UserScopedLayout({ children }: { children: React.ReactNo
   if (!sessionReady || !isAuthenticated || !user) return null
   if (user.slug && params.slug !== user.slug) return null
 
-  return (
-    <div className="flex min-h-screen bg-background">
-      <Sidebar />
-      <main className="flex-1 ml-64 min-h-screen overflow-y-auto">
-        {children}
-      </main>
-    </div>
-  )
+  return <AppShell>{children}</AppShell>
 }

@@ -27,6 +27,7 @@ import ProfileMenu from "./ProfileMenu";
 
 const ANIME_LINKS = [
   { name: "Browse All",       href: "/bestanimelist",    icon: List,          desc: "All 30,000+ anime" },
+  { name: "Trailers",         href: "/trailers",         icon: MonitorPlay,   desc: "Watch anime trailers" },
   { name: "AI Discover",      href: "/ai-discover",      icon: Robot,         desc: "Neural recommendations" },
   { name: "Seasonal",         href: "/seasonal",         icon: CalendarDots,  desc: "Any year & season" },
   { name: "Calendar",         href: "/calendar",         icon: CalendarCheck, desc: "Airing schedule" },

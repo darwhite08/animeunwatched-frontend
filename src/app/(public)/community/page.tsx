@@ -22,6 +22,7 @@ import { useImageUpload } from "@/hooks/useImageUpload"
 import NextImage from "next/image"
 import { PostMenu } from "@/components/ui/PostMenu"
 import { useAuthStore } from "@/stores/auth.store"
+import { VerifiedBadge } from "@/components/social/VerifiedBadge"
 import type { Post, PostComment } from "@/lib/api/types"
 
 type FeedTab = "trending" | "following" | "latest"
@@ -278,7 +279,10 @@ function PostCard({ post }: { post: Post }) {
             </Link>
             <div>
               <Link href={`/u/${post.author?.username ?? ""}`} className="rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60">
-                <p className="text-[15px] font-semibold text-foreground hover:text-accent-bright transition-colors leading-tight">{authorName}</p>
+                <p className="flex items-center gap-1.5 text-[15px] font-semibold text-foreground hover:text-accent-bright transition-colors leading-tight">
+                  {authorName}
+                  <VerifiedBadge kind={(post.author as { verifiedKind?: "USER" | "CREATOR" | "STUDIO" | null })?.verifiedKind} size={15} />
+                </p>
               </Link>
               <p className="text-[11px] text-muted mt-0.5 tabular-nums">{timeAgo(post.createdAt)}</p>
             </div>

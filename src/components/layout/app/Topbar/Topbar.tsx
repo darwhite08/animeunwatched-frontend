@@ -26,7 +26,7 @@ export function Topbar() {
 
   return (
     <>
-      <header className="sticky top-0 z-30 flex h-14 items-center gap-3 border-b border-border bg-background/85 px-4 backdrop-blur">
+      <header className="sticky top-0 z-40 flex h-14 items-center gap-3 border-b border-border bg-background/85 px-4 backdrop-blur">
         {/* Mobile: hamburger + logo (sidebar is hidden <md) */}
         <button onClick={() => setMobileDrawer(true)} aria-label="Open menu" className="rounded-lg p-1.5 text-muted hover:text-foreground md:hidden">
           <Menu size={20} />

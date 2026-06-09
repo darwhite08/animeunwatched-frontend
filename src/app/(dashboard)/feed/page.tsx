@@ -286,8 +286,8 @@ export default function FeedPage() {
       {/* Live "↑ N new posts" floating banner */}
       <NewPostsBanner count={queueLength} onClick={handleFlushAndScrollUp} />
 
-      {/* ── Sticky header ── */}
-      <div className="border-b border-border bg-black/50 backdrop-blur-md sticky top-[72px] z-30">
+      {/* ── Sticky header (sits flush under the AppShell topbar, h-14 = 56px) ── */}
+      <div className="border-b border-border bg-black/50 backdrop-blur-md sticky top-14 z-20">
         <div className="max-w-6xl mx-auto px-6 py-5 flex items-center gap-4">
           <div className="flex-1">
             <div className="flex items-center gap-3">

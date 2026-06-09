@@ -26,6 +26,7 @@ import {
 import { useToast } from "@/stores/toast.store"
 import { useUserProfile, useFollow } from "@/hooks/useUsers"
 import { SupportCreator } from "@/components/social/SupportCreator"
+import { VerifiedBadge } from "@/components/social/VerifiedBadge"
 import { useUserList } from "@/hooks/useLists"
 import { useActivityFeed } from "@/hooks/useActivityFeed"
 import { useAuthStore } from "@/stores/auth.store"
@@ -445,8 +446,9 @@ export default function UserProfilePage({
                   {user.grade}
                 </div>
 
-                <h1 className="text-5xl md:text-7xl font-black tracking-tighter uppercase italic text-foreground leading-none">
+                <h1 className="flex items-center justify-center gap-3 text-5xl md:text-7xl font-black tracking-tighter uppercase italic text-foreground leading-none md:justify-start">
                   {user.displayName}
+                  <VerifiedBadge kind={(user as { verifiedKind?: "USER" | "CREATOR" | "STUDIO" | null }).verifiedKind} size={36} />
                 </h1>
                 <p className="text-muted text-sm font-mono flex items-center gap-2">
                   @{user.username}

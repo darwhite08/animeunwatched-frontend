@@ -9,6 +9,8 @@ type Shot = {
   id: string
   caption: string | null
   videoUrl: string
+  embedUrl: string | null
+  sourceProvider: string | null
   thumbnailUrl: string | null
   author: { id: string; username: string; displayName: string; avatarUrl: string | null }
   anime: { malId: number; title: string } | null
@@ -80,17 +82,19 @@ function ShotCard({ shot, muted }: { shot: Shot; muted: boolean }) {
   const [likes, setLikes] = useState(shot._count.likes)
   const [busy, setBusy] = useState(false)
 
-  // Autoplay only while the card is on screen.
+  const isEmbed = Boolean(shot.embedUrl)
+
+  // Autoplay native video only while on screen (embeds manage their own playback).
   useEffect(() => {
     const v = videoRef.current
-    if (!v) return
+    if (!v || isEmbed) return
     const io = new IntersectionObserver(
       ([e]) => { if (e.isIntersecting) v.play().catch(() => {}); else v.pause() },
       { threshold: 0.6 },
     )
     io.observe(v)
     return () => io.disconnect()
-  }, [])
+  }, [isEmbed])
 
   async function toggleLike() {
     if (busy) return
@@ -106,17 +110,27 @@ function ShotCard({ shot, muted }: { shot: Shot; muted: boolean }) {
 
   return (
     <div className="relative aspect-[9/16] w-full overflow-hidden rounded-3xl border border-border bg-black">
-      <video
-        ref={videoRef}
-        src={shot.videoUrl}
-        poster={shot.thumbnailUrl ?? undefined}
-        muted={muted}
-        loop
-        playsInline
-        onClick={(e) => { const v = e.currentTarget; v.paused ? v.play() : v.pause() }}
-        className="h-full w-full object-cover"
-      />
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/20" />
+      {isEmbed ? (
+        <iframe
+          src={shot.embedUrl!}
+          className="h-full w-full"
+          allow="autoplay; encrypted-media; fullscreen"
+          allowFullScreen
+          title={shot.caption ?? "Shot"}
+        />
+      ) : (
+        <video
+          ref={videoRef}
+          src={shot.videoUrl}
+          poster={shot.thumbnailUrl ?? undefined}
+          muted={muted}
+          loop
+          playsInline
+          onClick={(e) => { const v = e.currentTarget; v.paused ? v.play() : v.pause() }}
+          className="h-full w-full object-cover"
+        />
+      )}
+      {!isEmbed && <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/20" />}
 
       {/* Right action rail */}
       <div className="absolute bottom-24 right-3 flex flex-col items-center gap-4">

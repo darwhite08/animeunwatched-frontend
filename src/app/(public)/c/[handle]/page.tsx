@@ -36,7 +36,7 @@ export default function StorefrontPage({ params }: { params: Promise<{ handle: s
   const hasContent = content.shots.length || content.blogs.length || content.posts.length || content.reviews.length || content.clubs.length
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-8">
+    <div className="mx-auto max-w-3xl px-4 pt-28 pb-16 sm:pt-36">
       {/* Hero */}
       <div className="rounded-3xl border border-border bg-gradient-to-b from-accent-soft to-transparent p-8 text-center">
         {creator.avatarUrl ? (

@@ -1,5 +1,5 @@
 import {
-  House, Television, Sparkle, UsersThree,
+  House, Television, Sparkle, UsersThree, FilmReel,
   Trophy, ChatCircleText, Bookmarks, User,
   ListBullets, PlayCircle, Robot, CalendarBlank, CalendarCheck,
   Star, Tag, Buildings, Smiley, MagicWand, SquaresFour,
@@ -69,9 +69,10 @@ export const PROFILE_FLYOUT: FlyoutLink[] = [
 
 export const NAV_ITEMS: NavItem[] = [
   { key: "feed",        label: "Home",        path: "/community",     icon: House,           mobile: true },
+  { key: "shots",       label: "Shots",       path: "/shots",         icon: FilmReel,       mobile: true },
   { key: "anime",       label: "Anime",       path: "/bestanimelist", icon: Television,     mobile: true, flyout: ANIME_FLYOUT },
   { key: "discover",    label: "Discover",    path: "/ai-discover",   icon: Sparkle },
-  { key: "clubs",       label: "Clubs",       path: "/clubs",         icon: UsersThree,     mobile: true },
+  { key: "clubs",       label: "Clubs",       path: "/clubs",         icon: UsersThree },
   { key: "leaderboard", label: "Leaderboard", path: "/leaderboard",   icon: Trophy },
   { key: "chat",        label: "Chat",        path: "/chat",          icon: ChatCircleText, badgeKey: "unreadDms", mobile: true },
   { key: "library",     label: "Library",     path: "watchlist",      icon: Bookmarks,      flyout: LIBRARY_FLYOUT },

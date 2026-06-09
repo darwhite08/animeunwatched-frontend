@@ -1,8 +1,8 @@
 "use client"
 
-import { useEffect, useRef, useState, useCallback } from "react"
+import { useEffect, useRef, useState, useCallback, useMemo } from "react"
 import Link from "next/link"
-import { Heart, MessageSquare, Volume2, VolumeX, Clapperboard, Loader2 } from "lucide-react"
+import { Heart, Volume2, VolumeX, Clapperboard, Loader2, Play, Star } from "lucide-react"
 import { api } from "@/lib/api/client"
 
 type Shot = {
@@ -18,17 +18,36 @@ type Shot = {
   isLikedByMe: boolean
 }
 
+type Trailer = {
+  malId: number
+  title: string
+  imageUrl: string | null
+  youtubeId: string
+  score: number | null
+  type: string | null
+  year: number | null
+}
+
+type FeedItem = { kind: "shot"; shot: Shot } | { kind: "trailer"; trailer: Trailer }
+
+const TRAILER_EVERY = 3 // interleave a trailer after every N shots
+
 export default function ShotsPage() {
   const [shots, setShots] = useState<Shot[]>([])
+  const [trailers, setTrailers] = useState<Trailer[]>([])
   const [cursor, setCursor] = useState<string | null>(null)
+  const [done, setDone] = useState(false)
   const [loading, setLoading] = useState(true)
   const [muted, setMuted] = useState(true)
-  const [done, setDone] = useState(false)
+  const [active, setActive] = useState(0)
+  const loadingRef = useRef(false)
 
-  const load = useCallback(async (c?: string | null) => {
+  const loadShots = useCallback(async (c?: string | null) => {
+    if (loadingRef.current) return
+    loadingRef.current = true
     try {
       const res = await api<{ data: Shot[]; meta: { nextCursor: string | null } }>(
-        `/shots/feed?limit=8${c ? `&cursor=${encodeURIComponent(c)}` : ""}`,
+        `/shots/feed?limit=6${c ? `&cursor=${encodeURIComponent(c)}` : ""}`,
       )
       setShots((prev) => (c ? [...prev, ...res.data] : res.data))
       setCursor(res.meta.nextCursor)
@@ -36,65 +55,130 @@ export default function ShotsPage() {
     } catch {
       setDone(true)
     } finally {
+      loadingRef.current = false
       setLoading(false)
     }
   }, [])
 
-  useEffect(() => { load() }, [load])
+  useEffect(() => {
+    loadShots()
+    api<{ data: Trailer[] }>(`/anime/trailers?limit=40`)
+      .then((r) => setTrailers(r.data ?? []))
+      .catch(() => {})
+  }, [loadShots])
+
+  // Interleave shots + trailers into a single vertical feed.
+  const feed = useMemo<FeedItem[]>(() => {
+    const out: FeedItem[] = []
+    let t = 0
+    if (shots.length === 0) {
+      trailers.forEach((tr) => out.push({ kind: "trailer", trailer: tr }))
+      return out
+    }
+    shots.forEach((s, i) => {
+      out.push({ kind: "shot", shot: s })
+      if ((i + 1) % TRAILER_EVERY === 0 && t < trailers.length) out.push({ kind: "trailer", trailer: trailers[t++] })
+    })
+    if (done) while (t < trailers.length) out.push({ kind: "trailer", trailer: trailers[t++] })
+    return out
+  }, [shots, trailers, done])
+
+  // Infinite scroll: pull the next page as the user nears the end of the feed.
+  const onActivate = useCallback(
+    (idx: number) => {
+      setActive(idx)
+      if (idx >= feed.length - 2 && !done && cursor) loadShots(cursor)
+    },
+    [feed.length, done, cursor, loadShots],
+  )
 
   if (loading) {
-    return <div className="flex h-[70vh] items-center justify-center"><Loader2 className="animate-spin text-accent" size={28} /></div>
+    return (
+      <div className="flex h-[calc(100dvh-3.5rem)] items-center justify-center bg-black">
+        <Loader2 className="animate-spin text-accent" size={28} />
+      </div>
+    )
   }
-  if (shots.length === 0) {
+  if (feed.length === 0) {
     return (
       <div className="mx-auto max-w-md py-24 text-center">
         <Clapperboard className="mx-auto mb-4 text-muted" size={32} />
         <h1 className="text-xl font-black uppercase italic tracking-tight text-foreground">No shots yet</h1>
-        <p className="mt-2 text-sm text-muted">Short vertical clips from creators will show up here.</p>
+        <p className="mt-2 text-sm text-muted">Short vertical clips + trailers will show up here.</p>
       </div>
     )
   }
 
   return (
-    <div className="mx-auto flex max-w-[460px] flex-col items-center gap-4 px-3 py-6">
-      <div className="flex w-full items-center gap-2 px-1">
-        <Clapperboard className="text-accent" size={20} />
-        <h1 className="text-2xl font-black uppercase italic tracking-tighter text-foreground">Shots</h1>
-        <button onClick={() => setMuted((m) => !m)} className="ml-auto flex items-center gap-1.5 rounded-full border border-border px-3 py-1.5 text-[11px] font-bold uppercase tracking-widest text-muted hover:text-foreground">
-          {muted ? <VolumeX size={14} /> : <Volume2 size={14} />} {muted ? "Muted" : "Sound"}
-        </button>
-      </div>
+    <div
+      style={{ paddingTop: 0 }}
+      className="relative h-[calc(100dvh-3.5rem-4rem)] w-full snap-y snap-mandatory overflow-y-scroll bg-black md:h-[calc(100dvh-3.5rem)] [&::-webkit-scrollbar]:hidden"
+    >
+      {/* Floating mute toggle */}
+      <button
+        onClick={() => setMuted((m) => !m)}
+        aria-label={muted ? "Unmute" : "Mute"}
+        className="fixed right-4 top-[4.5rem] z-30 flex h-10 w-10 items-center justify-center rounded-full bg-black/50 text-white backdrop-blur hover:bg-black/70 md:absolute md:right-6"
+      >
+        {muted ? <VolumeX size={18} /> : <Volume2 size={18} />}
+      </button>
 
-      {shots.map((s) => <ShotCard key={s.id} shot={s} muted={muted} />)}
+      {feed.map((item, idx) => (
+        <ReelSlot key={item.kind === "shot" ? item.shot.id : `t-${item.trailer.malId}`} index={idx} onActivate={onActivate}>
+          {item.kind === "shot" ? (
+            <ShotReel shot={item.shot} active={active === idx} muted={muted} />
+          ) : (
+            <TrailerReel trailer={item.trailer} active={active === idx} muted={muted} />
+          )}
+        </ReelSlot>
+      ))}
 
       {!done && (
-        <button onClick={() => load(cursor)} className="my-4 rounded-full bg-accent px-6 py-2.5 text-[11px] font-black uppercase tracking-[0.2em] text-white">
-          Load more
-        </button>
+        <div className="flex h-24 items-center justify-center">
+          <Loader2 className="animate-spin text-white/60" size={22} />
+        </div>
       )}
     </div>
   )
 }
 
-function ShotCard({ shot, muted }: { shot: Shot; muted: boolean }) {
+/** One full-height snap slot that reports when it becomes the active reel. */
+function ReelSlot({ index, onActivate, children }: { index: number; onActivate: (i: number) => void; children: React.ReactNode }) {
+  const ref = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const io = new IntersectionObserver(
+      ([e]) => { if (e.isIntersecting && e.intersectionRatio >= 0.6) onActivate(index) },
+      { threshold: [0.6] },
+    )
+    io.observe(el)
+    return () => io.disconnect()
+  }, [index, onActivate])
+  return (
+    <div ref={ref} className="flex h-full w-full snap-start snap-always items-center justify-center p-2 sm:p-4">
+      {children}
+    </div>
+  )
+}
+
+function MediaShell({ children }: { children: React.ReactNode }) {
+  return <div className="relative aspect-[9/16] h-full max-h-full w-auto overflow-hidden rounded-3xl border border-border bg-black">{children}</div>
+}
+
+function ShotReel({ shot, active, muted }: { shot: Shot; active: boolean; muted: boolean }) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const [liked, setLiked] = useState(shot.isLikedByMe)
   const [likes, setLikes] = useState(shot._count.likes)
   const [busy, setBusy] = useState(false)
-
   const isEmbed = Boolean(shot.embedUrl)
 
-  // Autoplay native video only while on screen (embeds manage their own playback).
   useEffect(() => {
     const v = videoRef.current
     if (!v || isEmbed) return
-    const io = new IntersectionObserver(
-      ([e]) => { if (e.isIntersecting) v.play().catch(() => {}); else v.pause() },
-      { threshold: 0.6 },
-    )
-    io.observe(v)
-    return () => io.disconnect()
-  }, [isEmbed])
+    if (active) v.play().catch(() => {})
+    else { v.pause(); v.currentTime = 0 }
+  }, [active, isEmbed])
 
   async function toggleLike() {
     if (busy) return
@@ -109,15 +193,13 @@ function ShotCard({ shot, muted }: { shot: Shot; muted: boolean }) {
   }
 
   return (
-    <div className="relative aspect-[9/16] w-full overflow-hidden rounded-3xl border border-border bg-black">
+    <MediaShell>
       {isEmbed ? (
-        <iframe
-          src={shot.embedUrl!}
-          className="h-full w-full"
-          allow="autoplay; encrypted-media; fullscreen"
-          allowFullScreen
-          title={shot.caption ?? "Shot"}
-        />
+        active ? (
+          <iframe src={shot.embedUrl!} className="h-full w-full" allow="autoplay; encrypted-media; fullscreen" allowFullScreen title={shot.caption ?? "Shot"} />
+        ) : (
+          <Poster src={shot.thumbnailUrl} />
+        )
       ) : (
         <video
           ref={videoRef}
@@ -132,7 +214,6 @@ function ShotCard({ shot, muted }: { shot: Shot; muted: boolean }) {
       )}
       {!isEmbed && <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/20" />}
 
-      {/* Right action rail */}
       <div className="absolute bottom-24 right-3 flex flex-col items-center gap-4">
         <button onClick={toggleLike} className="flex flex-col items-center gap-1 text-white">
           <span className={`flex h-11 w-11 items-center justify-center rounded-full ${liked ? "bg-rose-500" : "bg-black/40"}`}>
@@ -142,7 +223,6 @@ function ShotCard({ shot, muted }: { shot: Shot; muted: boolean }) {
         </button>
       </div>
 
-      {/* Bottom meta */}
       <div className="absolute inset-x-0 bottom-0 p-4">
         <Link href={`/u/${shot.author.username}`} className="flex items-center gap-2">
           {shot.author.avatarUrl ? (
@@ -160,6 +240,50 @@ function ShotCard({ shot, muted }: { shot: Shot; muted: boolean }) {
           </Link>
         )}
       </div>
-    </div>
+    </MediaShell>
   )
+}
+
+function TrailerReel({ trailer, active, muted }: { trailer: Trailer; active: boolean; muted: boolean }) {
+  return (
+    <MediaShell>
+      {active ? (
+        <iframe
+          key={`${trailer.youtubeId}-${muted ? "m" : "s"}`}
+          src={`https://www.youtube-nocookie.com/embed/${trailer.youtubeId}?autoplay=1&mute=${muted ? 1 : 0}&controls=0&rel=0&playsinline=1&modestbranding=1&loop=1&playlist=${trailer.youtubeId}`}
+          className="h-full w-full"
+          allow="autoplay; encrypted-media; fullscreen"
+          allowFullScreen
+          title={trailer.title}
+        />
+      ) : (
+        <>
+          <Poster src={trailer.imageUrl} />
+          <div className="absolute inset-0 flex items-center justify-center">
+            <span className="flex h-14 w-14 items-center justify-center rounded-full bg-black/50 text-white"><Play size={24} className="ml-0.5 fill-white" /></span>
+          </div>
+        </>
+      )}
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30" />
+
+      <span className="absolute left-3 top-3 rounded-full bg-accent px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-white">Trailer</span>
+
+      <div className="absolute inset-x-0 bottom-0 p-4">
+        <Link href={`/anime/${trailer.malId}`} className="block">
+          <h3 className="line-clamp-2 text-lg font-black leading-tight tracking-tight text-white">{trailer.title}</h3>
+        </Link>
+        <div className="mt-2 flex items-center gap-2 text-[11px] font-bold text-white/80">
+          {trailer.score != null && <span className="inline-flex items-center gap-1"><Star size={12} className="fill-amber-400 text-amber-400" />{trailer.score.toFixed(1)}</span>}
+          {trailer.type && <span className="rounded-full bg-white/15 px-2 py-0.5 uppercase tracking-widest">{trailer.type}</span>}
+          {trailer.year && <span>{trailer.year}</span>}
+        </div>
+      </div>
+    </MediaShell>
+  )
+}
+
+function Poster({ src }: { src: string | null }) {
+  if (!src) return <div className="h-full w-full bg-gradient-to-br from-zinc-900 to-black" />
+  // eslint-disable-next-line @next/next/no-img-element
+  return <img src={src} alt="" className="h-full w-full object-cover" />
 }

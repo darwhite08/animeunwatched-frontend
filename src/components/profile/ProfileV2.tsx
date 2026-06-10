@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useMemo, useRef, useState } from "react"
+import { useEffect, useMemo, useRef, useState, type ChangeEvent } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import {
@@ -12,6 +12,15 @@ import { useAuthStore } from "@/stores/auth.store"
 import { useUserList } from "@/hooks/useLists"
 import { useUserProfile } from "@/hooks/useUsers"
 import { useActivityFeed } from "@/hooks/useActivityFeed"
+import { useImageUpload } from "@/hooks/useImageUpload"
+import { useToast } from "@/stores/toast.store"
+import * as ep from "@/lib/api/endpoints"
+
+/** Ninja-tier title from reputation (matches the sidebar gamification strip). */
+const NINJA_TIERS: [number, string][] = [
+  [5000, "Kage"], [2000, "Jonin"], [1000, "Special Jonin"], [500, "Chunin"], [100, "Genin"], [0, "Academy Student"],
+]
+const ninjaTier = (rep: number) => NINJA_TIERS.find(([min]) => rep >= min)?.[1] ?? "Academy Student"
 
 /* ──────────────────────────────────────────────────────────────────────
    count-up hook — animates a number from 0 → target
@@ -72,13 +81,37 @@ function Sparkline({ series, color, w = 88, h = 28 }: { series: number[]; color:
 /* ──────────────────────────────────────────────────────────────────────
    Avatar with progress ring
    ────────────────────────────────────────────────────────────────────── */
-function ProfileAvatar({ size = 128, progress, level, name, avatarUrl }: {
-  size?: number; progress: number; level: number; name: string; avatarUrl?: string | null
+function ProfileAvatar({ size = 128, progress, level, name, avatarUrl, editable = false }: {
+  size?: number; progress: number; level: number; name: string; avatarUrl?: string | null; editable?: boolean
 }) {
   const r = size / 2 - 5
   const c = 2 * Math.PI * r
   const off = c * (1 - progress)
   const initial = (name?.[0] ?? "K").toUpperCase()
+
+  const fileRef = useRef<HTMLInputElement>(null)
+  const { upload, isUploading } = useImageUpload("avatar")
+  const { push } = useToast()
+  const setUser = useAuthStore((s) => s.setUser)
+  const [src, setSrc] = useState<string | null | undefined>(avatarUrl)
+  useEffect(() => { setSrc(avatarUrl) }, [avatarUrl])
+
+  async function onFile(e: ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0]
+    if (!file) return
+    try {
+      const { publicUrl } = await upload(file)
+      await ep.updateMe({ avatarUrl: publicUrl })
+      setSrc(publicUrl)
+      const u = useAuthStore.getState().user
+      if (u) setUser({ ...u, avatarUrl: publicUrl })
+      push("Profile photo updated", "success")
+    } catch {
+      push("Couldn't update photo — try a smaller image.", "error")
+    } finally {
+      e.target.value = ""
+    }
+  }
   return (
     <div className="relative shrink-0" style={{ width: size, height: size }}>
       <svg className="absolute inset-0 z-[2]" width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
@@ -100,14 +133,20 @@ function ProfileAvatar({ size = 128, progress, level, name, avatarUrl }: {
         style={{
           background: "radial-gradient(120% 120% at 30% 20%, color-mix(in srgb, var(--app-accent) 55%, var(--app-surface-2)), var(--app-surface-2))",
         }}>
-        {avatarUrl
-          ? <Image src={avatarUrl} alt={name} fill className="object-cover" sizes="128px" />
+        {src
+          ? // eslint-disable-next-line @next/next/no-img-element
+            <img src={src} alt={name} referrerPolicy="no-referrer" className="h-full w-full object-cover" onError={() => setSrc(null)} />
           : <span className="font-black text-4xl text-foreground italic">{initial}</span>}
       </div>
-      <button aria-label="Change avatar"
-        className="absolute bottom-1 right-1 z-[3] w-7 h-7 rounded-full grid place-items-center border border-border bg-background/80 backdrop-blur hover:bg-surface transition-colors">
-        <Camera size={13} />
-      </button>
+      {editable && (
+        <>
+          <button aria-label="Change profile photo" onClick={() => fileRef.current?.click()} disabled={isUploading}
+            className={`absolute bottom-1 right-1 z-[3] w-7 h-7 rounded-full grid place-items-center border border-border bg-background/80 backdrop-blur hover:bg-surface transition-colors disabled:opacity-50 ${isUploading ? "animate-pulse" : ""}`}>
+            <Camera size={13} />
+          </button>
+          <input ref={fileRef} type="file" accept="image/jpeg,image/png,image/webp,image/gif" className="hidden" onChange={onFile} />
+        </>
+      )}
       <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 z-[3] flex items-center gap-1 px-2 py-0.5 rounded-full bg-accent text-[10px] font-black text-black"
         style={{ boxShadow: "0 4px 14px color-mix(in srgb, var(--app-accent) 35%, transparent)" }}>
         <span className="font-mono opacity-70">LV</span>{level}
@@ -137,6 +176,35 @@ function Hero({ isOwner }: { isOwner: boolean }) {
   const handle = user?.username ? `@${user.username}` : "@admin"
   const bio = user?.bio || "Cataloguing the canon. Welcome to the archive."
 
+  const { push } = useToast()
+  const setUser = useAuthStore((s) => s.setUser)
+  const coverRef = useRef<HTMLInputElement>(null)
+  const coverUpload = useImageUpload("post")
+  const coverImage = (user as { coverImage?: string | null } | null)?.coverImage ?? null
+  const settingsHref = user?.slug ? `/user/${user.slug}/settings/account` : "/settings/account"
+
+  const shareProfile = async () => {
+    const url = `${typeof window !== "undefined" ? window.location.origin : "https://kaiveron.com"}/u/${user?.username ?? ""}`
+    try { await navigator.clipboard.writeText(url); push("Profile link copied!", "success") }
+    catch { push("Couldn't copy link", "error") }
+  }
+
+  const onCover = async (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    try {
+      const { publicUrl } = await coverUpload.upload(file)
+      await ep.updateMe({ coverImage: publicUrl })
+      const u = useAuthStore.getState().user
+      if (u) setUser({ ...u, coverImage: publicUrl } as typeof u)
+      push("Cover updated", "success")
+    } catch {
+      push("Couldn't update cover — try a smaller image.", "error")
+    } finally {
+      e.target.value = ""
+    }
+  }
+
   // Real social + curation counts. Curations = items in this user's
   // public watchlist (lists are public in this app).
   const followers  = profileData?.stats?.followers ?? 0
@@ -148,7 +216,11 @@ function Hero({ isOwner }: { isOwner: boolean }) {
       {/* Cover with aurora */}
       <div className="relative h-[150px] overflow-hidden"
         style={{ background: "linear-gradient(120deg, var(--app-surface-2), var(--app-surface))" }}>
-        <div className="absolute inset-[-60%_-20%_auto_-20%] h-[320px] blur-[36px] opacity-85 pointer-events-none animate-[aurora_16s_ease-in-out_infinite_alternate]"
+        {coverImage && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={coverImage} alt="" referrerPolicy="no-referrer" className="absolute inset-0 z-[1] h-full w-full object-cover" />
+        )}
+        <div className={`absolute inset-[-60%_-20%_auto_-20%] h-[320px] blur-[36px] opacity-85 pointer-events-none animate-[aurora_16s_ease-in-out_infinite_alternate] ${coverImage ? "hidden" : ""}`}
           style={{
             background: `
               radial-gradient(40% 60% at 25% 40%, color-mix(in srgb, var(--app-accent) 85%, transparent), transparent 70%),
@@ -162,10 +234,12 @@ function Hero({ isOwner }: { isOwner: boolean }) {
             maskImage: "linear-gradient(180deg, #000, transparent)",
           }} />
         {isOwner && (
-          <button className="absolute top-3 right-3 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-mono uppercase tracking-widest text-muted backdrop-blur-md border border-border bg-background/40 hover:bg-background/70 transition-colors">
-            <Camera size={12} /> Edit cover
+          <button onClick={() => coverRef.current?.click()} disabled={coverUpload.isUploading}
+            className={`absolute top-3 right-3 z-[2] flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-mono uppercase tracking-widest text-muted backdrop-blur-md border border-border bg-background/40 hover:bg-background/70 transition-colors disabled:opacity-60 ${coverUpload.isUploading ? "animate-pulse" : ""}`}>
+            <Camera size={12} /> {coverUpload.isUploading ? "Uploading…" : "Edit cover"}
           </button>
         )}
+        <input ref={coverRef} type="file" accept="image/jpeg,image/png,image/webp,image/gif" className="hidden" onChange={onCover} />
       </div>
 
       {/* Body — 3-col grid on lg: [avatar | identity | actions]. All three
@@ -174,7 +248,7 @@ function Hero({ isOwner }: { isOwner: boolean }) {
       <div className="px-6 pb-6 grid gap-6 grid-cols-1 lg:grid-cols-[auto_minmax(0,1fr)_auto] lg:items-start">
         <div className="-mt-[54px] self-start">
           <ProfileAvatar progress={progress} level={level} name={displayName}
-            avatarUrl={profile?.avatarUrl ?? user?.avatarUrl} />
+            avatarUrl={profile?.avatarUrl ?? user?.avatarUrl} editable={isOwner} />
         </div>
 
         <div className="min-w-0 pt-4">
@@ -186,7 +260,7 @@ function Hero({ isOwner }: { isOwner: boolean }) {
             </span>
           </div>
           <div className="flex items-center gap-2 mt-1.5 text-xs text-muted">
-            <span>Lv {level} · Visionary Curator</span>
+            <span>Lv {level} · {ninjaTier(reputation)}</span>
             <span className="opacity-40">•</span>
             <span className="font-mono uppercase tracking-widest text-muted">{handle}</span>
           </div>
@@ -212,10 +286,11 @@ function Hero({ isOwner }: { isOwner: boolean }) {
           <div className="flex items-center gap-2 lg:justify-end flex-wrap">
             {isOwner ? (
               <>
-                <button className="flex items-center gap-2 px-4 py-2 rounded-xl text-[11px] font-black uppercase tracking-widest text-black bg-accent hover:bg-accent-bright transition-colors">
+                <Link href={settingsHref}
+                  className="flex items-center gap-2 px-4 py-2 rounded-xl text-[11px] font-black uppercase tracking-widest text-black bg-accent hover:bg-accent-bright transition-colors">
                   <Settings size={14} /> Customize
-                </button>
-                <button className="flex items-center gap-2 px-4 py-2 rounded-xl text-[11px] font-black uppercase tracking-widest text-foreground border border-border hover:bg-surface-2 transition-colors">
+                </Link>
+                <button onClick={shareProfile} className="flex items-center gap-2 px-4 py-2 rounded-xl text-[11px] font-black uppercase tracking-widest text-foreground border border-border hover:bg-surface-2 transition-colors">
                   <Share2 size={13} /> Share
                 </button>
               </>
@@ -271,23 +346,17 @@ function Hero({ isOwner }: { isOwner: boolean }) {
 /* ──────────────────────────────────────────────────────────────────────
    Heatmap — 52w × 7d
    ────────────────────────────────────────────────────────────────────── */
-function buildHeatmap(): number[][] {
+/** Honest heatmap: lights the most-recent `streakDays` cells (the live streak),
+ *  counting back from today. Everything older is empty — no fabricated history. */
+function buildHeatmap(streakDays: number): number[][] {
   const weeks = 52, days = 7
-  let seed = 1337
-  const rnd = () => { seed = (seed * 9301 + 49297) % 233280; return seed / 233280 }
+  const total = weeks * days
   const grid: number[][] = []
   for (let w = 0; w < weeks; w++) {
     const col: number[] = []
-    const seasonal = 0.35 + 0.5 * Math.pow(w / weeks, 1.5)
     for (let d = 0; d < days; d++) {
-      const r = rnd()
-      const p = r * seasonal + (d === 5 || d === 6 ? 0.18 : 0)
-      let lvl = 0
-      if (p > 0.78) lvl = 4
-      else if (p > 0.58) lvl = 3
-      else if (p > 0.4) lvl = 2
-      else if (p > 0.22) lvl = 1
-      col.push(lvl)
+      const fromEnd = total - (w * days + d) - 1 // 0 = today
+      col.push(fromEnd < streakDays ? (fromEnd === 0 ? 4 : 3) : 0)
     }
     grid.push(col)
   }
@@ -302,7 +371,10 @@ function cellColor(lvl: number) {
 }
 
 function Heatmap() {
-  const grid = useMemo(buildHeatmap, [])
+  const user = useAuthStore((s) => s.user)
+  const streakDays = (user as { streakDays?: number } | null)?.streakDays ?? 0
+  const bestStreak = (user as { bestStreak?: number } | null)?.bestStreak ?? streakDays
+  const grid = useMemo(() => buildHeatmap(streakDays), [streakDays])
   return (
     <section className="rounded-[22px] bg-surface border border-border p-6">
       <div className="flex items-start justify-between gap-3 mb-4">
@@ -312,7 +384,11 @@ function Heatmap() {
             Watch activity
           </div>
           <div className="text-xs text-muted mt-1">
-            <b className="text-foreground">1,284</b> episodes this year · <b className="text-[#F0883E]">365-day streak</b>
+            {streakDays > 0 ? (
+              <><b className="text-[#F0883E]">{streakDays}-day streak</b>{bestStreak > streakDays && <> · best <b className="text-foreground">{bestStreak}</b></>}</>
+            ) : (
+              <>No streak yet — watch an episode today to start one.</>
+            )}
           </div>
         </div>
         <div className="flex items-center gap-1.5 font-mono text-[9px] uppercase tracking-widest text-subtle">

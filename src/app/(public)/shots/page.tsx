@@ -40,6 +40,7 @@ export default function ShotsPage() {
   const [loading, setLoading] = useState(true)
   const [muted, setMuted] = useState(true)
   const [active, setActive] = useState(0)
+  const [mode, setMode] = useState<"all" | "shots" | "trailers">("all")
   const loadingRef = useRef(false)
   const scrollRef = useRef<HTMLDivElement>(null)
 
@@ -68,8 +69,11 @@ export default function ShotsPage() {
       .catch(() => {})
   }, [loadShots])
 
-  // Interleave shots + trailers into a single vertical feed.
+  // Build the vertical feed for the selected tab.
   const feed = useMemo<FeedItem[]>(() => {
+    if (mode === "trailers") return trailers.map((tr) => ({ kind: "trailer", trailer: tr }))
+    if (mode === "shots") return shots.map((s) => ({ kind: "shot", shot: s }))
+    // "all" → interleave a trailer after every N shots
     const out: FeedItem[] = []
     let t = 0
     if (shots.length === 0) {
@@ -82,7 +86,13 @@ export default function ShotsPage() {
     })
     if (done) while (t < trailers.length) out.push({ kind: "trailer", trailer: trailers[t++] })
     return out
-  }, [shots, trailers, done])
+  }, [shots, trailers, done, mode])
+
+  const switchMode = (m: "all" | "shots" | "trailers") => {
+    setMode(m)
+    setActive(0)
+    scrollRef.current?.scrollTo({ top: 0 })
+  }
 
   // Deterministic active-reel detection from scroll position (each reel fills
   // the scroll container exactly). Drives play/pause + infinite-scroll loading.
@@ -101,16 +111,6 @@ export default function ShotsPage() {
       </div>
     )
   }
-  if (feed.length === 0) {
-    return (
-      <div className="mx-auto max-w-md py-24 text-center">
-        <Clapperboard className="mx-auto mb-4 text-muted" size={32} />
-        <h1 className="text-xl font-black uppercase italic tracking-tight text-foreground">No shots yet</h1>
-        <p className="mt-2 text-sm text-muted">Short vertical clips + trailers will show up here.</p>
-      </div>
-    )
-  }
-
   return (
     <div
       ref={scrollRef}
@@ -118,6 +118,21 @@ export default function ShotsPage() {
       style={{ paddingTop: 0 }}
       className="relative h-[calc(100dvh-3.5rem-4rem)] w-full snap-y snap-mandatory overflow-y-scroll bg-black md:h-[calc(100dvh-3.5rem)] [&::-webkit-scrollbar]:hidden"
     >
+      {/* Section tabs — Shots / Trailers / For You */}
+      <div className="fixed left-1/2 top-[4.5rem] z-30 flex -translate-x-1/2 gap-1 rounded-full border border-white/10 bg-black/55 p-1 backdrop-blur md:absolute">
+        {([["all", "For You"], ["shots", "Shots"], ["trailers", "Trailers"]] as const).map(([m, label]) => (
+          <button
+            key={m}
+            onClick={() => switchMode(m)}
+            className={`rounded-full px-3.5 py-1.5 text-[11px] font-black uppercase tracking-widest transition-colors ${
+              mode === m ? "bg-white text-black" : "text-white/70 hover:text-white"
+            }`}
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+
       {/* Floating mute toggle */}
       <button
         onClick={() => setMuted((m) => !m)}
@@ -126,6 +141,18 @@ export default function ShotsPage() {
       >
         {muted ? <VolumeX size={18} /> : <Volume2 size={18} />}
       </button>
+
+      {feed.length === 0 && (
+        <div className="flex h-full w-full flex-col items-center justify-center px-6 text-center">
+          <Clapperboard className="mb-4 text-muted" size={32} />
+          <h1 className="text-xl font-black uppercase italic tracking-tight text-foreground">
+            {mode === "shots" ? "No shots yet" : mode === "trailers" ? "No trailers yet" : "Nothing here yet"}
+          </h1>
+          <p className="mt-2 text-sm text-muted">
+            {mode === "shots" ? "Be the first to post a short vertical clip." : "Check back soon."}
+          </p>
+        </div>
+      )}
 
       {feed.map((item, idx) => (
         <div

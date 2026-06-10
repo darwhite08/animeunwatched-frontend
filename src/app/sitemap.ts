@@ -3,6 +3,11 @@ import { GENRES, FEATURED_STUDIOS, toSlug } from "@/lib/seo/taxonomy"
 
 const BASE = "https://kaiveron.com"
 
+// Statically generate at build time, then regenerate at most once per day.
+// The anime feed is large (~17k URLs) and changes slowly — never recompute it
+// per request. (Next.js App Router: route-level ISR for sitemap.ts.)
+export const revalidate = 86400 // 24h
+
 // Static public routes — always indexed
 const STATIC_ROUTES: MetadataRoute.Sitemap = [
   { url: BASE,                              changeFrequency: "daily",   priority: 1.0 },
@@ -57,28 +62,38 @@ const FEATURED_ANIME_IDS = [
   11061, 16498, 13767, 17265, 20507, 20583,
 ]
 
-async function fetchTopAnimeIds(): Promise<number[]> {
+type AnimeEntry = { malId: number; lastModified?: string }
+
+// Every index-worthy anime page, from the backend's dedicated sitemap feed.
+// The backend applies the quality gate (non-stub, real synopsis + score,
+// membersCount >= 500) and returns the full filtered set in one shot — no more
+// 5-page (~500-URL) cap. Featured IDs are merged in as a guaranteed floor, and
+// on any failure we degrade to the featured list rather than an empty sitemap.
+async function fetchAnimeEntries(): Promise<AnimeEntry[]> {
+  const featuredFallback = (): AnimeEntry[] =>
+    [...new Set(FEATURED_ANIME_IDS)].map((malId) => ({ malId }))
   try {
-    // Fetch top 500 by score for maximum SEO coverage
-    const pages = await Promise.allSettled([
-      fetch(`${process.env.API_BASE ?? "http://localhost:4000"}/api/v1/anime?limit=100&sort=score`, { next: { revalidate: 3600 } }),
-      fetch(`${process.env.API_BASE ?? "http://localhost:4000"}/api/v1/anime?limit=100&sort=score&page=2`, { next: { revalidate: 3600 } }),
-      fetch(`${process.env.API_BASE ?? "http://localhost:4000"}/api/v1/anime?limit=100&sort=score&page=3`, { next: { revalidate: 3600 } }),
-      fetch(`${process.env.API_BASE ?? "http://localhost:4000"}/api/v1/anime?limit=100&sort=score&page=4`, { next: { revalidate: 3600 } }),
-      fetch(`${process.env.API_BASE ?? "http://localhost:4000"}/api/v1/anime?limit=100&sort=score&page=5`, { next: { revalidate: 3600 } }),
-    ])
-    const ids: number[] = []
-    for (const result of pages) {
-      if (result.status === "fulfilled" && result.value.ok) {
-        const data = await result.value.json() as { data?: Array<{ malId: number }> }
-        ids.push(...(data.data ?? []).map((a) => a.malId).filter(Boolean))
+    const res = await fetch(
+      `${process.env.API_BASE ?? "http://localhost:4000"}/api/v1/anime/sitemap`,
+      { next: { revalidate: 86400 } },
+    )
+    if (!res.ok) return featuredFallback()
+    const json = (await res.json()) as { data?: Array<{ malId: number; updatedAt?: string }> }
+    const entries: AnimeEntry[] = (json.data ?? [])
+      .filter((a) => Boolean(a.malId))
+      .map((a) => ({ malId: a.malId, lastModified: a.updatedAt }))
+
+    // Guarantee the hand-picked high-traffic anime are always present.
+    const have = new Set(entries.map((e) => e.malId))
+    for (const malId of FEATURED_ANIME_IDS) {
+      if (!have.has(malId)) {
+        entries.push({ malId })
+        have.add(malId)
       }
     }
-    // Merge with featured list to ensure key anime are always indexed
-    const all = [...new Set([...ids, ...FEATURED_ANIME_IDS])]
-    return all.length > 0 ? all : FEATURED_ANIME_IDS
+    return entries.length > 0 ? entries : featuredFallback()
   } catch {
-    return FEATURED_ANIME_IDS
+    return featuredFallback()
   }
 }
 
@@ -131,7 +146,7 @@ function seasonRoutes(): MetadataRoute.Sitemap {
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [animeIds, blogs] = await Promise.all([fetchTopAnimeIds(), fetchBlogSlugs()])
+  const [animeEntries, blogs] = await Promise.all([fetchAnimeEntries(), fetchBlogSlugs()])
 
   const blogRoutes: MetadataRoute.Sitemap = blogs.map((b) => ({
     url:             `${BASE}/blog/${b.slug}`,
@@ -140,19 +155,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     lastModified:    b.lastModified ? new Date(b.lastModified) : new Date(),
   }))
 
-  const animeRoutes: MetadataRoute.Sitemap = animeIds.map((malId) => ({
-    url:             `${BASE}/anime/${malId}`,
+  const animeRoutes: MetadataRoute.Sitemap = animeEntries.map((a) => ({
+    url:             `${BASE}/anime/${a.malId}`,
     changeFrequency: "weekly",
     priority:        0.8,
-    lastModified:    new Date(),
+    lastModified:    a.lastModified ? new Date(a.lastModified) : new Date(),
   }))
 
-  // Episode discussion pages for top anime
-  const discussRoutes: MetadataRoute.Sitemap = animeIds.slice(0, 20).map((malId) => ({
-    url:             `${BASE}/anime/${malId}/discuss`,
+  // Episode discussion pages for the most popular anime (feed is sorted by
+  // popularity desc, so the first 20 are the strongest candidates).
+  const discussRoutes: MetadataRoute.Sitemap = animeEntries.slice(0, 20).map((a) => ({
+    url:             `${BASE}/anime/${a.malId}/discuss`,
     changeFrequency: "daily",
     priority:        0.6,
-    lastModified:    new Date(),
+    lastModified:    a.lastModified ? new Date(a.lastModified) : new Date(),
   }))
 
   return [

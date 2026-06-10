@@ -304,19 +304,62 @@
    document. Set on <body> not <html> so iOS rubber-band still works. */
 body { overflow-x: hidden; }
 /* ── Blog article (rich HTML authored in Creator Studio) ─────────────────── */
-.article-content { color: var(--app-muted); font-size: 1.05rem; line-height: 1.8; }
-.article-content > * + * { margin-top: 1.1em; }
-.article-content h1 { font-size: 2rem; font-weight: 900; font-style: italic; text-transform: uppercase; letter-spacing: -0.02em; color: var(--app-fg); margin-top: 1.4em; }
-.article-content h2 { font-size: 1.55rem; font-weight: 900; font-style: italic; text-transform: uppercase; letter-spacing: -0.02em; color: var(--app-fg); margin-top: 1.4em; }
-.article-content h3 { font-size: 1.25rem; font-weight: 800; color: var(--app-fg); margin-top: 1.3em; }
+.article-content { color: var(--app-muted); font-size: 1.075rem; line-height: 1.85; letter-spacing: -0.003em; }
+.article-content > * + * { margin-top: 1.15em; }
+
+/* Lead paragraph + editorial drop cap */
+.article-content > p:first-of-type { font-size: 1.2rem; line-height: 1.75; color: color-mix(in srgb, var(--app-fg) 82%, transparent); }
+.article-content > p:first-of-type::first-letter {
+  float: left; font-size: 3.5em; line-height: 0.78; font-weight: 900; font-style: italic;
+  padding: 0.05em 0.12em 0 0; color: var(--app-accent-bright);
+}
+
+/* Headings */
+.article-content h1, .article-content h2, .article-content h3 { color: var(--app-fg); scroll-margin-top: 96px; }
+.article-content h1 { font-size: 2.1rem; font-weight: 900; font-style: italic; text-transform: uppercase; letter-spacing: -0.03em; margin-top: 1.6em; line-height: 1.05; }
+.article-content h2 { font-size: 1.7rem; font-weight: 900; font-style: italic; text-transform: uppercase; letter-spacing: -0.03em; margin-top: 1.9em; line-height: 1.12; }
+.article-content h2::before {
+  content: ""; display: block; width: 2.6rem; height: 3px; margin-bottom: 0.55rem; border-radius: 99px;
+  background: linear-gradient(90deg, var(--app-accent-bright), var(--app-accent));
+}
+.article-content h3 { font-size: 1.32rem; font-weight: 800; letter-spacing: -0.01em; margin-top: 1.5em; }
+
+/* Body text */
 .article-content p { color: var(--app-muted); }
-.article-content a { color: var(--app-accent-bright); text-decoration: underline; }
-.article-content ul { list-style: disc; padding-left: 1.5em; }
+.article-content strong, .article-content b { color: var(--app-fg); font-weight: 800; }
+.article-content em { color: color-mix(in srgb, var(--app-fg) 72%, transparent); }
+.article-content a { color: var(--app-accent-bright); text-decoration: none; background-image: linear-gradient(var(--app-accent), var(--app-accent)); background-size: 100% 1px; background-position: 0 1.15em; background-repeat: no-repeat; transition: background-size .2s; }
+.article-content a:hover { background-size: 100% 2px; }
+
+/* Lists with accent markers */
+.article-content ul { list-style: none; padding-left: 1.4em; }
+.article-content ul > li { position: relative; }
+.article-content ul > li::before { content: ""; position: absolute; left: -1.05em; top: 0.66em; width: 0.42em; height: 0.42em; border-radius: 2px; background: var(--app-accent); }
 .article-content ol { list-style: decimal; padding-left: 1.5em; }
-.article-content li { margin: 0.4em 0; }
-.article-content blockquote { border-left: 3px solid var(--app-accent); padding-left: 1.1em; font-style: italic; color: var(--app-fg); }
-.article-content img { max-width: 100%; border-radius: 0.9rem; margin: 1.25em 0; }
-.article-content hr { border: 0; border-top: 1px solid var(--app-border); margin: 2em 0; }
+.article-content ol > li::marker { color: var(--app-accent-bright); font-weight: 800; }
+.article-content li { margin: 0.5em 0; }
+
+/* Elegant pull-blockquote */
+.article-content blockquote {
+  position: relative; margin: 1.7em 0; padding: 1.15em 1.4em 1.15em 2.7em;
+  border: 1px solid var(--app-border); border-left: 3px solid var(--app-accent);
+  border-radius: 0 1rem 1rem 0; background: color-mix(in srgb, var(--app-accent) 6%, transparent);
+  font-style: italic; font-size: 1.12rem; line-height: 1.62; color: var(--app-fg);
+}
+.article-content blockquote::before {
+  content: "\201C"; position: absolute; left: 0.5rem; top: 0.12em; font-size: 2.7rem; line-height: 1;
+  font-family: Georgia, "Times New Roman", serif; color: color-mix(in srgb, var(--app-accent) 55%, transparent);
+}
+.article-content blockquote p { color: inherit; }
+
+/* Images as framed figures */
+.article-content img { max-width: 100%; height: auto; border-radius: 1rem; border: 1px solid var(--app-border); box-shadow: 0 14px 44px rgba(0,0,0,0.38); margin: 1.7em auto; display: block; }
+.article-content figure { margin: 1.7em 0; }
+.article-content figure img { margin: 0 auto; }
+.article-content figcaption { margin-top: 0.65em; text-align: center; font-size: 0.82rem; color: var(--app-subtle); font-style: italic; }
+
+/* Centered gradient divider */
+.article-content hr { border: 0; height: 1px; margin: 2.6em auto; width: 62%; background: linear-gradient(90deg, transparent, var(--app-border), transparent); }
 .article-content pre { background: rgba(255,255,255,0.04); border: 1px solid var(--app-border); border-radius: 0.85rem; padding: 1em 1.1em; overflow-x: auto; font-size: 0.9rem; }
 .article-content code { background: rgba(255,255,255,0.08); border-radius: 0.3em; padding: 0.1em 0.35em; font-size: 0.9em; }
 .article-content pre code { background: none; padding: 0; }

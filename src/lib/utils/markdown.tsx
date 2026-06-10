@@ -22,6 +22,16 @@ function ensureHooks() {
       if (!YT_SRC.test(src)) el.parentNode?.removeChild(el)
     }
   })
+  // Make article images robust + fast: no-referrer dodges hotlink blocks (MAL
+  // CDN, catbox, etc.), lazy/async keeps long posts snappy.
+  DOMPurify.addHook("afterSanitizeAttributes", (node) => {
+    if (node.nodeName === "IMG") {
+      const el = node as Element
+      el.setAttribute("referrerpolicy", "no-referrer")
+      el.setAttribute("loading", "lazy")
+      el.setAttribute("decoding", "async")
+    }
+  })
 }
 
 export function sanitizeBlogHtml(html: string): string {
@@ -31,7 +41,7 @@ export function sanitizeBlogHtml(html: string): string {
     ADD_ATTR: [
       "allow", "allowfullscreen", "frameborder", "scrolling", "target", "rel", "start",
       "data-youtube-video", "data-link-preview", "data-url", "data-title", "data-description", "data-image", "data-site",
-      "colspan", "rowspan", "style",
+      "colspan", "rowspan", "style", "referrerpolicy", "loading", "decoding",
     ],
   })
 }

@@ -82,6 +82,21 @@ async function fetchTopAnimeIds(): Promise<number[]> {
   }
 }
 
+// Published blog posts — /blog/[slug]. Public, no auth; strong fresh-content
+// signal. Mirrors the anime fetcher; degrades to no blog routes on failure.
+async function fetchBlogSlugs(): Promise<Array<{ slug: string; lastModified?: string }>> {
+  try {
+    const res = await fetch(`${process.env.API_BASE ?? "http://localhost:4000"}/api/v1/blogs?limit=200`, { next: { revalidate: 3600 } })
+    if (!res.ok) return []
+    const data = await res.json() as { data?: Array<{ slug?: string; updatedAt?: string; publishedAt?: string }> }
+    return (data.data ?? [])
+      .filter((b): b is { slug: string; updatedAt?: string; publishedAt?: string } => Boolean(b.slug))
+      .map((b) => ({ slug: b.slug, lastModified: b.updatedAt ?? b.publishedAt }))
+  } catch {
+    return []
+  }
+}
+
 // Programmatic genre landing pages — /genres/[slug]. High long-tail volume
 // ("best action anime", "best isekai anime", …). One of the strongest
 // new-user acquisition surfaces.
@@ -116,7 +131,14 @@ function seasonRoutes(): MetadataRoute.Sitemap {
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const animeIds = await fetchTopAnimeIds()
+  const [animeIds, blogs] = await Promise.all([fetchTopAnimeIds(), fetchBlogSlugs()])
+
+  const blogRoutes: MetadataRoute.Sitemap = blogs.map((b) => ({
+    url:             `${BASE}/blog/${b.slug}`,
+    changeFrequency: "weekly",
+    priority:        0.7,
+    lastModified:    b.lastModified ? new Date(b.lastModified) : new Date(),
+  }))
 
   const animeRoutes: MetadataRoute.Sitemap = animeIds.map((malId) => ({
     url:             `${BASE}/anime/${malId}`,
@@ -138,6 +160,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...GENRE_ROUTES,
     ...STUDIO_ROUTES,
     ...seasonRoutes(),
+    ...blogRoutes,
     ...animeRoutes,
     ...discussRoutes,
   ]

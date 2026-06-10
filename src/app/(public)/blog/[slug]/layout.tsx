@@ -89,6 +89,17 @@ export default async function BlogSlugLayout({
 
   return (
     <>
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          itemListElement: [
+            { "@type": "ListItem", position: 1, name: "Home", item: SITE },
+            { "@type": "ListItem", position: 2, name: "The Chronicle", item: `${SITE}/blog` },
+            { "@type": "ListItem", position: 3, name: blog?.title ?? titleFromSlug(slug), item: `${SITE}/blog/${slug}` },
+          ],
+        }}
+      />
       {blog && (
         <JsonLd
           data={{

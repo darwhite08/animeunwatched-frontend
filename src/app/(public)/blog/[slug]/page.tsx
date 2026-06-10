@@ -15,6 +15,8 @@ import { useAuthStore } from "@/stores/auth.store"
 import { TranslateBar } from "@/components/blog/TranslateBar"
 import { ReaderFunnel } from "@/components/blog/ReaderFunnel"
 import { ReaderSidebar } from "@/components/blog/ReaderSidebar"
+import { ArticleTOC } from "@/components/blog/ArticleTOC"
+import { StickyJoinBar } from "@/components/blog/StickyJoinBar"
 
 /* ── Types ── */
 type BlogMeta = {
@@ -440,10 +442,29 @@ export default function BlogReaderPage({ params }: { params: Promise<{ slug: str
         </div>
       </div>
 
-      {/* Content area — article + sticky sidebar (≥lg) */}
-      <div className="max-w-6xl mx-auto px-6 pt-8">
-        <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_320px]">
-          <div className="min-w-0 space-y-10">
+      {/* Content area — TOC rail + article + secondary rail (research-backed) */}
+      <div className="max-w-7xl mx-auto px-6 pt-8">
+        <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_300px] xl:grid-cols-[210px_minmax(0,1fr)_300px]">
+
+          {/* Left rail — Table of Contents (xl+) */}
+          <aside className="hidden xl:block">
+            <div className="sticky top-24">
+              <ArticleTOC />
+            </div>
+          </aside>
+
+          {/* Article */}
+          <div className="min-w-0 space-y-8">
+
+            {/* Breadcrumbs — aids crawl + orientation */}
+            <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-subtle">
+              <Link href="/" className="hover:text-foreground">Home</Link>
+              <span className="text-border">/</span>
+              <Link href="/blog" className="hover:text-foreground">The Chronicle</Link>
+              <span className="text-border">/</span>
+              <span className="max-w-[40ch] truncate text-muted">{meta.title}</span>
+            </nav>
+
 
         {/* Author bar */}
         <motion.div
@@ -533,7 +554,7 @@ export default function BlogReaderPage({ params }: { params: Promise<{ slug: str
         <BlogComments slug={slug} />
           </div>
 
-          {/* Sticky sidebar — trending + sign-up CTA (fills the empty side space) */}
+          {/* Right rail — secondary modules only (right-rail blindness) */}
           <aside className="hidden lg:block">
             <div className="sticky top-24 space-y-6">
               <ReaderSidebar excludeSlug={slug} />
@@ -541,6 +562,9 @@ export default function BlogReaderPage({ params }: { params: Promise<{ slug: str
           </aside>
         </div>
       </div>
+
+      {/* Primary conversion: sticky bottom sign-up bar (logged-out) */}
+      <StickyJoinBar />
     </div>
   )
 }

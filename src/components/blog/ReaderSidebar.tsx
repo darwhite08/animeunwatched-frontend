@@ -2,20 +2,19 @@
 
 import { useEffect, useState } from "react"
 import Link from "next/link"
-import { Flame, ArrowRight, Star } from "lucide-react"
+import { Flame, Star } from "lucide-react"
 import { api } from "@/lib/api/client"
-import { useAuthStore } from "@/stores/auth.store"
 
 /**
- * Sticky sidebar for the blog reader (≥lg). Fills the wide empty side space with
- * a sign-up CTA (logged-out only) + trending anime + more articles, keeping the
- * conversion funnel in view the whole time a logged-out reader is scrolling.
+ * Right-rail modules for the blog reader (≥lg). Per the article-layout research,
+ * the right rail is for SECONDARY, low-graphics content only (right-rail
+ * blindness) — so it holds trending anime + more articles, NOT the primary
+ * sign-up CTA (that lives in the sticky bottom bar + end-of-article funnel).
  */
 type TrendAnime = { malId: number; title: string; titleEnglish: string | null; imageUrl: string | null; score: number | null }
 type BlogCard = { slug: string; title: string; author?: { displayName?: string; username?: string } | null }
 
 export function ReaderSidebar({ excludeSlug }: { excludeSlug?: string }) {
-  const isAuthenticated = useAuthStore((s) => s.isAuthenticated)
   const [anime, setAnime] = useState<TrendAnime[]>([])
   const [blogs, setBlogs] = useState<BlogCard[]>([])
 
@@ -28,27 +27,6 @@ export function ReaderSidebar({ excludeSlug }: { excludeSlug?: string }) {
 
   return (
     <div className="space-y-6 text-left">
-      {/* Sign-up CTA — logged-out only */}
-      {!isAuthenticated && (
-        <div className="overflow-hidden rounded-2xl border border-accent/30 bg-gradient-to-br from-accent/15 to-transparent p-5">
-          <p className="text-[9px] font-black uppercase tracking-[0.3em] text-accent-bright">Free forever</p>
-          <h3 className="mt-1.5 text-xl font-black uppercase italic leading-none tracking-tighter text-foreground">
-            Track. Rate.<br />Discover<span className="text-accent">.</span>
-          </h3>
-          <p className="mt-2 text-xs leading-relaxed text-muted">Build your watchlist, rate episodes, and join 12,000+ fans.</p>
-          <Link
-            href="/register"
-            className="mt-4 inline-flex w-full items-center justify-center gap-2 rounded-full px-4 py-2.5 text-[10px] font-black uppercase tracking-widest text-black transition-transform hover:scale-[1.02]"
-            style={{ background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))" }}
-          >
-            Get started <ArrowRight size={13} />
-          </Link>
-          <Link href="/login" className="mt-2 block text-center text-[10px] font-black uppercase tracking-widest text-subtle hover:text-foreground">
-            Log in
-          </Link>
-        </div>
-      )}
-
       {/* Trending anime */}
       {anime.length > 0 && (
         <div className="rounded-2xl border border-border bg-surface-2 p-4">

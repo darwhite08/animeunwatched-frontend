@@ -13,6 +13,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { api } from "@/lib/api/client"
 import { useAuthStore } from "@/stores/auth.store"
 import { TranslateBar } from "@/components/blog/TranslateBar"
+import { ReaderFunnel } from "@/components/blog/ReaderFunnel"
 
 /* ── Types ── */
 type BlogMeta = {
@@ -520,36 +521,8 @@ export default function BlogReaderPage({ params }: { params: Promise<{ slug: str
           </button>
         </div>
 
-        {/* More from this author */}
-        <div className="space-y-5">
-          <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-subtle">
-            More from {meta.author}
-          </h3>
-          <div className="grid sm:grid-cols-2 gap-5">
-            {RELATED_POSTS.map(rp => (
-              <Link
-                key={rp.slug}
-                href={`/blog/${rp.slug}`}
-                className="group block rounded-2xl overflow-hidden bg-surface-2 border border-border hover:border-accent/30 transition-all"
-              >
-                <div className={`h-28 bg-gradient-to-br ${rp.coverGradient} relative`}>
-                  <div className="absolute inset-0 bg-black/30" />
-                  <span className="absolute top-2 left-2 px-2 py-0.5 rounded-md bg-black/50 text-[9px] font-black uppercase tracking-widest text-muted">
-                    {rp.category}
-                  </span>
-                </div>
-                <div className="p-4">
-                  <p className="text-sm font-black uppercase italic tracking-tight text-foreground group-hover:text-accent-bright transition-colors line-clamp-2 leading-snug">
-                    {rp.title}
-                  </p>
-                  <p className="mt-1 text-[10px] text-subtle flex items-center gap-1">
-                    <Clock size={9} /> {rp.readTime} min read
-                  </p>
-                </div>
-              </Link>
-            ))}
-          </div>
-        </div>
+        {/* Trending content + sign-up funnel (real data; CTA for logged-out) */}
+        <ReaderFunnel excludeSlug={slug} />
 
         {/* Comments — real API */}
         <BlogComments slug={slug} />

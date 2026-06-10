@@ -26,7 +26,7 @@ export function Topbar() {
 
   return (
     <>
-      <header className="sticky top-0 z-40 flex h-14 items-center gap-3 border-b border-border bg-background/85 px-4 backdrop-blur">
+      <header className="sticky top-0 z-40 flex h-16 items-center gap-3 border-b border-white/[0.06] bg-gradient-to-b from-background/95 to-background/75 px-4 backdrop-blur-xl">
         {/* Mobile: hamburger + logo (sidebar is hidden <md) */}
         <button onClick={() => setMobileDrawer(true)} aria-label="Open menu" className="rounded-lg p-1.5 text-muted hover:text-foreground md:hidden">
           <Menu size={20} />
@@ -39,11 +39,11 @@ export function Topbar() {
         <button
           onClick={() => setSearchOpen(true)}
           aria-label="Search"
-          className="flex h-9 max-w-xs flex-1 items-center gap-2 rounded-xl border border-border px-3 text-muted hover:border-border-hover hover:text-foreground md:max-w-sm"
+          className="group flex h-10 max-w-xs flex-1 items-center gap-2.5 rounded-full border border-white/[0.07] bg-white/[0.03] px-4 text-muted shadow-[inset_0_1px_0_rgba(255,255,255,0.03)] transition-all hover:border-white/15 hover:bg-white/[0.05] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40 md:max-w-md"
         >
-          <Search size={16} />
+          <Search size={16} className="text-subtle transition-colors group-hover:text-accent-bright" />
           <span className="truncate text-sm">Search anime, users, clubs…</span>
-          <kbd className="ml-auto hidden rounded border border-border px-1.5 text-[10px] text-muted sm:inline">⌘K</kbd>
+          <kbd className="ml-auto hidden items-center rounded-md border border-white/10 bg-white/5 px-1.5 py-0.5 text-[10px] font-bold tracking-wide text-subtle sm:inline-flex">⌘K</kbd>
         </button>
 
         {/* Right utility cluster */}

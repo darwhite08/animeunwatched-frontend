@@ -64,10 +64,15 @@ export function SidebarFlyoutItem({
   return (
     <div ref={ref} className="relative" onMouseEnter={openFlyout} onMouseLeave={scheduleClose}>
       <div
-        className={`flex items-center rounded-xl text-sm font-bold ${
-          active ? "bg-accent/15 text-accent-bright" : "text-muted hover:bg-white/5 hover:text-foreground"
+        className={`relative flex items-center rounded-xl text-sm font-bold transition-all ${
+          active
+            ? "bg-gradient-to-r from-accent/20 to-accent/[0.06] text-accent-bright shadow-[inset_0_0_0_1px_color-mix(in_srgb,var(--app-accent)_25%,transparent)]"
+            : "text-muted hover:bg-white/5 hover:text-foreground"
         }`}
       >
+        {active && (
+          <span aria-hidden className="absolute left-0 top-1/2 h-5 w-1 -translate-y-1/2 rounded-r-full bg-accent-bright shadow-[0_0_10px_color-mix(in_srgb,var(--app-accent)_70%,transparent)]" />
+        )}
         <Link
           href={href}
           aria-current={active ? "page" : undefined}

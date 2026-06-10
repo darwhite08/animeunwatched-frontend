@@ -26,11 +26,11 @@ export function AvatarMenu() {
         aria-label="Account menu"
         aria-haspopup="menu"
         aria-expanded={open}
-        className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-full border border-border bg-accent text-sm font-black text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60"
+        className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-accent-bright to-accent text-sm font-black text-white ring-2 ring-white/10 transition-all hover:ring-accent/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60"
       >
         {user?.avatarUrl ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={user.avatarUrl} alt="" className="h-full w-full object-cover" />
+          <img src={user.avatarUrl} alt="" referrerPolicy="no-referrer" className="h-full w-full object-cover" />
         ) : (
           name[0]?.toUpperCase()
         )}

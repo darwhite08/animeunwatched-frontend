@@ -27,9 +27,9 @@ export function CreateButton() {
         onClick={() => setOpen((o) => !o)}
         aria-haspopup="menu"
         aria-expanded={open}
-        className="flex items-center gap-1.5 rounded-xl bg-accent px-3.5 py-2 text-xs font-black uppercase tracking-widest text-white hover:bg-accent-bright focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60"
+        className="flex items-center gap-1.5 rounded-full bg-gradient-to-r from-accent-bright to-accent px-4 py-2.5 text-xs font-black uppercase tracking-widest text-black shadow-[0_2px_16px_color-mix(in_srgb,var(--app-accent)_45%,transparent)] transition-transform hover:scale-[1.03] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60"
       >
-        <Plus size={15} /> <span className="hidden sm:inline">Create</span>
+        <Plus size={15} strokeWidth={3} /> <span className="hidden sm:inline">Create</span>
       </button>
       {open && (
         <div role="menu" className="absolute right-0 top-11 z-50 w-44 rounded-2xl border border-border bg-background p-1.5 shadow-2xl">

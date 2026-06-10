@@ -85,6 +85,12 @@ const nextConfig: NextConfig = {
         source: "/(.*)",
         headers: securityHeaders,
       },
+      {
+        // Never cache the service worker itself — otherwise the browser keeps
+        // an old worker (and its stale caching strategy) and never updates.
+        source: "/sw.js",
+        headers: [{ key: "Cache-Control", value: "no-cache, no-store, must-revalidate" }],
+      },
     ];
   },
   // Creator Studio is a gated subdomain for eligible creators — it is NOT part

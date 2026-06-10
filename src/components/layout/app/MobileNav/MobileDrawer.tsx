@@ -1,5 +1,6 @@
 "use client"
 
+import { useEffect } from "react"
 import Link from "next/link"
 import { X } from "lucide-react"
 import { useAuthStore } from "@/stores/auth.store"
@@ -23,6 +24,16 @@ export function MobileDrawer() {
   const user = useAuthStore((s) => s.user)
   const slug = user?.slug
 
+  // Close on Escape + lock body scroll while the drawer is open.
+  useEffect(() => {
+    if (!open) return
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") close() }
+    document.addEventListener("keydown", onKey)
+    const prev = document.body.style.overflow
+    document.body.style.overflow = "hidden"
+    return () => { document.removeEventListener("keydown", onKey); document.body.style.overflow = prev }
+  }, [open])
+
   if (!open) return null
 
   const Section = ({ title, links }: { title: string; links: FlyoutLink[] }) => (
@@ -41,7 +52,7 @@ export function MobileDrawer() {
   )
 
   return (
-    <div className="fixed inset-0 z-[60] md:hidden" role="dialog" aria-label="Navigation menu">
+    <div className="fixed inset-0 z-[60] md:hidden" role="dialog" aria-modal="true" aria-label="Navigation menu">
       <div className="absolute inset-0 bg-black/60" onClick={close} />
       <nav aria-label="Primary" className="absolute left-0 top-0 flex h-full w-72 flex-col border-r border-border bg-background px-3 py-4">
         <div className="mb-6 flex items-center justify-between px-1">

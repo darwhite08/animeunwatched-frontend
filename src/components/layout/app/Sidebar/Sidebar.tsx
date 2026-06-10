@@ -19,7 +19,7 @@ export function Sidebar() {
   return (
     <nav
       aria-label="Primary"
-      className={`fixed left-0 top-0 z-40 hidden h-screen flex-col border-r border-border bg-background px-3 py-4 transition-[width] duration-200 md:flex ${
+      className={`fixed left-0 top-0 z-40 hidden h-screen flex-col border-r border-border bg-background px-3 py-4 transition-[width] duration-200 motion-reduce:transition-none md:flex ${
         collapsed ? "w-16" : "w-60"
       }`}
     >

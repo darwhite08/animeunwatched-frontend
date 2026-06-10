@@ -14,6 +14,7 @@ import { api } from "@/lib/api/client"
 import { useAuthStore } from "@/stores/auth.store"
 import { TranslateBar } from "@/components/blog/TranslateBar"
 import { ReaderFunnel } from "@/components/blog/ReaderFunnel"
+import { ReaderSidebar } from "@/components/blog/ReaderSidebar"
 
 /* ── Types ── */
 type BlogMeta = {
@@ -439,8 +440,10 @@ export default function BlogReaderPage({ params }: { params: Promise<{ slug: str
         </div>
       </div>
 
-      {/* Content area */}
-      <div className="max-w-4xl mx-auto px-6 pt-8 space-y-10">
+      {/* Content area — article + sticky sidebar (≥lg) */}
+      <div className="max-w-6xl mx-auto px-6 pt-8">
+        <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_320px]">
+          <div className="min-w-0 space-y-10">
 
         {/* Author bar */}
         <motion.div
@@ -521,12 +524,22 @@ export default function BlogReaderPage({ params }: { params: Promise<{ slug: str
           </button>
         </div>
 
-        {/* Trending content + sign-up funnel (real data; CTA for logged-out) */}
-        <ReaderFunnel excludeSlug={slug} />
+        {/* Trending + sign-up funnel — mobile/tablet only (sidebar covers ≥lg) */}
+        <div className="lg:hidden">
+          <ReaderFunnel excludeSlug={slug} />
+        </div>
 
         {/* Comments — real API */}
         <BlogComments slug={slug} />
+          </div>
 
+          {/* Sticky sidebar — trending + sign-up CTA (fills the empty side space) */}
+          <aside className="hidden lg:block">
+            <div className="sticky top-24 space-y-6">
+              <ReaderSidebar excludeSlug={slug} />
+            </div>
+          </aside>
+        </div>
       </div>
     </div>
   )

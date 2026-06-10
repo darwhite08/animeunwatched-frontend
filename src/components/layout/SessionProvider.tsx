@@ -45,7 +45,11 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
       })
       .then(async (res) => {
         if (!res?.ok) {
-          setSessionReady()   // refresh succeeded but /me failed
+          // Refresh succeeded but /me failed → DON'T leave isAuthenticated=true
+          // with user=null (that deadlocks the (user) ↔ (auth) layouts into a
+          // blank /login loop). Treat as unauthenticated and let login render.
+          clear()
+          setSessionReady()
           return
         }
         const { user } = await res.json()

@@ -9,7 +9,7 @@
  *   - Navigation (HTML pages): network-first with offline fallback page
  */
 
-const CACHE_NAME = "kaiveron-v3";
+const CACHE_NAME = "kaiveron-v4";
 const OFFLINE_URL = "/offline.html";
 
 const STATIC_ASSETS = [
@@ -50,9 +50,11 @@ self.addEventListener("fetch", (event) => {
   if (request.method !== "GET") return;
   if (!url.origin.startsWith(self.location.origin) && !url.hostname.includes("fonts.g")) return;
 
-  // API calls → network-first
+  // API / auth calls → never let the SW touch them. Intercepting authenticated
+  // requests (esp. /api/v1/auth/*) can drop the Authorization header or serve a
+  // cached response, breaking the session (isAuthenticated=true but user=null).
+  // Pass straight through to the network/browser.
   if (url.pathname.startsWith("/api/")) {
-    event.respondWith(networkFirst(request));
     return;
   }
 

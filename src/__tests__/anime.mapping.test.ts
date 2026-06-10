@@ -47,6 +47,7 @@ const mockDTO: AnimeDTO = {
   score: 8.9,
   imageUrl: "https://cdn.myanimelist.net/one-piece.jpg",
   trailerUrl: null,
+  trailerYoutubeId: null,
   source: "Manga",
   studios: ["Toei Animation"],
   genres: ["Action", "Adventure", "Fantasy"],

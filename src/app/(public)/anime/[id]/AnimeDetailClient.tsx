@@ -112,6 +112,17 @@ function AnimeDetail({ anime, rawAnime }: { anime: Anime; rawAnime?: AnimeDTO })
   const { push } = useToast()
   const { data: reviewsData } = useAnimeReviews(anime.id)
   const malId = parseInt(anime.id, 10)
+  // Resolve a REAL YouTube trailer id: prefer the backend's clean
+  // trailerYoutubeId (what the /trailers gallery uses), else parse a
+  // trailerUrl (watch / youtu.be / embed forms). No real id → no trailer.
+  // (Previously this fell back to a hardcoded Rickroll video.)
+  const trailerYoutubeId = (() => {
+    if (rawAnime?.trailerYoutubeId) return rawAnime.trailerYoutubeId
+    const url = rawAnime?.trailerUrl
+    if (!url) return null
+    const m = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/)
+    return m ? m[1] : null
+  })()
   // Realtime: live updates for "X watching" counter + new reviews
   useLiveAnime(isNaN(malId) ? null : malId)
   const { data: similarData } = useQuery({
@@ -268,9 +279,9 @@ function AnimeDetail({ anime, rawAnime }: { anime: Anime; rawAnime?: AnimeDTO })
 
           {/* Actions */}
           <div className="ml-auto flex items-center gap-3">
-            {rawAnime?.trailerUrl && (
+            {trailerYoutubeId && (
               <a
-                href={rawAnime.trailerUrl}
+                href={rawAnime?.trailerUrl ?? `https://www.youtube.com/watch?v=${trailerYoutubeId}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 px-4 py-3 rounded-2xl border border-rose-500/30 bg-rose-500/10 text-rose-400 hover:bg-rose-500/20 hover:border-rose-500/50 transition-all text-xs font-black uppercase tracking-widest"
@@ -363,24 +374,22 @@ function AnimeDetail({ anime, rawAnime }: { anime: Anime; rawAnime?: AnimeDTO })
             {/* Trailer */}
             <div>
               <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-subtle mb-4">Trailer</h2>
-              <div className="relative w-full aspect-video rounded-2xl overflow-hidden bg-black/40 border border-border">
-                <iframe
-                  src={(() => {
-                    const url = rawAnime?.trailerUrl
-                    if (!url) return "https://www.youtube.com/embed/dQw4w9WgXcQ"
-                    // convert watch?v= → embed/
-                    const m = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([A-Za-z0-9_-]{11})/)
-                    return m ? `https://www.youtube.com/embed/${m[1]}` : "https://www.youtube.com/embed/dQw4w9WgXcQ"
-                  })()}
-                  title={`${anime.title} — Trailer`}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  className="absolute inset-0 w-full h-full"
-                  loading="lazy"
-                />
-              </div>
-              {!rawAnime?.trailerUrl && (
-                <p className="text-[9px] text-subtle mt-2 font-mono">Placeholder trailer — official trailer coming soon</p>
+              {trailerYoutubeId ? (
+                <div className="relative w-full aspect-video rounded-2xl overflow-hidden bg-black/40 border border-border">
+                  <iframe
+                    src={`https://www.youtube-nocookie.com/embed/${trailerYoutubeId}?rel=0`}
+                    title={`${anime.title} — Trailer`}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                    className="absolute inset-0 w-full h-full"
+                    loading="lazy"
+                  />
+                </div>
+              ) : (
+                <div className="flex w-full aspect-video flex-col items-center justify-center gap-2 rounded-2xl border border-border bg-black/40 text-center">
+                  <Play size={28} className="text-subtle" />
+                  <p className="text-xs font-bold text-muted">No trailer available yet</p>
+                </div>
               )}
             </div>
 

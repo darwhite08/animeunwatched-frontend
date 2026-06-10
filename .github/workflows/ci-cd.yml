@@ -39,11 +39,15 @@ jobs:
           node-version: '20'
           cache: 'npm'
       - run: npm install -g vercel@latest
-      - run: vercel pull --yes --environment=production --token=${{ secrets.VERCEL_TOKEN }}
-      - run: vercel build --prod --token=${{ secrets.VERCEL_TOKEN }}
+      # Build + deploy on Vercel's own infrastructure (NOT the GitHub runner).
+      # Building locally with `vercel build` timed out the ISR-exported
+      # /genres/[slug] + /studios/[slug] pages (>60s data fetch from the API)
+      # because the runner's path to the API is slow. A remote `vercel deploy`
+      # uses Vercel's build environment, which reaches the API fast — same path
+      # as a manual `vercel deploy --prod`.
       - name: Deploy
         id: deploy
         run: |
-          URL=$(vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }})
+          URL=$(vercel deploy --prod --yes --token=${{ secrets.VERCEL_TOKEN }})
           echo "url=$URL" >> $GITHUB_OUTPUT
           echo "✅ Live at: $URL"

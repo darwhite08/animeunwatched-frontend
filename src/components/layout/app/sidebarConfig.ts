@@ -53,7 +53,6 @@ export const HOME_FLYOUT: FlyoutLink[] = [
   { label: "Feed",     desc: "Latest posts",       path: "/community",          icon: Newspaper },
   { label: "Trending", desc: "What's hot right now", path: "/community/trending", icon: TrendUp },
   { label: "Reviews",  desc: "Anime reviews",      path: "/reviews",            icon: Star },
-  { label: "Blog",     desc: "Long-form articles", path: "/blog",               icon: Article },
   { label: "Polls",    desc: "Vote & debate",      path: "/poll",               icon: ChartBar },
 ]
 
@@ -83,6 +82,7 @@ export const NAV_ITEMS: NavItem[] = [
   { key: "anime",       label: "Anime",       path: "/bestanimelist", icon: Television,     mobile: true, flyout: ANIME_FLYOUT },
   { key: "discover",    label: "Discover",    path: "/ai-discover",   icon: Sparkle },
   { key: "clubs",       label: "Clubs",       path: "/clubs",         icon: UsersThree },
+  { key: "blog",        label: "Blog",        path: "/blog",          icon: Article },
   { key: "leaderboard", label: "Leaderboard", path: "/leaderboard",   icon: Trophy },
   { key: "chat",        label: "Chat",        path: "/chat",          icon: ChatCircleText, badgeKey: "unreadDms", mobile: true },
   { key: "library",     label: "Library",     path: "watchlist",      icon: Bookmarks,      flyout: LIBRARY_FLYOUT },

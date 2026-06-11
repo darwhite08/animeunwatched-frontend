@@ -10,6 +10,10 @@ import type { Paginated } from "@/lib/api/types"
 import { useCreateAnimeThread } from "@/hooks/useThreads"
 import { useAuthStore } from "@/stores/auth.store"
 import { getSocket } from "@/lib/socket"
+import { Avatar } from "@/components/ui/Avatar"
+import { VerifiedBadge } from "@/components/social/VerifiedBadge"
+
+type VerifiedKind = "USER" | "CREATOR" | "STUDIO" | null | undefined
 
 type ApiThread = {
   id: string
@@ -17,7 +21,7 @@ type ApiThread = {
   content: string
   isPinned: boolean
   createdAt: string
-  author: { username: string; displayName: string }
+  author: { username: string; displayName: string; avatarUrl: string | null; verifiedKind?: VerifiedKind }
   _count?: { replies: number }
 }
 
@@ -25,6 +29,8 @@ type Thread = {
   id: string
   title: string
   author: string
+  authorAvatar: string | null
+  authorVerified: VerifiedKind
   replies: number
   isPinned: boolean
   lastActivity: string
@@ -111,6 +117,8 @@ export function AnimeThreadsSection({ animeId, animeTitle }: AnimeThreadsSection
     id: t.id,
     title: t.title,
     author: t.author?.displayName ?? t.author?.username ?? "Anonymous",
+    authorAvatar: t.author?.avatarUrl ?? null,
+    authorVerified: t.author?.verifiedKind,
     replies: t._count?.replies ?? 0,
     isPinned: t.isPinned,
     lastActivity: relativeTime(t.createdAt),
@@ -260,9 +268,12 @@ export function AnimeThreadsSection({ animeId, animeTitle }: AnimeThreadsSection
                     </span>
                   )}
                 </div>
-                <p className="text-[10px] text-subtle mt-0.5">
-                  by <span className="text-muted">{thread.author}</span> · {thread.lastActivity}
-                </p>
+                <div className="flex items-center gap-1.5 mt-1 text-[10px] text-subtle">
+                  <Avatar src={thread.authorAvatar} name={thread.author} size={16} />
+                  <span className="text-muted font-bold">{thread.author}</span>
+                  <VerifiedBadge kind={thread.authorVerified} size={11} />
+                  <span>· {thread.lastActivity}</span>
+                </div>
               </div>
 
               {/* Stats */}

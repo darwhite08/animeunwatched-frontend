@@ -6,22 +6,12 @@ import { ChevronRight, Eye, EyeOff, AlertTriangle, CheckCircle2, Loader2 } from 
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { useToast } from "@/stores/toast.store"
+import { useClub } from "@/hooks/useClubs"
+import { useCreateClubThread } from "@/hooks/useThreads"
 
-/* ── Club name helper (mirrors club detail page) ── */
-const CLUB_NAMES: Record<string, string> = {
-  "attack-on-titan-discussion": "Attack on Titan Discussion",
-  "shonen-power-rankings": "Shonen Power Rankings",
-  "frieren-fan-club": "Frieren Fan Club",
-  "mappa-watch": "MAPPA Watch",
-  "anime-theory-lab": "Anime Theory Lab",
-  "seasonal-picks": "Seasonal Picks",
-}
-
-function clubName(slug: string): string {
-  return (
-    CLUB_NAMES[slug] ??
-    slug.split("-").map((w) => w[0]?.toUpperCase() + w.slice(1)).join(" ")
-  )
+/* ── Humanize a slug for display until the real club name loads ── */
+function humanizeSlug(slug: string): string {
+  return slug.split("-").map((w) => (w[0]?.toUpperCase() ?? "") + w.slice(1)).join(" ")
 }
 
 /* ── Word / char counts ── */
@@ -109,14 +99,16 @@ export default function CreateThreadPage({
   const { slug } = use(params)
   const router   = useRouter()
   const { push } = useToast()
-  const name     = clubName(slug)
+  const { data: clubData } = useClub(slug)
+  const createThread = useCreateClubThread(slug)
+  const name     = clubData?.club?.name ?? humanizeSlug(slug)
 
   const [title, setTitle]       = useState("")
   const [content, setContent]   = useState("")
   const [tagsRaw, setTagsRaw]   = useState("")
   const [spoiler, setSpoiler]   = useState(false)
   const [preview, setPreview]   = useState(false)
-  const [submitting, setSubmitting] = useState(false)
+  const submitting = createThread.isPending
 
   const words  = useMemo(() => wordCount(content), [content])
   const chars  = content.length
@@ -131,10 +123,18 @@ export default function CreateThreadPage({
 
   const handleSubmit = async () => {
     if (!canSubmit) return
-    setSubmitting(true)
-    await new Promise((r) => setTimeout(r, 900))
-    push("Thread posted!", "success")
-    router.push(`/clubs/${slug}`)
+    // Spoiler threads get a [SPOILER] title prefix so the convention is visible
+    // everywhere a thread title is shown (club tab, thread page, anime page).
+    const finalTitle = spoiler ? `[SPOILER] ${title.trim()}` : title.trim()
+    // Tags are appended to the body since the create endpoint stores title+content.
+    const body = tags.length > 0 ? `${content.trim()}\n\n${tags.map((t) => `#${t}`).join(" ")}` : content.trim()
+    try {
+      await createThread.mutateAsync({ title: finalTitle, content: body })
+      push("Thread posted!", "success")
+      router.push(`/clubs/${slug}`)
+    } catch {
+      push("Couldn't post the thread. Try again.", "error")
+    }
   }
 
   return (

@@ -10,7 +10,6 @@ import {
   ArrowLeft,
   Crown,
   Shield,
-  TrendingUp,
   Clock,
   ChevronRight,
   CalendarDays,
@@ -21,6 +20,7 @@ import {
   CheckCircle2,
   Timer,
   X,
+  Loader2,
 } from "lucide-react"
 import { useToast } from "@/stores/toast.store"
 import { useClub, useJoinClub, useClubMembers } from "@/hooks/useClubs"
@@ -64,7 +64,6 @@ type ThreadEntry = {
   author: string
   replyCount: number
   lastActivity: string
-  isTrending: boolean
 }
 
 type MemberEntry = {
@@ -73,139 +72,6 @@ type MemberEntry = {
   avatar: string
   role: "USER" | "MOD" | "ADMIN"
 }
-
-type ClubData = {
-  slug: string
-  name: string
-  description: string
-  memberCount: number
-  threadCount: number
-  category: string
-  coverGradient: string
-  rules: string[]
-  createdAt: string
-  owner: string
-  isJoined: boolean
-}
-
-/* ── Mock factory ── */
-const CLUB_OVERRIDES: Record<string, Partial<ClubData>> = {
-  "attack-on-titan-discussion": {
-    name: "Attack on Titan Discussion",
-    description:
-      "Deep dives into lore, symbolism, and the philosophical questions AoT poses. Rumbling theories welcome. Spoilers allowed — tag them.",
-    memberCount: 641,
-    threadCount: 184,
-    category: "Series Discussion",
-    coverGradient: "from-red-900 via-red-950 to-black",
-    rules: [
-      "Use spoiler tags for anything past episode 50.",
-      "No toxicity — debate the ideas, not the person.",
-      "Stay on topic: AoT and related themes only.",
-    ],
-    createdAt: "January 2024",
-    owner: "TitanSlayer_X",
-  },
-  "shonen-power-rankings": {
-    name: "Shonen Power Rankings",
-    description:
-      "The definitive space for ranking fights, arcs, and power systems. Scaling debates done right — with receipts.",
-    memberCount: 1204,
-    threadCount: 512,
-    category: "Rankings",
-    coverGradient: "from-orange-900 via-orange-950 to-black",
-    rules: [
-      "Back your claims with source material.",
-      "Feats only — no statements without context.",
-      "Respect differing interpretations.",
-    ],
-    createdAt: "November 2023",
-    owner: "PowerCalc_9000",
-  },
-}
-
-function buildClubData(slug: string): ClubData {
-  const override = CLUB_OVERRIDES[slug] ?? {}
-  return {
-    slug,
-    name: override.name ?? slug.split("-").map((w) => w[0]?.toUpperCase() + w.slice(1)).join(" "),
-    description:
-      override.description ??
-      "A community club dedicated to sharing anime knowledge, discussion, and recommendations.",
-    memberCount: override.memberCount ?? 120,
-    threadCount: override.threadCount ?? 34,
-    category: override.category ?? "General",
-    coverGradient: override.coverGradient ?? "from-indigo-900 via-indigo-950 to-black",
-    rules: override.rules ?? [
-      "Be respectful to all members.",
-      "No spam or self-promotion.",
-      "Keep discussions anime-related.",
-    ],
-    createdAt: override.createdAt ?? "March 2024",
-    owner: override.owner ?? "ClubFounder",
-    isJoined: false,
-  }
-}
-
-const MOCK_THREADS: ThreadEntry[] = [
-  {
-    id: "t1",
-    title: "Who had the best character arc across all seasons?",
-    author: "Otaku_Arch",
-    replyCount: 48,
-    lastActivity: "2h ago",
-    isTrending: true,
-  },
-  {
-    id: "t2",
-    title: "Unpopular opinion thread — let's hear your hot takes",
-    author: "ShadowWatcher",
-    replyCount: 93,
-    lastActivity: "4h ago",
-    isTrending: true,
-  },
-  {
-    id: "t3",
-    title: "Breaking down the symbolism in the final arc",
-    author: "NeuralBot_X",
-    replyCount: 31,
-    lastActivity: "1d ago",
-    isTrending: false,
-  },
-  {
-    id: "t4",
-    title: "Animation quality comparison: 2013 vs 2023",
-    author: "FrameRate_Fan",
-    replyCount: 22,
-    lastActivity: "2d ago",
-    isTrending: false,
-  },
-  {
-    id: "t5",
-    title: "Manga readers — how did you react to the ending?",
-    author: "VoidSeeker",
-    replyCount: 67,
-    lastActivity: "3d ago",
-    isTrending: false,
-  },
-  {
-    id: "t6",
-    title: "Best OST moments? Compile your favourites",
-    author: "Cipher_Ronin",
-    replyCount: 15,
-    lastActivity: "5d ago",
-    isTrending: false,
-  },
-]
-
-const MOCK_MEMBERS: MemberEntry[] = [
-  { id: "m1", username: "TitanSlayer_X", avatar: "T", role: "ADMIN" },
-  { id: "m2", username: "Otaku_Arch",    avatar: "O", role: "MOD"   },
-  { id: "m3", username: "ShadowWatcher", avatar: "S", role: "MOD"   },
-  { id: "m4", username: "NeuralBot_X",   avatar: "N", role: "USER"  },
-  { id: "m5", username: "VoidSeeker",    avatar: "V", role: "USER"  },
-  { id: "m6", username: "Cipher_Ronin",  avatar: "C", role: "USER"  },
-]
 
 const ROLE_STYLES: Record<MemberEntry["role"], string> = {
   ADMIN: "bg-accent/15 border-accent/30 text-accent-bright",
@@ -219,34 +85,13 @@ const ROLE_ICONS: Record<MemberEntry["role"], typeof Crown> = {
   USER:  Users,
 }
 
-const MOCK_CHALLENGES: Challenge[] = [
-  {
-    id: "c1",
-    threadId: "t-challenge-1",
-    animeTitle: "Fullmetal Alchemist: Brotherhood",
-    malId: 5114,
-    imageUrl: "https://cdn.myanimelist.net/images/anime/1223/96541.jpg",
-    description: "Watch FMA:B and discuss the themes of equivalent exchange in our threads.",
-    deadline: new Date(Date.now() + 12 * 24 * 3600 * 1000).toISOString(),
-    prize: "Legendary badge + 500 XP",
-    createdAt: new Date(Date.now() - 2 * 86400000).toISOString(),
-    authorName: "TitanSlayer_X",
-    replyCount: 24,
-  },
-  {
-    id: "c2",
-    threadId: "t-challenge-2",
-    animeTitle: "Vinland Saga",
-    malId: 37521,
-    imageUrl: "https://cdn.myanimelist.net/images/anime/1170/124312.jpg",
-    description: "Experience Thorfinn's journey. Season 1 mandatory, Season 2 recommended.",
-    deadline: new Date(Date.now() + 28 * 24 * 3600 * 1000).toISOString(),
-    prize: "Viking badge",
-    createdAt: new Date(Date.now() - 5 * 86400000).toISOString(),
-    authorName: "PowerCalc_9000",
-    replyCount: 11,
-  },
-]
+function relativeTime(iso: string): string {
+  const d = Date.now() - new Date(iso).getTime()
+  if (d < 60000) return "just now"
+  if (d < 3600000) return `${Math.floor(d / 60000)}m ago`
+  if (d < 86400000) return `${Math.floor(d / 3600000)}h ago`
+  return `${Math.floor(d / 86400000)}d ago`
+}
 
 function parseChallenge(thread: { id: string; title: string; content: string; author?: { displayName?: string; username?: string } | null; _count?: { replies: number } | null; createdAt: string }): Challenge | null {
   if (!thread.title.startsWith("[CHALLENGE]")) return null
@@ -440,7 +285,6 @@ function CreateChallengeModal({ slug, onClose }: { slug: string; onClose: () => 
               type="date"
               value={deadline}
               onChange={e => setDeadline(e.target.value)}
-              min={new Date().toISOString().split("T")[0]}
               className="w-full px-4 py-2.5 rounded-xl bg-surface border border-border text-sm text-foreground focus:outline-none focus:border-accent/40 transition-all"
               style={{ colorScheme: "dark" }}
             />
@@ -480,62 +324,109 @@ export default function ClubDetailPage({
   const { slug } = use(params)
   const { push } = useToast()
   const authUser = useAuthStore(s => s.user)
-  const { data: clubData } = useClub(slug)
+  const { data: clubData, isLoading: clubLoading, isError: clubError } = useClub(slug)
   const { data: threadsData } = useClubThreads(slug)
-  // `useCreateReply(threadId)` bakes threadId into the URL at hook-call time
-  // so we can't loop it per challenge. Each Accept click posts the "I'm in"
-  // reply directly via the API client — same endpoint, no hook-rules violation.
-
-  const [acceptedChallenges, setAcceptedChallenges] = useState<Set<string>>(new Set())
-  const [showCreateChallenge, setShowCreateChallenge] = useState(false)
-
-  const allThreads = threadsData?.data ?? []
-  const displayThreads = allThreads.filter(t => !t.title.startsWith("[CHALLENGE]")).length > 0
-    ? allThreads.filter(t => !t.title.startsWith("[CHALLENGE]")).map(t => ({
-        id: t.id as unknown as number,
-        title: t.title,
-        excerpt: t.content.slice(0, 120) + (t.content.length > 120 ? "…" : ""),
-        author: t.author?.displayName ?? t.author?.username ?? "Anonymous",
-        avatar: (t.author?.displayName ?? t.author?.username ?? "?")[0].toUpperCase(),
-        replies: t._count?.replies ?? 0, views: 0,
-        time: (() => { const d = Date.now() - new Date(t.createdAt).getTime(); return d < 86400000 ? `${Math.floor(d/3600000)}h ago` : `${Math.floor(d/86400000)}d ago` })(),
-        isPinned: t.isPinned, tags: [],
-      }))
-    : MOCK_THREADS
-
-  // Parse real challenges from threads, fall back to mock
-  const realChallenges = useMemo(
-    () => allThreads.map(parseChallenge).filter((c): c is Challenge => c !== null),
-    [allThreads]
-  )
-  const challenges: Challenge[] = realChallenges.length > 0 ? realChallenges : MOCK_CHALLENGES
-
   const { data: membersData } = useClubMembers(slug)
   const joinMut = useJoinClub(slug)
 
-  const apiClub = clubData?.club
-  const [clubState] = useState<ClubData>(() => buildClubData(slug))
+  const [acceptedChallenges, setAcceptedChallenges] = useState<Set<string>>(new Set())
+  const [showCreateChallenge, setShowCreateChallenge] = useState(false)
   const [activeTab, setActiveTab] = useState<ClubTab>("threads")
   const [joined, setJoined] = useState(false)
   const [onboardDismissed, setOnboardDismissed] = useState(false)
-  const isMember = !!apiClub?.isMember || joined
-  const isAdmin = apiClub?.myRole === "ADMIN"
-  const showOnboarding = !!apiClub?.isMember && !!apiClub?.needsOnboarding && !onboardDismissed
 
-  // Merge real data into club state
-  const club: ClubData = apiClub ? {
-    ...clubState,
-    name: apiClub.name,
+  // Real challenges parsed out of the thread list (a challenge is a thread whose
+  // title is prefixed [CHALLENGE] with a JSON body). No mock fallback.
+  const challenges = useMemo(
+    () => (threadsData?.data ?? []).map(parseChallenge).filter((c): c is Challenge => c !== null),
+    [threadsData]
+  )
+
+  const apiClub = clubData?.club
+
+  // ── Loading ──
+  if (clubLoading) {
+    return (
+      <div className="min-h-screen bg-background text-foreground flex items-center justify-center">
+        <Loader2 size={28} className="animate-spin text-subtle" />
+      </div>
+    )
+  }
+
+  // ── Not found — this slug has no real club. Never fabricate one. ──
+  if (clubError || !apiClub) {
+    return (
+      <div className="min-h-screen bg-background text-foreground flex flex-col items-center justify-center px-6 text-center">
+        <div className="h-20 w-20 rounded-3xl bg-surface border border-border flex items-center justify-center mb-5">
+          <Users size={28} className="text-subtle" />
+        </div>
+        <h1 className="text-2xl font-black uppercase italic tracking-tight text-foreground mb-2">Club not found</h1>
+        <p className="text-sm text-muted max-w-sm mb-6">
+          There&apos;s no club at <span className="font-bold text-foreground">/{slug}</span>. It may have been removed, or the link is out of date.
+        </p>
+        <div className="flex items-center gap-3">
+          <Link
+            href="/clubs"
+            className="px-5 py-2.5 rounded-xl bg-surface border border-border text-[10px] font-black uppercase tracking-widest text-muted hover:text-foreground hover:border-border transition-all"
+          >
+            Browse Clubs
+          </Link>
+          <Link
+            href="/clubs/new"
+            className="px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest text-black transition-all"
+            style={{ background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))" }}
+          >
+            Create a Club
+          </Link>
+        </div>
+      </div>
+    )
+  }
+
+  // ── Real club — every value below comes from the API. ──
+  const isMember = !!apiClub.isMember || joined
+  const isAdmin = apiClub.myRole === "ADMIN"
+  const showOnboarding = !!apiClub.isMember && !!apiClub.needsOnboarding && !onboardDismissed
+
+  const rules = (apiClub.rules ?? "").split("\n").map(r => r.trim()).filter(Boolean)
+  const club = {
     slug: apiClub.slug,
-    description: apiClub.description ?? clubState.description,
-    memberCount: apiClub._count?.members ?? clubState.memberCount,
-    threadCount: apiClub._count?.threads ?? clubState.threadCount,
-    isJoined: joined,
-  } : clubState
+    name: apiClub.name,
+    description: apiClub.description?.trim() || "A community club for anime fans.",
+    memberCount: apiClub._count?.members ?? 0,
+    threadCount: apiClub._count?.threads ?? 0,
+    category: apiClub.category?.trim() || "General",
+    coverGradient: "from-indigo-900 via-indigo-950 to-black",
+    rules,
+    createdAt: apiClub.createdAt
+      ? new Date(apiClub.createdAt).toLocaleDateString(undefined, { month: "long", year: "numeric" })
+      : "—",
+    owner: apiClub.owner?.displayName ?? apiClub.owner?.username ?? "—",
+    isJoined: isMember,
+  }
+
+  // Real threads only (challenges are filtered out — they have their own tab).
+  const displayThreads: ThreadEntry[] = (threadsData?.data ?? [])
+    .filter(t => !t.title.startsWith("[CHALLENGE]"))
+    .map(t => ({
+      id: t.id,
+      title: t.title,
+      author: t.author?.displayName ?? t.author?.username ?? "Anonymous",
+      replyCount: t._count?.replies ?? 0,
+      lastActivity: relativeTime(t.createdAt),
+    }))
+
+  const apiMembers = membersData?.data ?? []
+  const displayMembers: MemberEntry[] = apiMembers.map(m => ({
+    id: m.userId,
+    username: m.user.username,
+    avatar: (m.user.displayName || m.user.username)[0]?.toUpperCase() ?? "?",
+    role: m.role,
+  }))
 
   const toggleJoin = () => {
     if (!authUser) { push("Sign in to join clubs", "info"); return }
-    const next = !joined
+    const next = !isMember
     joinMut.mutate(
       { join: next },
       {
@@ -549,7 +440,6 @@ export default function ClubDetailPage({
     if (!authUser) { push("Sign in to accept challenges", "info"); return }
     if (acceptedChallenges.has(challenge.id)) return
 
-    // Optimistic: mark accepted immediately so the button updates without lag.
     setAcceptedChallenges(prev => new Set(prev).add(challenge.id))
     push(`Challenge accepted! Watch ${challenge.animeTitle} by ${new Date(challenge.deadline).toLocaleDateString()}`, "success")
 
@@ -561,9 +451,7 @@ export default function ClubDetailPage({
         }),
       })
     } catch {
-      // Soft failure — leave the UI accepted; server might still record it.
-      // If you want strict rollback, uncomment:
-      // setAcceptedChallenges(prev => { const n = new Set(prev); n.delete(challenge.id); return n })
+      /* soft failure — leave UI accepted */
     }
   }
 
@@ -602,17 +490,18 @@ export default function ClubDetailPage({
             <div className="flex flex-wrap items-center gap-6 mb-6">
               <span className="flex items-center gap-1.5 text-xs font-bold text-muted">
                 <Users size={12} />
-                {club.memberCount.toLocaleString()} members
+                {club.memberCount.toLocaleString()} member{club.memberCount !== 1 ? "s" : ""}
               </span>
               <span className="flex items-center gap-1.5 text-xs font-bold text-muted">
                 <MessageSquare size={12} />
-                {club.threadCount} threads
+                {club.threadCount} thread{club.threadCount !== 1 ? "s" : ""}
               </span>
             </div>
 
             <button
               onClick={toggleJoin}
-              className={`px-8 py-3 rounded-2xl text-sm font-black uppercase tracking-widest transition-all duration-300 ${
+              disabled={joinMut.isPending}
+              className={`px-8 py-3 rounded-2xl text-sm font-black uppercase tracking-widest transition-all duration-300 disabled:opacity-50 ${
                 club.isJoined
                   ? "bg-surface border border-border text-muted hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/20"
                   : "bg-accent hover:bg-accent-bright text-black shadow-[0_0_32px_rgba(99,102,241,0.4)] hover:-translate-y-0.5"
@@ -667,57 +556,64 @@ export default function ClubDetailPage({
             >
               <div className="flex items-center justify-between mb-6">
                 <p className="text-[10px] font-black uppercase tracking-[0.2em] text-subtle">
-                  {club.threadCount || MOCK_THREADS.length} threads
+                  {club.threadCount} thread{club.threadCount !== 1 ? "s" : ""}
                 </p>
                 <Link
-                  href={`/clubs/${slug}/new-thread`}
+                  href={`/clubs/${slug}/create-thread`}
                   className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-accent hover:bg-accent-bright text-[10px] font-black uppercase tracking-widest text-foreground transition-all shadow-[0_0_20px_rgba(99,102,241,0.25)]"
                 >
                   <Plus size={11} /> New Thread
                 </Link>
               </div>
 
-              {displayThreads.map((thread, i) => (
-                <motion.div
-                  key={thread.id}
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.05 }}
-                >
+              {displayThreads.length === 0 ? (
+                <div className="py-16 text-center rounded-2xl bg-surface border border-border border-dashed">
+                  <MessageSquare size={22} className="mx-auto text-subtle mb-2" />
+                  <p className="text-sm font-bold text-muted">No threads yet</p>
+                  <p className="text-[11px] text-subtle mt-1 mb-4">Be the first to start a discussion in {club.name}.</p>
                   <Link
-                    href={`/threads/${thread.id}`}
-                    className="group flex items-center justify-between gap-4 p-5 rounded-2xl bg-surface border border-border hover:border-accent/25 hover:bg-surface transition-all"
+                    href={`/clubs/${slug}/create-thread`}
+                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-accent hover:bg-accent-bright text-[10px] font-black uppercase tracking-widest text-black transition-all"
                   >
-                    <div className="flex-1 min-w-0 space-y-1.5">
-                      <div className="flex items-center gap-2 flex-wrap">
-                        {!!((thread as Record<string, unknown>).isTrending) && (
-                          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-accent/10 border border-accent/20 text-[9px] font-black uppercase tracking-wider text-accent-bright">
-                            <TrendingUp size={8} /> Trending
-                          </span>
-                        )}
+                    <Plus size={11} /> Start a thread
+                  </Link>
+                </div>
+              ) : (
+                displayThreads.map((thread, i) => (
+                  <motion.div
+                    key={thread.id}
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: i * 0.05 }}
+                  >
+                    <Link
+                      href={`/threads/${thread.id}`}
+                      className="group flex items-center justify-between gap-4 p-5 rounded-2xl bg-surface border border-border hover:border-accent/25 hover:bg-surface transition-all"
+                    >
+                      <div className="flex-1 min-w-0 space-y-1.5">
                         <h3 className="text-sm font-bold text-foreground group-hover:text-foreground transition-colors line-clamp-1">
                           {thread.title}
                         </h3>
+                        <div className="flex items-center gap-3 text-[10px] text-subtle">
+                          <span>by {thread.author}</span>
+                          <span className="flex items-center gap-1">
+                            <MessageSquare size={9} />
+                            {thread.replyCount} repl{thread.replyCount === 1 ? "y" : "ies"}
+                          </span>
+                          <span className="flex items-center gap-1">
+                            <Clock size={9} />
+                            {thread.lastActivity}
+                          </span>
+                        </div>
                       </div>
-                      <div className="flex items-center gap-3 text-[10px] text-subtle">
-                        <span>by {thread.author}</span>
-                        <span className="flex items-center gap-1">
-                          <MessageSquare size={9} />
-                          {(thread as Record<string, unknown>).replyCount as number ?? 0} replies
-                        </span>
-                        <span className="flex items-center gap-1">
-                          <Clock size={9} />
-                          {(thread as Record<string, unknown>).lastActivity as string ?? ""}
-                        </span>
-                      </div>
-                    </div>
-                    <ChevronRight
-                      size={14}
-                      className="text-subtle group-hover:text-accent-bright group-hover:translate-x-0.5 transition-all shrink-0"
-                    />
-                  </Link>
-                </motion.div>
-              ))}
+                      <ChevronRight
+                        size={14}
+                        className="text-subtle group-hover:text-accent-bright group-hover:translate-x-0.5 transition-all shrink-0"
+                      />
+                    </Link>
+                  </motion.div>
+                ))
+              )}
             </motion.div>
           )}
 
@@ -790,38 +686,38 @@ export default function ClubDetailPage({
               exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.3 }}
             >
-              {(() => {
-                const apiMembers = membersData?.data ?? []
-                const displayMembers = apiMembers.length > 0
-                  ? apiMembers.map(m => ({ id: m.userId, username: m.user.username, avatar: (m.user.displayName || m.user.username)[0]?.toUpperCase() ?? "?", role: m.role as "USER" | "MOD" | "ADMIN" }))
-                  : MOCK_MEMBERS
-                return (
-                  <>
-                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-subtle mb-6">
-                      {club.memberCount.toLocaleString()} members total — showing {displayMembers.length}
-                    </p>
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-                      {displayMembers.map((member, i) => {
-                        const RoleIcon = ROLE_ICONS[member.role]
-                        return (
-                          <motion.div key={member.id} initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: i * 0.06 }}
-                            className="p-5 rounded-2xl bg-surface border border-border hover:border-border transition-all flex flex-col items-center gap-3 text-center group">
-                            <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center font-black text-xl text-foreground group-hover:scale-105 transition-transform">
-                              {member.avatar}
-                            </div>
-                            <div className="space-y-1">
-                              <p className="text-sm font-black text-foreground">{member.username}</p>
-                              <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full border text-[9px] font-black uppercase tracking-wider ${ROLE_STYLES[member.role]}`}>
-                                <RoleIcon size={8} />{member.role}
-                              </span>
-                            </div>
-                          </motion.div>
-                        )
-                      })}
-                    </div>
-                  </>
-                )
-              })()}
+              {displayMembers.length === 0 ? (
+                <div className="py-16 text-center rounded-2xl bg-surface border border-border border-dashed">
+                  <Users size={22} className="mx-auto text-subtle mb-2" />
+                  <p className="text-sm font-bold text-muted">No members yet</p>
+                  <p className="text-[11px] text-subtle mt-1">Be the first to join {club.name}.</p>
+                </div>
+              ) : (
+                <>
+                  <p className="text-[10px] font-black uppercase tracking-[0.2em] text-subtle mb-6">
+                    {club.memberCount.toLocaleString()} member{club.memberCount !== 1 ? "s" : ""} total — showing {displayMembers.length}
+                  </p>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                    {displayMembers.map((member, i) => {
+                      const RoleIcon = ROLE_ICONS[member.role]
+                      return (
+                        <motion.div key={member.id} initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: i * 0.06 }}
+                          className="p-5 rounded-2xl bg-surface border border-border hover:border-border transition-all flex flex-col items-center gap-3 text-center group">
+                          <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center font-black text-xl text-foreground group-hover:scale-105 transition-transform">
+                            {member.avatar}
+                          </div>
+                          <div className="space-y-1">
+                            <p className="text-sm font-black text-foreground">{member.username}</p>
+                            <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full border text-[9px] font-black uppercase tracking-wider ${ROLE_STYLES[member.role]}`}>
+                              <RoleIcon size={8} />{member.role}
+                            </span>
+                          </div>
+                        </motion.div>
+                      )
+                    })}
+                  </div>
+                </>
+              )}
             </motion.div>
           )}
 
@@ -835,7 +731,7 @@ export default function ClubDetailPage({
           {/* ── Leaderboard ── */}
           {activeTab === "leaderboard" && (
             <motion.div key="leaderboard" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.3 }} className="max-w-2xl">
-              <ClubLeaderboardTab slug={slug} ownerId={apiClub?.ownerId} />
+              <ClubLeaderboardTab slug={slug} ownerId={apiClub.ownerId} />
             </motion.div>
           )}
 
@@ -860,25 +756,27 @@ export default function ClubDetailPage({
                 <p className="text-sm text-muted leading-relaxed">{club.description}</p>
               </div>
 
-              {/* Rules */}
-              <div className="p-6 rounded-2xl bg-surface border border-border space-y-4">
-                <div className="flex items-center gap-2">
-                  <AlertTriangle size={14} className="text-accent-bright" />
-                  <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-muted">
-                    Club Rules
-                  </h2>
+              {/* Rules — only if the club actually set any */}
+              {club.rules.length > 0 && (
+                <div className="p-6 rounded-2xl bg-surface border border-border space-y-4">
+                  <div className="flex items-center gap-2">
+                    <AlertTriangle size={14} className="text-accent-bright" />
+                    <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-muted">
+                      Club Rules
+                    </h2>
+                  </div>
+                  <ol className="space-y-3">
+                    {club.rules.map((rule, i) => (
+                      <li key={i} className="flex items-start gap-3 text-sm text-muted">
+                        <span className="shrink-0 h-5 w-5 rounded-full bg-accent/15 border border-accent/25 flex items-center justify-center text-[9px] font-black text-accent-bright">
+                          {i + 1}
+                        </span>
+                        {rule}
+                      </li>
+                    ))}
+                  </ol>
                 </div>
-                <ol className="space-y-3">
-                  {club.rules.map((rule, i) => (
-                    <li key={i} className="flex items-start gap-3 text-sm text-muted">
-                      <span className="shrink-0 h-5 w-5 rounded-full bg-accent/15 border border-accent/25 flex items-center justify-center text-[9px] font-black text-accent-bright">
-                        {i + 1}
-                      </span>
-                      {rule}
-                    </li>
-                  ))}
-                </ol>
-              </div>
+              )}
 
               {/* Meta */}
               <div className="p-6 rounded-2xl bg-surface border border-border space-y-4">
@@ -914,7 +812,7 @@ export default function ClubDetailPage({
         )}
       </AnimatePresence>
 
-      {showOnboarding && apiClub && (
+      {showOnboarding && (
         <ClubOnboarding slug={slug} club={{ name: apiClub.name, rules: apiClub.rules, welcomeMessage: apiClub.welcomeMessage }} onDone={() => setOnboardDismissed(true)} />
       )}
     </div>

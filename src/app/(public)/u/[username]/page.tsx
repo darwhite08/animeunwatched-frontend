@@ -82,15 +82,6 @@ type ActivityEvent = {
   icon: typeof Zap
 }
 
-type MockPost = {
-  id: number
-  content: string
-  anime?: string
-  likes: number
-  comments: number
-  time: string
-}
-
 /* Derive a "grade" + level from raw reputation rather than carrying any
    hardcoded user templates around. Mirrors the leaderboard logic. */
 function gradeForLevel(level: number): string {
@@ -156,70 +147,7 @@ function mapActivityToTimeline(a: {
   return                    { id: a.id as unknown as number, type: "added",     text: "Activity",           sub: (a.body ?? "").slice(0, 80), time: timeAgo(a.createdAt), icon: Zap }
 }
 
-const ACTIVITY_EVENTS_FALLBACK: ActivityEvent[] = [
-  {
-    id: 1, type: "added",
-    text: "Added to Archive",
-    sub: "Frieren: Beyond Journey's End",
-    time: "2h ago", icon: Bookmark,
-  },
-  {
-    id: 2, type: "review",
-    text: "Posted a Review",
-    sub: "Attack on Titan • 10/10",
-    time: "1d ago", icon: Star,
-  },
-  {
-    id: 3, type: "poll",
-    text: "Voted in a Poll",
-    sub: "Greatest anime protagonist of all time",
-    time: "2d ago", icon: Trophy,
-  },
-  {
-    id: 4, type: "milestone",
-    text: "Reached Milestone",
-    sub: "50-episode streak unlocked",
-    time: "4d ago", icon: Zap,
-  },
-]
-
-const MOCK_POSTS: MockPost[] = [
-  {
-    id: 1,
-    content:
-      "Frieren's arc on mana concealment is the best exposition of a magic system I've ever seen. It recontextualizes everything.",
-    anime: "Frieren: Beyond Journey's End",
-    likes: 218,
-    comments: 31,
-    time: "3h ago",
-  },
-  {
-    id: 2,
-    content:
-      "Finished Monster for the third time. Every rewatch reveals new layers. Johan Liebert remains unmatched as an anime villain. Not a take — a fact.",
-    anime: "Monster",
-    likes: 396,
-    comments: 57,
-    time: "2d ago",
-  },
-  {
-    id: 3,
-    content:
-      "Unpopular opinion: HxH 2011 never got the ending it deserved and we should be angry about it every single day.",
-    likes: 142,
-    comments: 89,
-    time: "5d ago",
-  },
-]
-
-const WATCHLIST_PREVIEW_IDS = [
-  "frieren",
-  "attack-on-titan",
-  "steins-gate",
-  "hunter-x-hunter-2011",
-]
-
-// WATCHLIST_ANIME now comes from listData in the component
+// Everything on this page hydrates from the live API — no mock templates.
 
 /* ─────────────────────────────────────────────
    Sub-components
@@ -258,6 +186,26 @@ function DNABar({
   )
 }
 
+/* Poster image with graceful fallback when the catalog has no cover. */
+function CoverThumb({ src, title, sizes }: { src: string; title: string; sizes: string }) {
+  if (!src) {
+    return (
+      <div className="absolute inset-0 bg-gradient-to-br from-indigo-900/50 to-violet-900/30 flex items-center justify-center">
+        <BookOpen size={20} className="text-subtle" />
+      </div>
+    )
+  }
+  return (
+    <Image
+      src={src}
+      alt={title}
+      fill
+      className="object-cover brightness-75 group-hover:brightness-90 group-hover:scale-105 transition-all duration-500"
+      sizes={sizes}
+    />
+  )
+}
+
 /* ─────────────────────────────────────────────
    Page
 ───────────────────────────────────────────── */
@@ -277,7 +225,7 @@ export default function UserProfilePage({
 
   // User is derived 100% from the live API — no mock templates, no
   // hand-curated fallbacks. Anything missing renders as the empty value.
-  const repField = (realUser as { reputation?: number } | undefined)?.reputation ?? 0
+  const repField = realUser?.reputation ?? 0
   const level    = levelFromRep(repField)
   const dna      = dnaFromList(listData?.data ?? [])
   const user = {
@@ -288,21 +236,28 @@ export default function UserProfilePage({
     level,
     avatar:      (realUser?.displayName ?? username).slice(0, 2).toUpperCase(),
     avatarUrl:   realUser?.avatarUrl ?? null,
+    coverImage:  realUser?.coverImage ?? null,
     joined:      realUser?.createdAt
       ? new Date(realUser.createdAt).toLocaleDateString(undefined, { month: "long", year: "numeric" })
       : "",
     stats: {
       archived:  profileData?.stats?.listCount ?? 0,
-      streak:    (realUser as { streakDays?: number } | undefined)?.streakDays ?? 0,
-      rank:      0,
+      streak:    realUser?.streakDays ?? 0,
+      rank:      profileData?.stats?.rank ?? 0,
       followers: profileData?.stats?.followers ?? 0,
     },
     dna,
-  } as MockUser & { avatarUrl: string | null }
+  } as MockUser & { avatarUrl: string | null; coverImage: string | null }
 
   const isOwnProfile = currentUser?.username === username
-  const [following, setFollowing] = useState(false)
-  const [likedPosts, setLikedPosts] = useState<Set<number>>(new Set())
+  // Follow state is hydrated from the API; local override applies after the
+  // viewer toggles it in this session.
+  const [followOverride, setFollowOverride] = useState<boolean | null>(null)
+  const serverFollowing = realUser?.isFollowing ?? false
+  const following = followOverride ?? serverFollowing
+
+  // Real recent posts from the profile payload
+  const recentPosts = profileData?.recentPosts ?? []
 
   // Real watchlist preview from API
   const watchlistAnime = (listData?.data ?? []).slice(0, 4).map(e => ({
@@ -312,19 +267,11 @@ export default function UserProfilePage({
     rating: e.anime?.score ?? 0,
   }))
 
-  // Real activity timeline for this profile — falls back to the
-  // illustrative placeholders only when the user has no activity yet
-  // AND we haven't loaded the feed (avoids a flash of empty state).
+  // Real activity timeline for this profile — never fabricated entries.
   const { data: activityData } = useActivityFeed("profile", realUser?.id)
-  const liveActivities = (activityData?.pages.flatMap(p => p.data) ?? [])
+  const activityEvents: ActivityEvent[] = (activityData?.pages.flatMap(p => p.data) ?? [])
     .slice(0, 6)
     .map(mapActivityToTimeline)
-  const activityEvents: ActivityEvent[] =
-    liveActivities.length > 0
-      ? liveActivities
-      : realUser && activityData
-        ? []  // confirmed user, no activity yet
-        : ACTIVITY_EVENTS_FALLBACK  // loading or unknown user
 
   const toggleFollow = () => {
     if (!currentUser) { push("Sign in to follow users", "info"); return }
@@ -333,7 +280,7 @@ export default function UserProfilePage({
       { follow: next },
       {
         onSuccess: () => {
-          setFollowing(next)
+          setFollowOverride(next)
           push(next ? `Following @${user.username}! 🎌` : `Unfollowed @${user.username}`, next ? "success" : "info")
         },
         onError: () => push("Failed to update follow", "error"),
@@ -354,16 +301,10 @@ export default function UserProfilePage({
     }
   }
 
-  const toggleLike = (id: number) => {
-    setLikedPosts((prev) => {
-      const next = new Set(prev)
-      if (next.has(id)) next.delete(id)
-      else next.add(id)
-      return next
-    })
-  }
-
-  const displayedFollowers = user.stats.followers + (following ? 1 : 0)
+  // Server count already includes the viewer's follow when isFollowing is
+  // true — only adjust for a toggle made in this session.
+  const displayedFollowers =
+    user.stats.followers + (following && !serverFollowing ? 1 : 0) - (!following && serverFollowing ? 1 : 0)
 
   const stats = [
     {
@@ -382,7 +323,7 @@ export default function UserProfilePage({
     },
     {
       label: "Global Rank",
-      value: `#${user.stats.rank.toLocaleString()}`,
+      value: user.stats.rank ? `#${user.stats.rank.toLocaleString()}` : "—",
       icon: Globe,
       color: "text-blue-400",
       glow: "group-hover:bg-blue-500/10",
@@ -401,8 +342,18 @@ export default function UserProfilePage({
 
       {/* ── HERO ── */}
       <section className="relative overflow-hidden">
-        {/* Mesh gradient background */}
+        {/* Cover image (when set) + mesh gradient background */}
         <div className="absolute inset-0 z-0">
+          {user.coverImage && (
+            <Image
+              src={user.coverImage}
+              alt=""
+              fill
+              priority
+              className="object-cover opacity-30"
+              sizes="100vw"
+            />
+          )}
           <div className="absolute top-[-20%] right-[-10%] w-[55%] h-[120%] bg-accent/20 blur-[140px] rounded-full animate-pulse" />
           <div className="absolute top-[10%] left-[-15%] w-[45%] h-[90%] bg-violet-900/15 blur-[120px] rounded-full" />
           <div className="absolute bottom-[-10%] right-[20%] w-[30%] h-[60%] bg-blue-800/10 blur-[100px] rounded-full animate-pulse [animation-delay:1.5s]" />
@@ -420,11 +371,24 @@ export default function UserProfilePage({
               className="relative shrink-0"
             >
               <div className="h-40 w-40 md:h-52 md:w-52 rounded-[2.5rem] p-[3px] bg-gradient-to-br from-indigo-500 via-white/10 to-violet-600 shadow-2xl shadow-indigo-500/20">
-                <div className="h-full w-full rounded-[2.3rem] bg-gradient-to-br from-indigo-600/30 to-violet-700/30 flex items-center justify-center backdrop-blur-sm border border-border">
-                  <span className="text-5xl md:text-6xl font-black text-foreground tracking-tighter select-none">
-                    {user.avatar}
-                  </span>
-                </div>
+                {user.avatarUrl ? (
+                  <div className="relative h-full w-full rounded-[2.3rem] overflow-hidden border border-border">
+                    <Image
+                      src={user.avatarUrl}
+                      alt={user.displayName}
+                      fill
+                      priority
+                      className="object-cover"
+                      sizes="(max-width: 768px) 160px, 208px"
+                    />
+                  </div>
+                ) : (
+                  <div className="h-full w-full rounded-[2.3rem] bg-gradient-to-br from-indigo-600/30 to-violet-700/30 flex items-center justify-center backdrop-blur-sm border border-border">
+                    <span className="text-5xl md:text-6xl font-black text-foreground tracking-tighter select-none">
+                      {user.avatar}
+                    </span>
+                  </div>
+                )}
               </div>
               {/* Level pip */}
               <div className="absolute -bottom-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-background border border-accent/40 text-[9px] font-black text-accent-bright uppercase tracking-widest whitespace-nowrap">
@@ -448,7 +412,7 @@ export default function UserProfilePage({
 
                 <h1 className="flex items-center justify-center gap-3 text-5xl md:text-7xl font-black tracking-tighter uppercase italic text-foreground leading-none md:justify-start">
                   {user.displayName}
-                  <VerifiedBadge kind={(user as { verifiedKind?: "USER" | "CREATOR" | "STUDIO" | null }).verifiedKind} size={36} />
+                  <VerifiedBadge kind={realUser?.verifiedKind} size={36} />
                 </h1>
                 <p className="text-muted text-sm font-mono flex items-center gap-2">
                   @{user.username}
@@ -557,50 +521,63 @@ export default function UserProfilePage({
             </Link>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            {watchlistAnime.map((anime, i) => (
-              <motion.div
-                key={anime.id}
-                initial={{ opacity: 0, scale: 0.95 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.07 }}
-              >
-                <Link href={`/anime/${anime.id}`} className="group block">
-                  <div className="relative aspect-[3/4] rounded-xl overflow-hidden border border-border group-hover:border-accent/30 transition-all">
-                    <Image
-                      src={anime.image}
-                      alt={anime.title}
-                      fill
-                      className="object-cover brightness-75 group-hover:brightness-90 group-hover:scale-105 transition-all duration-500"
-                      sizes="(max-width: 768px) 25vw, 160px"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-                    <div className="absolute bottom-2 left-2 right-2">
-                      <p className="text-[10px] font-black text-foreground leading-tight line-clamp-2">
-                        {anime.title}
-                      </p>
-                    </div>
-                  </div>
-                </Link>
-              </motion.div>
-            ))}
-          </div>
-
-          <Link
-            href={`/u/${user.username}/list`}
-            className="flex items-center justify-between p-4 rounded-xl bg-surface border border-border hover:border-accent/20 hover:bg-surface transition-all group"
-          >
-            <div className="flex items-center gap-3">
-              <BookOpen size={15} className="text-accent-bright" />
-              <p className="text-sm font-bold text-muted group-hover:text-foreground transition-colors">
-                See full list →
+          {watchlistAnime.length === 0 ? (
+            <div className="py-10 text-center space-y-2">
+              <BookOpen size={22} className="mx-auto text-subtle" />
+              <p className="text-sm font-bold text-muted">No titles archived yet</p>
+              <p className="text-xs text-subtle">
+                {isOwnProfile
+                  ? "Start tracking anime and they'll show up here."
+                  : `@${user.username} hasn't added anything to their archive yet.`}
               </p>
+              {isOwnProfile && (
+                <Link href="/bestanimelist" className="inline-flex items-center gap-1.5 mt-2 text-[10px] font-black uppercase tracking-widest text-accent-bright">
+                  Browse anime <ChevronRight size={11} />
+                </Link>
+              )}
             </div>
-            <span className="text-[10px] font-black text-subtle uppercase tracking-widest">
-              {user.stats.archived} titles
-            </span>
-          </Link>
+          ) : (
+            <>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                {watchlistAnime.map((anime, i) => (
+                  <motion.div
+                    key={anime.id}
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: i * 0.07 }}
+                  >
+                    <Link href={`/anime/${anime.id}`} className="group block">
+                      <div className="relative aspect-[3/4] rounded-xl overflow-hidden border border-border group-hover:border-accent/30 transition-all">
+                        <CoverThumb src={anime.image} title={anime.title} sizes="(max-width: 768px) 25vw, 160px" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                        <div className="absolute bottom-2 left-2 right-2">
+                          <p className="text-[10px] font-black text-foreground leading-tight line-clamp-2">
+                            {anime.title}
+                          </p>
+                        </div>
+                      </div>
+                    </Link>
+                  </motion.div>
+                ))}
+              </div>
+
+              <Link
+                href={`/u/${user.username}/list`}
+                className="flex items-center justify-between p-4 rounded-xl bg-surface border border-border hover:border-accent/20 hover:bg-surface transition-all group"
+              >
+                <div className="flex items-center gap-3">
+                  <BookOpen size={15} className="text-accent-bright" />
+                  <p className="text-sm font-bold text-muted group-hover:text-foreground transition-colors">
+                    See full list →
+                  </p>
+                </div>
+                <span className="text-[10px] font-black text-subtle uppercase tracking-widest">
+                  {user.stats.archived} titles
+                </span>
+              </Link>
+            </>
+          )}
         </motion.div>
       </section>
 
@@ -621,6 +598,17 @@ export default function UserProfilePage({
               </Link>
             </div>
 
+            {activityEvents.length === 0 ? (
+              <div className="p-8 rounded-[1.5rem] bg-surface border border-border text-center space-y-2">
+                <Zap size={20} className="mx-auto text-subtle" />
+                <p className="text-sm font-bold text-muted">No activity yet</p>
+                <p className="text-xs text-subtle">
+                  {isOwnProfile
+                    ? "Rate, review or archive an anime to start your chronicle."
+                    : `@${user.username} hasn't logged any activity yet.`}
+                </p>
+              </div>
+            ) : (
             <div className="relative space-y-3">
               <div className="absolute left-8 top-0 bottom-0 w-px bg-gradient-to-b from-indigo-500/50 via-white/5 to-transparent" />
 
@@ -648,6 +636,7 @@ export default function UserProfilePage({
                 </motion.div>
               ))}
             </div>
+            )}
           </div>
 
           {/* ── Recent Posts ── */}
@@ -657,49 +646,61 @@ export default function UserProfilePage({
             </h2>
 
             <div className="space-y-4">
-              {MOCK_POSTS.map((post, i) => {
-                const liked = likedPosts.has(post.id)
-                return (
-                  <motion.div
-                    key={post.id}
-                    initial={{ opacity: 0, y: 10 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: i * 0.07 }}
-                    className="p-6 rounded-2xl bg-surface-2 border border-border hover:border-border transition-colors space-y-4"
-                  >
-                    {post.anime && (
-                      <Link
-                        href="/bestanimelist"
-                        className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-accent/8 border border-accent/15 text-[10px] font-bold text-accent-bright hover:bg-accent/15 transition-colors"
-                      >
-                        <Star size={9} /> {post.anime}
-                      </Link>
-                    )}
+              {recentPosts.length === 0 ? (
+                <div className="p-8 rounded-2xl bg-surface-2 border border-border text-center space-y-2">
+                  <MessageSquare size={20} className="mx-auto text-subtle" />
+                  <p className="text-sm font-bold text-muted">No posts yet</p>
+                  <p className="text-xs text-subtle">
+                    {isOwnProfile
+                      ? "Share your first take with the community."
+                      : `@${user.username} hasn't posted anything yet.`}
+                  </p>
+                </div>
+              ) : recentPosts.map((post, i) => (
+                <motion.div
+                  key={post.id}
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.07 }}
+                  className="p-6 rounded-2xl bg-surface-2 border border-border hover:border-border transition-colors space-y-4"
+                >
+                  {post.anime && (
+                    <Link
+                      href={`/anime/${post.anime.malId}`}
+                      className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-accent/8 border border-accent/15 text-[10px] font-bold text-accent-bright hover:bg-accent/15 transition-colors"
+                    >
+                      <Star size={9} /> {post.anime.title}
+                    </Link>
+                  )}
 
-                    <p className="text-sm text-muted leading-relaxed">{post.content}</p>
+                  <p className="text-sm text-muted leading-relaxed whitespace-pre-wrap">{post.content}</p>
 
-                    <div className="flex items-center gap-5 pt-2 border-t border-border">
-                      <button
-                        onClick={() => toggleLike(post.id)}
-                        className={`flex items-center gap-1.5 text-xs font-bold transition-colors ${
-                          liked ? "text-rose-400" : "text-subtle hover:text-rose-400"
-                        }`}
-                      >
-                        <Heart size={13} fill={liked ? "currentColor" : "none"} />
-                        {liked ? post.likes + 1 : post.likes}
-                      </button>
-                      <span className="flex items-center gap-1.5 text-xs font-bold text-subtle">
-                        <MessageSquare size={13} />
-                        {post.comments}
-                      </span>
-                      <span className="ml-auto text-[9px] font-black text-subtle uppercase tracking-widest">
-                        {post.time}
-                      </span>
-                    </div>
-                  </motion.div>
-                )
-              })}
+                  {post.imageUrl && (
+                    /* eslint-disable-next-line @next/next/no-img-element */
+                    <img
+                      src={post.imageUrl}
+                      alt=""
+                      loading="lazy"
+                      className="max-h-72 w-auto rounded-xl border border-border object-cover"
+                    />
+                  )}
+
+                  <div className="flex items-center gap-5 pt-2 border-t border-border">
+                    <span className="flex items-center gap-1.5 text-xs font-bold text-subtle">
+                      <Heart size={13} />
+                      {post._count?.likes ?? 0}
+                    </span>
+                    <span className="flex items-center gap-1.5 text-xs font-bold text-subtle">
+                      <MessageSquare size={13} />
+                      {post._count?.comments ?? 0}
+                    </span>
+                    <span className="ml-auto text-[9px] font-black text-subtle uppercase tracking-widest">
+                      {timeAgo(post.createdAt)}
+                    </span>
+                  </div>
+                </motion.div>
+              ))}
             </div>
           </div>
         </div>
@@ -718,7 +719,13 @@ export default function UserProfilePage({
                 <Award size={72} strokeWidth={1} />
               </div>
 
-              {user.dna.map((bar) => (
+              {user.dna.length === 0 ? (
+                <p className="text-xs text-subtle leading-relaxed py-2">
+                  {isOwnProfile
+                    ? "Archive a few anime and your genre DNA will appear here."
+                    : "Not enough archived anime to compute a genre DNA yet."}
+                </p>
+              ) : user.dna.map((bar) => (
                 <DNABar key={bar.label} label={bar.label} percent={bar.percent} colors={bar.colors} />
               ))}
 
@@ -749,6 +756,13 @@ export default function UserProfilePage({
               </Link>
             </div>
 
+            {watchlistAnime.length === 0 ? (
+              <div className="p-8 rounded-2xl bg-surface border border-border text-center space-y-2">
+                <BookOpen size={20} className="mx-auto text-subtle" />
+                <p className="text-sm font-bold text-muted">Nothing here yet</p>
+                <p className="text-xs text-subtle">Archived anime will show up with their posters.</p>
+              </div>
+            ) : (
             <div className="grid grid-cols-2 gap-4">
               {watchlistAnime.map((anime, i) => (
                 <motion.div
@@ -760,28 +774,25 @@ export default function UserProfilePage({
                 >
                   <Link href={`/anime/${anime.id}`} className="group block">
                     <div className="relative aspect-[3/4] rounded-2xl overflow-hidden border border-border group-hover:border-accent/30 transition-all">
-                      <Image
-                        src={anime.image}
-                        alt={anime.title}
-                        fill
-                        className="object-cover brightness-75 group-hover:brightness-90 group-hover:scale-105 transition-all duration-500"
-                        sizes="(max-width: 768px) 50vw, 200px"
-                      />
+                      <CoverThumb src={anime.image} title={anime.title} sizes="(max-width: 768px) 50vw, 200px" />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
                       <div className="absolute bottom-3 left-3 right-3">
                         <p className="text-xs font-black text-foreground leading-tight line-clamp-2">
                           {anime.title}
                         </p>
-                        <div className="flex items-center gap-1 mt-1">
-                          <Star size={9} fill="var(--app-accent)" className="text-accent-bright" />
-                          <span className="text-[9px] text-muted font-bold">{anime.rating.toFixed(1)}</span>
-                        </div>
+                        {anime.rating > 0 && (
+                          <div className="flex items-center gap-1 mt-1">
+                            <Star size={9} fill="var(--app-accent)" className="text-accent-bright" />
+                            <span className="text-[9px] text-muted font-bold">{anime.rating.toFixed(1)}</span>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </Link>
                 </motion.div>
               ))}
             </div>
+            )}
 
             {/* Reading list CTA */}
             <Link

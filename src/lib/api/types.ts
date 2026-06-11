@@ -185,10 +185,28 @@ export interface PostComment {
  * counts on every profile surface — they all read `profileData.user.stats`
  * and got `undefined`. Keep stats at the top level.
  */
+/** Compact post shape embedded in the public profile payload. */
+export interface ProfilePost {
+  id: string
+  authorId: string
+  content: string
+  animeId: string | null
+  imageUrl?: string | null
+  createdAt: string
+  anime?: { title: string; malId: number } | null
+  _count?: { likes: number; comments: number }
+}
+
 export interface UserProfile {
-  user: User
-  stats: { followers: number; following: number; listCount: number; reviewCount: number }
-  recentPosts: Post[]
+  user: User & {
+    coverImage?: string | null
+    verifiedKind?: "USER" | "CREATOR" | "STUDIO" | null
+    isFollowing?: boolean
+    followRequested?: boolean
+  }
+  stats: { followers: number; following: number; listCount: number; reviewCount: number; rank?: number }
+  recentPosts: ProfilePost[]
+  recentReviews?: Array<{ id: string; animeId: string; score: number; body: string | null; createdAt: string }>
 }
 
 export interface Notification {

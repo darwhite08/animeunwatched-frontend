@@ -261,35 +261,52 @@ function ShotReel({ shot, active, muted }: { shot: Shot; active: boolean; muted:
 function TrailerReel({ trailer, active, muted }: { trailer: Trailer; active: boolean; muted: boolean }) {
   return (
     <MediaShell>
-      {active ? (
-        <iframe
-          key={`${trailer.youtubeId}-${muted ? "m" : "s"}`}
-          src={`https://www.youtube-nocookie.com/embed/${trailer.youtubeId}?autoplay=1&mute=${muted ? 1 : 0}&controls=0&rel=0&playsinline=1&modestbranding=1&loop=1&playlist=${trailer.youtubeId}`}
-          className="h-full w-full"
-          allow="autoplay; encrypted-media; fullscreen"
-          allowFullScreen
-          title={trailer.title}
-        />
-      ) : (
-        <>
-          <Poster src={trailer.imageUrl} />
-          <div className="absolute inset-0 flex items-center justify-center">
-            <span className="flex h-14 w-14 items-center justify-center rounded-full bg-black/50 text-white"><Play size={24} className="ml-0.5 fill-white" /></span>
-          </div>
-        </>
+      {/* Blurred poster backdrop fills the vertical card so the 16:9 trailer
+          never sits in awkward black letterboxing. */}
+      {trailer.imageUrl && (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={trailer.imageUrl} alt="" referrerPolicy="no-referrer" className="absolute inset-0 h-full w-full scale-125 object-cover opacity-30 blur-2xl" />
       )}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black/30 via-black/45 to-black/80" />
 
-      <span className="absolute left-3 top-3 rounded-full bg-accent px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-white">Trailer</span>
+      {/* Centered 16:9 player */}
+      <div className="absolute inset-0 flex items-center justify-center px-1">
+        <div className="relative aspect-video w-full overflow-hidden rounded-xl bg-black shadow-2xl ring-1 ring-white/10">
+          {active ? (
+            <iframe
+              key={`${trailer.youtubeId}-${muted ? "m" : "s"}`}
+              src={`https://www.youtube-nocookie.com/embed/${trailer.youtubeId}?autoplay=1&mute=${muted ? 1 : 0}&controls=0&rel=0&playsinline=1&modestbranding=1&loop=1&playlist=${trailer.youtubeId}`}
+              className="absolute inset-0 h-full w-full"
+              allow="autoplay; encrypted-media; fullscreen"
+              allowFullScreen
+              title={trailer.title}
+            />
+          ) : (
+            <>
+              <Poster src={trailer.imageUrl} />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <span className="flex h-12 w-12 items-center justify-center rounded-full bg-black/55 text-white backdrop-blur"><Play size={20} className="ml-0.5 fill-white" /></span>
+              </div>
+            </>
+          )}
+        </div>
+      </div>
 
-      <div className="absolute inset-x-0 bottom-0 p-4">
+      {/* Trailer badge */}
+      <span className="absolute left-3 top-3 z-10 rounded-full bg-accent px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-white shadow-lg">Trailer</span>
+
+      {/* Bottom meta */}
+      <div className="absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-black via-black/80 to-transparent p-4 pt-14">
         <Link href={`/anime/${trailer.malId}`} className="block">
-          <h3 className="line-clamp-2 text-lg font-black leading-tight tracking-tight text-white">{trailer.title}</h3>
+          <h3 className="line-clamp-2 text-lg font-black leading-tight tracking-tight text-white transition-colors hover:text-accent-bright">{trailer.title}</h3>
         </Link>
         <div className="mt-2 flex items-center gap-2 text-[11px] font-bold text-white/80">
           {trailer.score != null && <span className="inline-flex items-center gap-1"><Star size={12} className="fill-amber-400 text-amber-400" />{trailer.score.toFixed(1)}</span>}
           {trailer.type && <span className="rounded-full bg-white/15 px-2 py-0.5 uppercase tracking-widest">{trailer.type}</span>}
           {trailer.year && <span>{trailer.year}</span>}
+          <Link href={`/anime/${trailer.malId}`} className="ml-auto inline-flex items-center gap-1 rounded-full bg-accent/90 px-3 py-1 text-[10px] font-black uppercase tracking-widest text-black transition-transform hover:scale-105">
+            Details
+          </Link>
         </div>
       </div>
     </MediaShell>

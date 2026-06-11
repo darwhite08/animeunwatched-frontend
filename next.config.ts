@@ -51,6 +51,12 @@ const securityHeaders = [
 
 const nextConfig: NextConfig = {
   images: {
+    // Do NOT run images through Vercel's optimizer (free tier = 5k transforms,
+    // we were at 18k). With this, <Image> serves the source URL directly, so
+    // images stream straight from MAL CDN / Cloudflare R2 — never billed to
+    // Vercel. Sources are already web-sized (MAL posters) or resized at the
+    // storage layer; we keep lazy-loading + layout from next/image.
+    unoptimized: true,
     remotePatterns: [
       { protocol: "https", hostname: "images.unsplash.com",          pathname: "**" },
       { protocol: "https", hostname: "cdn.myanimelist.net",           pathname: "**" },

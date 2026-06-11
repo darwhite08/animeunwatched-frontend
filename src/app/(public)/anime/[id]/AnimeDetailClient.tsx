@@ -67,6 +67,7 @@ import {
   Star, Clock, Monitor, Plus, Check, Share2, ChevronLeft,
   MessageSquare, Heart, Sparkles, PenSquare, Flag, BookOpen, Calendar, Play, Tv,
 } from "lucide-react"
+import { SiCrunchyroll, SiNetflix, SiFunimation } from "react-icons/si"
 import EpisodeTracker from "@/components/anime/EpisodeTracker"
 import { AnimeThreadsSection } from "@/components/anime/AnimeThreadsSection"
 import { AnimeStatsCard } from "@/components/anime/AnimeStatsCard"
@@ -526,15 +527,18 @@ function AnimeDetail({ anime, rawAnime, currentEpisode = 0 }: { anime: Anime; ra
               </div>
               <div className="space-y-2">
                 {[
-                  { name: "Crunchyroll", color: "text-orange-400", bg: "bg-orange-500/10 border-orange-500/20", search: `https://www.crunchyroll.com/search?q=${encodeURIComponent(anime.title)}` },
-                  { name: "Netflix",     color: "text-red-400",    bg: "bg-red-500/10 border-red-500/20",       search: `https://www.netflix.com/search?q=${encodeURIComponent(anime.title)}` },
-                  { name: "Funimation",  color: "text-violet-400", bg: "bg-violet-500/10 border-violet-500/20", search: `https://www.funimation.com/search/?q=${encodeURIComponent(anime.title)}` },
-                  { name: "HiDive",      color: "text-cyan-400",   bg: "bg-cyan-500/10 border-cyan-500/20",     search: `https://www.hidive.com/search#q=${encodeURIComponent(anime.title)}` },
-                ].map(p => (
-                  <a key={p.name} href={p.search} target="_blank" rel="noopener noreferrer"
-                    className={`flex items-center justify-between px-4 py-2.5 rounded-xl border text-xs font-bold transition-all hover:scale-[1.02] ${p.bg}`}
+                  { name: "Crunchyroll", Icon: SiCrunchyroll, color: "text-[#F47521]", bg: "bg-orange-500/10 border-orange-500/20", search: `https://www.crunchyroll.com/search?q=${encodeURIComponent(anime.title)}` },
+                  { name: "Netflix",     Icon: SiNetflix,     color: "text-[#E50914]", bg: "bg-red-500/10 border-red-500/20",       search: `https://www.netflix.com/search?q=${encodeURIComponent(anime.title)}` },
+                  { name: "Funimation",  Icon: SiFunimation,  color: "text-[#6D2FD0]", bg: "bg-violet-500/10 border-violet-500/20", search: `https://www.funimation.com/search/?q=${encodeURIComponent(anime.title)}` },
+                  { name: "HiDive",      Icon: Tv,            color: "text-[#00B3E3]", bg: "bg-cyan-500/10 border-cyan-500/20",     search: `https://www.hidive.com/search#q=${encodeURIComponent(anime.title)}` },
+                ].map(({ name, Icon, color, bg, search }) => (
+                  <a key={name} href={search} target="_blank" rel="noopener noreferrer"
+                    className={`flex items-center justify-between px-4 py-2.5 rounded-xl border text-xs font-bold transition-all hover:scale-[1.02] ${bg}`}
                   >
-                    <span className={p.color}>{p.name}</span>
+                    <span className={`flex items-center gap-2.5 ${color}`}>
+                      <Icon size={16} aria-hidden className="shrink-0" />
+                      <span>{name}</span>
+                    </span>
                     <span className="text-subtle text-[9px]">Search →</span>
                   </a>
                 ))}

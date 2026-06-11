@@ -445,3 +445,44 @@ export function useLiveThread(threadId: string | null) {
     return () => { if (retry) clearTimeout(retry); cleanup?.() }
   }, [threadId, qc])
 }
+
+// ── Live blog views ──────────────────────────────────────────────────────────
+// Records a (deduplicated, server-side) view once per mount, seeds the count
+// from the blog, then keeps it live: joins the blog's room and updates on every
+// `blog.views` broadcast so the number ticks up in realtime as others read.
+export function useBlogViews(slug: string | null, initialCount = 0): number {
+  const [count, setCount] = useState(initialCount)
+
+  // Keep the seed in sync if the blog data resolves after first render.
+  useEffect(() => { setCount((c) => (initialCount > c ? initialCount : c)) }, [initialCount])
+
+  useEffect(() => {
+    if (!slug) return
+    let cancelled = false
+
+    // Record the view (deduped server-side per viewer/day). Returns the live total.
+    import("@/lib/api/client")
+      .then(({ api }) => api<{ viewCount: number }>(`/blogs/${slug}/view`, { method: "POST" }))
+      .then((r) => { if (!cancelled && typeof r?.viewCount === "number") setCount((c) => Math.max(c, r.viewCount)) })
+      .catch(() => { /* view recording is best-effort */ })
+
+    // Subscribe to live updates for this blog.
+    let retry: ReturnType<typeof setTimeout> | null = null
+    let cleanup: (() => void) | null = null
+    const attach = () => {
+      const s = getSocket()
+      if (!s) { retry = setTimeout(attach, 600); return }
+      s.emit("room:join", `blog:${slug}`)
+      const onViews = (p: { slug: string; viewCount: number }) => {
+        if (p?.slug === slug && typeof p.viewCount === "number") setCount((c) => Math.max(c, p.viewCount))
+      }
+      s.on("blog.views", onViews)
+      cleanup = () => { s.off("blog.views", onViews); s.emit("room:leave", `blog:${slug}`) }
+    }
+    attach()
+
+    return () => { cancelled = true; if (retry) clearTimeout(retry); cleanup?.() }
+  }, [slug])
+
+  return count
+}

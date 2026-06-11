@@ -9,6 +9,7 @@ import {
 import Link from "next/link"
 import { useToast } from "@/stores/toast.store"
 import { useBlog, type Blog } from "@/hooks/useBlogs"
+import { useBlogViews } from "@/hooks/useRealtime"
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { api } from "@/lib/api/client"
 import { useAuthStore } from "@/stores/auth.store"
@@ -349,12 +350,15 @@ export function BlogReaderClient({ slug, initialBlog }: { slug: string; initialB
     coverGradient: "from-indigo-900 via-violet-900 to-purple-900",
     tags: [] as string[],
     likes: 0,
-    views: 0,
+    views: apiBlog.viewCount ?? 0,
     content: apiBlog.body,
   } : (BLOG_META[slug] ?? { ...FALLBACK_META, slug, title: slug.replace(/-/g, " ") })
 
   // ALL hooks must run on every render — never gate them behind an early
   // return. Loading / error UI is rendered AFTER all hooks below.
+  // Real, deduplicated, realtime view count (records this read once + ticks
+  // live as others read). Only active once the real blog has resolved.
+  const liveViews = useBlogViews(apiBlog ? slug : null, meta.views)
   const [liked, setLiked]       = useState(false)
   const [likeCount, setLikeCount] = useState(meta.likes)
   const [bookmarked, setBookmarked] = useState(false)
@@ -489,7 +493,7 @@ export function BlogReaderClient({ slug, initialBlog }: { slug: string; initialB
 
           <div className="flex items-center gap-2 text-[10px] text-subtle">
             <Eye size={10} />
-            <span>{meta.views.toLocaleString()} views</span>
+            <span>{liveViews.toLocaleString()} views</span>
           </div>
 
           {/* Share */}

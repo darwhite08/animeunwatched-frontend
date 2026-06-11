@@ -105,7 +105,7 @@ export default function UserBlogPage({
     coverGradient: COVER_GRADIENTS[i % COVER_GRADIENTS.length],
     publishedAt: formatDate(b.publishedAt),
     readTime: Math.max(1, Math.ceil(b.body.split(/\s+/).length / 200)),
-    views: 0,
+    views: b.viewCount ?? 0,
     likes: 0,
   }))
 

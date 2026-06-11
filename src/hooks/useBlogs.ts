@@ -8,6 +8,7 @@ export type Blog = {
   author: { id: string; username: string; displayName: string; avatarUrl: string | null }
   category?: string | null; hasSpoilers?: boolean; animeMalId?: number | null; animeTitle?: string | null
   coverImage?: string | null
+  viewCount?: number
 }
 
 export const blogsKey  = ["blogs"]               as const

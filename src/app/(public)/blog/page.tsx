@@ -233,7 +233,7 @@ export default function BlogListingPage() {
     readTime: Math.max(1, Math.ceil(b.body.split(" ").length / 200)),
     publishedAt: b.publishedAt ? new Date(b.publishedAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "",
     coverGradient: "from-indigo-900 via-violet-900 to-purple-900",
-    category: "Deep Dive" as const, likes: 0, views: 0,
+    category: "Deep Dive" as const, likes: 0, views: b.viewCount ?? 0,
   })), [blogsData])
 
   const allBlogs = apiBlogs

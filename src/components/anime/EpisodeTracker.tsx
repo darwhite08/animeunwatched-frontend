@@ -31,11 +31,18 @@ export default function EpisodeTracker({ totalEpisodes, currentEpisode: initialE
   }, [initialEpisode])
 
   const saveProgress = (newEps: number, isComplete: boolean) => {
-    if (!isAuthenticated) return
     upsert.mutate({
       status: isComplete ? "COMPLETED" : newEps > 0 ? "WATCHING" : "PLAN_TO_WATCH",
       episodesSeen: newEps,
     })
+  }
+
+  // Tracking is per-account — without a session there's nowhere to save, so the
+  // count would silently reset on refresh. Prompt sign-in instead of pretending.
+  const requireAuth = (): boolean => {
+    if (isAuthenticated) return true
+    push("Sign in to track your episode progress", "info")
+    return false
   }
 
   /* Ongoing series */
@@ -53,8 +60,9 @@ export default function EpisodeTracker({ totalEpisodes, currentEpisode: initialE
   const isCompleted = current === totalEpisodes
   const progress = totalEpisodes > 0 ? (current / totalEpisodes) * 100 : 0
 
-    const decrement = () => {
+  const decrement = () => {
     if (current <= 0) return
+    if (!requireAuth()) return
     const next = current - 1
     setCurrent(next)
     saveProgress(next, false)
@@ -63,14 +71,16 @@ export default function EpisodeTracker({ totalEpisodes, currentEpisode: initialE
 
   const increment = () => {
     if (current >= totalEpisodes) return
+    if (!requireAuth()) return
     const next = current + 1
     const complete = next === totalEpisodes
     setCurrent(next)
     saveProgress(next, complete)
-    push(complete ? `🎉 Completed ${animeId ? "anime" : ""}! All ${totalEpisodes} episodes watched!` : `Episode ${next} marked watched! 🎌`, "success")
+    push(complete ? `🎉 Completed! All ${totalEpisodes} episodes watched!` : `Episode ${next} marked watched! 🎌`, "success")
   }
 
   const markAll = () => {
+    if (!requireAuth()) return
     setCurrent(totalEpisodes)
     saveProgress(totalEpisodes, true)
     push(`All ${totalEpisodes} episodes marked as watched! 🎌`, "success")

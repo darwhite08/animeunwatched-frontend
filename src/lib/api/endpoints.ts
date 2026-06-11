@@ -196,6 +196,11 @@ export const markAllRead = () =>
 export const getLeaderboard = (limit = 50, period = "all-time") =>
   api<{ data: Array<{ rank: number; id: string; username: string; displayName: string; avatarUrl: string | null; reputation: number; xp: number; level: number; archived: number; reviews: number; posts: number }>; meta: { total: number; period: string } }>(`/users/leaderboard/top?limit=${limit}&period=${period}`)
 
+export const getBoardLeaderboard = (board: string, window: string, audience: string, limit = 50) =>
+  api<import("./types").BoardLeaderboard>(
+    `/users/leaderboard/boards?board=${board}&window=${window}&audience=${audience}&limit=${limit}`
+  )
+
 /* ── Chat (E2E encrypted DMs) ── */
 export const uploadPublicKey = (publicKey: string) =>
   api<void>("/chat/keys/me", { method: "PUT", body: JSON.stringify({ publicKey }) })

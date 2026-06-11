@@ -1,244 +1,717 @@
 "use client"
 
-import { useState } from "react"
-import { motion, AnimatePresence } from "framer-motion"
+import { useMemo, useState } from "react"
+import Link from "next/link"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import {
-  Trophy, Crown, Swords, Zap, Shield, Star, Flame,
-  TrendingUp, Users, Activity, ChevronUp, ChevronDown, Minus,
+  Play, PenLine, Flame, Users, Zap, Globe, Search, Check, Plus,
+  Crown, Medal, BadgeCheck, TrendingUp,
 } from "lucide-react"
-import { TiltCard } from "@/components/ui/TiltCard"
-import { useLeaderboard } from "@/hooks/useLeaderboard"
+import { useBoardLeaderboard } from "@/hooks/useLeaderboard"
 import { useAuthStore } from "@/stores/auth.store"
-import { PresenceDot } from "@/components/ui/PresenceDot"
+import { useToast } from "@/stores/toast.store"
+import * as ep from "@/lib/api/endpoints"
+import type { BoardLeaderboardRow, LeaderboardBoardId } from "@/lib/api/types"
 
-type Period = "all-time" | "monthly" | "weekly"
+/* ─── Board config — every board reads from this; the podium and rows are
+       metric-agnostic and format whatever the active board points at. ─────── */
+type WindowId = "week" | "month" | "all"
+type AudienceId = "global" | "friends"
 
-const GRADIENT_MAP: Record<number, string> = {
-  1: "from-accent-bright to-orange-600",
-  2: "from-slate-300 to-slate-500",
-  3: "from-accent to-amber-800",
-}
-
-const TITLE_MAP: Record<number, { label: string; color: string }> = {
-  1:  { label: "Legendary Shinobi", color: "text-accent-bright"   },
-  2:  { label: "Arch-Mage",         color: "text-muted"   },
-  3:  { label: "Elite Jonin",       color: "text-accent"   },
-  4:  { label: "Shadow Watcher",    color: "text-accent-bright"  },
-  5:  { label: "Binge Master",      color: "text-purple-400"  },
-  6:  { label: "Neural Ranked",     color: "text-blue-400"    },
-  7:  { label: "Veteran Otaku",     color: "text-teal-400"    },
-  8:  { label: "Hidden Gem",        color: "text-emerald-400" },
-  9:  { label: "Rising Star",       color: "text-rose-400"    },
-  10: { label: "Apprentice",        color: "text-muted"    },
-}
-
-const ICON_MAP: Record<number, typeof Crown> = {
-  1: Crown, 2: Swords, 3: Shield, 4: Star, 5: Flame,
-  6: Zap, 7: TrendingUp, 8: Activity, 9: Star, 10: Zap,
-}
-
-type User = {
-  rank: number; id?: string; name: string; xp: string; xpNum: number
-  level: number; streak: number; archived: number
-  trend: "up" | "down" | "same"; trendVal: number
-  isMe: boolean
-}
-
-const BASE_USERS: User[] = [
-  { rank:1,  name:"Otaku_Arch",      xp:"1.24M", xpNum:1240000, level:99,  streak:89,  archived:412, trend:"same",  trendVal:0, isMe:false },
-  { rank:2,  name:"Shadow_Watcher",  xp:"840K",  xpNum:840000,  level:88,  streak:45,  archived:298, trend:"up",    trendVal:1, isMe:false },
-  { rank:3,  name:"Void_Seeker",     xp:"620K",  xpNum:620000,  level:75,  streak:32,  archived:256, trend:"up",    trendVal:2, isMe:false },
-  { rank:4,  name:"Neural_Ghost",    xp:"480K",  xpNum:480000,  level:68,  streak:22,  archived:201, trend:"down",  trendVal:1, isMe:false },
-  { rank:5,  name:"Cipher_Ronin",    xp:"320K",  xpNum:320000,  level:59,  streak:18,  archived:178, trend:"up",    trendVal:3, isMe:false },
-  { rank:6,  name:"Alpha_Watcher",   xp:"240K",  xpNum:240000,  level:52,  streak:14,  archived:156, trend:"same",  trendVal:0, isMe:false },
-  { rank:7,  name:"Delta_Weeb",      xp:"180K",  xpNum:180000,  level:47,  streak:11,  archived:134, trend:"down",  trendVal:2, isMe:false },
-  { rank:8,  name:"Kurosaki_Fan",    xp:"140K",  xpNum:140000,  level:41,  streak:9,   archived:112, trend:"up",    trendVal:1, isMe:false },
-  { rank:9,  name:"Titan_Slayer",    xp:"110K",  xpNum:110000,  level:36,  streak:7,   archived:98,  trend:"up",    trendVal:4, isMe:false },
-  { rank:10, name:"Anime_Oracle",    xp:"88K",   xpNum:88000,   level:32,  streak:5,   archived:87,  trend:"same",  trendVal:0, isMe:false },
-  { rank:11, name:"Sasuke_Simped",   xp:"72K",   xpNum:72000,   level:29,  streak:4,   archived:76,  trend:"down",  trendVal:1, isMe:false },
-  { rank:12, name:"Mango_Reader",    xp:"61K",   xpNum:61000,   level:27,  streak:3,   archived:65,  trend:"up",    trendVal:2, isMe:false },
-  { rank:812, name:"darwhite08",     xp:"24.1K", xpNum:24100,   level:20,  streak:22,  archived:124, trend:"up",    trendVal:8, isMe:true  },
+const BOARDS: Array<{
+  id: LeaderboardBoardId; label: string; icon: typeof Play
+  unit: string; secondaryLabel: string; windowed: boolean; accent: string
+}> = [
+  { id: "episodes", label: "Most Episodes",    icon: Play,      unit: "eps",       secondaryLabel: "titles", windowed: true,  accent: "#5B3BFF" },
+  { id: "reviews",  label: "Top Reviewers",    icon: PenLine,   unit: "reviews",   secondaryLabel: "likes",  windowed: true,  accent: "#00D4FF" },
+  { id: "streak",   label: "Longest Streaks",  icon: Flame,     unit: "days",      secondaryLabel: "best",   windowed: false, accent: "#F0883E" },
+  { id: "followed", label: "Most Followed",    icon: Users,     unit: "followers", secondaryLabel: "level",  windowed: false, accent: "#3FB950" },
+  { id: "xp",       label: "Top Contributors", icon: Zap,       unit: "XP",        secondaryLabel: "titles", windowed: false, accent: "#8B5CF6" },
 ]
 
-const TOP_3 = BASE_USERS.slice(0, 3)
-const REST  = BASE_USERS.slice(3)
+const WINDOWS: Array<{ id: WindowId; label: string }> = [
+  { id: "week", label: "This Week" }, { id: "month", label: "This Month" }, { id: "all", label: "All-Time" },
+]
 
-const PERIOD_LABELS: Record<Period, string> = {
-  "all-time": "All Time",
-  "monthly":  "This Month",
-  "weekly":   "This Week",
+/* ─── Helpers ────────────────────────────────────────────────────────────── */
+const compact = (n: number) => {
+  if (n >= 1e6) return (n / 1e6).toFixed(n >= 1e7 ? 0 : 1).replace(/\.0$/, "") + "M"
+  if (n >= 1e4) return (n / 1e3).toFixed(0) + "K"
+  return n.toLocaleString()
 }
 
-export default function PublicLeaderboardPage() {
-  const [period, setPeriod] = useState<Period>("all-time")
-  const { data: lbData, isLoading } = useLeaderboard(50, period)
-  const me = useAuthStore(s => s.user)
+function gradeForLevel(level: number): string {
+  if (level >= 30) return "Crimson Shinobi"
+  if (level >= 20) return "Void Sentinel"
+  if (level >= 12) return "Neural Oracle"
+  if (level >= 7)  return "Elite Jonin"
+  if (level >= 4)  return "Jonin"
+  return "Iron Shinobi"
+}
 
-  // Merge real data with mock, real data takes priority
-  const realUsers: User[] = (lbData?.data ?? []).map((u, i) => ({
-    rank: i + 1,
-    id: u.id,
-    name: u.username,
-    xp: u.xp >= 1_000_000 ? `${(u.xp/1_000_000).toFixed(2)}M` : u.xp >= 1000 ? `${(u.xp/1000).toFixed(0)}K` : String(u.xp),
-    xpNum: u.xp,
-    level: u.level,
-    streak: 0,
-    archived: u.archived,
-    trend: "same" as const,
-    trendVal: 0,
-    isMe: me?.username === u.username,
-  }))
+// Stable per-user avatar hue from the username
+function hueFor(s: string): number {
+  let h = 0
+  for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) % 360
+  return h
+}
+const avColor = (username: string) => `oklch(0.62 0.17 ${hueFor(username)})`
 
-  const displayUsers = realUsers.length > 0 ? realUsers : BASE_USERS
+// Anime power-tier from board rank — instant status read
+function tierFor(rank: number): { t: string; c: string; ss?: boolean } {
+  if (rank === 1)  return { t: "SS", c: "var(--lb-gold)", ss: true }
+  if (rank <= 3)   return { t: "S",  c: "#FF6B9D" }
+  if (rank <= 10)  return { t: "A",  c: "#00D4FF" }
+  if (rank <= 25)  return { t: "B",  c: "#3FB950" }
+  return            { t: "C",  c: "#8DA2C0" }
+}
 
+function Tier({ rank, lg }: { rank: number; lg?: boolean }) {
+  const t = tierFor(rank)
   return (
-    <div className="min-h-screen bg-background text-foreground pb-32">
-      {/* Header */}
-      <div className="max-w-5xl mx-auto px-6 pt-32 pb-12 space-y-8">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-          <div>
-            <motion.div initial={{ opacity:0, x:-16 }} animate={{ opacity:1, x:0 }}
-              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent/10 border border-accent/20 text-[9px] font-black uppercase tracking-[0.3em] text-accent-bright mb-4"
-            >
-              <Trophy size={11} /> Global Hall of Fame
-            </motion.div>
-            <h1 className="text-5xl md:text-6xl font-black tracking-tighter text-foreground uppercase italic leading-none">
-              The Pantheon<span style={{color:"var(--app-accent)"}}>.</span>
-            </h1>
-            <p className="text-subtle text-sm mt-3">12,402 Shinobi competing globally</p>
-          </div>
-          <div className="flex items-center gap-1 p-1 bg-surface border border-border rounded-2xl">
-            {(["all-time","monthly","weekly"] as Period[]).map(p => (
-              <button key={p} onClick={() => setPeriod(p)}
-                className={`relative px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider transition-all ${period === p ? "text-black" : "text-subtle hover:text-foreground"}`}
-              >
-                {period === p && (
-                  <motion.div layoutId="period-bg" className="absolute inset-0 rounded-xl"
-                    style={{ background: "linear-gradient(135deg, var(--app-accent), #d97706)" }} />
-                )}
-                <span className="relative z-10">{PERIOD_LABELS[p]}</span>
-              </button>
-            ))}
-          </div>
-        </div>
+    <span className={"lb-tier" + (t.ss ? " is-ss" : "") + (lg ? " lg" : "")} style={{ "--tc": t.c } as React.CSSProperties}>
+      <span>{t.t}</span>
+    </span>
+  )
+}
 
-        {/* TOP 3 PODIUM */}
-        <div className="grid grid-cols-3 gap-4 items-end">
-          {[displayUsers[1], displayUsers[0], displayUsers[2]].filter(Boolean).map((user, colIdx) => {
-            const heights = ["h-36","h-48","h-32"]
-            const Icon = ICON_MAP[user.rank] ?? Zap
-            const grad  = GRADIENT_MAP[user.rank]
-            const title = TITLE_MAP[user.rank]
-            return (
-              <TiltCard key={user.rank} intensity={6} glare className="flex flex-col items-center">
-                <motion.div initial={{ opacity:0, y:30 }} animate={{ opacity:1, y:0 }} transition={{ delay: colIdx*0.1 }}
-                  className="flex flex-col items-center w-full"
-                >
-                  {user.rank === 1 && (
-                    <motion.div animate={{ y:[0,-4,0] }} transition={{ duration:2.5, repeat:Infinity }} className="mb-2">
-                      <Crown size={20} className="text-accent-bright" fill="currentColor" />
-                    </motion.div>
-                  )}
-                  <div className={`relative w-14 h-14 rounded-2xl bg-gradient-to-br ${grad} p-0.5 mb-3 shadow-lg`}>
-                    <div className="w-full h-full rounded-[calc(1rem-2px)] bg-surface flex items-center justify-center text-xl font-black">{user.name[0]}</div>
-                    <div className={`absolute -bottom-2 -right-2 w-6 h-6 rounded-lg bg-gradient-to-br ${grad} flex items-center justify-center`}>
-                      <Icon size={12} className="text-black" />
-                    </div>
-                    {user.id && (
-                      <span className="absolute -top-1 -right-1">
-                        <PresenceDot userId={user.id} size={10} />
-                      </span>
-                    )}
-                  </div>
-                  <p className="text-sm font-black text-foreground">{user.name}</p>
-                  <p className={`text-[9px] font-black uppercase tracking-wider ${title.color} mt-0.5`}>{title.label}</p>
-                  <p className="text-lg font-black text-foreground mt-1 font-mono">{user.xp}</p>
-                  <p className="text-[9px] text-subtle uppercase tracking-widest">XP</p>
-                  <div className={`w-full mt-4 ${heights[colIdx]} bg-gradient-to-t ${
-                    user.rank===1 ? "from-accent/40 to-accent/10 border-accent/30" :
-                    user.rank===2 ? "from-slate-600/40 to-slate-400/10 border-border" :
-                                    "from-amber-800/40 to-accent/10 border-accent/30"
-                  } border border-b-0 rounded-t-2xl flex items-center justify-center`}>
-                    <span className="text-3xl font-black text-subtle">#{user.rank}</span>
-                  </div>
-                </motion.div>
-              </TiltCard>
-            )
-          })}
-        </div>
+function Ava({ row, size, fontSize }: { row: BoardLeaderboardRow; size: number; fontSize: number }) {
+  const u = row.user
+  return u.avatarUrl ? (
+    /* eslint-disable-next-line @next/next/no-img-element */
+    <img src={u.avatarUrl} alt={u.displayName} loading="lazy"
+      style={{ width: size, height: size, borderRadius: "50%", objectFit: "cover", display: "block" }} />
+  ) : (
+    <span style={{
+      width: size, height: size, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center",
+      fontWeight: 800, fontSize, color: "var(--lb-paper)",
+      background: `radial-gradient(120% 120% at 30% 20%, ${avColor(u.username)}, var(--lb-surface-2))`,
+    }}>{u.displayName[0]?.toUpperCase()}</span>
+  )
+}
 
-        {/* RANKING TABLE */}
-        <div className="space-y-2">
-          <div className="grid grid-cols-[2rem_1fr_5rem_5rem_5rem_5rem] gap-4 px-5 text-[9px] font-black uppercase tracking-[0.25em] text-subtle mb-3">
-            <span>#</span><span>Shinobi</span><span className="text-right">Level</span>
-            <span className="text-right">Streak</span><span className="text-right">Archived</span>
-            <span className="text-right">XP</span>
-          </div>
-          <AnimatePresence>
-            {displayUsers.slice(3).map((user, i) => {
-              const Icon  = ICON_MAP[Math.min(user.rank, 10)] ?? Zap
-              const title = TITLE_MAP[Math.min(user.rank, 10)]
-              const isMe  = user.isMe
-              return (
-                <motion.div key={user.rank} initial={{ opacity:0, x:-12 }} animate={{ opacity:1, x:0 }} transition={{ delay: i*0.03 }}
-                  className={`grid grid-cols-[2rem_1fr_5rem_5rem_5rem_5rem] gap-4 items-center px-5 py-4 rounded-2xl border transition-all ${
-                    isMe ? "border-accent/30 bg-accent/8" : "border-border bg-white/[0.01] hover:bg-surface hover:border-border"
-                  }`}
-                >
-                  <span className={`text-sm font-black ${isMe ? "text-accent-bright" : "text-subtle"}`}>
-                    {user.rank > 100 ? `#${user.rank}` : user.rank}
-                  </span>
-                  <div className="flex items-center gap-3 min-w-0">
-                    <div className="relative shrink-0">
-                      <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-600/40 to-violet-600/30 flex items-center justify-center font-black text-sm">{user.name[0]}</div>
-                      {user.id && (
-                        <span className="absolute -bottom-0.5 -right-0.5">
-                          <PresenceDot userId={user.id} size={9} />
-                        </span>
-                      )}
-                    </div>
-                    <div className="min-w-0">
-                      <div className="flex items-center gap-2">
-                        <p className={`text-sm font-black truncate ${isMe ? "text-accent-bright" : "text-muted"}`}>{user.name}{isMe && " (You)"}</p>
-                        <Icon size={11} className={title.color} />
-                      </div>
-                      <p className={`text-[9px] uppercase tracking-wider ${title.color} opacity-80`}>{title.label}</p>
-                    </div>
-                  </div>
-                  <span className="text-sm font-black text-muted text-right">Lv.{user.level}</span>
-                  <span className="text-sm font-black text-muted text-right flex items-center justify-end gap-1">
-                    <Flame size={11} className="text-orange-500" />{user.streak}d
-                  </span>
-                  <span className="text-sm font-black text-muted text-right">{user.archived}</span>
-                  <div className="flex items-center justify-end gap-1.5">
-                    <span className="text-sm font-black text-foreground font-mono">{user.xp}</span>
-                    {user.trend==="up"   && <ChevronUp   size={12} className="text-emerald-400 shrink-0"/>}
-                    {user.trend==="down" && <ChevronDown size={12} className="text-red-400 shrink-0"/>}
-                    {user.trend==="same" && <Minus       size={12} className="text-subtle shrink-0"/>}
-                  </div>
-                </motion.div>
-              )
-            })}
-          </AnimatePresence>
-        </div>
+function Verified({ kind, size = 14 }: { kind: BoardLeaderboardRow["user"]["verifiedKind"]; size?: number }) {
+  if (!kind) return null
+  return <span className="lb-verified" title="Verified"><BadgeCheck size={size} strokeWidth={1.8} /></span>
+}
 
-        {/* Stats */}
-        <div className="grid grid-cols-3 gap-4 pt-8 border-t border-border">
-          {[
-            { icon:Users,    label:"Global Shinobi", value:"12,402" },
-            { icon:Activity, label:"Daily Active",   value:"1,120"  },
-            { icon:Trophy,   label:"Your Standing",  value:"#812"   },
-          ].map(({ icon:Icon, label, value }) => (
-            <div key={label} className="flex items-center gap-4 p-5 rounded-2xl bg-surface border border-border">
-              <Icon size={18} className="text-accent-bright shrink-0" />
-              <div>
-                <p className="text-xl font-black tracking-tighter text-foreground">{value}</p>
-                <p className="text-[9px] text-subtle uppercase tracking-[0.2em]">{label}</p>
-              </div>
-            </div>
-          ))}
-        </div>
+/* ─── Follow button (real mutation, optimistic) ──────────────────────────── */
+function FollowBtn({ row, overrides, onToggle }: {
+  row: BoardLeaderboardRow
+  overrides: Map<string, boolean>
+  onToggle: (username: string, next: boolean) => void
+}) {
+  const me = useAuthStore(s => s.user)
+  const { push } = useToast()
+  const following = overrides.get(row.user.username) ?? row.isFollowing
+  if (me?.id === row.user.id) return <span />
+  return (
+    <button
+      className={"lb-fbtn" + (following ? " is-following" : "")}
+      onClick={() => {
+        if (!me) { push("Sign in to follow users", "info"); return }
+        onToggle(row.user.username, !following)
+      }}
+    >
+      {following
+        ? <><Check size={14} strokeWidth={2.2} />Following</>
+        : <><Plus size={14} strokeWidth={2.4} />Follow</>}
+    </button>
+  )
+}
+
+/* ─── Podium ─────────────────────────────────────────────────────────────── */
+function PodCard({ row, board }: { row: BoardLeaderboardRow; board: (typeof BOARDS)[number] }) {
+  const place = row.rank
+  const size = place === 1 ? 112 : 92
+  const r = size / 2 - 6, c = 2 * Math.PI * r
+  const ringTier = place === 1 ? "var(--lb-gold)" : place === 2 ? "var(--lb-silver)" : "var(--lb-bronze)"
+  const u = row.user
+  const grade = gradeForLevel(u.level)
+  return (
+    <div className={"lb-pod lb-pod-" + place} style={{ "--av": avColor(u.username), "--ped": ringTier } as React.CSSProperties}>
+      <div className="lb-pod-crown">
+        {place === 1 && <div className="lb-ribbon"><Crown size={11} strokeWidth={2} />Board Champion</div>}
+        {place === 1 ? <Crown size={30} strokeWidth={1.7} /> : <Medal size={24} strokeWidth={1.7} />}
+      </div>
+      <div className="lb-pod-av" style={{ width: size, height: size }}>
+        <svg className="lb-pod-ring" width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
+          <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="var(--lb-rule-strong)" strokeWidth="4" />
+          <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke={ringTier} strokeWidth="4" strokeLinecap="round"
+            strokeDasharray={c} strokeDashoffset={c * 0.12} transform={`rotate(-90 ${size / 2} ${size / 2})`}
+            style={{ filter: `drop-shadow(0 0 8px color-mix(in oklab, ${ringTier} 60%, transparent))` }} />
+        </svg>
+        <div className="lb-pod-ava"><Ava row={row} size={size - 20} fontSize={place === 1 ? 42 : 34} /></div>
+        <span className="lb-pod-medal">{place}</span>
+      </div>
+      <Link href={`/u/${u.username}`} className="lb-pod-name" style={{ color: "inherit", textDecoration: "none" }}>
+        {u.displayName}
+        <Verified kind={u.verifiedKind} size={place === 1 ? 18 : 15} />
+      </Link>
+      <div className="lb-pod-handle"><span className="lb-mono">@{u.username}</span></div>
+      <div className="lb-pod-metric tnum">
+        {row.value.toLocaleString()}<span className="lb-pm-unit">{board.unit}</span>
+      </div>
+      <div className="lb-pod-tier">
+        <Tier rank={place} lg={place === 1} />
+        <span className="lb-mono">Lv {u.level} · {grade}</span>
+      </div>
+      <div className="lb-pedestal"><span>{place}</span></div>
+    </div>
+  )
+}
+
+function Podium({ top, board }: { top: BoardLeaderboardRow[]; board: (typeof BOARDS)[number] }) {
+  if (top.length < 3) return null
+  const order = [top[1], top[0], top[2]]
+  return (
+    <div className="lb-podium-wrap lb-rise" style={{ "--board": board.accent } as React.CSSProperties}>
+      <div className="lb-speedlines" />
+      <div className="lb-halftone" />
+      <div className="lb-podium-glow" />
+      <div className="lb-podium">
+        {order.map(row => <PodCard key={row.user.id} row={row} board={board} />)}
       </div>
     </div>
   )
 }
+
+/* ─── Ranked row ─────────────────────────────────────────────────────────── */
+function Row({ row, board, isMe, overrides, onToggle }: {
+  row: BoardLeaderboardRow; board: (typeof BOARDS)[number]; isMe: boolean
+  overrides: Map<string, boolean>; onToggle: (username: string, next: boolean) => void
+}) {
+  const u = row.user
+  return (
+    <div className={"lb-row" + (isMe ? " is-you" : "")}>
+      <div className="lb-rk"><span className="lb-rk-n">{row.rank}</span></div>
+      <Link href={`/u/${u.username}`} className="lb-who" style={{ color: "inherit", textDecoration: "none" }}>
+        <span className="lb-ava" style={{ "--av": avColor(u.username) } as React.CSSProperties}>
+          <Ava row={row} size={44} fontSize={17} />
+          <span className="lb-ava-lv">{u.level}</span>
+        </span>
+        <div className="lb-who-txt">
+          <div className="lb-who-name">
+            <Tier rank={row.rank} />
+            {u.displayName}
+            <Verified kind={u.verifiedKind} />
+            {isMe && <span className="lb-you-tag">YOU</span>}
+          </div>
+          <div className="lb-who-sub">
+            <span className="lb-mono">@{u.username}</span>
+            <span className="lb-grade">· {gradeForLevel(u.level)}</span>
+          </div>
+        </div>
+      </Link>
+      <div className="lb-sec col-sec">
+        <b>{board.secondaryLabel === "level" ? `Lv ${row.secondary}` : compact(row.secondary)}</b>{" "}
+        <span className="lb-mono">{board.secondaryLabel}</span>
+      </div>
+      <div className="lb-metric">
+        <div className="lb-metric-n tnum">{row.value.toLocaleString()}</div>
+        <div className="lb-metric-u">{board.unit}</div>
+      </div>
+      <div className="lb-follow col-follow">
+        <FollowBtn row={row} overrides={overrides} onToggle={onToggle} />
+      </div>
+    </div>
+  )
+}
+
+function SkeletonRow() {
+  return (
+    <div className="lb-row" style={{ pointerEvents: "none" }}>
+      <span className="lb-skel" style={{ width: 26, height: 20, borderRadius: 6 }} />
+      <div className="lb-who">
+        <span className="lb-skel" style={{ width: 44, height: 44, borderRadius: "50%" }} />
+        <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 7 }}>
+          <span className="lb-skel" style={{ width: "42%", height: 12 }} />
+          <span className="lb-skel" style={{ width: "26%", height: 10 }} />
+        </div>
+      </div>
+      <span className="lb-skel col-sec" style={{ width: 56, height: 14, justifySelf: "end" }} />
+      <span className="lb-skel" style={{ width: 64, height: 20, justifySelf: "end" }} />
+      <span className="lb-skel col-follow" style={{ width: 84, height: 32, borderRadius: 10, justifySelf: "end" }} />
+    </div>
+  )
+}
+
+/* ─── Sticky you-bar ─────────────────────────────────────────────────────── */
+function YouBar({ me, total, board }: {
+  me: { rank: number; value: number; secondary: number; nextValue: number | null }
+  total: number; board: (typeof BOARDS)[number]
+}) {
+  const user = useAuthStore(s => s.user)
+  if (!user) return null
+  const atTop = me.rank <= 1
+  const gap = me.nextValue != null ? Math.max(1, me.nextValue - me.value) : null
+  const pct = gap != null ? Math.min(0.97, Math.max(0.12, me.value / (me.value + gap))) : 1
+  return (
+    <div className="lb-youbar" style={{ "--accent": board.accent } as React.CSSProperties}>
+      <div className="lb-youbar-id">
+        <div className="lb-youbar-rk">
+          <span className="lb-mono" style={{ color: "rgba(244,242,236,.7)" }}>Rank</span>
+          <b>#{me.rank.toLocaleString()}</b>
+        </div>
+        <span className="lb-youbar-ava">
+          {user.avatarUrl
+            /* eslint-disable-next-line @next/next/no-img-element */
+            ? <img src={user.avatarUrl} alt="" style={{ width: 40, height: 40, borderRadius: "50%", objectFit: "cover" }} />
+            : user.displayName[0]?.toUpperCase()}
+        </span>
+        <div>
+          <div className="lb-youbar-name">{user.displayName}<span className="lb-you-tag">YOU</span></div>
+          <div className="lb-youbar-sub">
+            {compact(me.value)} {board.unit}
+            {total > 100 ? " · top " + Math.max(0.1, (me.rank / total) * 100).toFixed(1) + "%" : ` · #${me.rank} of ${total}`}
+          </div>
+        </div>
+      </div>
+      <div className="lb-youbar-prog">
+        <div className="lb-yp-top">
+          <span className="lb-yp-label">
+            {atTop
+              ? <>You&apos;re <b>#1</b> — defend your spot</>
+              : gap != null
+                ? <><b>{compact(gap)}</b> {board.unit} to pass <b>#{(me.rank - 1).toLocaleString()}</b></>
+                : <>Keep going — every {board.unit.replace(/s$/, "")} counts</>}
+          </span>
+        </div>
+        <div className="lb-youbar-track"><span style={{ width: pct * 100 + "%" }} /></div>
+      </div>
+      <div className="lb-youbar-metric">
+        <div className="lb-mono" style={{ color: "rgba(244,242,236,.6)" }}>of {compact(total)}</div>
+        <b className="tnum">{compact(me.value)}</b>
+      </div>
+      <Link href="/dashboard" className="lb-youbar-cta" style={{ textDecoration: "none", display: "inline-flex", alignItems: "center", gap: 6 }}>
+        <Zap size={15} strokeWidth={2} />Climb
+      </Link>
+    </div>
+  )
+}
+
+/* ─── Page ───────────────────────────────────────────────────────────────── */
+export default function LeaderboardPage() {
+  const me = useAuthStore(s => s.user)
+  const { push } = useToast()
+  const qc = useQueryClient()
+
+  const [boardId, setBoardId] = useState<LeaderboardBoardId>("episodes")
+  const [win, setWin] = useState<WindowId>("all")
+  const [audience, setAudience] = useState<AudienceId>("global")
+  const [q, setQ] = useState("")
+
+  const board = BOARDS.find(b => b.id === boardId)!
+  const effectiveWin = board.windowed ? win : "all"
+  const { data, isLoading } = useBoardLeaderboard(boardId, effectiveWin, audience)
+
+  // Optimistic follow overrides, keyed by username (cleared on refetch via key)
+  const [overrides, setOverrides] = useState<Map<string, boolean>>(new Map())
+  const followMut = useMutation({
+    mutationFn: ({ username, next }: { username: string; next: boolean }) =>
+      next ? ep.follow(username) : ep.unfollow(username),
+    onError: (_e, { username }) => {
+      setOverrides(prev => { const n = new Map(prev); n.delete(username); return n })
+      push("Failed to update follow", "error")
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["leaderboard-board"] }),
+  })
+  const onToggle = (username: string, next: boolean) => {
+    setOverrides(prev => new Map(prev).set(username, next))
+    followMut.mutate({ username, next })
+  }
+
+  const rows = useMemo(() => data?.data ?? [], [data])
+  const searching = q.trim().length > 0
+  const filtered = useMemo(() => {
+    if (!searching) return rows
+    const needle = q.trim().toLowerCase()
+    return rows.filter(r =>
+      r.user.displayName.toLowerCase().includes(needle) || r.user.username.toLowerCase().includes(needle))
+  }, [rows, q, searching])
+
+  const showPodium = !searching && filtered.length >= 3
+  const listRows = searching || !showPodium ? filtered : filtered.slice(3)
+
+  return (
+    <div className="lb-page" style={{ "--accent": board.accent } as React.CSSProperties}>
+      <style>{LB_CSS}</style>
+      <div className="lb-shell">
+
+        {/* Top bar */}
+        <div className="lb-topbar">
+          <div className="lb-brand">
+            <div className="lb-brand-mark">
+              <svg viewBox="-6 -8 88 116" style={{ width: 20, height: 20, display: "block" }} aria-label="Kaiveron">
+                <path d="M 0 0 L 24 0 L 24 36 L 40 36 L 56 0 L 76 0 L 50 44 L 42 44 L 64 100 L 44 100 L 30 64 L 24 64 L 24 100 L 0 100 Z" fill="#F4F2EC" fillRule="evenodd" />
+              </svg>
+            </div>
+            <div className="lb-titleblock">
+              <h1>Leaderboard</h1>
+              <div className="lb-mono lb-tagline">
+                <span className="lb-live" />
+                Live rankings{data ? ` · ${compact(data.total)} ranked` : ""}
+              </div>
+            </div>
+          </div>
+          <div className="lb-search">
+            <Search size={16} strokeWidth={1.9} />
+            <input value={q} onChange={e => setQ(e.target.value)} placeholder="Search ranked users…" />
+          </div>
+        </div>
+
+        {/* Board tabs */}
+        <div className="lb-boards">
+          {BOARDS.map(b => {
+            const BIcon = b.icon
+            return (
+              <button key={b.id} className={"lb-board" + (b.id === boardId ? " is-active" : "")}
+                style={{ "--board": b.accent } as React.CSSProperties} onClick={() => setBoardId(b.id)}>
+                <span className="lb-board-ic"><BIcon size={16} strokeWidth={1.9} /></span>
+                {b.label}
+              </button>
+            )
+          })}
+        </div>
+
+        {/* Controls */}
+        <div className="lb-controls">
+          <div className="lb-board-meta">
+            <h2>{board.label}</h2>
+            <span className="lb-mono">
+              · {board.windowed ? WINDOWS.find(w => w.id === win)!.label : "All-Time"}
+              {audience === "friends" ? " · Friends" : ""}
+            </span>
+          </div>
+          <div className="lb-controls-l">
+            <div className="lb-seg" style={{ opacity: board.windowed ? 1 : 0.45 }}
+              title={board.windowed ? undefined : "This board is all-time only"}>
+              {WINDOWS.map(w => (
+                <button key={w.id} disabled={!board.windowed}
+                  className={w.id === effectiveWin ? "is-on" : ""}
+                  onClick={() => board.windowed && setWin(w.id)}>{w.label}</button>
+              ))}
+            </div>
+            <div className="lb-aud">
+              <button className={audience === "global" ? "is-on" : ""} onClick={() => setAudience("global")}>
+                <Globe size={15} strokeWidth={1.9} />Global
+              </button>
+              <button className={audience === "friends" ? "is-on" : ""}
+                onClick={() => {
+                  if (!me) { push("Sign in to see your friends board", "info"); return }
+                  setAudience("friends")
+                }}>
+                <Users size={15} strokeWidth={1.9} />Friends
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Body */}
+        {isLoading && !data ? (
+          <div className="lb-list lb-rise">
+            {Array.from({ length: 8 }).map((_, i) => <SkeletonRow key={i} />)}
+          </div>
+        ) : filtered.length === 0 ? (
+          <div className="lb-list lb-rise">
+            <div className="lb-empty">
+              <span className="lb-empty-ic">
+                {searching ? <Search size={24} strokeWidth={1.8} /> : <TrendingUp size={24} strokeWidth={1.8} />}
+              </span>
+              {searching ? (
+                <>
+                  <h3>No one matches &ldquo;{q}&rdquo;</h3>
+                  <p>Try a different name or handle, or clear the search to see the full board.</p>
+                </>
+              ) : audience === "friends" ? (
+                <>
+                  <h3>No friends ranked yet</h3>
+                  <p>Follow people on Kaiveron and they&apos;ll show up here, ranked against you.</p>
+                </>
+              ) : (
+                <>
+                  <h3>Nothing on this board yet</h3>
+                  <p>Be the first — watch, review, and climb the rankings.</p>
+                </>
+              )}
+            </div>
+          </div>
+        ) : (
+          <>
+            {showPodium && <Podium top={filtered.slice(0, 3)} board={board} />}
+            <div className="lb-list lb-rise" style={{ animationDelay: ".08s" }}>
+              <div className="lb-list-head lb-mono">
+                <span>Rank</span>
+                <span>User</span>
+                <span className="col-sec ta-r">{board.secondaryLabel}</span>
+                <span className="ta-r">{board.unit}</span>
+                <span className="col-follow" />
+              </div>
+              {listRows.map(row => (
+                <Row key={row.user.id} row={row} board={board}
+                  isMe={me?.id === row.user.id} overrides={overrides} onToggle={onToggle} />
+              ))}
+            </div>
+          </>
+        )}
+      </div>
+
+      {/* Sticky you-bar */}
+      {me && data?.me && !searching && (
+        <YouBar me={data.me} total={data.total} board={board} />
+      )}
+    </div>
+  )
+}
+
+/* ─── Page CSS (ported from the approved standalone design) ──────────────── */
+const LB_CSS = `
+  @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
+  .lb-page {
+    --lb-bg: #060A14; --lb-surface: #0D1224; --lb-surface-2: #121a33; --lb-surface-3: #18223f;
+    --lb-rule: rgba(244,242,236,0.07); --lb-rule-strong: rgba(244,242,236,0.14);
+    --lb-paper: #F4F2EC; --lb-muted: rgba(244,242,236,0.58); --lb-faint: rgba(244,242,236,0.34);
+    --accent-2: #00D4FF;
+    --lb-gold: #F2C94C; --lb-silver: #C7D2E0; --lb-bronze: #E08A4B;
+    --pad: 24px; --gap: 16px; --radius: 22px;
+    position: relative; min-height: 100vh; padding: 34px 32px 150px;
+    font-family: 'Sora', system-ui, sans-serif; color: var(--lb-paper); -webkit-font-smoothing: antialiased;
+    background:
+      radial-gradient(1300px 640px at 78% -12%, color-mix(in oklab, var(--accent) 20%, transparent), transparent 60%),
+      radial-gradient(1000px 520px at 6% -4%, color-mix(in oklab, var(--accent-2) 12%, transparent), transparent 55%),
+      var(--lb-bg);
+  }
+  .lb-page button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+  .lb-page input { font-family: inherit; }
+  .lb-mono { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--lb-faint); }
+  .tnum { font-variant-numeric: tabular-nums; }
+  @keyframes lbrise { from { transform: translateY(14px); opacity: 0; } to { transform: none; opacity: 1; } }
+  .lb-rise { animation: lbrise .6s cubic-bezier(.2,.7,.2,1) both; }
+  @media (prefers-reduced-motion: reduce) { .lb-rise { animation: none; } }
+
+  .lb-shell { margin: 0 auto; max-width: 1180px; display: flex; flex-direction: column; gap: var(--gap); }
+
+  .lb-topbar { display: flex; align-items: center; justify-content: space-between; gap: 20px; margin-bottom: 4px; }
+  .lb-brand { display: flex; align-items: center; gap: 12px; }
+  .lb-brand-mark { width: 38px; height: 38px; border-radius: 12px; display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(135deg, color-mix(in oklab, var(--accent) 70%, #000), color-mix(in oklab, var(--accent) 30%, var(--accent-2)));
+    box-shadow: 0 6px 18px color-mix(in oklab, var(--accent) 40%, transparent), inset 0 1px 0 rgba(255,255,255,.2); }
+  .lb-titleblock h1 { margin: 0; font-size: 25px; font-weight: 800; letter-spacing: -0.02em; line-height: 1;
+    text-shadow: 0 0 24px color-mix(in oklab, var(--accent) 45%, transparent); }
+  .lb-titleblock .lb-tagline { margin-top: 6px; color: var(--accent-2); display: flex; align-items: center; gap: 7px; }
+  .lb-live { width: 7px; height: 7px; border-radius: 50%; background: #3FB950; animation: lblive 1.8s infinite; }
+  @keyframes lblive { 0% { box-shadow: 0 0 0 0 rgba(63,185,80,.55); } 70% { box-shadow: 0 0 0 7px rgba(63,185,80,0); } 100% { box-shadow: 0 0 0 0 rgba(63,185,80,0); } }
+  @media (prefers-reduced-motion: reduce) { .lb-live { animation: none; } }
+  .lb-search { display: flex; align-items: center; gap: 9px; height: 42px; padding: 0 14px; min-width: 230px;
+    border-radius: 13px; background: var(--lb-surface); border: 1px solid var(--lb-rule-strong); color: var(--lb-muted); transition: border-color .16s, background .16s; }
+  .lb-search:focus-within { border-color: color-mix(in oklab, var(--accent) 55%, transparent); background: var(--lb-surface-2); }
+  .lb-search input { flex: 1; min-width: 0; border: none; outline: none; background: none; color: var(--lb-paper); font-size: 13.5px; }
+  .lb-search input::placeholder { color: var(--lb-faint); }
+
+  .lb-boards { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 2px; scrollbar-width: none; }
+  .lb-boards::-webkit-scrollbar { display: none; }
+  .lb-board { flex-shrink: 0; display: flex; align-items: center; gap: 9px; height: 46px; padding: 0 17px; border-radius: 14px;
+    background: var(--lb-surface); border: 1px solid var(--lb-rule); color: var(--lb-muted); font-size: 14px; font-weight: 600;
+    transition: transform .14s, color .16s, border-color .16s, background .16s; }
+  .lb-board:hover { color: var(--lb-paper); border-color: var(--lb-rule-strong); transform: translateY(-1px); }
+  .lb-board .lb-board-ic { width: 30px; height: 30px; border-radius: 9px; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    background: color-mix(in oklab, var(--board) 16%, transparent); color: var(--board); transition: background .16s; }
+  .lb-board.is-active { color: var(--lb-paper); border-color: color-mix(in oklab, var(--board) 60%, transparent);
+    background: color-mix(in oklab, var(--board) 14%, var(--lb-surface)); box-shadow: 0 8px 22px color-mix(in oklab, var(--board) 22%, transparent); }
+  .lb-board.is-active .lb-board-ic { background: color-mix(in oklab, var(--board) 28%, transparent); }
+
+  .lb-controls { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; padding: 6px 4px 2px; }
+  .lb-seg { display: inline-flex; padding: 4px; border-radius: 13px; background: var(--lb-surface); border: 1px solid var(--lb-rule); }
+  .lb-seg button { position: relative; height: 34px; padding: 0 16px; border-radius: 9px; font-size: 13px; font-weight: 600; color: var(--lb-muted); white-space: nowrap; transition: color .15s; }
+  .lb-seg button.is-on { color: var(--lb-paper); background: color-mix(in oklab, var(--accent) 22%, var(--lb-surface-3)); box-shadow: 0 2px 8px color-mix(in oklab, var(--accent) 25%, transparent); }
+  .lb-seg button:not(.is-on):hover { color: var(--lb-paper); }
+  .lb-aud { display: inline-flex; gap: 6px; }
+  .lb-aud button { display: inline-flex; align-items: center; gap: 7px; height: 42px; padding: 0 15px; border-radius: 12px;
+    background: var(--lb-surface); border: 1px solid var(--lb-rule); color: var(--lb-muted); font-size: 13px; font-weight: 600; transition: color .15s, border-color .15s, background .15s; }
+  .lb-aud button svg { color: var(--lb-faint); transition: color .15s; }
+  .lb-aud button:hover { color: var(--lb-paper); border-color: var(--lb-rule-strong); }
+  .lb-aud button.is-on { color: var(--lb-paper); border-color: color-mix(in oklab, var(--accent-2) 55%, transparent); background: color-mix(in oklab, var(--accent-2) 12%, var(--lb-surface)); }
+  .lb-aud button.is-on svg { color: var(--accent-2); }
+  .lb-controls-l { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .lb-board-meta { display: flex; align-items: center; gap: 9px; }
+  .lb-board-meta h2 { margin: 0; font-size: 17px; font-weight: 700; letter-spacing: -.01em; }
+  .lb-board-meta .lb-mono { color: var(--lb-muted); }
+
+  .lb-podium-wrap { position: relative; border-radius: var(--radius); padding: 30px var(--pad) 0; overflow: hidden;
+    background:
+      radial-gradient(620px 280px at 50% -30%, color-mix(in oklab, var(--lb-gold) 14%, transparent), transparent 70%),
+      linear-gradient(180deg, var(--lb-surface-2), var(--lb-surface));
+    border: 1px solid var(--lb-rule-strong); }
+  .lb-podium-glow { position: absolute; inset: -40% 20% auto 20%; height: 320px; filter: blur(56px); opacity: .5; pointer-events: none;
+    background: radial-gradient(40% 60% at 50% 40%, color-mix(in oklab, var(--lb-gold) 60%, transparent), transparent 70%); }
+  .lb-podium { position: relative; display: grid; grid-template-columns: 1fr 1.18fr 1fr; align-items: end; gap: 18px; max-width: 760px; margin: 0 auto; z-index: 1; }
+
+  .lb-pod { display: flex; flex-direction: column; align-items: center; text-align: center; }
+  .lb-pod-2 { order: 1; } .lb-pod-1 { order: 2; } .lb-pod-3 { order: 3; }
+  .lb-pod-crown { display: flex; flex-direction: column; align-items: center; margin-bottom: 8px; filter: drop-shadow(0 3px 8px rgba(0,0,0,.5)); }
+  .lb-pod-1 .lb-pod-crown { color: var(--lb-gold); filter: drop-shadow(0 0 14px color-mix(in oklab, var(--lb-gold) 70%, transparent)); animation: lbcrown 3.4s ease-in-out infinite; }
+  .lb-pod-2 .lb-pod-crown { color: var(--lb-silver); }
+  .lb-pod-3 .lb-pod-crown { color: var(--lb-bronze); }
+  @keyframes lbcrown { 0%,100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-3px) rotate(-2deg); } }
+
+  .lb-pod-av { position: relative; }
+  .lb-pod-1 .lb-pod-av::before { content: ''; position: absolute; inset: -16px; border-radius: 50%; z-index: -1;
+    background: radial-gradient(circle, color-mix(in oklab, var(--lb-gold) 50%, transparent), transparent 68%); animation: lbaura 2.8s ease-in-out infinite; }
+  @keyframes lbaura { 0%,100% { transform: scale(1); opacity: .55; } 50% { transform: scale(1.16); opacity: .95; } }
+  .lb-pod-ring { display: block; }
+  .lb-pod-ava { position: absolute; inset: 7px; border-radius: 50%; overflow: hidden; display: flex; align-items: center; justify-content: center;
+    background: radial-gradient(120% 120% at 30% 20%, color-mix(in oklab, var(--av) 60%, var(--lb-surface-3)), var(--lb-surface-2));
+    border: 3px solid var(--lb-surface); box-shadow: inset 0 2px 14px rgba(0,0,0,.5); }
+  .lb-pod-ava img { width: 100%; height: 100%; object-fit: cover; }
+  .lb-pod-medal { position: absolute; bottom: -6px; left: 50%; transform: translateX(-50%); z-index: 3;
+    display: flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 50%;
+    font-size: 13px; font-weight: 800; color: var(--lb-bg); border: 3px solid var(--lb-surface); box-shadow: 0 4px 10px rgba(0,0,0,.45); }
+  .lb-pod-1 .lb-pod-medal { background: linear-gradient(135deg, #FFE08A, var(--lb-gold)); }
+  .lb-pod-2 .lb-pod-medal { background: linear-gradient(135deg, #E6EEF8, var(--lb-silver)); }
+  .lb-pod-3 .lb-pod-medal { background: linear-gradient(135deg, #F6B27A, var(--lb-bronze)); }
+
+  .lb-pod-name { margin-top: 16px; display: flex; align-items: center; gap: 6px; font-weight: 700; letter-spacing: -.01em; }
+  .lb-pod-name:hover { text-decoration: underline !important; }
+  .lb-verified { color: var(--accent-2); display: inline-flex; flex-shrink: 0; }
+  .lb-pod-handle { margin-top: 3px; display: inline-flex; align-items: center; gap: 7px; color: var(--lb-muted); }
+  .lb-pod-handle .lb-mono { text-transform: none; letter-spacing: 0; font-size: 12px; }
+  .lb-pod-metric { margin-top: 13px; font-weight: 800; letter-spacing: -.02em; line-height: 1; }
+  .lb-pod-metric .lb-pm-unit { font-size: .42em; font-weight: 600; color: var(--lb-muted); margin-left: 5px; letter-spacing: .04em; text-transform: uppercase; font-family: 'JetBrains Mono', monospace; }
+  .lb-pod-tier { margin-top: 11px; display: flex; align-items: center; gap: 8px; justify-content: center; }
+  .lb-pod-tier .lb-mono { color: var(--lb-muted); }
+
+  .lb-pedestal { margin-top: 18px; width: 100%; border-radius: 14px 14px 0 0; display: flex; align-items: flex-start; justify-content: center; padding-top: 13px;
+    background: linear-gradient(180deg, color-mix(in oklab, var(--ped) 26%, var(--lb-surface-3)), color-mix(in oklab, var(--ped) 6%, var(--lb-surface))); border: 1px solid var(--lb-rule); border-bottom: none; }
+  .lb-pedestal span { font-size: 42px; font-weight: 800; line-height: 1; color: color-mix(in oklab, var(--ped) 70%, var(--lb-paper)); opacity: .9; text-shadow: 0 2px 12px color-mix(in oklab, var(--ped) 40%, transparent); }
+  .lb-pod-1 .lb-pedestal { height: 98px; } .lb-pod-1 .lb-pedestal span { font-size: 52px; }
+  .lb-pod-2 .lb-pedestal { height: 74px; }
+  .lb-pod-3 .lb-pedestal { height: 60px; }
+  .lb-pod-1 .lb-pod-name { font-size: 20px; } .lb-pod-1 .lb-pod-metric { font-size: 38px; }
+  .lb-pod-2 .lb-pod-name, .lb-pod-3 .lb-pod-name { font-size: 17px; }
+  .lb-pod-2 .lb-pod-metric, .lb-pod-3 .lb-pod-metric { font-size: 29px; }
+
+  .lb-ribbon { display: inline-flex; align-items: center; gap: 6px; margin-bottom: 11px; padding: 5px 13px; border-radius: 999px;
+    font-family: 'JetBrains Mono', monospace; font-size: 9.5px; letter-spacing: .2em; font-weight: 700; text-transform: uppercase; color: #2A1A00;
+    background: linear-gradient(135deg, #FFE7A6, var(--lb-gold)); box-shadow: 0 4px 18px color-mix(in oklab, var(--lb-gold) 55%, transparent), inset 0 1px 0 rgba(255,255,255,.5); }
+  .lb-pod-1 .lb-pod-metric { background: linear-gradient(100deg, #FFE7A6 0%, #FFFFFF 28%, #FFD24A 52%, #FFFFFF 74%, #FFE08A 100%);
+    background-size: 220% auto; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent;
+    animation: lbshine 4.5s linear infinite; filter: drop-shadow(0 2px 12px color-mix(in oklab, var(--lb-gold) 45%, transparent)); }
+  @keyframes lbshine { to { background-position: 220% center; } }
+  .lb-pod-1 .lb-pod-metric .lb-pm-unit { -webkit-text-fill-color: var(--lb-muted); color: var(--lb-muted); }
+
+  .lb-speedlines { position: absolute; inset: -30% 0 auto 0; height: 560px; pointer-events: none; opacity: .55; z-index: 0;
+    background: repeating-conic-gradient(from 0deg at 50% 36%,
+      transparent 0deg 2.4deg, color-mix(in oklab, var(--board) 34%, transparent) 2.4deg 3.2deg);
+    -webkit-mask: radial-gradient(closest-side at 50% 36%, transparent 28%, #000 60%, transparent 86%);
+    mask: radial-gradient(closest-side at 50% 36%, transparent 28%, #000 60%, transparent 86%);
+    animation: lbspin 90s linear infinite; }
+  @keyframes lbspin { to { transform: rotate(360deg); } }
+  .lb-halftone { position: absolute; inset: 0; pointer-events: none; z-index: 0; opacity: .5;
+    background-image: radial-gradient(rgba(244,242,236,0.10) 1px, transparent 1.4px); background-size: 13px 13px;
+    -webkit-mask: linear-gradient(180deg, #000, transparent 70%); mask: linear-gradient(180deg, #000, transparent 70%); }
+  @media (prefers-reduced-motion: reduce) {
+    .lb-speedlines, .lb-pod-1 .lb-pod-crown, .lb-pod-1 .lb-pod-av::before, .lb-pod-1 .lb-pod-metric { animation: none; }
+  }
+
+  .lb-tier { display: inline-flex; align-items: center; justify-content: center; transform: skewX(-11deg);
+    min-width: 24px; height: 21px; padding: 0 7px; border-radius: 5px; font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 12px; letter-spacing: .03em;
+    color: #0A0A0A; background: var(--tc); box-shadow: 0 2px 9px color-mix(in oklab, var(--tc) 50%, transparent), inset 0 1px 0 rgba(255,255,255,.35); flex-shrink: 0; }
+  .lb-tier > span { display: inline-block; transform: skewX(11deg); }
+  .lb-tier.is-ss { background: linear-gradient(135deg, #FFE7A6, var(--lb-gold)); box-shadow: 0 0 16px color-mix(in oklab, var(--lb-gold) 75%, transparent), inset 0 1px 0 rgba(255,255,255,.5); }
+  .lb-tier.lg { min-width: 34px; height: 27px; font-size: 15px; border-radius: 7px; }
+
+  .lb-list { border-radius: var(--radius); background: var(--lb-surface); border: 1px solid var(--lb-rule); overflow: hidden;
+    --cols: minmax(64px,auto) minmax(0,2.4fr) 1fr 1.1fr auto; }
+  .lb-list-head { display: grid; grid-template-columns: var(--cols); align-items: center; gap: 14px; padding: 13px var(--pad); border-bottom: 1px solid var(--lb-rule); }
+  .lb-list-head span { color: var(--lb-faint); }
+  .lb-list-head .ta-r { text-align: right; }
+  .lb-row { display: grid; grid-template-columns: var(--cols); align-items: center; gap: 14px; padding: 13px var(--pad);
+    border-bottom: 1px solid var(--lb-rule); transition: background .14s; position: relative; }
+  .lb-row:last-child { border-bottom: none; }
+  .lb-row:hover { background: var(--lb-surface-2); }
+  .lb-row.is-you { background: color-mix(in oklab, var(--accent) 12%, var(--lb-surface)); box-shadow: inset 3px 0 0 var(--accent-2); }
+  .lb-row.is-you:hover { background: color-mix(in oklab, var(--accent) 16%, var(--lb-surface)); }
+
+  .lb-rk { display: flex; align-items: center; gap: 11px; }
+  .lb-rk-n { font-size: 18px; font-weight: 800; color: var(--lb-muted); min-width: 26px; font-variant-numeric: tabular-nums; }
+  .lb-row.is-you .lb-rk-n { color: var(--lb-paper); }
+
+  .lb-who { display: flex; align-items: center; gap: 13px; min-width: 0; }
+  .lb-ava { position: relative; width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center;
+    background: radial-gradient(120% 120% at 30% 20%, color-mix(in oklab, var(--av) 62%, var(--lb-surface-3)), var(--lb-surface-2));
+    border: 1px solid color-mix(in oklab, var(--av) 40%, var(--lb-rule-strong)); box-shadow: inset 0 1px 8px rgba(0,0,0,.4); overflow: visible; }
+  .lb-ava img { border: none; }
+  .lb-ava .lb-ava-lv { position: absolute; bottom: -4px; right: -5px; font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 600; color: var(--lb-paper);
+    padding: 1px 4px; border-radius: 6px; background: var(--lb-surface-3); border: 1px solid var(--lb-rule-strong); letter-spacing: .02em; z-index: 2; }
+  .lb-who-txt { min-width: 0; }
+  .lb-who-name { display: flex; align-items: center; gap: 7px; font-size: 15px; font-weight: 600; }
+  .lb-you-tag { font-family: 'JetBrains Mono', monospace; font-size: 8.5px; letter-spacing: .12em; padding: 2px 6px; border-radius: 5px; color: var(--lb-bg); background: var(--accent-2); font-weight: 700; }
+  .lb-who-sub { margin-top: 3px; display: flex; align-items: center; gap: 8px; color: var(--lb-faint); }
+  .lb-who-sub .lb-mono { text-transform: none; letter-spacing: 0; font-size: 12px; }
+  .lb-grade { color: var(--lb-muted); font-size: 12px; }
+
+  .lb-sec { text-align: right; color: var(--lb-muted); }
+  .lb-sec b { color: var(--lb-paper); font-weight: 700; font-variant-numeric: tabular-nums; }
+  .lb-sec .lb-mono { color: var(--lb-faint); }
+  .lb-metric { text-align: right; }
+  .lb-metric-n { font-size: 21px; font-weight: 800; letter-spacing: -.01em; font-variant-numeric: tabular-nums; }
+  .lb-metric-u { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--lb-faint); margin-top: 2px; }
+  .lb-follow { display: flex; justify-content: flex-end; }
+  .lb-fbtn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 36px; padding: 0 14px; border-radius: 10px; font-size: 12.5px; font-weight: 600;
+    color: var(--lb-paper); background: var(--lb-rule); border: 1px solid var(--lb-rule-strong); transition: background .15s, border-color .15s, transform .12s; white-space: nowrap; }
+  .lb-fbtn:hover { background: var(--lb-rule-strong); transform: translateY(-1px); }
+  .lb-fbtn.is-following { color: var(--lb-muted); }
+
+  .lb-youbar { position: fixed; left: 50%; bottom: 22px; transform: translateX(-50%); z-index: 40; width: min(1116px, calc(100vw - 48px));
+    display: grid; grid-template-columns: auto 1fr auto auto; align-items: center; gap: 20px; padding: 13px 18px; border-radius: 18px;
+    font-family: 'Sora', system-ui, sans-serif; color: var(--lb-paper, #F4F2EC);
+    background: color-mix(in oklab, var(--accent) 20%, rgba(13,18,36,.86)); backdrop-filter: blur(20px) saturate(150%); -webkit-backdrop-filter: blur(20px) saturate(150%);
+    border: 1px solid color-mix(in oklab, var(--accent-2) 40%, transparent); box-shadow: 0 18px 50px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.1); }
+  .lb-youbar-id { display: flex; align-items: center; gap: 13px; }
+  .lb-youbar-rk { display: flex; flex-direction: column; align-items: center; justify-content: center; min-width: 64px; padding: 6px 12px; border-radius: 12px;
+    background: rgba(6,10,20,.4); border: 1px solid var(--lb-rule-strong); }
+  .lb-youbar-rk b { font-size: 22px; font-weight: 800; line-height: 1; letter-spacing: -.02em; font-variant-numeric: tabular-nums; }
+  .lb-youbar-ava { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 15px; flex-shrink: 0; overflow: hidden;
+    background: radial-gradient(120% 120% at 30% 20%, color-mix(in oklab, var(--accent) 65%, var(--lb-surface-3)), var(--lb-surface-2)); border: 1px solid var(--lb-rule-strong); }
+  .lb-youbar-name { font-size: 15px; font-weight: 700; display: flex; align-items: center; gap: 7px; }
+  .lb-youbar-sub { margin-top: 2px; color: rgba(244,242,236,.7); font-size: 12.5px; }
+  .lb-youbar-prog { min-width: 0; }
+  .lb-youbar-prog .lb-yp-top { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin-bottom: 7px; }
+  .lb-youbar-prog .lb-yp-label { font-size: 12.5px; color: rgba(244,242,236,.82); }
+  .lb-youbar-prog .lb-yp-label b { color: #fff; font-weight: 700; }
+  .lb-youbar-track { height: 7px; border-radius: 4px; background: rgba(6,10,20,.45); overflow: hidden; }
+  .lb-youbar-track span { display: block; height: 100%; border-radius: 4px; background: linear-gradient(90deg, var(--accent-2), var(--lb-paper)); box-shadow: 0 0 12px color-mix(in oklab, var(--accent-2) 60%, transparent); }
+  .lb-youbar-metric { text-align: right; }
+  .lb-youbar-metric b { font-size: 19px; font-weight: 800; letter-spacing: -.01em; font-variant-numeric: tabular-nums; }
+  .lb-youbar-cta { height: 40px; padding: 0 18px; border-radius: 12px; font-size: 13.5px; font-weight: 700; color: var(--lb-bg, #060A14);
+    background: linear-gradient(135deg, var(--accent-2), var(--lb-paper)); box-shadow: 0 6px 18px color-mix(in oklab, var(--accent-2) 40%, transparent); transition: transform .14s; white-space: nowrap; }
+  .lb-youbar-cta:hover { transform: translateY(-1px); }
+
+  .lb-empty { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px; padding: 60px 24px; }
+  .lb-empty-ic { width: 54px; height: 54px; border-radius: 16px; display: flex; align-items: center; justify-content: center; color: var(--accent-2); background: color-mix(in oklab, var(--accent-2) 12%, transparent); margin-bottom: 6px; }
+  .lb-empty h3 { margin: 0; font-size: 17px; font-weight: 700; }
+  .lb-empty p { margin: 0; max-width: 320px; color: var(--lb-muted); font-size: 13.5px; line-height: 1.55; }
+
+  .lb-skel { background: linear-gradient(90deg, var(--lb-surface-2) 0%, var(--lb-surface-3) 50%, var(--lb-surface-2) 100%); background-size: 200% 100%; animation: lbshimmer 1.4s ease-in-out infinite; border-radius: 6px; display: inline-block; }
+  @keyframes lbshimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+  @media (max-width: 940px) {
+    .lb-list-head .col-sec, .lb-row .col-sec { display: none; }
+    .lb-list { --cols: minmax(56px,auto) minmax(0,2.4fr) 1.1fr auto; }
+  }
+  @media (max-width: 720px) {
+    .lb-page { padding: 22px 14px 160px; }
+    .lb-topbar { flex-wrap: wrap; }
+    .lb-search { min-width: 0; width: 100%; order: 3; }
+    .lb-podium { grid-template-columns: 1fr; gap: 12px; max-width: 360px; }
+    .lb-pod-2, .lb-pod-1, .lb-pod-3 { order: 0; }
+    .lb-pedestal { display: none; }
+    .lb-pod { padding: 18px; border-radius: 16px; background: var(--lb-surface-2); border: 1px solid var(--lb-rule); }
+    .lb-youbar { grid-template-columns: auto 1fr auto; }
+    .lb-youbar-prog { display: none; }
+  }
+  @media (max-width: 520px) {
+    .lb-list-head .col-follow, .lb-row .col-follow { display: none; }
+    .lb-list { --cols: minmax(48px,auto) minmax(0,2.4fr) 1.1fr; }
+  }
+`

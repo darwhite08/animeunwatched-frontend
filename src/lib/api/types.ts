@@ -218,6 +218,35 @@ export interface Notification {
   createdAt: string
 }
 
+/* ── Board leaderboards ── */
+export type LeaderboardBoardId = "episodes" | "reviews" | "streak" | "followed" | "xp"
+
+export interface BoardLeaderboardRow {
+  rank: number
+  value: number
+  secondary: number
+  isFollowing: boolean
+  user: {
+    id: string
+    username: string
+    slug: string | null
+    displayName: string
+    avatarUrl: string | null
+    verifiedKind: "USER" | "CREATOR" | "STUDIO" | null
+    reputation: number
+    level: number
+  }
+}
+
+export interface BoardLeaderboard {
+  board: LeaderboardBoardId
+  window: "week" | "month" | "all"
+  audience: "global" | "friends"
+  total: number
+  data: BoardLeaderboardRow[]
+  me: { rank: number; value: number; secondary: number; nextValue: number | null } | null
+}
+
 /* Pagination wrappers */
 export interface Paginated<T> {
   data: T[]

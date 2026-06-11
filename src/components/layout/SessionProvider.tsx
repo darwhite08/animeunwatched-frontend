@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useRef } from "react"
+import { useQueryClient } from "@tanstack/react-query"
 import { useAuthStore } from "@/stores/auth.store"
 import { connectSocket, disconnectSocket, updateSocketToken } from "@/lib/socket"
 import { preloadNotificationAudio } from "@/lib/audio/notifications"
@@ -12,6 +13,7 @@ const BASE = ""
 
 export function SessionProvider({ children }: { children: React.ReactNode }) {
   const { setAccess, setUser, setSessionReady, clear } = useAuthStore()
+  const qc = useQueryClient()
   const bootstrapped = useRef(false)
 
   // Preload notification sounds + arm the gesture-unlock listener so the
@@ -95,13 +97,23 @@ export function SessionProvider({ children }: { children: React.ReactNode }) {
         updateSocketToken(state.accessToken)
         void ensureKeyOnce(state.accessToken)
       }
+      // Session just became authenticated (cookie bootstrap on refresh, or
+      // login). Many GETs use optionalAuth and return 200 unauthenticated, so
+      // queries that fired before the token arrived cached impersonal data
+      // (reactedByMe=false, likedByMe=false, isMember=false…). Refetch them now
+      // that requests will carry the token.
+      if (state.accessToken && !prev.accessToken) {
+        void qc.invalidateQueries()
+      }
       if (!state.accessToken && prev.accessToken) {
         disconnectSocket()
         keyEnsuredFor.token = null
+        // Logged out — drop personalized state from the cache.
+        void qc.invalidateQueries()
       }
     })
     return unsub
-  }, [])
+  }, [qc])
 
   return (
     <>

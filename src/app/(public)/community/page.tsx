@@ -19,7 +19,6 @@ import { Avatar } from "@/components/ui/Avatar"
 import { CommentRow } from "@/components/posts/CommentRow"
 import { useLiveFeed } from "@/hooks/useRealtime"
 import { useImageUpload } from "@/hooks/useImageUpload"
-import NextImage from "next/image"
 import { PostMenu } from "@/components/ui/PostMenu"
 import { useAuthStore } from "@/stores/auth.store"
 import { VerifiedBadge } from "@/components/social/VerifiedBadge"
@@ -308,15 +307,18 @@ function PostCard({ post }: { post: Post }) {
           return <p className="text-[15px] text-foreground leading-[1.6] max-w-[65ch] whitespace-pre-wrap break-words"><RichBody text={post.content} /></p>
         })()}
 
-        {/* Image attachment */}
+        {/* Image attachment — plain <img> (not next/image): user uploads are
+            served from kaiveron.com/cdn which isn't in remotePatterns, and
+            next/image rejects absolute URLs by hostname even when unoptimized. */}
         {post.imageUrl && (
           <a href={post.imageUrl} target="_blank" rel="noopener noreferrer" className="block rounded-2xl overflow-hidden border border-border max-w-[520px] hover:border-border transition-colors">
-            <NextImage
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
               src={post.imageUrl}
               alt="Post attachment"
-              width={520}
-              height={520}
-              unoptimized
+              loading="lazy"
+              decoding="async"
+              referrerPolicy="no-referrer"
               className="w-full h-auto object-cover max-h-[520px]"
             />
           </a>
@@ -647,12 +649,13 @@ export default function CommunityPage() {
                   {/* Attached image preview */}
                   {attachedImage && (
                     <div className="relative inline-block rounded-xl overflow-hidden border border-border group">
-                      <NextImage
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
                         src={attachedImage}
                         alt="Attached"
-                        width={200}
-                        height={200}
-                        unoptimized
+                        loading="lazy"
+                        decoding="async"
+                        referrerPolicy="no-referrer"
                         className="max-h-48 w-auto object-cover"
                       />
                       <button

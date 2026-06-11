@@ -207,6 +207,7 @@ export interface UserProfile {
   stats: { followers: number; following: number; listCount: number; reviewCount: number; rank?: number }
   recentPosts: ProfilePost[]
   recentReviews?: Array<{ id: string; animeId: string; score: number; body: string | null; createdAt: string }>
+  badges?: Array<{ code: string; earnedAt: string }>
 }
 
 export interface Notification {

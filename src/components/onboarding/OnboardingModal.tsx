@@ -10,6 +10,8 @@ import {
   Check,
   Star,
   ArrowRight,
+  Bell,
+  Sparkles,
   X,
 } from "lucide-react"
 import Image from "next/image"
@@ -18,6 +20,12 @@ import { useBrowseAnime } from "@/hooks/useAnime"
 import type { AnimeDTO } from "@/lib/api/types"
 import { useWatchlist } from "@/stores/watchlist.store"
 import { useToast } from "@/stores/toast.store"
+import { useAuthStore } from "@/stores/auth.store"
+import { usePushNotifications } from "@/hooks/usePushNotifications"
+import { track } from "@/lib/analytics/ga"
+import * as ep from "@/lib/api/endpoints"
+
+type EndowedPick = { malId: number | null; title: string; imageUrl: string | null }
 
 function mapDTO(a: AnimeDTO, i: number): Anime {
   return { id: String(a.malId), title: a.title, titleJapanese: a.titleJapanese ?? "", rating: a.score ?? 0, year: a.year ?? 0, episodes: a.episodes, type: (["TV","Movie","OVA"] as const).includes(a.type as any) ? a.type as "TV"|"Movie"|"OVA" : "TV" as const, status: a.status?.toLowerCase().includes("airing") ? "airing" : "finished", studio: a.studios[0] ?? "Unknown", genres: a.genres, synopsis: a.synopsis ?? "", image: a.imageUrl ?? "", tags: a.genres.map(g => g.toLowerCase().replace(/\s/g, "-")), category: "all" as const, rank: i+1 }
@@ -331,17 +339,27 @@ function StepGenres({
 function StepReady({
   selectedAnime,
   watcherTypeId,
+  endowed,
+  genres,
   onEnter,
 }: {
   selectedAnime: Anime[]
   watcherTypeId: string | null
+  endowed: EndowedPick[]
+  genres: string[]
   onEnter: () => void
 }) {
   const watcherLabel =
     WATCHER_TYPES.find((w) => w.id === watcherTypeId)?.label ?? "Shinobi"
+  const { permission, isSupported, requestPermission, subscribing } = usePushNotifications()
+
+  // Endowed-progress framing: starter archive of 10, already partly filled.
+  const GOAL = 10
+  const have = Math.min(GOAL, selectedAnime.length + endowed.length)
+  const genreLabel = genres.slice(0, 2).join(" & ") || "your taste"
 
   return (
-    <div className="flex flex-col gap-6 items-center text-center">
+    <div className="flex flex-col gap-5 items-center text-center">
       <div>
         <motion.p
           initial={{ opacity: 0, y: -8 }}
@@ -369,31 +387,68 @@ function StepReady({
         </motion.div>
       )}
 
-      {/* Mini anime grid */}
+      {/* Starter-archive endowed progress — head start with a STATED REASON */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.15 }}
+        className="w-full p-4 rounded-2xl border border-border bg-surface-2 text-left space-y-3"
+      >
+        <div className="flex items-baseline justify-between">
+          <span className="text-[10px] font-black uppercase tracking-[0.2em] text-subtle">Starter Archive</span>
+          <span className="text-xs font-black text-foreground">{have} <span className="text-subtle font-bold">of {GOAL} started</span></span>
+        </div>
+        <div className="h-2 w-full rounded-full bg-surface overflow-hidden">
+          <motion.div
+            initial={{ width: 0 }}
+            animate={{ width: `${(have / GOAL) * 100}%` }}
+            transition={{ delay: 0.3, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            className="h-full rounded-full"
+            style={{ background: "linear-gradient(90deg, var(--app-accent), var(--app-accent-bright))" }}
+          />
+        </div>
+        {endowed.length > 0 && (
+          <p className="text-[11px] leading-relaxed text-muted">
+            <Sparkles size={11} className="inline -mt-0.5 mr-1 text-accent-bright" />
+            Head start: because you picked <strong className="text-foreground">{genreLabel}</strong>, we
+            pre-added <strong className="text-foreground">{endowed.map(e => e.title).join(" and ")}</strong> to
+            your archive — {GOAL - have} more and your starter set is complete.
+          </p>
+        )}
+      </motion.div>
+
+      {/* Mini anime grid — picks + endowed (endowed marked) */}
       <motion.div
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.15 }}
+        transition={{ delay: 0.2 }}
         className="grid grid-cols-5 gap-2 w-full"
       >
-        {selectedAnime.slice(0, 5).map((anime, i) => (
+        {[
+          ...selectedAnime.slice(0, Math.max(0, 5 - endowed.length)).map(a => ({ key: a.id, title: a.title, image: a.image, gifted: false })),
+          ...endowed.slice(0, 2).map(e => ({ key: `e-${e.malId}`, title: e.title, image: e.imageUrl ?? "", gifted: true })),
+        ].map((item, i) => (
           <motion.div
-            key={anime.id}
+            key={item.key}
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 + i * 0.05 }}
-            className="relative rounded-xl overflow-hidden aspect-[2/3]"
+            transition={{ delay: 0.25 + i * 0.05 }}
+            className="relative rounded-xl overflow-hidden aspect-[2/3] border border-border"
           >
-            <Image
-              src={anime.image}
-              alt={anime.title}
-              fill
-              className="object-cover"
-              sizes="20vw"
-            />
+            {item.image ? (
+              <Image src={item.image} alt={item.title} fill className="object-cover" sizes="20vw" />
+            ) : (
+              <div className="absolute inset-0 bg-surface-2" />
+            )}
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
+            {item.gifted && (
+              <span className="absolute top-1 left-1 px-1 py-0.5 rounded text-[7px] font-black uppercase tracking-wider text-black"
+                style={{ background: "var(--app-accent-bright)" }}>
+                + For you
+              </span>
+            )}
             <p className="absolute bottom-1 inset-x-1 text-[8px] font-bold text-foreground text-center leading-tight line-clamp-2">
-              {anime.title}
+              {item.title}
             </p>
           </motion.div>
         ))}
@@ -411,6 +466,22 @@ function StepReady({
         Enter the Archive
         <ArrowRight className="w-4 h-4" />
       </motion.button>
+
+      {/* Contextual push opt-in — earned AFTER the first value moment (populated
+          archive), never on first launch. Relevant trigger framing only. */}
+      {isSupported && permission === "default" && (
+        <motion.button
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.55 }}
+          onClick={() => { track("push_optin_prompted", { context: "onboarding" }); void requestPermission() }}
+          disabled={subscribing}
+          className="flex items-center gap-2 text-[11px] font-bold text-muted hover:text-foreground transition-colors"
+        >
+          <Bell size={12} />
+          {subscribing ? "Enabling…" : "Alert me when my anime drop new episodes"}
+        </motion.button>
+      )}
     </div>
   )
 }
@@ -447,7 +518,9 @@ export default function OnboardingModal({
   const [selectedAnimeIds, setSelectedAnimeIds] = useState<Set<string>>(new Set())
   const [selectedAnimeMap, setSelectedAnimeMap] = useState<Map<string, Anime>>(new Map())
   const [selectedGenres, setSelectedGenres] = useState<Set<string>>(new Set())
+  const [endowed, setEndowed] = useState<EndowedPick[]>([])
 
+  const me = useAuthStore((s) => s.user)
   const addToWatchlist = useWatchlist((s) => s.add)
   const toast = useToast((s) => s.push)
   const { data: browseData } = useBrowseAnime({ limit: 50 })
@@ -477,9 +550,31 @@ export default function OnboardingModal({
     return true
   }
 
+  // Persist onboarding to the real API. Selected anime become real list
+  // entries (this is what makes the streak tick + first-add badge fire), and
+  // completeOnboarding returns the endowed-progress starter picks.
+  const persistOnboarding = async () => {
+    if (!me) return // not signed in (shouldn't happen on this route) — local-only fallback
+    try {
+      await Promise.allSettled(
+        Array.from(selectedAnimeMap.keys()).map((malId) =>
+          ep.upsertListEntry(malId, { status: "PLAN_TO_WATCH" })
+        )
+      )
+      const res = await ep.completeOnboarding(Array.from(selectedGenres))
+      if (res.endowed?.length) {
+        setEndowed(res.endowed)
+        track("endowed_progress_shown", { count: res.endowed.length })
+      }
+    } catch {
+      // Onboarding still completes with local state — endowment is best-effort.
+    }
+  }
+
   const goNext = () => {
     if (!canProceed()) return
     setDirection(1)
+    if (step === 3) void persistOnboarding() // fire as we transition to the Ready step
     setStep((s) => Math.min(s + 1, totalSteps))
   }
 
@@ -522,7 +617,7 @@ export default function OnboardingModal({
   }
 
   const handleEnter = () => {
-    // Add all selected anime to watchlist
+    // Mirror selections into the local store for instant UI (server already has them)
     selectedAnimeMap.forEach((anime) => {
       addToWatchlist(anime)
     })
@@ -530,6 +625,11 @@ export default function OnboardingModal({
     if (typeof window !== "undefined") {
       localStorage.setItem("aw_onboarded", "1")
     }
+    track("onboarding_completed", {
+      selected: selectedAnimeIds.size,
+      genres: selectedGenres.size,
+      endowed: endowed.length,
+    })
     toast("Archive initialized! Your watch begins now.", "success")
     onComplete()
   }
@@ -616,6 +716,8 @@ export default function OnboardingModal({
                     <StepReady
                       selectedAnime={selectedAnimeList}
                       watcherTypeId={watcherType}
+                      endowed={endowed}
+                      genres={Array.from(selectedGenres)}
                       onEnter={handleEnter}
                     />
                   )}

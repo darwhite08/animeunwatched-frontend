@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, useCallback, useMemo } from "react"
 import Link from "next/link"
 import { Heart, Volume2, VolumeX, Clapperboard, Loader2, Play, Star } from "lucide-react"
 import { api } from "@/lib/api/client"
+import { track } from "@/lib/analytics/ga"
 
 type Shot = {
   id: string
@@ -43,6 +44,21 @@ export default function ShotsPage() {
   const [mode, setMode] = useState<"all" | "shots" | "trailers">("all")
   const loadingRef = useRef(false)
   const scrollRef = useRef<HTMLDivElement>(null)
+
+  // Well-being guardrail: the variable-reward feed is the strongest hook in the
+  // product AND its highest addiction risk (engagement research §2). After 20
+  // minutes of continuous viewing, surface a gentle, dismissible check-in.
+  // Dismissing re-arms it for another 20 minutes.
+  const BREAK_AFTER_MS = 20 * 60_000
+  const [showBreak, setShowBreak] = useState(false)
+  const [breakCycle, setBreakCycle] = useState(0)
+  useEffect(() => {
+    const t = setTimeout(() => {
+      setShowBreak(true)
+      track("shots_break_shown", { cycle: breakCycle + 1 })
+    }, BREAK_AFTER_MS)
+    return () => clearTimeout(t)
+  }, [breakCycle, BREAK_AFTER_MS])
 
   const loadShots = useCallback(async (c?: string | null) => {
     if (loadingRef.current) return
@@ -141,6 +157,34 @@ export default function ShotsPage() {
       >
         {muted ? <VolumeX size={18} /> : <Volume2 size={18} />}
       </button>
+
+      {/* Usage-awareness check-in (gentle, dismissible — never blocks for long) */}
+      {showBreak && (
+        <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/80 p-6 backdrop-blur-sm">
+          <div className="w-full max-w-sm rounded-3xl border border-white/10 bg-zinc-900 p-7 text-center">
+            <p className="text-3xl">🍵</p>
+            <h2 className="mt-3 text-lg font-black uppercase italic tracking-tight text-white">
+              Still scrolling?
+            </h2>
+            <p className="mt-2 text-sm leading-relaxed text-white/60">
+              You&apos;ve been in the feed for about {20 * (breakCycle + 1)} minutes.
+              The anime will still be here after a stretch.
+            </p>
+            <div className="mt-6 flex flex-col gap-2">
+              <Link href="/"
+                onClick={() => track("shots_break_taken", { cycle: breakCycle + 1 })}
+                className="rounded-2xl bg-white px-5 py-3 text-sm font-black uppercase tracking-widest text-black">
+                Take a break
+              </Link>
+              <button
+                onClick={() => { setShowBreak(false); setBreakCycle(c => c + 1); track("shots_break_dismissed", { cycle: breakCycle + 1 }) }}
+                className="rounded-2xl border border-white/15 px-5 py-3 text-sm font-bold uppercase tracking-widest text-white/70 hover:text-white">
+                Keep watching
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {feed.length === 0 && (
         <div className="flex h-full w-full flex-col items-center justify-center px-6 text-center">

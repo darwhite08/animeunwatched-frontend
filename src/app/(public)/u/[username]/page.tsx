@@ -24,6 +24,7 @@ import {
   Mail,
 } from "lucide-react"
 import { useToast } from "@/stores/toast.store"
+import { BADGE_META, TIER_COLOR } from "@/lib/badges"
 import { useUserProfile, useFollow } from "@/hooks/useUsers"
 import { SupportCreator } from "@/components/social/SupportCreator"
 import { VerifiedBadge } from "@/components/social/VerifiedBadge"
@@ -740,6 +741,43 @@ export default function UserProfilePage({
                 <Clock size={36} className="text-accent opacity-20" strokeWidth={1} />
               </div>
             </div>
+          </div>
+
+          {/* ── Dojo Wall (earned badges — rare/first/completion feats only) ── */}
+          <div className="space-y-6">
+            <h2 className="text-3xl font-black tracking-tighter uppercase italic">
+              Dojo Wall
+            </h2>
+            {(profileData?.badges?.length ?? 0) === 0 ? (
+              <div className="p-6 rounded-[2rem] border border-border bg-surface text-center space-y-1.5">
+                <Award size={20} className="mx-auto text-subtle" strokeWidth={1.5} />
+                <p className="text-sm font-bold text-muted">No badges yet</p>
+                <p className="text-xs text-subtle leading-relaxed">
+                  {isOwnProfile
+                    ? "Badges mark rare feats — first steps, finished arcs, long streaks. They arrive when you least expect them."
+                    : "Rare feats earn their place on the wall."}
+                </p>
+              </div>
+            ) : (
+              <div className="p-5 rounded-[2rem] border border-border bg-surface grid grid-cols-2 gap-3">
+                {(profileData?.badges ?? []).map(b => {
+                  const meta = BADGE_META[b.code]
+                  if (!meta) return null
+                  return (
+                    <div key={b.code} title={meta.desc}
+                      className="flex items-center gap-3 p-3 rounded-2xl bg-surface-2 border border-border">
+                      <span className="text-xl leading-none">{meta.emoji}</span>
+                      <div className="min-w-0">
+                        <p className="text-xs font-black text-foreground leading-tight">{meta.name}</p>
+                        <p className="text-[9px] font-black uppercase tracking-widest mt-0.5" style={{ color: TIER_COLOR[meta.tier] }}>
+                          {meta.tier}
+                        </p>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            )}
           </div>
 
           {/* ── Watchlist Preview ── */}

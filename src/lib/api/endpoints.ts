@@ -43,6 +43,13 @@ export const updateMe = (body: { displayName?: string; bio?: string; avatarUrl?:
 export const updateSlug = (slug: string) =>
   api<{ user: User }>("/users/me/slug", { method: "PATCH", body: JSON.stringify({ slug }) })
 
+/** Persist onboarding genres; returns endowed-progress starter picks. */
+export const completeOnboarding = (favoriteGenres: string[]) =>
+  api<{ user: User; endowed: Array<{ malId: number | null; title: string; imageUrl: string | null }> }>(
+    "/users/me/onboarding",
+    { method: "POST", body: JSON.stringify({ favoriteGenres }) }
+  )
+
 export const checkSlugAvailable = (slug: string) =>
   api<{ available: boolean; error?: string }>(`/users/slug-check?slug=${encodeURIComponent(slug)}`)
 

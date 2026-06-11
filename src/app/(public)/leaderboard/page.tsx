@@ -18,13 +18,15 @@ import type { BoardLeaderboardRow, LeaderboardBoardId } from "@/lib/api/types"
 type WindowId = "week" | "month" | "all"
 type AudienceId = "global" | "friends"
 
+// Contribution boards lead; raw-volume boards trail (engagement research:
+// contribution framing over competitive volume).
 const BOARDS: Array<{
   id: LeaderboardBoardId; label: string; icon: typeof Play
   unit: string; secondaryLabel: string; windowed: boolean; accent: string
 }> = [
-  { id: "episodes", label: "Most Episodes",    icon: Play,      unit: "eps",       secondaryLabel: "titles", windowed: true,  accent: "#5B3BFF" },
   { id: "reviews",  label: "Top Reviewers",    icon: PenLine,   unit: "reviews",   secondaryLabel: "likes",  windowed: true,  accent: "#00D4FF" },
   { id: "streak",   label: "Longest Streaks",  icon: Flame,     unit: "days",      secondaryLabel: "best",   windowed: false, accent: "#F0883E" },
+  { id: "episodes", label: "Most Episodes",    icon: Play,      unit: "eps",       secondaryLabel: "titles", windowed: true,  accent: "#5B3BFF" },
   { id: "followed", label: "Most Followed",    icon: Users,     unit: "followers", secondaryLabel: "level",  windowed: false, accent: "#3FB950" },
   { id: "xp",       label: "Top Contributors", icon: Zap,       unit: "XP",        secondaryLabel: "titles", windowed: false, accent: "#8B5CF6" },
 ]
@@ -296,9 +298,14 @@ export default function LeaderboardPage() {
   const { push } = useToast()
   const qc = useQueryClient()
 
-  const [boardId, setBoardId] = useState<LeaderboardBoardId>("episodes")
+  // Defaults follow the engagement research: lead with a CONTRIBUTION board
+  // (reviews), not a volume board, and default signed-in users to the Friends
+  // cohort — global competitive ranking is opt-in, never the headline.
+  const [boardId, setBoardId] = useState<LeaderboardBoardId>("reviews")
   const [win, setWin] = useState<WindowId>("all")
-  const [audience, setAudience] = useState<AudienceId>("global")
+  const [audienceChoice, setAudienceChoice] = useState<AudienceId | null>(null)
+  const audience: AudienceId = audienceChoice ?? (me ? "friends" : "global")
+  const setAudience = setAudienceChoice
   const [q, setQ] = useState("")
 
   const board = BOARDS.find(b => b.id === boardId)!

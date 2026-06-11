@@ -25,10 +25,14 @@
 // key-recovery flow.
 const E2E_ENABLED = false
 
-// Secure-context guard kept for the legacy path. When E2E is disabled
-// we ignore this entirely.
-export const isE2EAvailable: boolean =
-  E2E_ENABLED && typeof window !== "undefined" && !!window.crypto?.subtle
+// True when WebCrypto is usable at all (secure context). Decryption of
+// legacy E2E-era messages depends on THIS, not on E2E_ENABLED — old
+// ciphertext must stay readable even while E2E sending is switched off.
+export const isCryptoAvailable: boolean =
+  typeof window !== "undefined" && !!window.crypto?.subtle
+
+// Gates E2E *sending* only.
+export const isE2EAvailable: boolean = E2E_ENABLED && isCryptoAvailable
 
 // Use localStorage so keys persist across browser sessions, tabs, and refreshes.
 // Without this, closing a tab generates a new key pair, making all old messages
@@ -175,10 +179,8 @@ export async function decryptMessage(
   ciphertext: string,
   iv: string,
 ): Promise<string> {
-  // If this message was sent without E2E (plain marker), just base64-decode it.
-  // Also attempt this path when we have NO sharedKey OR no E2E available, so
-  // messages from the previous E2E era still surface text where possible.
-  if (iv === PLAIN_IV_MARKER || !sharedKey || !isE2EAvailable) {
+  // Messages sent without E2E carry the plain marker — just base64-decode.
+  if (iv === PLAIN_IV_MARKER) {
     try {
       return decodeURIComponent(escape(atob(ciphertext)))
     } catch {
@@ -186,7 +188,10 @@ export async function decryptMessage(
     }
   }
 
-  if (!sharedKey || !isE2EAvailable) {
+  // Real AES-GCM ciphertext (legacy E2E era or E2E mode). Needs the pairwise
+  // key + WebCrypto — intentionally NOT gated on E2E_ENABLED so history stays
+  // readable while E2E sending is disabled.
+  if (!sharedKey || !isCryptoAvailable) {
     throw new Error("E2E key unavailable")
   }
 

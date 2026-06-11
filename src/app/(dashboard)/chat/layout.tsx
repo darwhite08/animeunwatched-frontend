@@ -11,6 +11,7 @@ import { useClubs, useCreateClub, useSearchClubs } from "@/hooks/useClubs"
 import { useNotificationsQuery } from "@/hooks/useNotificationsQuery"
 import { useToast } from "@/stores/toast.store"
 import * as ep from "@/lib/api/endpoints"
+import { isE2EAvailable } from "@/lib/e2e-crypto"
 import type { User } from "@/lib/api/types"
 import { format, isToday, isYesterday } from "date-fns"
 
@@ -87,7 +88,7 @@ function NewDMModal({ onClose }: { onClose:()=>void }) {
         </div>
         <div style={{ padding:"10px 16px", borderTop:"1px solid var(--line)", display:"flex", alignItems:"center", gap:5 }}>
           <svg width={9} height={9} viewBox="0 0 24 24" fill="none" stroke="var(--mint)" strokeWidth={2.4} strokeLinecap="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
-          <span style={{ fontSize:11, color:"var(--ink-4)" }}>End-to-end encrypted · ECDH P-256</span>
+          <span style={{ fontSize:11, color:"var(--ink-4)" }}>{isE2EAvailable ? "End-to-end encrypted · ECDH P-256" : "Private · encrypted in transit"}</span>
         </div>
       </motion.div>
     </motion.div>
@@ -99,6 +100,23 @@ function convTime(iso:string) {
   if(isToday(d)) return format(d,"HH:mm")
   if(isYesterday(d)) return "Yesterday"
   return format(d,"MMM d")
+}
+
+/* Sidebar preview for the last message. Plain-marker messages (the normal
+   case while E2E sending is off) are base64 plaintext — show the real text.
+   True E2E ciphertext stays a generic label. */
+function lastMessagePreview(msg: { ciphertext: string; iv: string } | null): string {
+  if (!msg) return "Encrypted message"
+  if (msg.iv !== "PLAIN_NO_E2E") return "Encrypted message"
+  let text: string
+  try { text = decodeURIComponent(escape(atob(msg.ciphertext))) } catch { return "Encrypted message" }
+  // Collapse attachment markers into compact labels
+  text = text
+    .replace(/^📷 \[Image: [^\]]*\]$/gm, "📷 Photo")
+    .replace(/^📎 \[File: [^\]]*\]$/gm, "📎 File")
+    .replace(/\s+/g, " ")
+    .trim()
+  return text || "Encrypted message"
 }
 
 /* ─── Quick "Create Community" modal ───────────────────────────────────────── */
@@ -389,7 +407,7 @@ export default function ChatLayout({ children }: { children: React.ReactNode }) 
                     <div style={{ fontSize:13.5, fontWeight:600, color:"var(--ink)" }}>Direct Messages</div>
                     <div style={{ fontSize:10.5, color:"var(--ink-4)", marginTop:1, display:"flex", alignItems:"center", gap:4 }}>
                       <span style={{ width:6, height:6, borderRadius:"50%", background:"oklch(0.78 0.16 145)", display:"inline-block" }}/>
-                      End-to-end encrypted
+                      {isE2EAvailable ? "End-to-end encrypted" : "Private messages"}
                     </div>
                   </div>
                 </>
@@ -512,7 +530,9 @@ export default function ChatLayout({ children }: { children: React.ReactNode }) 
                     ? <p style={{ textAlign:"center", color:"var(--ink-4)", fontSize:11.5, padding:"24px 12px", lineHeight:1.6 }}>{search?"No matches.":"No DMs yet.\nClick + to message someone."}</p>
                     : filtered.map(conv=>{
                         const active=conv.id===activeId
-                        const hasUnread=!conv.lastMessage?.readAt&&!!conv.lastMessage
+                        // Unread = the OTHER user sent the last message and I haven't
+                        // read it. My own unread-by-them messages don't count.
+                        const hasUnread=!!conv.lastMessage&&conv.lastMessage.senderId!==me?.id&&!conv.lastMessage.readAt
                         return (
                           <Link key={conv.id} href={`/chat/${conv.id}`} style={{ textDecoration:"none" }}>
                             <div style={{ display:"flex", alignItems:"center", gap:10, padding:"8px 9px", borderRadius:"var(--r-md)", cursor:"pointer", background:active?"var(--bg-2)":"transparent", boxShadow:active?"inset 0 0 0 1px var(--line-strong)":"none", position:"relative", transition:"background 100ms", marginBottom:1 }}
@@ -527,7 +547,9 @@ export default function ChatLayout({ children }: { children: React.ReactNode }) 
                                 </div>
                                 <div style={{ fontSize:11.5, color:hasUnread?"var(--ink-2)":"var(--ink-4)", marginTop:1, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap", display:"flex", alignItems:"center", gap:4 }}>
                                   <svg width={8} height={8} viewBox="0 0 24 24" fill="none" stroke="var(--mint)" strokeWidth={2.4} strokeLinecap="round" style={{ flexShrink:0, opacity:.7 }}><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
-                                  {hasUnread?<strong>New message</strong>:"Encrypted message"}
+                                  {hasUnread
+                                    ? <strong style={{ overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{lastMessagePreview(conv.lastMessage)}</strong>
+                                    : <span style={{ overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{lastMessagePreview(conv.lastMessage)}</span>}
                                 </div>
                               </div>
                               {hasUnread&&<div style={{ width:7, height:7, borderRadius:"50%", background:"var(--indigo)", flexShrink:0 }}/>}

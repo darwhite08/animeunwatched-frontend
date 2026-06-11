@@ -8,7 +8,7 @@ import { AnimatePresence, motion } from "framer-motion"
 import { useMessages, useSendMessage, useMarkRead, useChatSocket, useTypingIndicator, useDeleteMessage } from "@/hooks/useChat"
 import { usePresence } from "@/hooks/useRealtime"
 import { useAuthStore } from "@/stores/auth.store"
-import { getOrCreateKeyPair, getSharedKey, encryptMessage, decryptMessage, isE2EAvailable } from "@/lib/e2e-crypto"
+import { getOrCreateKeyPair, getSharedKey, encryptMessage, decryptMessage, isE2EAvailable, isCryptoAvailable } from "@/lib/e2e-crypto"
 import { useUserList } from "@/hooks/useLists"
 import { useToast } from "@/stores/toast.store"
 import { useWebRTC } from "@/hooks/useWebRTC"
@@ -36,8 +36,11 @@ const dayLabel = (iso: string) => {
 
 /* ─── Decrypt cache ──────────────────────────────────────────────────────── */
 const PLAIN_IV = "PLAIN_NO_E2E"
+// Sentinel for legacy E2E messages this device can no longer decrypt
+// (key pair lost — new browser / cleared storage / partner key rotated).
+const LOCKED = "\u0000LOCKED"
 
-function useDecrypt(msgs: DirectMessage[], key: CryptoKey | null) {
+function useDecrypt(msgs: DirectMessage[], key: CryptoKey | null, ready: boolean) {
   const [cache, setCache] = useState<Record<string, string>>({})
   useEffect(() => { setCache({}) }, [key])
   useEffect(() => {
@@ -45,24 +48,28 @@ function useDecrypt(msgs: DirectMessage[], key: CryptoKey | null) {
     const todo = msgs.filter(m => !(m.id in cache))
     if (!todo.length) return
     Promise.all(todo.map(async m => {
-      // Plain messages (sent without E2E from HTTP context) — always readable
+      // Plain messages (sent while E2E is disabled) — always readable
       if (m.iv === PLAIN_IV) {
         try {
           const text = decodeURIComponent(escape(atob(m.ciphertext)))
           return [m.id, text] as const
         } catch { return [m.id, m.ciphertext] as const }
       }
-      // E2E messages — require key
-      if (!key) return null // keep as undefined (spinner) until key is ready
+      // Legacy E2E messages — need the pairwise key
+      if (!key) {
+        // Crypto init finished and there's still no key → this device can't
+        // decrypt; show the tombstone instead of a forever-pending placeholder.
+        return ready ? ([m.id, LOCKED] as const) : null
+      }
       try { return [m.id, await decryptMessage(key, m.ciphertext, m.iv)] as const }
-      catch { return [m.id, "⚠ Could not decrypt"] as const }
+      catch { return [m.id, LOCKED] as const }
     })).then(r => {
       const valid = r.filter(Boolean) as [string, string][]
       if (!valid.length) return
       setCache(p => { const n={...p}; valid.forEach(([id,t])=>n[id]=t); return n })
     })
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [msgs.length, key])
+  }, [msgs.length, key, ready])
   return cache
 }
 
@@ -299,13 +306,19 @@ function ContextRail({ conv, onClose, sharedFiles }: { conv: ConversationDetail;
       <div style={{ margin:"12px 14px", padding:12, borderRadius:"var(--r-md)", background:"oklch(0.28 0.10 162 / 0.25)", border:"1px solid oklch(0.50 0.12 162 / 0.40)" }}>
         <div style={{ display:"flex", alignItems:"center", gap:8, fontSize:12, fontWeight:600, color:"oklch(0.85 0.12 162)", marginBottom:6 }}>
           <svg width={12} height={12} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
-          End-to-end encrypted
+          {isE2EAvailable ? "End-to-end encrypted" : "Private conversation"}
         </div>
-        <div style={{ fontSize:11.5, color:"var(--ink-2)", lineHeight:1.55 }}>Messages are encrypted on your device. Kaiveron servers can't read them.</div>
-        <div style={{ marginTop:8, padding:"5px 8px", background:"rgba(0,0,0,0.25)", borderRadius:6, fontFamily:"monospace", fontSize:10.5, color:"var(--ink-4)", wordBreak:"break-all" }}>
-          <div style={{ fontSize:9, color:"var(--ink-4)", textTransform:"uppercase", letterSpacing:"0.08em", marginBottom:3 }}>Safety number</div>
-          {conv.otherUser.id.slice(-16).match(/.{1,4}/g)?.join(" ")}
+        <div style={{ fontSize:11.5, color:"var(--ink-2)", lineHeight:1.55 }}>
+          {isE2EAvailable
+            ? "Messages are encrypted on your device. Kaiveron servers can't read them."
+            : "Messages are encrypted in transit and only visible to you two."}
         </div>
+        {isE2EAvailable && (
+          <div style={{ marginTop:8, padding:"5px 8px", background:"rgba(0,0,0,0.25)", borderRadius:6, fontFamily:"monospace", fontSize:10.5, color:"var(--ink-4)", wordBreak:"break-all" }}>
+            <div style={{ fontSize:9, color:"var(--ink-4)", textTransform:"uppercase", letterSpacing:"0.08em", marginBottom:3 }}>Safety number</div>
+            {conv.otherUser.id.slice(-16).match(/.{1,4}/g)?.join(" ")}
+          </div>
+        )}
       </div>
 
       {/* Call banner — voice sync notification */}
@@ -465,7 +478,7 @@ function ChatHeaderUser({ other }: { other: { id: string; username: string; disp
           {other.displayName}
           <span style={{ display:"inline-flex", alignItems:"center", gap:4, padding:"3px 7px", fontSize:10, fontWeight:600, borderRadius:999, color:"oklch(0.85 0.12 162)", background:"oklch(0.30 0.10 162/0.20)", border:"1px solid oklch(0.50 0.12 162/0.30)", flexShrink:0 }}>
             <svg width={8} height={8} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
-            E2E
+            {isE2EAvailable ? "E2E" : "Private"}
           </span>
         </div>
         <div style={{ fontSize:11.5, color:"var(--ink-3)", marginTop:1, display:"flex", alignItems:"center", gap:6 }}>
@@ -494,11 +507,12 @@ function MsgRow({ m, isMine, text, authorSrc, authorName, onDelete }: { m:GM; is
     : { background:"var(--bg-2)", border:"1px solid var(--line)", borderTopLeftRadius:4 }
 
   const isDecrypting = text === undefined
-  const isError      = text?.startsWith("⚠")
+  const isLocked     = text === LOCKED
+  const isError      = !isLocked && text?.startsWith("⚠")
   // Call-summary messages are rendered as a distinct centered line, not a bubble.
   // Format: "📞 Audio call · 2:34" or "📞 Video call · Missed"
-  const isCallSummary = !isDecrypting && !isError && text?.startsWith("📞 ")
-  const parts        = (!isDecrypting && !isError && !isCallSummary && text) ? parseParts(text) : null
+  const isCallSummary = !isDecrypting && !isLocked && !isError && text?.startsWith("📞 ")
+  const parts        = (!isDecrypting && !isLocked && !isError && !isCallSummary && text) ? parseParts(text) : null
 
   // Centered call summary row — WhatsApp/iMessage style.
   // Asymmetric copy: caller (isMine) doesn't see "Missed" — they see "No answer"
@@ -572,8 +586,15 @@ function MsgRow({ m, isMine, text, authorSrc, authorName, onDelete }: { m:GM; is
           ) : isDecrypting ? (
             <div style={{ ...bubble, display:"inline-block", padding:"8px 13px 9px", borderRadius:14 }}>
               <span style={{ color:"var(--ink-4)", fontSize:13, display:"flex", alignItems:"center", gap:6 }}>
-                🔒 <span style={{ opacity:0.6 }}>Encrypted — open this chat to read</span>
+                🔒 <span style={{ opacity:0.6 }}>Decrypting…</span>
               </span>
+            </div>
+          ) : isLocked ? (
+            // Legacy E2E message this device has no key for — honest tombstone
+            // instead of an infinite "decrypting" state.
+            <div style={{ ...bubble, display:"inline-flex", alignItems:"center", gap:6, padding:"8px 13px 9px", borderRadius:14, opacity:0.65 }}>
+              <svg width={12} height={12} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" style={{ flexShrink:0 }}><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
+              <span style={{ fontSize:13, fontStyle:"italic" }}>Encrypted message — can&apos;t be displayed on this device</span>
             </div>
           ) : isError ? (
             <div style={{ ...bubble, display:"inline-block", padding:"8px 13px 9px", borderRadius:14 }}>
@@ -713,6 +734,7 @@ export default function ConversationPage() {
 
   const [conv,         setConv]         = useState<ConversationDetail|null>(null)
   const [initLoading,  setInitLoading]  = useState(true)
+  const [cryptoDone,   setCryptoDone]   = useState(false)
   const [cryptoError,  setCryptoError]  = useState<string|null>(null)
   const [showContext,  setShowContext]   = useState(false)
   const [sharedKey,    setSharedKey]    = useState<CryptoKey|null>(null)
@@ -738,7 +760,7 @@ export default function ConversationPage() {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } = useMessages(conversationId)
   const messages  = [...(data?.pages??[])].reverse().flatMap(p=>[...p.messages].reverse())
   const grouped   = groupMsgs(messages)
-  const decrypted = useDecrypt(messages, sharedKey)
+  const decrypted = useDecrypt(messages, sharedKey, cryptoDone)
 
   const sendMutation = useSendMessage(conversationId)
   const markReadMut  = useMarkRead(conversationId)
@@ -798,54 +820,73 @@ export default function ConversationPage() {
     el.scrollTo({ top: el.scrollHeight, behavior })
   }, [])
 
+  // Mark-read must NOT depend on the E2E key — with E2E disabled the key may
+  // never exist, and read receipts/unread badges would never clear.
   useEffect(() => {
-    if (!messages.length || !sharedKey) return
+    if (!messages.length || initLoading) return
     const now = Date.now()
     if (now - lastMarkRef.current < 5_000) return
     lastMarkRef.current = now; markReadMut.mutate()
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [messages.length, sharedKey])
+  }, [messages.length, initLoading])
 
   const initCrypto = useCallback(async (cancelled: { v: boolean }) => {
     setCryptoError(null)
+    setCryptoDone(false)
 
     // Non-secure context (http:// on a LAN IP): crypto.subtle is unavailable.
-    // Skip E2E setup entirely — messaging still works via server-side encoding.
-    if (!isE2EAvailable) {
+    // No E2E sending AND no legacy decryption — messaging still works via the
+    // plain-marker encoding.
+    if (!isCryptoAvailable) {
       try {
         const { conversation } = await ep.getConversation(conversationId)
         if (cancelled.v) return
         setConv(conversation)
-        // No sharedKey — encryptMessage/decryptMessage handle null key with base64 fallback
-        setCryptoError("no-e2e") // special marker: not a real error, just no E2E
+        setCryptoError("no-e2e") // special marker: not a real error, just no WebCrypto
       } catch (e) {
         if (!cancelled.v) setCryptoError("Could not load conversation.")
         console.error("[Chat]", e)
       } finally {
-        if (!cancelled.v) setInitLoading(false)
+        if (!cancelled.v) { setInitLoading(false); setCryptoDone(true) }
       }
       return
     }
 
     try {
-      const { publicKeyJwk, privateKey } = await getOrCreateKeyPair()
-      await ep.uploadPublicKey(publicKeyJwk)
       const { conversation } = await ep.getConversation(conversationId)
       if (cancelled.v) return
       setConv(conversation)
-      if (conversation.publicKey) {
-        const key = await getSharedKey(privateKey, conversation.publicKey)
-        if (!cancelled.v) { setSharedKey(key); sharedKeyRef.current = key }
-      } else {
-        if (!cancelled.v) setCryptoError("Waiting for the other user to open this chat.")
+
+      // Key handshake — required for E2E sending, best-effort for reading
+      // legacy E2E-era history while E2E sending is disabled.
+      try {
+        const { publicKeyJwk, privateKey } = await getOrCreateKeyPair()
+        if (isE2EAvailable) {
+          await ep.uploadPublicKey(publicKeyJwk)
+        } else if (me?.id) {
+          // Never overwrite an already-published key while E2E is off:
+          // partners derive their pairwise key from it to decrypt old history.
+          const existing = await ep.getRecipientPublicKey(me.id).catch(() => null)
+          if (!existing?.publicKey) await ep.uploadPublicKey(publicKeyJwk)
+        }
+        if (conversation.publicKey) {
+          const key = await getSharedKey(privateKey, conversation.publicKey)
+          if (!cancelled.v) { setSharedKey(key); sharedKeyRef.current = key }
+        } else if (isE2EAvailable) {
+          // Key exchange only blocks anything when E2E sending is actually on.
+          if (!cancelled.v) setCryptoError("Waiting for the other user to open this chat.")
+        }
+      } catch (e) {
+        if (isE2EAvailable && !cancelled.v) setCryptoError("Encryption setup failed.")
+        console.error("[Chat] key setup", e)
       }
     } catch (e) {
-      if (!cancelled.v) setCryptoError("Encryption setup failed.")
+      if (!cancelled.v) setCryptoError("Could not load conversation.")
       console.error("[Chat]", e)
     } finally {
-      if (!cancelled.v) setInitLoading(false)
+      if (!cancelled.v) { setInitLoading(false); setCryptoDone(true) }
     }
-  }, [conversationId])
+  }, [conversationId, me?.id])
 
   useEffect(() => {
     const c = { v:false }; setInitLoading(true); setSharedKey(null)
@@ -981,7 +1022,7 @@ export default function ConversationPage() {
 
   // Extract shared files from all decrypted messages
   const sharedFiles = Object.values(decrypted).flatMap(text => {
-    if (!text || text.startsWith("⚠")) return []
+    if (!text || text.startsWith("⚠") || text === LOCKED) return []
     return parseParts(text).filter(p=>p.kind==="image"||p.kind==="file").map(p => ({
       name:    p.kind==="image" || p.kind==="file" ? p.name : "",
       isImage: p.kind==="image",
@@ -1061,11 +1102,12 @@ export default function ConversationPage() {
           </div>
         </div>
 
-        {/* No-E2E mode banner (HTTP on LAN IP — crypto.subtle unavailable) */}
+        {/* No-WebCrypto banner — only reachable in non-HTTPS dev contexts
+            (plain http:// on a LAN IP). Never shows on production HTTPS. */}
         {cryptoError === "no-e2e" && (
           <div style={{ flexShrink:0, padding:"6px 24px", background:"oklch(0.28 0.08 60/0.25)", borderBottom:"1px solid oklch(0.50 0.10 60/0.30)", display:"flex", alignItems:"center", gap:8 }}>
             <span style={{ fontSize:12, color:"oklch(0.82 0.12 80)" }}>
-              🔓 Messages are server-encrypted (E2E unavailable on HTTP). Use <strong>localhost:3000</strong> for full E2E encryption.
+              🔓 This connection isn&apos;t secure (no HTTPS) — encrypted message history can&apos;t be displayed here.
             </span>
           </div>
         )}
@@ -1111,7 +1153,7 @@ export default function ConversationPage() {
               <div style={{ width:44, height:44, borderRadius:"var(--r-md)", background:"var(--indigo-soft)", border:"1px solid var(--indigo-ring)", display:"grid", placeItems:"center" }}>
                 <svg width={20} height={20} viewBox="0 0 24 24" fill="none" stroke="var(--indigo)" strokeWidth={1.8} strokeLinecap="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
               </div>
-              <p style={{ fontSize:13, color:"var(--ink-3)", textAlign:"center", lineHeight:1.6 }}>No messages yet.<br/>This conversation is end-to-end encrypted.</p>
+              <p style={{ fontSize:13, color:"var(--ink-3)", textAlign:"center", lineHeight:1.6 }}>No messages yet.<br/>{isE2EAvailable ? "This conversation is end-to-end encrypted." : "This conversation is private."}</p>
             </div>
           )}
 
@@ -1268,7 +1310,7 @@ export default function ConversationPage() {
             ))}
             <span style={{ marginLeft:"auto", display:"inline-flex", alignItems:"center", gap:5, color:"var(--ink-4)", flexShrink:0 }}>
               <svg width={9} height={9} viewBox="0 0 24 24" fill="none" stroke="oklch(0.80 0.14 162)" strokeWidth={2.4} strokeLinecap="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
-              {sharedKey ? "Encrypted on your device" : !isE2EAvailable ? "Server encrypted (HTTP mode)" : "Server encrypted"}
+              {isE2EAvailable && sharedKey ? "End-to-end encrypted" : "Encrypted in transit"}
             </span>
           </div>
         </div>

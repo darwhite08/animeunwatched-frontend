@@ -4,7 +4,7 @@ import { motion } from "framer-motion"
 import { Lock, Shield, Sparkles } from "lucide-react"
 
 const FEATURES = [
-  { icon: "🔒", label: "End-to-end encrypted",    desc: "Only you and the recipient can read messages" },
+  { icon: "🔒", label: "Private messaging",        desc: "Messages are encrypted in transit, visible only to you two" },
   { icon: "⚡", label: "Real-time delivery",       desc: "Messages delivered instantly via WebSocket"   },
   { icon: "🎌", label: "Anime-native experience",  desc: "Share anime lists and discoveries in chat"    },
 ]
@@ -50,7 +50,7 @@ export default function ChatEmptyPage() {
         <div className="space-y-2">
           <h2 className="text-[18px] font-bold text-foreground tracking-tight">Select a conversation</h2>
           <p className="text-[12.5px] leading-relaxed" style={{ color: "color-mix(in srgb, var(--app-fg) 35%, transparent)" }}>
-            Pick a chat from the left panel or click ✏ to start a new encrypted conversation with any Shinobi on Kaiveron.
+            Pick a chat from the left panel or click ✏ to start a new private conversation with any Shinobi on Kaiveron.
           </p>
         </div>
 
@@ -73,7 +73,7 @@ export default function ChatEmptyPage() {
           style={{ background: "rgba(16,185,129,0.06)", borderColor: "rgba(16,185,129,0.15)" }}>
           <Shield size={11} className="text-emerald-400/70" />
           <span className="text-[10px] font-medium" style={{ color: "rgba(52,211,153,0.7)" }}>
-            Server cannot read your messages · ECDH P-256 + AES-GCM
+            Private conversations · TLS encrypted in transit
           </span>
         </div>
       </motion.div>

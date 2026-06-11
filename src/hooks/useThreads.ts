@@ -19,7 +19,7 @@ type Thread = {
   isLocked: boolean
   createdAt: string
   updatedAt: string
-  author: { id: string; username: string; displayName: string; avatarUrl: string | null }
+  author: { id: string; username: string; displayName: string; avatarUrl: string | null; verifiedKind?: "USER" | "CREATOR" | "STUDIO" | null }
   _count?: { replies: number }
   club?: { slug: string; name: string } | null
   anime?: { malId: number; title: string; titleEnglish: string | null } | null
@@ -33,7 +33,7 @@ type Reply = {
   parentId: string | null
   content: string
   createdAt: string
-  author: { id: string; username: string; displayName: string; avatarUrl: string | null }
+  author: { id: string; username: string; displayName: string; avatarUrl: string | null; verifiedKind?: "USER" | "CREATOR" | "STUDIO" | null }
   reactions?: ReactionSummary[]
 }
 

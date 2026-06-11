@@ -19,6 +19,10 @@ import {
   Loader2,
 } from "lucide-react"
 import { useToast } from "@/stores/toast.store"
+import { Avatar } from "@/components/ui/Avatar"
+import { VerifiedBadge } from "@/components/social/VerifiedBadge"
+
+type VerifiedKind = "USER" | "CREATOR" | "STUDIO" | null | undefined
 
 /** Read heart-like state out of a reaction summary list. */
 function likeState(reactions?: ReactionSummary[]) {
@@ -30,7 +34,8 @@ function likeState(reactions?: ReactionSummary[]) {
 type ReplyItem = {
   id: string
   author: string
-  avatar: string
+  avatarUrl: string | null
+  verifiedKind: VerifiedKind
   date: string
   content: string
   likes: number
@@ -152,7 +157,6 @@ export default function ThreadDetailPage({
 
   // ── Real thread ──
   const author = apiThread.author?.displayName ?? apiThread.author?.username ?? "Anonymous"
-  const avatar = author[0]?.toUpperCase() ?? "?"
 
   // Breadcrumb + back link follow the thread's real parent: anime or club.
   const crumb: Crumb = apiThread.club
@@ -164,7 +168,8 @@ export default function ThreadDetailPage({
   const replies: ReplyItem[] = (repliesData?.data ?? []).map(r => ({
     id: r.id,
     author: r.author?.displayName ?? r.author?.username ?? "Anonymous",
-    avatar: (r.author?.displayName ?? r.author?.username ?? "?")[0].toUpperCase(),
+    avatarUrl: r.author?.avatarUrl ?? null,
+    verifiedKind: r.author?.verifiedKind,
     content: r.content,
     date: relativeTime(r.createdAt),
     ...likeState(r.reactions),
@@ -247,11 +252,12 @@ export default function ThreadDetailPage({
 
           {/* Author meta */}
           <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center font-black text-sm text-foreground">
-              {avatar}
-            </div>
+            <Avatar src={apiThread.author?.avatarUrl} name={author} size={40} />
             <div>
-              <p className="text-sm font-black text-foreground">{author}</p>
+              <p className="text-sm font-black text-foreground flex items-center gap-1.5">
+                {author}
+                <VerifiedBadge kind={apiThread.author?.verifiedKind} size={14} />
+              </p>
               <p className="text-[10px] text-subtle flex items-center gap-1">
                 <Clock size={9} /> {relativeTime(apiThread.createdAt)}
               </p>
@@ -352,11 +358,12 @@ export default function ThreadDetailPage({
                 >
                   {/* Author */}
                   <div className="flex items-center gap-3">
-                    <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-indigo-500/70 to-violet-600/70 flex items-center justify-center font-black text-sm text-foreground shrink-0">
-                      {reply.avatar}
-                    </div>
+                    <Avatar src={reply.avatarUrl} name={reply.author} size={36} />
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-black text-foreground">{reply.author}</p>
+                      <p className="text-sm font-black text-foreground flex items-center gap-1.5">
+                        {reply.author}
+                        <VerifiedBadge kind={reply.verifiedKind} size={13} />
+                      </p>
                       <p className="text-[10px] text-subtle">{reply.date}</p>
                     </div>
                   </div>

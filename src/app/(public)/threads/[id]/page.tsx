@@ -1,7 +1,7 @@
 "use client"
 
 import { use, useState } from "react"
-import { useThread, useReplies, useCreateReply } from "@/hooks/useThreads"
+import { useThread, useReplies, useCreateReply, useReactThread, useReactReply, LIKE_EMOJI, type ReactionSummary } from "@/hooks/useThreads"
 import { useLiveThread } from "@/hooks/useRealtime"
 import { useAuthStore } from "@/stores/auth.store"
 import { motion, AnimatePresence } from "framer-motion"
@@ -15,9 +15,16 @@ import {
   ChevronRight,
   Reply,
   Clock,
+  Heart,
   Loader2,
 } from "lucide-react"
 import { useToast } from "@/stores/toast.store"
+
+/** Read heart-like state out of a reaction summary list. */
+function likeState(reactions?: ReactionSummary[]) {
+  const h = reactions?.find(r => r.emoji === LIKE_EMOJI)
+  return { likes: h?.count ?? 0, liked: !!h?.reactedByMe }
+}
 
 /* ── Types ── */
 type ReplyItem = {
@@ -26,6 +33,8 @@ type ReplyItem = {
   avatar: string
   date: string
   content: string
+  likes: number
+  liked: boolean
 }
 
 type Crumb = { rootLabel: string; rootHref: string; label: string; href: string } | null
@@ -103,7 +112,9 @@ export default function ThreadDetailPage({
   const { data: threadData, isLoading, isError } = useThread(id)
   const { data: repliesData } = useReplies(id)
   const createReplyMut = useCreateReply(id)
-  // Realtime: new replies appear instantly without refresh
+  const reactThreadMut = useReactThread(id)
+  const reactReplyMut = useReactReply(id)
+  // Realtime: new replies + likes appear instantly without refresh
   useLiveThread(id)
 
   const [composerText, setComposerText] = useState("")
@@ -156,9 +167,20 @@ export default function ThreadDetailPage({
     avatar: (r.author?.displayName ?? r.author?.username ?? "?")[0].toUpperCase(),
     content: r.content,
     date: relativeTime(r.createdAt),
+    ...likeState(r.reactions),
   }))
 
   const replyCount = apiThread._count?.replies ?? replies.length
+  const threadLike = likeState(apiThread.reactions)
+
+  const likeThread = () => {
+    if (!isAuthenticated) { push("Sign in to like", "info"); return }
+    reactThreadMut.mutate(LIKE_EMOJI)
+  }
+  const likeReply = (replyId: string) => {
+    if (!isAuthenticated) { push("Sign in to like", "info"); return }
+    reactReplyMut.mutate({ replyId })
+  }
 
   const submitReply = (text: string) => {
     if (!isAuthenticated) { push("Sign in to reply", "info"); return }
@@ -249,12 +271,24 @@ export default function ThreadDetailPage({
           </p>
         </motion.div>
 
-        {/* Reply count */}
+        {/* Reply count + thread like */}
         <div className="flex items-center justify-between mb-6">
           <p className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-subtle">
             <MessageSquare size={12} />
             {replyCount} repl{replyCount === 1 ? "y" : "ies"}
           </p>
+          <button
+            onClick={likeThread}
+            aria-pressed={threadLike.liked}
+            className={`flex items-center gap-2 px-4 py-2 rounded-xl border text-[10px] font-black uppercase tracking-widest transition-all ${
+              threadLike.liked
+                ? "bg-rose-500/10 border-rose-500/30 text-rose-400"
+                : "bg-surface border-border text-subtle hover:text-rose-400 hover:border-rose-500/20"
+            }`}
+          >
+            <Heart size={12} fill={threadLike.liked ? "currentColor" : "none"} />
+            {threadLike.likes > 0 ? threadLike.likes : "Like"}
+          </button>
         </div>
 
         {/* Reply composer (top) */}
@@ -331,8 +365,18 @@ export default function ThreadDetailPage({
                   <p className="text-sm text-muted leading-relaxed whitespace-pre-line">{reply.content}</p>
 
                   {/* Actions */}
-                  {!apiThread.isLocked && (
-                    <div className="flex items-center gap-4 border-t border-border pt-3">
+                  <div className="flex items-center gap-4 border-t border-border pt-3">
+                    <button
+                      onClick={() => likeReply(reply.id)}
+                      aria-pressed={reply.liked}
+                      className={`flex items-center gap-1.5 text-xs font-bold transition-colors ${
+                        reply.liked ? "text-rose-400" : "text-subtle hover:text-rose-400"
+                      }`}
+                    >
+                      <Heart size={13} fill={reply.liked ? "currentColor" : "none"} />
+                      {reply.likes > 0 ? reply.likes : "Like"}
+                    </button>
+                    {!apiThread.isLocked && (
                       <button
                         onClick={() =>
                           setReplyingTo(replyingTo === reply.id ? null : reply.id)
@@ -341,8 +385,8 @@ export default function ThreadDetailPage({
                       >
                         <Reply size={12} /> Reply
                       </button>
-                    </div>
-                  )}
+                    )}
+                  </div>
 
                   {/* Inline reply composer */}
                   <AnimatePresence>

@@ -429,9 +429,15 @@ export function useLiveThread(threadId: string | null) {
         qc.invalidateQueries({ queryKey: ["replies", threadId] })
         qc.invalidateQueries({ queryKey: ["thread",  threadId] })
       }
+      // Likes/reactions toggled by other viewers — keep counts in sync live.
+      const onReaction = (p: { targetType?: "thread" | "reply" }) => {
+        if (p?.targetType === "reply") qc.invalidateQueries({ queryKey: ["replies", threadId] })
+        else qc.invalidateQueries({ queryKey: ["thread", threadId] })
+      }
 
       s.on("thread.reply", onReply)
-      cleanup = () => { s.off("thread.reply", onReply) }
+      s.on("thread.reaction", onReaction)
+      cleanup = () => { s.off("thread.reply", onReply); s.off("thread.reaction", onReaction) }
     }
 
     let retry: ReturnType<typeof setTimeout> | null = null

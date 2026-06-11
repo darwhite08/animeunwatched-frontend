@@ -1,17 +1,21 @@
 "use client"
 
-import { useMemo } from "react"
-import { Users, Star, BookOpen, Trophy } from "lucide-react"
+import { useEffect } from "react"
+import { Star, BookOpen, Trophy, Eye } from "lucide-react"
 import { TiltCard } from "@/components/ui/TiltCard"
 import type { Anime } from "@/lib/data/anime"
-import { useQuery } from "@tanstack/react-query"
+import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { api } from "@/lib/api/client"
 import type { Paginated } from "@/lib/api/types"
+import { getSocket } from "@/lib/socket"
 
-/* Stable "random" values derived from rank so they don't flicker on re-render */
-function seedInt(rank: number, salt: number, min: number, max: number): number {
-  const val = ((rank * 2654435761 + salt * 40503) >>> 0) / 4294967296
-  return Math.floor(min + val * (max - min))
+type UserStats = {
+  watching: number
+  completed: number
+  planToWatch: number
+  onHold: number
+  dropped: number
+  total: number
 }
 
 interface AnimeStatsCardProps {
@@ -19,34 +23,51 @@ interface AnimeStatsCardProps {
 }
 
 export function AnimeStatsCard({ anime }: AnimeStatsCardProps) {
-  // Try to get real review count from API
+  const qc = useQueryClient()
+
+  // Real first-party review count for this anime.
   const { data: reviewsData } = useQuery({
     queryKey: ["anime-review-count", anime.id],
     queryFn: () => api<Paginated<{ id: string }>>(`/anime/${anime.id}/reviews?limit=1`),
     enabled: !!anime.id,
   })
 
-  const realReviewCount = reviewsData?.meta?.total
-  const fallbackStats = useMemo(() => ({
-    members:    seedInt(anime.rank, 1, 1000, 50000),
-    reviews:    seedInt(anime.rank, 2, 50, 500),
-    watchlists: seedInt(anime.rank, 3, 200, 12000),
-  }), [anime.rank])
+  // Real first-party community list stats (how many Kaiveron users are
+  // watching / have it on a list). No fabricated numbers.
+  const { data: userStats } = useQuery({
+    queryKey: ["anime-user-stats", anime.id],
+    queryFn: () => api<UserStats>(`/anime/${anime.id}/user-stats`),
+    enabled: !!anime.id,
+    refetchOnWindowFocus: true,
+  })
 
-  const stats = {
-    members:    fallbackStats.members,
-    reviews:    realReviewCount ?? fallbackStats.reviews,
-    watchlists: fallbackStats.watchlists,
-  }
+  // Live counts: when anyone changes their list for this anime the backend
+  // emits anime.list-changed to the anime room — refetch the stats.
+  useEffect(() => {
+    if (!anime.id) return
+    const room = `anime:${anime.id}`
+    const onChange = () => qc.invalidateQueries({ queryKey: ["anime-user-stats", anime.id] })
+    const join = () => {
+      const s = getSocket()
+      if (!s) { retry = setTimeout(join, 600); return }
+      s.emit("room:join", room)
+      s.on("anime.list-changed", onChange)
+    }
+    let retry: ReturnType<typeof setTimeout> | null = null
+    join()
+    return () => {
+      if (retry) clearTimeout(retry)
+      const s = getSocket()
+      if (s) { s.off("anime.list-changed", onChange); s.emit("room:leave", room) }
+    }
+  }, [anime.id, qc])
+
+  const reviewCount = reviewsData?.meta?.total ?? 0
+  const watching = userStats?.watching ?? 0
+  const onLists = userStats?.total ?? 0
 
   const fillPct = Math.round((anime.rating / 10) * 100)
-
-  const scoreColor =
-    anime.rating >= 9
-      ? "bg-emerald-500"
-      : anime.rating >= 8
-      ? "bg-accent-bright"
-      : "bg-accent-bright"
+  const scoreColor = anime.rating >= 9 ? "bg-emerald-500" : "bg-accent-bright"
 
   return (
     <TiltCard intensity={5} scale={1.01} glare={false}>
@@ -55,7 +76,7 @@ export function AnimeStatsCard({ anime }: AnimeStatsCardProps) {
           Community Stats
         </h3>
 
-        {/* Community Score */}
+        {/* Community Score — the canonical score */}
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-muted flex items-center gap-1.5">
@@ -71,11 +92,11 @@ export function AnimeStatsCard({ anime }: AnimeStatsCardProps) {
           </div>
         </div>
 
-        {/* Stat rows */}
+        {/* Real first-party stat rows */}
         {[
-          { icon: Users,    label: "Members watching",  value: stats.members.toLocaleString()    },
-          { icon: BookOpen, label: "Reviews",            value: stats.reviews.toLocaleString()    },
-          { icon: Star,     label: "On watchlists",      value: stats.watchlists.toLocaleString() },
+          { icon: Eye,      label: "Watching",      value: watching.toLocaleString()    },
+          { icon: Star,     label: "On watchlists", value: onLists.toLocaleString()     },
+          { icon: BookOpen, label: "Reviews",       value: reviewCount.toLocaleString() },
         ].map(({ icon: Icon, label, value }) => (
           <div key={label} className="flex items-center justify-between text-xs">
             <span className="text-subtle font-medium flex items-center gap-1.5">
@@ -85,13 +106,15 @@ export function AnimeStatsCard({ anime }: AnimeStatsCardProps) {
           </div>
         ))}
 
-        {/* Rank badge */}
-        <div className="pt-1 border-t border-border flex items-center gap-2">
-          <Trophy size={11} className="text-accent-bright/70" />
-          <span className="text-[10px] font-black text-subtle">
-            <span className="text-accent-bright/90">#{anime.rank}</span> on Neural Archive
-          </span>
-        </div>
+        {/* Rank badge — real catalog rank */}
+        {anime.rank > 0 && (
+          <div className="pt-1 border-t border-border flex items-center gap-2">
+            <Trophy size={11} className="text-accent-bright/70" />
+            <span className="text-[10px] font-black text-subtle">
+              <span className="text-accent-bright/90">#{anime.rank}</span> on Neural Archive
+            </span>
+          </div>
+        )}
       </div>
     </TiltCard>
   )

@@ -8,6 +8,13 @@ const BACKEND_ORIGINS = [
   "https://api.kaiveron.com",
 ].join(" ")
 
+// Local/LAN backend origins for `connect-src` — included ONLY in development
+// so they never ship in the production CSP (they're useless to a real client
+// and just widen the policy).
+const DEV_CONNECT = process.env.NODE_ENV === "production"
+  ? ""
+  : "http://localhost:4000 http://192.168.31.167:4000 "
+
 const securityHeaders = [
   // HSTS — 2y + includeSubDomains + preload. Vercel adds its own too but
   // explicit beats implicit. Safe because all kaiveron domains are TLS-only.
@@ -36,7 +43,7 @@ const securityHeaders = [
       // pull from many CDNs (MAL, catbox, imgur, etc.); images are low-risk.
       "img-src 'self' data: blob: https:",
       // Backend origins (HTTPS for polling, wss/ws for WebSocket upgrade)
-      `connect-src 'self' http://localhost:4000 http://192.168.31.167:4000 ${BACKEND_ORIGINS} https://api.jikan.moe https://accounts.google.com https://sentry.io https://*.sentry.io https://*.r2.cloudflarestorage.com https://*.r2.dev wss: ws:`,
+      `connect-src 'self' ${DEV_CONNECT}${BACKEND_ORIGINS} https://api.jikan.moe https://accounts.google.com https://sentry.io https://*.sentry.io https://*.r2.cloudflarestorage.com https://*.r2.dev wss: ws:`,
       // youtube-nocookie is what trailers/shots embed; keep youtube.com too
       "frame-src 'self' https://accounts.google.com https://www.youtube.com https://youtube.com https://www.youtube-nocookie.com https://www.instagram.com",
       "media-src 'self' https: blob:",

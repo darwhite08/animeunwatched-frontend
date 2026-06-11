@@ -7,12 +7,15 @@
  * schemas — Google reads them all.
  */
 export function JsonLd({ data }: { data: Record<string, unknown> | Record<string, unknown>[] }): React.ReactElement {
+  // Escape `<` to its unicode form so user-controlled values inside the schema
+  // (blog title, author name, anime title/synopsis) can't break out of the
+  // <script> element with a literal `</script>` (stored XSS). JSON.stringify
+  // escapes quotes but NOT `</script>`, so this extra pass is required.
+  const json = JSON.stringify(data).replace(/</g, "\\u003c")
   return (
     <script
       type="application/ld+json"
-      // Schema.org JSON must not be HTML-escaped — using dangerouslySetInnerHTML
-      // with JSON.stringify is the documented Next.js pattern.
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(data) }}
+      dangerouslySetInnerHTML={{ __html: json }}
     />
   )
 }

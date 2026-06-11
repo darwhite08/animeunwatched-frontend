@@ -7,6 +7,8 @@ import { FileText, Bold, Italic, List, Link as LinkIcon, Eye, EyeOff, Save, Send
 import { useToast } from "@/stores/toast.store"
 import { useRouter } from "next/navigation"
 import { useCreateBlog } from "@/hooks/useBlogs"
+import { useCreatorAccess } from "@/hooks/useCreator"
+import { Lock } from "lucide-react"
 
 const CATEGORIES = ["Deep Dive", "Review", "Theory", "Opinion", "List", "Analysis"]
 const TOOLBAR = [
@@ -20,6 +22,7 @@ export default function NewBlogPage() {
   const { push } = useToast()
   const router = useRouter()
   const createBlog = useCreateBlog()
+  const { isCreator, isResolved } = useCreatorAccess()
   const [title,    setTitle]    = useState("")
   const [body,     setBody]     = useState("")
   const [category, setCategory] = useState("Deep Dive")
@@ -50,6 +53,29 @@ export default function NewBlogPage() {
   }
 
   const insert = (md: string) => setBody(prev => prev + (prev ? "\n" : "") + md)
+
+  // Blogs are creator-only. Show a gate to everyone who isn't a creator.
+  if (isResolved && !isCreator) {
+    return (
+      <div className="min-h-screen bg-background text-foreground flex flex-col items-center justify-center px-6 text-center">
+        <div className="h-20 w-20 rounded-3xl bg-surface border border-border flex items-center justify-center mb-5">
+          <Lock size={28} className="text-subtle" />
+        </div>
+        <h1 className="text-2xl font-black uppercase italic tracking-tight mb-2">Creators only</h1>
+        <p className="text-sm text-muted max-w-sm mb-6">
+          Publishing blog articles is a Creator feature. Become a creator to write for The Chronicle.
+        </p>
+        <div className="flex items-center gap-3">
+          <Link href="/blog" className="px-5 py-2.5 rounded-xl bg-surface border border-border text-[10px] font-black uppercase tracking-widest text-muted hover:text-foreground hover:border-border transition-all">
+            Back to The Chronicle
+          </Link>
+          <a href="https://creator-studio.kaiveron.com" className="px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest text-black transition-all" style={{ background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))" }}>
+            Become a Creator
+          </a>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen bg-background text-foreground pb-32">

@@ -4,11 +4,13 @@ import { useState, useRef, useEffect } from "react"
 import { createPortal } from "react-dom"
 import Link from "next/link"
 import { Plus, PencilLine, BarChart3, MessageSquare } from "lucide-react"
+import { useCreatorAccess } from "@/hooks/useCreator"
 
+// `creatorOnly` items (blogs, polls) are hidden from regular members.
 const CREATE_ACTIONS = [
-  { label: "New post", href: "/community", icon: MessageSquare },
-  { label: "Blog article", href: "/blog/new", icon: PencilLine },
-  { label: "Poll", href: "/poll", icon: BarChart3 },
+  { label: "New post", href: "/community", icon: MessageSquare, creatorOnly: false },
+  { label: "Blog article", href: "/blog/new", icon: PencilLine, creatorOnly: true },
+  { label: "Poll", href: "/poll", icon: BarChart3, creatorOnly: true },
 ]
 
 /** Primary-accent create button with an action menu.
@@ -21,6 +23,8 @@ export function CreateButton() {
   const menuRef = useRef<HTMLDivElement>(null)
   const [mounted, setMounted] = useState(false)
   useEffect(() => setMounted(true), [])
+  const { isCreator } = useCreatorAccess()
+  const actions = CREATE_ACTIONS.filter((a) => !a.creatorOnly || isCreator)
 
   useEffect(() => {
     if (!open) return
@@ -62,7 +66,7 @@ export function CreateButton() {
           style={{ top: pos.top, right: pos.right }}
           className="fixed z-[100] w-48 rounded-2xl border border-border bg-background p-1.5 shadow-2xl"
         >
-          {CREATE_ACTIONS.map((a) => (
+          {actions.map((a) => (
             <Link key={a.href} href={a.href} onClick={() => setOpen(false)} role="menuitem" className="flex items-center gap-2.5 rounded-xl px-3 py-2 text-sm text-muted hover:bg-white/5 hover:text-foreground">
               <a.icon size={15} /> {a.label}
             </Link>

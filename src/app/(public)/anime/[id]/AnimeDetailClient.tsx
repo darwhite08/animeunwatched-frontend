@@ -525,21 +525,21 @@ function AnimeDetail({ anime, rawAnime, currentEpisode = 0 }: { anime: Anime; ra
                 <Tv size={13} className="text-subtle" />
                 <h3 className="text-[9px] font-black uppercase tracking-[0.3em] text-subtle">Where to Watch</h3>
               </div>
-              <div className="space-y-2">
+              <div className="space-y-1.5">
                 {[
-                  { name: "Crunchyroll", Icon: SiCrunchyroll, color: "text-[#F47521]", bg: "bg-orange-500/10 border-orange-500/20", search: `https://www.crunchyroll.com/search?q=${encodeURIComponent(anime.title)}` },
-                  { name: "Netflix",     Icon: SiNetflix,     color: "text-[#E50914]", bg: "bg-red-500/10 border-red-500/20",       search: `https://www.netflix.com/search?q=${encodeURIComponent(anime.title)}` },
-                  { name: "Funimation",  Icon: SiFunimation,  color: "text-[#6D2FD0]", bg: "bg-violet-500/10 border-violet-500/20", search: `https://www.funimation.com/search/?q=${encodeURIComponent(anime.title)}` },
-                  { name: "HiDive",      Icon: Tv,            color: "text-[#00B3E3]", bg: "bg-cyan-500/10 border-cyan-500/20",     search: `https://www.hidive.com/search#q=${encodeURIComponent(anime.title)}` },
-                ].map(({ name, Icon, color, bg, search }) => (
+                  { name: "Crunchyroll", Icon: SiCrunchyroll, color: "text-[#F47521]", search: `https://www.crunchyroll.com/search?q=${encodeURIComponent(anime.title)}` },
+                  { name: "Netflix",     Icon: SiNetflix,     color: "text-[#E50914]", search: `https://www.netflix.com/search?q=${encodeURIComponent(anime.title)}` },
+                  { name: "Funimation",  Icon: SiFunimation,  color: "text-[#6D2FD0]", search: `https://www.funimation.com/search/?q=${encodeURIComponent(anime.title)}` },
+                  { name: "HiDive",      Icon: Tv,            color: "text-[#00B3E3]", search: `https://www.hidive.com/search#q=${encodeURIComponent(anime.title)}` },
+                ].map(({ name, Icon, color, search }) => (
                   <a key={name} href={search} target="_blank" rel="noopener noreferrer"
-                    className={`flex items-center justify-between px-4 py-2.5 rounded-xl border text-xs font-bold transition-all hover:scale-[1.02] ${bg}`}
+                    className="group flex items-center justify-between px-3 py-2.5 rounded-xl border border-transparent hover:border-border hover:bg-white/[0.03] transition-colors"
                   >
-                    <span className={`flex items-center gap-2.5 ${color}`}>
-                      <Icon size={16} aria-hidden className="shrink-0" />
+                    <span className="flex items-center gap-2.5 text-sm font-bold text-muted group-hover:text-foreground transition-colors">
+                      <Icon size={16} aria-hidden className={`shrink-0 ${color}`} />
                       <span>{name}</span>
                     </span>
-                    <span className="text-subtle text-[9px]">Search →</span>
+                    <span className="text-subtle text-[9px] font-black uppercase tracking-wider opacity-0 group-hover:opacity-100 transition-opacity">Search →</span>
                   </a>
                 ))}
               </div>

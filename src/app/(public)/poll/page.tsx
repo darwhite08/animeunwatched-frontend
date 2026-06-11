@@ -19,6 +19,7 @@ import {
   Zap,
 } from "lucide-react"
 import { useToast } from "@/stores/toast.store"
+import { useCreatorAccess } from "@/hooks/useCreator"
 
 /* ─────────────────────────────────────────────
    Types
@@ -341,6 +342,7 @@ function PollCard({ poll }: { poll: Poll }) {
 ───────────────────────────────────────────── */
 export default function PollsPage() {
   const [activeTab, setActiveTab] = useState<FilterTab>("all")
+  const { isCreator } = useCreatorAccess()
 
   // Collapse the page header from full → compact past this scroll position.
   const [collapsed, setCollapsed] = useState(false)
@@ -450,11 +452,13 @@ export default function PollsPage() {
                       <span>total votes · refreshing every 4s</span>
                     </div>
                   </div>
-                  <Link href="/creators/create/polls"
-                    className="self-start md:self-end inline-flex items-center gap-2 px-5 py-3 rounded-xl text-[11px] font-black uppercase tracking-widest text-black transition-all hover:scale-[1.03] motion-reduce:transform-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70 shrink-0"
-                    style={{ background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))", boxShadow: "0 8px 24px color-mix(in srgb, var(--app-accent) 35%, transparent)" }}>
-                    <Plus size={13} /> Create Poll
-                  </Link>
+                  {isCreator && (
+                    <Link href="/creators/create/polls"
+                      className="self-start md:self-end inline-flex items-center gap-2 px-5 py-3 rounded-xl text-[11px] font-black uppercase tracking-widest text-black transition-all hover:scale-[1.03] motion-reduce:transform-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70 shrink-0"
+                      style={{ background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))", boxShadow: "0 8px 24px color-mix(in srgb, var(--app-accent) 35%, transparent)" }}>
+                      <Plus size={13} /> Create Poll
+                    </Link>
+                  )}
                 </motion.div>
               )}
             </AnimatePresence>

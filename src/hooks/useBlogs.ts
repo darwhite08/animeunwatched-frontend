@@ -2,10 +2,12 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { api } from "@/lib/api/client"
 import type { Paginated, BlogStatus } from "@/lib/api/types"
 
-type Blog = {
+export type Blog = {
   id: string; slug: string; authorId: string; title: string; body: string
   status: BlogStatus; publishedAt: string | null; createdAt: string; updatedAt: string
   author: { id: string; username: string; displayName: string; avatarUrl: string | null }
+  category?: string | null; hasSpoilers?: boolean; animeMalId?: number | null; animeTitle?: string | null
+  coverImage?: string | null
 }
 
 export const blogsKey  = ["blogs"]               as const
@@ -18,11 +20,14 @@ export function useBlogs(page = 1) {
   })
 }
 
-export function useBlog(slug: string) {
+export function useBlog(slug: string, initialBlog?: Blog) {
   return useQuery({
     queryKey: blogKey(slug),
     queryFn:  () => api<{ blog: Blog }>(`/blogs/${slug}`),
     enabled:  !!slug,
+    // Seeded from the server component so the article body is in the SSR HTML
+    // (crawlable / link-previewable) and there's no client-fetch flash.
+    initialData: initialBlog ? { blog: initialBlog } : undefined,
   })
 }
 

@@ -418,7 +418,7 @@ export default function UserProfilePage({
                 <h1 className="flex items-center justify-center gap-3 text-5xl md:text-7xl font-black tracking-tighter uppercase italic text-foreground leading-none md:justify-start">
                   {user.displayName}
                   <VerifiedBadge kind={realUser?.verifiedKind} size={36} />
-                  {foundingSerial != null && <FoundingBadge serial={foundingSerial} size={18} />}
+                  {foundingSerial != null && <FoundingBadge serial={foundingSerial} size={22} />}
                 </h1>
                 <p className="text-muted text-sm font-mono flex items-center gap-2">
                   @{user.username}

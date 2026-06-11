@@ -15,6 +15,8 @@ type Thread = {
   updatedAt: string
   author: { id: string; username: string; displayName: string; avatarUrl: string | null }
   _count?: { replies: number }
+  club?: { slug: string; name: string } | null
+  anime?: { malId: number; title: string; titleEnglish: string | null } | null
 }
 
 type Reply = {
@@ -54,7 +56,10 @@ export function useCreateReply(threadId: string) {
         method: "POST",
         body:   JSON.stringify(body),
       }),
-    onSuccess: () => qc.invalidateQueries({ queryKey: repliesKey(threadId) }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: repliesKey(threadId) })
+      qc.invalidateQueries({ queryKey: threadKey(threadId) }) // refresh the reply count
+    },
   })
 }
 

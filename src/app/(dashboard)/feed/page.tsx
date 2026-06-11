@@ -28,6 +28,7 @@ import { useLeaderboard } from "@/hooks/useLeaderboard"
 import { useLiveFeed, useQueuedPosts } from "@/hooks/useRealtime"
 import { useLiveTime } from "@/hooks/useLiveTime"
 import { NewPostsBanner } from "@/components/feed/NewPostsBanner"
+import { PostLikersModal } from "@/components/posts/PostLikersModal"
 
 // Renders an auto-updating relative timestamp ("just now" → "1m ago" → ...)
 function LiveTime({ iso }: { iso: string }) { return <>{useLiveTime(iso)}</> }
@@ -83,6 +84,7 @@ function RealPostCard({ post, index }: { post: Post; index: number }) {
   const me = useAuthStore(s => s.user)
   const [liked, setLiked] = useState(post.isLikedByMe ?? false)
   const [likeCount, setLikeCount] = useState(post._count?.likes ?? 0)
+  const [likersOpen, setLikersOpen] = useState(false)
   const likePost = useLikePost(post.id)
   const deletePost = useDeletePost(post.id)
 
@@ -147,6 +149,18 @@ function RealPostCard({ post, index }: { post: Post; index: number }) {
       )}
 
       <p className="text-sm text-muted leading-relaxed">{post.content}</p>
+
+      {/* Instagram-style "liked by" — tap to see who liked this */}
+      {likeCount > 0 && (
+        <button
+          onClick={() => setLikersOpen(true)}
+          className="flex items-center gap-1.5 text-[11px] font-bold text-muted hover:text-foreground transition-colors -mb-1 w-fit"
+        >
+          <Heart size={11} className="text-rose-400" fill="currentColor" />
+          Liked by <span className="text-foreground">{likeCount.toLocaleString()}</span> {likeCount === 1 ? "person" : "people"}
+        </button>
+      )}
+      <PostLikersModal postId={post.id} open={likersOpen} onClose={() => setLikersOpen(false)} />
 
       <div className="flex items-center gap-5 pt-1 border-t border-border">
         <button onClick={handleLike} disabled={likePost.isPending}

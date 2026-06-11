@@ -33,7 +33,7 @@ export default function ProfileMenu({ user, isOpen, onClose, onLogout }: Profile
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.93, y: 8 }}
           transition={{ duration: 0.18, ease: [0.32, 0.72, 0, 1] }}
-          className="absolute right-0 mt-3 w-52 rounded-2xl p-1.5 backdrop-blur-2xl z-50"
+          className="fixed top-[58px] right-4 w-52 rounded-2xl p-1.5 backdrop-blur-2xl z-[120]"
           style={{
             background: "linear-gradient(160deg, color-mix(in srgb, var(--app-bg) 98%, transparent), color-mix(in srgb, var(--app-bg) 99%, transparent))",
             border: "1px solid color-mix(in srgb, var(--app-fg) 7%, transparent)",

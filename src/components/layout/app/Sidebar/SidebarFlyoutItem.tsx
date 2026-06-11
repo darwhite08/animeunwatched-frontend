@@ -107,7 +107,7 @@ export function SidebarFlyoutItem({
           onMouseEnter={openFlyout}
           onMouseLeave={scheduleClose}
           style={{ top: pos.top, left: pos.left }}
-          className="fixed z-50 w-64 max-h-[80vh] overflow-y-auto rounded-2xl border border-border bg-background/95 p-2 shadow-2xl backdrop-blur-xl [&::-webkit-scrollbar]:w-1.5"
+          className="fixed z-[120] w-64 max-h-[80vh] overflow-y-auto rounded-2xl border border-border bg-background/95 p-2 shadow-2xl backdrop-blur-xl [&::-webkit-scrollbar]:w-1.5"
         >
           {links.map((l) => {
             const LIcon = l.icon

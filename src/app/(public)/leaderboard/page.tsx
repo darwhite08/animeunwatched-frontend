@@ -181,7 +181,7 @@ function Podium({ top, board }: { top: BoardLeaderboardRow[]; board: (typeof BOA
   if (top.length < 3) return null
   const order = [top[1], top[0], top[2]]
   return (
-    <div className="lb-podium-wrap lb-rise" style={{ "--board": board.accent } as React.CSSProperties}>
+    <div className="lb-podium-wrap lb-rise">
       <div className="lb-speedlines" />
       <div className="lb-halftone" />
       <div className="lb-podium-glow" />
@@ -263,7 +263,7 @@ function YouBar({ me, total, board }: {
   const gap = me.nextValue != null ? Math.max(1, me.nextValue - me.value) : null
   const pct = gap != null ? Math.min(0.97, Math.max(0.12, me.value / (me.value + gap))) : 1
   return (
-    <div className="lb-youbar" style={{ "--accent": board.accent } as React.CSSProperties}>
+    <div className="lb-youbar">
       <div className="lb-youbar-id">
         <div className="lb-youbar-rk">
           <span className="lb-mono" style={{ color: "rgba(244,242,236,.7)" }}>Rank</span>
@@ -355,7 +355,7 @@ export default function LeaderboardPage() {
   const listRows = searching || !showPodium ? filtered : filtered.slice(3)
 
   return (
-    <div className="lb-page" style={{ "--accent": board.accent } as React.CSSProperties}>
+    <div className="lb-page">
       <style>{LB_CSS}</style>
       <div className="lb-shell">
 
@@ -387,7 +387,7 @@ export default function LeaderboardPage() {
             const BIcon = b.icon
             return (
               <button key={b.id} className={"lb-board" + (b.id === boardId ? " is-active" : "")}
-                style={{ "--board": b.accent } as React.CSSProperties} onClick={() => setBoardId(b.id)}>
+                onClick={() => setBoardId(b.id)}>
                 <span className="lb-board-ic"><BIcon size={16} strokeWidth={1.9} /></span>
                 {b.label}
               </button>
@@ -487,24 +487,31 @@ export default function LeaderboardPage() {
 
 /* ─── Page CSS (ported from the approved standalone design) ──────────────── */
 const LB_CSS = `
-  @import url('https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
   .lb-page {
-    --lb-bg: #060A14; --lb-surface: #0D1224; --lb-surface-2: #121a33; --lb-surface-3: #18223f;
-    --lb-rule: rgba(244,242,236,0.07); --lb-rule-strong: rgba(244,242,236,0.14);
-    --lb-paper: #F4F2EC; --lb-muted: rgba(244,242,236,0.58); --lb-faint: rgba(244,242,236,0.34);
-    --accent-2: #00D4FF;
-    --lb-gold: #F2C94C; --lb-silver: #C7D2E0; --lb-bronze: #E08A4B;
+    /* Mapped to the app design system so the leaderboard matches the rest of
+       Kaiveron (near-black surfaces + amber accent + app font) instead of its
+       old standalone navy/indigo/cyan theme. */
+    --lb-bg: var(--app-bg);
+    --lb-surface: var(--app-surface);
+    --lb-surface-2: var(--app-surface-2);
+    --lb-surface-3: color-mix(in srgb, var(--app-fg) 7%, var(--app-surface-2));
+    --lb-rule: var(--app-border); --lb-rule-strong: var(--app-border-hover);
+    --lb-paper: var(--app-fg); --lb-muted: var(--app-muted); --lb-faint: var(--app-subtle);
+    /* Brand accent = app amber/gold (per-board hues only tint the board tabs). */
+    --accent: var(--app-accent); --accent-2: var(--app-accent-bright);
+    --board: var(--app-accent);
+    --lb-gold: var(--app-accent-bright); --lb-silver: #C7D2E0; --lb-bronze: #E08A4B;
     --pad: 24px; --gap: 16px; --radius: 22px;
     position: relative; min-height: 100vh; padding: 34px 32px 150px;
-    font-family: 'Sora', system-ui, sans-serif; color: var(--lb-paper); -webkit-font-smoothing: antialiased;
+    font-family: inherit; color: var(--lb-paper); -webkit-font-smoothing: antialiased;
     background:
-      radial-gradient(1300px 640px at 78% -12%, color-mix(in oklab, var(--accent) 20%, transparent), transparent 60%),
-      radial-gradient(1000px 520px at 6% -4%, color-mix(in oklab, var(--accent-2) 12%, transparent), transparent 55%),
+      radial-gradient(1300px 640px at 78% -12%, color-mix(in oklab, var(--accent) 16%, transparent), transparent 60%),
+      radial-gradient(1000px 520px at 6% -4%, color-mix(in oklab, var(--accent) 9%, transparent), transparent 55%),
       var(--lb-bg);
   }
   .lb-page button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
   .lb-page input { font-family: inherit; }
-  .lb-mono { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--lb-faint); }
+  .lb-mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--lb-faint); }
   .tnum { font-variant-numeric: tabular-nums; }
   @keyframes lbrise { from { transform: translateY(14px); opacity: 0; } to { transform: none; opacity: 1; } }
   .lb-rise { animation: lbrise .6s cubic-bezier(.2,.7,.2,1) both; }
@@ -597,7 +604,7 @@ const LB_CSS = `
   .lb-pod-handle { margin-top: 3px; display: inline-flex; align-items: center; gap: 7px; color: var(--lb-muted); }
   .lb-pod-handle .lb-mono { text-transform: none; letter-spacing: 0; font-size: 12px; }
   .lb-pod-metric { margin-top: 13px; font-weight: 800; letter-spacing: -.02em; line-height: 1; }
-  .lb-pod-metric .lb-pm-unit { font-size: .42em; font-weight: 600; color: var(--lb-muted); margin-left: 5px; letter-spacing: .04em; text-transform: uppercase; font-family: 'JetBrains Mono', monospace; }
+  .lb-pod-metric .lb-pm-unit { font-size: .42em; font-weight: 600; color: var(--lb-muted); margin-left: 5px; letter-spacing: .04em; text-transform: uppercase; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
   .lb-pod-tier { margin-top: 11px; display: flex; align-items: center; gap: 8px; justify-content: center; }
   .lb-pod-tier .lb-mono { color: var(--lb-muted); }
 
@@ -612,7 +619,7 @@ const LB_CSS = `
   .lb-pod-2 .lb-pod-metric, .lb-pod-3 .lb-pod-metric { font-size: 29px; }
 
   .lb-ribbon { display: inline-flex; align-items: center; gap: 6px; margin-bottom: 11px; padding: 5px 13px; border-radius: 999px;
-    font-family: 'JetBrains Mono', monospace; font-size: 9.5px; letter-spacing: .2em; font-weight: 700; text-transform: uppercase; color: #2A1A00;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 9.5px; letter-spacing: .2em; font-weight: 700; text-transform: uppercase; color: #2A1A00;
     background: linear-gradient(135deg, #FFE7A6, var(--lb-gold)); box-shadow: 0 4px 18px color-mix(in oklab, var(--lb-gold) 55%, transparent), inset 0 1px 0 rgba(255,255,255,.5); }
   .lb-pod-1 .lb-pod-metric { background: linear-gradient(100deg, #FFE7A6 0%, #FFFFFF 28%, #FFD24A 52%, #FFFFFF 74%, #FFE08A 100%);
     background-size: 220% auto; -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent;
@@ -635,7 +642,7 @@ const LB_CSS = `
   }
 
   .lb-tier { display: inline-flex; align-items: center; justify-content: center; transform: skewX(-11deg);
-    min-width: 24px; height: 21px; padding: 0 7px; border-radius: 5px; font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 12px; letter-spacing: .03em;
+    min-width: 24px; height: 21px; padding: 0 7px; border-radius: 5px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-weight: 700; font-size: 12px; letter-spacing: .03em;
     color: #0A0A0A; background: var(--tc); box-shadow: 0 2px 9px color-mix(in oklab, var(--tc) 50%, transparent), inset 0 1px 0 rgba(255,255,255,.35); flex-shrink: 0; }
   .lb-tier > span { display: inline-block; transform: skewX(11deg); }
   .lb-tier.is-ss { background: linear-gradient(135deg, #FFE7A6, var(--lb-gold)); box-shadow: 0 0 16px color-mix(in oklab, var(--lb-gold) 75%, transparent), inset 0 1px 0 rgba(255,255,255,.5); }
@@ -656,7 +663,7 @@ const LB_CSS = `
   .lb-rk { display: flex; align-items: center; gap: 11px; }
   .lb-rk-n { font-size: 18px; font-weight: 800; color: var(--lb-muted); min-width: 26px; font-variant-numeric: tabular-nums; }
   .lb-row.is-you .lb-rk-n { color: var(--lb-paper); }
-  .lb-delta { display: inline-flex; align-items: center; gap: 2px; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; min-width: 34px; }
+  .lb-delta { display: inline-flex; align-items: center; gap: 2px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; font-weight: 600; min-width: 34px; }
   .lb-delta.up { color: #3FB950; } .lb-delta.down { color: #E5577D; }
   .lb-delta.flat { color: var(--lb-faint); } .lb-delta.new { color: #00D4FF; }
 
@@ -665,11 +672,11 @@ const LB_CSS = `
     background: radial-gradient(120% 120% at 30% 20%, color-mix(in oklab, var(--av) 62%, var(--lb-surface-3)), var(--lb-surface-2));
     border: 1px solid color-mix(in oklab, var(--av) 40%, var(--lb-rule-strong)); box-shadow: inset 0 1px 8px rgba(0,0,0,.4); overflow: visible; }
   .lb-ava img { border: none; }
-  .lb-ava .lb-ava-lv { position: absolute; bottom: -4px; right: -5px; font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 600; color: var(--lb-paper);
+  .lb-ava .lb-ava-lv { position: absolute; bottom: -4px; right: -5px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 9px; font-weight: 600; color: var(--lb-paper);
     padding: 1px 4px; border-radius: 6px; background: var(--lb-surface-3); border: 1px solid var(--lb-rule-strong); letter-spacing: .02em; z-index: 2; }
   .lb-who-txt { min-width: 0; }
   .lb-who-name { display: flex; align-items: center; gap: 7px; font-size: 15px; font-weight: 600; }
-  .lb-you-tag { font-family: 'JetBrains Mono', monospace; font-size: 8.5px; letter-spacing: .12em; padding: 2px 6px; border-radius: 5px; color: var(--lb-bg); background: var(--accent-2); font-weight: 700; }
+  .lb-you-tag { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 8.5px; letter-spacing: .12em; padding: 2px 6px; border-radius: 5px; color: var(--lb-bg); background: var(--accent-2); font-weight: 700; }
   .lb-who-sub { margin-top: 3px; display: flex; align-items: center; gap: 8px; color: var(--lb-faint); }
   .lb-who-sub .lb-mono { text-transform: none; letter-spacing: 0; font-size: 12px; }
   .lb-grade { color: var(--lb-muted); font-size: 12px; }
@@ -679,7 +686,7 @@ const LB_CSS = `
   .lb-sec .lb-mono { color: var(--lb-faint); }
   .lb-metric { text-align: right; }
   .lb-metric-n { font-size: 21px; font-weight: 800; letter-spacing: -.01em; font-variant-numeric: tabular-nums; }
-  .lb-metric-u { font-family: 'JetBrains Mono', monospace; font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--lb-faint); margin-top: 2px; }
+  .lb-metric-u { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--lb-faint); margin-top: 2px; }
   .lb-follow { display: flex; justify-content: flex-end; }
   .lb-fbtn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; height: 36px; padding: 0 14px; border-radius: 10px; font-size: 12.5px; font-weight: 600;
     color: var(--lb-paper); background: var(--lb-rule); border: 1px solid var(--lb-rule-strong); transition: background .15s, border-color .15s, transform .12s; white-space: nowrap; }

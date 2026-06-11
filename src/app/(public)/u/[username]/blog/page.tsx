@@ -106,7 +106,7 @@ export default function UserBlogPage({
     publishedAt: formatDate(b.publishedAt),
     readTime: Math.max(1, Math.ceil(b.body.split(/\s+/).length / 200)),
     views: b.viewCount ?? 0,
-    likes: 0,
+    likes: b.likeCount ?? 0,
   }))
 
   return (

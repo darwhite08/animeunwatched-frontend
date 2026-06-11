@@ -28,6 +28,7 @@ import { BADGE_META, TIER_COLOR } from "@/lib/badges"
 import { useUserProfile, useFollow } from "@/hooks/useUsers"
 import { SupportCreator } from "@/components/social/SupportCreator"
 import { VerifiedBadge } from "@/components/social/VerifiedBadge"
+import { FoundingBadge } from "@/components/social/FoundingBadge"
 import { useUserList } from "@/hooks/useLists"
 import { useActivityFeed } from "@/hooks/useActivityFeed"
 import { useAuthStore } from "@/stores/auth.store"
@@ -251,6 +252,9 @@ export default function UserProfilePage({
   } as MockUser & { avatarUrl: string | null; coverImage: string | null }
 
   const isOwnProfile = currentUser?.username === username
+  // Founding Creator serial (1..250) if this user holds the badge.
+  const foundingSerial = profileData?.badges?.find(b => b.code === "FOUNDING_CREATOR")?.serial ?? null
+
   // Follow state is hydrated from the API; local override applies after the
   // viewer toggles it in this session.
   const [followOverride, setFollowOverride] = useState<boolean | null>(null)
@@ -414,6 +418,7 @@ export default function UserProfilePage({
                 <h1 className="flex items-center justify-center gap-3 text-5xl md:text-7xl font-black tracking-tighter uppercase italic text-foreground leading-none md:justify-start">
                   {user.displayName}
                   <VerifiedBadge kind={realUser?.verifiedKind} size={36} />
+                  {foundingSerial != null && <FoundingBadge serial={foundingSerial} size={18} />}
                 </h1>
                 <p className="text-muted text-sm font-mono flex items-center gap-2">
                   @{user.username}

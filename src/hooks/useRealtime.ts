@@ -486,3 +486,59 @@ export function useBlogViews(slug: string | null, initialCount = 0): number {
 
   return count
 }
+
+// ── Blog likes (persistent + realtime) ───────────────────────────────────────
+// Seeds from the blog's real likeCount + likedByMe (so a like survives refresh),
+// toggles optimistically against POST/DELETE /blogs/:slug/like, and keeps the
+// count live as others like via the blog room's `blog.likes` broadcast.
+export function useBlogLikes(
+  slug: string | null,
+  initialCount = 0,
+  initialLiked = false,
+): { count: number; liked: boolean; pending: boolean; toggle: () => void } {
+  const [count, setCount] = useState(initialCount)
+  const [liked, setLiked] = useState(initialLiked)
+  const [pending, setPending] = useState(false)
+  const isAuth = useAuthStore((s) => s.isAuthenticated)
+
+  // Re-seed when the real blog resolves after first render.
+  useEffect(() => { setCount(initialCount) }, [initialCount])
+  useEffect(() => { setLiked(initialLiked) }, [initialLiked])
+
+  // Live count updates from other readers.
+  useEffect(() => {
+    if (!slug) return
+    let retry: ReturnType<typeof setTimeout> | null = null
+    let cleanup: (() => void) | null = null
+    const attach = () => {
+      const s = getSocket()
+      if (!s) { retry = setTimeout(attach, 600); return }
+      s.emit("room:join", `blog:${slug}`)
+      const onLikes = (p: { slug: string; likeCount: number }) => {
+        if (p?.slug === slug && typeof p.likeCount === "number") setCount(p.likeCount)
+      }
+      s.on("blog.likes", onLikes)
+      cleanup = () => { s.off("blog.likes", onLikes); s.emit("room:leave", `blog:${slug}`) }
+    }
+    attach()
+    return () => { if (retry) clearTimeout(retry); cleanup?.() }
+  }, [slug])
+
+  const toggle = useCallback(() => {
+    if (!slug || pending) return
+    if (!isAuth) return // caller surfaces a sign-in prompt
+    const next = !liked
+    setLiked(next)
+    setCount((c) => Math.max(0, c + (next ? 1 : -1)))
+    setPending(true)
+    void import("@/lib/api/client")
+      .then(({ api }) =>
+        api<{ likeCount: number; likedByMe: boolean }>(`/blogs/${slug}/like`, { method: next ? "POST" : "DELETE" }),
+      )
+      .then((r) => { setCount(r.likeCount); setLiked(r.likedByMe) })
+      .catch(() => { setLiked(!next); setCount((c) => Math.max(0, c + (next ? -1 : 1))) }) // revert
+      .finally(() => setPending(false))
+  }, [slug, liked, pending, isAuth])
+
+  return { count, liked, pending, toggle }
+}

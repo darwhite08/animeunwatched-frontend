@@ -5,10 +5,12 @@ import type { Paginated, BlogStatus } from "@/lib/api/types"
 export type Blog = {
   id: string; slug: string; authorId: string; title: string; body: string
   status: BlogStatus; publishedAt: string | null; createdAt: string; updatedAt: string
-  author: { id: string; username: string; displayName: string; avatarUrl: string | null }
+  author: { id: string; username: string; displayName: string; avatarUrl: string | null; verifiedKind?: "USER" | "CREATOR" | "STUDIO" | null }
   category?: string | null; hasSpoilers?: boolean; animeMalId?: number | null; animeTitle?: string | null
   coverImage?: string | null
   viewCount?: number
+  likeCount?: number
+  likedByMe?: boolean
 }
 
 export const blogsKey  = ["blogs"]               as const

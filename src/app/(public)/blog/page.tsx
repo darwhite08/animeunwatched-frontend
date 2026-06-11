@@ -7,9 +7,33 @@ import {
   BookOpen, Heart, Eye, Clock, User, TrendingUp, PenSquare, ChevronRight,
 } from "lucide-react"
 import Link from "next/link"
+import { VerifiedBadge } from "@/components/social/VerifiedBadge"
 
 // Collapses the header from full → compact once the user scrolls this far.
 const COLLAPSE_AT = 96
+
+/* Strip HTML tags + entities to plain text for excerpts (blog bodies are rich HTML). */
+function stripHtml(html: string): string {
+  return html
+    .replace(/<style[\s\S]*?<\/style>/gi, " ")
+    .replace(/<[^>]*>/g, " ")
+    .replace(/&nbsp;/gi, " ")
+    .replace(/&amp;/gi, "&").replace(/&lt;/gi, "<").replace(/&gt;/gi, ">")
+    .replace(/&#?[a-z0-9]+;/gi, " ")
+    .replace(/\s+/g, " ")
+    .trim()
+}
+
+/* First <img> src in a blog body — used as the card cover when no coverImage. */
+function firstImage(html: string): string | null {
+  const m = html.match(/<img[^>]+src=["']([^"']+)["']/i)
+  return m?.[1] ?? null
+}
+
+/* Map the backend BlogCategory enum → the display labels used by the filter pills. */
+const CATEGORY_LABEL: Record<string, "Deep Dive" | "Review" | "Theory" | "Opinion" | "List"> = {
+  DEEP_DIVE: "Deep Dive", REVIEW: "Review", THEORY: "Theory", OPINION: "Opinion", LIST: "List",
+}
 
 /* ── Types ── */
 type Category = "All" | "Deep Dive" | "Review" | "Theory" | "Opinion" | "List"
@@ -20,9 +44,12 @@ type Blog = {
   title: string
   excerpt: string
   author: string
+  authorAvatar?: string | null
+  authorVerified?: "USER" | "CREATOR" | "STUDIO" | null
   readTime: number
   publishedAt: string
   coverGradient: string
+  coverImage?: string | null
   category: "Deep Dive" | "Review" | "Theory" | "Opinion" | "List"
   likes: number
   views: number
@@ -169,11 +196,22 @@ function BlogCard({ blog, index }: { blog: Blog; index: number }) {
         href={`/blog/${blog.slug}`}
         className="group block bg-surface-2 border border-border hover:border-accent/30 rounded-2xl overflow-hidden transition-all"
       >
-        {/* Cover gradient */}
-        <div className={`h-40 w-full bg-gradient-to-br ${blog.coverGradient} relative`}>
-          <div className="absolute inset-0 bg-black/30" />
+        {/* Cover — real image when available, gradient fallback otherwise.
+            Plain <img>: blog covers come from arbitrary content hosts, so we
+            don't route them through next/image's remote-host allowlist. */}
+        <div className={`h-40 w-full relative overflow-hidden ${blog.coverImage ? "bg-surface-3" : `bg-gradient-to-br ${blog.coverGradient}`}`}>
+          {blog.coverImage && (
+            /* eslint-disable-next-line @next/next/no-img-element */
+            <img
+              src={blog.coverImage}
+              alt={blog.title}
+              loading="lazy"
+              className="absolute inset-0 h-full w-full object-cover group-hover:scale-105 transition-transform duration-500"
+            />
+          )}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-black/20" />
           {/* Category badge */}
-          <span className="absolute top-3 left-3 px-2.5 py-1 rounded-lg bg-black/50 backdrop-blur-md border border-border text-[9px] font-black uppercase tracking-widest text-muted">
+          <span className="absolute top-3 left-3 px-2.5 py-1 rounded-lg bg-black/55 backdrop-blur-md border border-white/10 text-[9px] font-black uppercase tracking-widest text-foreground/90">
             {blog.category}
           </span>
         </div>
@@ -187,13 +225,20 @@ function BlogCard({ blog, index }: { blog: Blog; index: number }) {
 
           {/* Meta */}
           <div className="flex items-center gap-3 text-[10px] text-subtle pt-1 border-t border-border">
-            <span className="flex items-center gap-1">
-              <User size={9} /> {blog.author}
+            <span className="flex items-center gap-1.5 min-w-0">
+              {blog.authorAvatar ? (
+                /* eslint-disable-next-line @next/next/no-img-element */
+                <img src={blog.authorAvatar} alt="" className="w-4 h-4 rounded-full object-cover shrink-0" />
+              ) : (
+                <User size={9} />
+              )}
+              <span className="truncate">{blog.author}</span>
+              {blog.authorVerified && <VerifiedBadge kind={blog.authorVerified} size={11} />}
             </span>
-            <span className="flex items-center gap-1">
+            <span className="flex items-center gap-1 shrink-0">
               <Clock size={9} /> {blog.readTime} min
             </span>
-            <span className="ml-auto">{blog.publishedAt}</span>
+            <span className="ml-auto shrink-0">{blog.publishedAt}</span>
           </div>
 
           {/* Stats */}
@@ -226,15 +271,22 @@ export default function BlogListingPage() {
     return () => window.removeEventListener("scroll", onScroll)
   }, [])
 
-  const apiBlogs: Blog[] = useMemo(() => (blogsData?.data ?? []).map(b => ({
-    id: b.id, slug: b.slug, title: b.title,
-    excerpt: b.body.slice(0, 160) + "…",
-    author: b.author?.displayName ?? b.author?.username ?? "Anonymous",
-    readTime: Math.max(1, Math.ceil(b.body.split(" ").length / 200)),
-    publishedAt: b.publishedAt ? new Date(b.publishedAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "",
-    coverGradient: "from-indigo-900 via-violet-900 to-purple-900",
-    category: "Deep Dive" as const, likes: 0, views: b.viewCount ?? 0,
-  })), [blogsData])
+  const apiBlogs: Blog[] = useMemo(() => (blogsData?.data ?? []).map(b => {
+    const text = stripHtml(b.body)
+    return {
+      id: b.id, slug: b.slug, title: b.title,
+      excerpt: text.slice(0, 160) + (text.length > 160 ? "…" : ""),
+      author: b.author?.displayName ?? b.author?.username ?? "Anonymous",
+      authorAvatar: b.author?.avatarUrl ?? null,
+      authorVerified: b.author?.verifiedKind ?? null,
+      readTime: Math.max(1, Math.ceil(text.split(" ").length / 200)),
+      publishedAt: b.publishedAt ? new Date(b.publishedAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "",
+      coverGradient: "from-indigo-900 via-violet-900 to-purple-900",
+      coverImage: b.coverImage ?? firstImage(b.body),
+      category: CATEGORY_LABEL[b.category ?? ""] ?? "Deep Dive",
+      likes: b.likeCount ?? 0, views: b.viewCount ?? 0,
+    }
+  }), [blogsData])
 
   const allBlogs = apiBlogs
   void BLOGS
@@ -243,15 +295,17 @@ export default function BlogListingPage() {
   // (#hashtag tokens across all blog bodies). Both recompute when blogs
   // refetch — no mock fallback.
   const liveTopAuthors = useMemo(() => {
-    const counts = new Map<string, { articles: number; avatar: string; username: string }>()
+    const counts = new Map<string, { articles: number; avatarUrl: string | null; initial: string; username: string; verified: "USER" | "CREATOR" | "STUDIO" | null }>()
     for (const b of (blogsData?.data ?? [])) {
       const handle = b.author?.username ?? "anon"
       const display = b.author?.displayName ?? b.author?.username ?? "Anonymous"
       const cur = counts.get(display)
       counts.set(display, {
         articles: (cur?.articles ?? 0) + 1,
-        avatar: display[0]?.toUpperCase() ?? "?",
+        avatarUrl: b.author?.avatarUrl ?? cur?.avatarUrl ?? null,
+        initial: display[0]?.toUpperCase() ?? "?",
         username: handle,
+        verified: b.author?.verifiedKind ?? cur?.verified ?? null,
       })
     }
     return [...counts.entries()]
@@ -289,7 +343,7 @@ export default function BlogListingPage() {
       <div className="sticky top-[var(--sticky-top,0px)] z-40 bg-background border-b border-border shadow-[0_4px_12px_color-mix(in_srgb,var(--app-fg)_4%,transparent)]">
         {/* The relative wrapper has indigo glow only in the FULL state */}
         <div className="relative overflow-hidden transition-[padding] duration-300 motion-reduce:transition-none"
-          style={{ paddingTop: collapsed ? "92px" : "120px", paddingBottom: collapsed ? "12px" : "32px" }}>
+          style={{ paddingTop: collapsed ? "88px" : "92px", paddingBottom: collapsed ? "12px" : "22px" }}>
           {!collapsed && (
             <div aria-hidden className="absolute inset-0 bg-gradient-to-br from-indigo-950/40 via-violet-950/20 to-transparent pointer-events-none" />
           )}
@@ -335,13 +389,13 @@ export default function BlogListingPage() {
                   <span className="px-3 py-1 rounded-full bg-accent/10 border border-accent/20 text-[10px] font-black uppercase tracking-widest text-accent-bright">
                     Community Long-form
                   </span>
-                  <h1 className="mt-4 text-5xl md:text-7xl font-black tracking-tighter uppercase italic text-foreground leading-none">
+                  <h1 className="mt-3 text-4xl md:text-5xl font-black tracking-tighter uppercase italic text-foreground leading-none">
                     The Chronicle<span style={{color:"var(--app-accent)"}}>.</span>
                   </h1>
-                  <p className="mt-3 text-muted text-base max-w-lg">
+                  <p className="mt-2 text-muted text-sm max-w-lg">
                     Long-form anime journalism by the community — deep dives, reviews, theories, and takes.
                   </p>
-                  <div className="mt-10 flex items-center gap-1 flex-wrap">
+                  <div className="mt-5 flex items-center gap-1 flex-wrap">
                     {CATEGORIES.map(cat => (
                       <button
                         key={cat}
@@ -365,7 +419,7 @@ export default function BlogListingPage() {
       </div>
 
       {/* Main grid — left feed + sticky right rail, independent scroll */}
-      <div className="max-w-6xl mx-auto px-6 pt-10 grid lg:grid-cols-3 gap-10">
+      <div className="max-w-6xl mx-auto px-6 pt-8 grid lg:grid-cols-3 gap-8">
 
         {/* Blog grid (2/3) */}
         <div className="lg:col-span-2">
@@ -407,11 +461,19 @@ export default function BlogListingPage() {
                   <Link key={author.name} href={`/u/${author.username}`}
                     className="flex items-center gap-3 group rounded-lg hover:bg-surface-2 -mx-1 px-1 py-1 transition-colors">
                     <span className="text-[10px] font-black text-muted w-4 shrink-0 tabular-nums">{i + 1}</span>
-                    <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-xs font-black shrink-0 text-foreground">
-                      {author.avatar}
-                    </div>
+                    {author.avatarUrl ? (
+                      /* eslint-disable-next-line @next/next/no-img-element */
+                      <img src={author.avatarUrl} alt="" className="h-8 w-8 rounded-xl object-cover shrink-0" />
+                    ) : (
+                      <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-xs font-black shrink-0 text-foreground">
+                        {author.initial}
+                      </div>
+                    )}
                     <div className="flex-1 min-w-0">
-                      <p className="text-xs font-bold text-foreground truncate group-hover:text-accent-bright transition-colors">{author.name}</p>
+                      <p className="text-xs font-bold text-foreground truncate group-hover:text-accent-bright transition-colors flex items-center gap-1">
+                        <span className="truncate">{author.name}</span>
+                        {author.verified && <VerifiedBadge kind={author.verified} size={12} />}
+                      </p>
                       <p className="text-[10px] text-muted tabular-nums">{author.articles} article{author.articles === 1 ? "" : "s"}</p>
                     </div>
                     <ChevronRight size={12} className="text-muted shrink-0" />

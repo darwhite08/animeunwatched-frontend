@@ -9,7 +9,8 @@ import {
 import Link from "next/link"
 import { useToast } from "@/stores/toast.store"
 import { useBlog, type Blog } from "@/hooks/useBlogs"
-import { useBlogViews } from "@/hooks/useRealtime"
+import { useBlogViews, useBlogLikes } from "@/hooks/useRealtime"
+import { VerifiedBadge } from "@/components/social/VerifiedBadge"
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query"
 import { api } from "@/lib/api/client"
 import { useAuthStore } from "@/stores/auth.store"
@@ -349,7 +350,7 @@ export function BlogReaderClient({ slug, initialBlog }: { slug: string; initialB
     readTime: Math.max(1, Math.ceil(apiBlog.body.split(" ").length / 200)),
     coverGradient: "from-indigo-900 via-violet-900 to-purple-900",
     tags: [] as string[],
-    likes: 0,
+    likes: apiBlog.likeCount ?? 0,
     views: apiBlog.viewCount ?? 0,
     content: apiBlog.body,
   } : (BLOG_META[slug] ?? { ...FALLBACK_META, slug, title: slug.replace(/-/g, " ") })
@@ -359,8 +360,11 @@ export function BlogReaderClient({ slug, initialBlog }: { slug: string; initialB
   // Real, deduplicated, realtime view count (records this read once + ticks
   // live as others read). Only active once the real blog has resolved.
   const liveViews = useBlogViews(apiBlog ? slug : null, meta.views)
-  const [liked, setLiked]       = useState(false)
-  const [likeCount, setLikeCount] = useState(meta.likes)
+  // Real, persistent, realtime likes (seeded from likedByMe so a like survives
+  // refresh; optimistic toggle; ticks live as others like).
+  const { count: likeCount, liked, toggle: toggleLikeApi } = useBlogLikes(
+    apiBlog ? slug : null, meta.likes, apiBlog?.likedByMe ?? false,
+  )
   const [bookmarked, setBookmarked] = useState(false)
   const [commentLikes, setCommentLikes] = useState<Record<number, boolean>>({})
 
@@ -385,8 +389,8 @@ export function BlogReaderClient({ slug, initialBlog }: { slug: string; initialB
   )
 
   const toggleLike = () => {
-    setLiked(l => !l)
-    setLikeCount(c => liked ? c - 1 : c + 1)
+    if (!useAuthStore.getState().isAuthenticated) { push("Sign in to like this article", "info"); return }
+    toggleLikeApi()
   }
 
   const toggleCommentLike = (id: number) => {
@@ -476,24 +480,37 @@ export function BlogReaderClient({ slug, initialBlog }: { slug: string; initialB
           transition={{ delay: 0.15 }}
           className="flex items-center gap-4 flex-wrap"
         >
-          <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center font-black text-sm shrink-0">
-              {meta.authorAvatar}
-            </div>
+          <Link
+            href={apiBlog?.author?.username ? `/u/${apiBlog.author.username}` : "#"}
+            className="flex items-center gap-3 group"
+          >
+            {apiBlog?.author?.avatarUrl ? (
+              /* eslint-disable-next-line @next/next/no-img-element */
+              <img src={apiBlog.author.avatarUrl} alt={meta.author} className="h-10 w-10 rounded-xl object-cover shrink-0" />
+            ) : (
+              <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center font-black text-sm shrink-0">
+                {meta.authorAvatar}
+              </div>
+            )}
             <div>
-              <p className="text-sm font-black text-foreground">{meta.author}</p>
+              <p className="text-sm font-black text-foreground flex items-center gap-1.5 group-hover:text-accent-bright transition-colors">
+                {meta.author}
+                {apiBlog?.author?.verifiedKind && <VerifiedBadge kind={apiBlog.author.verifiedKind} size={14} />}
+              </p>
               <p className="text-[10px] text-subtle">{meta.publishedAt}</p>
             </div>
-          </div>
+          </Link>
 
-          <div className="flex items-center gap-2 text-[10px] text-subtle ml-2">
-            <Clock size={10} />
+          {/* Read time + views — highlighted chips */}
+          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-accent/10 border border-accent/20 text-[10px] font-bold text-accent-bright ml-2">
+            <Clock size={11} />
             <span>{meta.readTime} min read</span>
           </div>
 
-          <div className="flex items-center gap-2 text-[10px] text-subtle">
-            <Eye size={10} />
-            <span>{liveViews.toLocaleString()} views</span>
+          <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-surface-2 border border-border text-[10px] font-bold text-foreground">
+            <Eye size={11} className="text-accent-bright" />
+            <span className="tabular-nums">{liveViews.toLocaleString()}</span>
+            <span className="text-subtle">views</span>
           </div>
 
           {/* Share */}

@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
 import { Minus, Plus, Trophy } from "lucide-react"
 import { useToast } from "@/stores/toast.store"
@@ -18,6 +18,17 @@ export default function EpisodeTracker({ totalEpisodes, currentEpisode: initialE
   const isAuthenticated = useAuthStore(s => s.isAuthenticated)
   const upsert = useUpsertListEntry(animeId)
   const [current, setCurrent] = useState(initialEpisode)
+
+  // The saved progress (the user's ListEntry.episodesSeen) loads async — after
+  // the anime query resolves and after the session is restored on refresh.
+  // Re-sync local state whenever that saved value changes so a reload doesn't
+  // show 0 over real progress. We skip while a save is in flight so the user's
+  // own clicks aren't clobbered by a stale refetch mid-edit.
+  useEffect(() => {
+    if (upsert.isPending) return
+    setCurrent(initialEpisode)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialEpisode])
 
   const saveProgress = (newEps: number, isComplete: boolean) => {
     if (!isAuthenticated) return

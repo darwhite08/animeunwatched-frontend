@@ -58,7 +58,7 @@ function AnimeDetailLoader({
 
   if (isError || !data?.anime) return notFound()
 
-  return <AnimeDetail anime={mapAPIAnime(data.anime)} rawAnime={data.anime} />
+  return <AnimeDetail anime={mapAPIAnime(data.anime)} rawAnime={data.anime} currentEpisode={data.listEntry?.episodesSeen ?? 0} />
 }
 import { motion } from "framer-motion"
 import Image from "next/image"
@@ -107,7 +107,7 @@ export function AnimeDetailClient({
   )
 }
 
-function AnimeDetail({ anime, rawAnime }: { anime: Anime; rawAnime?: AnimeDTO }) {
+function AnimeDetail({ anime, rawAnime, currentEpisode = 0 }: { anime: Anime; rawAnime?: AnimeDTO; currentEpisode?: number }) {
   const { add, remove, has } = useWatchlist()
   const { push } = useToast()
   const { data: reviewsData } = useAnimeReviews(anime.id)
@@ -408,7 +408,7 @@ function AnimeDetail({ anime, rawAnime }: { anime: Anime; rawAnime?: AnimeDTO })
             {/* Episode Tracking */}
             <div>
               <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-subtle mb-4">Episode Tracking</h2>
-              <EpisodeTracker totalEpisodes={anime.episodes} animeId={anime.id} />
+              <EpisodeTracker totalEpisodes={anime.episodes} animeId={anime.id} currentEpisode={currentEpisode} />
             </div>
 
             {/* Community Stats */}

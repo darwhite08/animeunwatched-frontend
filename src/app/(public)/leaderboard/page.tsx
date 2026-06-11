@@ -5,7 +5,7 @@ import Link from "next/link"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import {
   Play, PenLine, Flame, Users, Zap, Globe, Search, Check, Plus,
-  Crown, Medal, BadgeCheck, TrendingUp,
+  Crown, Medal, BadgeCheck, TrendingUp, ChevronUp, ChevronDown,
 } from "lucide-react"
 import { useBoardLeaderboard } from "@/hooks/useLeaderboard"
 import { useAuthStore } from "@/stores/auth.store"
@@ -73,6 +73,20 @@ function Tier({ rank, lg }: { rank: number; lg?: boolean }) {
   return (
     <span className={"lb-tier" + (t.ss ? " is-ss" : "") + (lg ? " lg" : "")} style={{ "--tc": t.c } as React.CSSProperties}>
       <span>{t.t}</span>
+    </span>
+  )
+}
+
+/** Rank-movement chip — real data from daily snapshots; hidden when null. */
+function Delta({ row }: { row: BoardLeaderboardRow }) {
+  if (row.isNew) return <span className="lb-delta new">NEW</span>
+  if (row.delta == null) return null
+  if (row.delta === 0) return <span className="lb-delta flat">—</span>
+  const up = row.delta > 0
+  return (
+    <span className={"lb-delta " + (up ? "up" : "down")}>
+      {up ? <ChevronUp size={11} strokeWidth={2.6} /> : <ChevronDown size={11} strokeWidth={2.6} />}
+      {Math.abs(row.delta)}
     </span>
   )
 }
@@ -186,7 +200,7 @@ function Row({ row, board, isMe, overrides, onToggle }: {
   const u = row.user
   return (
     <div className={"lb-row" + (isMe ? " is-you" : "")}>
-      <div className="lb-rk"><span className="lb-rk-n">{row.rank}</span></div>
+      <div className="lb-rk"><span className="lb-rk-n">{row.rank}</span><Delta row={row} /></div>
       <Link href={`/u/${u.username}`} className="lb-who" style={{ color: "inherit", textDecoration: "none" }}>
         <span className="lb-ava" style={{ "--av": avColor(u.username) } as React.CSSProperties}>
           <Ava row={row} size={44} fontSize={17} />
@@ -642,6 +656,9 @@ const LB_CSS = `
   .lb-rk { display: flex; align-items: center; gap: 11px; }
   .lb-rk-n { font-size: 18px; font-weight: 800; color: var(--lb-muted); min-width: 26px; font-variant-numeric: tabular-nums; }
   .lb-row.is-you .lb-rk-n { color: var(--lb-paper); }
+  .lb-delta { display: inline-flex; align-items: center; gap: 2px; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; min-width: 34px; }
+  .lb-delta.up { color: #3FB950; } .lb-delta.down { color: #E5577D; }
+  .lb-delta.flat { color: var(--lb-faint); } .lb-delta.new { color: #00D4FF; }
 
   .lb-who { display: flex; align-items: center; gap: 13px; min-width: 0; }
   .lb-ava { position: relative; width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center;

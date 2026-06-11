@@ -227,6 +227,10 @@ export interface BoardLeaderboardRow {
   value: number
   secondary: number
   isFollowing: boolean
+  /** Rank movement vs yesterday's snapshot (positive = climbed). null = no snapshot data (windowed/friends views). */
+  delta: number | null
+  /** Entered the board since yesterday's snapshot. */
+  isNew: boolean
   user: {
     id: string
     username: string

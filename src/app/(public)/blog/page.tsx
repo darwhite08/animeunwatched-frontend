@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useMemo, useEffect } from "react"
+import { useState, useMemo } from "react"
 import { useBlogs } from "@/hooks/useBlogs"
 import { motion, AnimatePresence } from "framer-motion"
 import {
@@ -8,9 +8,6 @@ import {
 } from "lucide-react"
 import Link from "next/link"
 import { VerifiedBadge } from "@/components/social/VerifiedBadge"
-
-// Collapses the header from full → compact once the user scrolls this far.
-const COLLAPSE_AT = 96
 
 /* Strip HTML tags + entities to plain text for excerpts (blog bodies are rich HTML). */
 function stripHtml(html: string): string {
@@ -261,16 +258,6 @@ export default function BlogListingPage() {
   const [activeCategory, setActiveCategory] = useState<Category>("All")
   const { data: blogsData } = useBlogs()
 
-  // Collapse the header to a compact "The Chronicle." pill once the user
-  // scrolls past COLLAPSE_AT. Listens to window scroll only when mounted.
-  const [collapsed, setCollapsed] = useState(false)
-  useEffect(() => {
-    const onScroll = () => setCollapsed(window.scrollY > COLLAPSE_AT)
-    window.addEventListener("scroll", onScroll, { passive: true })
-    onScroll()
-    return () => window.removeEventListener("scroll", onScroll)
-  }, [])
-
   const apiBlogs: Blog[] = useMemo(() => (blogsData?.data ?? []).map(b => {
     const text = stripHtml(b.body)
     return {
@@ -337,89 +324,52 @@ export default function BlogListingPage() {
   return (
     <div className="min-h-screen bg-background text-foreground pb-32">
 
-      {/* Sticky header — full at top, collapses to a compact "The Chronicle." +
-          category pills once the user scrolls past COLLAPSE_AT. Fully opaque
-          bg so feed content can't bleed through. */}
-      <div className="sticky top-[var(--sticky-top,0px)] z-40 bg-background border-b border-border shadow-[0_4px_12px_color-mix(in_srgb,var(--app-fg)_4%,transparent)]">
-        {/* The relative wrapper has indigo glow only in the FULL state */}
-        <div className="relative overflow-hidden transition-[padding] duration-300 motion-reduce:transition-none"
-          style={{ paddingTop: collapsed ? "88px" : "92px", paddingBottom: collapsed ? "12px" : "22px" }}>
-          {!collapsed && (
-            <div aria-hidden className="absolute inset-0 bg-gradient-to-br from-indigo-950/40 via-violet-950/20 to-transparent pointer-events-none" />
-          )}
-          <div className="max-w-6xl mx-auto px-6 relative">
-            <AnimatePresence initial={false} mode="wait">
-              {collapsed ? (
-                <motion.div
-                  key="compact"
-                  initial={{ opacity: 0, y: -6 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -6 }}
-                  transition={{ duration: 0.2 }}
-                  className="flex items-center justify-between gap-4"
-                >
-                  <h1 className="text-2xl font-black tracking-tighter uppercase italic text-foreground leading-none">
-                    The Chronicle<span style={{color:"var(--app-accent)"}}>.</span>
-                  </h1>
-                  <div className="flex items-center gap-1 flex-wrap">
-                    {CATEGORIES.map(cat => (
-                      <button
-                        key={cat}
-                        onClick={() => setActiveCategory(cat)}
-                        aria-pressed={activeCategory === cat}
-                        className={`px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 ${
-                          activeCategory === cat
-                            ? "bg-accent text-black"
-                            : "bg-surface border border-border text-muted hover:text-foreground hover:bg-surface-2"
-                        }`}
-                      >
-                        {cat}
-                      </button>
-                    ))}
-                  </div>
-                </motion.div>
-              ) : (
-                <motion.div
-                  key="full"
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: 8 }}
-                  transition={{ duration: 0.25 }}
-                >
-                  <span className="px-3 py-1 rounded-full bg-accent/10 border border-accent/20 text-[10px] font-black uppercase tracking-widest text-accent-bright">
-                    Community Long-form
-                  </span>
-                  <h1 className="mt-3 text-4xl md:text-5xl font-black tracking-tighter uppercase italic text-foreground leading-none">
-                    The Chronicle<span style={{color:"var(--app-accent)"}}>.</span>
-                  </h1>
-                  <p className="mt-2 text-muted text-sm max-w-lg">
-                    Long-form anime journalism by the community — deep dives, reviews, theories, and takes.
-                  </p>
-                  <div className="mt-5 flex items-center gap-1 flex-wrap">
-                    {CATEGORIES.map(cat => (
-                      <button
-                        key={cat}
-                        onClick={() => setActiveCategory(cat)}
-                        aria-pressed={activeCategory === cat}
-                        className={`px-5 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 ${
-                          activeCategory === cat
-                            ? "bg-accent text-black shadow-[0_0_20px_color-mix(in_srgb,var(--app-accent)_40%,transparent)]"
-                            : "bg-surface border border-border text-muted hover:text-foreground hover:bg-surface-2"
-                        }`}
-                      >
-                        {cat}
-                      </button>
-                    ))}
-                  </div>
-                </motion.div>
-              )}
-            </AnimatePresence>
+      {/* Hero — scrolls away with the page (NOT sticky), so once you scroll the
+          cards get the full viewport. Compact so it doesn't dominate on load. */}
+      <div className="relative overflow-hidden">
+        <div aria-hidden className="absolute inset-0 bg-gradient-to-br from-indigo-950/40 via-violet-950/20 to-transparent pointer-events-none" />
+        <div className="max-w-6xl mx-auto px-6 relative pt-[calc(var(--sticky-top,0px)+28px)] pb-6">
+          <span className="px-3 py-1 rounded-full bg-accent/10 border border-accent/20 text-[10px] font-black uppercase tracking-widest text-accent-bright">
+            Community Long-form
+          </span>
+          <h1 className="mt-3 text-3xl md:text-4xl font-black tracking-tighter uppercase italic text-foreground leading-none">
+            The Chronicle<span style={{color:"var(--app-accent)"}}>.</span>
+          </h1>
+          <p className="mt-2 text-muted text-sm max-w-lg">
+            Long-form anime journalism by the community — deep dives, reviews, theories, and takes.
+          </p>
+        </div>
+      </div>
+
+      {/* Filter bar — sticky with a CONSTANT height (so it never resizes on
+          scroll → no jitter). Pins right below the global navbar once the hero
+          scrolls past it. */}
+      <div className="sticky top-[var(--sticky-top,0px)] z-40 bg-background/95 backdrop-blur border-y border-border shadow-[0_4px_12px_color-mix(in_srgb,var(--app-fg)_4%,transparent)]">
+        <div className="max-w-6xl mx-auto px-6 py-2.5 flex items-center gap-3">
+          <span className="hidden md:block text-base font-black tracking-tighter uppercase italic text-foreground leading-none shrink-0 mr-1">
+            The Chronicle<span style={{color:"var(--app-accent)"}}>.</span>
+          </span>
+          <div className="flex items-center gap-1.5 overflow-x-auto -mx-1 px-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            {CATEGORIES.map(cat => (
+              <button
+                key={cat}
+                onClick={() => setActiveCategory(cat)}
+                aria-pressed={activeCategory === cat}
+                className={`px-3.5 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest whitespace-nowrap transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 ${
+                  activeCategory === cat
+                    ? "bg-accent text-black shadow-[0_0_16px_color-mix(in_srgb,var(--app-accent)_35%,transparent)]"
+                    : "bg-surface border border-border text-muted hover:text-foreground hover:bg-surface-2"
+                }`}
+              >
+                {cat}
+              </button>
+            ))}
           </div>
         </div>
       </div>
 
       {/* Main grid — left feed + sticky right rail, independent scroll */}
-      <div className="max-w-6xl mx-auto px-6 pt-8 grid lg:grid-cols-3 gap-8">
+      <div className="max-w-6xl mx-auto px-6 pt-6 grid lg:grid-cols-3 gap-8">
 
         {/* Blog grid (2/3) */}
         <div className="lg:col-span-2">

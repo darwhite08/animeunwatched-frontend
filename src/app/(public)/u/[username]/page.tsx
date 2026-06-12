@@ -682,7 +682,12 @@ export default function UserProfilePage({
                     </Link>
                   )}
 
-                  <p className="text-sm text-muted leading-relaxed whitespace-pre-wrap">{post.content}</p>
+                  {(() => {
+                    const hasGallery = (post.imageUrls && post.imageUrls.length) || post.imageUrl
+                    const previewUrl = hasGallery ? null : firstUrl(post.content)
+                    const display = previewUrl ? post.content.replace(/https?:\/\/[^\s<]+/i, "").trim() : post.content
+                    return display ? <p className="text-sm text-muted leading-relaxed whitespace-pre-wrap">{display}</p> : null
+                  })()}
 
                   {(() => {
                     const gallery = post.imageUrls && post.imageUrls.length ? post.imageUrls : post.imageUrl ? [post.imageUrl] : []

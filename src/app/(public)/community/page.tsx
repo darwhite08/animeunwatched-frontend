@@ -306,7 +306,13 @@ function PostCard({ post }: { post: Post }) {
           if (spoilerMatch) {
             return <SpoilerBlock text={spoilerMatch[1]} />
           }
-          return <p className="text-[15px] text-foreground leading-[1.6] max-w-[65ch] whitespace-pre-wrap break-words"><RichBody text={post.content} /></p>
+          // When a link preview will render, drop the bare URL from the text
+          // (Twitter/Discord-style) — if that leaves nothing, show only the card.
+          const hasGallery = (post.imageUrls && post.imageUrls.length) || post.imageUrl
+          const previewUrl = hasGallery ? null : firstUrl(post.content)
+          const display = previewUrl ? post.content.replace(/https?:\/\/[^\s<]+/i, "").trim() : post.content
+          if (!display) return null
+          return <p className="text-[15px] text-foreground leading-[1.6] max-w-[65ch] whitespace-pre-wrap break-words"><RichBody text={display} /></p>
         })()}
 
         {/* Image attachment(s) — single image renders plainly; multi-image posts

@@ -303,6 +303,9 @@ export type UploadIntent = {
   key: string
   expiresIn: number
   contentType: string
+  // Present for a size-enforced presigned POST — the client POSTs multipart
+  // form-data (these fields + the file last). Absent → legacy presigned PUT.
+  fields?: Record<string, string>
 }
 
 export const presignAvatarUpload = (contentType: string, size?: number) =>

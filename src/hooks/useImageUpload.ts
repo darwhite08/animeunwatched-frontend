@@ -58,9 +58,15 @@ export function useImageUpload(scope: UploadScope) {
     try {
       const intent = await presign(scope, file.type, file.size)
 
-      // Try direct presigned PUT to S3 first (fast, no backend bandwidth).
+      // Try the direct upload to S3 first (fast, no backend bandwidth).
+      // New backend → size-enforced presigned POST (intent.fields); older
+      // backend → presigned PUT. Either way the proxy is the fallback.
       try {
-        await directPut(intent.uploadUrl, file, setProgress)
+        if (intent.fields) {
+          await directPost(intent.uploadUrl, intent.fields, file, setProgress)
+        } else {
+          await directPut(intent.uploadUrl, file, setProgress)
+        }
         setProgress(100)
         return { publicUrl: intent.publicUrl, key: intent.key }
       } catch (err) {
@@ -97,7 +103,35 @@ export function useImageUpload(scope: UploadScope) {
   return { upload, isUploading, error, progress, reset: () => { setError(null); setProgress(0) } }
 }
 
-// Direct presigned PUT to S3.
+// Direct size-enforced presigned POST to S3 (multipart form-data: the policy
+// fields first, the file LAST). The browser sets the multipart Content-Type +
+// boundary — we must NOT set it ourselves.
+async function directPost(
+  url: string,
+  fields: Record<string, string>,
+  file: File,
+  setProgress: (n: number) => void,
+): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const form = new FormData()
+    for (const [k, v] of Object.entries(fields)) form.append(k, v)
+    form.append("file", file) // must be last
+    const xhr = new XMLHttpRequest()
+    xhr.open("POST", url, true)
+    xhr.upload.onprogress = (e) => {
+      if (e.lengthComputable) setProgress(Math.round((e.loaded / e.total) * 100))
+    }
+    xhr.onload = () => {
+      if (xhr.status >= 200 && xhr.status < 300) resolve()
+      // 403 EntityTooLarge here = the file exceeded the policy's size cap.
+      else reject(new Error(`S3 POST returned ${xhr.status}`))
+    }
+    xhr.onerror = () => reject(new Error("Direct upload blocked"))
+    xhr.send(form)
+  })
+}
+
+// Direct presigned PUT to S3 (legacy fallback for an older backend).
 async function directPut(url: string, file: File, setProgress: (n: number) => void): Promise<void> {
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest()

@@ -33,6 +33,13 @@ export const exportMyData = () =>
 
 export const me = () => api<{ user: User }>("/auth/me")
 
+// Email verification (signup OTP). The user is logged in but unverified.
+export const verifyEmail = (code: string) =>
+  api<{ user: User }>("/auth/verify-email", { method: "POST", body: JSON.stringify({ code }) })
+
+export const resendVerification = () =>
+  api<{ sent?: boolean; alreadyVerified?: boolean }>("/auth/resend-verification", { method: "POST" })
+
 /* ── Users ── */
 export const getUser = (username: string) =>
   api<UserProfile>(`/users/${username}`)

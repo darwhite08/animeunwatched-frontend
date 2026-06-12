@@ -4,6 +4,7 @@ import { Sidebar } from "./Sidebar/Sidebar"
 import { Topbar } from "./Topbar/Topbar"
 import { BottomTabBar } from "./MobileNav/BottomTabBar"
 import { MobileDrawer } from "./MobileNav/MobileDrawer"
+import { EmailVerifyBanner } from "./EmailVerifyBanner"
 import { useSidebarStore } from "./useSidebarStore"
 
 /**
@@ -32,6 +33,7 @@ export function AppShell({ children, publicMode = false }: { children: React.Rea
 
       <div className={`flex min-h-screen flex-col transition-[margin] duration-200 motion-reduce:transition-none ${collapsed ? "md:ml-16" : "md:ml-60"}`}>
         <Topbar />
+        <EmailVerifyBanner />
         <main id="main-content" tabIndex={-1} className="flex-1 pb-16 outline-none md:pb-0">{children}</main>
       </div>
 

@@ -37,6 +37,8 @@ export type BlogStatus = "DRAFT" | "PUBLISHED"
 export interface User {
   id: string
   email: string
+  /** When the email was confirmed. null = unverified email/password signup. */
+  emailVerifiedAt?: string | null
   username: string
   /** URL-safe routing alias. Never use for data fetching — always use session id internally. */
   slug: string | null

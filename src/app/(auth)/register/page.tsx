@@ -102,7 +102,10 @@ export default function RegisterPage() {
       {
         onSuccess: () => {
           void import("@/lib/analytics/ga").then(({ track }) => track("sign_up", { method: "email" }))
-          router.push("/onboarding")
+          // If email verification is required (SMTP configured), the account
+          // comes back unverified — send them to confirm the code first.
+          const u = useAuthStore.getState().user
+          router.push(u && !u.emailVerifiedAt ? "/verify-email" : "/onboarding")
         },
         onError: (err) => {
           if (err instanceof ApiError) {

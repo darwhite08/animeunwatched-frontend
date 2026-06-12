@@ -548,7 +548,7 @@ function MsgRow({ m, isMine, text, authorSrc, authorName, onDelete }: { m:GM; is
   }
 
   return (
-    <div style={{
+    <div id={`msg-${m.id}`} style={{
         display:"grid",
         gridTemplateColumns:"52px minmax(0,1fr)",
         paddingTop:    m.isGroupStart ? 10 : 1,
@@ -556,6 +556,7 @@ function MsgRow({ m, isMine, text, authorSrc, authorName, onDelete }: { m:GM; is
         paddingLeft:24, paddingRight:24,
         position:"relative",
         animation:"msg-in 240ms cubic-bezier(0.22,1,0.36,1) both",
+        transition:"background 600ms",
       }}
       onMouseEnter={()=>setHover(true)} onMouseLeave={()=>setHover(false)}>
 
@@ -750,6 +751,12 @@ export default function ConversationPage() {
   const [pendingFiles, setPendingFiles] = useState<FilePrev[]>([])
   const [focus,        setFocus]        = useState(false)
 
+  // Message search (backed by GET /chat/conversations/:id/search)
+  const [searchOpen,    setSearchOpen]    = useState(false)
+  const [searchQuery,   setSearchQuery]   = useState("")
+  const [searchResults, setSearchResults] = useState<Array<{ id: string; senderId: string; body: string; createdAt: string }>>([])
+  const [searching,     setSearching]     = useState(false)
+
   const scrollRef   = useRef<HTMLDivElement>(null)
   const inputRef    = useRef<HTMLTextAreaElement>(null)
   const fileRef     = useRef<HTMLInputElement>(null)
@@ -757,6 +764,32 @@ export default function ConversationPage() {
   const lastMarkRef = useRef(0)
   const prevLastId  = useRef<string|null>(null)
   const prevScrollH = useRef(0)
+
+  // Debounced message search → backend full-text over this conversation.
+  useEffect(() => {
+    if (!searchOpen) return
+    const term = searchQuery.trim()
+    if (term.length < 1) { setSearchResults([]); setSearching(false); return }
+    setSearching(true)
+    const t = setTimeout(async () => {
+      try {
+        const res = await ep.searchMessages(conversationId, term)
+        setSearchResults(res.data)
+      } catch { setSearchResults([]) }
+      finally { setSearching(false) }
+    }, 250)
+    return () => clearTimeout(t)
+  }, [searchQuery, searchOpen, conversationId])
+
+  // Jump to a matched message if it's currently in the DOM; otherwise hint to scroll up.
+  const jumpToMessage = useCallback((id: string) => {
+    const el = document.getElementById(`msg-${id}`)
+    if (!el) { push("That message is further up — scroll up to load older history first.", "info"); return }
+    el.scrollIntoView({ behavior: "smooth", block: "center" })
+    el.style.background = "color-mix(in srgb, var(--gold-1) 16%, transparent)"
+    setTimeout(() => { el.style.background = "" }, 1500)
+    setSearchOpen(false)
+  }, [push])
 
   useChatSocket(conversationId)
   const { permission: micPerm, requestMic } = useMicPermission()
@@ -1092,7 +1125,7 @@ export default function ConversationPage() {
             {[
               { id:"audio", title: micPerm==="denied" ? "🚫 Mic blocked — click for help" : "Voice call", onClick:()=>initiateCall("audio"), d:"M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.99 10.86 19.79 19.79 0 0 1 1.93 2.18 2 2 0 0 1 3.9 0H6.9a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 7.91a16 16 0 0 0 6.13 6.13l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92Z", isCall: true },
               { id:"video", title: micPerm==="denied" ? "🚫 Mic blocked — click for help" : "Video call", onClick:()=>initiateCall("video"), d:"M15 10l4.553-2.069A1 1 0 0 1 21 8.82v6.361a1 1 0 0 1-1.447.894L15 14M3 8a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z", isCall: true },
-              { id:"search", title:"Message search coming soon", onClick:()=>push("Message search is coming in the next release", "info"), d:"M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14ZM21 21l-4.3-4.3", isCall: false },
+              { id:"search", title:"Search messages", onClick:()=>setSearchOpen(o=>!o), d:"M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14ZM21 21l-4.3-4.3", isCall: false },
             ].map(({ id, title, onClick, d, isCall }) => {
               const inCall = webrtc.status !== "idle"
               const disabled = isCall && inCall
@@ -1111,6 +1144,52 @@ export default function ConversationPage() {
             </button>
           </div>
         </div>
+
+        {/* Message search panel */}
+        {searchOpen && (
+          <div style={{ flexShrink:0, position:"relative", zIndex:2, background:"var(--bg-1)", borderBottom:"1px solid var(--line)", boxShadow:"0 10px 28px rgba(0,0,0,0.35)" }}>
+            <div style={{ padding:"10px 16px", display:"flex", alignItems:"center", gap:10 }}>
+              <svg width={15} height={15} viewBox="0 0 24 24" fill="none" stroke="var(--ink-3)" strokeWidth={1.8} strokeLinecap="round" style={{ flexShrink:0 }}><path d="M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14ZM21 21l-4.3-4.3"/></svg>
+              <input autoFocus value={searchQuery} onChange={e=>setSearchQuery(e.target.value)}
+                placeholder="Search this conversation…"
+                onKeyDown={e=>{ if(e.key==="Escape"){ setSearchOpen(false); setSearchQuery("") } }}
+                style={{ flex:1, background:"transparent", border:"none", outline:"none", color:"var(--ink)", fontSize:14, fontFamily:"inherit" }} />
+              {searching && <div style={{ width:14, height:14, border:"2px solid var(--indigo)", borderTopColor:"transparent", borderRadius:"50%", animation:"spin 0.6s linear infinite", flexShrink:0 }}/>}
+              <button onClick={()=>{ setSearchOpen(false); setSearchQuery(""); setSearchResults([]) }}
+                style={{ background:"none", border:"none", color:"var(--ink-4)", cursor:"pointer", fontSize:16, lineHeight:1, padding:2, flexShrink:0 }}>✕</button>
+            </div>
+            {searchQuery.trim().length > 0 && (
+              <div style={{ maxHeight:300, overflowY:"auto", borderTop:"1px solid var(--line)" }}>
+                {searchResults.length === 0 && !searching ? (
+                  <div style={{ padding:"18px", textAlign:"center", color:"var(--ink-4)", fontSize:13 }}>No messages match &ldquo;{searchQuery.trim()}&rdquo;</div>
+                ) : (
+                  searchResults.map(r => {
+                    const body = r.body ?? ""
+                    const term = searchQuery.trim()
+                    const idx = body.toLowerCase().indexOf(term.toLowerCase())
+                    const start = Math.max(0, idx - 28)
+                    const pre = (start > 0 ? "…" : "") + body.slice(start, idx)
+                    const match = idx >= 0 ? body.slice(idx, idx + term.length) : ""
+                    const post = idx >= 0 ? body.slice(idx + term.length, idx + term.length + 90) : body.slice(0, 120)
+                    return (
+                      <button key={r.id} onClick={()=>jumpToMessage(r.id)}
+                        style={{ width:"100%", textAlign:"left", display:"flex", flexDirection:"column", gap:3, padding:"9px 16px", background:"transparent", border:"none", borderBottom:"1px solid var(--line)", cursor:"pointer", fontFamily:"inherit", transition:"background 100ms" }}
+                        onMouseEnter={e=>(e.currentTarget.style.background="color-mix(in srgb, var(--app-fg) 4%, transparent)")}
+                        onMouseLeave={e=>(e.currentTarget.style.background="transparent")}>
+                        <span style={{ fontSize:13, color:"var(--ink-2)", lineHeight:1.45 }}>
+                          {pre}
+                          {match && <mark style={{ background:"color-mix(in srgb, var(--gold-1) 32%, transparent)", color:"var(--ink)", borderRadius:3, padding:"0 2px" }}>{match}</mark>}
+                          {post}{post.length >= 90 ? "…" : ""}
+                        </span>
+                        <span style={{ fontSize:10.5, color:"var(--ink-4)" }}>{format(new Date(r.createdAt), "MMM d, yyyy · HH:mm")}</span>
+                      </button>
+                    )
+                  })
+                )}
+              </div>
+            )}
+          </div>
+        )}
 
         {/* No-WebCrypto banner — only reachable in non-HTTPS dev contexts
             (plain http:// on a LAN IP). Never shows on production HTTPS. */}

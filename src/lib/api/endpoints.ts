@@ -242,6 +242,10 @@ export const startConversation = (recipientId: string) =>
 export const getConversation = (conversationId: string) =>
   api<{ conversation: ConversationDetail }>(`/chat/conversations/${conversationId}`)
 
+export const searchMessages = (conversationId: string, q: string) =>
+  api<{ data: Array<{ id: string; senderId: string; body: string; createdAt: string }> }>(
+    `/chat/conversations/${conversationId}/search?q=${encodeURIComponent(q)}`)
+
 export const getMessages = (conversationId: string, cursor?: string, limit = 30) => {
   const qs = new URLSearchParams({ limit: String(limit), ...(cursor ? { cursor } : {}) })
   return api<{ messages: DirectMessage[]; nextCursor: string | null }>(

@@ -127,6 +127,13 @@ export default function ShotsPage() {
       </div>
     )
   }
+
+  // Ambient backdrop image = the currently-active item's poster (fills the void).
+  const currentItem = feed[active]
+  const backdropImg = currentItem
+    ? (currentItem.kind === "shot" ? currentItem.shot.thumbnailUrl : currentItem.trailer.imageUrl)
+    : null
+
   return (
     <div
       ref={scrollRef}
@@ -134,6 +141,18 @@ export default function ShotsPage() {
       style={{ paddingTop: 0 }}
       className="relative h-[calc(100dvh-3.5rem-4rem)] w-full snap-y snap-mandatory overflow-y-scroll bg-black md:h-[calc(100dvh-3.5rem)] [&::-webkit-scrollbar]:hidden"
     >
+      {/* Premium ambient backdrop — the active poster, blurred + dimmed, fills the
+          black void around the vertical card with a soft gold glow. */}
+      <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
+        {backdropImg && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img key={backdropImg} src={backdropImg} alt="" referrerPolicy="no-referrer"
+            className="absolute inset-0 h-full w-full scale-110 object-cover opacity-30 blur-3xl transition-opacity duration-700" />
+        )}
+        <div className="absolute inset-0 bg-black/60" />
+        <div className="absolute inset-0" style={{ background: "radial-gradient(65% 60% at 50% 42%, color-mix(in srgb, var(--app-accent) 12%, transparent), transparent 72%)" }} />
+      </div>
+
       {/* Section tabs — Shots / Trailers / For You */}
       <div className="fixed left-1/2 top-[4.5rem] z-30 flex -translate-x-1/2 gap-1 rounded-full border border-white/10 bg-black/55 p-1 backdrop-blur md:absolute">
         {([["all", "For You"], ["shots", "Shots"], ["trailers", "Trailers"]] as const).map(([m, label]) => (
@@ -201,7 +220,7 @@ export default function ShotsPage() {
       {feed.map((item, idx) => (
         <div
           key={item.kind === "shot" ? item.shot.id : `t-${item.trailer.malId}`}
-          className="flex h-full w-full snap-start snap-always items-center justify-center p-2 sm:p-4"
+          className="relative z-[1] flex h-full w-full snap-start snap-always items-center justify-center p-2 sm:p-4"
         >
           {item.kind === "shot" ? (
             <ShotReel shot={item.shot} active={active === idx} muted={muted} />
@@ -221,7 +240,7 @@ export default function ShotsPage() {
 }
 
 function MediaShell({ children }: { children: React.ReactNode }) {
-  return <div className="relative aspect-[9/16] h-full max-h-full w-auto overflow-hidden rounded-3xl border border-border bg-black">{children}</div>
+  return <div className="relative aspect-[9/16] h-full max-h-full w-auto overflow-hidden rounded-3xl bg-black ring-1 ring-white/10 shadow-[0_24px_70px_rgba(0,0,0,0.65)]">{children}</div>
 }
 
 function ShotReel({ shot, active, muted }: { shot: Shot; active: boolean; muted: boolean }) {

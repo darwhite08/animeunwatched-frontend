@@ -260,8 +260,14 @@ export default function Navbar() {
             </AnimatePresence>
           </div>
 
+          {/* Blog — public long-form content (SEO + discovery), shown to everyone. */}
+          <Link href="/blog"
+            className={`whitespace-nowrap px-4 py-2 text-[10px] font-black uppercase tracking-widest rounded-full transition-all ${pathname.startsWith("/blog") ? "text-foreground bg-surface" : "text-muted hover:text-foreground hover:bg-surface"}`}>
+            Blog
+          </Link>
+
           {/* Community + Leaderboard are part of the logged-in experience.
-              Logged-out marketing nav stays minimal: Home + Anime + Search + Sign in. */}
+              Logged-out marketing nav stays minimal: Home + Anime + Blog + Search + Sign in. */}
           {isHydrated && isAuthenticated && (
             <>
               {/* Community dropdown */}
@@ -372,7 +378,7 @@ export default function Navbar() {
 
               <div>
                 <p className="text-[8px] font-black text-subtle uppercase tracking-[0.3em] px-3 mb-1">Navigate</p>
-                {[{ name: "Home", href: "/" }, { name: "Leaderboard", href: "/leaderboard" }].map(l => (
+                {[{ name: "Home", href: "/" }, { name: "Blog", href: "/blog" }, { name: "Leaderboard", href: "/leaderboard" }].map(l => (
                   <Link key={l.href} href={l.href} onClick={() => setMobileMenuOpen(false)}
                     className={`flex items-center px-3 py-3 rounded-xl text-xs font-bold transition-all ${pathname === l.href ? "text-foreground bg-surface" : "text-muted hover:text-foreground hover:bg-surface"}`}>
                     {l.name}

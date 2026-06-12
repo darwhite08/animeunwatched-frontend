@@ -242,7 +242,7 @@ function CommunityRail({ activeCommunity, onSelect }: { activeCommunity:string|n
       {/* Home/Inbox */}
       <div style={{ position:"relative" }}>
         <button onClick={()=>onSelect(null)} style={{ width:38, height:38, borderRadius:activeCommunity===null?14:18, background:activeCommunity===null?"var(--indigo-soft)":"var(--bg-2)", border:`1px solid ${activeCommunity===null?"var(--indigo-ring)":"var(--line)"}`, display:"grid", placeItems:"center", cursor:"pointer", transition:"all 200ms", color:activeCommunity===null?"var(--indigo)":"var(--ink-3)" }}>
-          <svg width={18} height={18} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg>
+          <svg width={18} height={18} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
         </button>
         {unreadCount>0 && <div style={{ position:"absolute", top:-3, right:-3, minWidth:16, height:16, borderRadius:8, background:"oklch(0.72 0.17 18)", color:"var(--app-fg)", fontSize:9.5, fontWeight:700, display:"grid", placeItems:"center", padding:"0 4px", border:"2px solid var(--bg-0)" }}>{unreadCount}</div>}
       </div>
@@ -415,8 +415,12 @@ export default function ChatLayout({ children }: { children: React.ReactNode }) 
                 </>
               ) : (
                 <>
-                  <div style={{ width:30, height:30, borderRadius:"var(--r-sm)", background:"linear-gradient(135deg,oklch(0.40 0.04 280),oklch(0.25 0.03 270))", display:"grid", placeItems:"center", border:"1px solid var(--line-strong)", flexShrink:0 }}>
-                    <svg width={14} height={14} viewBox="0 0 24 24" fill="none" stroke="var(--ink)" strokeWidth={2} strokeLinecap="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
+                  <div style={{ width:30, height:30, borderRadius:"var(--r-sm)", background:"linear-gradient(135deg,var(--gold-1),var(--gold-2))", display:"grid", placeItems:"center", boxShadow:"0 2px 9px oklch(0.72 0.16 79/0.38), inset 0 1px 0 rgba(255,255,255,0.3)", flexShrink:0 }}>
+                    {/* Kaiveron DM mark — twin speech bubbles (a conversation), not an arrow. */}
+                    <svg width={16} height={16} viewBox="0 0 24 24" fill="none" stroke="#241803" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M16 8.5a4.5 4.5 0 0 1-4.5 4.5H8l-3 2.5V8.5A4.5 4.5 0 0 1 9.5 4h2A4.5 4.5 0 0 1 16 8.5Z"/>
+                      <path d="M18 10.5a4 4 0 0 1 3 3.9V20l-2.6-2h-2.9a4 4 0 0 1-2.5-.9"/>
+                    </svg>
                   </div>
                   <div style={{ flex:1, minWidth:0 }}>
                     <div style={{ fontSize:13.5, fontWeight:600, color:"var(--ink)" }}>Direct Messages</div>
@@ -479,7 +483,7 @@ export default function ChatLayout({ children }: { children: React.ReactNode }) 
                 {/* Quick filters */}
                 <div style={{ display:"flex", flexDirection:"column", gap:1, paddingTop:6 }}>
                   {[
-                    { icon:<svg width={14} height={14} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round"><path d="M3 11l19-9-9 19-2-8-8-2z"/></svg>, label:"Inbox" },
+                    { icon:<svg width={14} height={14} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round"><path d="M22 12h-6l-2 3h-4l-2-3H2"/><path d="M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>, label:"Inbox" },
                     { icon:<svg width={14} height={14} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>, label:"Threads" },
                     { icon:<svg width={14} height={14} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round"><circle cx="12" cy="12" r="4"/><path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-3.92 7.94"/></svg>, label:"Mentions" },
                     { icon:<svg width={14} height={14} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>, label:"Drafts" },

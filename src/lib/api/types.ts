@@ -196,6 +196,7 @@ export interface ProfilePost {
   content: string
   animeId: string | null
   imageUrl?: string | null
+  imageUrls?: string[]
   createdAt: string
   anime?: { title: string; malId: number } | null
   _count?: { likes: number; comments: number }

@@ -5,6 +5,7 @@ import { motion } from "framer-motion"
 import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
+import { PostGallery } from "@/components/posts/PostGallery"
 import {
   UserPlus,
   UserCheck,
@@ -682,15 +683,10 @@ export default function UserProfilePage({
 
                   <p className="text-sm text-muted leading-relaxed whitespace-pre-wrap">{post.content}</p>
 
-                  {post.imageUrl && (
-                    /* eslint-disable-next-line @next/next/no-img-element */
-                    <img
-                      src={post.imageUrl}
-                      alt=""
-                      loading="lazy"
-                      className="max-h-72 w-auto rounded-xl border border-border object-cover"
-                    />
-                  )}
+                  {(() => {
+                    const gallery = post.imageUrls && post.imageUrls.length ? post.imageUrls : post.imageUrl ? [post.imageUrl] : []
+                    return gallery.length > 0 ? <PostGallery images={gallery} /> : null
+                  })()}
 
                   <div className="flex items-center gap-5 pt-2 border-t border-border">
                     <span className="flex items-center gap-1.5 text-xs font-bold text-subtle">

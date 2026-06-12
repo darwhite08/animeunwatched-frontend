@@ -13,6 +13,7 @@ import Link from "next/link"
 import { useToast } from "@/stores/toast.store"
 import TrendingWidget from "@/components/social/TrendingWidget"
 import { WhoToFollowWidget } from "@/components/social/WhoToFollowWidget"
+import { PostLikersModal } from "@/components/posts/PostLikersModal"
 import WatchlistPreviewWidget from "@/components/social/WatchlistPreviewWidget"
 import { useDiscover, useTrending, useFeed, useCreatePost, useLikePost, useComments, useCreateComment } from "@/hooks/usePosts"
 import { Avatar } from "@/components/ui/Avatar"
@@ -206,6 +207,7 @@ function PostCard({ post }: { post: Post }) {
   // the underlying post object changes (refetch, socket invalidation, etc.)
   const [liked, setLiked]       = useState(post.isLikedByMe ?? false)
   const [likeCount, setLikeCount] = useState(post._count?.likes ?? 0)
+  const [likersOpen, setLikersOpen] = useState(false)
   const likePost                 = useLikePost(post.id)
 
   // Keep local state in sync with prop — prevents drift after refresh/refetch
@@ -331,6 +333,38 @@ function PostCard({ post }: { post: Post }) {
           const url = firstUrl(post.content)
           return url ? <LinkPreviewCard url={url} /> : null
         })()}
+
+        {/* Instagram-style "liked by" — overlapping avatars + tap to see the list */}
+        {likeCount > 0 && (
+          <button onClick={() => setLikersOpen(true)}
+            className="flex items-center gap-2 text-[11px] font-bold text-muted hover:text-foreground transition-colors w-fit">
+            {(post.likePreview?.length ?? 0) > 0 ? (
+              <span className="flex -space-x-2 shrink-0">
+                {post.likePreview!.slice(0, 3).map((u, i) =>
+                  u.avatarUrl ? (
+                    /* eslint-disable-next-line @next/next/no-img-element */
+                    <img key={i} src={u.avatarUrl} alt="" referrerPolicy="no-referrer" className="h-5 w-5 rounded-full object-cover ring-2 ring-background" />
+                  ) : (
+                    <span key={i} className="h-5 w-5 rounded-full ring-2 ring-background bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-[8px] font-black text-white">
+                      {u.displayName[0]?.toUpperCase()}
+                    </span>
+                  ),
+                )}
+              </span>
+            ) : (
+              <Heart size={11} className="text-rose-400" fill="currentColor" />
+            )}
+            {post.likePreview && post.likePreview.length > 0 ? (
+              <span>
+                Liked by <span className="text-foreground">{post.likePreview[0].displayName}</span>
+                {likeCount > 1 && <> and <span className="text-foreground">{(likeCount - 1).toLocaleString()}</span> {likeCount - 1 === 1 ? "other" : "others"}</>}
+              </span>
+            ) : (
+              <span>Liked by <span className="text-foreground">{likeCount.toLocaleString()}</span> {likeCount === 1 ? "person" : "people"}</span>
+            )}
+          </button>
+        )}
+        <PostLikersModal postId={post.id} open={likersOpen} onClose={() => setLikersOpen(false)} />
 
         {/* Actions — 40px hit targets, AA-compliant contrast, focus-visible ring */}
         <div className="flex items-center gap-1 pt-2 border-t border-border">

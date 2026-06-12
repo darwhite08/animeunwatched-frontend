@@ -19,10 +19,13 @@ import { format, isToday, isYesterday } from "date-fns"
 const GLOBAL_CSS = `
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap');
   :root {
-    --bg-0:var(--app-bg); --bg-1:var(--app-bg); --bg-2:#151926; --bg-3:#1c2132; --bg-elev:#1f2438;
+    /* Warm neutral dark surfaces (de-blued) to pair with the Kaiveron gold accent. */
+    --bg-0:var(--app-bg); --bg-1:var(--app-bg); --bg-2:#17161d; --bg-3:#201e28; --bg-elev:#241f2e;
     --line:color-mix(in srgb, var(--app-fg) 5.5%, transparent); --line-strong:color-mix(in srgb, var(--app-fg) 10%, transparent);
-    --ink:#ECEEF5; --ink-2:#B8BDD0; --ink-3:#8088A0; --ink-4:#545B73;
-    --indigo:oklch(0.66 0.18 282); --indigo-soft:oklch(0.66 0.18 282/0.16); --indigo-ring:oklch(0.66 0.18 282/0.35);
+    --ink:#F1EFEA; --ink-2:#C5C0B6; --ink-3:#8C857A; --ink-4:#5C5648;
+    /* Accent is Kaiveron gold (var name kept as --indigo to avoid a sweeping rename). */
+    --indigo:oklch(0.82 0.15 79); --indigo-soft:oklch(0.82 0.15 79/0.14); --indigo-ring:oklch(0.82 0.15 79/0.40);
+    --gold-1:#fbbf24; --gold-2:#f59e0b;
     --mint:oklch(0.80 0.14 162); --amber:oklch(0.80 0.14 75); --rose:oklch(0.72 0.17 18);
     --r-sm:8px; --r-md:12px; --r-lg:16px; --r-xl:22px;
   }
@@ -205,7 +208,7 @@ function NewCommunityModal({ onClose, onCreated }: { onClose:()=>void; onCreated
             style={{ background:"none", border:"1px solid var(--line-strong)", color:"var(--ink-3)", padding:"8px 14px", borderRadius:8, fontSize:12.5, fontWeight:600, cursor:"pointer", fontFamily:"inherit" }}
           >Cancel</button>
           <button type="submit" disabled={!canSubmit}
-            style={{ background:canSubmit?"var(--indigo)":"var(--bg-3)", color:canSubmit?"var(--app-fg)":"var(--ink-4)", border:"none", padding:"8px 16px", borderRadius:8, fontSize:12.5, fontWeight:600, cursor:canSubmit?"pointer":"not-allowed", fontFamily:"inherit", boxShadow:canSubmit?"0 4px 14px oklch(0.45 0.18 282/0.35)":"none", transition:"all 150ms" }}
+            style={{ background:canSubmit?"linear-gradient(135deg,var(--gold-1),var(--gold-2))":"var(--bg-3)", color:canSubmit?"#1a1405":"var(--ink-4)", border:"none", padding:"8px 16px", borderRadius:8, fontSize:12.5, fontWeight:700, cursor:canSubmit?"pointer":"not-allowed", fontFamily:"inherit", boxShadow:canSubmit?"0 4px 14px oklch(0.72 0.16 79/0.35)":"none", transition:"all 150ms" }}
           >{createMut.isPending ? "Creating…" : "Create"}</button>
         </div>
       </motion.form>

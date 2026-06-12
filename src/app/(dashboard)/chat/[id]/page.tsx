@@ -15,6 +15,7 @@ import { useWebRTC } from "@/hooks/useWebRTC"
 import { useMicPermission } from "@/hooks/useMicPermission"
 import { useImageUpload } from "@/hooks/useImageUpload"
 import { IncomingCallCard, ActiveCallModal } from "@/components/chat/CallUI"
+import { AsanohaDoodle } from "@/components/chat/DoodleBackground"
 import { Avatar } from "../layout"
 import * as ep from "@/lib/api/endpoints"
 import { format, isToday, isYesterday } from "date-fns"
@@ -503,7 +504,7 @@ function MsgRow({ m, isMine, text, authorSrc, authorName, onDelete }: { m:GM; is
   const isDeleted = !!m.deletedAt
 
   const bubble: React.CSSProperties = isMine
-    ? { background:"linear-gradient(180deg,oklch(0.62 0.18 282),oklch(0.55 0.17 280))", color:"#F8F7FF", borderTopRightRadius:4, boxShadow:"0 6px 22px oklch(0.45 0.18 282/0.30),inset 0 1px 0 color-mix(in srgb, var(--app-fg) 10%, transparent)" }
+    ? { background:"linear-gradient(165deg,#fcc63a,#f59e0b)", color:"#241803", borderTopRightRadius:4, boxShadow:"0 6px 22px oklch(0.72 0.16 79/0.32),inset 0 1px 0 rgba(255,255,255,0.35)" }
     : { background:"var(--bg-2)", border:"1px solid var(--line)", borderTopLeftRadius:4 }
 
   const isDecrypting = text === undefined
@@ -662,7 +663,7 @@ function MsgRow({ m, isMine, text, authorSrc, authorName, onDelete }: { m:GM; is
           {/* Reactions */}
           {reacted && (
             <div style={{ display:"flex", justifyContent:isMine?"flex-end":"flex-start" }}>
-              <div onClick={()=>setReacted(null)} style={{ display:"inline-flex", alignItems:"center", gap:4, padding:"2px 8px 2px 6px", borderRadius:999, background:"oklch(0.40 0.16 282/0.25)", border:"1px solid var(--indigo-ring)", fontSize:11.5, color:"var(--ink)", cursor:"pointer" }}>
+              <div onClick={()=>setReacted(null)} style={{ display:"inline-flex", alignItems:"center", gap:4, padding:"2px 8px 2px 6px", borderRadius:999, background:"oklch(0.55 0.14 79/0.20)", border:"1px solid var(--indigo-ring)", fontSize:11.5, color:"var(--ink)", cursor:"pointer" }}>
                 {reacted} <span style={{ fontFeatureSettings:'"tnum"' }}>1</span>
               </div>
             </div>
@@ -1060,10 +1061,16 @@ export default function ConversationPage() {
       <input ref={imgRef}  type="file" multiple accept="image/*" className="sr-only" onChange={handleFilePick}/>
 
       {/* ── THREAD ────────────────────────────────────────────────────────── */}
-      <div style={{ flex:1, display:"flex", flexDirection:"column", minWidth:0, minHeight:0, background:"var(--bg-0)" }}>
+      <div style={{ flex:1, display:"flex", flexDirection:"column", minWidth:0, minHeight:0, background:"var(--bg-0)", position:"relative", isolation:"isolate" }}>
+
+        {/* Subtle asanoha (麻の葉) doodle texture behind the conversation — so the
+            thread reads as a designed surface, not a blank window. */}
+        <div style={{ position:"absolute", inset:0, zIndex:0, pointerEvents:"none", opacity:0.7 }}>
+          <AsanohaDoodle opacity={0.05} color="245,200,90" />
+        </div>
 
         {/* Header */}
-        <div style={{ height:60, flexShrink:0, padding:"0 16px", display:"flex", alignItems:"center", gap:12, borderBottom:"1px solid var(--line)", background:"var(--bg-0)", position:"relative" }}>
+        <div style={{ height:60, flexShrink:0, padding:"0 16px", display:"flex", alignItems:"center", gap:12, borderBottom:"1px solid var(--line)", background:"var(--bg-0)", position:"relative", zIndex:1 }}>
           {/* Back arrow — Instagram-web style. Returns to the message list (mobile
               back); the Kaiveron logo in the far-left rail exits to the feed. */}
           <Link href="/chat" title="Back to messages"
@@ -1141,7 +1148,7 @@ export default function ConversationPage() {
             the chat. overscrollBehavior:contain stops scroll chaining too. */}
         <div ref={scrollRef}
           data-lenis-prevent="true"
-          style={{ flex:1, overflowY:"auto", overscrollBehavior:"contain", paddingTop:16, paddingBottom:8, minHeight:0 }}>
+          style={{ flex:1, overflowY:"auto", overscrollBehavior:"contain", paddingTop:16, paddingBottom:8, minHeight:0, position:"relative", zIndex:1 }}>
           {hasNextPage && (
             <div style={{ display:"flex", justifyContent:"center", paddingBottom:12 }}>
               <button onClick={()=>{ prevScrollH.current=scrollRef.current?.scrollHeight??0; fetchNextPage() }} disabled={isFetchingNextPage}
@@ -1212,7 +1219,7 @@ export default function ConversationPage() {
         </div>
 
         {/* Composer */}
-        <div style={{ flexShrink:0, padding:"12px 24px 18px", background:"var(--bg-0)", position:"relative" }}>
+        <div style={{ flexShrink:0, padding:"12px 24px 18px", background:"var(--bg-0)", position:"relative", zIndex:1 }}>
           {/* Slash command popup */}
           <AnimatePresence>
             {showSlash && (
@@ -1297,7 +1304,7 @@ export default function ConversationPage() {
 
               {/* Send */}
               <button onClick={handleSend} disabled={!canSend}
-                style={{ marginLeft:"auto", height:30, padding:"0 10px 0 12px", borderRadius:8, display:"inline-flex", alignItems:"center", gap:6, background:canSend?"var(--indigo)":"var(--bg-3)", color:canSend?"var(--app-fg)":"var(--ink-4)", border:"none", cursor:canSend?"pointer":"default", fontSize:12.5, fontWeight:600, boxShadow:canSend?"0 6px 16px oklch(0.45 0.18 282/0.45)":"none", transition:"all 150ms", fontFamily:"inherit" }}>
+                style={{ marginLeft:"auto", height:30, padding:"0 10px 0 12px", borderRadius:8, display:"inline-flex", alignItems:"center", gap:6, background:canSend?"linear-gradient(135deg,var(--gold-1),var(--gold-2))":"var(--bg-3)", color:canSend?"#1a1405":"var(--ink-4)", border:"none", cursor:canSend?"pointer":"default", fontSize:12.5, fontWeight:700, boxShadow:canSend?"0 6px 16px oklch(0.72 0.16 79/0.40)":"none", transition:"all 150ms", fontFamily:"inherit" }}>
                 {sendMutation.isPending
                   ? <div style={{ width:12, height:12, border:"2px solid color-mix(in srgb, var(--app-fg) 50%, transparent)", borderTopColor:"transparent", borderRadius:"50%", animation:"spin 0.6s linear infinite" }}/>
                   : <>Send <svg width={12} height={12} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round"><path d="m5 12 7-7 7 7M12 5v14"/></svg></>

@@ -8,19 +8,24 @@ import * as ep from "@/lib/api/endpoints"
  * Characters (with Japanese voice actor) + Staff for an anime, from the
  * /anime/:malId/characters and /staff endpoints (Jikan passthrough).
  */
-export function AnimeCastSection({ malId }: { malId: number }) {
-  const [showAllChars, setShowAllChars] = useState(false)
-  const [showAllStaff, setShowAllStaff] = useState(false)
+export function AnimeCastSection({ malId, mode = "both" }: { malId: number; mode?: "both" | "characters" | "staff" }) {
+  const [showAllChars, setShowAllChars] = useState(mode === "characters")
+  const [showAllStaff, setShowAllStaff] = useState(mode === "staff")
+
+  const wantChars = mode !== "staff"
+  const wantStaff = mode !== "characters"
 
   const characters = useQuery({
     queryKey: ["anime-characters", malId],
     queryFn: () => ep.getAnimeCharacters(malId),
     staleTime: 60 * 60 * 1000,
+    enabled: wantChars,
   })
   const staff = useQuery({
     queryKey: ["anime-staff", malId],
     queryFn: () => ep.getAnimeStaff(malId),
     staleTime: 60 * 60 * 1000,
+    enabled: wantStaff,
   })
 
   const chars = (characters.data?.data ?? []).slice().sort((a, b) => {
@@ -35,6 +40,7 @@ export function AnimeCastSection({ malId }: { malId: number }) {
   return (
     <div className="space-y-12">
       {/* ── Characters ── */}
+      {wantChars && (
       <section>
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-subtle">Characters & Voice Cast</h2>
@@ -83,9 +89,10 @@ export function AnimeCastSection({ malId }: { malId: number }) {
           </div>
         )}
       </section>
+      )}
 
       {/* ── Staff ── */}
-      {(staff.isLoading || staffList.length > 0) && (
+      {wantStaff && (staff.isLoading || staffList.length > 0) && (
         <section>
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-subtle">Staff</h2>

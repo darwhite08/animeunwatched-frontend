@@ -114,6 +114,15 @@ function AnimeDetail({ anime, rawAnime, currentEpisode = 0 }: { anime: Anime; ra
   const { push } = useToast()
   const { data: reviewsData } = useAnimeReviews(anime.id)
   const malId = parseInt(anime.id, 10)
+  const [tab, setTab] = useState<"overview" | "characters" | "staff" | "episodes" | "reviews" | "discussion">("overview")
+  const TABS = [
+    { id: "overview", label: "Overview" },
+    { id: "characters", label: "Characters" },
+    { id: "staff", label: "Staff" },
+    { id: "episodes", label: "Episodes" },
+    { id: "reviews", label: "Reviews" },
+    { id: "discussion", label: "Discussion" },
+  ] as const
   // Resolve a REAL YouTube trailer id: prefer the backend's clean
   // trailerYoutubeId (what the /trailers gallery uses), else parse a
   // trailerUrl (watch / youtu.be / embed forms). No real id → no trailer.
@@ -354,128 +363,152 @@ function AnimeDetail({ anime, rawAnime, currentEpisode = 0 }: { anime: Anime; ra
               </div>
             )}
 
-            {/* Genres */}
-            <div className="flex flex-wrap gap-2">
-              {anime.genres.map(g => (
-                <span key={g} className="px-4 py-1.5 rounded-full bg-surface border border-border text-xs font-black uppercase tracking-wider text-muted">
-                  {g}
-                </span>
+            {/* Section tabs */}
+            <div className="flex gap-1 overflow-x-auto border-b border-border scrollbar-hide">
+              {TABS.map(t => (
+                <button key={t.id} onClick={() => setTab(t.id)}
+                  className={`relative px-4 py-3 text-[11px] font-black uppercase tracking-widest whitespace-nowrap transition-colors ${tab === t.id ? "text-foreground" : "text-subtle hover:text-muted"}`}>
+                  {t.label}
+                  {tab === t.id && <span className="absolute bottom-0 inset-x-3 h-0.5 bg-accent rounded-full" />}
+                </button>
               ))}
             </div>
 
-            {/* Synopsis */}
-            <div>
-              <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-subtle mb-4">Synopsis</h2>
-              {anime.synopsis ? (
-                <p className="text-muted text-base leading-relaxed font-medium">{anime.synopsis}</p>
-              ) : (
-                <p className="text-subtle text-base leading-relaxed font-medium italic">No synopsis available.</p>
-              )}
-            </div>
-
-            {/* Characters & Staff (Jikan) */}
-            {!isNaN(malId) && <AnimeCastSection malId={malId} />}
-
-            {/* Trailer */}
-            <div>
-              <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-subtle mb-4">Trailer</h2>
-              {trailerYoutubeId ? (
-                <div className="relative w-full aspect-video rounded-2xl overflow-hidden bg-black/40 border border-border">
-                  <iframe
-                    src={`https://www.youtube-nocookie.com/embed/${trailerYoutubeId}?rel=0`}
-                    title={`${anime.title} — Trailer`}
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                    className="absolute inset-0 w-full h-full"
-                    loading="lazy"
-                  />
+            {/* ── OVERVIEW ── */}
+            {tab === "overview" && (
+              <div className="space-y-10">
+                {/* Genres */}
+                <div className="flex flex-wrap gap-2">
+                  {anime.genres.map(g => (
+                    <span key={g} className="px-4 py-1.5 rounded-full bg-surface border border-border text-xs font-black uppercase tracking-wider text-muted">{g}</span>
+                  ))}
                 </div>
-              ) : (
-                <div className="flex w-full aspect-video flex-col items-center justify-center gap-2 rounded-2xl border border-border bg-black/40 text-center">
-                  <Play size={28} className="text-subtle" />
-                  <p className="text-xs font-bold text-muted">No trailer available yet</p>
+
+                {/* Trailer — now above the synopsis */}
+                <div>
+                  <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-subtle mb-4">Trailer</h2>
+                  {trailerYoutubeId ? (
+                    <div className="relative w-full aspect-video rounded-2xl overflow-hidden bg-black/40 border border-border">
+                      <iframe
+                        src={`https://www.youtube-nocookie.com/embed/${trailerYoutubeId}?rel=0`}
+                        title={`${anime.title} — Trailer`}
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                        className="absolute inset-0 w-full h-full"
+                        loading="lazy"
+                      />
+                    </div>
+                  ) : (
+                    <div className="flex w-full aspect-video flex-col items-center justify-center gap-2 rounded-2xl border border-border bg-black/40 text-center">
+                      <Play size={28} className="text-subtle" />
+                      <p className="text-xs font-bold text-muted">No trailer available yet</p>
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
 
-            {/* Tags */}
-            <div>
-              <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-subtle mb-4">Neural Tags</h2>
-              <div className="flex flex-wrap gap-2">
-                {anime.tags.map(t => (
-                  <span key={t} className="px-3 py-1 rounded-lg bg-accent/8 border border-accent/15 text-[10px] font-bold text-accent-bright/80 uppercase tracking-wider">
-                    {t}
-                  </span>
-                ))}
+                {/* Synopsis */}
+                <div>
+                  <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-subtle mb-4">Synopsis</h2>
+                  {anime.synopsis ? (
+                    <p className="text-muted text-base leading-relaxed font-medium">{anime.synopsis}</p>
+                  ) : (
+                    <p className="text-subtle text-base leading-relaxed font-medium italic">No synopsis available.</p>
+                  )}
+                </div>
+
+                {/* Tags */}
+                <div>
+                  <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-subtle mb-4">Neural Tags</h2>
+                  <div className="flex flex-wrap gap-2">
+                    {anime.tags.map(t => (
+                      <span key={t} className="px-3 py-1 rounded-lg bg-accent/8 border border-accent/15 text-[10px] font-bold text-accent-bright/80 uppercase tracking-wider">{t}</span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Community Stats */}
+                <AnimeStatsCard anime={anime} />
               </div>
-            </div>
+            )}
 
-            {/* Episode Tracking */}
-            <div>
-              <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-subtle mb-4">Episode Tracking</h2>
-              <EpisodeTracker totalEpisodes={anime.episodes} animeId={anime.id} currentEpisode={currentEpisode} />
-            </div>
+            {/* ── CHARACTERS ── */}
+            {tab === "characters" && (isNaN(malId)
+              ? <p className="text-sm text-subtle">No character data available.</p>
+              : <AnimeCastSection malId={malId} mode="characters" />)}
 
-            {/* Community Stats */}
-            <AnimeStatsCard anime={anime} />
+            {/* ── STAFF ── */}
+            {tab === "staff" && (isNaN(malId)
+              ? <p className="text-sm text-subtle">No staff data available.</p>
+              : <AnimeCastSection malId={malId} mode="staff" />)}
 
-            {/* Reviews */}
-            <div>
-              <div className="flex items-center justify-between mb-5">
-                <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-subtle">Community Reviews</h2>
-                <button
-                  onClick={() => setReviewOpen(true)}
-                  className="text-[10px] font-black uppercase tracking-widest text-accent-bright hover:text-accent-bright transition-colors flex items-center gap-1.5"
-                >
-                  <PenSquare size={11} /> Write a Review
-                </button>
+            {/* ── EPISODES ── */}
+            {tab === "episodes" && (
+              <div>
+                <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-subtle mb-4">Episode Tracking</h2>
+                <EpisodeTracker totalEpisodes={anime.episodes} animeId={anime.id} currentEpisode={currentEpisode} />
               </div>
+            )}
 
-              <div className="space-y-4">
-                {(() => {
-                  const apiRevs = reviewsData?.data ?? []
-                  const reviews = apiRevs.map(r => ({
-                    id: r.id, user: r.author?.displayName ?? r.author?.username ?? "?",
-                    score: r.score, body: r.body, date: new Date(r.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }), likes: r._count?.likes ?? 0,
-                  }))
-                  void MOCK_REVIEWS
-                  if (reviews.length === 0) {
-                    return (
-                      <div className="text-center py-10 text-subtle text-sm border border-dashed border-border rounded-2xl">
-                        No reviews yet. Be the first to write one.
-                      </div>
-                    )
-                  }
-                  return reviews.map((r, i) => (
-                    <motion.div key={r.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 + i * 0.06 }}
-                      className="p-5 rounded-2xl bg-surface border border-border space-y-3">
-                      <div className="flex items-center justify-between">
-                        <div className="flex items-center gap-3">
-                          <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-xs font-black">
-                            {r.user[0]}
+            {/* ── REVIEWS ── */}
+            {tab === "reviews" && (
+              <div>
+                <div className="flex items-center justify-between mb-5">
+                  <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-subtle">Community Reviews</h2>
+                  <button
+                    onClick={() => setReviewOpen(true)}
+                    className="text-[10px] font-black uppercase tracking-widest text-accent-bright hover:text-accent-bright transition-colors flex items-center gap-1.5"
+                  >
+                    <PenSquare size={11} /> Write a Review
+                  </button>
+                </div>
+
+                <div className="space-y-4">
+                  {(() => {
+                    const apiRevs = reviewsData?.data ?? []
+                    const reviews = apiRevs.map(r => ({
+                      id: r.id, user: r.author?.displayName ?? r.author?.username ?? "?",
+                      score: r.score, body: r.body, date: new Date(r.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }), likes: r._count?.likes ?? 0,
+                    }))
+                    void MOCK_REVIEWS
+                    if (reviews.length === 0) {
+                      return (
+                        <div className="text-center py-10 text-subtle text-sm border border-dashed border-border rounded-2xl">
+                          No reviews yet. Be the first to write one.
+                        </div>
+                      )
+                    }
+                    return reviews.map((r, i) => (
+                      <motion.div key={r.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 + i * 0.06 }}
+                        className="p-5 rounded-2xl bg-surface border border-border space-y-3">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-3">
+                            <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-xs font-black">
+                              {r.user[0]}
+                            </div>
+                            <div>
+                              <p className="text-xs font-black text-foreground">{r.user}</p>
+                              <p className="text-[9px] text-subtle mt-0.5">{r.date}</p>
+                            </div>
                           </div>
-                          <div>
-                            <p className="text-xs font-black text-foreground">{r.user}</p>
-                            <p className="text-[9px] text-subtle mt-0.5">{r.date}</p>
+                          <div className="flex items-center gap-1.5">
+                            <Star size={12} fill="var(--app-accent)" className="text-accent-bright" />
+                            <span className="text-sm font-black text-foreground">{r.score}</span>
+                            <span className="text-xs text-subtle">/10</span>
                           </div>
                         </div>
-                        <div className="flex items-center gap-1.5">
-                          <Star size={12} fill="var(--app-accent)" className="text-accent-bright" />
-                          <span className="text-sm font-black text-foreground">{r.score}</span>
-                          <span className="text-xs text-subtle">/10</span>
-                        </div>
-                      </div>
-                      <p className="text-sm text-muted leading-relaxed">{r.body}</p>
-                      <span className="flex items-center gap-1.5 text-[10px] text-subtle">
-                        <Heart size={11} /> {r.likes} helpful
-                      </span>
-                    </motion.div>
-                  ))
-                })()}
+                        <p className="text-sm text-muted leading-relaxed">{r.body}</p>
+                        <span className="flex items-center gap-1.5 text-[10px] text-subtle">
+                          <Heart size={11} /> {r.likes} helpful
+                        </span>
+                      </motion.div>
+                    ))
+                  })()}
+                </div>
               </div>
-            </div>
-            {/* Discussion Threads */}
-            <AnimeThreadsSection animeId={anime.id} animeTitle={anime.title} />
+            )}
+
+            {/* ── DISCUSSION ── */}
+            {tab === "discussion" && <AnimeThreadsSection animeId={anime.id} animeTitle={anime.title} />}
           </div>
 
           {/* RIGHT — sidebar */}

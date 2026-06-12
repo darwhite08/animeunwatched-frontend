@@ -150,14 +150,36 @@ function RealPostCard({ post, index }: { post: Post; index: number }) {
 
       <p className="text-sm text-muted leading-relaxed">{post.content}</p>
 
-      {/* Instagram-style "liked by" — tap to see who liked this */}
+      {/* Instagram-style "liked by" — overlapping avatars + tap to see the list */}
       {likeCount > 0 && (
         <button
           onClick={() => setLikersOpen(true)}
-          className="flex items-center gap-1.5 text-[11px] font-bold text-muted hover:text-foreground transition-colors -mb-1 w-fit"
+          className="flex items-center gap-2 text-[11px] font-bold text-muted hover:text-foreground transition-colors -mb-1 w-fit"
         >
-          <Heart size={11} className="text-rose-400" fill="currentColor" />
-          Liked by <span className="text-foreground">{likeCount.toLocaleString()}</span> {likeCount === 1 ? "person" : "people"}
+          {(post.likePreview?.length ?? 0) > 0 ? (
+            <span className="flex -space-x-2 shrink-0">
+              {post.likePreview!.slice(0, 3).map((u, i) =>
+                u.avatarUrl ? (
+                  /* eslint-disable-next-line @next/next/no-img-element */
+                  <img key={i} src={u.avatarUrl} alt="" className="h-5 w-5 rounded-full object-cover ring-2 ring-background" />
+                ) : (
+                  <span key={i} className="h-5 w-5 rounded-full ring-2 ring-background bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-[8px] font-black text-white">
+                    {u.displayName[0]?.toUpperCase()}
+                  </span>
+                ),
+              )}
+            </span>
+          ) : (
+            <Heart size={11} className="text-rose-400" fill="currentColor" />
+          )}
+          {post.likePreview && post.likePreview.length > 0 ? (
+            <span>
+              Liked by <span className="text-foreground">{post.likePreview[0].displayName}</span>
+              {likeCount > 1 && <> and <span className="text-foreground">{(likeCount - 1).toLocaleString()}</span> {likeCount - 1 === 1 ? "other" : "others"}</>}
+            </span>
+          ) : (
+            <span>Liked by <span className="text-foreground">{likeCount.toLocaleString()}</span> {likeCount === 1 ? "person" : "people"}</span>
+          )}
         </button>
       )}
       <PostLikersModal postId={post.id} open={likersOpen} onClose={() => setLikersOpen(false)} />

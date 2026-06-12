@@ -115,6 +115,7 @@ export interface Post {
   anime?: Pick<AnimeDTO, "id" | "malId" | "title" | "imageUrl"> | null
   _count?: { likes: number; comments: number }
   isLikedByMe?: boolean
+  likePreview?: Array<{ username: string; displayName: string; avatarUrl: string | null }>
   liked?: boolean
 }
 

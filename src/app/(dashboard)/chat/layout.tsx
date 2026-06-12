@@ -224,6 +224,18 @@ function CommunityRail({ activeCommunity, onSelect }: { activeCommunity:string|n
 
   return (
     <div style={{ width:54, flexShrink:0, background:"var(--bg-0)", borderRight:"1px solid var(--line)", display:"flex", flexDirection:"column", alignItems:"center", padding:"12px 0", gap:6, overflowY:"auto" }}>
+      {/* Back to Kaiveron feed — exits the chat surface entirely (Discord-style home). */}
+      <Link href="/community" title="Back to Kaiveron feed"
+        style={{ width:40, height:40, borderRadius:13, display:"grid", placeItems:"center", background:"#0a0a0a", border:"1px solid var(--line-strong)", textDecoration:"none", flexShrink:0, transition:"all 180ms", boxShadow:"0 2px 10px rgba(0,0,0,0.3)" }}
+        onMouseEnter={e=>{(e.currentTarget as HTMLElement).style.borderColor="oklch(0.70 0.15 80)";(e.currentTarget as HTMLElement).style.transform="translateY(-1px)"}}
+        onMouseLeave={e=>{(e.currentTarget as HTMLElement).style.borderColor="var(--line-strong)";(e.currentTarget as HTMLElement).style.transform="translateY(0)"}}>
+        <svg width={24} height={24} viewBox="0 0 100 100">
+          <defs><linearGradient id="railK" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor="#fbbf24"/><stop offset="100%" stopColor="#f59e0b"/></linearGradient></defs>
+          <path d="M 30 28 L 40 28 L 40 46 L 47 46 L 54 28 L 64 28 L 53 50 L 50 50 L 60 72 L 50 72 L 44 60 L 40 60 L 40 72 L 30 72 Z" fill="url(#railK)"/>
+        </svg>
+      </Link>
+      <div style={{ width:28, height:1, background:"var(--line-strong)", margin:"2px 0" }}/>
+
       {/* Home/Inbox */}
       <div style={{ position:"relative" }}>
         <button onClick={()=>onSelect(null)} style={{ width:38, height:38, borderRadius:activeCommunity===null?14:18, background:activeCommunity===null?"var(--indigo-soft)":"var(--bg-2)", border:`1px solid ${activeCommunity===null?"var(--indigo-ring)":"var(--line)"}`, display:"grid", placeItems:"center", cursor:"pointer", transition:"all 200ms", color:activeCommunity===null?"var(--indigo)":"var(--ink-3)" }}>

@@ -590,11 +590,13 @@ function MsgRow({ m, isMine, text, authorSrc, authorName, onDelete }: { m:GM; is
               </span>
             </div>
           ) : isLocked ? (
-            // Legacy E2E message this device has no key for — honest tombstone
-            // instead of an infinite "decrypting" state.
-            <div style={{ ...bubble, display:"inline-flex", alignItems:"center", gap:6, padding:"8px 13px 9px", borderRadius:14, opacity:0.65 }}>
-              <svg width={12} height={12} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" style={{ flexShrink:0 }}><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
-              <span style={{ fontSize:13, fontStyle:"italic" }}>Encrypted message — can&apos;t be displayed on this device</span>
+            // Legacy E2E message this device has no key for. Render a subtle,
+            // muted chip — NOT the loud message bubble — so old encrypted
+            // messages recede instead of shouting across the thread.
+            <div title="This message was end-to-end encrypted with a key this device doesn't have."
+              style={{ display:"inline-flex", alignItems:"center", gap:6, padding:"5px 11px", borderRadius:999, background:"color-mix(in srgb, var(--app-fg) 4%, transparent)", border:"1px solid var(--line)", color:"var(--ink-4)", maxWidth:280 }}>
+              <svg width={11} height={11} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" style={{ flexShrink:0, opacity:0.8 }}><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
+              <span style={{ fontSize:12, fontWeight:500 }}>Encrypted message</span>
             </div>
           ) : isError ? (
             <div style={{ ...bubble, display:"inline-block", padding:"8px 13px 9px", borderRadius:14 }}>
@@ -1062,8 +1064,9 @@ export default function ConversationPage() {
 
         {/* Header */}
         <div style={{ height:60, flexShrink:0, padding:"0 16px", display:"flex", alignItems:"center", gap:12, borderBottom:"1px solid var(--line)", background:"var(--bg-0)", position:"relative" }}>
-          {/* Back arrow — Instagram-web style. Exits the conversation and goes to dashboard. */}
-          <Link href="/dashboard" title="Back to dashboard"
+          {/* Back arrow — Instagram-web style. Returns to the message list (mobile
+              back); the Kaiveron logo in the far-left rail exits to the feed. */}
+          <Link href="/chat" title="Back to messages"
             style={{ width:30, height:30, borderRadius:"var(--r-sm)", display:"grid", placeItems:"center", color:"var(--ink-3)", background:"transparent", textDecoration:"none", flexShrink:0, transition:"background 120ms,color 120ms" }}
             onMouseEnter={e=>Object.assign((e.currentTarget as HTMLElement).style,{background:"var(--bg-2)",color:"var(--ink)"})}
             onMouseLeave={e=>Object.assign((e.currentTarget as HTMLElement).style,{background:"transparent",color:"var(--ink-3)"})}

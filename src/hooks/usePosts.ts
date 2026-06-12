@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useInfiniteQuery, useQueryClient } from "@tanstack/react-query"
 import * as ep from "@/lib/api/endpoints"
+import { useAuthStore } from "@/stores/auth.store"
 
 export const feedKey     = ["posts/feed"]    as const
 export const discoverKey = ["posts/discover"] as const
@@ -8,11 +9,14 @@ export const postKey     = (id: string)   => ["post", id] as const
 export const commentsKey = (id: string)   => ["post/comments", id] as const
 
 export function useFeed() {
+  // The "Following" feed is auth-only — don't fire it for guests.
+  const isAuthenticated = useAuthStore(s => s.isAuthenticated)
   return useInfiniteQuery({
     queryKey: feedKey,
     queryFn:  ({ pageParam }) => ep.getFeed(pageParam as string | undefined),
     initialPageParam: undefined as string | undefined,
     getNextPageParam: (last) => last.meta.nextCursor ?? undefined,
+    enabled: isAuthenticated,
   })
 }
 

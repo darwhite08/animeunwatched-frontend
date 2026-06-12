@@ -52,7 +52,11 @@ export async function api<T>(path: string, opts: ApiOptions = {}): Promise<T> {
     },
   })
 
-  if (res.status === 401 && !skipRefresh) {
+  // Only try to refresh + (on failure) bounce to login when the request was made
+  // WITH a token — i.e. a real session that may have expired. Guests browsing
+  // public pages hit auth-only endpoints and get 401s; those must surface as a
+  // plain error (handled per-page / by the sign-in wall), never a login redirect.
+  if (res.status === 401 && !skipRefresh && token) {
     await refreshTokenOnce()
     return api<T>(path, { ...opts, skipRefresh: true })
   }
@@ -89,7 +93,7 @@ async function refreshTokenOnce(): Promise<void> {
     })
     if (!res.ok) {
       useAuthStore.getState().clear()
-      if (typeof window !== "undefined") {
+      if (typeof window !== "undefined" && !window.location.pathname.startsWith("/login")) {
         window.location.href = `/login?next=${encodeURIComponent(window.location.pathname)}`
       }
       throw new ApiError(res.status, "UNAUTHORIZED", "refresh failed")

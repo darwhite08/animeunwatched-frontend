@@ -28,12 +28,14 @@ function firstImage(html: string): string | null {
 }
 
 /* Map the backend BlogCategory enum → the display labels used by the filter pills. */
-const CATEGORY_LABEL: Record<string, "Deep Dive" | "Review" | "Theory" | "Opinion" | "List"> = {
-  DEEP_DIVE: "Deep Dive", REVIEW: "Review", THEORY: "Theory", OPINION: "Opinion", LIST: "List",
+const CATEGORY_LABEL: Record<string, CategoryLabel> = {
+  DEEP_DIVE: "Deep Dive", REVIEW: "Review", FEATURE: "Feature", DISCUSSION: "Discussion",
+  THEORY: "Theory", OPINION: "Opinion", LIST: "List", NEWS: "News",
 }
 
 /* ── Types ── */
-type Category = "All" | "Deep Dive" | "Review" | "Theory" | "Opinion" | "List"
+type CategoryLabel = "Deep Dive" | "Review" | "Feature" | "Discussion" | "Theory" | "Opinion" | "List" | "News" | "Article"
+type Category = "All" | CategoryLabel
 
 type Blog = {
   id: string
@@ -47,7 +49,7 @@ type Blog = {
   publishedAt: string
   coverGradient: string
   coverImage?: string | null
-  category: "Deep Dive" | "Review" | "Theory" | "Opinion" | "List"
+  category: CategoryLabel
   likes: number
   views: number
 }
@@ -179,7 +181,7 @@ const POPULAR_TAGS = [
   "animation", "villain", "underrated", "slow-burn", "shonen", "manga",
 ]
 
-const CATEGORIES: Category[] = ["All", "Deep Dive", "Review", "Theory", "Opinion", "List"]
+const CATEGORIES: Category[] = ["All", "News", "Deep Dive", "Review", "Feature", "Discussion", "Theory", "Opinion", "List"]
 
 /* ── BlogCard ── */
 function BlogCard({ blog, index }: { blog: Blog; index: number }) {
@@ -270,7 +272,7 @@ export default function BlogListingPage() {
       publishedAt: b.publishedAt ? new Date(b.publishedAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "",
       coverGradient: "from-indigo-900 via-violet-900 to-purple-900",
       coverImage: b.coverImage ?? firstImage(b.body),
-      category: CATEGORY_LABEL[b.category ?? ""] ?? "Deep Dive",
+      category: CATEGORY_LABEL[b.category ?? ""] ?? "Article",
       likes: b.likeCount ?? 0, views: b.viewCount ?? 0,
     }
   }), [blogsData])

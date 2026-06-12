@@ -68,7 +68,7 @@ export function TranslateBar({ content }: { content: string }) {
             <RotateCcw size={12} /> Original
           </button>
         )}
-        {translated && <span className="ml-auto text-[10px] uppercase tracking-widest text-muted">AI-translated</span>}
+        {translated && <span className="ml-auto text-[10px] uppercase tracking-widest text-muted">Auto-translated</span>}
       </div>
 
       {looksLikeHtml(shown) ? (

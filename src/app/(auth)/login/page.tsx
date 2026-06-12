@@ -12,6 +12,7 @@ import { useToast } from "@/stores/toast.store"
 import { useAuthStore } from "@/stores/auth.store"
 import { ApiError, api } from "@/lib/api/client"
 import { connectSocket } from "@/lib/socket"
+import { getLastPath } from "@/lib/lastPath"
 import { useQueryClient } from "@tanstack/react-query"
 import type { User } from "@/lib/api/types"
 
@@ -71,8 +72,10 @@ export default function LoginPage() {
 
   const qc = useQueryClient()
 
-  // Honor returnTo (or legacy ?next=) from query string. Falls back to "/".
-  const returnTo = safeReturnTo(params.get("returnTo") ?? params.get("next"))
+  // Destination after login: an explicit ?returnTo=/?next= wins; otherwise resume
+  // the last page the user was on before logging out; otherwise the landing page.
+  const explicitReturn = params.get("returnTo") ?? params.get("next")
+  const returnTo = explicitReturn ? safeReturnTo(explicitReturn) : (getLastPath() ?? "/")
 
   function goAfterAuth() {
     // Absolute URL → full-page navigation (needed when returnTo is a

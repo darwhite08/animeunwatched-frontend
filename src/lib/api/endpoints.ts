@@ -163,7 +163,7 @@ export const getWhoToFollow = (limit = 10) =>
 export const getPost = (id: string) =>
   api<{ post: Post; liked: boolean }>(`/posts/${id}`)
 
-export const createPost = (body: { content: string; animeId?: string; imageUrl?: string }) =>
+export const createPost = (body: { content: string; animeId?: string; imageUrl?: string; imageUrls?: string[] }) =>
   api<{ post: Post }>("/posts", { method: "POST", body: JSON.stringify(body) })
 
 export const deletePost = (id: string) =>

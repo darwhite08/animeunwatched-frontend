@@ -17,6 +17,7 @@ import WatchlistPreviewWidget from "@/components/social/WatchlistPreviewWidget"
 import { useDiscover, useTrending, useFeed, useCreatePost, useLikePost, useComments, useCreateComment } from "@/hooks/usePosts"
 import { Avatar } from "@/components/ui/Avatar"
 import { CommentRow } from "@/components/posts/CommentRow"
+import { PostGallery } from "@/components/posts/PostGallery"
 import { useLiveFeed } from "@/hooks/useRealtime"
 import { useImageUpload } from "@/hooks/useImageUpload"
 import { PostMenu } from "@/components/ui/PostMenu"
@@ -307,22 +308,13 @@ function PostCard({ post }: { post: Post }) {
           return <p className="text-[15px] text-foreground leading-[1.6] max-w-[65ch] whitespace-pre-wrap break-words"><RichBody text={post.content} /></p>
         })()}
 
-        {/* Image attachment — plain <img> (not next/image): user uploads are
-            served from kaiveron.com/cdn which isn't in remotePatterns, and
-            next/image rejects absolute URLs by hostname even when unoptimized. */}
-        {post.imageUrl && (
-          <a href={post.imageUrl} target="_blank" rel="noopener noreferrer" className="block rounded-2xl overflow-hidden border border-border max-w-[520px] hover:border-border transition-colors">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={post.imageUrl}
-              alt="Post attachment"
-              loading="lazy"
-              decoding="async"
-              referrerPolicy="no-referrer"
-              className="w-full h-auto object-cover max-h-[520px]"
-            />
-          </a>
-        )}
+        {/* Image attachment(s) — single image renders plainly; multi-image posts
+            get a viewer-toggled grid/carousel gallery. Falls back to imageUrl for
+            posts created before the gallery field existed. */}
+        {(() => {
+          const gallery = post.imageUrls && post.imageUrls.length ? post.imageUrls : post.imageUrl ? [post.imageUrl] : []
+          return gallery.length > 0 ? <PostGallery images={gallery} /> : null
+        })()}
 
         {/* Actions — 40px hit targets, AA-compliant contrast, focus-visible ring */}
         <div className="flex items-center gap-1 pt-2 border-t border-border">
@@ -444,8 +436,9 @@ export default function CommunityPage() {
   const [composing, setComposing] = useState(false)
   const [draft, setDraft] = useState("")
   const [isSpoiler, setIsSpoiler] = useState(false)
-  const [attachedImage, setAttachedImage] = useState<string | null>(null)
+  const [attachedImages, setAttachedImages] = useState<string[]>([])
   const fileInputRef    = useRef<HTMLInputElement>(null)
+  const MAX_IMAGES = 10
   const composerRef     = useRef<HTMLTextAreaElement>(null)
 
   /** Insert text at the textarea's cursor; pad with a leading space when
@@ -550,32 +543,37 @@ export default function CommunityPage() {
     [pollsApiData],
   )
 
-  const handleImagePick = useCallback(async (file: File) => {
-    try {
-      const { publicUrl } = await upload(file)
-      setAttachedImage(publicUrl)
-    } catch {
-      // useImageUpload sets `error` — toast it
-      if (uploadError) push(uploadError, "error")
+  const handleImagePick = useCallback(async (files: File[]) => {
+    const room = MAX_IMAGES - attachedImages.length
+    if (room <= 0) { push(`You can attach up to ${MAX_IMAGES} images`, "info"); return }
+    const toUpload = files.slice(0, room)
+    for (const file of toUpload) {
+      try {
+        const { publicUrl } = await upload(file)
+        setAttachedImages(prev => prev.length < MAX_IMAGES ? [...prev, publicUrl] : prev)
+      } catch {
+        // useImageUpload sets `error` — toast it
+        if (uploadError) push(uploadError, "error")
+      }
     }
-  }, [upload, uploadError, push])
+  }, [upload, uploadError, push, attachedImages.length])
 
   const submitPost = useCallback(() => {
-    if (!draft.trim() && !attachedImage) return
+    if (!draft.trim() && attachedImages.length === 0) return
     if (!isAuthenticated) { push("Sign in to post", "info"); return }
     // Wrap spoiler content in [spoiler] tags for the backend to handle
     const content = isSpoiler ? `[spoiler]${draft}[/spoiler]` : draft
     createPost.mutate(
-      { content: content || " ", imageUrl: attachedImage ?? undefined },
+      { content: content || " ", imageUrls: attachedImages.length ? attachedImages : undefined },
       {
         onSuccess: () => {
-          setDraft(""); setComposing(false); setIsSpoiler(false); setAttachedImage(null)
+          setDraft(""); setComposing(false); setIsSpoiler(false); setAttachedImages([])
           push("Post published!", "success")
         },
         onError: () => push("Failed to post. Try again.", "error"),
       }
     )
-  }, [draft, attachedImage, isAuthenticated, createPost, push, isSpoiler])
+  }, [draft, attachedImages, isAuthenticated, createPost, push, isSpoiler])
 
   return (
     <div className="min-h-screen bg-background text-foreground pb-32">
@@ -646,24 +644,31 @@ export default function CommunityPage() {
                     rows={4} autoFocus disabled={!isAuthenticated}
                     className="w-full bg-transparent text-sm text-foreground placeholder:text-subtle resize-none outline-none leading-relaxed disabled:opacity-40" />
 
-                  {/* Attached image preview */}
-                  {attachedImage && (
-                    <div className="relative inline-block rounded-xl overflow-hidden border border-border group">
-                      {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img
-                        src={attachedImage}
-                        alt="Attached"
-                        loading="lazy"
-                        decoding="async"
-                        referrerPolicy="no-referrer"
-                        className="max-h-48 w-auto object-cover"
-                      />
-                      <button
-                        type="button"
-                        onClick={() => setAttachedImage(null)}
-                        className="absolute top-1.5 right-1.5 w-6 h-6 rounded-full bg-black/70 backdrop-blur-sm text-muted hover:text-foreground hover:bg-black/90 flex items-center justify-center text-[14px] leading-none transition-colors"
-                        aria-label="Remove image"
-                      >×</button>
+                  {/* Attached image previews — thumbnails, remove each */}
+                  {attachedImages.length > 0 && (
+                    <div className="flex flex-wrap gap-2">
+                      {attachedImages.map((img, i) => (
+                        <div key={img + i} className="relative rounded-xl overflow-hidden border border-border">
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={img}
+                            alt={`Attached ${i + 1}`}
+                            loading="lazy"
+                            decoding="async"
+                            referrerPolicy="no-referrer"
+                            className="h-24 w-24 object-cover"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => setAttachedImages(prev => prev.filter((_, j) => j !== i))}
+                            className="absolute top-1 right-1 w-5 h-5 rounded-full bg-black/70 backdrop-blur-sm text-muted hover:text-foreground hover:bg-black/90 flex items-center justify-center text-[12px] leading-none transition-colors"
+                            aria-label="Remove image"
+                          >×</button>
+                        </div>
+                      ))}
+                      {attachedImages.length > 1 && (
+                        <span className="self-end text-[11px] text-subtle font-semibold pb-1">{attachedImages.length}/{MAX_IMAGES}</span>
+                      )}
                     </div>
                   )}
                   {isUploading && (
@@ -695,23 +700,24 @@ export default function CommunityPage() {
                       <input
                         ref={fileInputRef}
                         type="file"
+                        multiple
                         accept="image/jpeg,image/png,image/webp,image/gif"
                         onChange={e => {
-                          const f = e.target.files?.[0]
-                          if (f) handleImagePick(f)
+                          const files = Array.from(e.target.files ?? [])
+                          if (files.length) handleImagePick(files)
                           e.target.value = ""
                         }}
                         className="hidden"
                       />
                       <button
                         type="button"
-                        title={isUploading ? `Uploading ${progress}%…` : "Attach an image"}
-                        disabled={isUploading || !!attachedImage}
+                        title={isUploading ? `Uploading ${progress}%…` : attachedImages.length >= MAX_IMAGES ? `Max ${MAX_IMAGES} images` : "Attach images"}
+                        disabled={isUploading || attachedImages.length >= MAX_IMAGES}
                         onClick={() => fileInputRef.current?.click()}
-                        className={`p-1.5 transition-colors ${
+                        className={`p-1.5 transition-colors disabled:opacity-50 ${
                           isUploading
                             ? "text-accent-bright animate-pulse"
-                            : attachedImage
+                            : attachedImages.length > 0
                             ? "text-emerald-400"
                             : "text-subtle hover:text-accent-bright"
                         }`}

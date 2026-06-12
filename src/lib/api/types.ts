@@ -110,6 +110,7 @@ export interface Post {
   content: string
   animeId: string | null
   imageUrl: string | null
+  imageUrls?: string[]
   createdAt: string
   updatedAt: string
   deletedAt: string | null

@@ -40,6 +40,11 @@ export const verifyEmail = (code: string) =>
 export const resendVerification = () =>
   api<{ sent?: boolean; alreadyVerified?: boolean }>("/auth/resend-verification", { method: "POST" })
 
+/* ── Link unfurl (Open Graph preview) ── */
+import type { LinkPreview } from "./types"
+export const getLinkPreview = (url: string) =>
+  api<LinkPreview>(`/links/preview?url=${encodeURIComponent(url)}`)
+
 /* ── Manga reading list ── */
 import type { MangaEntry, MangaSearchResult } from "./types"
 export const searchManga = (q: string) =>

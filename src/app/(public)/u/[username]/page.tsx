@@ -6,6 +6,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { PostGallery } from "@/components/posts/PostGallery"
+import { LinkPreviewCard, firstUrl } from "@/components/posts/LinkPreviewCard"
 import {
   UserPlus,
   UserCheck,
@@ -686,6 +687,12 @@ export default function UserProfilePage({
                   {(() => {
                     const gallery = post.imageUrls && post.imageUrls.length ? post.imageUrls : post.imageUrl ? [post.imageUrl] : []
                     return gallery.length > 0 ? <PostGallery images={gallery} layout={post.galleryLayout} /> : null
+                  })()}
+
+                  {(() => {
+                    const hasGallery = (post.imageUrls && post.imageUrls.length) || post.imageUrl
+                    const url = hasGallery ? null : firstUrl(post.content)
+                    return url ? <LinkPreviewCard url={url} /> : null
                   })()}
 
                   <div className="flex items-center gap-5 pt-2 border-t border-border">

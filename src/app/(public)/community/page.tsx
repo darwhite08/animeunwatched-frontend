@@ -18,6 +18,7 @@ import { useDiscover, useTrending, useFeed, useCreatePost, useLikePost, useComme
 import { Avatar } from "@/components/ui/Avatar"
 import { CommentRow } from "@/components/posts/CommentRow"
 import { PostGallery } from "@/components/posts/PostGallery"
+import { LinkPreviewCard, firstUrl } from "@/components/posts/LinkPreviewCard"
 import { useLiveFeed } from "@/hooks/useRealtime"
 import { useImageUpload } from "@/hooks/useImageUpload"
 import { PostMenu } from "@/components/ui/PostMenu"
@@ -314,6 +315,15 @@ function PostCard({ post }: { post: Post }) {
         {(() => {
           const gallery = post.imageUrls && post.imageUrls.length ? post.imageUrls : post.imageUrl ? [post.imageUrl] : []
           return gallery.length > 0 ? <PostGallery images={gallery} layout={post.galleryLayout} /> : null
+        })()}
+
+        {/* Rich link preview — unfurls the first URL in the post (no preview if
+            the post already has its own image gallery, to avoid double media). */}
+        {(() => {
+          const hasGallery = (post.imageUrls && post.imageUrls.length) || post.imageUrl
+          if (hasGallery) return null
+          const url = firstUrl(post.content)
+          return url ? <LinkPreviewCard url={url} /> : null
         })()}
 
         {/* Actions — 40px hit targets, AA-compliant contrast, focus-visible ring */}

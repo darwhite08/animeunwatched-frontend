@@ -258,6 +258,15 @@ export interface MangaSearchResult {
   genre: string | null
 }
 
+export interface LinkPreview {
+  url: string
+  title: string | null
+  description: string | null
+  image: string | null
+  siteName: string | null
+  favicon: string | null
+}
+
 export interface Notification {
   id: string
   recipientId: string

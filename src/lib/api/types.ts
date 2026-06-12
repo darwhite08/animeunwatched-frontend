@@ -77,6 +77,17 @@ export interface AnimeDTO {
   studios: string[]
 }
 
+/* ── Anime cast/staff (Jikan passthrough) ── */
+export interface AnimeCharacterEntry {
+  character: { mal_id: number; name: string; images?: { jpg?: { image_url?: string }; webp?: { image_url?: string } } }
+  role: string
+  voice_actors: Array<{ person: { name: string; images?: { jpg?: { image_url?: string } } }; language: string }>
+}
+export interface AnimeStaffEntry {
+  person: { mal_id: number; name: string; images?: { jpg?: { image_url?: string } } }
+  positions: string[]
+}
+
 export interface ListEntry {
   id: string
   userId: string

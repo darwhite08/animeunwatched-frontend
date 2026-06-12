@@ -70,6 +70,7 @@ import {
 import { SiCrunchyroll, SiNetflix, SiFunimation } from "react-icons/si"
 import EpisodeTracker from "@/components/anime/EpisodeTracker"
 import { AnimeThreadsSection } from "@/components/anime/AnimeThreadsSection"
+import { AnimeCastSection } from "@/components/anime/AnimeCastSection"
 import { AnimeStatsCard } from "@/components/anime/AnimeStatsCard"
 import ReviewComposer from "@/components/review/ReviewComposer"
 import ReportModal from "@/components/moderation/ReportModal"
@@ -371,6 +372,9 @@ function AnimeDetail({ anime, rawAnime, currentEpisode = 0 }: { anime: Anime; ra
                 <p className="text-subtle text-base leading-relaxed font-medium italic">No synopsis available.</p>
               )}
             </div>
+
+            {/* Characters & Staff (Jikan) */}
+            {!isNaN(malId) && <AnimeCastSection malId={malId} />}
 
             {/* Trailer */}
             <div>

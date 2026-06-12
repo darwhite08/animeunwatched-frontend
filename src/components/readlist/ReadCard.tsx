@@ -1,98 +1,99 @@
 "use client"
 
 import { motion } from "framer-motion"
-import Image from "next/image"
-import { MoreVertical, Play, BookOpen } from "lucide-react"
-import { useToast } from "@/stores/toast.store"
+import { useState } from "react"
+import { Trash2, Minus, Plus, BookOpen } from "lucide-react"
+import type { MangaEntry, MangaStatus } from "@/lib/api/types"
 
-// We deconstruct 'manga' because the parent page passes 'manga={manga}'
-export const ReadCard = ({ manga }: { manga: any }) => {
-  const { push } = useToast()
-  // Destructure for cleaner code
-  const { title, author, progress, status, image, category } = manga;
-  const soon = () => push("Manga reading is coming with the next release", "info")
+const STATUS_LABEL: Record<MangaStatus, string> = {
+  READING: "Reading", COMPLETED: "Completed", PLAN_TO_READ: "Plan to Read", ON_HOLD: "On Hold", DROPPED: "Dropped",
+}
+const STATUS_OPTS: MangaStatus[] = ["READING", "COMPLETED", "PLAN_TO_READ", "ON_HOLD", "DROPPED"]
+
+export function ReadCard({
+  manga, owner, onChange, onRemove,
+}: {
+  manga: MangaEntry
+  owner: boolean
+  onChange: (patch: { status?: MangaStatus; progress?: number }) => void
+  onRemove: () => void
+}) {
+  const { title, author, coverUrl, genre, status, progress, totalChapters } = manga
+  const [busy, setBusy] = useState(false)
+
+  const pct = totalChapters && totalChapters > 0
+    ? Math.min(100, Math.round((progress / totalChapters) * 100))
+    : status === "COMPLETED" ? 100 : 0
+
+  const bumpProgress = async (delta: number) => {
+    const next = Math.max(0, progress + delta)
+    if (totalChapters && next > totalChapters) return
+    setBusy(true); await onChange({ progress: next }); setBusy(false)
+  }
 
   return (
-    <motion.div 
-      layout
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      exit={{ opacity: 0, scale: 0.95 }}
-      whileHover={{ y: -12 }}
-      className="group relative rounded-[2.8rem] border border-border bg-background overflow-hidden transition-all duration-700 hover:border-accent/40 hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.8)]"
-    >
-      {/* COVER IMAGE WITH DYNAMIC OVERLAY */}
-      <div className="relative h-80 w-full overflow-hidden">
-        <Image 
-          src={image} 
-          alt={title} 
-          fill 
-          priority
-          className="object-cover transition-transform duration-1000 group-hover:scale-110 brightness-[0.6] group-hover:brightness-100" 
-        />
-        
-        {/* Gradient Scrim */}
+    <motion.div layout initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }}
+      whileHover={{ y: -10 }}
+      className="group relative rounded-[2.8rem] border border-border bg-background overflow-hidden transition-all duration-500 hover:border-accent/40 hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.8)]">
+      {/* COVER */}
+      <div className="relative h-80 w-full overflow-hidden bg-surface">
+        {coverUrl ? (
+          /* eslint-disable-next-line @next/next/no-img-element */
+          <img src={coverUrl} alt={title} referrerPolicy="no-referrer" loading="lazy"
+            className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 group-hover:scale-105 brightness-[0.7] group-hover:brightness-100" />
+        ) : (
+          <div className="absolute inset-0 flex items-center justify-center text-subtle"><BookOpen size={40} /></div>
+        )}
         <div className="absolute inset-0 bg-gradient-to-t from-[var(--app-bg)] via-transparent to-transparent z-10" />
-        
-        {/* Top Badges */}
         <div className="absolute top-6 inset-x-6 flex justify-between items-center z-20">
           <div className="px-3 py-1 rounded-full bg-black/60 backdrop-blur-xl border border-border text-[9px] font-black uppercase tracking-[0.2em] text-accent-bright">
-            {category || "Archives"}
+            {genre || "Manga"}
           </div>
-          <button
-            type="button"
-            onClick={soon}
-            aria-label="Manga options (coming soon)"
-            className="p-2 bg-black/40 backdrop-blur-md rounded-xl border border-border text-subtle hover:text-foreground transition-all"
-          >
-            <MoreVertical size={16} />
-          </button>
-        </div>
-
-        {/* Floating Play Icon on Hover */}
-        <div className="absolute inset-0 z-20 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-4 group-hover:translate-y-0">
-          <div className="h-16 w-16 rounded-full bg-accent flex items-center justify-center text-black shadow-[0_0_30px_rgba(79,70,229,0.5)]">
-            <BookOpen size={24} />
-          </div>
+          {owner && (
+            <button type="button" onClick={onRemove} aria-label="Remove from library"
+              className="p-2 bg-black/50 backdrop-blur-md rounded-xl border border-border text-subtle hover:text-rose-400 hover:border-rose-400/40 transition-all">
+              <Trash2 size={15} />
+            </button>
+          )}
         </div>
       </div>
 
-      {/* CONTENT BLOCK */}
-      <div className="p-10 space-y-8 relative">
-        {/* Top subtle separator glow */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-px bg-gradient-to-r from-transparent via-indigo-500/20 to-transparent" />
-
+      {/* CONTENT */}
+      <div className="p-8 space-y-6 relative">
         <div className="space-y-1">
-          <h3 className="text-2xl font-black text-foreground tracking-tighter leading-tight group-hover:text-accent-bright transition-colors">
-            {title}
-          </h3>
-          <p className="text-[11px] font-bold text-subtle uppercase tracking-[0.2em]">{author}</p>
+          <h3 className="text-xl font-black text-foreground tracking-tight leading-tight line-clamp-2 group-hover:text-accent-bright transition-colors">{title}</h3>
+          {author && <p className="text-[11px] font-bold text-subtle uppercase tracking-[0.2em] truncate">{author}</p>}
         </div>
 
-        {/* PROGRESS SYSTEM */}
+        {/* PROGRESS */}
         <div className="space-y-3">
-          <div className="flex justify-between text-[10px] font-black uppercase tracking-[0.3em]">
-            <span className="text-muted italic">{status}</span>
-            <span className="text-foreground">{progress}% Complete</span>
+          <div className="flex justify-between items-center text-[10px] font-black uppercase tracking-[0.2em]">
+            <span className="text-muted italic">{STATUS_LABEL[status]}</span>
+            <span className="text-foreground tabular-nums">
+              {totalChapters ? `${progress} / ${totalChapters} ch` : `${progress} ch`}
+            </span>
           </div>
-          <div className="h-2 w-full bg-surface rounded-full overflow-hidden p-[2px] border border-border">
-            <motion.div 
-              initial={{ width: 0 }}
-              whileInView={{ width: `${progress}%` }}
-              transition={{ duration: 1.5, ease: "circOut" }}
-              className="h-full bg-gradient-to-r from-indigo-600 via-indigo-400 to-white/40 rounded-full shadow-[0_0_15px_rgba(99,102,241,0.4)]"
-            />
+          <div className="h-2 w-full bg-surface rounded-full overflow-hidden border border-border">
+            <motion.div initial={{ width: 0 }} animate={{ width: `${pct}%` }} transition={{ duration: 0.8, ease: "circOut" }}
+              className="h-full rounded-full" style={{ background: "linear-gradient(90deg,var(--app-accent),var(--app-accent-bright))" }} />
           </div>
         </div>
 
-        {/* ACTION BUTTON */}
-        <button
-          type="button"
-          onClick={soon}
-          className="w-full py-5 rounded-2xl bg-surface border border-border text-[10px] font-black uppercase tracking-[0.3em] text-muted hover:bg-white hover:text-black hover:border-white transition-all flex items-center justify-center gap-3"
-        >
-          <Play size={14} fill="currentColor" /> Resume Chapter
-        </button>
+        {/* OWNER CONTROLS */}
+        {owner ? (
+          <div className="flex items-center gap-2">
+            <select value={status} onChange={e => onChange({ status: e.target.value as MangaStatus })}
+              className="flex-1 min-w-0 bg-surface border border-border rounded-xl px-3 py-2.5 text-[11px] font-bold text-foreground outline-none focus:border-accent/50 cursor-pointer">
+              {STATUS_OPTS.map(s => <option key={s} value={s}>{STATUS_LABEL[s]}</option>)}
+            </select>
+            <div className="flex items-center gap-1 shrink-0">
+              <button type="button" disabled={busy || progress <= 0} onClick={() => bumpProgress(-1)} aria-label="Chapter -1"
+                className="h-9 w-9 rounded-xl bg-surface border border-border grid place-items-center text-muted hover:text-foreground disabled:opacity-40 transition-colors"><Minus size={14} /></button>
+              <button type="button" disabled={busy || (!!totalChapters && progress >= totalChapters)} onClick={() => bumpProgress(1)} aria-label="Chapter +1"
+                className="h-9 w-9 rounded-xl bg-accent text-black grid place-items-center hover:opacity-90 disabled:opacity-40 transition-opacity"><Plus size={14} /></button>
+            </div>
+          </div>
+        ) : null}
       </div>
     </motion.div>
   )

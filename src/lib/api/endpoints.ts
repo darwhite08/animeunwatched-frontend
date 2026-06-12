@@ -40,6 +40,19 @@ export const verifyEmail = (code: string) =>
 export const resendVerification = () =>
   api<{ sent?: boolean; alreadyVerified?: boolean }>("/auth/resend-verification", { method: "POST" })
 
+/* ── Manga reading list ── */
+import type { MangaEntry, MangaSearchResult } from "./types"
+export const searchManga = (q: string) =>
+  api<{ data: MangaSearchResult[] }>(`/readlist/search?q=${encodeURIComponent(q)}`)
+export const getReadlist = (usernameOrSlug: string) =>
+  api<{ data: MangaEntry[] }>(`/readlist/${encodeURIComponent(usernameOrSlug)}`)
+export const addManga = (body: MangaSearchResult & { status?: string }) =>
+  api<{ entry: MangaEntry }>("/readlist", { method: "POST", body: JSON.stringify(body) })
+export const updateMangaEntry = (id: string, body: { status?: string; progress?: number; score?: number | null }) =>
+  api<{ entry: MangaEntry }>(`/readlist/${id}`, { method: "PATCH", body: JSON.stringify(body) })
+export const removeMangaEntry = (id: string) =>
+  api<void>(`/readlist/${id}`, { method: "DELETE" })
+
 /* ── Users ── */
 export const getUser = (username: string) =>
   api<UserProfile>(`/users/${username}`)

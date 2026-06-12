@@ -217,6 +217,36 @@ export interface UserProfile {
   badges?: Array<{ code: string; serial?: number | null; earnedAt: string }>
 }
 
+/* ── Manga reading list (AniList-powered) ── */
+export type MangaStatus = "READING" | "COMPLETED" | "PLAN_TO_READ" | "ON_HOLD" | "DROPPED"
+
+export interface MangaEntry {
+  id: string
+  userId: string
+  anilistId: number
+  title: string
+  coverUrl: string | null
+  author: string | null
+  format: string | null
+  totalChapters: number | null
+  genre: string | null
+  status: MangaStatus
+  progress: number
+  score: number | null
+  createdAt: string
+  updatedAt: string
+}
+
+export interface MangaSearchResult {
+  anilistId: number
+  title: string
+  coverUrl: string | null
+  author: string | null
+  format: string | null
+  totalChapters: number | null
+  genre: string | null
+}
+
 export interface Notification {
   id: string
   recipientId: string

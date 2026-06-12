@@ -111,6 +111,7 @@ export interface Post {
   animeId: string | null
   imageUrl: string | null
   imageUrls?: string[]
+  galleryLayout?: "grid" | "carousel"
   createdAt: string
   updatedAt: string
   deletedAt: string | null
@@ -197,6 +198,7 @@ export interface ProfilePost {
   animeId: string | null
   imageUrl?: string | null
   imageUrls?: string[]
+  galleryLayout?: "grid" | "carousel"
   createdAt: string
   anime?: { title: string; malId: number } | null
   _count?: { likes: number; comments: number }

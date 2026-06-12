@@ -313,7 +313,7 @@ function PostCard({ post }: { post: Post }) {
             posts created before the gallery field existed. */}
         {(() => {
           const gallery = post.imageUrls && post.imageUrls.length ? post.imageUrls : post.imageUrl ? [post.imageUrl] : []
-          return gallery.length > 0 ? <PostGallery images={gallery} /> : null
+          return gallery.length > 0 ? <PostGallery images={gallery} layout={post.galleryLayout} /> : null
         })()}
 
         {/* Actions — 40px hit targets, AA-compliant contrast, focus-visible ring */}
@@ -437,6 +437,7 @@ export default function CommunityPage() {
   const [draft, setDraft] = useState("")
   const [isSpoiler, setIsSpoiler] = useState(false)
   const [attachedImages, setAttachedImages] = useState<string[]>([])
+  const [galleryLayout, setGalleryLayout] = useState<"grid" | "carousel">("grid")
   const fileInputRef    = useRef<HTMLInputElement>(null)
   const MAX_IMAGES = 10
   const composerRef     = useRef<HTMLTextAreaElement>(null)
@@ -564,16 +565,20 @@ export default function CommunityPage() {
     // Wrap spoiler content in [spoiler] tags for the backend to handle
     const content = isSpoiler ? `[spoiler]${draft}[/spoiler]` : draft
     createPost.mutate(
-      { content: content || " ", imageUrls: attachedImages.length ? attachedImages : undefined },
+      {
+        content: content || " ",
+        imageUrls: attachedImages.length ? attachedImages : undefined,
+        ...(attachedImages.length > 1 ? { galleryLayout } : {}),
+      },
       {
         onSuccess: () => {
-          setDraft(""); setComposing(false); setIsSpoiler(false); setAttachedImages([])
+          setDraft(""); setComposing(false); setIsSpoiler(false); setAttachedImages([]); setGalleryLayout("grid")
           push("Post published!", "success")
         },
         onError: () => push("Failed to post. Try again.", "error"),
       }
     )
-  }, [draft, attachedImages, isAuthenticated, createPost, push, isSpoiler])
+  }, [draft, attachedImages, galleryLayout, isAuthenticated, createPost, push, isSpoiler])
 
   return (
     <div className="min-h-screen bg-background text-foreground pb-32">
@@ -669,6 +674,23 @@ export default function CommunityPage() {
                       {attachedImages.length > 1 && (
                         <span className="self-end text-[11px] text-subtle font-semibold pb-1">{attachedImages.length}/{MAX_IMAGES}</span>
                       )}
+                    </div>
+                  )}
+
+                  {/* Author picks how their multi-image post displays. */}
+                  {attachedImages.length > 1 && (
+                    <div className="flex items-center gap-2">
+                      <span className="text-[11px] font-bold uppercase tracking-widest text-subtle">Display as</span>
+                      <div className="flex items-center gap-0.5 p-0.5 rounded-lg bg-surface border border-border">
+                        {(["grid", "carousel"] as const).map(opt => (
+                          <button
+                            key={opt}
+                            type="button"
+                            onClick={() => setGalleryLayout(opt)}
+                            className={`px-3 py-1 rounded-md text-[11px] font-bold capitalize transition-colors ${galleryLayout === opt ? "bg-accent text-black" : "text-subtle hover:text-foreground"}`}
+                          >{opt}</button>
+                        ))}
+                      </div>
                     </div>
                   )}
                   {isUploading && (

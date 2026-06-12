@@ -685,7 +685,7 @@ export default function UserProfilePage({
 
                   {(() => {
                     const gallery = post.imageUrls && post.imageUrls.length ? post.imageUrls : post.imageUrl ? [post.imageUrl] : []
-                    return gallery.length > 0 ? <PostGallery images={gallery} /> : null
+                    return gallery.length > 0 ? <PostGallery images={gallery} layout={post.galleryLayout} /> : null
                   })()}
 
                   <div className="flex items-center gap-5 pt-2 border-t border-border">

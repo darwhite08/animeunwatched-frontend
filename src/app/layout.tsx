@@ -4,6 +4,7 @@ import { QueryProvider } from "@/providers/QueryProvider"
 import { KeyboardShortcuts } from "@/providers/KeyboardShortcuts"
 import { SessionProvider } from "@/components/layout/SessionProvider"
 import { LastVisitTracker } from "@/components/layout/LastVisitTracker"
+import { AuthPromptModal } from "@/components/auth/AuthPromptModal"
 import { LenisProvider } from "@/providers/LenisProvider"
 import { ThemeProvider } from "@/providers/ThemeProvider"
 // PageLoader and ToastContainer are critical — always eagerly loaded
@@ -114,6 +115,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 {children}
                 {/* Remembers the last page so users resume there after re-login */}
                 <LastVisitTracker />
+                {/* Sign-in wall for guests attempting a gated action */}
+                <AuthPromptModal />
                 {/* Critical: toasts appear on user actions — must always be ready */}
                 <ToastContainer />
 

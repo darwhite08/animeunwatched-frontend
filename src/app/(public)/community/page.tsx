@@ -11,6 +11,7 @@ import {
 } from "lucide-react"
 import Link from "next/link"
 import { useToast } from "@/stores/toast.store"
+import { useAuthPrompt } from "@/stores/authPrompt.store"
 import TrendingWidget from "@/components/social/TrendingWidget"
 import { WhoToFollowWidget } from "@/components/social/WhoToFollowWidget"
 import { PostLikersModal } from "@/components/posts/PostLikersModal"
@@ -202,6 +203,7 @@ function SpoilerBlock({ text }: { text: string }) {
 function PostCard({ post }: { post: Post }) {
   const { push }       = useToast()
   const isAuthenticated = useAuthStore(s => s.isAuthenticated)
+  const showAuthPrompt = useAuthPrompt(s => s.show)
 
   // Like state — initialised from API's isLikedByMe and resynced whenever
   // the underlying post object changes (refetch, socket invalidation, etc.)
@@ -227,7 +229,7 @@ function PostCard({ post }: { post: Post }) {
   const createComment = useCreateComment(post.id)
 
   const handleLike = useCallback(() => {
-    if (!isAuthenticated) { push("Sign in to like posts", "info"); return }
+    if (!isAuthenticated) { showAuthPrompt({ subtitle: "Sign in to like and react to posts." }); return }
     // Use the server's authoritative response — fixes "I can like twice
     // after refresh" where local state was out of sync with the DB.
     likePost.mutate(
@@ -251,7 +253,7 @@ function PostCard({ post }: { post: Post }) {
 
   const handleSubmitComment = () => {
     if (!commentDraft.trim()) return
-    if (!isAuthenticated) { push("Sign in to comment", "info"); return }
+    if (!isAuthenticated) { showAuthPrompt({ subtitle: "Sign in to join the discussion." }); return }
     createComment.mutate(commentDraft.trim(), {
       onSuccess: () => {
         setCommentDraft("")
@@ -451,8 +453,8 @@ function PostCard({ post }: { post: Post }) {
                     onKeyDown={e => {
                       if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) handleSubmitComment()
                     }}
-                    placeholder={isAuthenticated ? "Write a comment… (⌘Enter to post)" : "Sign in to comment"}
-                    disabled={!isAuthenticated}
+                    onFocus={() => { if (!isAuthenticated) { showAuthPrompt({ subtitle: "Sign in to join the discussion." }); commentInputRef.current?.blur() } }}
+                    placeholder="Write a comment… (⌘Enter to post)"
                     rows={2}
                     maxLength={500}
                     className="w-full bg-surface border border-border rounded-xl px-3 py-2 text-[12px] text-foreground placeholder:text-subtle resize-none outline-none focus:border-accent/40 transition-colors disabled:opacity-40"
@@ -461,7 +463,7 @@ function PostCard({ post }: { post: Post }) {
                     <span className="text-[9px] text-subtle font-mono">{500 - commentDraft.length} chars</span>
                     <button
                       onClick={handleSubmitComment}
-                      disabled={!commentDraft.trim() || createComment.isPending || !isAuthenticated}
+                      disabled={!commentDraft.trim() || createComment.isPending}
                       className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-black text-black transition-all disabled:opacity-40 disabled:cursor-not-allowed"
                       style={{ background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))" }}
                     >
@@ -482,8 +484,14 @@ function PostCard({ post }: { post: Post }) {
 export default function CommunityPage() {
   const { push } = useToast()
   const isAuthenticated = useAuthStore(s => s.isAuthenticated)
+  const showAuthPrompt = useAuthPrompt(s => s.show)
   const [feedTab, setFeedTab] = useState<FeedTab>("trending")
   const [composing, setComposing] = useState(false)
+  // Open the composer for members; pop the sign-in wall for guests.
+  const openComposer = useCallback(() => {
+    if (isAuthenticated) setComposing(c => !c)
+    else showAuthPrompt({ subtitle: "Sign in to share a post with the community." })
+  }, [isAuthenticated, showAuthPrompt])
   const [draft, setDraft] = useState("")
   const [isSpoiler, setIsSpoiler] = useState(false)
   const [attachedImages, setAttachedImages] = useState<string[]>([])
@@ -611,7 +619,7 @@ export default function CommunityPage() {
 
   const submitPost = useCallback(() => {
     if (!draft.trim() && attachedImages.length === 0) return
-    if (!isAuthenticated) { push("Sign in to post", "info"); return }
+    if (!isAuthenticated) { showAuthPrompt({ subtitle: "Sign in to share a post with the community." }); return }
     // Wrap spoiler content in [spoiler] tags for the backend to handle
     const content = isSpoiler ? `[spoiler]${draft}[/spoiler]` : draft
     createPost.mutate(
@@ -642,7 +650,7 @@ export default function CommunityPage() {
           <h1 className="text-3xl font-black tracking-tighter uppercase italic text-foreground">
             Community<span style={{ color: "var(--app-accent)" }}>.</span>
           </h1>
-          <button onClick={() => setComposing(c => !c)}
+          <button onClick={openComposer}
             className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest text-black transition-all hover:scale-[1.03] motion-reduce:transform-none shrink-0 mt-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70"
             style={{ background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))", boxShadow: "0 4px 16px color-mix(in srgb, var(--app-accent) 35%, transparent)" }}>
             <Plus size={13} /> New Post
@@ -677,7 +685,7 @@ export default function CommunityPage() {
       <motion.button
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
-        onClick={() => setComposing(c => !c)}
+        onClick={openComposer}
         className="fixed bottom-8 right-8 z-40 flex items-center gap-2 px-5 py-3 rounded-2xl text-xs font-black uppercase tracking-widest text-black transition-all hover:scale-105 md:hidden"
         style={{ background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))", boxShadow: "0 8px 24px color-mix(in srgb, var(--app-accent) 50%, transparent)" }}
       >

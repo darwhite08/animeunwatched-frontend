@@ -7,8 +7,12 @@ import { useNavBadges } from "../useNavBadges"
 
 export function NotificationsButton() {
   const slug = useAuthStore((s) => s.user?.slug)
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated)
   const { unreadNotifications } = useNavBadges()
   const href = slug ? `/user/${slug}/notifications` : "/notifications"
+
+  // Guests have no notifications — hide the bell entirely.
+  if (!isAuthenticated) return null
 
   return (
     <Link

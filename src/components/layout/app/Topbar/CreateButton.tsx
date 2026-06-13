@@ -5,6 +5,8 @@ import { createPortal } from "react-dom"
 import Link from "next/link"
 import { Plus, PencilLine, BarChart3, MessageSquare } from "lucide-react"
 import { useCreatorAccess } from "@/hooks/useCreator"
+import { useAuthStore } from "@/stores/auth.store"
+import { useAuthPrompt } from "@/stores/authPrompt.store"
 
 // `creatorOnly` items (blogs, polls) are hidden from regular members.
 const CREATE_ACTIONS = [
@@ -25,6 +27,8 @@ export function CreateButton() {
   useEffect(() => setMounted(true), [])
   const { isCreator } = useCreatorAccess()
   const actions = CREATE_ACTIONS.filter((a) => !a.creatorOnly || isCreator)
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated)
+  const showAuthPrompt = useAuthPrompt((s) => s.show)
 
   useEffect(() => {
     if (!open) return
@@ -40,6 +44,7 @@ export function CreateButton() {
   }, [open])
 
   const toggle = () => {
+    if (!isAuthenticated) { showAuthPrompt({ subtitle: "Sign in to create posts, polls, and articles." }); return }
     if (!open) {
       const r = btnRef.current?.getBoundingClientRect()
       if (r) setPos({ top: r.bottom + 8, right: Math.max(8, window.innerWidth - r.right) })

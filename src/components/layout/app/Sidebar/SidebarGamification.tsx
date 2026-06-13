@@ -15,6 +15,8 @@ function tierOf(rep: number): string {
 
 export function SidebarGamification({ slug, collapsed }: { slug?: string | null; collapsed: boolean }) {
   const user = useAuthStore((s) => s.user)
+  // Guests have no XP/streak — hide the strip rather than show zeros.
+  if (!user) return null
   const rep = user?.reputation ?? 0
   const streak = user?.streakDays ?? 0
   const tier = tierOf(rep)

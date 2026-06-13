@@ -1,13 +1,17 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
+import Link from "next/link"
 import { useAuthStore } from "@/stores/auth.store"
 import { logout } from "@/lib/api/endpoints"
 import ProfileMenu from "@/components/layout/ProfileMenu"
 
-/** Avatar button → existing ProfileMenu (profile, settings, theme, logout). */
+/** Avatar button → existing ProfileMenu (profile, settings, theme, logout).
+ *  Guests browsing the app shell see a "Sign in" button instead. */
 export function AvatarMenu() {
   const user = useAuthStore((s) => s.user)
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated)
+  const sessionReady = useAuthStore((s) => s.sessionReady)
   const [open, setOpen] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
 
@@ -16,6 +20,17 @@ export function AvatarMenu() {
     document.addEventListener("mousedown", onDoc)
     return () => document.removeEventListener("mousedown", onDoc)
   }, [])
+
+  // Guest → prominent Sign in CTA (the whole point: nudge them to convert).
+  if (sessionReady && !isAuthenticated) {
+    return (
+      <Link href="/login"
+        className="flex h-10 items-center rounded-full px-5 text-[12px] font-black uppercase tracking-widest text-black transition-opacity hover:opacity-90"
+        style={{ background: "linear-gradient(135deg,var(--app-accent-bright),var(--app-accent))" }}>
+        Sign in
+      </Link>
+    )
+  }
 
   const name = user?.displayName ?? user?.username ?? "?"
 

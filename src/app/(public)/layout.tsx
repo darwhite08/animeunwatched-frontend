@@ -28,10 +28,13 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
     setShowOnboarding(false);
   };
 
-  // Logged-in users browse inside the app shell (sidebar + topbar), so the
-  // experience is consistent with the rest of the app instead of the marketing
-  // topbar. Logged-out visitors keep the marketing chrome below (unchanged).
-  if (sessionReady && isAuthenticated) {
+  // App shell (sidebar + topbar) for EVERYONE on app pages — guests browse the
+  // real signed-in experience (with write actions gated by the sign-in wall) so
+  // they're nudged to convert. The landing page "/" keeps the marketing hero for
+  // guests; signed-in users get the shell there too.
+  const isLanding = pathname === "/";
+  const useAppShell = !isLanding || (sessionReady && isAuthenticated);
+  if (useAppShell) {
     return (
       <AppShell publicMode>
         {children}

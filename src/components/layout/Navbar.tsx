@@ -323,13 +323,20 @@ export default function Navbar() {
           )}
           {isHydrated && isAuthenticated && <WatchlistLink />}
 
-          {/* Auth CTA / Profile */}
+          {/* Auth CTA / Profile — guests get "View Community" (drops them into the
+              real app view); a small Sign in link stays for returning members. */}
           {isHydrated && !isAuthenticated ? (
-            <Link href="/login"
-              className="px-5 py-2 rounded-full text-[10px] font-black text-black uppercase tracking-widest transition-all hover:scale-105"
-              style={{ background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))", boxShadow: "0 2px 12px color-mix(in srgb, var(--app-accent) 35%, transparent)" }}>
-              Sign In
-            </Link>
+            <div className="flex items-center gap-2">
+              <Link href="/login"
+                className="hidden sm:inline-flex px-3 py-2 rounded-full text-[10px] font-black text-muted uppercase tracking-widest transition-colors hover:text-foreground">
+                Sign in
+              </Link>
+              <Link href="/community"
+                className="px-5 py-2 rounded-full text-[10px] font-black text-black uppercase tracking-widest transition-all hover:scale-105"
+                style={{ background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))", boxShadow: "0 2px 12px color-mix(in srgb, var(--app-accent) 35%, transparent)" }}>
+                View Community
+              </Link>
+            </div>
           ) : isHydrated && isAuthenticated && storeUser ? (
             <div className="relative" ref={profileRef}>
               <button onClick={() => setProfileOpen(!profileOpen)}

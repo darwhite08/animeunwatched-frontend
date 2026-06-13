@@ -32,7 +32,8 @@ export default function RegisterPage() {
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
-    const ref = params.get("ref")
+    // Handles are case-insensitive — normalize the referral so it always matches.
+    const ref = params.get("ref")?.toLowerCase()
     if (ref) {
       setRefBy(ref)
       // Persist so it survives OAuth redirects
@@ -94,10 +95,11 @@ export default function RegisterPage() {
     register.mutate(
       {
         email:       form.email.trim(),
-        username:    form.username.trim(),
+        // Handle is lowercase (case-insensitive identity); display name keeps casing.
+        username:    form.username.trim().toLowerCase(),
         displayName: form.username.trim(),
         password:    form.password,
-        ...(refBy ? { referredBy: refBy } : {}),
+        ...(refBy ? { referredBy: refBy.toLowerCase() } : {}),
       } as Parameters<typeof register.mutate>[0],
       {
         onSuccess: () => {

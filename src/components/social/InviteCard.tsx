@@ -26,7 +26,9 @@ export function InviteCard() {
 
   if (!username) return null
 
-  const link = `https://kaiveron.com/join/${username}`
+  // Handles are case-insensitive — always present the link in lowercase.
+  const handle = username.toLowerCase()
+  const link = `https://kaiveron.com/join/${handle}`
   const count = data?.count ?? 0
 
   const copy = async () => {
@@ -61,7 +63,7 @@ export function InviteCard() {
       </div>
 
       <div className="flex items-center gap-2 rounded-xl border border-border bg-background px-3 py-2.5">
-        <span className="flex-1 truncate font-mono text-[13px] text-muted">kaiveron.com/join/{username}</span>
+        <span className="flex-1 truncate font-mono text-[13px] text-muted">kaiveron.com/join/{handle}</span>
         <button
           onClick={copy}
           aria-label="Copy invite link"

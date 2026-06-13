@@ -17,7 +17,8 @@ type Inviter = { username?: string; displayName?: string; avatarUrl?: string | n
  */
 export default function JoinPage() {
   const params = useParams()
-  const username = String(params?.username ?? "")
+  // Handles are case-insensitive — normalize so attribution is consistent.
+  const username = String(params?.username ?? "").toLowerCase()
   const [inviter, setInviter] = useState<Inviter | null>(null)
 
   useEffect(() => {

@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   Search, Menu, X, Bookmark, ChevronDown,
-  TrendingUp, MessageSquare,
+  TrendingUp, MessageSquare, Users,
 } from "lucide-react";
 import {
   List, Robot, CalendarDots, Star, Tag, Buildings, SquaresFour,
@@ -266,8 +266,16 @@ export default function Navbar() {
             Blog
           </Link>
 
-          {/* Community + Leaderboard are part of the logged-in experience.
-              Logged-out marketing nav stays minimal: Home + Anime + Blog + Search + Sign in. */}
+          {/* Community — the feed is public now, so invite guests straight in.
+              Members get the richer dropdown below instead. */}
+          {!(isHydrated && isAuthenticated) && (
+            <Link href="/community"
+              className={`whitespace-nowrap flex items-center gap-1.5 px-4 py-2 text-[10px] font-black uppercase tracking-widest rounded-full transition-all ${pathname.startsWith("/community") ? "text-foreground bg-surface" : "text-muted hover:text-foreground hover:bg-surface"}`}>
+              <Users size={11} /> Community
+            </Link>
+          )}
+
+          {/* Leaderboard + the Community dropdown are part of the logged-in experience. */}
           {isHydrated && isAuthenticated && (
             <>
               {/* Community dropdown */}
@@ -378,7 +386,7 @@ export default function Navbar() {
 
               <div>
                 <p className="text-[8px] font-black text-subtle uppercase tracking-[0.3em] px-3 mb-1">Navigate</p>
-                {[{ name: "Home", href: "/" }, { name: "Blog", href: "/blog" }, { name: "Leaderboard", href: "/leaderboard" }].map(l => (
+                {[{ name: "Home", href: "/" }, { name: "Community", href: "/community" }, { name: "Blog", href: "/blog" }, { name: "Leaderboard", href: "/leaderboard" }].map(l => (
                   <Link key={l.href} href={l.href} onClick={() => setMobileMenuOpen(false)}
                     className={`flex items-center px-3 py-3 rounded-xl text-xs font-bold transition-all ${pathname === l.href ? "text-foreground bg-surface" : "text-muted hover:text-foreground hover:bg-surface"}`}>
                     {l.name}

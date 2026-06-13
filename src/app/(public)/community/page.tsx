@@ -646,7 +646,7 @@ export default function CommunityPage() {
           strip from top of viewport to bottom of the tabs, so scrolling
           content cannot peek through the navbar's transparent margins. */}
       <div className="sticky top-[var(--sticky-top,0px)] z-40 bg-background border-b border-border shadow-[0_4px_12px_color-mix(in_srgb,var(--app-fg)_4%,transparent)]">
-        <div className="max-w-6xl mx-auto px-6 pt-[var(--page-top,120px)] pb-0 flex items-start justify-between gap-4">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-[var(--page-top,120px)] pb-0 flex items-start justify-between gap-4">
           <h1 className="text-3xl font-black tracking-tighter uppercase italic text-foreground">
             Community<span style={{ color: "var(--app-accent)" }}>.</span>
           </h1>
@@ -656,7 +656,7 @@ export default function CommunityPage() {
             <Plus size={13} /> New Post
           </button>
         </div>
-        <div className="max-w-6xl mx-auto px-6 mt-3 flex items-center justify-between gap-4">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 mt-3 flex items-center justify-between gap-4">
           <div className="flex items-center gap-1">
             {(["trending", "following", "latest"] as FeedTab[]).map(t => (
               <button key={t} onClick={() => setFeedTab(t)}
@@ -692,7 +692,7 @@ export default function CommunityPage() {
         <Plus size={14} /> Post
       </motion.button>
 
-      <div className="max-w-6xl mx-auto px-6 pt-6 grid lg:grid-cols-3 gap-8">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-6 grid lg:grid-cols-3 gap-8">
 
         {/* Feed */}
         <div className="lg:col-span-2 space-y-5">
@@ -880,7 +880,7 @@ export default function CommunityPage() {
             scrolling here only moves the sidebar, not the page. */}
         <aside
           data-lenis-prevent
-          className="lg:sticky lg:top-[220px] lg:self-start lg:max-h-[calc(100vh-240px)] lg:overflow-y-auto lg:overscroll-contain space-y-6 lg:pr-2"
+          className="hidden lg:block lg:sticky lg:top-[220px] lg:self-start lg:max-h-[calc(100vh-240px)] lg:overflow-y-auto lg:overscroll-contain space-y-6 lg:pr-2"
         >
           <div className="p-5 rounded-2xl bg-surface border border-border space-y-4">
             <div className="flex items-center gap-2">

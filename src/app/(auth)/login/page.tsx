@@ -345,7 +345,7 @@ export default function LoginPage() {
                   placeholder="you@domain.com"
                   autoComplete="email"
                   disabled={isDisabled}
-                  className="w-full h-12 rounded-xl bg-surface border border-border px-4 text-sm text-foreground placeholder:text-subtle outline-none focus:border-accent/50 focus:bg-surface transition-all disabled:opacity-50"
+                  className="w-full h-12 rounded-xl bg-surface border border-border px-4 text-base sm:text-sm text-foreground placeholder:text-subtle outline-none focus:border-accent/50 focus:bg-surface transition-all disabled:opacity-50"
                 />
               </div>
 
@@ -366,7 +366,7 @@ export default function LoginPage() {
                     placeholder="Your password"
                     autoComplete="current-password"
                     disabled={isDisabled}
-                    className="w-full h-12 rounded-xl bg-surface border border-border px-4 pr-12 text-sm text-foreground placeholder:text-subtle outline-none focus:border-accent/50 focus:bg-surface transition-all disabled:opacity-50"
+                    className="w-full h-12 rounded-xl bg-surface border border-border px-4 pr-12 text-base sm:text-sm text-foreground placeholder:text-subtle outline-none focus:border-accent/50 focus:bg-surface transition-all disabled:opacity-50"
                   />
                   <button
                     type="button"
@@ -393,7 +393,7 @@ export default function LoginPage() {
                 whileTap={{ scale: 0.98 }}
                 type="submit"
                 disabled={isDisabled}
-                className="w-full h-12 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed transition-all font-bold text-sm text-black flex items-center justify-center gap-2 focus:outline-none" style={{background:"linear-gradient(135deg,var(--app-accent-bright),var(--app-accent))",boxShadow:"0 0 30px color-mix(in srgb, var(--app-accent) 35%, transparent)"}}
+                className="w-full h-12 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed transition-all active:scale-[0.98] font-bold text-sm text-black flex items-center justify-center gap-2 focus:outline-none" style={{background:"linear-gradient(135deg,var(--app-accent-bright),var(--app-accent))",boxShadow:"0 0 30px color-mix(in srgb, var(--app-accent) 35%, transparent)"}}
               >
                 {isSubmitting
                   ? <><Loader2 size={15} className="animate-spin" /> Signing in...</>

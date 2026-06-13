@@ -84,7 +84,7 @@ export function AnimeStatsCard({ anime }: AnimeStatsCardProps) {
             </span>
             <span className="text-sm font-black text-foreground">{anime.rating.toFixed(1)}</span>
           </div>
-          <div className="h-1.5 rounded-full bg-surface overflow-hidden">
+          <div className="h-1.5 rounded-full bg-white/[0.06] overflow-hidden">
             <div
               className={`h-full rounded-full ${scoreColor} transition-all duration-700`}
               style={{ width: `${fillPct}%` }}

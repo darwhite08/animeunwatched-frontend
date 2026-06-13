@@ -664,7 +664,7 @@ export default function OnboardingModal({
             className="relative w-full max-w-lg bg-surface border border-border rounded-3xl overflow-hidden shadow-2xl"
           >
             {/* Header */}
-            <div className="flex items-center justify-between px-6 pt-6 pb-4 border-b border-border">
+            <div className="flex items-center justify-between px-4 sm:px-6 pt-6 pb-4 pt-safe border-b border-border">
               <ProgressDots current={step} total={totalSteps} />
               <div className="flex items-center gap-3">
                 <span className="text-muted text-xs font-mono">
@@ -682,7 +682,7 @@ export default function OnboardingModal({
             </div>
 
             {/* Step content with slide animation */}
-            <div className="px-6 py-6 min-h-[420px] overflow-hidden">
+            <div className="px-4 sm:px-6 py-6 pb-safe min-h-[420px] overflow-hidden">
               <AnimatePresence mode="wait" custom={direction}>
                 <motion.div
                   key={step}
@@ -727,7 +727,7 @@ export default function OnboardingModal({
 
             {/* Footer nav (not shown on step 4) */}
             {step < 4 && (
-              <div className="flex items-center justify-between px-6 pb-6 pt-2">
+              <div className="flex items-center justify-between px-4 sm:px-6 pb-6 pt-2 pb-safe">
                 <button
                   onClick={goBack}
                   disabled={step === 1}

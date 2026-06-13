@@ -59,7 +59,7 @@ export function MobileDrawer() {
           <Link href="/community" onClick={close}><KaiveronLogo size={30} /></Link>
           <button onClick={close} aria-label="Close menu" className="rounded-lg p-1.5 text-muted hover:text-foreground"><X size={18} /></button>
         </div>
-        <div className="flex flex-1 flex-col gap-1 overflow-y-auto" onClick={close}>
+        <div className="flex flex-1 flex-col gap-1 overflow-y-auto [-webkit-overflow-scrolling:touch]" onClick={close}>
           {NAV_ITEMS.map((item) => <SidebarItem key={item.key} item={item} slug={slug} collapsed={false} />)}
           {NAV_ITEMS.filter((i) => i.flyout).map((i) => (
             <Section key={i.key} title={SECTION_TITLES[i.key] ?? i.label} links={i.flyout!} />

@@ -1,9 +1,10 @@
 "use client"
 
 import { useState } from "react"
-import { motion, AnimatePresence } from "framer-motion"
+import { motion } from "framer-motion"
 import { X, Flag, Loader2, CheckCircle2 } from "lucide-react"
 import { useToast } from "@/stores/toast.store"
+import { Sheet } from "@/components/ui/Sheet"
 
 type ContentType = "post" | "review" | "blog" | "comment" | "user"
 
@@ -40,21 +41,9 @@ export default function ReportModal({ isOpen, onClose, contentType, contentId }:
   }
 
   return (
-    <AnimatePresence>
-      {isOpen && (
-        <div className="fixed inset-0 z-[300] flex items-center justify-center p-4">
-          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-            onClick={onClose} className="absolute inset-0 bg-black/75 backdrop-blur-md"
-          />
-
-          <motion.div
-            initial={{ opacity: 0, scale: 0.93, y: 16 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.93 }}
-            transition={{ type: "spring", damping: 26, stiffness: 280 }}
-            className="relative w-full max-w-md bg-background rounded-3xl border border-border p-7 shadow-2xl"
-          >
-            <button onClick={onClose} className="absolute top-5 right-5 p-2 rounded-full bg-surface border border-border text-muted hover:text-foreground transition-colors">
+    <Sheet open={isOpen} onClose={onClose} ariaLabel={`Report ${contentType}`} className="sm:max-w-md">
+      <div className="relative p-6 sm:p-7">
+            <button onClick={onClose} aria-label="Close" className="absolute top-5 right-5 flex h-11 w-11 items-center justify-center rounded-full bg-surface border border-border text-muted hover:text-foreground transition-colors">
               <X size={15} />
             </button>
 
@@ -110,9 +99,7 @@ export default function ReportModal({ isOpen, onClose, contentType, contentId }:
                 </button>
               </div>
             )}
-          </motion.div>
-        </div>
-      )}
-    </AnimatePresence>
+      </div>
+    </Sheet>
   )
 }

@@ -133,7 +133,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
               </div>
 
               {/* Results */}
-              <div className="p-3 max-h-[420px] overflow-y-auto no-scrollbar">
+              <div className="p-3 max-h-[60vh] overflow-y-auto [-webkit-overflow-scrolling:touch] no-scrollbar">
                 {!query.trim() ? (
                   <>
                     {/* Quick actions */}
@@ -238,12 +238,12 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
 
               {/* Footer */}
               <div className="px-6 py-3 border-t border-border bg-black/30 flex items-center justify-between">
-                <div className="flex gap-4 text-[9px] font-black text-subtle uppercase tracking-widest">
+                <div className="flex gap-4 text-[10px] font-black text-subtle uppercase tracking-widest">
                   <span>↑↓ navigate</span>
                   <span>↵ open</span>
                   <span>esc close</span>
                 </div>
-                <div className="text-[9px] font-black text-accent/40 uppercase tracking-widest animate-pulse">
+                <div className="text-[10px] font-black text-accent/40 uppercase tracking-widest animate-pulse">
                   {query ? `${results.length} matches` : "Neural_Link_Ready"}
                 </div>
               </div>

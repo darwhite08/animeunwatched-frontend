@@ -109,7 +109,7 @@ function QuickCard({ href, icon: Icon, label, color, iconColor }: {
 }) {
   return (
     <Link href={href}
-      className={`group flex flex-col gap-4 p-6 rounded-2xl bg-gradient-to-br border transition-all duration-300 hover:-translate-y-1 ${color}`}>
+      className={`group flex flex-col gap-4 p-5 sm:p-6 rounded-2xl bg-gradient-to-br border transition-all duration-300 hover:-translate-y-1 active:scale-95 ${color}`}>
       <div className={`w-10 h-10 rounded-xl bg-black/30 flex items-center justify-center ${iconColor}`}>
         <Icon size={20} />
       </div>
@@ -156,7 +156,7 @@ export default function DashboardPage() {
       <ActivityTicker />
 
       {/* ── HEADER ── */}
-      <header className="relative overflow-hidden rounded-[2.5rem] border p-10 shadow-2xl"
+      <header className="relative overflow-hidden rounded-[2.5rem] border p-6 sm:p-8 md:p-10 shadow-2xl"
         style={{
           background: "linear-gradient(160deg, var(--app-bg) 0%, var(--app-bg) 100%)",
           borderColor: "color-mix(in srgb, var(--app-accent) 15%, transparent)",
@@ -176,7 +176,7 @@ export default function DashboardPage() {
               <Crown size={14} className="animate-pulse" />
               Neural Link Active • {grade}
             </motion.div>
-            <h1 className="text-5xl lg:text-6xl font-black tracking-tighter text-foreground leading-none">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tighter text-foreground leading-none">
               Welcome,{" "}
               <span className="italic" style={{
                 backgroundImage: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent), var(--app-fg))",
@@ -187,11 +187,11 @@ export default function DashboardPage() {
             </h1>
           </div>
 
-          <div className="flex items-center gap-6 border-l border-border pl-8">
+          <div className="flex items-center gap-5 sm:gap-6 lg:border-l border-border lg:pl-8">
             <HeaderMetric label="Reputation" value={String(rep)} icon={Zap}       color="text-accent-bright"  />
             <HeaderMetric label="Level"      value={String(level)} icon={TrendingUp} color="text-accent-bright" />
             <Link href="/notifications"
-              className="p-3 rounded-2xl bg-surface border border-border hover:bg-surface transition-all">
+              className="flex items-center justify-center min-h-11 min-w-11 p-3 rounded-2xl bg-surface border border-border hover:bg-surface transition-all active:scale-95">
               <Bell size={18} className="text-muted" />
             </Link>
           </div>
@@ -266,7 +266,7 @@ export default function DashboardPage() {
       {/* ── QUICK ACCESS ── */}
       <div>
         <p className="text-[9px] font-mono font-black uppercase tracking-[0.4em] text-subtle mb-4">Quick Access</p>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
           <QuickCard href="/clubs"           icon={Users} label="Browse Clubs"
             color="from-violet-600/20 to-violet-900/5 border-violet-500/20 hover:border-violet-500/50" iconColor="text-violet-400" />
           <QuickCard href="/profile#reviews" icon={Star}  label="My Reviews"

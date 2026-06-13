@@ -2,14 +2,13 @@
 
 import { useEffect, useState, useCallback } from "react"
 import Link from "next/link"
-import { createPortal } from "react-dom"
-import { motion, AnimatePresence } from "framer-motion"
 import { X, Heart, Loader2 } from "lucide-react"
 import * as ep from "@/lib/api/endpoints"
 import type { PostLiker } from "@/lib/api/endpoints"
 import { VerifiedBadge } from "@/components/social/VerifiedBadge"
 import { useAuthStore } from "@/stores/auth.store"
 import { useToast } from "@/stores/toast.store"
+import { Sheet } from "@/components/ui/Sheet"
 
 /**
  * Instagram-style "Liked by" list. Opened by tapping a post's like count.
@@ -22,9 +21,6 @@ export function PostLikersModal({ postId, open, onClose }: { postId: string; ope
   const [likers, setLikers] = useState<PostLiker[]>([])
   const [loading, setLoading] = useState(true)
   const [follow, setFollow] = useState<Map<string, boolean>>(new Map())
-  const [mounted, setMounted] = useState(false)
-
-  useEffect(() => { setMounted(true) }, [])
 
   useEffect(() => {
     if (!open) return
@@ -34,14 +30,6 @@ export function PostLikersModal({ postId, open, onClose }: { postId: string; ope
       .catch(() => setLikers([]))
       .finally(() => setLoading(false))
   }, [open, postId])
-
-  // Lock body scroll while open
-  useEffect(() => {
-    if (!open) return
-    const prev = document.body.style.overflow
-    document.body.style.overflow = "hidden"
-    return () => { document.body.style.overflow = prev }
-  }, [open])
 
   const toggleFollow = useCallback((liker: PostLiker) => {
     if (!me) { push("Sign in to follow users", "info"); return }
@@ -54,34 +42,20 @@ export function PostLikersModal({ postId, open, onClose }: { postId: string; ope
     })
   }, [me, follow, push])
 
-  if (!mounted) return null
-
-  return createPortal(
-    <AnimatePresence>
-      {open && (
-        <motion.div
-          initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[400] flex items-center justify-center p-4"
-          style={{ background: "rgba(0,0,0,0.6)", backdropFilter: "blur(4px)" }}
-          onClick={onClose}
-        >
-          <motion.div
-            initial={{ opacity: 0, scale: 0.96, y: 12 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.96, y: 12 }}
-            transition={{ duration: 0.18, ease: [0.32, 0.72, 0, 1] }}
-            className="w-full max-w-sm max-h-[70vh] flex flex-col rounded-2xl border border-border bg-surface overflow-hidden shadow-2xl"
-            onClick={e => e.stopPropagation()}
-          >
+  return (
+    <Sheet open={open} onClose={onClose} ariaLabel="Likes" className="sm:max-w-sm">
+      <div className="flex max-h-[70vh] flex-col">
             <div className="flex items-center justify-between px-5 py-3.5 border-b border-border">
               <div className="flex items-center gap-2">
                 <Heart size={14} className="text-rose-400" fill="currentColor" />
                 <h2 className="text-sm font-black uppercase tracking-widest text-foreground">Likes</h2>
               </div>
-              <button onClick={onClose} className="text-subtle hover:text-foreground transition-colors" aria-label="Close">
+              <button onClick={onClose} aria-label="Close" className="flex h-11 w-11 items-center justify-center -mr-2 text-subtle hover:text-foreground transition-colors">
                 <X size={18} />
               </button>
             </div>
 
-            <div className="flex-1 overflow-y-auto p-2 [&::-webkit-scrollbar]:w-1.5">
+            <div className="flex-1 overflow-y-auto p-2 [-webkit-overflow-scrolling:touch] [&::-webkit-scrollbar]:w-1.5">
               {loading ? (
                 <div className="flex items-center justify-center py-12"><Loader2 className="animate-spin text-accent" size={22} /></div>
               ) : likers.length === 0 ? (
@@ -125,10 +99,7 @@ export function PostLikersModal({ postId, open, onClose }: { postId: string; ope
                 })
               )}
             </div>
-          </motion.div>
-        </motion.div>
-      )}
-    </AnimatePresence>,
-    document.body,
+      </div>
+    </Sheet>
   )
 }

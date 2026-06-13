@@ -79,12 +79,12 @@ export default function WatchlistPage() {
 
   if (!isAuthenticated) {
     return (
-      <div className="max-w-[1440px] mx-auto px-8 py-32 flex flex-col items-center justify-center min-h-[60vh] space-y-6">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8 py-32 flex flex-col items-center justify-center min-h-[60vh] space-y-6">
         <MonitorPlay size={48} className="text-subtle" />
-        <h2 className="text-3xl font-black text-foreground tracking-tighter">Your Archives Await</h2>
+        <h2 className="text-2xl sm:text-3xl font-black text-foreground tracking-tighter">Your Archives Await</h2>
         <p className="text-muted text-sm max-w-xs text-center">Sign in to track your anime journey, manage your watchlist, and sync across devices.</p>
         <Link href="/login"
-          className="flex items-center gap-2 px-8 py-4 rounded-2xl font-black text-sm uppercase tracking-widest transition-all text-black" style={{background:"linear-gradient(135deg,var(--app-accent-bright),var(--app-accent))",boxShadow:"0 4px 20px color-mix(in srgb, var(--app-accent) 35%, transparent)"}}>
+          className="flex items-center justify-center gap-2 px-8 py-4 min-h-11 rounded-2xl font-black text-sm uppercase tracking-widest transition-all active:scale-95 text-black" style={{background:"linear-gradient(135deg,var(--app-accent-bright),var(--app-accent))",boxShadow:"0 4px 20px color-mix(in srgb, var(--app-accent) 35%, transparent)"}}>
           <LogIn size={15} /> Sign In
         </Link>
       </div>
@@ -92,7 +92,7 @@ export default function WatchlistPage() {
   }
 
   return (
-    <div className="max-w-[1440px] mx-auto px-8 py-12 pb-32 space-y-10">
+    <div className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8 py-12 pb-32 space-y-10">
       {/* Header */}
       <header className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-8">
         <div className="space-y-3">
@@ -100,7 +100,7 @@ export default function WatchlistPage() {
             className="flex items-center gap-2 text-accent-bright font-black uppercase tracking-[0.4em] text-[10px]">
             <MonitorPlay size={13} /> Neural Transmission • Active
           </motion.p>
-          <h1 className="text-6xl md:text-7xl font-black tracking-tighter text-foreground leading-none">
+          <h1 className="text-4xl sm:text-5xl md:text-7xl font-black tracking-tighter text-foreground leading-none">
             Archives<span style={{color:"var(--app-accent)"}}>.</span>
           </h1>
           <p className="text-subtle text-sm">{items.length} anime tracked</p>
@@ -110,16 +110,16 @@ export default function WatchlistPage() {
           <div className="relative group flex-1 sm:w-72">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-subtle group-focus-within:text-accent-bright transition-colors" size={16} />
             <input type="text" placeholder="Search watchlist…"
-              className="w-full pl-11 pr-10 py-3.5 rounded-2xl bg-surface border border-border text-foreground placeholder:text-subtle focus:outline-none focus:border-accent/40 transition-all text-sm"
+              className="w-full pl-11 pr-10 py-3.5 min-h-11 rounded-2xl bg-surface border border-border text-foreground placeholder:text-subtle focus:outline-none focus:border-accent/40 transition-all text-base sm:text-sm"
               value={query} onChange={e => setQuery(e.target.value)} />
             {query && (
-              <button onClick={() => setQuery("")} className="absolute right-4 top-1/2 -translate-y-1/2 text-subtle hover:text-foreground transition-colors">
+              <button onClick={() => setQuery("")} className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center justify-center min-h-11 min-w-11 text-subtle hover:text-foreground transition-colors">
                 <X size={14} />
               </button>
             )}
           </div>
           <button onClick={() => push("Use the Browse page to add anime to your list!", "info")}
-            className="flex items-center justify-center gap-2 px-6 py-3.5 rounded-2xl font-black text-[11px] uppercase tracking-widest transition-all active:scale-95 text-black" style={{background:"linear-gradient(135deg,var(--app-accent-bright),var(--app-accent))"}}>
+            className="flex items-center justify-center gap-2 px-6 py-3.5 min-h-11 rounded-2xl font-black text-[11px] uppercase tracking-widest transition-all active:scale-95 text-black" style={{background:"linear-gradient(135deg,var(--app-accent-bright),var(--app-accent))"}}>
             <Plus size={15} /> Add Anime
           </button>
         </div>
@@ -201,7 +201,7 @@ export default function WatchlistPage() {
             {TABS.map(t => (
               (COUNTS[t] > 0 || t === "All") && (
                 <button key={t} onClick={() => setTab(t)}
-                  className={`relative flex items-center gap-2 px-5 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest whitespace-nowrap transition-all ${
+                  className={`relative flex items-center gap-2 px-5 min-h-11 rounded-full text-[10px] font-black uppercase tracking-widest whitespace-nowrap transition-all active:scale-95 ${
                     tab === t
                       ? "text-black shadow-[0_0_20px_color-mix(in srgb, var(--app-accent) 30%, transparent)]"
                       : "bg-surface text-muted hover:bg-surface border border-border"
@@ -255,7 +255,7 @@ export default function WatchlistPage() {
                 </Link>
               </div>
 
-              <div className="flex items-center gap-8 pt-2 text-center">
+              <div className="flex items-center gap-5 sm:gap-8 pt-2 text-center">
                 {[
                   { label: "Track progress", sub: "Episode by episode" },
                   { label: "Rate & review", sub: "Share your opinions" },

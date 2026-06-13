@@ -94,7 +94,7 @@ function ResetPasswordContent() {
                       value={password}
                       onChange={e => setPassword(e.target.value)}
                       placeholder="••••••••••"
-                      className="w-full pl-10 pr-11 py-3 rounded-xl bg-surface border border-border text-sm text-foreground placeholder:text-subtle focus:outline-none focus:border-accent/40 transition-all"
+                      className="w-full pl-10 pr-11 py-3 rounded-xl bg-surface border border-border text-base sm:text-sm text-foreground placeholder:text-subtle focus:outline-none focus:border-accent/40 transition-all"
                     />
                     <button type="button" onClick={() => setShow(s => !s)} className="absolute right-3 top-1/2 -translate-y-1/2 text-subtle hover:text-muted transition-colors">
                       {show ? <EyeOff size={14} /> : <Eye size={14} />}
@@ -112,7 +112,7 @@ function ResetPasswordContent() {
                       value={confirm}
                       onChange={e => setConfirm(e.target.value)}
                       placeholder="Repeat password"
-                      className="w-full pl-10 pr-4 py-3 rounded-xl bg-surface border border-border text-sm text-foreground placeholder:text-subtle focus:outline-none focus:border-accent/40 transition-all"
+                      className="w-full pl-10 pr-4 py-3 rounded-xl bg-surface border border-border text-base sm:text-sm text-foreground placeholder:text-subtle focus:outline-none focus:border-accent/40 transition-all"
                     />
                   </div>
                 </div>
@@ -124,7 +124,7 @@ function ResetPasswordContent() {
                 <button
                   type="submit"
                   disabled={submitting || !token}
-                  className="w-full py-3 rounded-2xl text-sm font-black uppercase tracking-widest text-black transition-all hover:scale-[1.01] disabled:opacity-50"
+                  className="w-full py-3 rounded-2xl text-sm font-black uppercase tracking-widest text-black transition-all hover:scale-[1.01] active:scale-[0.98] disabled:opacity-50"
                   style={{ background: "linear-gradient(135deg,var(--app-accent-bright),var(--app-accent))", boxShadow: "0 4px 20px color-mix(in srgb, var(--app-accent) 30%, transparent)" }}
                 >
                   {submitting ? <Loader2 size={14} className="inline animate-spin mr-2" /> : null}

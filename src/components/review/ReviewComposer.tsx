@@ -1,11 +1,12 @@
 "use client"
 
-import { useState } from "react"
-import { motion, AnimatePresence } from "framer-motion"
+import { useState, useEffect } from "react"
+import { motion } from "framer-motion"
 import { X, Star, AlertTriangle, Send, Loader2 } from "lucide-react"
 import { useToast } from "@/stores/toast.store"
 import { useCreateReview } from "@/hooks/useReviews"
 import { useAuthStore } from "@/stores/auth.store"
+import { Sheet } from "@/components/ui/Sheet"
 
 interface ReviewComposerProps {
   isOpen: boolean
@@ -52,27 +53,12 @@ export default function ReviewComposer({ isOpen, onClose, animeTitle, animeId }:
   useEffect(() => { if (!isOpen) { setScore(null); setBody(""); setHovered(null) } }, [isOpen])
 
   return (
-    <AnimatePresence>
-      {isOpen && (
-        <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={onClose}
-            className="absolute inset-0 bg-black/80 backdrop-blur-md"
-          />
-
-          <motion.div
-            initial={{ opacity: 0, scale: 0.93, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.93, y: 20 }}
-            transition={{ type: "spring", damping: 26, stiffness: 260 }}
-            className="relative w-full max-w-lg bg-background rounded-3xl border border-border p-8 shadow-2xl space-y-7"
-          >
+    <Sheet open={isOpen} onClose={onClose} ariaLabel={`Write a review for ${animeTitle}`} className="sm:max-w-lg">
+      <div className="relative p-6 sm:p-8 space-y-7">
             <button
               onClick={onClose}
-              className="absolute top-5 right-5 p-2 rounded-full bg-surface border border-border text-muted hover:text-foreground transition-colors"
+              aria-label="Close"
+              className="absolute top-5 right-5 flex h-11 w-11 items-center justify-center rounded-full bg-surface border border-border text-muted hover:text-foreground transition-colors"
             >
               <X size={16} />
             </button>
@@ -157,11 +143,7 @@ export default function ReviewComposer({ isOpen, onClose, animeTitle, animeId }:
             >
               {submitting ? <><Loader2 size={14} className="animate-spin" /> Submitting…</> : <><Send size={14} /> Submit Review</>}
             </button>
-          </motion.div>
-        </div>
-      )}
-    </AnimatePresence>
+      </div>
+    </Sheet>
   )
 }
-
-import { useEffect } from "react"

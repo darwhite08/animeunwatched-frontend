@@ -742,7 +742,16 @@ const LB_CSS = `
     .lb-youbar-prog { display: none; }
   }
   @media (max-width: 520px) {
+    .lb-page { --pad: 14px; --gap: 14px; padding: 20px 12px 150px; }
     .lb-list-head .col-follow, .lb-row .col-follow { display: none; }
-    .lb-list { --cols: minmax(48px,auto) minmax(0,2.4fr) 1.1fr; }
+    .lb-list { --cols: minmax(40px,auto) minmax(0,2.4fr) 1.1fr; }
+    .lb-list-head, .lb-row { gap: 10px; }
+    .lb-who { gap: 10px; }
+    .lb-rk-n { font-size: 16px; min-width: 20px; }
+    .lb-metric-n { font-size: 18px; }
+  }
+  @media (max-width: 360px) {
+    .lb-page { --pad: 12px; padding: 18px 10px 150px; }
+    .lb-who-sub .lb-grade { display: none; }
   }
 `

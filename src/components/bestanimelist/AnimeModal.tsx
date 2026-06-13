@@ -100,7 +100,8 @@ export default function AnimeModal({ isOpen, onClose, anime }: AnimeModalProps) 
               <div className="p-8 lg:p-12 flex flex-col justify-between">
                 <button
                   onClick={onClose}
-                  className="absolute top-6 right-6 p-2 rounded-full bg-surface border border-border text-muted hover:text-foreground hover:bg-surface transition-all"
+                  aria-label="Close"
+                  className="absolute top-6 right-6 flex h-11 w-11 items-center justify-center rounded-full bg-surface border border-border text-muted hover:text-foreground hover:bg-surface transition-all"
                 >
                   <X size={18} />
                 </button>

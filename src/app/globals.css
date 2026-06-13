@@ -446,6 +446,17 @@ body,
   -webkit-overflow-scrolling: touch;
 }
 
+/* Momentum horizontal scroll with no visible scrollbar — used by pill/tab rows
+   (anime detail section nav, seasonal, readlist, sidebar). */
+.scrollbar-hide {
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;          /* Firefox */
+  -ms-overflow-style: none;       /* IE/Edge */
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;                  /* WebKit */
+}
+
 /* (4) Safe-area insets so content clears the notch / home indicator when the
        viewport runs edge-to-edge (viewport-fit=cover). Utilities are opt-in;
        the fixed bottom tab bar is lifted automatically. On non-notched devices

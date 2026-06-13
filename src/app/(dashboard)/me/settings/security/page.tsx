@@ -115,7 +115,7 @@ function PasswordField({
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder ?? "••••••••"}
-          className="w-full rounded-xl bg-black/40 border border-border pl-4 pr-11 py-3 text-sm text-foreground placeholder:text-subtle outline-none focus:border-accent/50 transition-colors"
+          className="w-full rounded-xl bg-black/40 border border-border pl-4 pr-11 py-3 text-base sm:text-sm text-foreground placeholder:text-subtle outline-none focus:border-accent/50 transition-colors"
         />
         <button
           type="button"

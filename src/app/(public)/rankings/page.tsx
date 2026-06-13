@@ -69,9 +69,9 @@ export default function RankingsPage() {
 
   return (
     <div className="min-h-screen bg-background text-foreground pb-32">
-      <div className="max-w-7xl mx-auto px-6 pt-32 pb-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-32 pb-10">
         <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-accent-bright/60 mb-3">Neural Leaderboard</p>
-        <h1 className="text-6xl font-black tracking-tighter uppercase italic text-foreground leading-none mb-2">
+        <h1 className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tighter uppercase italic text-foreground leading-none mb-2">
           Leaderboard<span style={{color:"var(--app-accent)"}}>.</span>
         </h1>
         <p className="text-subtle text-sm mb-10">Top anime by community credibility-weighted scores</p>
@@ -80,7 +80,7 @@ export default function RankingsPage() {
         <div className="grid grid-cols-2 md:grid-cols-5 gap-3 mb-10">
           {CATEGORIES.map(c => (
             <button key={c.id} onClick={() => changeCategory(c.id)}
-              className={`p-4 rounded-2xl border text-left transition-all ${
+              className={`p-4 min-h-11 rounded-2xl border text-left transition-all active:scale-95 ${
                 cat === c.id ? "border-accent/40 bg-accent/10" : "border-border bg-surface hover:border-border"
               }`}>
               <c.icon size={16} className={cat === c.id ? "text-accent-bright" : "text-subtle"} />
@@ -115,7 +115,7 @@ export default function RankingsPage() {
             >
               {/* Top 3 podium — page 1 only */}
               {top3.length >= 3 && (
-                <div className="grid grid-cols-3 gap-4 mb-10">
+                <div className="grid grid-cols-3 gap-2.5 sm:gap-4 mb-10">
                   {[1, 0, 2].map((pos, i) => {
                     const anime = top3[pos]
                     if (!anime) return null
@@ -125,12 +125,12 @@ export default function RankingsPage() {
                         initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: i * 0.08 }}
                         onClick={() => setSelected(anime)}
-                        className={`group p-5 rounded-2xl border cursor-pointer transition-all hover:border-accent/30 ${
+                        className={`group p-3.5 sm:p-5 rounded-2xl border cursor-pointer transition-all hover:border-accent/30 active:scale-95 ${
                           pos === 0 ? "border-accent/30 bg-accent/5" : "border-border bg-surface"
                         }`}
                       >
-                        <div className="flex items-center gap-3 mb-3">
-                          <span className="text-2xl">{medals[i]}</span>
+                        <div className="flex items-center gap-2 sm:gap-3 mb-3">
+                          <span className="text-xl sm:text-2xl">{medals[i]}</span>
                           <span className="text-[10px] font-black text-subtle font-mono">#{pos + 1}</span>
                         </div>
                         <p className="font-black text-foreground group-hover:text-foreground text-sm leading-tight line-clamp-2">
@@ -171,7 +171,7 @@ export default function RankingsPage() {
             <button
               onClick={() => { setPage(p => Math.max(1, p - 1)); window.scrollTo({ top: 0, behavior: "smooth" }) }}
               disabled={page === 1}
-              className="px-4 py-2 rounded-xl bg-surface border border-border text-xs font-black text-muted hover:text-foreground hover:bg-surface disabled:opacity-30 disabled:cursor-not-allowed transition-all uppercase tracking-widest"
+              className="px-4 min-h-11 rounded-xl bg-surface border border-border text-xs font-black text-muted hover:text-foreground hover:bg-surface disabled:opacity-30 disabled:cursor-not-allowed transition-all active:scale-95 uppercase tracking-widest"
             >
               <ChevronLeft size={14} className="inline -mt-0.5" /> Prev
             </button>
@@ -191,7 +191,7 @@ export default function RankingsPage() {
                 ) : (
                   <button key={n}
                     onClick={() => { setPage(n as number); window.scrollTo({ top: 0, behavior: "smooth" }) }}
-                    className={`w-9 h-9 rounded-xl text-xs font-black transition-all ${
+                    className={`w-11 h-11 rounded-xl text-xs font-black transition-all active:scale-95 ${
                       page === n ? "bg-accent text-black shadow-[0_0_16px_color-mix(in srgb, var(--app-accent) 40%, transparent)]"
                         : "bg-surface border border-border text-muted hover:text-foreground hover:bg-surface"
                     }`}
@@ -203,7 +203,7 @@ export default function RankingsPage() {
             <button
               onClick={() => { setPage(p => Math.min(totalPages, p + 1)); window.scrollTo({ top: 0, behavior: "smooth" }) }}
               disabled={page >= totalPages}
-              className="px-4 py-2 rounded-xl bg-surface border border-border text-xs font-black text-muted hover:text-foreground hover:bg-surface disabled:opacity-30 disabled:cursor-not-allowed transition-all uppercase tracking-widest"
+              className="px-4 min-h-11 rounded-xl bg-surface border border-border text-xs font-black text-muted hover:text-foreground hover:bg-surface disabled:opacity-30 disabled:cursor-not-allowed transition-all active:scale-95 uppercase tracking-widest"
             >
               Next <ChevronRight size={14} className="inline -mt-0.5" />
             </button>

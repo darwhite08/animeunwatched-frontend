@@ -79,7 +79,7 @@ export default function FeedbackButton() {
               initial={{ scale: 0.95, y: 30 }}
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.95, y: 30 }}
-              className="w-full max-w-sm bg-background border border-border rounded-[2rem] p-6 space-y-5"
+              className="w-full max-w-sm bg-background border border-border rounded-[2rem] p-6 pb-safe space-y-5"
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">

@@ -64,7 +64,7 @@ export default function FilterDrawer({
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", damping: 25, stiffness: 200 }}
-            className="fixed right-0 top-0 bottom-0 w-full max-w-xs bg-surface border-l border-border z-[101] flex flex-col"
+            className="fixed right-0 top-0 bottom-0 w-full max-w-xs bg-surface border-l border-border z-[101] flex flex-col pr-safe"
           >
             {/* Header */}
             <div className="flex items-center justify-between p-8 border-b border-border">

@@ -245,15 +245,15 @@ function Hero({ isOwner }: { isOwner: boolean }) {
       {/* Body — 3-col grid on lg: [avatar | identity | actions]. All three
           start at the same top edge (pt-4); avatar gets its own negative
           margin so only IT pokes up over the cover. */}
-      <div className="px-6 pb-6 grid gap-6 grid-cols-1 lg:grid-cols-[auto_minmax(0,1fr)_auto] lg:items-start">
-        <div className="-mt-[54px] self-start">
+      <div className="px-4 sm:px-6 pb-6 grid gap-6 grid-cols-1 lg:grid-cols-[auto_minmax(0,1fr)_auto] lg:items-start">
+        <div className="-mt-10 sm:-mt-[54px] self-start">
           <ProfileAvatar progress={progress} level={level} name={displayName}
             avatarUrl={profile?.avatarUrl ?? user?.avatarUrl} editable={isOwner} />
         </div>
 
         <div className="min-w-0 pt-4">
           <div className="flex items-center gap-2 flex-wrap">
-            <h1 className="text-3xl font-black tracking-tighter text-foreground italic uppercase leading-none">{displayName}</h1>
+            <h1 className="text-2xl sm:text-3xl font-black tracking-tighter text-foreground italic uppercase leading-none break-words">{displayName}</h1>
             <span title="Verified" className="text-accent-bright"><ShieldCheck size={20} /></span>
             <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-widest text-accent border border-accent/40 bg-accent/10">
               <Sparkles size={11} /> Elite
@@ -287,22 +287,22 @@ function Hero({ isOwner }: { isOwner: boolean }) {
             {isOwner ? (
               <>
                 <Link href={settingsHref}
-                  className="flex items-center gap-2 px-4 py-2 rounded-xl text-[11px] font-black uppercase tracking-widest text-black bg-accent hover:bg-accent-bright transition-colors">
+                  className="flex items-center justify-center gap-2 min-h-11 px-4 py-2 rounded-xl text-[11px] font-black uppercase tracking-widest text-black bg-accent hover:bg-accent-bright active:scale-95 transition-[transform,background-color]">
                   <Settings size={14} /> Customize
                 </Link>
-                <button onClick={shareProfile} className="flex items-center gap-2 px-4 py-2 rounded-xl text-[11px] font-black uppercase tracking-widest text-foreground border border-border hover:bg-surface-2 transition-colors">
+                <button onClick={shareProfile} className="flex items-center justify-center gap-2 min-h-11 px-4 py-2 rounded-xl text-[11px] font-black uppercase tracking-widest text-foreground border border-border hover:bg-surface-2 active:scale-95 transition-[transform,background-color]">
                   <Share2 size={13} /> Share
                 </button>
               </>
             ) : (
               <>
                 <button onClick={() => setFollowing(f => !f)}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-xl text-[11px] font-black uppercase tracking-widest transition-colors ${
+                  className={`flex items-center justify-center gap-2 min-h-11 px-4 py-2 rounded-xl text-[11px] font-black uppercase tracking-widest active:scale-95 transition-[transform,background-color] ${
                     following ? "text-foreground border border-border hover:bg-surface-2" : "text-black bg-accent hover:bg-accent-bright"
                   }`}>
                   {following ? <><Check size={14} /> Following</> : <><Plus size={14} /> Follow</>}
                 </button>
-                <button className="flex items-center gap-2 px-4 py-2 rounded-xl text-[11px] font-black uppercase tracking-widest text-foreground border border-border hover:bg-surface-2 transition-colors">
+                <button className="flex items-center justify-center gap-2 min-h-11 px-4 py-2 rounded-xl text-[11px] font-black uppercase tracking-widest text-foreground border border-border hover:bg-surface-2 active:scale-95 transition-[transform,background-color]">
                   <MessageSquare size={13} /> Message
                 </button>
               </>
@@ -310,7 +310,7 @@ function Hero({ isOwner }: { isOwner: boolean }) {
           </div>
 
           <Link href={user?.slug ? `/user/${user.slug}/profile/wrapped` : "/profile/wrapped"}
-            className="group relative flex items-center gap-3 px-4 py-3 rounded-xl text-left border border-accent/30 bg-accent/[0.06] hover:bg-accent/[0.10] transition-colors overflow-hidden">
+            className="group relative flex items-center gap-3 min-h-11 px-4 py-3 rounded-xl text-left border border-accent/30 bg-accent/[0.06] hover:bg-accent/[0.10] active:scale-[0.98] transition-[transform,background-color] overflow-hidden">
             <span className="absolute inset-0 pointer-events-none opacity-50"
               style={{ background: "radial-gradient(60% 100% at 0% 50%, color-mix(in srgb, var(--app-accent) 22%, transparent), transparent 60%)" }} />
             <span className="relative w-8 h-8 rounded-lg grid place-items-center bg-accent/15 text-accent">
@@ -399,20 +399,22 @@ function Heatmap() {
           More
         </div>
       </div>
-      <div className="overflow-x-auto">
-        <div className="flex justify-between font-mono text-[9px] uppercase tracking-widest text-subtle mb-2 pl-1 pr-1">
-          {HEATMAP_MONTHS.map((m, i) => <span key={i}>{m}</span>)}
-        </div>
-        <div className="flex gap-[3px]">
-          {grid.map((col, w) => (
-            <div key={w} className="flex flex-col gap-[3px]">
-              {col.map((lvl, d) => (
-                <span key={d} className="w-[10px] h-[10px] rounded-[2px]"
-                  style={{ background: cellColor(lvl) }}
-                  title={`${lvl ? lvl * 2 + Math.round(lvl / 2) : 0} episodes`} />
-              ))}
-            </div>
-          ))}
+      <div className="overflow-x-auto -mx-1 px-1 [scrollbar-width:none] [-webkit-overflow-scrolling:touch]">
+        <div className="min-w-max">
+          <div className="flex justify-between font-mono text-[9px] uppercase tracking-widest text-subtle mb-2">
+            {HEATMAP_MONTHS.map((m, i) => <span key={i}>{m}</span>)}
+          </div>
+          <div className="flex gap-[3px]">
+            {grid.map((col, w) => (
+              <div key={w} className="flex flex-col gap-[3px]">
+                {col.map((lvl, d) => (
+                  <span key={d} className="w-[10px] h-[10px] rounded-[2px]"
+                    style={{ background: cellColor(lvl) }}
+                    title={`${lvl ? lvl * 2 + Math.round(lvl / 2) : 0} episodes`} />
+                ))}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>
@@ -440,7 +442,7 @@ function NowWatching() {
           <Play size={14} className="text-accent" /> Now watching
         </div>
         <div className="text-xs text-muted">Nothing on the screen right now.</div>
-        <Link href="/discover" className="mt-auto flex items-center gap-2 px-4 py-2.5 rounded-xl text-[11px] font-black uppercase tracking-widest text-black bg-accent hover:bg-accent-bright transition-colors">
+        <Link href="/discover" className="mt-auto flex items-center justify-center gap-2 min-h-11 px-4 py-2.5 rounded-xl text-[11px] font-black uppercase tracking-widest text-black bg-accent hover:bg-accent-bright active:scale-95 transition-[transform,background-color]">
           <Sparkles size={13} /> Find something
         </Link>
       </section>
@@ -485,7 +487,7 @@ function NowWatching() {
         </div>
       </div>
       <Link href={malId ? `/anime/${malId}` : "/watchlist"}
-        className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-[11px] font-black uppercase tracking-widest text-black bg-accent hover:bg-accent-bright transition-colors">
+        className="flex items-center justify-center gap-2 min-h-11 px-4 py-2.5 rounded-xl text-[11px] font-black uppercase tracking-widest text-black bg-accent hover:bg-accent-bright active:scale-95 transition-[transform,background-color]">
         <Play size={13} /> Continue
       </Link>
     </section>
@@ -514,12 +516,12 @@ function StatBand({ archiveCount }: { archiveCount: number }) {
       {stats.map((s, i) => {
         const Icon = s.icon
         return (
-          <div key={s.id} className="p-5 flex flex-col gap-2">
-            <div className="flex items-center justify-between">
+          <div key={s.id} className="p-4 sm:p-5 flex flex-col gap-2">
+            <div className="flex items-center justify-between gap-2">
               <span style={{ color: s.color }}><Icon size={17} /></span>
               <Sparkline series={s.series} color={s.color} />
             </div>
-            <div className="text-2xl font-black text-foreground tabular-nums tracking-tighter">
+            <div className="text-xl sm:text-2xl font-black text-foreground tabular-nums tracking-tighter">
               <CountValue value={s.value} />
             </div>
             <div className="font-mono text-[10px] uppercase tracking-widest text-subtle">{s.label}</div>
@@ -578,7 +580,7 @@ function Favorites() {
           Edit list <ChevronRight size={13} />
         </button>
       </div>
-      <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
         {list.map(f => {
           const card = (
             <>
@@ -598,7 +600,7 @@ function Favorites() {
             </>
           )
           return f.malId
-            ? <Link key={f.id} href={`/anime/${f.malId}`} className="flex flex-col gap-2 hover:opacity-90 transition-opacity">{card}</Link>
+            ? <Link key={f.id} href={`/anime/${f.malId}`} className="flex flex-col gap-2 hover:opacity-90 active:scale-95 transition-[transform,opacity]">{card}</Link>
             : <div key={f.id} className="flex flex-col gap-2">{card}</div>
         })}
       </div>

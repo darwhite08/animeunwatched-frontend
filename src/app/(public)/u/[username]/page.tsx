@@ -367,8 +367,8 @@ export default function UserProfilePage({
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-[var(--app-bg)]/40 to-[var(--app-bg)]" />
         </div>
 
-        <div className="relative z-10 max-w-6xl mx-auto px-6 pt-20 pb-16">
-          <div className="flex flex-col md:flex-row items-center md:items-end gap-10">
+        <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 pt-20 pb-16">
+          <div className="flex flex-col md:flex-row items-center md:items-end gap-8 sm:gap-10">
 
             {/* Avatar */}
             <motion.div
@@ -417,7 +417,7 @@ export default function UserProfilePage({
                   {user.grade}
                 </div>
 
-                <h1 className="flex items-center justify-center gap-3 text-5xl md:text-7xl font-black tracking-tighter uppercase italic text-foreground leading-none md:justify-start">
+                <h1 className="flex items-center justify-center gap-2 sm:gap-3 flex-wrap text-4xl sm:text-5xl md:text-7xl font-black tracking-tighter uppercase italic text-foreground leading-none md:justify-start break-words">
                   {user.displayName}
                   <VerifiedBadge kind={realUser?.verifiedKind} size={36} />
                   {foundingSerial != null && <FoundingBadge serial={foundingSerial} size={22} />}
@@ -446,7 +446,7 @@ export default function UserProfilePage({
                 {!isOwnProfile && (
                 <button
                   onClick={toggleFollow}
-                  className={`flex items-center gap-2 px-7 py-3 rounded-2xl text-sm font-black uppercase tracking-widest transition-all duration-300 ${
+                  className={`flex items-center justify-center gap-2 min-h-11 px-7 py-3 rounded-2xl text-sm font-black uppercase tracking-widest transition-all duration-300 active:scale-95 ${
                     following
                       ? "bg-surface border border-border text-muted hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/20"
                       : "bg-accent text-black hover:bg-accent-bright shadow-[0_0_32px_rgba(99,102,241,0.35)] hover:-translate-y-0.5"
@@ -465,7 +465,7 @@ export default function UserProfilePage({
                 {!isOwnProfile && (
                 <button
                   onClick={handleMessage}
-                  className="flex items-center gap-2 px-5 py-3 rounded-2xl text-sm font-black uppercase tracking-widest bg-surface border border-border text-muted hover:bg-surface hover:text-foreground transition-all duration-300"
+                  className="flex items-center justify-center gap-2 min-h-11 px-5 py-3 rounded-2xl text-sm font-black uppercase tracking-widest bg-surface border border-border text-muted hover:bg-surface hover:text-foreground transition-all duration-300 active:scale-95"
                 >
                   <Mail size={15} /> Message
                 </button>
@@ -482,8 +482,8 @@ export default function UserProfilePage({
       </section>
 
       {/* ── STAT CARDS ── */}
-      <section className="max-w-6xl mx-auto px-6 -mt-4">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-5">
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 -mt-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-5">
           {stats.map((stat, i) => (
             <motion.div
               key={stat.label}
@@ -491,12 +491,12 @@ export default function UserProfilePage({
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.08, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-              className={`group relative overflow-hidden p-7 rounded-[2rem] border border-border bg-surface hover:bg-surface-2 transition-all duration-500 cursor-default`}
+              className={`group relative overflow-hidden p-5 sm:p-7 rounded-[2rem] border border-border bg-surface hover:bg-surface-2 transition-all duration-500 cursor-default`}
             >
-              <div className={`mb-5 ${stat.color} opacity-80 group-hover:opacity-100 transition-opacity`}>
+              <div className={`mb-4 sm:mb-5 ${stat.color} opacity-80 group-hover:opacity-100 transition-opacity`}>
                 <stat.icon size={26} strokeWidth={1.5} />
               </div>
-              <p className="text-3xl font-black text-foreground tracking-tighter">{stat.value}</p>
+              <p className="text-2xl sm:text-3xl font-black text-foreground tracking-tighter">{stat.value}</p>
               <p className="mt-2 text-[9px] font-black text-subtle uppercase tracking-[0.25em]">
                 {stat.label}
               </p>
@@ -507,7 +507,7 @@ export default function UserProfilePage({
       </section>
 
       {/* ── WATCHLIST PREVIEW TAB ── */}
-      <section className="max-w-6xl mx-auto px-6 mt-10">
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 mt-10">
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -590,7 +590,7 @@ export default function UserProfilePage({
       </section>
 
       {/* ── MAIN CONTENT ── */}
-      <div className="max-w-6xl mx-auto px-6 mt-16 grid lg:grid-cols-12 gap-12">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 mt-16 grid lg:grid-cols-12 gap-12">
 
         {/* LEFT COLUMN */}
         <div className="lg:col-span-7 space-y-14">

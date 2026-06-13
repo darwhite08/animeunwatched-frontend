@@ -302,7 +302,7 @@ export default function CreatorSpotlightPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-6xl md:text-8xl font-black italic uppercase tracking-tighter leading-none text-foreground"
+            className="text-4xl sm:text-6xl md:text-8xl font-black italic uppercase tracking-tighter leading-none text-foreground"
           >
             Creator<span className="text-accent">.</span>
             <br />

@@ -143,7 +143,7 @@ export default function PopularAnimePage() {
             Community Pulse
           </p>
         </div>
-        <h1 className="text-6xl font-black tracking-tighter uppercase italic text-foreground leading-none mb-2">
+        <h1 className="text-4xl sm:text-6xl font-black tracking-tighter uppercase italic text-foreground leading-none mb-2">
           Trending in the Archive<span className="text-accent">.</span>
         </h1>
         <p className="text-subtle text-sm">What the community is watching, adding, and reviewing right now</p>

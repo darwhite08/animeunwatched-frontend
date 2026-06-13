@@ -288,7 +288,7 @@ export default function AnimeDiscussionsPage() {
               <Users size={12} />
               Community · Anime Threads
             </div>
-            <h1 className="text-6xl font-black tracking-tighter uppercase italic leading-[0.9] text-foreground">
+            <h1 className="text-4xl sm:text-6xl font-black tracking-tighter uppercase italic leading-[0.9] text-foreground">
               Anime<br />
               <span className="bg-gradient-to-r from-indigo-400 via-violet-400 to-purple-400 bg-clip-text text-transparent">
                 Discussions

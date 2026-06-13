@@ -88,7 +88,7 @@ export default function NewAnimePage() {
 
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-8">
           <div>
-            <h1 className="text-6xl font-black tracking-tighter uppercase italic text-foreground leading-none mb-2">
+            <h1 className="text-4xl sm:text-6xl font-black tracking-tighter uppercase italic text-foreground leading-none mb-2">
               New to the Archive<span className="text-violet-500">.</span>
             </h1>
             <div className="flex items-center gap-3 mt-3">

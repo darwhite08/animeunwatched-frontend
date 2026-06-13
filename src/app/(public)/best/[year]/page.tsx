@@ -191,7 +191,7 @@ export default function BestOfYearPage({ params }: { params: Promise<{ year: str
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-7xl md:text-9xl font-black italic uppercase tracking-tighter leading-none text-foreground"
+            className="text-4xl sm:text-7xl md:text-9xl font-black italic uppercase tracking-tighter leading-none text-foreground"
           >
             Best of<span style={{color:"var(--app-accent)"}}>.</span>
             <br />

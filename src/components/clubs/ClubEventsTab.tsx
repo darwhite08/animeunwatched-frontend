@@ -107,20 +107,20 @@ function EventComposer({ slug, onClose, onDone }: { slug: string; onClose: () =>
       <div className="w-full max-w-md rounded-2xl border border-border bg-surface p-5" onClick={(e) => e.stopPropagation()}>
         <div className="mb-3 flex items-center justify-between"><h3 className="text-lg font-bold text-foreground">New event</h3><button onClick={onClose}><X size={20} className="text-muted" /></button></div>
         <div className="space-y-3">
-          <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Event title" className="w-full rounded-xl border border-border bg-background px-3 py-2.5 text-sm text-foreground outline-none focus:border-accent" />
+          <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Event title" className="w-full rounded-xl border border-border bg-background px-3 py-2.5 text-base sm:text-sm text-foreground outline-none focus:border-accent" />
           <div className="flex flex-wrap gap-1.5">
             {(["WATCH_PARTY", "AMA", "GAME_NIGHT", "GENERAL"] as const).map((k) => (
               <button key={k} onClick={() => setKind(k)} className={`rounded-full px-3 py-1 text-xs font-semibold ${kind === k ? "bg-accent text-black" : "bg-background text-muted"}`}>{KIND_LABEL[k]}</button>
             ))}
           </div>
-          <label className="block text-xs text-muted">Starts at<input type="datetime-local" value={startsAt} onChange={(e) => setStartsAt(e.target.value)} className="mt-1 w-full rounded-xl border border-border bg-background px-3 py-2.5 text-sm text-foreground outline-none focus:border-accent" /></label>
+          <label className="block text-xs text-muted">Starts at<input type="datetime-local" value={startsAt} onChange={(e) => setStartsAt(e.target.value)} className="mt-1 w-full rounded-xl border border-border bg-background px-3 py-2.5 text-base sm:text-sm text-foreground outline-none focus:border-accent" /></label>
           {kind === "WATCH_PARTY" && (
             <div className="flex gap-2">
-              <input value={malId} onChange={(e) => setMalId(e.target.value.replace(/\D/g, ""))} inputMode="numeric" placeholder="MAL ID (optional)" className="flex-1 rounded-xl border border-border bg-background px-3 py-2.5 text-sm text-foreground outline-none focus:border-accent" />
-              <input value={episode} onChange={(e) => setEpisode(e.target.value.replace(/\D/g, ""))} inputMode="numeric" placeholder="Ep #" className="w-24 rounded-xl border border-border bg-background px-3 py-2.5 text-sm text-foreground outline-none focus:border-accent" />
+              <input value={malId} onChange={(e) => setMalId(e.target.value.replace(/\D/g, ""))} inputMode="numeric" placeholder="MAL ID (optional)" className="flex-1 rounded-xl border border-border bg-background px-3 py-2.5 text-base sm:text-sm text-foreground outline-none focus:border-accent" />
+              <input value={episode} onChange={(e) => setEpisode(e.target.value.replace(/\D/g, ""))} inputMode="numeric" placeholder="Ep #" className="w-24 rounded-xl border border-border bg-background px-3 py-2.5 text-base sm:text-sm text-foreground outline-none focus:border-accent" />
             </div>
           )}
-          <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={2} placeholder="Details (optional)" className="w-full resize-none rounded-xl border border-border bg-background px-3 py-2.5 text-sm text-foreground outline-none focus:border-accent" />
+          <textarea value={description} onChange={(e) => setDescription(e.target.value)} rows={2} placeholder="Details (optional)" className="w-full resize-none rounded-xl border border-border bg-background px-3 py-2.5 text-base sm:text-sm text-foreground outline-none focus:border-accent" />
           <button onClick={save} disabled={!canSave} className="w-full rounded-xl bg-accent py-2.5 text-sm font-bold text-black disabled:opacity-40">{create.isPending ? "Creating…" : "Create event"}</button>
         </div>
       </div>

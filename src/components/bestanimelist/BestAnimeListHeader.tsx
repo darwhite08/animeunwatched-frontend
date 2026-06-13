@@ -18,7 +18,7 @@ export default function BestAnimeListHeader() {
             Neural Archive · 30,000+ Titles
           </motion.div>
 
-          <h1 className="text-6xl md:text-8xl font-black text-foreground tracking-tighter uppercase italic leading-[0.85]">
+          <h1 className="text-4xl sm:text-6xl md:text-8xl font-black text-foreground tracking-tighter uppercase italic leading-[0.85]">
             The{" "}
             <span className="text-transparent bg-clip-text"
               style={{ backgroundImage: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent), #d97706)" }}>

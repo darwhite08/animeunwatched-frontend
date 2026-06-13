@@ -56,7 +56,7 @@ export default function TopAnimePage() {
           <Trophy size={18} className="text-accent-bright" />
           <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-accent-bright/60">Neural Rankings</p>
         </div>
-        <h1 className="text-6xl font-black tracking-tighter uppercase italic text-foreground leading-none mb-2">
+        <h1 className="text-4xl sm:text-6xl font-black tracking-tighter uppercase italic text-foreground leading-none mb-2">
           Top Anime<span className="text-accent-bright">.</span>
         </h1>
         <p className="text-subtle text-sm mb-8">Ranked by community score × credibility weighted ratings</p>

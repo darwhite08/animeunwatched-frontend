@@ -10,8 +10,17 @@ import type {
 
 /* ── Auth ── */
 export const register = (body: {
-  email: string; username: string; displayName: string; password: string
+  email: string; username: string; displayName: string; password: string; referredBy?: string
 }) => api<AuthResponse>("/auth/register", { method: "POST", body: JSON.stringify(body) })
+
+/* ── Referrals (invite link) ── */
+export interface MyReferrals {
+  count: number
+  verifiedCount: number
+  repEarned: number
+  recent: { username: string; displayName: string; slug: string | null; avatarUrl: string | null; verified: boolean; joinedAt: string }[]
+}
+export const getMyReferrals = () => api<MyReferrals>("/users/me/referrals")
 
 export const login = (body: { email: string; password: string }) =>
   api<AuthResponse>("/auth/login", { method: "POST", body: JSON.stringify(body) })

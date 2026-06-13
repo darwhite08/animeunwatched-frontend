@@ -15,6 +15,7 @@ import { useActivityFeed } from "@/hooks/useActivityFeed"
 import { useImageUpload } from "@/hooks/useImageUpload"
 import { useToast } from "@/stores/toast.store"
 import * as ep from "@/lib/api/endpoints"
+import { InviteCard } from "@/components/social/InviteCard"
 
 /** Ninja-tier title from reputation (matches the sidebar gamification strip). */
 const NINJA_TIERS: [number, string][] = [
@@ -860,6 +861,8 @@ export default function ProfileV2() {
       </div>
 
       <StatBand archiveCount={archiveCount} />
+
+      <InviteCard />
 
       <div className="grid gap-5 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)] items-start">
         <Favorites />

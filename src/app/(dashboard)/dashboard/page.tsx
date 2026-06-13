@@ -70,7 +70,7 @@ function StreakBento({ reputation }: { reputation: number }) {
             <div className="p-2 rounded-lg bg-orange-500/10 text-orange-500"><Flame size={20} /></div>
           </div>
         </div>
-        <p className="text-8xl font-black tracking-tighter relative z-10 text-foreground">
+        <p className="text-6xl sm:text-8xl font-black tracking-tighter relative z-10 text-foreground">
           {streak}<span className="text-xl text-subtle ml-2 italic font-medium">Days</span>
         </p>
         {isAtRisk && streak > 0 && (

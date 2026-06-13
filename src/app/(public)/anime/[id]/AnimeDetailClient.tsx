@@ -289,7 +289,7 @@ function AnimeDetail({ anime, rawAnime, currentEpisode = 0 }: { anime: Anime; ra
           <span className="text-sm text-subtle">{anime.year}</span>
 
           {/* Actions */}
-          <div className="ml-auto flex items-center gap-3">
+          <div className="w-full sm:w-auto sm:ml-auto flex flex-wrap items-center gap-2 sm:gap-3">
             {trailerYoutubeId && (
               <a
                 href={rawAnime?.trailerUrl ?? `https://www.youtube.com/watch?v=${trailerYoutubeId}`}

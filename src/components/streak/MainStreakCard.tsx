@@ -14,7 +14,7 @@ export const MainStreakCard = ({ currentStreak, bestStreak }: { currentStreak: n
           </div>
           <span className="text-sm font-black uppercase tracking-[0.3em] text-muted">Active Momentum</span>
         </div>
-        <h2 className="text-8xl font-black tracking-tighter text-foreground">
+        <h2 className="text-6xl sm:text-8xl font-black tracking-tighter text-foreground">
           {currentStreak}<span className="text-3xl text-subtle ml-2 italic">days</span>
         </h2>
       </div>

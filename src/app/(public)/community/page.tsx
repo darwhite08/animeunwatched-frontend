@@ -675,7 +675,7 @@ export default function CommunityPage() {
               </button>
             ))}
           </div>
-          <p className="text-[11px] text-muted font-mono uppercase tracking-widest tabular-nums shrink-0">
+          <p className="hidden sm:block text-[11px] text-muted font-mono uppercase tracking-widest tabular-nums shrink-0">
             {posts.length > 0 ? `${posts.length}+ posts · The Dojo` : "The Dojo — share your thoughts"}
           </p>
         </div>

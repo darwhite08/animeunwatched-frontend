@@ -1,6 +1,7 @@
 "use client"
 
 import { motion } from "framer-motion"
+import { DURATION, EASE } from "@/lib/design/tokens"
 import { Plus, Check } from "lucide-react"
 import { Star, Play } from "@phosphor-icons/react"
 import Image from "next/image"
@@ -35,7 +36,8 @@ export default function AnimeCard({ anime, index, onClick }: AnimeCardProps) {
       initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ delay: Math.min(index * 0.035, 0.4), ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: DURATION.base, ease: EASE.out, delay: Math.min(index * 0.035, 0.4) }}
+      whileTap={{ scale: 0.96 }}
       onClick={() => onClick(anime)}
       className="group relative aspect-[2/3] w-full cursor-pointer"
     >
@@ -80,16 +82,17 @@ export default function AnimeCard({ anime, index, onClick }: AnimeCardProps) {
           </div>
         )}
 
-        {/* Watchlist button */}
+        {/* Watchlist button — always tappable on touch; hover-reveal on desktop */}
         <button
           onClick={handleToggleList}
-          className={`absolute top-3 right-3 h-7 w-7 flex items-center justify-center rounded-full transition-all duration-300 shadow-lg ${
+          aria-label={inList ? "Remove from watchlist" : "Add to watchlist"}
+          className={`absolute top-2 right-2 h-9 w-9 flex items-center justify-center rounded-full transition-all duration-300 shadow-lg active:scale-90 ${
             inList
               ? "bg-emerald-500 opacity-100 scale-100"
-              : "bg-accent/90 opacity-0 scale-75 group-hover:opacity-100 group-hover:scale-100"
+              : "bg-accent/90 opacity-100 scale-100 sm:opacity-0 sm:scale-75 sm:group-hover:opacity-100 sm:group-hover:scale-100"
           }`}
         >
-          {inList ? <Check size={12} className="text-foreground" /> : <Plus size={13} className="text-foreground" />}
+          {inList ? <Check size={14} className="text-foreground" /> : <Plus size={15} className="text-foreground" />}
         </button>
 
         {/* Live badge */}

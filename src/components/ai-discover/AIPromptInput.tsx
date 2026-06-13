@@ -59,20 +59,20 @@ export default function AIPromptInput({ onSearch }: AIPromptInputProps) {
           boxShadow: "0 24px 80px rgba(0,0,0,0.6), 0 0 0 0.5px color-mix(in srgb, var(--app-accent) 8%, transparent) inset",
         }}>
         {/* Terminal header */}
-        <div className="flex items-center justify-between px-6 py-3 border-b border-border">
-          <div className="flex items-center gap-3">
-            <div className="flex gap-1.5">
+        <div className="flex items-center justify-between gap-3 px-4 sm:px-6 py-3 border-b border-border">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="flex gap-1.5 shrink-0">
               <div className="w-2.5 h-2.5 rounded-full bg-red-500/30 border border-red-500/50" />
               <div className="w-2.5 h-2.5 rounded-full bg-accent/30 border border-accent/50" />
               <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/30 border border-emerald-500/50" />
             </div>
-            <div className="h-4 w-px bg-surface mx-2" />
-            <div className="flex items-center gap-2 text-accent-bright">
-              <Terminal size={13} className="animate-pulse" />
-              <span className="text-[10px] font-black uppercase tracking-[0.2em]">Neural_Query_Interface</span>
+            <div className="hidden sm:block h-4 w-px bg-surface mx-2 shrink-0" />
+            <div className="flex items-center gap-2 text-accent-bright min-w-0">
+              <Terminal size={13} className="animate-pulse shrink-0" />
+              <span className="text-[10px] font-black uppercase tracking-[0.2em] truncate">Neural_Query_Interface</span>
             </div>
           </div>
-          <div className="flex items-center gap-1.5 text-subtle text-[9px] font-mono">
+          <div className="hidden sm:flex items-center gap-1.5 text-subtle text-[9px] font-mono shrink-0">
             <Command size={9} /> SHIFT+ENTER
           </div>
         </div>
@@ -87,7 +87,7 @@ export default function AIPromptInput({ onSearch }: AIPromptInputProps) {
               onKeyDown={handleKey}
               placeholder="Query the archives… (e.g. 'Seinen with philosophical depth and no filler')"
               rows={3}
-              className="w-full bg-transparent border-none rounded-xl p-4 text-lg text-foreground placeholder:text-subtle focus:outline-none resize-none font-medium leading-relaxed"
+              className="w-full bg-transparent border-none rounded-xl p-3 sm:p-4 text-base sm:text-lg text-foreground placeholder:text-subtle focus:outline-none resize-none font-medium leading-relaxed"
             />
             <AnimatePresence>
               {isFocused && (
@@ -102,8 +102,8 @@ export default function AIPromptInput({ onSearch }: AIPromptInputProps) {
             </AnimatePresence>
           </div>
 
-          {/* Suggestions */}
-          <div className="flex flex-wrap gap-2 mt-4 px-2">
+          {/* Suggestions — horizontally scrollable on phones to avoid cramped wrapping */}
+          <div className="flex sm:flex-wrap gap-2 mt-4 px-2 -mx-2 overflow-x-auto scrollbar-hide [-webkit-overflow-scrolling:touch] sm:overflow-visible sm:mx-0">
             {SUGGESTIONS.map((text, i) => (
               <motion.button
                 key={text}
@@ -111,7 +111,7 @@ export default function AIPromptInput({ onSearch }: AIPromptInputProps) {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.06 }}
                 onClick={() => setPrompt(text)}
-                className="group/btn relative px-3 py-1.5 text-[10px] font-bold rounded-lg border border-border text-muted hover:text-accent-bright hover:border-accent/20 transition-all duration-300"
+                className="group/btn relative shrink-0 px-3 py-1.5 text-[10px] font-bold rounded-lg border border-border text-muted hover:text-accent-bright hover:border-accent/20 active:scale-95 transition-all duration-300"
               >
                 <span className="relative z-10 uppercase tracking-wider">{text}</span>
               </motion.button>
@@ -119,7 +119,7 @@ export default function AIPromptInput({ onSearch }: AIPromptInputProps) {
           </div>
 
           {/* Action row */}
-          <div className="mt-5 flex items-center justify-end gap-4 px-2">
+          <div className="mt-5 flex items-center justify-end gap-4 px-2 max-sm:px-0">
             <div className="flex-1 hidden md:flex items-center gap-3 text-[9px] font-black text-subtle uppercase tracking-[0.3em]">
               <Cpu size={11} />
               <span>Hardware Acceleration: ON</span>
@@ -133,11 +133,11 @@ export default function AIPromptInput({ onSearch }: AIPromptInputProps) {
               whileTap={{ scale: 0.97 }}
               onClick={handleSubmit}
               disabled={loading || !prompt.trim()}
-              className="relative group/submit overflow-hidden px-8 py-3 disabled:opacity-40 disabled:cursor-not-allowed rounded-xl transition-all font-black text-black text-xs uppercase tracking-widest"
+              className="relative group/submit overflow-hidden max-sm:flex-1 min-h-11 px-8 py-3 disabled:opacity-40 disabled:cursor-not-allowed rounded-xl transition-all font-black text-black text-xs uppercase tracking-widest"
               style={{ background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))", boxShadow: "0 4px 20px color-mix(in srgb, var(--app-accent) 35%, transparent)" }}
             >
               <div className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/15 to-transparent -translate-x-full group-hover/submit:animate-[shimmer_1.5s_infinite]" />
-              <div className="relative z-10 flex items-center gap-2.5">
+              <div className="relative z-10 flex items-center justify-center gap-2.5">
                 {loading ? (
                   <><Loader2 className="w-4 h-4 animate-spin text-black" /><span className="text-xs font-black text-black uppercase tracking-widest italic">Analyzing…</span></>
                 ) : (

@@ -64,10 +64,10 @@ export default function FilterDrawer({
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", damping: 25, stiffness: 200 }}
-            className="fixed right-0 top-0 bottom-0 w-full max-w-xs bg-surface border-l border-border z-[101] flex flex-col pr-safe"
+            className="fixed right-0 top-0 bottom-0 w-full max-w-xs bg-surface border-l border-border z-[101] flex flex-col pr-safe pt-safe"
           >
             {/* Header */}
-            <div className="flex items-center justify-between p-8 border-b border-border">
+            <div className="flex items-center justify-between p-6 sm:p-8 border-b border-border">
               <div className="flex items-center gap-3">
                 <SlidersHorizontal size={16} className="text-accent-bright" />
                 <h2 className="text-base font-black text-foreground uppercase italic tracking-tighter">
@@ -80,13 +80,14 @@ export default function FilterDrawer({
                   </span>
                 )}
               </div>
-              <button onClick={onClose} className="p-2 hover:bg-surface rounded-full text-muted hover:text-foreground transition-colors">
-                <X size={18} />
+              <button onClick={onClose} aria-label="Close filters"
+                className="flex h-11 w-11 items-center justify-center -mr-2 hover:bg-surface rounded-full text-muted hover:text-foreground active:scale-90 transition-all">
+                <X size={20} />
               </button>
             </div>
 
             {/* Filters */}
-            <div data-lenis-prevent className="flex-1 overflow-y-auto px-8 overscroll-contain">
+            <div data-lenis-prevent className="flex-1 overflow-y-auto px-6 sm:px-8 overscroll-contain [-webkit-overflow-scrolling:touch]">
               <FilterCheckboxGroup
                 title={genreSection.title}
                 options={genreSection.options}
@@ -102,19 +103,20 @@ export default function FilterDrawer({
             </div>
 
             {/* Footer */}
-            <div className="p-8 border-t border-border flex gap-3">
+            <div className="p-6 sm:p-8 pb-[max(1.5rem,env(safe-area-inset-bottom))] border-t border-border flex gap-3">
               <button
                 onClick={() => { onClose() }}
-                className="flex-1 py-3.5 bg-accent hover:bg-accent-bright rounded-xl text-[10px] font-black text-foreground uppercase tracking-widest transition-colors"
+                className="flex-1 min-h-11 bg-accent hover:bg-accent-bright rounded-xl text-[10px] font-black text-foreground uppercase tracking-widest active:scale-[0.98] transition-all"
               >
                 Show {resultCount} Results
               </button>
               <button
                 onClick={() => { onReset(); onClose() }}
-                className="p-3.5 bg-surface hover:bg-surface rounded-xl text-muted hover:text-foreground transition-colors"
+                aria-label="Reset filters"
+                className="flex h-11 w-11 items-center justify-center bg-surface hover:bg-surface rounded-xl text-muted hover:text-foreground active:scale-90 transition-all"
                 title="Reset filters"
               >
-                <RotateCcw size={15} />
+                <RotateCcw size={16} />
               </button>
             </div>
           </motion.div>

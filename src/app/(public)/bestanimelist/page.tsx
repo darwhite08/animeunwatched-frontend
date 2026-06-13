@@ -79,7 +79,7 @@ function FilterPill({ active, onClick, children }: { active: boolean; onClick: (
   return (
     <button
       onClick={onClick}
-      className={`px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider border transition-all whitespace-nowrap ${
+      className={`flex min-h-9 items-center px-3.5 rounded-full text-[10px] font-black uppercase tracking-wider border transition-all whitespace-nowrap shrink-0 active:scale-95 ${
         active
           ? "bg-accent/20 border-accent/50 text-accent-bright"
           : "bg-surface border-border text-muted hover:border-border hover:text-muted"
@@ -191,25 +191,26 @@ export default function BestAnimeListPage() {
     <div className="min-h-screen bg-background pb-40">
       <BestAnimeListHeader />
 
-      <div className="max-w-7xl mx-auto px-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
         {/* Toolbar */}
-        <div className="flex flex-wrap items-center justify-between gap-4 mb-4 py-4 border-b border-border">
+        <div className="flex flex-col gap-3 mb-4 py-4 border-b border-border lg:flex-row lg:flex-wrap lg:items-center lg:justify-between lg:gap-4">
           <CategoryTabs active={category} onChange={handleCategoryChange} />
-          <div className="flex items-center gap-3">
-            <div className="relative group">
-              <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-subtle group-focus-within:text-accent-bright transition-colors" />
+          <div className="flex items-center gap-2 sm:gap-3">
+            <div className="relative group flex-1 lg:flex-initial">
+              <Search size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-subtle group-focus-within:text-accent-bright transition-colors" />
               <input value={query} onChange={e => handleQueryChange(e.target.value)}
                 placeholder="Search anime…"
-                className="pl-8 pr-8 py-2 bg-surface border border-border rounded-full text-[11px] font-medium text-foreground placeholder:text-subtle outline-none focus:border-accent/50 w-44 focus:w-64 transition-all duration-300" />
+                className="h-11 w-full pl-10 pr-9 bg-surface border border-border rounded-full text-base sm:text-sm font-medium text-foreground placeholder:text-subtle outline-none focus:border-accent/50 transition-all duration-300 lg:w-48 lg:focus:w-64" />
               {query && (
-                <button onClick={() => setQuery("")} className="absolute right-3 top-1/2 -translate-y-1/2">
-                  <X size={11} className="text-subtle hover:text-foreground" />
+                <button onClick={() => setQuery("")} aria-label="Clear search"
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 flex h-7 w-7 items-center justify-center rounded-full text-subtle hover:text-foreground active:scale-90 transition-all">
+                  <X size={14} />
                 </button>
               )}
             </div>
             <button onClick={() => setFilterOpen(true)}
-              className="flex items-center gap-2 px-5 py-2 bg-surface border border-border rounded-full text-[10px] font-black text-foreground uppercase tracking-widest hover:bg-surface transition-all relative">
-              <ListFilter size={13} className="text-accent" />
+              className="flex h-11 items-center gap-2 px-5 bg-surface border border-border rounded-full text-[10px] font-black text-foreground uppercase tracking-widest active:scale-95 transition-all relative shrink-0">
+              <ListFilter size={14} className="text-accent" />
               Refine
               {activeFilterCount > 0 && (
                 <span className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full text-[8px] font-black text-black flex items-center justify-center" style={{background:"linear-gradient(135deg,var(--app-accent-bright),var(--app-accent))"}}>
@@ -220,10 +221,10 @@ export default function BestAnimeListPage() {
           </div>
         </div>
 
-        {/* Advanced filter chips */}
-        <div className="flex flex-wrap items-center gap-2 mb-8 pb-4 border-b border-border">
+        {/* Advanced filter chips — horizontally scrollable on phones */}
+        <div className="flex items-center gap-2 mb-8 pb-4 border-b border-border overflow-x-auto scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-0 lg:flex-wrap lg:overflow-visible">
           {/* Decade */}
-          <span className="text-[9px] font-black text-subtle uppercase tracking-widest mr-1">Era</span>
+          <span className="text-[9px] font-black text-subtle uppercase tracking-widest mr-1 shrink-0">Era</span>
           {DECADE_OPTIONS.map(d => (
             <FilterPill key={d.label} active={selectedDecade === d.label}
               onClick={() => { setSelectedDecade(prev => prev === d.label ? "" : d.label); setPage(1) }}>
@@ -231,10 +232,10 @@ export default function BestAnimeListPage() {
             </FilterPill>
           ))}
 
-          <div className="w-px h-4 bg-surface mx-1" />
+          <div className="w-px h-4 bg-border mx-1 shrink-0" />
 
           {/* Score */}
-          <span className="text-[9px] font-black text-subtle uppercase tracking-widest mr-1">Score</span>
+          <span className="text-[9px] font-black text-subtle uppercase tracking-widest mr-1 shrink-0">Score</span>
           {SCORE_OPTIONS.map(s => (
             <FilterPill key={s.label} active={selectedScore === s.min}
               onClick={() => { setSelectedScore(prev => prev === s.min ? null : s.min) }}>
@@ -242,10 +243,10 @@ export default function BestAnimeListPage() {
             </FilterPill>
           ))}
 
-          <div className="w-px h-4 bg-surface mx-1" />
+          <div className="w-px h-4 bg-border mx-1 shrink-0" />
 
           {/* Status */}
-          <span className="text-[9px] font-black text-subtle uppercase tracking-widest mr-1">Status</span>
+          <span className="text-[9px] font-black text-subtle uppercase tracking-widest mr-1 shrink-0">Status</span>
           {STATUS_OPTIONS.map(st => (
             <FilterPill key={st} active={selectedStatus === st}
               onClick={() => { setSelectedStatus(prev => prev === st ? "" : st); setPage(1) }}>
@@ -253,10 +254,10 @@ export default function BestAnimeListPage() {
             </FilterPill>
           ))}
 
-          <div className="w-px h-4 bg-surface mx-1" />
+          <div className="w-px h-4 bg-border mx-1 shrink-0" />
 
           {/* Season */}
-          <span className="text-[9px] font-black text-subtle uppercase tracking-widest mr-1">Season</span>
+          <span className="text-[9px] font-black text-subtle uppercase tracking-widest mr-1 shrink-0">Season</span>
           {SEASON_OPTIONS.map(s => (
             <FilterPill key={s} active={selectedSeason === s}
               onClick={() => { setSelectedSeason(prev => prev === s ? "" : s) }}>
@@ -264,10 +265,10 @@ export default function BestAnimeListPage() {
             </FilterPill>
           ))}
 
-          <div className="w-px h-4 bg-surface mx-1" />
+          <div className="w-px h-4 bg-border mx-1 shrink-0" />
 
           {/* Episodes */}
-          <span className="text-[9px] font-black text-subtle uppercase tracking-widest mr-1">Eps</span>
+          <span className="text-[9px] font-black text-subtle uppercase tracking-widest mr-1 shrink-0">Eps</span>
           {EPISODE_OPTIONS.map(e => (
             <FilterPill key={e.key} active={selectedEpisodeRange === e.key}
               onClick={() => { setSelectedEpisodeRange(prev => prev === e.key ? "" : e.key) }}>
@@ -277,7 +278,7 @@ export default function BestAnimeListPage() {
 
           {advancedFilterCount > 0 && (
             <>
-              <div className="w-px h-4 bg-surface mx-1" />
+              <div className="w-px h-4 bg-border mx-1 shrink-0" />
               <button onClick={handleReset}
                 className="px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider border border-rose-500/30 bg-rose-500/10 text-rose-400 hover:bg-rose-500/20 transition-all">
                 Clear all

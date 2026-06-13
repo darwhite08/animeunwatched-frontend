@@ -17,22 +17,22 @@ export const AchievementGrid = () => {
   ]
 
   return (
-    <div className="space-y-6">
-      <h4 className="text-xl font-black tracking-tighter px-2 italic">Milestones</h4>
-      <div className="grid gap-4">
+    <div className="space-y-5 sm:space-y-6">
+      <h4 className="text-lg sm:text-xl font-black tracking-tighter px-1 sm:px-2 italic">Milestones</h4>
+      <div className="grid grid-cols-2 lg:grid-cols-1 gap-3 sm:gap-4">
         {achievements.map((item) => (
           <div
             key={item.title}
-            className={`p-6 rounded-[2rem] border border-border bg-surface flex items-center gap-5 group hover:bg-surface transition-all ${item.earned ? "" : "opacity-40"}`}
+            className={`p-4 sm:p-5 lg:p-6 rounded-[1.5rem] sm:rounded-[2rem] border border-border bg-surface flex flex-col lg:flex-row lg:items-center gap-3 sm:gap-4 lg:gap-5 group hover:bg-surface transition-all ${item.earned ? "" : "opacity-40"}`}
           >
-            <div className={`p-4 rounded-2xl bg-background border border-border ${item.color} group-hover:scale-110 transition-transform`}>
+            <div className={`shrink-0 grid place-items-center h-11 w-11 sm:h-12 sm:w-12 rounded-2xl bg-background border border-border ${item.color} group-hover:scale-110 transition-transform`}>
               <item.icon size={20} />
             </div>
-            <div className="flex-1">
-              <p className="font-black text-foreground">{item.title}</p>
-              <p className="text-xs text-subtle uppercase font-bold tracking-tighter">{item.desc}</p>
+            <div className="flex-1 min-w-0">
+              <p className="font-black text-foreground leading-tight">{item.title}</p>
+              <p className="text-[11px] sm:text-xs text-subtle uppercase font-bold tracking-tight">{item.desc}</p>
             </div>
-            <span className="text-[10px] font-black uppercase tracking-widest">
+            <span className="text-[10px] font-black uppercase tracking-widest shrink-0">
               {item.earned ? <span className="text-emerald-400">Unlocked</span> : <span className="text-subtle">{streak} / {item.desc.match(/\d+/)?.[0]}</span>}
             </span>
           </div>

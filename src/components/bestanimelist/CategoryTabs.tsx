@@ -1,6 +1,7 @@
 "use client"
 
 import { motion } from "framer-motion"
+import { SPRING } from "@/lib/design/tokens"
 import { categories } from "./filterData"
 
 interface CategoryTabsProps {
@@ -10,12 +11,12 @@ interface CategoryTabsProps {
 
 export default function CategoryTabs({ active, onChange }: CategoryTabsProps) {
   return (
-    <div className="flex items-center gap-1 overflow-x-auto no-scrollbar py-2">
+    <div className="flex items-center gap-1 overflow-x-auto scrollbar-hide -mx-1 px-1 py-1">
       {categories.map((cat) => (
         <button
           key={cat.id}
           onClick={() => onChange(cat.id)}
-          className="relative flex items-center justify-center px-5 py-2 group outline-none shrink-0"
+          className="relative flex min-h-11 items-center justify-center whitespace-nowrap px-5 py-2 group outline-none shrink-0 transition-transform active:scale-95"
         >
           {/* Background renders BEHIND the label */}
           {active === cat.id && (
@@ -23,7 +24,7 @@ export default function CategoryTabs({ active, onChange }: CategoryTabsProps) {
               layoutId="tab-bg"
               className="absolute inset-0 rounded-full"
               style={{ background: "linear-gradient(135deg,var(--app-accent-bright),var(--app-accent))", boxShadow: "0 0 20px color-mix(in srgb, var(--app-accent) 40%, transparent)" }}
-              transition={{ type: "spring", bounce: 0.2, duration: 0.5 }}
+              transition={SPRING.snappy}
             />
           )}
           <span className={`relative z-10 text-[11px] font-black uppercase tracking-widest transition-colors duration-300 ${

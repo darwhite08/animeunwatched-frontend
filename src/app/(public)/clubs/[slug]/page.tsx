@@ -367,13 +367,13 @@ export default function ClubDetailPage({
         <div className="flex items-center gap-3">
           <Link
             href="/clubs"
-            className="px-5 py-2.5 rounded-xl bg-surface border border-border text-[10px] font-black uppercase tracking-widest text-muted hover:text-foreground hover:border-border transition-all"
+            className="flex items-center px-5 min-h-11 rounded-xl bg-surface border border-border text-[10px] font-black uppercase tracking-widest text-muted hover:text-foreground hover:border-border active:scale-95 transition-all"
           >
             Browse Clubs
           </Link>
           <Link
             href="/clubs/new"
-            className="px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest text-black transition-all"
+            className="flex items-center px-5 min-h-11 rounded-xl text-[10px] font-black uppercase tracking-widest text-black active:scale-95 transition-all"
             style={{ background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))" }}
           >
             Create a Club
@@ -465,11 +465,11 @@ export default function ClubDetailPage({
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,color-mix(in srgb, var(--app-fg) 5%, transparent),transparent_60%)]" />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/30 to-[var(--app-bg)]" />
 
-        <div className="relative z-10 max-w-6xl mx-auto px-6 pt-10 pb-16">
+        <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 pt-8 sm:pt-10 pb-12 sm:pb-16">
           {/* Back */}
           <Link
             href="/clubs"
-            className="inline-flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-muted hover:text-muted transition-colors mb-8 group"
+            className="inline-flex items-center gap-1.5 min-h-11 text-[10px] font-black uppercase tracking-widest text-muted hover:text-muted active:scale-95 transition-all mb-6 sm:mb-8 group"
           >
             <ArrowLeft size={11} className="group-hover:-translate-x-0.5 transition-transform" />
             All Clubs
@@ -483,7 +483,7 @@ export default function ClubDetailPage({
             <p className="text-[10px] font-black uppercase tracking-[0.3em] text-muted mb-3">
               {club.category}
             </p>
-            <h1 className="text-5xl md:text-6xl font-black uppercase italic tracking-tighter text-foreground leading-none mb-4">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-black uppercase italic tracking-tighter text-foreground leading-none mb-4">
               {club.name}
             </h1>
 
@@ -501,7 +501,7 @@ export default function ClubDetailPage({
             <button
               onClick={toggleJoin}
               disabled={joinMut.isPending}
-              className={`px-8 py-3 rounded-2xl text-sm font-black uppercase tracking-widest transition-all duration-300 disabled:opacity-50 ${
+              className={`px-8 min-h-11 rounded-2xl text-sm font-black uppercase tracking-widest transition-all duration-300 active:scale-95 disabled:opacity-50 ${
                 club.isJoined
                   ? "bg-surface border border-border text-muted hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/20"
                   : "bg-accent hover:bg-accent-bright text-black shadow-[0_0_32px_rgba(99,102,241,0.4)] hover:-translate-y-0.5"
@@ -515,12 +515,12 @@ export default function ClubDetailPage({
 
       {/* Tab navigation */}
       <div className="sticky top-[var(--sticky-top,72px)] z-30 border-b border-border bg-background/90 backdrop-blur-md">
-        <div className="max-w-6xl mx-auto px-6 flex items-center gap-1">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 flex items-center gap-1 overflow-x-auto scrollbar-hide">
           {(["threads", "events", "challenges", "members", "leaderboard", "about"] as ClubTab[]).map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`relative px-5 py-4 text-[11px] font-black uppercase tracking-widest capitalize transition-colors ${
+              className={`relative shrink-0 px-4 sm:px-5 py-4 text-[11px] font-black uppercase tracking-widest capitalize transition-colors active:scale-95 ${
                 activeTab === tab ? "text-foreground" : "text-subtle hover:text-muted"
               }`}
             >
@@ -542,7 +542,7 @@ export default function ClubDetailPage({
       </div>
 
       {/* Tab content */}
-      <div className="max-w-6xl mx-auto px-6 pt-8">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-8">
         <AnimatePresence mode="wait">
           {/* ── Threads ── */}
           {activeTab === "threads" && (
@@ -560,7 +560,7 @@ export default function ClubDetailPage({
                 </p>
                 <Link
                   href={`/clubs/${slug}/create-thread`}
-                  className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-accent hover:bg-accent-bright text-[10px] font-black uppercase tracking-widest text-foreground transition-all shadow-[0_0_20px_rgba(99,102,241,0.25)]"
+                  className="flex items-center gap-2 px-5 min-h-11 rounded-xl bg-accent hover:bg-accent-bright text-[10px] font-black uppercase tracking-widest text-foreground transition-all active:scale-95 shadow-[0_0_20px_rgba(99,102,241,0.25)]"
                 >
                   <Plus size={11} /> New Thread
                 </Link>
@@ -573,7 +573,7 @@ export default function ClubDetailPage({
                   <p className="text-[11px] text-subtle mt-1 mb-4">Be the first to start a discussion in {club.name}.</p>
                   <Link
                     href={`/clubs/${slug}/create-thread`}
-                    className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-accent hover:bg-accent-bright text-[10px] font-black uppercase tracking-widest text-black transition-all"
+                    className="inline-flex items-center gap-2 px-5 min-h-11 rounded-xl bg-accent hover:bg-accent-bright text-[10px] font-black uppercase tracking-widest text-black transition-all active:scale-95"
                   >
                     <Plus size={11} /> Start a thread
                   </Link>
@@ -588,7 +588,7 @@ export default function ClubDetailPage({
                   >
                     <Link
                       href={`/threads/${thread.id}`}
-                      className="group flex items-center justify-between gap-4 p-5 rounded-2xl bg-surface border border-border hover:border-accent/25 hover:bg-surface transition-all"
+                      className="group flex items-center justify-between gap-4 p-4 sm:p-5 min-h-[3.5rem] rounded-2xl bg-surface border border-border hover:border-accent/25 hover:bg-surface active:scale-[0.99] transition-all"
                     >
                       <div className="flex-1 min-w-0 space-y-1.5">
                         <h3 className="text-sm font-bold text-foreground group-hover:text-foreground transition-colors line-clamp-1">
@@ -637,7 +637,7 @@ export default function ClubDetailPage({
                 {authUser && (
                   <button
                     onClick={() => setShowCreateChallenge(true)}
-                    className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest text-black transition-all hover:-translate-y-0.5"
+                    className="flex items-center gap-2 px-5 min-h-11 rounded-xl text-[10px] font-black uppercase tracking-widest text-black transition-all hover:-translate-y-0.5 active:scale-95"
                     style={{ background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))", boxShadow: "0 0 20px color-mix(in srgb, var(--app-accent) 25%, transparent)" }}
                   >
                     <Swords size={11} /> New Challenge
@@ -655,7 +655,7 @@ export default function ClubDetailPage({
                   {authUser && (
                     <button
                       onClick={() => setShowCreateChallenge(true)}
-                      className="mt-2 px-6 py-3 rounded-2xl text-[10px] font-black uppercase tracking-widest text-black"
+                      className="mt-2 px-6 min-h-11 rounded-2xl text-[10px] font-black uppercase tracking-widest text-black active:scale-95 transition-transform"
                       style={{ background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))" }}
                     >
                       Create First Challenge

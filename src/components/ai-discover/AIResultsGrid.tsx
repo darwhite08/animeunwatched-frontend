@@ -22,20 +22,20 @@ export default function AIResultsGrid({ results, hasSearched, query }: AIResults
   if (!hasSearched) {
     // Default teaser grid
     return (
-      <section className="py-24 bg-background px-6">
+      <section className="py-12 sm:py-24 bg-background px-4 sm:px-6">
         <div className="max-w-7xl mx-auto">
-          <div className="flex items-end justify-between mb-12">
-            <h2 className="text-4xl font-black text-foreground italic uppercase tracking-tighter">
+          <div className="flex items-end justify-between mb-8 sm:mb-12">
+            <h2 className="text-3xl sm:text-4xl font-black text-foreground italic uppercase tracking-tighter">
               Neural Matches<span style={{color:"var(--app-accent)"}}>.</span>
             </h2>
-            <p className="text-[10px] font-black text-subtle uppercase tracking-widest">
+            <p className="text-[10px] font-black text-subtle uppercase tracking-widest text-right">
               Submit a query to activate
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 opacity-30 pointer-events-none select-none">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8 opacity-30 pointer-events-none select-none">
             {[1,2,3].map(i => (
-              <div key={i} className="aspect-[16/10] bg-surface rounded-[2rem] border border-border animate-pulse" />
+              <div key={i} className="aspect-[16/10] bg-surface rounded-[1.5rem] sm:rounded-[2rem] border border-border animate-pulse" />
             ))}
           </div>
         </div>
@@ -45,14 +45,14 @@ export default function AIResultsGrid({ results, hasSearched, query }: AIResults
 
   return (
     <>
-      <section className="py-24 bg-background px-6">
+      <section className="py-12 sm:py-24 bg-background px-4 sm:px-6">
         <div className="max-w-7xl mx-auto">
-          <div className="flex items-end justify-between mb-12">
+          <div className="flex items-end justify-between mb-8 sm:mb-12">
             <div>
               <motion.h2
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="text-4xl font-black text-foreground italic uppercase tracking-tighter"
+                className="text-3xl sm:text-4xl font-black text-foreground italic uppercase tracking-tighter"
               >
                 Neural Matches<span style={{color:"var(--app-accent)"}}>.</span>
               </motion.h2>
@@ -81,7 +81,7 @@ export default function AIResultsGrid({ results, hasSearched, query }: AIResults
               <p className="text-subtle font-black uppercase tracking-widest text-sm">No matches found — try different keywords</p>
             </motion.div>
           ) : (
-            <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8">
               <AnimatePresence>
                 {results.map((anime, i) => {
                   const inList = has(anime.id)
@@ -94,10 +94,11 @@ export default function AIResultsGrid({ results, hasSearched, query }: AIResults
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: i * 0.06 }}
                       whileHover={{ y: -8 }}
+                      whileTap={{ scale: 0.98 }}
                       onClick={() => setSelectedAnime(anime)}
-                      className="group relative aspect-[16/10] bg-surface rounded-[2rem] border border-border hover:border-accent/30 overflow-hidden p-1 cursor-pointer transition-colors duration-300"
+                      className="group relative aspect-[16/10] bg-surface rounded-[1.5rem] sm:rounded-[2rem] border border-border hover:border-accent/30 overflow-hidden p-1 cursor-pointer transition-colors duration-300"
                     >
-                      <div className="relative h-full w-full rounded-[1.8rem] overflow-hidden flex flex-col justify-end p-5">
+                      <div className="relative h-full w-full rounded-[1.3rem] sm:rounded-[1.8rem] overflow-hidden flex flex-col justify-end p-4 sm:p-5">
                         <img loading="lazy" decoding="async"
                           src={anime.image}
                           alt={anime.title}
@@ -119,10 +120,10 @@ export default function AIResultsGrid({ results, hasSearched, query }: AIResults
                             if (inList) { remove(anime.id); push(`Removed "${anime.title}"`, "info") }
                             else { add(anime); push(`Added "${anime.title}" to watchlist!`, "success") }
                           }}
-                          className={`absolute top-4 right-4 h-8 w-8 rounded-full flex items-center justify-center transition-all ${
+                          className={`absolute top-3 right-3 sm:top-4 sm:right-4 h-9 w-9 rounded-full flex items-center justify-center transition-all active:scale-90 ${
                             inList
                               ? "bg-emerald-500 opacity-100"
-                              : "bg-black/40 border border-border opacity-0 group-hover:opacity-100"
+                              : "bg-black/40 border border-border opacity-100 sm:opacity-0 sm:group-hover:opacity-100"
                           }`}
                         >
                           {inList ? <Check size={13} className="text-foreground" /> : <Plus size={14} className="text-foreground" />}

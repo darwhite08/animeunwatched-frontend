@@ -8,6 +8,7 @@ import {
 } from "lucide-react"
 import Link from "next/link"
 import { VerifiedBadge } from "@/components/social/VerifiedBadge"
+import { fadeUp, ui } from "@/lib/design/tokens"
 
 /* Strip HTML tags + entities to plain text for excerpts (blog bodies are rich HTML). */
 function stripHtml(html: string): string {
@@ -186,19 +187,15 @@ const CATEGORIES: Category[] = ["All", "News", "Deep Dive", "Review", "Feature",
 /* ── BlogCard ── */
 function BlogCard({ blog, index }: { blog: Blog; index: number }) {
   return (
-    <motion.article
-      initial={{ opacity: 0, y: 16 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.06 }}
-    >
+    <motion.article {...fadeUp(index)}>
       <Link
         href={`/blog/${blog.slug}`}
-        className="group block bg-surface-2 border border-border hover:border-accent/30 rounded-2xl overflow-hidden transition-all"
+        className="group block bg-surface-2 border border-border hover:border-accent/30 rounded-2xl overflow-hidden transition-all active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60"
       >
         {/* Cover — real image when available, gradient fallback otherwise.
             Plain <img>: blog covers come from arbitrary content hosts, so we
             don't route them through next/image's remote-host allowlist. */}
-        <div className={`h-40 w-full relative overflow-hidden ${blog.coverImage ? "bg-surface-3" : `bg-gradient-to-br ${blog.coverGradient}`}`}>
+        <div className={`aspect-[16/9] w-full relative overflow-hidden ${blog.coverImage ? "bg-surface-3" : `bg-gradient-to-br ${blog.coverGradient}`}`}>
           {blog.coverImage && (
             /* eslint-disable-next-line @next/next/no-img-element */
             <img
@@ -210,17 +207,17 @@ function BlogCard({ blog, index }: { blog: Blog; index: number }) {
           )}
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-black/20" />
           {/* Category badge */}
-          <span className="absolute top-3 left-3 px-2.5 py-1 rounded-lg bg-black/55 backdrop-blur-md border border-white/10 text-[9px] font-black uppercase tracking-widest text-foreground/90">
+          <span className="absolute top-3 left-3 px-2.5 py-1 rounded-lg bg-black/55 backdrop-blur-md border border-white/10 text-[10px] font-black uppercase tracking-widest text-foreground/90">
             {blog.category}
           </span>
         </div>
 
         {/* Body */}
-        <div className="p-5 space-y-3">
-          <h2 className="text-sm font-black uppercase italic tracking-tight text-foreground leading-snug group-hover:text-accent-bright transition-colors line-clamp-2">
+        <div className="p-4 sm:p-5 space-y-3">
+          <h2 className="text-[15px] sm:text-sm font-black uppercase italic tracking-tight text-foreground leading-snug group-hover:text-accent-bright transition-colors line-clamp-2">
             {blog.title}
           </h2>
-          <p className="text-xs text-muted leading-relaxed line-clamp-2">{blog.excerpt}</p>
+          <p className="text-[13px] sm:text-xs text-muted leading-relaxed line-clamp-2">{blog.excerpt}</p>
 
           {/* Meta */}
           <div className="flex items-center gap-3 text-[10px] text-subtle pt-1 border-t border-border">
@@ -330,7 +327,7 @@ export default function BlogListingPage() {
           cards get the full viewport. Compact so it doesn't dominate on load. */}
       <div className="relative overflow-hidden">
         <div aria-hidden className="absolute inset-0 bg-gradient-to-br from-indigo-950/40 via-violet-950/20 to-transparent pointer-events-none" />
-        <div className="max-w-6xl mx-auto px-6 relative pt-[calc(var(--sticky-top,0px)+28px)] pb-6">
+        <div className={`max-w-6xl mx-auto ${ui.screenX} relative pt-[calc(var(--sticky-top,0px)+28px)] pb-6`}>
           <span className="px-3 py-1 rounded-full bg-accent/10 border border-accent/20 text-[10px] font-black uppercase tracking-widest text-accent-bright">
             Community Long-form
           </span>
@@ -347,17 +344,17 @@ export default function BlogListingPage() {
           scroll → no jitter). Pins right below the global navbar once the hero
           scrolls past it. */}
       <div className="sticky top-[var(--sticky-top,0px)] z-40 bg-background/95 backdrop-blur border-y border-border shadow-[0_4px_12px_color-mix(in_srgb,var(--app-fg)_4%,transparent)]">
-        <div className="max-w-6xl mx-auto px-6 py-2.5 flex items-center gap-3">
+        <div className={`max-w-6xl mx-auto ${ui.screenX} py-2 flex items-center gap-3`}>
           <span className="hidden md:block text-base font-black tracking-tighter uppercase italic text-foreground leading-none shrink-0 mr-1">
             The Chronicle<span style={{color:"var(--app-accent)"}}>.</span>
           </span>
-          <div className="flex items-center gap-1.5 overflow-x-auto -mx-1 px-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-hide -mx-1 px-1">
             {CATEGORIES.map(cat => (
               <button
                 key={cat}
                 onClick={() => setActiveCategory(cat)}
                 aria-pressed={activeCategory === cat}
-                className={`px-3.5 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest whitespace-nowrap transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 ${
+                className={`min-h-11 inline-flex items-center px-4 rounded-full text-[10px] font-black uppercase tracking-widest whitespace-nowrap transition-all active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 ${
                   activeCategory === cat
                     ? "bg-accent text-black shadow-[0_0_16px_color-mix(in_srgb,var(--app-accent)_35%,transparent)]"
                     : "bg-surface border border-border text-muted hover:text-foreground hover:bg-surface-2"
@@ -371,7 +368,7 @@ export default function BlogListingPage() {
       </div>
 
       {/* Main grid — left feed + sticky right rail, independent scroll */}
-      <div className="max-w-6xl mx-auto px-6 pt-6 grid lg:grid-cols-3 gap-8">
+      <div className={`max-w-6xl mx-auto ${ui.screenX} pt-6 grid lg:grid-cols-3 gap-8`}>
 
         {/* Blog grid (2/3) */}
         <div className="lg:col-span-2">
@@ -381,7 +378,7 @@ export default function BlogListingPage() {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="grid sm:grid-cols-2 gap-6"
+              className="grid sm:grid-cols-2 gap-4 sm:gap-6"
             >
               {filtered.map((blog, i) => (
                 <BlogCard key={blog.id} blog={blog} index={i} />
@@ -451,7 +448,7 @@ export default function BlogListingPage() {
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: i * 0.03 }}
-                  className="px-3 py-1.5 rounded-full bg-surface-2 border border-border text-[10px] font-bold text-muted hover:text-accent-bright hover:border-accent/30 cursor-pointer transition-colors"
+                  className="inline-flex min-h-11 items-center px-3.5 rounded-full bg-surface-2 border border-border text-[11px] font-bold text-muted hover:text-accent-bright hover:border-accent/30 cursor-pointer transition-colors active:scale-95"
                 >
                   #{tag}
                 </motion.span>

@@ -138,7 +138,7 @@ function TrendingCard({
         <div className="flex gap-2 mt-4 flex-wrap">
           <button
             onClick={handleToggle}
-            className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-300 ${
+            className={`flex items-center gap-1.5 min-h-11 px-4 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-300 active:scale-95 ${
               inList
                 ? "bg-emerald-600 text-foreground hover:bg-emerald-700"
                 : "bg-white text-black hover:bg-accent hover:text-black"
@@ -148,13 +148,13 @@ function TrendingCard({
           </button>
           <Link
             href={`/anime/${anime.id}`}
-            className="flex items-center gap-1.5 px-4 py-2 rounded-xl border border-border bg-surface text-muted hover:bg-surface hover:text-foreground transition-all text-[10px] font-black uppercase tracking-widest"
+            className="flex items-center gap-1.5 min-h-11 px-4 py-2 rounded-xl border border-border bg-surface text-muted hover:bg-surface hover:text-foreground transition-all active:scale-95 text-[10px] font-black uppercase tracking-widest"
           >
             <ArrowRight size={12} /> View Details
           </Link>
           <button
             onClick={() => onPreview(anime)}
-            className="flex items-center gap-1.5 px-4 py-2 rounded-xl border border-accent/20 bg-accent/5 text-accent-bright hover:bg-accent/10 transition-all text-[10px] font-black uppercase tracking-widest"
+            className="flex items-center gap-1.5 min-h-11 px-4 py-2 rounded-xl border border-accent/20 bg-accent/5 text-accent-bright hover:bg-accent/10 transition-all active:scale-95 text-[10px] font-black uppercase tracking-widest"
           >
             Quick Preview
           </button>
@@ -349,14 +349,14 @@ export default function DiscoverPage() {
             </span>
           </div>
 
-          {/* Genre pills */}
-          <div className="flex flex-wrap gap-2">
+          {/* Genre pills — horizontally scrollable on phones to avoid wrap cramp */}
+          <div className="flex sm:flex-wrap gap-2 -mx-4 px-4 sm:mx-0 sm:px-0 overflow-x-auto scrollbar-hide [-webkit-overflow-scrolling:touch] sm:overflow-visible">
             {GENRES.map((genre) => (
               <motion.button
                 key={genre}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setSelectedGenre(genre)}
-                className={`px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all duration-300 ${
+                className={`shrink-0 min-h-11 px-5 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all duration-300 ${
                   selectedGenre === genre
                     ? "bg-accent text-black shadow-[0_0_20px_color-mix(in srgb, var(--app-accent) 40%, transparent)]"
                     : "bg-surface border border-border text-muted hover:text-foreground hover:bg-surface"

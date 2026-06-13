@@ -66,14 +66,14 @@ function SearchContent() {
 
   return (
     <>
-      <div className="max-w-5xl mx-auto px-6 pt-32 pb-32 space-y-10">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 pt-24 sm:pt-32 pb-24 sm:pb-32 space-y-8 sm:space-y-10">
 
         {/* Header */}
         <div>
           <p className="text-[9px] font-mono font-black uppercase tracking-[0.4em] text-accent-bright/60 mb-2">
             Neural Archive Search
           </p>
-          <h1 className="text-4xl md:text-5xl font-black tracking-tighter text-foreground uppercase italic mb-8">
+          <h1 className="text-4xl sm:text-5xl font-black tracking-tighter text-foreground uppercase italic mb-6 sm:mb-8">
             Search<span style={{color:"var(--app-accent)"}}>.</span>
           </h1>
 
@@ -90,12 +90,12 @@ function SearchContent() {
               onChange={e => setQuery(e.target.value)}
               autoFocus
               placeholder="Search anime, users, tags…"
-              className="w-full pl-13 pr-12 py-4 text-lg font-medium bg-white/[0.04] border border-border rounded-2xl text-foreground placeholder:text-subtle outline-none focus:border-accent/50 focus:bg-white/[0.06] transition-all"
+              className="w-full min-h-12 pl-13 pr-12 py-4 text-base sm:text-lg font-medium bg-white/[0.04] border border-border rounded-2xl text-foreground placeholder:text-subtle outline-none focus:border-accent/50 focus:bg-white/[0.06] transition-all"
             />
             {query && (
               <button
                 onClick={() => setQuery("")}
-                className="absolute right-5 top-1/2 -translate-y-1/2 text-subtle hover:text-foreground transition-colors"
+                className="absolute right-2 top-1/2 -translate-y-1/2 h-11 w-11 flex items-center justify-center rounded-xl text-subtle hover:text-foreground active:scale-95 transition-all"
               >
                 <X size={18} />
               </button>
@@ -104,12 +104,12 @@ function SearchContent() {
         </div>
 
         {/* Tabs */}
-        <div className="flex items-center gap-2 border-b border-border pb-0">
+        <div className="flex items-center gap-2 border-b border-border pb-0 -mx-4 px-4 sm:mx-0 sm:px-0 overflow-x-auto scrollbar-hide [-webkit-overflow-scrolling:touch]">
           {TABS.map(t => (
             <button
               key={t.id}
               onClick={() => setTab(t.id)}
-              className={`relative px-5 py-3 text-sm font-black uppercase tracking-wider transition-colors ${
+              className={`relative shrink-0 min-h-11 px-5 py-3 text-sm font-black uppercase tracking-wider transition-colors active:scale-95 ${
                 tab === t.id ? "text-foreground" : "text-subtle hover:text-muted"
               }`}
             >
@@ -137,13 +137,14 @@ function SearchContent() {
                 </div>
               )}
               {!searchLoading && animeResults.length > 0 ? (
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-5">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-5">
                   {animeResults.map((anime, i) => (
                     <motion.div
                       key={anime.id}
                       initial={{ opacity: 0, y: 10 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: i * 0.03 }}
+                      whileTap={{ scale: 0.97 }}
                       onClick={() => setModal(anime)}
                       className="group aspect-[2/3] relative cursor-pointer"
                     >
@@ -186,7 +187,8 @@ function SearchContent() {
                   initial={{ opacity: 0, y: 6 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.05 }}
-                  className="flex items-center gap-4 p-5 rounded-2xl bg-surface border border-border hover:border-border hover:bg-surface transition-all group cursor-pointer"
+                  whileTap={{ scale: 0.98 }}
+                  className="flex items-center gap-4 p-4 sm:p-5 rounded-2xl bg-surface border border-border hover:border-border hover:bg-surface transition-all group cursor-pointer"
                 >
                   <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-lg font-black shrink-0">
                     {u.name[0]}
@@ -213,8 +215,8 @@ function SearchContent() {
                     const d = Date.now() - new Date(post.createdAt).getTime()
                     const timeStr = d < 3600000 ? `${Math.floor(d/60000)}m ago` : d < 86400000 ? `${Math.floor(d/3600000)}h ago` : `${Math.floor(d/86400000)}d ago`
                     return (
-                      <motion.div key={post.id} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}
-                        className="p-5 rounded-2xl bg-surface border border-border hover:border-border transition-all cursor-pointer">
+                      <motion.div key={post.id} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }} whileTap={{ scale: 0.98 }}
+                        className="p-4 sm:p-5 rounded-2xl bg-surface border border-border hover:border-border transition-all cursor-pointer">
                         <p className="font-bold text-muted hover:text-foreground line-clamp-2">{post.content.slice(0, 100)}…</p>
                         <div className="flex items-center gap-4 mt-2 text-xs text-subtle">
                           <span>@{author}</span>

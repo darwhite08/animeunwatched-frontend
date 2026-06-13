@@ -17,6 +17,7 @@ import {
 } from "lucide-react"
 import { useToast } from "@/stores/toast.store"
 import { useClubs, useJoinClub } from "@/hooks/useClubs"
+import { ui } from "@/lib/design/tokens"
 
 /* ── Types ── */
 type Club = {
@@ -81,9 +82,9 @@ function ClubCard({
         </div>
       </div>
 
-      <div className="p-5 space-y-4">
+      <div className="p-4 sm:p-5 space-y-4">
         {/* Name */}
-        <h3 className="text-base font-black uppercase italic tracking-tight text-foreground leading-snug group-hover:text-accent-bright transition-colors">
+        <h3 className="text-base font-black uppercase italic tracking-tight text-foreground leading-snug group-hover:text-accent-bright transition-colors line-clamp-2">
           {club.name}
         </h3>
 
@@ -105,20 +106,21 @@ function ClubCard({
         </div>
 
         {/* Actions */}
-        <div className="flex items-center gap-2 pt-1 border-t border-border">
+        <div className="flex items-center gap-2 pt-3 border-t border-border">
           <button
             onClick={() => onToggleJoin(club.id)}
-            className={`flex-1 py-2 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-200 ${
+            className={`flex-1 min-h-11 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-200 active:scale-95 ${
               club.isJoined
                 ? "bg-surface border border-border text-muted hover:bg-red-500/10 hover:text-red-400 hover:border-red-500/20"
-                : "text-black shadow-[0_0_20px_color-mix(in srgb, var(--app-accent) 30%, transparent)]" // gold
+                : "text-black shadow-[0_0_20px_color-mix(in_srgb,var(--app-accent)_30%,transparent)]"
             }`}
+            style={!club.isJoined ? { background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))" } : undefined}
           >
             {club.isJoined ? "Joined" : "Join Club"}
           </button>
           <Link
             href={`/clubs/${club.slug}`}
-            className="flex items-center gap-1 px-3 py-2 rounded-xl bg-surface border border-border text-[10px] font-black uppercase tracking-widest text-muted hover:text-foreground hover:border-border transition-all"
+            className="flex items-center justify-center gap-1 min-h-11 px-4 rounded-xl bg-surface border border-border text-[10px] font-black uppercase tracking-widest text-muted hover:text-foreground hover:border-border active:scale-95 transition-all"
           >
             View <ChevronRight size={11} />
           </Link>
@@ -170,19 +172,19 @@ export default function ClubsPage() {
           <div className="absolute top-[-30%] right-[-5%] w-[40%] h-[200%] bg-indigo-700/15 blur-[120px] rounded-full" />
           <div className="absolute bottom-[-20%] left-[-10%] w-[35%] h-[150%] bg-violet-900/10 blur-[100px] rounded-full" />
         </div>
-        <div className="relative z-10 max-w-6xl mx-auto px-6 py-16">
+        <div className={`relative z-10 max-w-6xl mx-auto ${ui.screenX} py-10 sm:py-16`}>
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
             className="space-y-4"
           >
-            <div className="flex items-end justify-between gap-6 flex-wrap">
+            <div className="flex items-end justify-between gap-4 flex-wrap">
               <div>
                 <p className="text-[10px] font-black uppercase tracking-[0.3em] text-accent-bright/70 mb-3">
                   Community
                 </p>
-                <h1 className="text-6xl font-black uppercase italic tracking-tighter text-foreground leading-none">
+                <h1 className="text-4xl sm:text-5xl md:text-6xl font-black uppercase italic tracking-tighter text-foreground leading-none">
                   Clubs<span style={{color:"var(--app-accent)"}}>.</span>
                 </h1>
                 <p className="mt-3 text-muted text-sm max-w-md">
@@ -191,7 +193,7 @@ export default function ClubsPage() {
               </div>
               <Link
                 href="/clubs/new"
-                className="flex items-center gap-2 px-6 py-3 rounded-2xl text-sm font-black uppercase tracking-widest text-black transition-all hover:-translate-y-0.5" style={{background:"linear-gradient(135deg,var(--app-accent-bright),var(--app-accent))",boxShadow:"0 0 32px color-mix(in srgb, var(--app-accent) 35%, transparent)"}}
+                className="flex items-center gap-2 px-5 sm:px-6 min-h-11 rounded-2xl text-sm font-black uppercase tracking-widest text-black transition-all hover:-translate-y-0.5 active:scale-95" style={{background:"linear-gradient(135deg,var(--app-accent-bright),var(--app-accent))",boxShadow:"0 0 32px color-mix(in srgb, var(--app-accent) 35%, transparent)"}}
               >
                 <Plus size={14} /> Create Club
               </Link>
@@ -200,13 +202,13 @@ export default function ClubsPage() {
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-6 pt-8">
+      <div className={`max-w-6xl mx-auto ${ui.screenX} pt-8`}>
         {/* Search + filter bar */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1, duration: 0.5 }}
-          className="flex flex-col sm:flex-row gap-3 mb-8"
+          className="flex flex-col gap-3 mb-8"
         >
           <div className="relative flex-1">
             <Search
@@ -218,16 +220,16 @@ export default function ClubsPage() {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search clubs…"
-              className="w-full pl-10 pr-4 py-3 rounded-xl bg-surface border border-border text-sm text-foreground placeholder:text-subtle focus:outline-none focus:border-accent/40 focus:bg-surface transition-all"
+              className="w-full pl-10 pr-4 min-h-11 rounded-xl bg-surface border border-border text-base sm:text-sm text-foreground placeholder:text-subtle focus:outline-none focus:border-accent/40 focus:bg-surface transition-all"
             />
           </div>
-          <div className="flex items-center gap-2 flex-wrap">
+          <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-0 sm:flex-wrap">
             {CATEGORIES.map((cat) => (
               <button
                 key={cat}
                 onClick={() => setActiveCategory(cat)}
                 aria-pressed={activeCategory === cat}
-                className={`px-4 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 ${
+                className={`shrink-0 px-4 min-h-11 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 ${
                   activeCategory === cat
                     ? "text-black border border-accent/60 shadow-[0_4px_16px_color-mix(in_srgb,var(--app-accent)_35%,transparent)]"
                     : "bg-surface border border-border text-muted hover:text-foreground hover:border-accent/30 hover:bg-surface-2"
@@ -280,7 +282,7 @@ export default function ClubsPage() {
                   setSearch("")
                   setActiveCategory("All")
                 }}
-                className="mt-2 px-5 py-2.5 rounded-xl bg-accent/20 border border-accent/20 text-xs font-black uppercase tracking-widest text-accent-bright hover:bg-accent/30 transition-all"
+                className="mt-2 px-5 min-h-11 rounded-xl bg-accent/20 border border-accent/20 text-xs font-black uppercase tracking-widest text-accent-bright hover:bg-accent/30 active:scale-95 transition-all"
               >
                 Clear filters
               </button>

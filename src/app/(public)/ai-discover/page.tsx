@@ -52,7 +52,7 @@ export default function AIDiscoverPage() {
   return (
     <main className="min-h-screen flex flex-col bg-background text-foreground w-full">
       <AIDiscoverHero />
-      <div className="bg-background pt-0 pb-16 px-6 -mt-8 relative z-10">
+      <div className="bg-background pt-0 pb-16 px-4 sm:px-6 -mt-8 relative z-10">
         <div className="max-w-5xl mx-auto">
           <AIPromptInput onSearch={handleSearch} />
         </div>

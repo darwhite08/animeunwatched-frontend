@@ -4,14 +4,14 @@ import { motion } from "framer-motion"
 
 export default function AIDiscoverHero() {
   return (
-    <section className="relative pt-32 pb-16 flex flex-col items-center justify-center overflow-hidden w-full bg-background">
+    <section className="relative pt-24 sm:pt-32 pb-12 sm:pb-16 flex flex-col items-center justify-center overflow-hidden w-full bg-background">
       {/* Background glows */}
       <div className="absolute top-20 left-1/2 -translate-x-1/2 w-[700px] h-[400px] blur-[140px] rounded-full pointer-events-none"
         style={{ background: "radial-gradient(ellipse, color-mix(in srgb, var(--app-accent) 8%, transparent) 0%, rgba(99,102,241,0.06) 50%, transparent 70%)" }} />
       <div className="absolute bottom-0 right-0 w-[400px] h-[300px] blur-[120px] rounded-full pointer-events-none"
         style={{ background: "rgba(139,92,246,0.05)" }} />
 
-      <div className="relative z-10 max-w-4xl mx-auto px-6 text-center">
+      <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 text-center">
         {/* Badge */}
         <motion.div
           initial={{ opacity: 0, y: -16 }}
@@ -36,7 +36,7 @@ export default function AIDiscoverHero() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
-          className="text-6xl md:text-8xl font-black tracking-tighter text-foreground leading-[0.9] mb-8"
+          className="text-5xl sm:text-6xl md:text-8xl font-black tracking-tighter text-foreground leading-[0.9] mb-6 sm:mb-8"
         >
           Find Your Next{" "}
           <span className="italic" style={{
@@ -53,7 +53,7 @@ export default function AIDiscoverHero() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.35, duration: 0.6 }}
-          className="text-muted max-w-xl mx-auto text-lg font-medium leading-relaxed tracking-tight"
+          className="text-muted max-w-xl mx-auto text-base sm:text-lg font-medium leading-relaxed tracking-tight"
         >
           Describe what you're in the mood for — our AI searches 30,000+ anime to find your perfect match.
         </motion.p>

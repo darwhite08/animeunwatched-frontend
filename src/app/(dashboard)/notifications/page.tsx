@@ -6,6 +6,7 @@ import { useState } from "react"
 import { useToast } from "@/stores/toast.store"
 import { useNotificationsQuery, useMarkRead, useMarkAllRead } from "@/hooks/useNotificationsQuery"
 import type { Notification } from "@/lib/api/types"
+import { ui, fadeUp } from "@/lib/design/tokens"
 
 type NotifType = "achievement" | "comment" | "update" | "follow" | "poll" | "system"
 
@@ -86,28 +87,29 @@ export default function NotificationsPage() {
   const visible = filter === "unread" ? notifs.filter(n => !n.read) : notifs
 
   return (
-    <div className="max-w-3xl mx-auto px-6 py-12 space-y-8 pb-32">
+    <div className={`max-w-3xl mx-auto ${ui.screenX} py-8 sm:py-12 space-y-6 sm:space-y-8 pb-32`}>
       {/* Header */}
-      <div className="flex items-start justify-between gap-4">
-        <div>
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0">
           <p className="text-[9px] font-mono font-black uppercase tracking-[0.4em] text-accent-bright/60 mb-2">Neural_Feed</p>
-          <h1 className="text-4xl font-black tracking-tighter text-foreground uppercase italic">Notifications</h1>
+          <h1 className="text-3xl sm:text-4xl font-black tracking-tighter text-foreground uppercase italic">Notifications</h1>
         </div>
-        <div className="flex items-center gap-2 mt-2">
+        <div className="flex items-center gap-2 mt-1 shrink-0">
           {unreadCount > 0 && (
             <button
               onClick={markAllRead}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-black uppercase tracking-wider text-accent-bright hover:bg-accent/10 border border-accent/20 transition-colors"
+              className={`flex items-center justify-center gap-1.5 px-3 sm:px-4 ${ui.touch} rounded-xl text-[11px] sm:text-xs font-black uppercase tracking-wider text-accent-bright hover:bg-accent/10 active:scale-95 border border-accent/20 transition-all`}
             >
-              <CheckCheck size={13} /> Mark all read
+              <CheckCheck size={13} /> <span className="hidden sm:inline">Mark all </span>read
             </button>
           )}
           <button
             onClick={clearAll}
-            className="p-2 rounded-xl text-subtle hover:text-muted hover:bg-surface transition-colors"
+            className={`flex items-center justify-center ${ui.touch} rounded-xl text-subtle hover:text-muted hover:bg-surface active:scale-95 transition-all`}
             title="Clear all"
+            aria-label="Clear all"
           >
-            <Trash2 size={15} />
+            <Trash2 size={16} />
           </button>
         </div>
       </div>
@@ -118,7 +120,7 @@ export default function NotificationsPage() {
           <button
             key={f}
             onClick={() => setFilter(f)}
-            className={`px-5 py-2 rounded-full text-xs font-black uppercase tracking-wider transition-all ${
+            className={`flex items-center px-5 min-h-11 rounded-full text-xs font-black uppercase tracking-wider transition-all active:scale-95 ${
               filter === f
                 ? "bg-surface text-foreground"
                 : "text-subtle hover:bg-surface hover:text-foreground"
@@ -155,37 +157,43 @@ export default function NotificationsPage() {
                   exit={{ opacity: 0, x: 40, scale: 0.95 }}
                   transition={{ delay: i * 0.02 }}
                   onClick={() => markRead(notif.id)}
-                  className={`group relative flex items-start gap-4 p-5 rounded-2xl border transition-all cursor-pointer ${
+                  className={`group relative flex items-start gap-3 sm:gap-4 p-4 sm:p-5 rounded-2xl border transition-all cursor-pointer active:scale-[0.99] ${
                     notif.read
                       ? "border-border bg-transparent hover:bg-surface"
                       : "border-accent/15 bg-accent/5 hover:bg-accent/8"
                   }`}
                 >
-                  {/* Unread dot */}
+                  {/* Unread accent rail */}
                   {!notif.read && (
-                    <div className="absolute top-5 right-5 h-2 w-2 rounded-full bg-accent" />
+                    <span className="absolute left-0 top-1/2 -translate-y-1/2 h-8 w-1 rounded-r-full bg-accent" />
                   )}
 
-                  <div className={`shrink-0 p-2.5 rounded-xl ${bg}`}>
-                    <Icon size={16} className={color} />
+                  <div className={`shrink-0 grid place-items-center h-11 w-11 rounded-xl ${bg}`}>
+                    <Icon size={17} className={color} />
                   </div>
 
-                  <div className="flex-1 min-w-0">
+                  <div className="flex-1 min-w-0 pr-5">
                     <p className={`text-sm font-bold leading-snug ${notif.read ? "text-muted" : "text-foreground"}`}>
                       {notif.title}
                     </p>
-                    <p className="text-xs text-subtle mt-0.5 leading-relaxed">{notif.body}</p>
+                    <p className="text-xs text-subtle mt-0.5 leading-relaxed line-clamp-2">{notif.body}</p>
                     <div className="flex items-center gap-3 mt-2">
                       <span className="text-[9px] font-mono text-subtle uppercase tracking-widest">{notif.time}</span>
-                      <span className="text-[9px] font-mono text-subtle uppercase">{notif.node}</span>
+                      <span className="text-[9px] font-mono text-subtle uppercase truncate">{notif.node}</span>
                     </div>
                   </div>
 
+                  {/* Unread dot */}
+                  {!notif.read && (
+                    <span className="absolute top-4 right-4 h-2 w-2 rounded-full bg-accent" />
+                  )}
+
                   <button
                     onClick={e => { e.stopPropagation(); dismiss(notif.id) }}
-                    className="shrink-0 opacity-0 group-hover:opacity-100 p-1.5 rounded-lg text-subtle hover:text-muted hover:bg-surface transition-all"
+                    aria-label="Dismiss notification"
+                    className="shrink-0 grid place-items-center h-11 w-11 -mr-1.5 rounded-lg text-subtle opacity-100 sm:opacity-0 sm:group-hover:opacity-100 hover:text-muted hover:bg-surface active:scale-90 transition-all"
                   >
-                    <Trash2 size={12} />
+                    <Trash2 size={14} />
                   </button>
                 </motion.div>
               )

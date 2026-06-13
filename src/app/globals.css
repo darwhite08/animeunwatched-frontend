@@ -382,6 +382,26 @@ body { overflow-x: hidden; }
 .article-content ul[data-type="taskList"] { list-style: none; padding-left: 0.25em; }
 .article-content ul[data-type="taskList"] li { display: flex; gap: 0.5em; align-items: flex-start; }
 
+/* Mobile reading: clamp the bold-italic display headings + first-letter so the
+   uppercase/tracking treatment never pushes past a 320px viewport, and let wide
+   media (tables, code, embeds) scroll instead of widening the document. */
+@media (max-width: 640px) {
+  .article-content { font-size: 1.0125rem; line-height: 1.8; }
+  .article-content > p:first-of-type { font-size: 1.1rem; }
+  .article-content > p:first-of-type::first-letter { font-size: 2.9rem; }
+  .article-content h1 { font-size: 1.6rem; margin-top: 1.3em; }
+  .article-content h2 { font-size: 1.34rem; margin-top: 1.55em; }
+  .article-content h3 { font-size: 1.14rem; }
+  /* Stack the link-preview card so the thumb + body each get full width. */
+  .article-content .link-preview-card { flex-direction: column; }
+  .article-content .link-preview-card .lp-thumb { flex-basis: auto; max-width: none; width: 100%; min-height: 150px; }
+}
+.article-content table { display: block; max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.article-content pre { max-width: 100%; }
+.article-content div[data-youtube-video] iframe { max-width: 100%; }
+/* Long unbroken strings (URLs in plain-text legacy bodies) shouldn't overflow. */
+.article-content p, .article-content li, .article-content a { overflow-wrap: anywhere; }
+
 /* ──────────────────────────────────────────────────────────────────────
    Logged-in app shell wrapping public pages.
    Public pages bake in fixed-marketing-navbar top clearance (pt-28/32/[120px])

@@ -295,10 +295,10 @@ function BlogComments({ slug }: { slug: string }) {
         <div className="flex gap-3">
           <textarea value={draft} onChange={e => setDraft(e.target.value)}
             placeholder="Share your thoughts…" rows={2} maxLength={1000}
-            className="flex-1 px-4 py-3 rounded-xl bg-surface border border-border text-sm text-foreground placeholder:text-subtle focus:outline-none focus:border-accent/30 resize-none transition-all" />
+            className="flex-1 px-4 py-3 rounded-xl bg-surface border border-border text-base sm:text-sm text-foreground placeholder:text-subtle focus:outline-none focus:border-accent/30 resize-none transition-all" />
           <button onClick={() => draft.trim() && createMut.mutate(draft.trim())}
             disabled={!draft.trim() || createMut.isPending}
-            className="p-3 rounded-xl text-black transition-all disabled:opacity-40 hover:scale-105"
+            className="min-h-11 min-w-11 inline-flex items-center justify-center rounded-xl text-black transition-all disabled:opacity-40 hover:scale-105 active:scale-95"
             style={{ background: "linear-gradient(135deg,var(--app-accent-bright),var(--app-accent))" }}>
             {createMut.isPending ? <Loader2 size={16} className="animate-spin" /> : <Send size={16} />}
           </button>
@@ -417,24 +417,24 @@ export function BlogReaderClient({ slug, initialBlog }: { slug: string; initialB
         {/* Back */}
         <Link
           href="/blog"
-          className="absolute top-6 left-6 flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-muted hover:text-foreground transition-colors"
+          className="absolute top-3 left-3 sm:top-4 sm:left-4 inline-flex min-h-11 items-center gap-1.5 px-3 rounded-full bg-black/40 backdrop-blur-md text-[10px] font-black uppercase tracking-widest text-muted hover:text-foreground active:scale-95 transition-all"
         >
           <ChevronLeft size={13} /> The Chronicle
         </Link>
 
         {/* Category */}
-        <div className="absolute top-6 right-6">
+        <div className="absolute top-4 right-4 sm:top-6 sm:right-6">
           <span className="px-3 py-1 rounded-full bg-black/50 backdrop-blur-md border border-border text-[10px] font-black uppercase tracking-widest text-accent-bright">
             {(meta as Record<string, unknown>).category as string ?? "Article"}
           </span>
         </div>
 
         {/* Title overlay */}
-        <div className="absolute bottom-8 left-6 right-6 max-w-4xl mx-auto">
+        <div className="absolute bottom-7 sm:bottom-8 left-4 right-4 sm:left-6 sm:right-6 max-w-4xl mx-auto">
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-3xl md:text-5xl font-black uppercase italic tracking-tighter text-foreground leading-none"
+            className="text-[1.6rem] sm:text-4xl md:text-5xl font-black uppercase italic tracking-tighter text-foreground leading-[1.05] md:leading-none"
           >
             {meta.title}
           </motion.h1>
@@ -450,7 +450,7 @@ export function BlogReaderClient({ slug, initialBlog }: { slug: string; initialB
       </div>
 
       {/* Content area — TOC rail + article + secondary rail (research-backed) */}
-      <div className="max-w-7xl mx-auto px-6 pt-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-8">
         <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_300px] xl:grid-cols-[210px_minmax(0,1fr)_300px]">
 
           {/* Left rail — Table of Contents (xl+) */}
@@ -460,8 +460,9 @@ export function BlogReaderClient({ slug, initialBlog }: { slug: string; initialB
             </div>
           </aside>
 
-          {/* Article */}
-          <div className="min-w-0 space-y-8">
+          {/* Article — cap line length for comfortable reading below lg (the grid
+              template handles width at lg+); centered so tablet isn't over-wide. */}
+          <div className="min-w-0 space-y-8 w-full max-w-[68ch] mx-auto lg:max-w-none lg:mx-0">
 
             {/* Breadcrumbs — aids crawl + orientation */}
             <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-subtle">
@@ -516,7 +517,7 @@ export function BlogReaderClient({ slug, initialBlog }: { slug: string; initialB
           {/* Share */}
           <button
             onClick={share}
-            className="ml-auto flex items-center gap-2 px-4 py-2 rounded-xl border border-border bg-white/[0.04] text-[10px] font-black uppercase tracking-widest text-muted hover:text-foreground hover:bg-surface transition-all"
+            className="ml-auto inline-flex min-h-11 items-center gap-2 px-4 rounded-xl border border-border bg-white/[0.04] text-[10px] font-black uppercase tracking-widest text-muted hover:text-foreground hover:bg-surface active:scale-95 transition-all"
           >
             <Share2 size={12} /> Share
           </button>
@@ -532,10 +533,10 @@ export function BlogReaderClient({ slug, initialBlog }: { slug: string; initialB
         </motion.div>
 
         {/* Like / Share / Bookmark bar */}
-        <div className="flex items-center gap-4 py-5 border-t border-b border-border">
+        <div className="flex items-center gap-3 sm:gap-4 py-5 border-t border-b border-border">
           <button
             onClick={toggleLike}
-            className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${
+            className={`inline-flex min-h-11 items-center gap-2 px-4 sm:px-5 rounded-xl text-xs font-black uppercase tracking-widest transition-all active:scale-95 ${
               liked
                 ? "bg-rose-500/15 border border-rose-500/25 text-rose-400"
                 : "bg-white/[0.04] border border-border text-muted hover:text-rose-400 hover:border-rose-500/20"
@@ -547,14 +548,14 @@ export function BlogReaderClient({ slug, initialBlog }: { slug: string; initialB
 
           <button
             onClick={share}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white/[0.04] border border-border text-xs font-black uppercase tracking-widest text-muted hover:text-foreground hover:bg-surface transition-all"
+            className="inline-flex min-h-11 items-center gap-2 px-4 sm:px-5 rounded-xl bg-white/[0.04] border border-border text-xs font-black uppercase tracking-widest text-muted hover:text-foreground hover:bg-surface active:scale-95 transition-all"
           >
             <Share2 size={14} /> Share
           </button>
 
           <button
             onClick={() => { setBookmarked(b => !b); push(bookmarked ? "Removed bookmark" : "Bookmarked!", "success") }}
-            className={`ml-auto flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all border ${
+            className={`ml-auto inline-flex min-h-11 items-center gap-2 px-4 sm:px-5 rounded-xl text-xs font-black uppercase tracking-widest transition-all active:scale-95 border ${
               bookmarked
                 ? "bg-accent/15 border-accent/25 text-accent-bright"
                 : "bg-white/[0.04] border-border text-muted hover:text-accent-bright"

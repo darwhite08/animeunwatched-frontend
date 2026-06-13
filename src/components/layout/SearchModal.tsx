@@ -99,19 +99,19 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[200] flex items-start justify-center p-4 sm:p-6 bg-black/50 backdrop-blur-sm"
+            className="fixed inset-0 z-[200] flex items-start justify-center p-0 sm:p-6 bg-black/50 backdrop-blur-sm"
             onClick={onClose}
           >
             <motion.div
-              initial={{ scale: 0.96, y: -16, opacity: 0 }}
-              animate={{ scale: 1, y: 80, opacity: 1 }}
-              exit={{ scale: 0.96, y: -16, opacity: 0 }}
-              transition={{ type: "spring", damping: 22, stiffness: 320 }}
+              initial={{ scale: 0.98, y: -8, opacity: 0 }}
+              animate={{ scale: 1, y: 0, opacity: 1 }}
+              exit={{ scale: 0.98, y: -8, opacity: 0 }}
+              transition={{ type: "spring", damping: 26, stiffness: 340 }}
               onClick={e => e.stopPropagation()}
-              className="w-full max-w-2xl bg-background/95 backdrop-blur-3xl rounded-3xl border border-border shadow-[0_30px_100px_rgba(0,0,0,0.8)] overflow-hidden"
+              className="w-full h-[100dvh] sm:h-auto sm:mt-20 max-w-2xl flex flex-col bg-background/95 backdrop-blur-3xl rounded-none sm:rounded-3xl border-x-0 border-t-0 sm:border border-border shadow-[0_30px_100px_rgba(0,0,0,0.8)] overflow-hidden pt-safe sm:pt-0"
             >
               {/* Input */}
-              <div className="flex items-center gap-4 px-6 py-4 border-b border-border">
+              <div className="flex items-center gap-3 sm:gap-4 px-4 sm:px-6 py-3 sm:py-4 min-h-14 border-b border-border">
                 <MagnifyingGlass size={20} weight="bold" className={`shrink-0 transition-colors ${query ? "text-accent-bright" : "text-subtle"}`} />
                 <input
                   ref={inputRef}
@@ -119,21 +119,21 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                   onChange={e => setQuery(e.target.value)}
                   onKeyDown={handleKeyDown}
                   placeholder="Search anime, genres, or tags…"
-                  className="flex-1 bg-transparent border-none outline-none text-lg font-medium text-foreground placeholder:text-subtle"
+                  className="flex-1 min-h-11 bg-transparent border-none outline-none text-base sm:text-lg font-medium text-foreground placeholder:text-subtle"
                 />
                 {query ? (
-                  <button onClick={() => setQuery("")} className="text-subtle hover:text-foreground transition-colors">
-                    <X size={16} />
+                  <button onClick={() => setQuery("")} className="shrink-0 h-11 w-11 -mr-2 flex items-center justify-center rounded-xl text-subtle hover:text-foreground active:scale-95 transition-all">
+                    <X size={18} />
                   </button>
                 ) : (
-                  <div className="flex items-center gap-1 px-2 py-1 rounded-md bg-surface border border-border text-[9px] font-black text-subtle uppercase tracking-tighter shrink-0">
+                  <div className="hidden sm:flex items-center gap-1 px-2 py-1 rounded-md bg-surface border border-border text-[9px] font-black text-subtle uppercase tracking-tighter shrink-0">
                     ⌘ K
                   </div>
                 )}
               </div>
 
               {/* Results */}
-              <div className="p-3 max-h-[60vh] overflow-y-auto [-webkit-overflow-scrolling:touch] no-scrollbar">
+              <div className="p-3 flex-1 sm:flex-none sm:max-h-[60vh] overflow-y-auto [-webkit-overflow-scrolling:touch] no-scrollbar pb-safe sm:pb-3">
                 {!query.trim() ? (
                   <>
                     {/* Quick actions */}
@@ -144,7 +144,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                           key={item.label}
                           href={item.href}
                           onClick={onClose}
-                          className={`group flex items-center justify-between px-4 py-3 rounded-xl hover:bg-surface cursor-pointer transition-all ${cursor === i ? "bg-surface" : ""}`}
+                          className={`group flex items-center justify-between min-h-11 px-4 py-3 rounded-xl hover:bg-surface cursor-pointer transition-all active:scale-[0.98] ${cursor === i ? "bg-surface" : ""}`}
                         >
                           <div className="flex items-center gap-3 text-muted group-hover:text-foreground">
                             <item.icon size={14} className="text-accent/70 group-hover:text-accent-bright" />
@@ -162,7 +162,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                         <button
                           key={term}
                           onClick={() => setQuery(term)}
-                          className={`group w-full flex items-center justify-between px-4 py-3 rounded-xl hover:bg-accent/10 transition-all border border-transparent hover:border-accent/20 ${cursor === QUICK_ACTIONS.length + i ? "bg-accent/10 border-accent/20" : ""}`}
+                          className={`group w-full flex items-center justify-between min-h-11 px-4 py-3 rounded-xl hover:bg-accent/10 transition-all active:scale-[0.98] border border-transparent hover:border-accent/20 ${cursor === QUICK_ACTIONS.length + i ? "bg-accent/10 border-accent/20" : ""}`}
                         >
                           <div className="flex items-center gap-3">
                             <div className="h-7 w-7 rounded-lg bg-surface flex items-center justify-center text-subtle group-hover:text-accent-bright">
@@ -187,7 +187,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                             <button
                               key={anime.id}
                               onClick={() => setSelectedAnime(anime)}
-                              className={`group w-full flex items-center gap-4 px-4 py-3 rounded-xl hover:bg-surface transition-all text-left ${cursor === i ? "bg-surface" : ""}`}
+                              className={`group w-full flex items-center gap-4 min-h-11 px-4 py-3 rounded-xl hover:bg-surface transition-all active:scale-[0.98] text-left ${cursor === i ? "bg-surface" : ""}`}
                             >
                               <div className="relative h-10 w-8 shrink-0 rounded-lg overflow-hidden bg-surface">
                                 {anime.image && <img loading="lazy" decoding="async" src={anime.image} alt={anime.title} className="w-full h-full object-cover" onError={(e) => { (e.target as HTMLImageElement).style.display = "none" }} />}
@@ -215,7 +215,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                               key={u.username}
                               href={`/u/${u.username}`}
                               onClick={onClose}
-                              className="group w-full flex items-center gap-3 px-4 py-2.5 rounded-xl hover:bg-surface transition-all"
+                              className="group w-full flex items-center gap-3 min-h-11 px-4 py-2.5 rounded-xl hover:bg-surface transition-all active:scale-[0.98]"
                             >
                               <Avatar src={u.avatarUrl} name={u.displayName} size={32} />
 

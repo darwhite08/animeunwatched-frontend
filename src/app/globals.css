@@ -394,3 +394,71 @@ body { overflow-x: hidden; }
    ────────────────────────────────────────────────────────────────────── */
 .app-public-shell { --sticky-top: 3.5rem; --page-top: 1.25rem; }
 .app-public-shell main > * { padding-top: var(--page-top, 1.25rem); }
+
+/* ════════════════════════════════════════════════════════════════════════
+   PWA / native-app feel (mobile standalone)
+   Additive only — appended at the end so it wins on equal specificity, and
+   no rule above is modified.
+   ════════════════════════════════════════════════════════════════════════ */
+
+/* (1) Remove the "web page" tells: tap highlight + iOS long-press callout
+       globally, and stop accidental text selection from taps/drags. */
+* {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+html {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* (1b) Reading and forms must still work — re-enable selection (and the iOS
+        callout) on inputs and primary content/article surfaces. */
+input,
+textarea,
+select,
+[contenteditable],
+[contenteditable] *,
+.article-content,
+.article-content *,
+.prose,
+.prose *,
+.whitespace-pre-wrap,
+.select-text,
+.select-text * {
+  -webkit-user-select: text;
+  user-select: text;
+  -webkit-touch-callout: default;
+}
+
+/* (2) No pull-to-refresh / rubber-banding on the document scroll root. */
+html,
+body {
+  overscroll-behavior: none;
+}
+
+/* (3) Momentum scrolling inside inner scroll containers. */
+body,
+[data-lenis-prevent],
+.overflow-y-auto,
+.overflow-auto,
+.overflow-x-auto {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* (4) Safe-area insets so content clears the notch / home indicator when the
+       viewport runs edge-to-edge (viewport-fit=cover). Utilities are opt-in;
+       the fixed bottom tab bar is lifted automatically. On non-notched devices
+       and desktop every inset is 0, so these are no-ops there. */
+.pt-safe { padding-top: env(safe-area-inset-top); }
+.pb-safe { padding-bottom: env(safe-area-inset-bottom); }
+.pl-safe { padding-left: env(safe-area-inset-left); }
+.pr-safe { padding-right: env(safe-area-inset-right); }
+
+/* The fixed bottom tab bar (h-16 = 4rem) must sit above the home indicator:
+   grow its height by the inset and pad the extra space below the buttons.
+   box-sizing:border-box (Tailwind default) keeps the button row at 4rem. */
+nav[aria-label="Primary mobile"] {
+  height: calc(4rem + env(safe-area-inset-bottom));
+  padding-bottom: env(safe-area-inset-bottom);
+}

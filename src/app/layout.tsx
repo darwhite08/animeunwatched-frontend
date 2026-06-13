@@ -17,6 +17,7 @@ const KeyboardShortcutsOverlay = lazy(() => import("@/components/ui/KeyboardShor
 const MobileNav            = lazy(() => import("@/components/layout/MobileNav"))
 const CookieConsent        = lazy(() => import("@/components/ui/CookieConsent"))
 const MessagesButton       = lazy(() => import("@/components/ui/MessagesButton"))
+const InstallPrompt        = lazy(() => import("@/components/pwa/InstallPrompt"))
 const GoogleAnalytics      = lazy(() =>
   import("@/components/analytics/GoogleAnalytics").then(m => ({ default: m.GoogleAnalytics }))
 )
@@ -25,10 +26,16 @@ const PageviewPinger       = lazy(() =>
 )
 
 export const viewport = {
-  themeColor: "var(--app-accent)",
+  // Real hex (a CSS var is invalid in the theme-color meta and gets ignored).
+  // Dark base for a cohesive, native-feeling status bar in standalone mode.
+  themeColor: "#020202",
   width: "device-width",
   initialScale: 1,
-  maximumScale: 5,
+  // Lock zoom for an app-like feel (note: this reduces pinch-zoom a11y).
+  maximumScale: 1,
+  userScalable: false,
+  // Extend under the notch / home indicator; paired with safe-area padding in CSS.
+  viewportFit: "cover",
 }
 
 const SITE_URL = "https://kaiveron.com"
@@ -50,6 +57,14 @@ export const metadata = {
   creator: "Kaiveron",
   publisher: "Kaiveron",
   category: "Entertainment",
+  // iOS standalone ("Add to Home Screen") behavior. black-translucent lets the
+  // status bar overlay content, which pairs with viewport-fit=cover + safe-area
+  // padding. apple-touch-icon is emitted automatically from src/app/apple-icon.png.
+  appleWebApp: {
+    capable: true,
+    title: "Kaiveron",
+    statusBarStyle: "black-translucent",
+  },
   openGraph: {
     type: "website",
     siteName: "Kaiveron",
@@ -136,6 +151,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 </Suspense>
                 <Suspense fallback={null}>
                   <MessagesButton />
+                </Suspense>
+                {/* PWA "Add to home screen" pill — only shows when installable */}
+                <Suspense fallback={null}>
+                  <InstallPrompt />
                 </Suspense>
                 {/* Loads + runs ONLY when NEXT_PUBLIC_GA_MEASUREMENT_ID is set
                     AND the user has accepted the cookie banner */}

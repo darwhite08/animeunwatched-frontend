@@ -122,7 +122,7 @@ export default function ShotsPage() {
 
   if (loading) {
     return (
-      <div className="flex h-[calc(100dvh-3.5rem)] items-center justify-center bg-black">
+      <div className="flex h-[calc(100dvh-3.5rem-4rem-env(safe-area-inset-bottom))] items-center justify-center bg-black md:h-[calc(100dvh-3.5rem)]">
         <Loader2 className="animate-spin text-accent" size={28} />
       </div>
     )
@@ -139,7 +139,7 @@ export default function ShotsPage() {
       ref={scrollRef}
       onScroll={handleScroll}
       style={{ paddingTop: 0 }}
-      className="relative h-[calc(100dvh-3.5rem-4rem)] w-full snap-y snap-mandatory overflow-y-scroll bg-black md:h-[calc(100dvh-3.5rem)] [&::-webkit-scrollbar]:hidden"
+      className="relative h-[calc(100dvh-3.5rem-4rem-env(safe-area-inset-bottom))] w-full snap-y snap-mandatory overflow-y-scroll overscroll-y-contain bg-black md:h-[calc(100dvh-3.5rem)] [&::-webkit-scrollbar]:hidden"
     >
       {/* Premium ambient backdrop — the active poster, blurred + dimmed, fills the
           black void around the vertical card with a soft gold glow. */}
@@ -154,12 +154,12 @@ export default function ShotsPage() {
       </div>
 
       {/* Section tabs — Shots / Trailers / For You */}
-      <div className="fixed left-1/2 top-[4.5rem] z-30 flex -translate-x-1/2 gap-1 rounded-full border border-white/10 bg-black/55 p-1 backdrop-blur md:absolute">
+      <div className="fixed left-1/2 top-[calc(env(safe-area-inset-top)+4.5rem)] z-30 flex -translate-x-1/2 gap-1 rounded-full border border-white/10 bg-black/55 p-1 backdrop-blur md:absolute md:top-[4.5rem]">
         {([["all", "For You"], ["shots", "Shots"], ["trailers", "Trailers"]] as const).map(([m, label]) => (
           <button
             key={m}
             onClick={() => switchMode(m)}
-            className={`rounded-full px-3.5 py-1.5 text-[11px] font-black uppercase tracking-widest transition-colors ${
+            className={`rounded-full px-3.5 py-2 text-[11px] font-black uppercase tracking-widest transition-all duration-200 ease-out active:scale-95 ${
               mode === m ? "bg-white text-black" : "text-white/70 hover:text-white"
             }`}
           >
@@ -172,7 +172,7 @@ export default function ShotsPage() {
       <button
         onClick={() => setMuted((m) => !m)}
         aria-label={muted ? "Unmute" : "Mute"}
-        className="fixed right-4 top-[4.5rem] z-30 flex h-10 w-10 items-center justify-center rounded-full bg-black/50 text-white backdrop-blur hover:bg-black/70 md:absolute md:right-6"
+        className="fixed right-4 top-[calc(env(safe-area-inset-top)+4.5rem)] z-30 flex h-11 w-11 items-center justify-center rounded-full bg-black/50 text-white backdrop-blur transition-transform duration-200 ease-out hover:bg-black/70 active:scale-95 md:absolute md:right-6 md:top-[4.5rem]"
       >
         {muted ? <VolumeX size={18} /> : <Volume2 size={18} />}
       </button>
@@ -192,12 +192,12 @@ export default function ShotsPage() {
             <div className="mt-6 flex flex-col gap-2">
               <Link href="/"
                 onClick={() => track("shots_break_taken", { cycle: breakCycle + 1 })}
-                className="rounded-2xl bg-white px-5 py-3 text-sm font-black uppercase tracking-widest text-black">
+                className="rounded-2xl bg-white px-5 py-3 text-sm font-black uppercase tracking-widest text-black transition-transform duration-200 ease-out active:scale-[0.98]">
                 Take a break
               </Link>
               <button
                 onClick={() => { setShowBreak(false); setBreakCycle(c => c + 1); track("shots_break_dismissed", { cycle: breakCycle + 1 }) }}
-                className="rounded-2xl border border-white/15 px-5 py-3 text-sm font-bold uppercase tracking-widest text-white/70 hover:text-white">
+                className="rounded-2xl border border-white/15 px-5 py-3 text-sm font-bold uppercase tracking-widest text-white/70 transition-transform duration-200 ease-out hover:text-white active:scale-[0.98]">
                 Keep watching
               </button>
             </div>
@@ -291,28 +291,28 @@ function ShotReel({ shot, active, muted }: { shot: Shot; active: boolean; muted:
       )}
       {!isEmbed && <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/20" />}
 
-      <div className="absolute bottom-24 right-3 flex flex-col items-center gap-4">
-        <button onClick={toggleLike} className="flex flex-col items-center gap-1 text-white">
-          <span className={`flex h-11 w-11 items-center justify-center rounded-full ${liked ? "bg-rose-500" : "bg-black/40"}`}>
+      <div className="absolute bottom-28 right-3 z-10 flex flex-col items-center gap-4">
+        <button onClick={toggleLike} aria-pressed={liked} aria-label={liked ? "Unlike" : "Like"} className="flex flex-col items-center gap-1 text-white transition-transform duration-200 ease-out active:scale-90">
+          <span className={`flex h-11 w-11 items-center justify-center rounded-full backdrop-blur transition-colors duration-200 ${liked ? "bg-rose-500" : "bg-black/40"}`}>
             <Heart size={20} className={liked ? "fill-white" : ""} />
           </span>
           <span className="text-[11px] font-bold tabular-nums">{likes}</span>
         </button>
       </div>
 
-      <div className="absolute inset-x-0 bottom-0 p-4">
-        <Link href={`/u/${shot.author.username}`} className="flex items-center gap-2">
+      <div className="absolute inset-x-0 bottom-0 p-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
+        <Link href={`/u/${shot.author.username}`} className="inline-flex max-w-full items-center gap-2 transition-transform duration-200 ease-out active:scale-[0.98]">
           {shot.author.avatarUrl ? (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={shot.author.avatarUrl} alt="" className="h-8 w-8 rounded-full border border-white/30 object-cover" />
+            <img src={shot.author.avatarUrl} alt="" className="h-8 w-8 shrink-0 rounded-full border border-white/30 object-cover" />
           ) : (
-            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-accent text-xs font-black text-white">{shot.author.displayName?.[0]?.toUpperCase() ?? "?"}</span>
+            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-accent text-xs font-black text-white">{shot.author.displayName?.[0]?.toUpperCase() ?? "?"}</span>
           )}
-          <span className="text-sm font-bold text-white">@{shot.author.username}</span>
+          <span className="truncate text-sm font-bold text-white">@{shot.author.username}</span>
         </Link>
-        {shot.caption && <p className="mt-2 line-clamp-2 text-[13px] text-white/90">{shot.caption}</p>}
+        {shot.caption && <p className="mt-2 line-clamp-2 text-[13px] leading-snug text-white/90">{shot.caption}</p>}
         {shot.anime && (
-          <Link href={`/anime/${shot.anime.malId}`} className="mt-2 inline-block rounded-full bg-white/15 px-3 py-1 text-[10px] font-bold uppercase tracking-widest text-white">
+          <Link href={`/anime/${shot.anime.malId}`} className="mt-2 inline-block max-w-full truncate rounded-full bg-white/15 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-white transition-transform duration-200 ease-out active:scale-95">
             {shot.anime.title}
           </Link>
         )}
@@ -359,15 +359,15 @@ function TrailerReel({ trailer, active, muted }: { trailer: Trailer; active: boo
       <span className="absolute left-3 top-3 z-10 rounded-full bg-accent px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-white shadow-lg">Trailer</span>
 
       {/* Bottom meta */}
-      <div className="absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-black via-black/80 to-transparent p-4 pt-14">
+      <div className="absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-black via-black/80 to-transparent p-4 pt-14 pb-[max(1rem,env(safe-area-inset-bottom))]">
         <Link href={`/anime/${trailer.malId}`} className="block">
-          <h3 className="line-clamp-2 text-lg font-black leading-tight tracking-tight text-white transition-colors hover:text-accent-bright">{trailer.title}</h3>
+          <h3 className="line-clamp-2 text-base font-black leading-tight tracking-tight text-white transition-colors hover:text-accent-bright sm:text-lg">{trailer.title}</h3>
         </Link>
-        <div className="mt-2 flex items-center gap-2 text-[11px] font-bold text-white/80">
+        <div className="mt-2 flex flex-wrap items-center gap-2 text-[11px] font-bold text-white/80">
           {trailer.score != null && <span className="inline-flex items-center gap-1"><Star size={12} className="fill-amber-400 text-amber-400" />{trailer.score.toFixed(1)}</span>}
           {trailer.type && <span className="rounded-full bg-white/15 px-2 py-0.5 uppercase tracking-widest">{trailer.type}</span>}
           {trailer.year && <span>{trailer.year}</span>}
-          <Link href={`/anime/${trailer.malId}`} className="ml-auto inline-flex items-center gap-1 rounded-full bg-accent/90 px-3 py-1 text-[10px] font-black uppercase tracking-widest text-black transition-transform hover:scale-105">
+          <Link href={`/anime/${trailer.malId}`} className="ml-auto inline-flex min-h-9 items-center gap-1 rounded-full bg-accent/90 px-3 py-1.5 text-[10px] font-black uppercase tracking-widest text-black transition-transform duration-200 ease-out hover:scale-105 active:scale-95">
             Details
           </Link>
         </div>

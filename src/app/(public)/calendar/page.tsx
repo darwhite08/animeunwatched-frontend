@@ -61,7 +61,7 @@ export default function CalendarPage() {
       {/* Sticky header */}
       <div className="sticky top-[var(--sticky-top,72px)] z-30 border-b border-border backdrop-blur-xl"
         style={{ background: "color-mix(in srgb, var(--app-bg) 92%, transparent)" }}>
-        <div className="max-w-6xl mx-auto px-6 py-5">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-5">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
             {/* Title */}
             <div>
@@ -96,13 +96,13 @@ export default function CalendarPage() {
           </div>
 
           {/* Season tabs */}
-          <div className="flex items-center gap-2 mt-4 flex-wrap">
+          <div className="flex items-center gap-2 mt-4 overflow-x-auto scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-0 sm:flex-wrap">
             {SEASONS.map(s => {
               const m = SEASON_META[s]
               const active = s === season
               return (
                 <button key={s} onClick={() => setSeason(s)}
-                  className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-[10px] font-black uppercase tracking-widest transition-all ${
+                  className={`flex shrink-0 items-center gap-1.5 px-4 min-h-11 rounded-full text-[10px] font-black uppercase tracking-widest transition-all active:scale-95 ${
                     active ? "text-black" : "bg-surface text-subtle hover:bg-surface hover:text-foreground border border-border"
                   }`}
                   style={active ? {
@@ -118,7 +118,7 @@ export default function CalendarPage() {
             })}
 
             {!isLoading && !isError && (
-              <span className="ml-auto text-[10px] text-subtle font-black uppercase tracking-widest">
+              <span className="ml-auto shrink-0 text-[10px] text-subtle font-black uppercase tracking-widest">
                 {anime.length} titles
               </span>
             )}
@@ -127,7 +127,7 @@ export default function CalendarPage() {
       </div>
 
       {/* Content */}
-      <div className="max-w-6xl mx-auto px-6 py-10 space-y-12">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-10 space-y-12">
 
         {/* Loading */}
         {isLoading && (

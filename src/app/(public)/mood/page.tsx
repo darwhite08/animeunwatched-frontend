@@ -160,7 +160,7 @@ export default function MoodPage() {
   return (
     <div className="min-h-screen bg-background text-foreground pb-40">
       {/* Header */}
-      <div className="max-w-5xl mx-auto px-6 pt-32 pb-10 text-center">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 pt-32 pb-10 text-center">
         <motion.div initial={{ opacity: 0, y: -12 }} animate={{ opacity: 1, y: 0 }}
           className="inline-flex items-center gap-2 mb-6 px-4 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.4em]"
           style={{ background: "color-mix(in srgb, var(--app-accent) 10%, transparent)", border: "1px solid color-mix(in srgb, var(--app-accent) 25%, transparent)", color: "var(--app-accent)" }}>
@@ -168,7 +168,7 @@ export default function MoodPage() {
         </motion.div>
 
         <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.08 }}
-          className="text-5xl md:text-7xl font-black tracking-tighter text-foreground leading-none mb-4">
+          className="text-4xl sm:text-5xl md:text-7xl font-black tracking-tighter text-foreground leading-none mb-4">
           How are you
           <span className="italic" style={{
             backgroundImage: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))",
@@ -176,13 +176,13 @@ export default function MoodPage() {
           }}> feeling?</span>
         </motion.h1>
         <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.18 }}
-          className="text-muted text-lg">
+          className="text-muted text-base sm:text-lg">
           Pick your vibe — we'll find the perfect anime.
         </motion.p>
       </div>
 
       {/* Mood Grid */}
-      <div className="max-w-5xl mx-auto px-6">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6">
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-12">
           {MOODS.map((m, i) => {
             const Icon = m.icon
@@ -191,6 +191,7 @@ export default function MoodPage() {
               <motion.button key={m.id}
                 initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.04 }}
+                whileTap={{ scale: 0.97 }}
                 onClick={() => setSelected(active ? null : m.id)}
                 className={`relative text-left p-5 rounded-2xl border transition-all duration-300 group ${
                   active ? `bg-gradient-to-br ${m.color} ${m.border} scale-[1.02]` : "bg-surface border-border hover:border-border hover:bg-surface"
@@ -253,7 +254,7 @@ export default function MoodPage() {
 
               <div className="mt-8 text-center">
                 <Link href="/ai-discover"
-                  className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl text-xs font-black uppercase tracking-widest text-black transition-all hover:scale-105"
+                  className="inline-flex items-center gap-2 px-6 min-h-11 rounded-2xl text-xs font-black uppercase tracking-widest text-black transition-all hover:scale-105 active:scale-95"
                   style={{ background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))" }}>
                   <Flame size={14} /> Get AI-powered picks instead
                 </Link>

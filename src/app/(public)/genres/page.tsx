@@ -90,7 +90,7 @@ function GenrePanel({ genre, onAnimeClick }: { genre: GenreName; onAnimeClick: (
   const g = brandForGenre(genre)
 
   return (
-    <div className="mt-4 p-6 rounded-2xl bg-surface border border-border">
+    <div className="mt-4 p-4 sm:p-6 rounded-2xl bg-surface border border-border">
       <div className="flex items-center justify-between mb-6">
         <h3 className={`text-2xl font-black uppercase italic tracking-tight ${g.accent}`}>
           {g.emoji} {genre}
@@ -169,14 +169,14 @@ export default function GenresPage() {
   return (
     <div className="min-h-screen bg-background pb-40">
       {/* Header */}
-      <div className="max-w-7xl mx-auto px-6 pt-32 pb-14">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-32 pb-14">
         <motion.p initial={{ opacity: 0, x: -16 }} animate={{ opacity: 1, x: 0 }}
           className="flex items-center gap-2 text-accent-bright font-black uppercase tracking-[0.4em] text-[10px] mb-4"
         >
           <Layers size={13} /> Browse By Category
         </motion.p>
         <motion.h1 initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }}
-          className="text-6xl md:text-8xl font-black tracking-tighter text-foreground italic leading-none"
+          className="text-5xl sm:text-6xl md:text-8xl font-black tracking-tighter text-foreground italic leading-none"
         >
           Genre<span style={{color:"var(--app-accent)"}}>.</span>
           <br /><span className="text-subtle">Explorer</span>
@@ -204,7 +204,7 @@ export default function GenresPage() {
       </div>
 
       {/* Genre grid */}
-      <div className="max-w-7xl mx-auto px-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {GENRES.map((g, i) => {
             const isOpen = activeGenre === g.name
@@ -213,6 +213,7 @@ export default function GenresPage() {
                 <motion.button
                   initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.04 }}
+                  whileTap={{ scale: 0.97 }}
                   onClick={() => toggleGenre(g.name)}
                   className={`w-full text-left relative rounded-2xl border overflow-hidden transition-all duration-300 ${g.border} ${isOpen ? "ring-1 ring-indigo-500/30" : ""}`}
                 >

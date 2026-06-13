@@ -5,6 +5,7 @@ import { MonitorPlay, ChevronRight, CalendarDays, Clock, TrendingUp } from "luci
 import Link from "next/link"
 import { useAuthStore } from "@/stores/auth.store"
 import { useUserList } from "@/hooks/useLists"
+import { ui } from "@/lib/design/tokens"
 import { useMemo } from "react"
 
 // ─── Mock data ────────────────────────────────────────────────────────────────
@@ -93,11 +94,11 @@ function CalendarGrid() {
     <div className="space-y-3">
       <div className="flex items-center gap-2">
         <CalendarDays size={13} className="text-accent-bright" />
-        <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-subtle">
+        <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-subtle whitespace-nowrap">
           Last 30 Days
         </h3>
         <div className="flex-1 h-px bg-surface" />
-        <div className="flex items-center gap-1.5 text-[9px] text-subtle font-bold">
+        <div className="hidden sm:flex items-center gap-1.5 text-[9px] text-subtle font-bold">
           <span className="w-3 h-3 rounded-sm bg-surface border border-border inline-block" /> 0
           <span className="w-3 h-3 rounded-sm bg-amber-900/70 border-indigo-700/30 inline-block ml-2" /> 1
           <span className="w-3 h-3 rounded-sm bg-accent/80 border-accent/30 inline-block ml-2" /> 2
@@ -134,16 +135,19 @@ function EpisodeRow({ entry, index }: { entry: EpisodeEntry; index: number }) {
       initial={{ opacity: 0, x: -12 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay: index * 0.03 }}
-      className="flex items-center gap-4 px-4 py-3.5 rounded-2xl bg-surface border border-border hover:border-border hover:bg-surface transition-all group"
+    >
+    <Link
+      href={entry.animeId ? `/anime/${entry.animeId}` : "/watchlist"}
+      className="flex items-center gap-3 sm:gap-4 px-3 sm:px-4 py-3 min-h-11 rounded-2xl bg-surface border border-border hover:border-accent/30 active:scale-[0.99] transition-all group"
     >
       {/* Cover thumbnail */}
-      <div className={`relative w-10 h-12 rounded-xl overflow-hidden shrink-0 bg-gradient-to-br ${entry.coverGradient} flex items-center justify-center`}>
+      <div className={`relative w-11 h-14 rounded-xl overflow-hidden shrink-0 bg-gradient-to-br ${entry.coverGradient} flex items-center justify-center`}>
         <MonitorPlay size={14} className="text-subtle" />
       </div>
 
       {/* Info */}
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-black text-foreground uppercase italic tracking-tight truncate">
+        <p className="text-[13px] sm:text-sm font-black text-foreground uppercase italic tracking-tight truncate group-hover:text-accent-bright transition-colors">
           {entry.animeTitle}
         </p>
         <p className="text-[10px] font-bold text-subtle uppercase tracking-widest mt-0.5">
@@ -167,6 +171,7 @@ function EpisodeRow({ entry, index }: { entry: EpisodeEntry; index: number }) {
       }`}>
         {entry.platform}
       </span>
+    </Link>
     </motion.div>
   )
 }
@@ -205,7 +210,7 @@ export default function WatchlistHistoryPage() {
   }, new Map())
 
   return (
-    <div className="max-w-5xl mx-auto px-6 py-12 pb-32 space-y-10">
+    <div className={`max-w-5xl mx-auto ${ui.screenX} py-8 sm:py-12 pb-32 space-y-8 sm:space-y-10`}>
 
       {/* Breadcrumb */}
       <nav className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-subtle">
@@ -221,11 +226,11 @@ export default function WatchlistHistoryPage() {
         <motion.p
           initial={{ opacity: 0, x: -16 }}
           animate={{ opacity: 1, x: 0 }}
-          className="flex items-center gap-2 text-accent-bright font-black uppercase tracking-[0.4em] text-[10px]"
+          className="flex items-center gap-2 text-accent-bright font-black uppercase tracking-[0.3em] sm:tracking-[0.4em] text-[10px]"
         >
           <MonitorPlay size={13} /> Episode Log
         </motion.p>
-        <h1 className="text-6xl md:text-7xl font-black tracking-tighter text-foreground italic leading-none">
+        <h1 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tighter text-foreground italic leading-none">
           Episode<span style={{color:"var(--app-accent)"}}>.</span>
           <br />
           <span className="text-subtle">History</span>
@@ -261,7 +266,7 @@ export default function WatchlistHistoryPage() {
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.14 }}
-        className="p-6 rounded-2xl bg-surface border border-border"
+        className="p-4 sm:p-6 rounded-2xl bg-surface border border-border"
       >
         <CalendarGrid />
       </motion.div>
@@ -306,7 +311,7 @@ export default function WatchlistHistoryPage() {
       <div className="flex items-center gap-3 pt-4 border-t border-border">
         <Link
           href="/watchlist"
-          className="flex items-center gap-2 text-[11px] font-black uppercase tracking-widest text-subtle hover:text-accent-bright transition-colors"
+          className={`inline-flex items-center gap-2 ${ui.touch} text-[11px] font-black uppercase tracking-widest text-subtle hover:text-accent-bright active:scale-95 transition-all`}
         >
           ← Back to Watchlist
         </Link>

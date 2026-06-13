@@ -44,17 +44,17 @@ export default function CollectionDetailPage({ params }: { params: Promise<{ id:
     <div className="min-h-screen bg-background text-foreground pb-32">
       {/* Hero */}
       <div className={`relative bg-gradient-to-br ${col.accentClass} border-b border-border pt-32 pb-12`}>
-        <div className="max-w-7xl mx-auto px-6">
-          <Link href="/collections" className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-subtle hover:text-foreground mb-6 transition-colors">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6">
+          <Link href="/collections" className="inline-flex items-center gap-2 min-h-11 text-[10px] font-black uppercase tracking-widest text-subtle hover:text-foreground mb-4 transition-colors active:scale-95">
             <ChevronLeft size={11}/> All Collections
           </Link>
-          <div className="flex items-start justify-between gap-6">
+          <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-6">
             <div className="space-y-3">
               <div className="flex items-center gap-3">
                 <Layers size={20} className="text-muted" />
                 <span className="text-[9px] font-mono uppercase tracking-[0.4em] text-subtle">Curated Collection</span>
               </div>
-              <h1 className="text-5xl font-black tracking-tighter uppercase italic text-foreground leading-none">{col.name}<span style={{color:"var(--app-accent)"}}>.</span></h1>
+              <h1 className="text-4xl sm:text-5xl font-black tracking-tighter uppercase italic text-foreground leading-none">{col.name}<span style={{color:"var(--app-accent)"}}>.</span></h1>
               <p className="text-muted text-sm max-w-xl leading-relaxed">{col.description}</p>
               <div className="flex items-center gap-4 text-[10px] text-subtle">
                 <span>Curated by <span className="text-muted font-black">{col.curator}</span></span>
@@ -64,10 +64,10 @@ export default function CollectionDetailPage({ params }: { params: Promise<{ id:
             </div>
             <div className="flex gap-3 shrink-0">
               <button onClick={() => { setLiked(l=>!l); push(liked?"Removed from favorites":"Collection saved!","success") }}
-                className={`flex items-center gap-2 px-4 py-2.5 rounded-2xl border text-xs font-black uppercase tracking-widest transition-all ${liked?"bg-rose-500/15 border-rose-500/30 text-rose-400":"border-border bg-surface text-muted hover:text-foreground"}`}
+                className={`flex items-center gap-2 px-4 min-h-11 rounded-2xl border text-xs font-black uppercase tracking-widest transition-all active:scale-95 ${liked?"bg-rose-500/15 border-rose-500/30 text-rose-400":"border-border bg-surface text-muted hover:text-foreground"}`}
               ><Heart size={13} fill={liked?"currentColor":"none"}/>{liked?"Saved":"Save"}</button>
               <button onClick={() => { navigator.clipboard.writeText(window.location.href); push("Link copied!","success") }}
-                className="flex items-center gap-2 px-4 py-2.5 rounded-2xl border border-border bg-surface text-muted hover:text-foreground text-xs font-black uppercase tracking-widest transition-all"
+                className="flex items-center gap-2 px-4 min-h-11 rounded-2xl border border-border bg-surface text-muted hover:text-foreground text-xs font-black uppercase tracking-widest transition-all active:scale-95"
               ><Share2 size={13}/>Share</button>
             </div>
           </div>
@@ -75,7 +75,7 @@ export default function CollectionDetailPage({ params }: { params: Promise<{ id:
       </div>
 
       {/* Grid */}
-      <div className="max-w-7xl mx-auto px-6 py-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
         {anime.length > 0 ? (
           <motion.div layout className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-5">
             {anime.map((a,i) => <AnimeCard key={a.id} anime={a} index={i} onClick={setSelected}/>)}

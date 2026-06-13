@@ -67,12 +67,12 @@ export default function SeasonalPage() {
   return (
     <div className="min-h-screen bg-background text-foreground pb-40">
       {/* Header */}
-      <div className="max-w-7xl mx-auto px-6 pt-32 pb-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-32 pb-10">
         <div className="flex items-center gap-3 mb-4">
           <CalendarDays size={16} className="text-accent-bright" />
           <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-accent-bright/60">Seasonal Archive</p>
         </div>
-        <h1 className="text-6xl font-black tracking-tighter uppercase italic text-foreground leading-none mb-3">
+        <h1 className="text-5xl sm:text-6xl font-black tracking-tighter uppercase italic text-foreground leading-none mb-3">
           Seasonal<span style={{color:"var(--app-accent)"}}>.</span>
         </h1>
         <p className="text-subtle text-sm">Every anime, every season — from {EARLIEST_YEAR} to {CURRENT_YEAR}.</p>
@@ -80,7 +80,7 @@ export default function SeasonalPage() {
 
       {/* Sticky picker bar */}
       <div className="sticky top-[var(--sticky-top,0px)] z-30 bg-background/90 backdrop-blur-xl border-b border-border">
-        <div className="max-w-7xl mx-auto px-6 py-4 flex flex-wrap items-center gap-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex flex-wrap items-center gap-3 sm:gap-4">
 
           {/* Year control */}
           <div className="flex items-center gap-2">
@@ -130,13 +130,13 @@ export default function SeasonalPage() {
           </div>
 
           {/* Season tabs */}
-          <div className="flex items-center gap-1.5 bg-white/4 border border-border rounded-2xl p-1">
+          <div className="flex items-center gap-1.5 bg-white/4 border border-border rounded-2xl p-1 max-w-full overflow-x-auto scrollbar-hide">
             {SEASONS.map(s => {
               const m = SEASON_META[s]
               const active = s === season
               return (
                 <button key={s} onClick={() => setSeason(s)}
-                  className={`flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${
+                  className={`flex shrink-0 items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all active:scale-95 ${
                     active ? "bg-white/12 text-foreground shadow-sm" : "text-subtle hover:text-foreground hover:bg-surface"
                   }`}
                 >
@@ -162,8 +162,8 @@ export default function SeasonalPage() {
       </div>
 
       {/* Season label */}
-      <div className="max-w-7xl mx-auto px-6 pt-8 pb-6 flex items-center gap-4">
-        <h2 className="text-3xl font-black tracking-tighter uppercase italic text-foreground">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-8 pb-6 flex flex-wrap items-center gap-3 sm:gap-4">
+        <h2 className="text-2xl sm:text-3xl font-black tracking-tighter uppercase italic text-foreground">
           {meta.emoji} {season.charAt(0).toUpperCase() + season.slice(1)} {year}
         </h2>
         <span className={`px-3 py-1 rounded-full border text-[10px] font-black uppercase tracking-widest ${meta.badge}`}>
@@ -177,7 +177,7 @@ export default function SeasonalPage() {
       </div>
 
       {/* Content */}
-      <div className="max-w-7xl mx-auto px-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
 
         {isLoading && (
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-5">
@@ -222,6 +222,7 @@ export default function SeasonalPage() {
                   initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: Math.min(i * 0.025, 0.4) }}
                   onClick={() => setSelected(a)}
+                  whileTap={{ scale: 0.96 }}
                   className="group relative cursor-pointer"
                 >
                   <div className="aspect-[2/3] rounded-[1.6rem] overflow-hidden bg-white/[0.04] relative">

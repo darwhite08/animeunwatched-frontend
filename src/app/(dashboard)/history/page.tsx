@@ -16,6 +16,7 @@ import Link from "next/link"
 import { useToast } from "@/stores/toast.store"
 import { useAuthStore } from "@/stores/auth.store"
 import { useUserList } from "@/hooks/useLists"
+import { ui } from "@/lib/design/tokens"
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -285,18 +286,18 @@ export default function HistoryPage() {
   }
 
   return (
-    <div className="max-w-5xl mx-auto px-6 py-12 pb-32 space-y-10">
+    <div className={`max-w-5xl mx-auto ${ui.screenX} py-8 sm:py-12 pb-32 space-y-8 sm:space-y-10`}>
       {/* Header */}
-      <header className="flex flex-col sm:flex-row sm:items-end justify-between gap-6">
-        <div className="space-y-3">
+      <header className="flex flex-row items-end justify-between gap-4">
+        <div className="space-y-2 sm:space-y-3 min-w-0">
           <motion.p
             initial={{ opacity: 0, x: -16 }}
             animate={{ opacity: 1, x: 0 }}
-            className="flex items-center gap-2 text-accent-bright font-black uppercase tracking-[0.4em] text-[10px]"
+            className="flex items-center gap-2 text-accent-bright font-black uppercase tracking-[0.3em] sm:tracking-[0.4em] text-[10px]"
           >
             <History size={13} /> Viewing Log
           </motion.p>
-          <h1 className="text-6xl md:text-7xl font-black tracking-tighter text-foreground italic leading-none">
+          <h1 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tighter text-foreground italic leading-none">
             Watch<span style={{color:"var(--app-accent)"}}>.</span>
             <br />
             <span className="text-subtle">History</span>
@@ -305,9 +306,9 @@ export default function HistoryPage() {
 
         <button
           onClick={handleClearAll}
-          className="self-start sm:self-auto flex items-center gap-2 px-5 py-3 rounded-2xl border border-red-900/30 bg-red-950/20 text-red-400 hover:bg-red-900/30 transition-all text-[10px] font-black uppercase tracking-widest"
+          className={`shrink-0 flex items-center gap-2 px-4 sm:px-5 ${ui.touch} rounded-2xl border border-red-900/30 bg-red-950/20 text-red-400 hover:bg-red-900/30 active:scale-95 transition-all text-[10px] font-black uppercase tracking-widest`}
         >
-          <Trash2 size={13} /> Clear All
+          <Trash2 size={13} /> <span className="hidden sm:inline">Clear All</span>
         </button>
       </header>
 
@@ -351,21 +352,22 @@ export default function HistoryPage() {
             placeholder="Filter by anime name…"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            className="w-full pl-11 pr-10 py-3 rounded-2xl bg-surface border border-border text-foreground placeholder:text-subtle focus:outline-none focus:border-accent/40 transition-all text-sm"
+            className="w-full pl-11 pr-11 min-h-11 py-3 rounded-2xl bg-surface border border-border text-foreground placeholder:text-subtle focus:outline-none focus:border-accent/40 transition-all text-base sm:text-sm"
           />
           {query && (
             <button
               onClick={() => setQuery("")}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-subtle hover:text-foreground transition-colors"
+              aria-label="Clear search"
+              className={`absolute right-1.5 top-1/2 -translate-y-1/2 ${ui.touch} grid place-items-center text-subtle hover:text-foreground active:scale-95 transition-all`}
             >
-              <X size={14} />
+              <X size={16} />
             </button>
           )}
         </div>
 
         <Link
           href="/watchlist"
-          className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-accent hover:bg-accent-bright text-black font-black text-[10px] uppercase tracking-widest transition-all whitespace-nowrap"
+          className={`flex items-center justify-center gap-2 px-6 ${ui.touch} rounded-2xl bg-accent hover:bg-accent-bright text-black font-black text-[10px] uppercase tracking-widest active:scale-95 transition-all whitespace-nowrap`}
         >
           Continue Watching <ArrowRight size={13} />
         </Link>
@@ -376,25 +378,33 @@ export default function HistoryPage() {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="py-32 text-center border border-dashed border-border rounded-[2rem]"
+          className="flex flex-col items-center justify-center py-20 sm:py-32 px-6 text-center border border-dashed border-border rounded-3xl sm:rounded-[2rem]"
         >
-          <History size={28} className="mx-auto mb-3 text-subtle" />
-          <p className="text-subtle font-black uppercase tracking-widest text-xs">
+          <div className="h-14 w-14 rounded-2xl bg-surface border border-border grid place-items-center mb-5 text-accent-bright">
+            <History size={24} />
+          </div>
+          <p className="text-subtle font-black uppercase tracking-widest text-[11px] sm:text-xs">
             No watch history yet
           </p>
+          <Link
+            href="/watchlist"
+            className={`mt-6 inline-flex items-center gap-2 px-5 ${ui.touch} rounded-2xl bg-accent text-black font-black text-[10px] uppercase tracking-widest active:scale-95 transition-transform`}
+          >
+            <Play size={14} /> Start Watching
+          </Link>
         </motion.div>
       ) : filtered.length === 0 ? (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="py-20 text-center border border-dashed border-border rounded-[2rem]"
+          className="flex flex-col items-center justify-center py-16 sm:py-20 px-6 text-center border border-dashed border-border rounded-3xl sm:rounded-[2rem]"
         >
-          <p className="text-subtle font-black uppercase tracking-widest text-xs">
+          <p className="text-subtle font-black uppercase tracking-widest text-[11px] sm:text-xs">
             No results for &ldquo;{query}&rdquo;
           </p>
           <button
             onClick={() => setQuery("")}
-            className="mt-4 text-xs text-accent-bright hover:text-accent-bright font-black uppercase tracking-widest"
+            className={`mt-2 inline-flex items-center ${ui.touch} px-4 text-xs text-accent-bright hover:opacity-80 active:scale-95 font-black uppercase tracking-widest transition-all`}
           >
             Clear search
           </button>
@@ -443,17 +453,13 @@ function HistoryEntryRow({
   entry: HistoryEntry
   index: number
 }) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, x: -12 }}
-      animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: 12 }}
-      transition={{ delay: index * 0.03 }}
-      className="flex items-center gap-4 px-4 py-3.5 rounded-2xl bg-surface border border-border hover:border-border hover:bg-surface transition-all group"
-    >
+  const rowClass =
+    "flex items-center gap-3 sm:gap-4 px-3 sm:px-4 py-3 min-h-11 rounded-2xl bg-surface border border-border hover:border-accent/30 active:scale-[0.99] transition-all group"
+  const inner = (
+    <>
       {/* Cover thumbnail */}
       <div
-        className={`relative w-12 h-14 rounded-xl overflow-hidden shrink-0 bg-gradient-to-br ${entry.coverGradient}`}
+        className={`relative w-11 h-14 rounded-xl overflow-hidden shrink-0 bg-gradient-to-br ${entry.coverGradient}`}
       >
         <div className="absolute inset-0 flex items-center justify-center">
           <MonitorPlay size={16} className="text-subtle" />
@@ -462,10 +468,10 @@ function HistoryEntryRow({
 
       {/* Info */}
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-black text-foreground uppercase italic tracking-tight truncate">
+        <p className="text-[13px] sm:text-sm font-black text-foreground uppercase italic tracking-tight truncate group-hover:text-accent-bright transition-colors">
           {entry.animeTitle}
         </p>
-        <p className="text-[10px] font-bold text-subtle uppercase tracking-widest mt-0.5">
+        <p className="text-[10px] font-bold text-subtle uppercase tracking-widest mt-0.5 truncate">
           {entry.episode}
         </p>
       </div>
@@ -489,6 +495,21 @@ function HistoryEntryRow({
       >
         {entry.platform}
       </span>
+    </>
+  )
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, x: -12 }}
+      animate={{ opacity: 1, x: 0 }}
+      exit={{ opacity: 0, x: 12 }}
+      transition={{ delay: index * 0.03 }}
+    >
+      {entry.animeId ? (
+        <Link href={`/anime/${entry.animeId}`} className={rowClass}>{inner}</Link>
+      ) : (
+        <div className={rowClass}>{inner}</div>
+      )}
     </motion.div>
   )
 }

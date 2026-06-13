@@ -1,11 +1,11 @@
 export default function CalendarLoading() {
   return (
     <div className="min-h-screen bg-background animate-pulse">
-      <div className="max-w-6xl mx-auto px-6 pt-28 pb-32">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-28 pb-32">
         <div className="mb-10 space-y-3">
           <div className="h-3 w-24 rounded-full bg-surface" />
-          <div className="h-12 w-56 rounded-xl bg-surface" />
-          <div className="h-4 w-72 rounded-lg bg-surface" />
+          <div className="h-12 w-56 max-w-full rounded-xl bg-surface" />
+          <div className="h-4 w-72 max-w-full rounded-lg bg-surface" />
         </div>
         <div className="flex items-center gap-4 mb-8">
           <div className="h-10 w-10 rounded-xl bg-surface" />

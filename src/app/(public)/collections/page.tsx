@@ -160,17 +160,17 @@ export default function CollectionsPage() {
   return (
     <div className="min-h-screen bg-background text-foreground pb-32">
       {/* Header */}
-      <div className="max-w-7xl mx-auto px-6 pt-32 pb-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-32 pb-12">
         <div className="flex items-center gap-3 mb-6">
           <SquaresFour size={18} weight="duotone" className="text-accent-bright" />
           <p className="text-[9px] font-mono uppercase tracking-[0.4em]" style={{ color: "color-mix(in srgb, var(--app-accent) 60%, transparent)" }}>
             Curated Collections
           </p>
         </div>
-        <h1 className="text-6xl md:text-7xl font-black tracking-tighter uppercase italic text-foreground leading-none mb-4">
+        <h1 className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tighter uppercase italic text-foreground leading-none mb-4">
           Collections<span style={{ color: "var(--app-accent)" }}>.</span>
         </h1>
-        <p className="text-subtle text-lg max-w-xl leading-relaxed">
+        <p className="text-subtle text-base sm:text-lg max-w-xl leading-relaxed">
           {COLLECTIONS.length} hand-picked collections — grouped by mood, theme, and what they'll do to your soul.
         </p>
         {/* Gold divider */}
@@ -179,7 +179,7 @@ export default function CollectionsPage() {
       </div>
 
       {/* Collection list */}
-      <div className="max-w-7xl mx-auto px-6 space-y-3">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 space-y-3">
         {COLLECTIONS.map((col, i) => {
           const isActive = active === col.id
           return (
@@ -191,7 +191,7 @@ export default function CollectionsPage() {
               {/* Header button */}
               <button
                 onClick={() => setActive(isActive ? null : col.id)}
-                className="w-full text-left p-6 rounded-2xl border transition-all duration-300 flex items-center justify-between gap-4 group"
+                className="w-full text-left p-4 sm:p-6 rounded-2xl border transition-all duration-300 flex items-center justify-between gap-3 sm:gap-4 group active:scale-[0.99]"
                 style={{
                   background: isActive
                     ? "linear-gradient(160deg, color-mix(in srgb, var(--app-accent) 8%, transparent), color-mix(in srgb, var(--app-accent) 3%, transparent))"

@@ -91,16 +91,16 @@ function StudioPanel({ studio, onAnimeClick }: { studio: StudioName; onAnimeClic
   const s = brandFor(studio, totalAnime)
 
   return (
-    <div className="mt-4 p-6 rounded-2xl bg-surface border border-border">
-      <div className="flex items-center justify-between mb-6">
-        <div className="flex items-center gap-3">
+    <div className="mt-4 p-4 sm:p-6 rounded-2xl bg-surface border border-border">
+      <div className="flex items-center justify-between mb-6 gap-3">
+        <div className="flex items-center gap-3 min-w-0">
           <div style={{ width: 40, height: 40, borderRadius: 10, background: `linear-gradient(135deg, ${s.colors[0]}, ${s.colors[1]})`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
             <span style={{ color: "white", fontWeight: 900, fontSize: 13, fontStyle: "italic", letterSpacing: "-0.02em" }}>{s.monogram}</span>
           </div>
-          <h3 className="text-2xl font-black uppercase italic tracking-tight text-foreground">{studio}</h3>
+          <h3 className="text-2xl font-black uppercase italic tracking-tight text-foreground truncate">{studio}</h3>
         </div>
         {!isLoading && (
-          <span className="text-[10px] font-black text-subtle uppercase tracking-widest">
+          <span className="shrink-0 text-[10px] font-black text-subtle uppercase tracking-widest">
             {totalAnime.toLocaleString()} titles
           </span>
         )}
@@ -166,14 +166,14 @@ export default function StudiosPage() {
 
   return (
     <div className="min-h-screen bg-background pb-40">
-      <div className="max-w-7xl mx-auto px-6 pt-32 pb-14">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-32 pb-14">
         <motion.p initial={{ opacity: 0, x: -16 }} animate={{ opacity: 1, x: 0 }}
           className="flex items-center gap-2 text-violet-400 font-black uppercase tracking-[0.4em] text-[10px] mb-4"
         >
           <Building2 size={13} /> Production Houses
         </motion.p>
         <motion.h1 initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.05 }}
-          className="text-6xl md:text-8xl font-black tracking-tighter text-foreground italic leading-none"
+          className="text-5xl sm:text-6xl md:text-8xl font-black tracking-tighter text-foreground italic leading-none"
         >
           Studio<span className="text-violet-500">.</span>
           <br /><span className="text-subtle">Archive</span>
@@ -199,7 +199,7 @@ export default function StudiosPage() {
         </nav>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {STUDIOS.map((s, i) => {
             const isOpen = activeStudio === s.name
@@ -208,6 +208,7 @@ export default function StudiosPage() {
                 <motion.button
                   initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.04 }}
+                  whileTap={{ scale: 0.98 }}
                   onClick={() => toggleStudio(s.name)}
                   className={`w-full text-left rounded-2xl border bg-surface overflow-hidden transition-all duration-300 hover:border-border hover:bg-surface ${
                     isOpen ? "ring-1 ring-violet-500/30 border-violet-900/40" : "border-border"

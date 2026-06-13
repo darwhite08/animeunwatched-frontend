@@ -4,11 +4,12 @@ import { useState, useMemo, useCallback, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { useParams } from "next/navigation"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
-import { Search, Plus, Loader2, X } from "lucide-react"
+import { Search, Plus, Loader2, X, BookOpen } from "lucide-react"
 import { ReadCard } from "@/components/readlist/ReadCard"
 import { useAuthStore } from "@/stores/auth.store"
 import { useToast } from "@/stores/toast.store"
 import * as ep from "@/lib/api/endpoints"
+import { ui } from "@/lib/design/tokens"
 import type { MangaEntry, MangaSearchResult, MangaStatus } from "@/lib/api/types"
 
 const TABS: Array<{ label: string; status: MangaStatus | "ALL" }> = [
@@ -53,41 +54,41 @@ export default function ReadlistPage() {
   }, [list, searchQuery, activeTab])
 
   return (
-    <div className="max-w-[1440px] mx-auto px-8 py-16 space-y-16 pb-40">
+    <div className={`max-w-[1440px] mx-auto ${ui.screenX} py-8 sm:py-12 lg:py-16 space-y-8 sm:space-y-12 pb-32`}>
       {/* HEADER & SEARCH */}
-      <header className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-12">
-        <div className="space-y-4">
+      <header className="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-6 lg:gap-12">
+        <div className="space-y-3">
           <motion.div initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }}
-            className="text-accent-bright font-black uppercase tracking-[0.4em] text-[10px]">
+            className="text-accent-bright font-black uppercase tracking-[0.3em] sm:tracking-[0.4em] text-[10px]">
             Archives Repository • {list.length} Title{list.length === 1 ? "" : "s"}
           </motion.div>
-          <h1 className="text-7xl md:text-8xl font-black tracking-tighter text-foreground leading-none">
+          <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tighter text-foreground leading-none">
             Library<span className="text-accent">.</span>
           </h1>
         </div>
 
-        <div className="flex items-center gap-3 w-full lg:w-auto">
+        <div className="flex items-center gap-2 sm:gap-3 w-full lg:w-auto">
           <div className="relative flex-1 lg:w-80 group">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-subtle group-focus-within:text-accent-bright transition-colors" size={20} />
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-subtle group-focus-within:text-accent-bright transition-colors" size={18} />
             <input type="text" placeholder="Search your chronicles..." value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
-              className="w-full pl-12 pr-6 py-4 rounded-2xl bg-surface border border-border text-foreground placeholder:text-subtle focus:outline-none focus:border-accent/50 transition-all" />
+              className="w-full pl-11 pr-6 min-h-11 py-3 rounded-2xl bg-surface border border-border text-foreground text-base sm:text-sm placeholder:text-subtle focus:outline-none focus:border-accent/50 transition-all" />
           </div>
           {isOwner && (
             <button onClick={() => setAddOpen(true)}
-              className="flex items-center gap-2 px-5 py-4 rounded-2xl bg-accent text-black font-black text-[11px] uppercase tracking-widest hover:opacity-90 transition-opacity whitespace-nowrap">
-              <Plus size={16} /> Add Manga
+              className={`flex items-center gap-2 px-4 sm:px-5 ${ui.touch} rounded-2xl bg-accent text-black font-black text-[11px] uppercase tracking-widest hover:opacity-90 active:scale-95 transition-all whitespace-nowrap`}>
+              <Plus size={16} /> <span className="hidden sm:inline">Add Manga</span>
             </button>
           )}
         </div>
       </header>
 
       {/* TABS */}
-      <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide border-b border-border">
+      <div className="flex gap-2 -mx-4 px-4 sm:mx-0 sm:px-0 overflow-x-auto pb-3 scrollbar-hide border-b border-border">
         {TABS.map(({ label, status }) => (
           <button key={status} onClick={() => setActiveTab(status)}
-            className={`px-8 py-2.5 rounded-full text-[10px] font-black uppercase tracking-widest whitespace-nowrap transition-all ${
-              activeTab === status ? "bg-accent text-black" : "bg-surface text-muted hover:bg-surface border border-border"
+            className={`px-5 sm:px-8 min-h-11 rounded-full text-[10px] font-black uppercase tracking-widest whitespace-nowrap active:scale-95 transition-all ${
+              activeTab === status ? "bg-accent text-black" : "bg-surface text-muted hover:text-foreground border border-border"
             }`}>
             {label}
           </button>
@@ -96,13 +97,13 @@ export default function ReadlistPage() {
 
       {/* GRID */}
       {isLoading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+        <div className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6 lg:gap-10">
           {Array.from({ length: 6 }).map((_, i) => (
-            <div key={i} className="rounded-[2.8rem] border border-border bg-surface/40 h-[520px] animate-pulse" />
+            <div key={i} className="rounded-3xl sm:rounded-[2.8rem] border border-border bg-surface/40 aspect-[2/3] animate-pulse" />
           ))}
         </div>
       ) : (
-        <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
+        <motion.div layout className="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6 lg:gap-10">
           <AnimatePresence mode="popLayout">
             {filtered.map(manga => (
               <ReadCard key={manga.id} manga={manga} owner={isOwner}
@@ -122,12 +123,15 @@ export default function ReadlistPage() {
       {/* EMPTY STATE */}
       {!isLoading && filtered.length === 0 && (
         <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
-          className="py-32 text-center border border-dashed border-border rounded-[3rem] bg-white/[0.01]">
-          <p className="text-subtle font-black uppercase tracking-[0.3em] text-xs italic">
+          className="flex flex-col items-center justify-center py-20 sm:py-32 px-6 text-center border border-dashed border-border rounded-3xl sm:rounded-[3rem] bg-white/[0.01]">
+          <div className="h-14 w-14 rounded-2xl bg-surface border border-border grid place-items-center mb-5 text-accent-bright">
+            <BookOpen size={24} />
+          </div>
+          <p className="max-w-xs text-subtle font-black uppercase tracking-[0.25em] text-[11px] sm:text-xs italic leading-relaxed">
             {list.length === 0 ? (isOwner ? "Your library is empty — add your first manga." : "No manga in this library yet.") : "No entries match your query."}
           </p>
           {isOwner && list.length === 0 && (
-            <button onClick={() => setAddOpen(true)} className="mt-6 inline-flex items-center gap-2 px-5 py-3 rounded-2xl bg-accent text-black font-black text-[11px] uppercase tracking-widest">
+            <button onClick={() => setAddOpen(true)} className={`mt-6 inline-flex items-center gap-2 px-5 ${ui.touch} rounded-2xl bg-accent text-black font-black text-[11px] uppercase tracking-widest active:scale-95 transition-transform`}>
               <Plus size={15} /> Add Manga
             </button>
           )}
@@ -179,9 +183,9 @@ function AddMangaModal({ onClose, existing, onAdded }: { onClose: () => void; ex
         <div className="flex items-center gap-3 p-4 border-b border-border">
           <Search size={18} className="text-subtle" />
           <input autoFocus value={q} onChange={e => setQ(e.target.value)} placeholder="Search manga (AniList)…"
-            className="flex-1 bg-transparent text-foreground placeholder:text-subtle outline-none text-sm" />
+            className="flex-1 min-h-11 bg-transparent text-foreground placeholder:text-subtle outline-none text-base sm:text-sm" />
           {searching && <Loader2 size={16} className="animate-spin text-accent" />}
-          <button onClick={onClose} className="text-subtle hover:text-foreground"><X size={18} /></button>
+          <button onClick={onClose} aria-label="Close" className={`${ui.touch} grid place-items-center text-subtle hover:text-foreground active:scale-95 transition-transform`}><X size={18} /></button>
         </div>
         <div className="max-h-[60vh] overflow-y-auto">
           {q.trim().length < 2 ? (
@@ -201,8 +205,8 @@ function AddMangaModal({ onClose, existing, onAdded }: { onClose: () => void; ex
                     <div className="text-[11px] text-subtle truncate">{[m.author, m.format, m.totalChapters ? `${m.totalChapters} ch` : null].filter(Boolean).join(" · ")}</div>
                   </div>
                   <button disabled={already || adding === m.anilistId} onClick={() => add(m)}
-                    className={`shrink-0 px-3 py-2 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all ${
-                      already ? "bg-surface text-subtle cursor-default" : "bg-accent text-black hover:opacity-90"
+                    className={`shrink-0 grid place-items-center px-4 min-h-11 min-w-11 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all ${
+                      already ? "bg-surface text-subtle cursor-default" : "bg-accent text-black hover:opacity-90 active:scale-95"
                     }`}>
                     {adding === m.anilistId ? <Loader2 size={13} className="animate-spin" /> : already ? "Added" : "Add"}
                   </button>

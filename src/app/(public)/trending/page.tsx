@@ -83,7 +83,7 @@ export default function TrendingPage() {
 
       {/* Header */}
       <div className="border-b border-border bg-black/40 backdrop-blur-md sticky top-[var(--sticky-top,72px)] z-30">
-        <div className="max-w-6xl mx-auto px-6 py-5">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-5">
           <div className="flex items-center gap-3">
             <Flame size={18} className="text-orange-400" />
             <h1 className="text-2xl font-black tracking-tighter uppercase italic text-foreground">
@@ -94,7 +94,7 @@ export default function TrendingPage() {
         </div>
       </div>
 
-      <div className="max-w-6xl mx-auto px-6 pt-10 space-y-16">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-10 space-y-16">
 
         {/* ── Section 1: Trending Discussions ── */}
         <section>
@@ -220,7 +220,7 @@ export default function TrendingPage() {
                       <button
                         key={option}
                         onClick={() => vote(poll.id, option)}
-                        className={`w-full text-left px-3 py-2 rounded-lg text-xs font-bold transition-all ${
+                        className={`w-full text-left px-3 min-h-11 flex items-center rounded-lg text-xs font-bold transition-all active:scale-95 ${
                           voted
                             ? isSelected
                               ? "bg-accent/15 border border-accent/30 text-accent-bright"

@@ -119,7 +119,7 @@ export default function RecommendationsPage() {
           <div className="absolute -top-16 right-1/3 w-72 h-72 bg-violet-600/8 blur-[100px] rounded-full" />
         </div>
 
-        <div className="relative z-10 max-w-7xl mx-auto px-6 pt-16 pb-12">
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 pt-16 pb-12">
           <motion.div
             initial={{ opacity: 0, y: -16 }}
             animate={{ opacity: 1, y: 0 }}
@@ -136,7 +136,7 @@ export default function RecommendationsPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
-            className="text-5xl lg:text-7xl font-black tracking-tighter uppercase italic text-foreground leading-none mb-3"
+            className="text-4xl sm:text-5xl lg:text-7xl font-black tracking-tighter uppercase italic text-foreground leading-none mb-3"
           >
             What to Watch<br />
             <span className="text-accent-bright">Next</span>
@@ -154,7 +154,7 @@ export default function RecommendationsPage() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 py-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-10">
         {/* ── Mode selector ── */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
           {MODES.map((m, i) => (
@@ -163,6 +163,7 @@ export default function RecommendationsPage() {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.07 }}
+              whileTap={{ scale: 0.97 }}
               onClick={() => setMode(m.id)}
               className={`relative p-5 rounded-2xl border text-left transition-all duration-300 overflow-hidden group ${
                 mode === m.id

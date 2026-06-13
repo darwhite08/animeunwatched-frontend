@@ -26,10 +26,10 @@ export function Topbar() {
 
   return (
     <>
-      <header className="sticky top-0 z-40 flex h-16 items-center gap-3 border-b border-white/[0.06] bg-gradient-to-b from-background/95 to-background/75 px-4 backdrop-blur-xl">
+      <header className="sticky top-0 z-40 flex h-[calc(4rem+env(safe-area-inset-top))] items-center gap-2 border-b border-white/[0.06] bg-gradient-to-b from-background/95 to-background/75 px-3 pt-[env(safe-area-inset-top)] backdrop-blur-xl sm:gap-3 sm:px-4">
         {/* Mobile: hamburger + logo (sidebar is hidden <md) */}
-        <button onClick={() => setMobileDrawer(true)} aria-label="Open menu" className="rounded-lg p-1.5 text-muted hover:text-foreground md:hidden">
-          <Menu size={20} />
+        <button onClick={() => setMobileDrawer(true)} aria-label="Open menu" className="-ml-1 flex h-11 w-11 items-center justify-center rounded-xl text-muted transition-colors hover:text-foreground active:bg-white/5 md:hidden">
+          <Menu size={22} />
         </button>
         <Link href="/" aria-label="Kaiveron home" className="md:hidden">
           <KaiveronLogo size={26} showWordmark={false} />
@@ -39,7 +39,7 @@ export function Topbar() {
         <button
           onClick={() => setSearchOpen(true)}
           aria-label="Search"
-          className="group flex h-10 max-w-xs flex-1 items-center gap-2.5 rounded-full border border-white/[0.07] bg-white/[0.03] px-4 text-muted shadow-[inset_0_1px_0_rgba(255,255,255,0.03)] transition-all hover:border-white/15 hover:bg-white/[0.05] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40 md:max-w-md"
+          className="group flex h-11 max-w-xs flex-1 items-center gap-2.5 rounded-full border border-white/[0.07] bg-white/[0.03] px-4 text-muted shadow-[inset_0_1px_0_rgba(255,255,255,0.03)] transition-all hover:border-white/15 hover:bg-white/[0.05] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40 md:max-w-md"
         >
           <Search size={16} className="text-subtle transition-colors group-hover:text-accent-bright" />
           <span className="truncate text-sm">Search anime, users, clubs…</span>

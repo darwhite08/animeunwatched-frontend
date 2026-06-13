@@ -14,7 +14,6 @@ import { JsonLd, SITE_JSONLD } from "@/components/seo/JsonLd"
 
 // Non-critical UI — lazy-loaded so they don't block the first paint
 const KeyboardShortcutsOverlay = lazy(() => import("@/components/ui/KeyboardShortcutsOverlay"))
-const MobileNav            = lazy(() => import("@/components/layout/MobileNav"))
 const CookieConsent        = lazy(() => import("@/components/ui/CookieConsent"))
 const MessagesButton       = lazy(() => import("@/components/ui/MessagesButton"))
 const InstallPrompt        = lazy(() => import("@/components/pwa/InstallPrompt"))
@@ -142,9 +141,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 */}
                 <Suspense fallback={null}>
                   <KeyboardShortcutsOverlay />
-                </Suspense>
-                <Suspense fallback={null}>
-                  <MobileNav />
                 </Suspense>
                 <Suspense fallback={null}>
                   <CookieConsent />

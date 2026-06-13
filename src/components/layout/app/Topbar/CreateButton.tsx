@@ -59,9 +59,9 @@ export function CreateButton() {
         onClick={toggle}
         aria-haspopup="menu"
         aria-expanded={open}
-        className="flex items-center gap-1.5 rounded-full bg-gradient-to-r from-accent-bright to-accent px-4 py-2.5 text-xs font-black uppercase tracking-widest text-black shadow-[0_2px_16px_color-mix(in_srgb,var(--app-accent)_45%,transparent)] transition-transform hover:scale-[1.03] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60"
+        className="flex h-11 w-11 items-center justify-center gap-1.5 rounded-full bg-gradient-to-r from-accent-bright to-accent px-0 text-xs font-black uppercase tracking-widest text-black shadow-[0_2px_16px_color-mix(in_srgb,var(--app-accent)_45%,transparent)] transition-transform hover:scale-[1.03] active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 sm:w-auto sm:px-4"
       >
-        <Plus size={15} strokeWidth={3} /> <span className="hidden sm:inline">Create</span>
+        <Plus size={16} strokeWidth={3} /> <span className="hidden sm:inline">Create</span>
       </button>
 
       {open && mounted && createPortal(
@@ -72,7 +72,7 @@ export function CreateButton() {
           className="fixed z-[100] w-48 rounded-2xl border border-border bg-background p-1.5 shadow-2xl"
         >
           {actions.map((a) => (
-            <Link key={a.href} href={a.href} onClick={() => setOpen(false)} role="menuitem" className="flex items-center gap-2.5 rounded-xl px-3 py-2 text-sm text-muted hover:bg-white/5 hover:text-foreground">
+            <Link key={a.href} href={a.href} onClick={() => setOpen(false)} role="menuitem" className="flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm text-muted hover:bg-white/5 hover:text-foreground">
               <a.icon size={15} /> {a.label}
             </Link>
           ))}

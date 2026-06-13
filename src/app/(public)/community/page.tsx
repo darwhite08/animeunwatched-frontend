@@ -27,6 +27,7 @@ import { PostMenu } from "@/components/ui/PostMenu"
 import { useAuthStore } from "@/stores/auth.store"
 import { VerifiedBadge } from "@/components/social/VerifiedBadge"
 import type { Post, PostComment } from "@/lib/api/types"
+import { EASE, DURATION } from "@/lib/design/tokens"
 
 type FeedTab = "trending" | "following" | "latest"
 
@@ -269,8 +270,9 @@ function PostCard({ post }: { post: Post }) {
   const grad         = avatarGradient(authorName)
 
   return (
-    <motion.article layout initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
-      className="bg-surface border border-border rounded-2xl overflow-hidden transition-all hover:border-accent/20 hover:shadow-[0_8px_24px_color-mix(in_srgb,var(--app-fg)_6%,transparent)] focus-within:ring-2 focus-within:ring-accent/40"
+    <motion.article layout initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: DURATION.base, ease: EASE.out }}
+      className="bg-surface border border-border rounded-2xl overflow-hidden transition-colors hover:border-accent/25 hover:shadow-[0_8px_28px_color-mix(in_srgb,var(--app-fg)_7%,transparent)] focus-within:ring-2 focus-within:ring-accent/40"
       style={{
         scrollMarginTop: "160px",  // account for sticky navbar + community header
       }}
@@ -374,7 +376,7 @@ function PostCard({ post }: { post: Post }) {
           <button onClick={handleLike} disabled={likePost.isPending}
             aria-label={liked ? `Unlike (${likeCount} likes)` : `Like (${likeCount} likes)`}
             aria-pressed={liked}
-            className={`flex items-center gap-2 min-h-10 px-3 rounded-xl text-sm font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 disabled:opacity-50 ${
+            className={`flex items-center gap-2 min-h-11 px-3 rounded-xl text-sm font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 disabled:opacity-50 ${
               liked
                 ? "text-rose-400 bg-rose-500/15"
                 : "text-muted hover:text-rose-400 hover:bg-rose-500/10"
@@ -387,7 +389,7 @@ function PostCard({ post }: { post: Post }) {
           <button onClick={handleToggleComments}
             aria-label={`${commentCount} comments — ${showComments ? "hide" : "show"}`}
             aria-expanded={showComments}
-            className={`flex items-center gap-2 min-h-10 px-3 rounded-xl text-sm font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 ${
+            className={`flex items-center gap-2 min-h-11 px-3 rounded-xl text-sm font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 ${
               showComments
                 ? "text-accent-bright bg-accent/15"
                 : "text-muted hover:text-accent-bright hover:bg-accent/10"
@@ -403,7 +405,7 @@ function PostCard({ post }: { post: Post }) {
             push("Link copied!", "success")
           }}
             aria-label="Copy post link"
-            className="flex items-center gap-1.5 min-h-10 min-w-10 justify-center px-3 rounded-xl text-sm font-bold text-muted hover:text-foreground hover:bg-surface-2 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 ml-auto">
+            className="flex items-center gap-1.5 min-h-11 min-w-10 justify-center px-3 rounded-xl text-sm font-bold text-muted hover:text-foreground hover:bg-surface-2 transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 ml-auto">
             <Share2 size={15} />
           </button>
         </div>
@@ -457,7 +459,7 @@ function PostCard({ post }: { post: Post }) {
                     placeholder="Write a comment… (⌘Enter to post)"
                     rows={2}
                     maxLength={500}
-                    className="w-full bg-surface border border-border rounded-xl px-3 py-2 text-[12px] text-foreground placeholder:text-subtle resize-none outline-none focus:border-accent/40 transition-colors disabled:opacity-40"
+                    className="w-full bg-surface border border-border rounded-xl px-3 py-2.5 text-base sm:text-[13px] text-foreground placeholder:text-subtle resize-none outline-none focus:border-accent/40 transition-colors disabled:opacity-40"
                   />
                   <div className="flex items-center justify-between mt-2">
                     <span className="text-[9px] text-subtle font-mono">{500 - commentDraft.length} chars</span>
@@ -647,7 +649,7 @@ export default function CommunityPage() {
           content cannot peek through the navbar's transparent margins. */}
       <div className="sticky top-[var(--sticky-top,0px)] z-40 bg-background border-b border-border shadow-[0_4px_12px_color-mix(in_srgb,var(--app-fg)_4%,transparent)]">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-[var(--page-top,120px)] pb-0 flex items-start justify-between gap-4">
-          <h1 className="text-3xl font-black tracking-tighter uppercase italic text-foreground">
+          <h1 className="text-2xl sm:text-3xl font-black tracking-tighter uppercase italic text-foreground">
             Community<span style={{ color: "var(--app-accent)" }}>.</span>
           </h1>
           <button onClick={openComposer}
@@ -705,7 +707,7 @@ export default function CommunityPage() {
                   <textarea ref={composerRef} value={draft} onChange={e => setDraft(e.target.value)}
                     placeholder={isAuthenticated ? "Share a theory, hot take, or reaction…" : "Sign in to post…"}
                     rows={4} autoFocus disabled={!isAuthenticated}
-                    className="w-full bg-transparent text-sm text-foreground placeholder:text-subtle resize-none outline-none leading-relaxed disabled:opacity-40" />
+                    className="w-full bg-transparent text-base sm:text-sm text-foreground placeholder:text-subtle resize-none outline-none leading-relaxed disabled:opacity-40" />
 
                   {/* Attached image previews — thumbnails, remove each */}
                   {attachedImages.length > 0 && (
@@ -770,13 +772,13 @@ export default function CommunityPage() {
                         title="Mention a user (@)"
                         aria-label="Mention a user"
                         onClick={() => insertAtCursor("@")}
-                        className="p-2 rounded-lg text-muted hover:text-accent-bright hover:bg-accent/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60"><AtSign size={15} /></button>
+                        className="flex h-10 w-10 items-center justify-center rounded-lg text-muted hover:text-accent-bright hover:bg-accent/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60"><AtSign size={15} /></button>
                       <button
                         type="button"
                         title="Add a hashtag (#)"
                         aria-label="Add a hashtag"
                         onClick={() => insertAtCursor("#")}
-                        className="p-2 rounded-lg text-muted hover:text-accent-bright hover:bg-accent/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60"><Hash size={15} /></button>
+                        className="flex h-10 w-10 items-center justify-center rounded-lg text-muted hover:text-accent-bright hover:bg-accent/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60"><Hash size={15} /></button>
                       <input
                         ref={fileInputRef}
                         type="file"
@@ -794,7 +796,7 @@ export default function CommunityPage() {
                         title={isUploading ? `Uploading ${progress}%…` : attachedImages.length >= MAX_IMAGES ? `Max ${MAX_IMAGES} images` : "Attach images"}
                         disabled={isUploading || attachedImages.length >= MAX_IMAGES}
                         onClick={() => fileInputRef.current?.click()}
-                        className={`p-1.5 transition-colors disabled:opacity-50 ${
+                        className={`flex h-10 w-10 items-center justify-center rounded-lg transition-colors disabled:opacity-50 ${
                           isUploading
                             ? "text-accent-bright animate-pulse"
                             : attachedImages.length > 0
@@ -814,7 +816,7 @@ export default function CommunityPage() {
                     <div className="flex items-center gap-2">
                       <span className={`text-[10px] font-mono ${500 - draft.length < 50 ? "text-accent-bright" : "text-subtle"}`}>{500 - draft.length}</span>
                       <button onClick={submitPost} disabled={!draft.trim() || createPost.isPending}
-                        className="flex items-center gap-2 px-4 py-2 rounded-xl bg-accent hover:bg-accent-bright disabled:opacity-40 text-xs font-black uppercase tracking-wider text-foreground transition-all">
+                        className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-accent hover:bg-accent-bright disabled:opacity-40 text-xs font-black uppercase tracking-wider text-black transition-all active:scale-95">
                         {createPost.isPending ? <Loader2 size={12} className="animate-spin" /> : <Send size={12} />}
                         Post
                       </button>

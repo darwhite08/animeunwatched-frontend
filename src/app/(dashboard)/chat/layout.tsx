@@ -358,6 +358,16 @@ export default function ChatLayout({ children }: { children: React.ReactNode }) 
   const [search,      setSearch]      = useState("")
   const [activeCom,   setActiveCom]   = useState<string|null>(null) // null = Home/DMs
 
+  // Mobile = single pane: show the DM list, or the open conversation, never both.
+  const [isMobile, setIsMobile] = useState(false)
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 767px)")
+    const update = () => setIsMobile(mq.matches)
+    update(); mq.addEventListener("change", update)
+    return () => mq.removeEventListener("change", update)
+  }, [])
+  const showList = !isMobile || !activeId   // on mobile, list only when no chat is open
+
   const { data: conversations=[], isLoading } = useConversations()
   const { data: clubData } = useClubs()
   const { push } = useToast()
@@ -390,11 +400,20 @@ export default function ChatLayout({ children }: { children: React.ReactNode }) 
 
       <div style={{ display:"flex", height:"100vh", width:"100%", overflow:"hidden", background:"var(--bg-0)" }}>
 
-        {/* ══ COMMUNITY RAIL (far left, 54px) ══════════════════════════════ */}
-        <CommunityRail activeCommunity={activeCom} onSelect={setActiveCom}/>
+        {/* ══ COMMUNITY RAIL (far left, 54px) — hidden on mobile ═══════════ */}
+        {!isMobile && <CommunityRail activeCommunity={activeCom} onSelect={setActiveCom}/>}
 
-        {/* ══ SIDEBAR (middle, 272px) ═══════════════════════════════════════ */}
-        <aside style={{ width:272, flexShrink:0, display:"flex", flexDirection:"column", background:"var(--bg-1)", borderRight:"1px solid var(--line)" }}>
+        {/* ══ SIDEBAR (DM list) — 272px on desktop, full-width on mobile when
+              no conversation is open; hidden on mobile while in a chat. ═══════ */}
+        {showList && (
+        <aside style={{ width: isMobile ? "100%" : 272, flexShrink:0, display:"flex", flexDirection:"column", background:"var(--bg-1)", borderRight: isMobile ? "none" : "1px solid var(--line)" }}>
+          {/* Mobile-only: get back to the feed (the rail is hidden on mobile). */}
+          {isMobile && (
+            <Link href="/community" style={{ display:"flex", alignItems:"center", gap:8, padding:"12px 16px", borderBottom:"1px solid var(--line)", color:"var(--ink-3)", textDecoration:"none", fontSize:13, fontWeight:600 }}>
+              <svg width={18} height={18} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+              Back to Kaiveron
+            </Link>
+          )}
 
           {/* Header */}
           <div style={{ padding:"14px 14px 10px", borderBottom:"1px solid var(--line)" }}>
@@ -599,9 +618,12 @@ export default function ChatLayout({ children }: { children: React.ReactNode }) 
             </div>
           )}
         </aside>
+        )}
 
-        {/* ══ MAIN ════════════════════════════════════════════════════════════ */}
-        <main style={{ flex:1, display:"flex", flexDirection:"column", minWidth:0 }}>{children}</main>
+        {/* ══ MAIN (conversation) — hidden on mobile until a chat is opened ════ */}
+        {(!isMobile || activeId) && (
+          <main style={{ flex:1, display:"flex", flexDirection:"column", minWidth:0 }}>{children}</main>
+        )}
       </div>
 
       <AnimatePresence>{showNew&&<NewDMModal onClose={()=>setShowNew(false)}/>}</AnimatePresence>

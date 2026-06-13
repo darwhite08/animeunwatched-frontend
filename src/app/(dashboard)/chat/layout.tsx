@@ -40,6 +40,24 @@ const GLOBAL_CSS = `
   @keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)}}
   @keyframes typing-bounce{0%,60%,100%{transform:translateY(0);opacity:.5}30%{transform:translateY(-3px);opacity:1}}
   @keyframes spin{to{transform:rotate(360deg)}}
+  /* Mobile chat = full-screen single pane. The dashboard bottom tab bar is fixed
+     and ~4rem tall + safe-area; reserve that space so the composer never hides
+     behind it, and use dvh so the iOS URL bar doesn't clip the input. */
+  .kv-chat-shell{height:100vh;height:100dvh}
+  @media (max-width:767px){
+    .kv-chat-shell{height:calc(100vh - 4rem - env(safe-area-inset-bottom));height:calc(100dvh - 4rem - env(safe-area-inset-bottom))}
+  }
+  /* Momentum scroll on iOS for every chat scroll region. */
+  .kv-momentum{-webkit-overflow-scrolling:touch}
+  /* Keyboard-shortcut hints under the composer are desktop-only — hide on phones
+     to declutter and give the composer more breathing room. */
+  @media (max-width:767px){ .composer-hint{display:none !important} }
+  /* Tighter horizontal gutters for message rows on phones so bubbles get more
+     width (desktop keeps the roomy 24px gutter + 52px avatar column). */
+  @media (max-width:767px){
+    .kv-msgrow{padding-left:12px !important;padding-right:12px !important;grid-template-columns:40px minmax(0,1fr) !important}
+    .kv-msggutter{padding-left:12px !important;padding-right:12px !important;grid-template-columns:40px minmax(0,1fr) !important}
+  }
 `
 
 /* ─── Avatar ────────────────────────────────────────────────────────────────── */
@@ -75,7 +93,7 @@ function NewDMModal({ onClose }: { onClose:()=>void }) {
         style={{ width:"100%", maxWidth:420, background:"var(--bg-1)", border:"1px solid var(--line-strong)", borderRadius:"var(--r-xl)", overflow:"hidden", boxShadow:"0 32px 80px rgba(0,0,0,0.8)" }}>
         <div style={{ padding:"14px 16px", borderBottom:"1px solid var(--line)", display:"flex", alignItems:"center", gap:10 }}>
           <svg width={14} height={14} viewBox="0 0 24 24" fill="none" stroke="var(--ink-3)" strokeWidth={2} strokeLinecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-          <input ref={ref} value={q} onChange={e=>setQ(e.target.value)} placeholder="Find someone to message…" style={{ flex:1, background:"transparent", border:"none", color:"var(--ink)", fontSize:13.5, outline:"none" }}/>
+          <input ref={ref} value={q} onChange={e=>setQ(e.target.value)} placeholder="Find someone to message…" className="text-base sm:text-[13.5px]" style={{ flex:1, background:"transparent", border:"none", color:"var(--ink)", outline:"none" }}/>
           {busy && <div style={{ width:14, height:14, border:"2px solid var(--indigo)", borderTopColor:"transparent", borderRadius:"50%", animation:"spin 0.6s linear infinite" }}/>}
           <button onClick={onClose} style={{ background:"none", border:"none", color:"var(--ink-4)", cursor:"pointer", fontSize:16, lineHeight:1, padding:2 }}>✕</button>
         </div>
@@ -83,7 +101,7 @@ function NewDMModal({ onClose }: { onClose:()=>void }) {
           {!q.trim() && <p style={{ textAlign:"center", color:"var(--ink-4)", fontSize:12, padding:"28px 16px" }}>Search for a Shinobi to message</p>}
           {q.trim()&&!busy&&!res.length&&<p style={{ textAlign:"center", color:"var(--ink-4)", fontSize:12, padding:"20px" }}>No results</p>}
           {res.map(u=>(
-            <div key={u.id} onClick={()=>open(u.id)} style={{ display:"flex", alignItems:"center", gap:12, padding:"10px 16px", cursor:"pointer", transition:"background 100ms" }} onMouseEnter={e=>(e.currentTarget.style.background="color-mix(in srgb, var(--app-fg) 4%, transparent)")} onMouseLeave={e=>(e.currentTarget.style.background="transparent")}>
+            <div key={u.id} onClick={()=>open(u.id)} className="active:scale-[0.98]" style={{ display:"flex", alignItems:"center", gap:12, minHeight:44, padding:"10px 16px", cursor:"pointer", transition:"background 100ms,transform 120ms" }} onMouseEnter={e=>(e.currentTarget.style.background="color-mix(in srgb, var(--app-fg) 4%, transparent)")} onMouseLeave={e=>(e.currentTarget.style.background="transparent")}>
               <Avatar name={u.displayName} src={u.avatarUrl} size={36} showStatus/>
               <div><div style={{ fontSize:13.5, fontWeight:600, color:"var(--ink)" }}>{u.displayName}</div><div style={{ fontSize:11, color:"var(--ink-3)", marginTop:1 }}>@{u.username}</div></div>
             </div>
@@ -398,7 +416,7 @@ export default function ChatLayout({ children }: { children: React.ReactNode }) 
     <>
       <style dangerouslySetInnerHTML={{ __html: GLOBAL_CSS }}/>
 
-      <div style={{ display:"flex", height:"100vh", width:"100%", overflow:"hidden", background:"var(--bg-0)" }}>
+      <div className="kv-chat-shell" style={{ display:"flex", width:"100%", overflow:"hidden", background:"var(--bg-0)" }}>
 
         {/* ══ COMMUNITY RAIL (far left, 54px) — hidden on mobile ═══════════ */}
         {!isMobile && <CommunityRail activeCommunity={activeCom} onSelect={setActiveCom}/>}
@@ -409,7 +427,7 @@ export default function ChatLayout({ children }: { children: React.ReactNode }) 
         <aside style={{ width: isMobile ? "100%" : 272, flexShrink:0, display:"flex", flexDirection:"column", background:"var(--bg-1)", borderRight: isMobile ? "none" : "1px solid var(--line)" }}>
           {/* Mobile-only: get back to the feed (the rail is hidden on mobile). */}
           {isMobile && (
-            <Link href="/community" style={{ display:"flex", alignItems:"center", gap:8, padding:"12px 16px", borderBottom:"1px solid var(--line)", color:"var(--ink-3)", textDecoration:"none", fontSize:13, fontWeight:600 }}>
+            <Link href="/community" className="active:scale-95" style={{ display:"flex", alignItems:"center", gap:8, minHeight:44, padding:"12px 16px", borderBottom:"1px solid var(--line)", color:"var(--ink-3)", textDecoration:"none", fontSize:14, fontWeight:600, transition:"transform 120ms" }}>
               <svg width={18} height={18} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
               Back to Kaiveron
             </Link>
@@ -456,15 +474,15 @@ export default function ChatLayout({ children }: { children: React.ReactNode }) 
             </div>
 
             {/* Search */}
-            <div style={{ display:"flex", alignItems:"center", gap:8, padding:"6px 10px", background:"var(--bg-2)", border:"1px solid var(--line)", borderRadius:"var(--r-sm)", cursor:"text" }}>
+            <div style={{ display:"flex", alignItems:"center", gap:8, padding:"6px 10px", background:"var(--bg-2)", border:"1px solid var(--line)", borderRadius:"var(--r-sm)", cursor:"text", minHeight:40 }}>
               <svg width={12} height={12} viewBox="0 0 24 24" fill="none" stroke="var(--ink-4)" strokeWidth={2} strokeLinecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-              <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Search" style={{ flex:1, background:"transparent", border:"none", color:"var(--ink)", fontSize:12.5, outline:"none" }}/>
+              <input value={search} onChange={e=>setSearch(e.target.value)} placeholder="Search" className="text-base sm:text-[12.5px]" style={{ flex:1, background:"transparent", border:"none", color:"var(--ink)", outline:"none" }}/>
               <span style={{ fontSize:10, padding:"1px 5px", borderRadius:4, background:"color-mix(in srgb, var(--app-fg) 4%, transparent)", color:"var(--ink-4)", border:"1px solid var(--line)", fontFamily:"monospace" }}>⌘K</span>
             </div>
           </div>
 
           {/* Scrollable content */}
-          <div style={{ flex:1, overflowY:"auto", padding:"4px 8px 8px" }}>
+          <div className="kv-momentum" style={{ flex:1, overflowY:"auto", overscrollBehavior:"contain", padding:"4px 8px 8px" }}>
 
             {activeCom && activeClub ? (
               /* ─── Community view: channels + voice rooms ─── */
@@ -572,8 +590,8 @@ export default function ChatLayout({ children }: { children: React.ReactNode }) 
                         // read it. My own unread-by-them messages don't count.
                         const hasUnread=!!conv.lastMessage&&conv.lastMessage.senderId!==me?.id&&!conv.lastMessage.readAt
                         return (
-                          <Link key={conv.id} href={`/chat/${conv.id}`} style={{ textDecoration:"none" }}>
-                            <div style={{ display:"flex", alignItems:"center", gap:10, padding:"8px 9px", borderRadius:"var(--r-md)", cursor:"pointer", background:active?"var(--bg-2)":"transparent", boxShadow:active?"inset 0 0 0 1px var(--line-strong)":"none", position:"relative", transition:"background 100ms", marginBottom:1 }}
+                          <Link key={conv.id} href={`/chat/${conv.id}`} className="active:scale-[0.98]" style={{ textDecoration:"none", display:"block", transition:"transform 120ms" }}>
+                            <div style={{ display:"flex", alignItems:"center", gap:10, minHeight:44, padding:"8px 9px", borderRadius:"var(--r-md)", cursor:"pointer", background:active?"var(--bg-2)":"transparent", boxShadow:active?"inset 0 0 0 1px var(--line-strong)":"none", position:"relative", transition:"background 100ms", marginBottom:1 }}
                               onMouseEnter={e=>{if(!active)(e.currentTarget as HTMLDivElement).style.background="color-mix(in srgb, var(--app-fg) 3%, transparent)"}}
                               onMouseLeave={e=>{if(!active)(e.currentTarget as HTMLDivElement).style.background="transparent"}}>
                               {active&&<div style={{ position:"absolute", left:0, top:"50%", transform:"translateY(-50%)", width:3, height:18, background:"var(--indigo)", borderRadius:"0 2px 2px 0" }}/>}

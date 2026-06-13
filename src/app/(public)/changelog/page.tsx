@@ -146,7 +146,7 @@ export default function ChangelogPage() {
 
       {/* Header */}
       <div className="border-b border-border bg-black/30 backdrop-blur-md sticky top-[var(--sticky-top,72px)] z-30">
-        <div className="max-w-3xl mx-auto px-6 py-6 flex items-center gap-3">
+        <div className="max-w-3xl mx-auto px-4 sm:px-6 py-6 flex items-center gap-3">
           <Cpu size={16} className="text-accent-bright" />
           <div>
             <h1 className="text-xl font-black tracking-tighter uppercase italic text-foreground">
@@ -158,7 +158,7 @@ export default function ChangelogPage() {
       </div>
 
       {/* Timeline */}
-      <div className="max-w-3xl mx-auto px-6 pt-12">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 pt-12">
         <div className="relative">
           {/* Vertical line */}
           <div className="absolute left-[11px] top-2 bottom-2 w-px bg-surface" />

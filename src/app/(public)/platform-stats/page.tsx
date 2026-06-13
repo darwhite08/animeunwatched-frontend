@@ -155,7 +155,7 @@ export default function StatsPage() {
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[400px] bg-accent/7 blur-[130px] rounded-full" />
         </div>
 
-        <div className="relative z-10 max-w-5xl mx-auto px-6 pt-24 pb-16 text-center">
+        <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 pt-24 pb-16 text-center">
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -169,7 +169,7 @@ export default function StatsPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.05 }}
-            className="text-5xl md:text-7xl font-black tracking-tighter uppercase italic leading-[0.92] text-foreground"
+            className="text-4xl sm:text-5xl md:text-7xl font-black tracking-tighter uppercase italic leading-[0.92] text-foreground"
           >
             The Numbers<span className="text-accent-bright">.</span>
           </motion.h1>
@@ -186,7 +186,7 @@ export default function StatsPage() {
       </section>
 
       {/* ── 7 Stat Cards ── */}
-      <section className="max-w-5xl mx-auto px-6 py-16">
+      <section className="max-w-5xl mx-auto px-4 sm:px-6 py-16">
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
           {STAT_CONFIG.map((cfg, i) => {
             const c = COLOR_MAP[cfg.color]
@@ -229,7 +229,7 @@ export default function StatsPage() {
 
       {/* ── Top Anime in the Archive ── */}
       <section className="border-t border-border py-16">
-        <div className="max-w-5xl mx-auto px-6 mb-8">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 mb-8">
           <p className="text-[10px] font-black uppercase tracking-[0.35em] text-subtle mb-2">Archive</p>
           <h2 className="text-3xl font-black tracking-tighter uppercase italic text-foreground">
             Top Anime in the Archive<span className="text-violet-500">.</span>
@@ -237,8 +237,8 @@ export default function StatsPage() {
         </div>
 
         {/* Horizontal scroll */}
-        <div className="px-6 overflow-x-auto no-scrollbar">
-          <div className="flex gap-4 w-max pb-3 max-w-none ml-[max(1.5rem,calc((100vw-80rem)/2))]">
+        <div className="px-4 sm:px-6 overflow-x-auto no-scrollbar">
+          <div className="flex gap-4 w-max pb-3 max-w-none ml-[max(1rem,calc((100vw-80rem)/2))]">
             {topAnime.map((anime, i) => (
               <motion.div
                 key={anime.malId}
@@ -287,7 +287,7 @@ export default function StatsPage() {
 
       {/* ── By the Numbers ── */}
       <section className="border-t border-border bg-white/[0.012] py-16">
-        <div className="max-w-5xl mx-auto px-6">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6">
           <div className="text-center mb-12">
             <p className="text-[10px] font-black uppercase tracking-[0.35em] text-subtle mb-2">Milestones</p>
             <h2 className="text-3xl font-black tracking-tighter uppercase italic text-foreground">
@@ -322,14 +322,14 @@ export default function StatsPage() {
       </section>
 
       {/* ── Footer / refresh ── */}
-      <div className="max-w-5xl mx-auto px-6 pt-10 flex items-center justify-between gap-4">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 pt-10 flex items-center justify-between gap-4">
         <div className="flex items-center gap-2 text-[10px] text-subtle">
           <LivePulse />
           <span>Last updated {formatLastUpdated(lastUpdated)} · auto-refreshes every 60s</span>
         </div>
         <button
           onClick={handleManualRefresh}
-          className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-accent-bright hover:text-accent-bright transition-colors"
+          className="flex items-center gap-1.5 min-h-11 px-2 -mr-2 text-[10px] font-black uppercase tracking-widest text-accent-bright hover:text-accent-bright transition-colors active:scale-95"
         >
           <RefreshCw size={11} className={statsQuery.isFetching ? "animate-spin" : ""} />
           Refresh

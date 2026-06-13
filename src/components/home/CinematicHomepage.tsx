@@ -58,8 +58,8 @@ function DiscoverySection() {
     .map(mapDTO)
 
   return (
-    <section className="min-h-screen py-24 bg-background relative z-[1] overflow-hidden flex items-center">
-      <div className="max-w-7xl mx-auto px-6 w-full space-y-16">
+    <section className="min-h-screen py-20 sm:py-24 bg-background relative z-[1] overflow-hidden flex items-center">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 w-full space-y-12 sm:space-y-16">
 
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
@@ -94,9 +94,9 @@ function DiscoverySection() {
               viewport={{ once: true }}
               transition={{ delay: i * 0.08 }}
               whileHover={{ y: -6, scale: 1.02 }}
-              className="group relative p-7 rounded-[2rem] bg-surface border border-white/[0.06] hover:border-white/[0.12] hover:bg-surface cursor-pointer overflow-hidden h-48 transition-all duration-300"
+              className="group relative p-5 sm:p-7 rounded-[1.5rem] sm:rounded-[2rem] bg-surface border border-white/[0.06] hover:border-white/[0.12] hover:bg-surface cursor-pointer overflow-hidden h-40 sm:h-48 transition-all duration-300"
             >
-              <AnimatedCounterText value={count} className="text-5xl font-black tracking-tighter text-foreground mb-1" />
+              <AnimatedCounterText value={count} className="text-4xl sm:text-5xl font-black tracking-tighter text-foreground mb-1" />
               <p className="text-[9px] text-subtle font-mono mb-2">anime</p>
               <p className="text-[10px] font-black uppercase tracking-[0.3em] text-muted group-hover:text-muted transition-colors">{label}</p>
               <ArrowRight size={16} className="text-subtle group-hover:text-muted absolute bottom-5 right-5 opacity-0 group-hover:opacity-100 transition-all group-hover:translate-x-1 duration-300" />
@@ -141,7 +141,7 @@ function DiscoverySection() {
           className="text-center"
         >
           <Link href="/bestanimelist"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-white/[0.08] text-sm font-medium text-muted hover:text-muted hover:border-white/[0.15] hover:bg-surface transition-all"
+            className="inline-flex min-h-11 items-center justify-center gap-2 px-5 py-2.5 rounded-xl border border-white/[0.08] text-sm font-medium text-muted hover:text-muted hover:border-white/[0.15] hover:bg-surface transition-all active:scale-95"
           >
             View full catalog <ArrowRight size={13} />
           </Link>
@@ -276,7 +276,7 @@ function AIOracleSection() {
   }, [PROMPTS.length])
 
   return (
-    <section className="min-h-screen py-28 relative z-[2] overflow-hidden bg-background flex items-center">
+    <section className="min-h-screen py-20 sm:py-28 relative z-[2] overflow-hidden bg-background flex items-center">
       {/* Ambient backdrop */}
       <div className="absolute inset-0 pointer-events-none" style={{
         background: "radial-gradient(ellipse 60% 70% at 78% 50%, color-mix(in srgb, var(--app-accent) 6%, transparent) 0%, transparent 60%), radial-gradient(ellipse 40% 50% at 10% 30%, rgba(99,102,241,0.04) 0%, transparent 55%)",
@@ -288,11 +288,11 @@ function AIOracleSection() {
         maskImage: "radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 80%)",
       }} />
 
-      <div className="max-w-7xl mx-auto px-6 w-full relative">
-        <div className="grid lg:grid-cols-[1fr_1.05fr] gap-16 lg:gap-20 items-center">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 w-full relative">
+        <div className="grid lg:grid-cols-[1fr_1.05fr] gap-12 sm:gap-16 lg:gap-20 items-center">
 
           {/* ── LEFT ── */}
-          <div className="space-y-12">
+          <div className="space-y-10 sm:space-y-12">
             <div>
               <motion.div
                 initial={{ opacity: 0, y: 8 }}
@@ -309,7 +309,7 @@ function AIOracleSection() {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="text-[clamp(2.4rem,4.4vw,4rem)] font-black tracking-[-0.025em] text-foreground leading-[1.02] mb-6"
+                className="text-[clamp(2rem,4.4vw,4rem)] font-black tracking-[-0.025em] text-foreground leading-[1.04] mb-6"
               >
                 Tell us how you<br />
                 <span
@@ -372,7 +372,7 @@ function AIOracleSection() {
             </div>
 
             <Link href="/ai-discover"
-              className="group inline-flex items-center gap-2.5 px-6 py-3 rounded-xl text-[12px] font-black uppercase tracking-[0.18em] text-black transition-all hover:-translate-y-0.5"
+              className="group inline-flex min-h-11 w-full sm:w-auto items-center justify-center gap-2.5 px-6 py-3 rounded-xl text-[12px] font-black uppercase tracking-[0.18em] text-black transition-all hover:-translate-y-0.5 active:scale-95"
               style={{
                 background: "linear-gradient(135deg,var(--app-accent-bright),var(--app-accent))",
                 boxShadow: "0 8px 28px color-mix(in srgb, var(--app-accent) 35%, transparent), inset 0 1px 0 color-mix(in srgb, var(--app-fg) 40%, transparent)",
@@ -451,7 +451,7 @@ function AIOracleSection() {
                   <button
                     key={i}
                     onClick={() => setActive(i)}
-                    className={`px-3 py-1.5 rounded-lg text-[10.5px] font-bold uppercase tracking-[0.04em] transition-all ${
+                    className={`px-3 py-2 rounded-lg text-[10.5px] font-bold uppercase tracking-[0.04em] transition-all active:scale-95 ${
                       active === i
                         ? "bg-accent text-black shadow-[0_2px_12px_color-mix(in srgb, var(--app-accent) 35%, transparent)]"
                         : "bg-white/[0.025] text-muted border border-white/[0.07] hover:bg-surface hover:text-muted hover:border-white/[0.12]"
@@ -508,7 +508,7 @@ function CommunitySection() {
   const animeTotalApprox = discoverPosts?.meta?.total ?? 30161
 
   return (
-    <section className="min-h-screen py-28 bg-background relative z-[2] overflow-hidden flex items-center">
+    <section className="min-h-screen py-20 sm:py-28 bg-background relative z-[2] overflow-hidden flex items-center">
       <div className="absolute inset-0 pointer-events-none" style={{
         background: "radial-gradient(ellipse 60% 70% at 88% 50%, color-mix(in srgb, var(--app-accent) 5%, transparent) 0%, transparent 60%), radial-gradient(ellipse 40% 50% at 8% 30%, rgba(99,102,241,0.04) 0%, transparent 55%)",
       }} />
@@ -518,11 +518,11 @@ function CommunitySection() {
         maskImage: "radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 80%)",
       }} />
 
-      <div className="max-w-7xl mx-auto px-6 w-full relative">
-        <div className="grid lg:grid-cols-[1fr_1.05fr] gap-16 lg:gap-20 items-center">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 w-full relative">
+        <div className="grid lg:grid-cols-[1fr_1.05fr] gap-12 sm:gap-16 lg:gap-20 items-center">
 
           {/* Left */}
-          <div className="space-y-12">
+          <div className="space-y-10 sm:space-y-12">
             <div>
               <motion.div
                 initial={{ opacity: 0, y: 8 }}
@@ -539,7 +539,7 @@ function CommunitySection() {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                className="text-[clamp(2.4rem,4.6vw,4rem)] font-black tracking-[-0.025em] text-foreground leading-[1.02] mb-6"
+                className="text-[clamp(2rem,4.6vw,4rem)] font-black tracking-[-0.025em] text-foreground leading-[1.04] mb-6"
               >
                 Every episode<br />
                 <span
@@ -604,9 +604,9 @@ function CommunitySection() {
                 { v: `${animeTotalApprox.toLocaleString()}+`, l: "Anime catalogued"  },
                 { v: "8.4",                               l: "Avg community rating"  },
               ].map(({ v, l }, i) => (
-                <div key={l} className={`${i > 0 ? "pl-6 border-l border-white/[0.05]" : ""}`}>
-                  <p className="text-[22px] font-black text-foreground tracking-[-0.02em] leading-none tabular-nums">{v}</p>
-                  <p className="text-[10px] font-medium uppercase tracking-[0.15em] text-subtle mt-2">{l}</p>
+                <div key={l} className={`${i > 0 ? "pl-3 sm:pl-6 border-l border-white/[0.05]" : ""}`}>
+                  <p className="text-lg sm:text-[22px] font-black text-foreground tracking-[-0.02em] leading-none tabular-nums">{v}</p>
+                  <p className="text-[9px] sm:text-[10px] font-medium uppercase tracking-[0.12em] sm:tracking-[0.15em] text-subtle mt-2 leading-tight">{l}</p>
                 </div>
               ))}
             </motion.div>
@@ -615,10 +615,10 @@ function CommunitySection() {
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
-              className="flex gap-3"
+              className="flex flex-col sm:flex-row gap-3"
             >
               <Link href="/leaderboard"
-                className="group inline-flex items-center gap-2.5 px-6 py-3 rounded-xl text-[12px] font-black uppercase tracking-[0.18em] text-black transition-all hover:-translate-y-0.5"
+                className="group inline-flex min-h-11 items-center justify-center gap-2.5 px-6 py-3 rounded-xl text-[12px] font-black uppercase tracking-[0.18em] text-black transition-all hover:-translate-y-0.5 active:scale-95"
                 style={{
                   background: "linear-gradient(135deg,var(--app-accent-bright),var(--app-accent))",
                   boxShadow: "0 8px 28px color-mix(in srgb, var(--app-accent) 35%, transparent), inset 0 1px 0 color-mix(in srgb, var(--app-fg) 40%, transparent)",
@@ -629,7 +629,7 @@ function CommunitySection() {
                 <ArrowRight size={12} className="group-hover:translate-x-0.5 transition-transform" />
               </Link>
               <Link href="/register"
-                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-white/[0.1] text-[12px] font-bold uppercase tracking-[0.18em] text-muted hover:text-foreground hover:border-border hover:bg-surface transition-all"
+                className="inline-flex min-h-11 items-center justify-center gap-2 px-6 py-3 rounded-xl border border-white/[0.1] text-[12px] font-bold uppercase tracking-[0.18em] text-muted hover:text-foreground hover:border-border hover:bg-surface transition-all active:scale-95"
               >
                 Join Free
               </Link>
@@ -846,7 +846,7 @@ function ShowcaseSection() {
   ]
 
   return (
-    <section className="py-32 bg-background relative z-[2] overflow-hidden">
+    <section className="py-20 sm:py-32 bg-background relative z-[2] overflow-hidden">
       {/* Ambient backdrop */}
       <div className="absolute inset-0 pointer-events-none" style={{
         background: "radial-gradient(ellipse 50% 50% at 50% 30%, color-mix(in srgb, var(--app-accent) 4%, transparent) 0%, transparent 60%)",
@@ -857,9 +857,9 @@ function ShowcaseSection() {
         maskImage: "radial-gradient(ellipse 70% 70% at 50% 50%, black 30%, transparent 80%)",
       }} />
 
-      <div className="max-w-7xl mx-auto px-6 w-full relative">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 w-full relative">
 
-        <div className="mb-16 max-w-3xl">
+        <div className="mb-12 sm:mb-16 max-w-3xl">
           <motion.div
             initial={{ opacity: 0, y: 8 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -875,7 +875,7 @@ function ShowcaseSection() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-[clamp(2.4rem,4.6vw,4rem)] font-black tracking-[-0.025em] text-foreground leading-[1.02] mb-5"
+            className="text-[clamp(2rem,4.6vw,4rem)] font-black tracking-[-0.025em] text-foreground leading-[1.04] mb-5"
           >
             Everything you need,<br />
             <span
@@ -900,7 +900,7 @@ function ShowcaseSection() {
           </motion.p>
         </div>
 
-        <div className="grid lg:grid-cols-3 gap-5">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
           {FEATURES.map(({ tag, title, desc, href, accent, preview }, i) => (
             <motion.div
               key={tag}
@@ -920,7 +920,7 @@ function ShowcaseSection() {
                 filter: "blur(2px)",
               }} />
 
-              <div className="relative h-full p-7 rounded-2xl bg-gradient-to-b from-[var(--app-bg)]/95 to-[var(--app-bg)]/95 border border-white/[0.08] backdrop-blur-xl transition-colors group-hover:border-white/[0.14] flex flex-col gap-6"
+              <div className="relative h-full p-5 sm:p-7 rounded-2xl bg-gradient-to-b from-[var(--app-bg)]/95 to-[var(--app-bg)]/95 border border-white/[0.08] backdrop-blur-xl transition-colors group-hover:border-white/[0.14] flex flex-col gap-6"
                 style={{ boxShadow: "0 30px 60px -20px rgba(0,0,0,0.55), 0 0 0 1px color-mix(in srgb, var(--app-fg) 2%, transparent) inset" }}
               >
                 {/* Top edge accent */}
@@ -957,7 +957,7 @@ function ShowcaseSection() {
 
                 <Link
                   href={href}
-                  className={`group/link inline-flex items-center gap-1.5 text-[11px] font-black uppercase tracking-[0.22em] transition-all ${
+                  className={`group/link inline-flex min-h-11 items-center gap-1.5 text-[11px] font-black uppercase tracking-[0.22em] transition-all active:scale-95 ${
                     accent === "indigo" ? "text-indigo-300/80 hover:text-indigo-200" :
                     accent === "amber" ? "text-accent-bright/80 hover:text-accent-bright" :
                     "text-violet-300/80 hover:text-violet-200"
@@ -992,7 +992,7 @@ function FinalCTASection() {
   ]
 
   return (
-    <section ref={ref} className="py-36 flex items-center justify-center bg-background relative z-[2] overflow-hidden">
+    <section ref={ref} className="py-24 sm:py-36 flex items-center justify-center bg-background relative z-[2] overflow-hidden">
       {/* Ambient glow */}
       <motion.div
         animate={{ scale: [1, 1.1, 1], opacity: [0.07, 0.13, 0.07] }}
@@ -1002,7 +1002,7 @@ function FinalCTASection() {
       {/* Dot grid */}
       <div className="absolute inset-0 opacity-[0.025] pointer-events-none" style={{ backgroundImage: "radial-gradient(circle, color-mix(in srgb, var(--app-fg) 80%, transparent) 1px, transparent 1px)", backgroundSize: "40px 40px" }} />
 
-      <motion.div style={{ scale, opacity }} className="relative z-10 w-full max-w-3xl mx-auto px-6">
+      <motion.div style={{ scale, opacity }} className="relative z-10 w-full max-w-3xl mx-auto px-4 sm:px-6">
 
         {/* Platform badge */}
         <div className="flex justify-center mb-10">
@@ -1014,7 +1014,7 @@ function FinalCTASection() {
 
         {/* Heading */}
         <div className="text-center mb-8">
-          <h2 className="text-[clamp(2.2rem,6vw,5rem)] font-bold tracking-tight leading-tight text-foreground mb-4">
+          <h2 className="text-[clamp(1.9rem,6vw,5rem)] font-bold tracking-tight leading-tight text-foreground mb-4">
             Your anime archive,<br />
             <span className="text-accent-bright">starting today.</span>
           </h2>
@@ -1036,14 +1036,14 @@ function FinalCTASection() {
         {/* CTA */}
         <div className="flex flex-col items-center gap-4">
           <Link href="/register"
-            className="group inline-flex items-center gap-2.5 px-8 py-4 rounded-xl text-base font-black uppercase tracking-wide text-black transition-all"
+            className="group inline-flex min-h-11 w-full sm:w-auto items-center justify-center gap-2.5 px-8 py-4 rounded-xl text-base font-black uppercase tracking-wide text-black transition-all active:scale-95"
             style={{ background: "linear-gradient(135deg,var(--app-accent-bright),var(--app-accent))", boxShadow: "0 4px 30px color-mix(in srgb, var(--app-accent) 40%, transparent)" }}
           >
             Create your free account
             <ArrowRight size={16} className="group-hover:translate-x-0.5 transition-transform" />
           </Link>
 
-          <div className="flex items-center gap-3 text-[11px] text-subtle">
+          <div className="flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-center text-[11px] text-subtle">
             <span>Free forever</span>
             <span className="text-subtle">·</span>
             <span>No credit card required</span>
@@ -1070,13 +1070,13 @@ function FinalCTASection() {
             </div>
 
             {/* Stats */}
-            <div className="flex items-center gap-5 text-center">
+            <div className="flex items-center gap-3 sm:gap-5 text-center">
               {[
                 { v: "4.2M", l: "Episodes tracked" },
                 { v: "30K+", l: "Anime catalogued"  },
                 { v: "8.4★", l: "Avg rating"        },
               ].map(({ v, l }, i) => (
-                <div key={l} className={`${i > 0 ? "pl-5 border-l border-white/[0.06]" : ""}`}>
+                <div key={l} className={`${i > 0 ? "pl-3 sm:pl-5 border-l border-white/[0.06]" : ""}`}>
                   <p className="text-sm font-bold text-muted">{v}</p>
                   <p className="text-[10px] text-subtle mt-0.5">{l}</p>
                 </div>

@@ -84,7 +84,7 @@ export default function ContactPage() {
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[350px] bg-accent/8 blur-[120px] rounded-full" />
         </div>
 
-        <div className="relative z-10 max-w-4xl mx-auto px-6 pt-24 pb-16 text-center">
+        <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 pt-24 pb-16 text-center">
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -97,7 +97,7 @@ export default function ContactPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.05 }}
-            className="text-5xl md:text-6xl font-black tracking-tighter uppercase italic leading-[0.92] text-foreground mb-4"
+            className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tighter uppercase italic leading-[0.92] text-foreground mb-4"
           >
             Get in<br />
             <span style={{color:"var(--app-accent)"}}>Touch.</span>
@@ -115,7 +115,7 @@ export default function ContactPage() {
       </section>
 
       {/* ── Body ── */}
-      <section className="max-w-5xl mx-auto px-6 py-16 space-y-14">
+      <section className="max-w-5xl mx-auto px-4 sm:px-6 py-16 space-y-14">
 
         {/* ── Contact cards ── */}
         <div className="grid md:grid-cols-3 gap-5">
@@ -175,7 +175,7 @@ export default function ContactPage() {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Your name"
-                  className="w-full bg-surface border border-border rounded-xl px-4 py-3.5 text-sm text-foreground placeholder:text-subtle focus:outline-none focus:border-accent/50 focus:bg-surface transition-all"
+                  className="w-full bg-surface border border-border rounded-xl px-4 py-3.5 text-base sm:text-sm text-foreground placeholder:text-subtle focus:outline-none focus:border-accent/50 focus:bg-surface transition-all"
                 />
               </div>
 
@@ -190,7 +190,7 @@ export default function ContactPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="you@example.com"
-                  className="w-full bg-surface border border-border rounded-xl px-4 py-3.5 text-sm text-foreground placeholder:text-subtle focus:outline-none focus:border-accent/50 focus:bg-surface transition-all"
+                  className="w-full bg-surface border border-border rounded-xl px-4 py-3.5 text-base sm:text-sm text-foreground placeholder:text-subtle focus:outline-none focus:border-accent/50 focus:bg-surface transition-all"
                 />
               </div>
             </div>
@@ -203,7 +203,7 @@ export default function ContactPage() {
               <select
                 value={category}
                 onChange={(e) => setCategory(e.target.value as Category)}
-                className="w-full bg-surface border border-border rounded-xl px-4 py-3.5 text-sm text-foreground focus:outline-none focus:border-accent/50 focus:bg-surface transition-all appearance-none cursor-pointer"
+                className="w-full bg-surface border border-border rounded-xl px-4 py-3.5 text-base sm:text-sm text-foreground focus:outline-none focus:border-accent/50 focus:bg-surface transition-all appearance-none cursor-pointer"
               >
                 {CATEGORIES.map((c) => (
                   <option key={c} value={c} className="bg-surface-2 text-foreground">
@@ -224,7 +224,7 @@ export default function ContactPage() {
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 placeholder="Write your message here…"
-                className="w-full bg-surface border border-border rounded-xl px-4 py-3.5 text-sm text-foreground placeholder:text-subtle focus:outline-none focus:border-accent/50 focus:bg-surface transition-all resize-none"
+                className="w-full bg-surface border border-border rounded-xl px-4 py-3.5 text-base sm:text-sm text-foreground placeholder:text-subtle focus:outline-none focus:border-accent/50 focus:bg-surface transition-all resize-none"
               />
             </div>
 

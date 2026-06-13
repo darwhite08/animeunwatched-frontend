@@ -157,7 +157,7 @@ export default function CinematicHero() {
           {/* Headline — ONE H1 per page (SEO). Each fragment animates as its
               own span inside the same h1 so the visual reveal effect stays
               while Google sees a single keyword-bearing heading. */}
-          <h1 className="mb-6 font-bold tracking-tight leading-[1.06] text-[clamp(2.8rem,5.2vw,5rem)] text-foreground">
+          <h1 className="mb-6 font-bold tracking-tight leading-[1.06] text-[clamp(2.1rem,5.2vw,5rem)] text-foreground">
             <span className="sr-only">Track, Rate &amp; Discover Anime — Your AI-Powered Anime Universe</span>
             {["Track. Rate.", "Discover your", "anime universe."].map((line, i) => (
               <span key={i} className="block overflow-hidden" aria-hidden="true">
@@ -190,11 +190,11 @@ export default function CinematicHero() {
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.88, duration: 0.5 }}
-            className="flex flex-wrap gap-3 mb-10"
+            className="flex flex-col sm:flex-row sm:flex-wrap gap-3 mb-10"
           >
             <Link
               href="/register"
-              className="group inline-flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-black uppercase tracking-widest transition-all duration-200 text-black"
+              className="group inline-flex min-h-11 items-center justify-center gap-2 px-6 py-3 rounded-xl text-sm font-black uppercase tracking-widest transition-all duration-200 text-black active:scale-95"
               style={{
                 background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))",
                 boxShadow: "0 4px 24px color-mix(in srgb, var(--app-accent) 40%, transparent), 0 0 0 1px color-mix(in srgb, var(--app-accent) 30%, transparent)",
@@ -205,7 +205,7 @@ export default function CinematicHero() {
             </Link>
             <Link
               href="/bestanimelist"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg border border-white/[0.1] text-muted hover:text-foreground hover:bg-surface text-sm font-medium transition-all duration-150"
+              className="inline-flex min-h-11 items-center justify-center gap-2 px-5 py-2.5 rounded-xl border border-white/[0.1] text-muted hover:text-foreground hover:bg-surface text-sm font-medium transition-all duration-150 active:scale-95"
             >
               Browse catalog
             </Link>
@@ -223,7 +223,7 @@ export default function CinematicHero() {
               { v: "30,161", l: "Anime in archive" },
               { v: "4.2M",   l: "Episodes tracked" },
             ].map(({ v, l }, i) => (
-              <div key={l} className={`${i > 0 ? "pl-5 ml-5 border-l border-white/[0.06]" : ""}`}>
+              <div key={l} className={`${i > 0 ? "pl-3 ml-3 sm:pl-5 sm:ml-5 border-l border-white/[0.06]" : ""}`}>
                 <p className="text-base font-black tracking-tighter"
                   style={{ background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
                   {v}

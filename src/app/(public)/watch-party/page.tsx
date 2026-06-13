@@ -20,7 +20,7 @@ export default function WatchPartyPage() {
         <motion.div animate={{ scale:[1,1.08,1], opacity:[0.15,0.25,0.15] }} transition={{ duration:8, repeat:Infinity }}
           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-accent blur-[160px] rounded-full pointer-events-none"
         />
-        <div className="relative z-10 text-center max-w-2xl mx-auto px-6 space-y-6 pt-32">
+        <div className="relative z-10 text-center max-w-2xl mx-auto px-4 sm:px-6 space-y-6 pt-32">
           <motion.div initial={{ opacity:0, y:-10 }} animate={{ opacity:1, y:0 }}
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-accent/25 bg-accent/8"
           >
@@ -29,7 +29,7 @@ export default function WatchPartyPage() {
           </motion.div>
 
           <motion.h1 initial={{ opacity:0, y:20 }} animate={{ opacity:1, y:0 }} transition={{ delay:0.1 }}
-            className="text-6xl md:text-7xl font-black tracking-tighter uppercase italic text-foreground leading-none"
+            className="text-4xl sm:text-6xl md:text-7xl font-black tracking-tighter uppercase italic text-foreground leading-none"
           >
             Watch Together<span style={{color:"var(--app-accent)"}}>.</span>
           </motion.h1>
@@ -45,11 +45,11 @@ export default function WatchPartyPage() {
           >
             <button
               onClick={() => alert("Watch Party launches Q3 2026 — sign up for early access!")}
-              className="flex items-center gap-2 px-8 py-4 rounded-2xl bg-accent hover:bg-accent-bright text-sm font-black uppercase tracking-widest text-foreground transition-all shadow-[0_0_30px_rgba(99,102,241,0.4)]"
+              className="flex items-center gap-2 px-8 py-4 rounded-2xl bg-accent hover:bg-accent-bright text-sm font-black uppercase tracking-widest text-foreground transition-all active:scale-95 shadow-[0_0_30px_rgba(99,102,241,0.4)]"
             >
               <Play size={14} /> Get Early Access
             </button>
-            <Link href="/community" className="flex items-center gap-2 px-8 py-4 rounded-2xl border border-border bg-white/[0.04] text-sm font-black uppercase tracking-widest text-muted hover:text-foreground hover:bg-surface transition-all">
+            <Link href="/community" className="flex items-center gap-2 px-8 py-4 rounded-2xl border border-border bg-white/[0.04] text-sm font-black uppercase tracking-widest text-muted hover:text-foreground hover:bg-surface transition-all active:scale-95">
               <Users size={14} /> Join Community
             </Link>
           </motion.div>
@@ -57,7 +57,7 @@ export default function WatchPartyPage() {
       </div>
 
       {/* Features grid */}
-      <div className="max-w-4xl mx-auto px-6 space-y-6">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 space-y-6">
         <h2 className="text-2xl font-black tracking-tighter uppercase italic text-foreground text-center mb-8">
           Everything you need for the perfect watch party
         </h2>

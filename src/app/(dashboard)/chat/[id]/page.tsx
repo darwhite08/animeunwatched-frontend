@@ -548,7 +548,7 @@ function MsgRow({ m, isMine, text, authorSrc, authorName, onDelete }: { m:GM; is
   }
 
   return (
-    <div id={`msg-${m.id}`} style={{
+    <div id={`msg-${m.id}`} className="kv-msgrow" style={{
         display:"grid",
         gridTemplateColumns:"52px minmax(0,1fr)",
         paddingTop:    m.isGroupStart ? 10 : 1,
@@ -716,7 +716,7 @@ function MsgRow({ m, isMine, text, authorSrc, authorName, onDelete }: { m:GM; is
 /* ─── Typing indicator ───────────────────────────────────────────────────── */
 function TypingIndicator({ name, src }: { name:string; src?:string|null }) {
   return (
-    <div style={{ display:"grid", gridTemplateColumns:"52px minmax(0,1fr)", padding:"4px 24px 8px" }}>
+    <div className="kv-msggutter" style={{ display:"grid", gridTemplateColumns:"52px minmax(0,1fr)", padding:"4px 24px 8px" }}>
       <div style={{ display:"flex", justifyContent:"flex-end", paddingRight:8, paddingTop:2 }}>
         <Avatar name={name} src={src} size={28} showStatus={false} />
       </div>
@@ -1102,12 +1102,13 @@ export default function ConversationPage() {
           <AsanohaDoodle opacity={0.09} color="245,200,110" />
         </div>
 
-        {/* Header */}
-        <div style={{ height:60, flexShrink:0, padding:"0 16px", display:"flex", alignItems:"center", gap:12, borderBottom:"1px solid var(--line)", background:"var(--bg-0)", position:"relative", zIndex:1 }}>
+        {/* Header — clears the top safe area (notch / Dynamic Island) on mobile. */}
+        <div style={{ flexShrink:0, minHeight:60, paddingTop:"env(safe-area-inset-top)", paddingLeft:12, paddingRight:12, display:"flex", alignItems:"center", gap:10, borderBottom:"1px solid var(--line)", background:"var(--bg-0)", position:"relative", zIndex:1 }}>
           {/* Back arrow — Instagram-web style. Returns to the message list (mobile
-              back); the Kaiveron logo in the far-left rail exits to the feed. */}
-          <Link href="/chat" title="Back to messages"
-            style={{ width:30, height:30, borderRadius:"var(--r-sm)", display:"grid", placeItems:"center", color:"var(--ink-3)", background:"transparent", textDecoration:"none", flexShrink:0, transition:"background 120ms,color 120ms" }}
+              back); the Kaiveron logo in the far-left rail exits to the feed.
+              44px tap target with press feedback for thumb reach. */}
+          <Link href="/chat" title="Back to messages" className="active:scale-90"
+            style={{ width:44, height:44, borderRadius:"var(--r-md)", display:"grid", placeItems:"center", color:"var(--ink-3)", background:"transparent", textDecoration:"none", flexShrink:0, transition:"background 120ms,color 120ms,transform 120ms" }}
             onMouseEnter={e=>Object.assign((e.currentTarget as HTMLElement).style,{background:"var(--bg-2)",color:"var(--ink)"})}
             onMouseLeave={e=>Object.assign((e.currentTarget as HTMLElement).style,{background:"transparent",color:"var(--ink-3)"})}
           >
@@ -1131,15 +1132,15 @@ export default function ConversationPage() {
               const disabled = isCall && inCall
               const blockedColor = micPerm === "denied" && isCall ? "rgba(239,68,68,0.7)" : "var(--ink-3)"
               return (
-              <button key={id} onClick={disabled ? undefined : () => onClick()} title={title}
-                style={{ width:30, height:30, borderRadius:"var(--r-sm)", display:"grid", placeItems:"center", color: disabled ? "var(--ink-5)" : blockedColor, background:"transparent", border:"none", cursor: disabled ? "not-allowed" : "pointer", transition:"background 120ms,color 120ms", opacity: disabled ? 0.4 : 1 }}
+              <button key={id} onClick={disabled ? undefined : () => onClick()} title={title} className={disabled ? "" : "active:scale-90"}
+                style={{ width:40, height:40, borderRadius:"var(--r-md)", display:"grid", placeItems:"center", color: disabled ? "var(--ink-5)" : blockedColor, background:"transparent", border:"none", cursor: disabled ? "not-allowed" : "pointer", transition:"background 120ms,color 120ms,transform 120ms", opacity: disabled ? 0.4 : 1 }}
                 onMouseEnter={e=>!disabled && Object.assign((e.currentTarget as HTMLElement).style,{background:"var(--bg-2)",color:"var(--ink)"})}
                 onMouseLeave={e=>!disabled && Object.assign((e.currentTarget as HTMLElement).style,{background:"transparent",color: blockedColor})}>
-                <svg width={15} height={15} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round"><path d={d}/></svg>
+                <svg width={16} height={16} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round"><path d={d}/></svg>
               </button>
             )})}
-            <button onClick={()=>setShowContext(p=>!p)} title="Details"
-              style={{ width:30, height:30, borderRadius:"var(--r-sm)", display:"grid", placeItems:"center", background:showContext?"var(--indigo-soft)":"transparent", color:showContext?"var(--indigo)":"var(--ink-3)", border:showContext?"1px solid var(--indigo-ring)":"none", cursor:"pointer", transition:"all 120ms" }}>
+            <button onClick={()=>setShowContext(p=>!p)} title="Details" className="active:scale-90"
+              style={{ width:40, height:40, borderRadius:"var(--r-md)", display:"grid", placeItems:"center", background:showContext?"var(--indigo-soft)":"transparent", color:showContext?"var(--indigo)":"var(--ink-3)", border:showContext?"1px solid var(--indigo-ring)":"none", cursor:"pointer", transition:"all 120ms" }}>
               <svg width={15} height={15} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
             </button>
           </div>
@@ -1148,15 +1149,16 @@ export default function ConversationPage() {
         {/* Message search panel */}
         {searchOpen && (
           <div style={{ flexShrink:0, position:"relative", zIndex:2, background:"var(--bg-1)", borderBottom:"1px solid var(--line)", boxShadow:"0 10px 28px rgba(0,0,0,0.35)" }}>
-            <div style={{ padding:"10px 16px", display:"flex", alignItems:"center", gap:10 }}>
+            <div style={{ padding:"8px 12px", display:"flex", alignItems:"center", gap:10, minHeight:48 }}>
               <svg width={15} height={15} viewBox="0 0 24 24" fill="none" stroke="var(--ink-3)" strokeWidth={1.8} strokeLinecap="round" style={{ flexShrink:0 }}><path d="M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14ZM21 21l-4.3-4.3"/></svg>
               <input autoFocus value={searchQuery} onChange={e=>setSearchQuery(e.target.value)}
                 placeholder="Search this conversation…"
                 onKeyDown={e=>{ if(e.key==="Escape"){ setSearchOpen(false); setSearchQuery("") } }}
-                style={{ flex:1, background:"transparent", border:"none", outline:"none", color:"var(--ink)", fontSize:14, fontFamily:"inherit" }} />
+                className="text-base sm:text-sm"
+                style={{ flex:1, background:"transparent", border:"none", outline:"none", color:"var(--ink)", fontFamily:"inherit" }} />
               {searching && <div style={{ width:14, height:14, border:"2px solid var(--indigo)", borderTopColor:"transparent", borderRadius:"50%", animation:"spin 0.6s linear infinite", flexShrink:0 }}/>}
-              <button onClick={()=>{ setSearchOpen(false); setSearchQuery(""); setSearchResults([]) }}
-                style={{ background:"none", border:"none", color:"var(--ink-4)", cursor:"pointer", fontSize:16, lineHeight:1, padding:2, flexShrink:0 }}>✕</button>
+              <button onClick={()=>{ setSearchOpen(false); setSearchQuery(""); setSearchResults([]) }} className="active:scale-90"
+                style={{ width:40, height:40, borderRadius:8, display:"grid", placeItems:"center", background:"none", border:"none", color:"var(--ink-4)", cursor:"pointer", fontSize:16, lineHeight:1, flexShrink:0, transition:"transform 120ms" }}>✕</button>
             </div>
             {searchQuery.trim().length > 0 && (
               <div style={{ maxHeight:300, overflowY:"auto", borderTop:"1px solid var(--line)" }}>
@@ -1227,6 +1229,7 @@ export default function ConversationPage() {
             the chat. overscrollBehavior:contain stops scroll chaining too. */}
         <div ref={scrollRef}
           data-lenis-prevent="true"
+          className="kv-momentum"
           style={{ flex:1, overflowY:"auto", overscrollBehavior:"contain", paddingTop:16, paddingBottom:8, minHeight:0, position:"relative", zIndex:1 }}>
           {hasNextPage && (
             <div style={{ display:"flex", justifyContent:"center", paddingBottom:12 }}>
@@ -1270,7 +1273,7 @@ export default function ConversationPage() {
 
           {/* AI Response bubble (from /ask command) */}
           {aiResponse && (
-            <div style={{ display:"grid", gridTemplateColumns:"52px minmax(0,1fr)", padding:"10px 24px", animation:"msg-in 240ms cubic-bezier(0.22,1,0.36,1) both" }}>
+            <div className="kv-msggutter" style={{ display:"grid", gridTemplateColumns:"52px minmax(0,1fr)", padding:"10px 24px", animation:"msg-in 240ms cubic-bezier(0.22,1,0.36,1) both" }}>
               <div style={{ display:"flex", justifyContent:"flex-end", paddingRight:8, paddingTop:2 }}>
                 <div style={{ width:32, height:32, borderRadius:"50%", background:"linear-gradient(135deg,oklch(0.7 0.18 282),oklch(0.55 0.18 250))", display:"grid", placeItems:"center" }}>
                   <svg width={14} height={14} viewBox="0 0 24 24" fill="none" stroke="var(--app-fg)" strokeWidth={2} strokeLinecap="round"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M5.6 18.4l2.8-2.8M15.6 8.4l2.8-2.8"/></svg>
@@ -1297,12 +1300,14 @@ export default function ConversationPage() {
           <div style={{ height:4 }}/>
         </div>
 
-        {/* Composer */}
-        <div style={{ flexShrink:0, padding:"12px 24px 18px", background:"var(--bg-0)", position:"relative", zIndex:1 }}>
+        {/* Composer — pads for the iOS home indicator. On mobile the chat shell
+            already reserves the bottom tab-bar height, so this inset is the final
+            clearance over the home indicator itself. */}
+        <div className="kv-composer" style={{ flexShrink:0, padding:"12px 16px max(14px, env(safe-area-inset-bottom))", background:"var(--bg-0)", position:"relative", zIndex:1 }}>
           {/* Slash command popup */}
           <AnimatePresence>
             {showSlash && (
-              <div style={{ position:"absolute", bottom:"100%", left:24, right:24, zIndex:50 }}>
+              <div style={{ position:"absolute", bottom:"100%", left:16, right:16, zIndex:50 }}>
                 <SlashMenu filter={input} onPick={cmd=>{ setInput(cmd); setShowSlash(false); inputRef.current?.focus() }} onClose={()=>setShowSlash(false)} />
               </div>
             )}
@@ -1343,7 +1348,8 @@ export default function ConversationPage() {
               }
               disabled={!cryptoReady || sendMutation.isPending}
               rows={1}
-              style={{ width:"100%", minHeight:44, maxHeight:200, padding:"12px 14px 8px", background:"transparent", border:"none", outline:"none", color:"var(--ink)", fontSize:14, lineHeight:1.5, resize:"none", fontFamily:"inherit", opacity:!cryptoReady||sendMutation.isPending?0.5:1 }}
+              className="text-base sm:text-sm"
+              style={{ width:"100%", minHeight:48, maxHeight:200, padding:"13px 14px 9px", background:"transparent", border:"none", outline:"none", color:"var(--ink)", lineHeight:1.5, resize:"none", fontFamily:"inherit", opacity:!cryptoReady||sendMutation.isPending?0.5:1 }}
             />
             {/* Toolbar */}
             <div style={{ display:"flex", alignItems:"center", gap:2, padding:"6px 8px", borderTop:"1px solid var(--line)" }}>
@@ -1356,8 +1362,8 @@ export default function ConversationPage() {
                 { title:"Voice message",icon:"M9 3a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V6a3 3 0 0 0-3-3ZM19 11a7 7 0 0 1-14 0M12 19v4m-3 0h6", action:()=>{} },
               ].map(({ title, icon, emoji, isImg, slash, action }) => (
                 <div key={title} style={{ position:"relative" }}>
-                  <button onClick={action} title={title}
-                    style={{ width:30, height:30, borderRadius:7, display:"grid", placeItems:"center", color:showEmoji&&emoji?"var(--indigo)":"var(--ink-3)", background:showEmoji&&emoji?"var(--indigo-soft)":"transparent", border:"none", cursor:"pointer", transition:"background 100ms,color 100ms", fontSize:emoji?14:undefined }}
+                  <button onClick={action} title={title} className="active:scale-90"
+                    style={{ width:36, height:36, borderRadius:8, display:"grid", placeItems:"center", color:showEmoji&&emoji?"var(--indigo)":"var(--ink-3)", background:showEmoji&&emoji?"var(--indigo-soft)":"transparent", border:"none", cursor:"pointer", transition:"background 100ms,color 100ms,transform 120ms", fontSize:emoji?15:undefined }}
                     onMouseEnter={e=>{ if(!(showEmoji&&emoji))Object.assign((e.currentTarget as HTMLElement).style,{background:"color-mix(in srgb, var(--app-fg) 5%, transparent)",color:"var(--ink)"}) }}
                     onMouseLeave={e=>{ if(!(showEmoji&&emoji))Object.assign((e.currentTarget as HTMLElement).style,{background:showEmoji&&emoji?"var(--indigo-soft)":"transparent",color:showEmoji&&emoji?"var(--indigo)":"var(--ink-3)"}) }}>
                     {emoji ? "😊"
@@ -1381,9 +1387,9 @@ export default function ConversationPage() {
                 Ask AI
               </button>
 
-              {/* Send */}
-              <button onClick={handleSend} disabled={!canSend}
-                style={{ marginLeft:"auto", height:30, padding:"0 10px 0 12px", borderRadius:8, display:"inline-flex", alignItems:"center", gap:6, background:canSend?"linear-gradient(135deg,var(--gold-1),var(--gold-2))":"var(--bg-3)", color:canSend?"#1a1405":"var(--ink-4)", border:"none", cursor:canSend?"pointer":"default", fontSize:12.5, fontWeight:700, boxShadow:canSend?"0 6px 16px oklch(0.72 0.16 79/0.40)":"none", transition:"all 150ms", fontFamily:"inherit" }}>
+              {/* Send — 44px tap target with press feedback. */}
+              <button onClick={handleSend} disabled={!canSend} className={canSend ? "active:scale-95" : ""}
+                style={{ marginLeft:"auto", minHeight:44, minWidth:44, padding:"0 14px 0 16px", borderRadius:10, display:"inline-flex", alignItems:"center", justifyContent:"center", gap:6, background:canSend?"linear-gradient(135deg,var(--gold-1),var(--gold-2))":"var(--bg-3)", color:canSend?"#1a1405":"var(--ink-4)", border:"none", cursor:canSend?"pointer":"default", fontSize:13.5, fontWeight:700, boxShadow:canSend?"0 6px 16px oklch(0.72 0.16 79/0.40)":"none", transition:"all 150ms", fontFamily:"inherit" }}>
                 {sendMutation.isPending
                   ? <div style={{ width:12, height:12, border:"2px solid color-mix(in srgb, var(--app-fg) 50%, transparent)", borderTopColor:"transparent", borderRadius:"50%", animation:"spin 0.6s linear infinite" }}/>
                   : <>Send <svg width={12} height={12} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round"><path d="m5 12 7-7 7 7M12 5v14"/></svg></>

@@ -160,7 +160,7 @@ export default function RoadmapPage() {
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[400px] bg-violet-600/8 blur-[120px] rounded-full" />
         </div>
 
-        <div className="relative z-10 max-w-5xl mx-auto px-6 pt-24 pb-16 text-center">
+        <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 pt-24 pb-16 text-center">
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -173,7 +173,7 @@ export default function RoadmapPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.05 }}
-            className="text-5xl md:text-6xl font-black tracking-tighter uppercase italic leading-[0.92] text-foreground mb-6"
+            className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tighter uppercase italic leading-[0.92] text-foreground mb-6"
           >
             Building in the<br />
             <span className="text-violet-400">Open.</span>
@@ -192,7 +192,7 @@ export default function RoadmapPage() {
       </section>
 
       {/* ── Status legend ── */}
-      <div className="max-w-6xl mx-auto px-6 pt-10 pb-2">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-10 pb-2">
         <div className="flex flex-wrap items-center gap-4">
           {COLUMNS.map((col) => (
             <div key={col.label} className="flex items-center gap-2">
@@ -212,7 +212,7 @@ export default function RoadmapPage() {
       </div>
 
       {/* ── Kanban board ── */}
-      <section className="max-w-6xl mx-auto px-6 py-10">
+      <section className="max-w-6xl mx-auto px-4 sm:px-6 py-10">
         <div className="grid md:grid-cols-3 gap-6">
           {COLUMNS.map((col, ci) => (
             <motion.div
@@ -244,7 +244,7 @@ export default function RoadmapPage() {
       </section>
 
       {/* ── CTA ── */}
-      <section className="max-w-5xl mx-auto px-6 pt-4">
+      <section className="max-w-5xl mx-auto px-4 sm:px-6 pt-4">
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
@@ -268,7 +268,7 @@ export default function RoadmapPage() {
               href="https://discord.gg/kaiveron"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-7 py-3 rounded-xl bg-violet-600 hover:bg-violet-500 text-sm font-black uppercase tracking-widest text-foreground transition-all"
+              className="inline-flex items-center justify-center min-h-11 gap-2 px-7 py-3 rounded-xl bg-violet-600 hover:bg-violet-500 text-sm font-black uppercase tracking-widest text-foreground transition-all active:scale-95"
             >
               Join the Discord
             </a>

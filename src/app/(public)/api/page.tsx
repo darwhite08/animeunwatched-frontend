@@ -76,7 +76,7 @@ function CopyButton({ text, label = "Copy" }: { text: string; label?: string }) 
   return (
     <button
       onClick={handleCopy}
-      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface hover:bg-surface border border-border text-[10px] font-black uppercase tracking-widest text-muted hover:text-muted transition-all"
+      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-surface hover:bg-surface border border-border text-[10px] font-black uppercase tracking-widest text-muted hover:text-muted transition-all active:scale-95"
     >
       {copied ? (
         <><Check size={11} className="text-emerald-400" /> Copied</>
@@ -115,7 +115,7 @@ export default function ApiDocsPage() {
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-accent/7 blur-[130px] rounded-full" />
         </div>
 
-        <div className="relative z-10 max-w-4xl mx-auto px-6 pt-24 pb-16">
+        <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 pt-24 pb-16">
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -133,7 +133,7 @@ export default function ApiDocsPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.05 }}
-            className="text-5xl md:text-6xl font-black tracking-tighter uppercase italic leading-[0.95] text-foreground mb-5"
+            className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tighter uppercase italic leading-[0.95] text-foreground mb-5"
           >
             Developer<span className="text-accent-bright"> API</span><span className="text-foreground">.</span>
           </motion.h1>
@@ -150,7 +150,7 @@ export default function ApiDocsPage() {
         </div>
       </section>
 
-      <div className="max-w-4xl mx-auto px-6 space-y-14 pt-14">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 space-y-14 pt-14">
 
         {/* ── Authentication ── */}
         <motion.section
@@ -194,29 +194,31 @@ export default function ApiDocsPage() {
           </div>
 
           <div className="rounded-2xl border border-border bg-surface overflow-hidden">
-            {/* Table header */}
-            <div className="grid grid-cols-[80px_1fr_1fr] gap-4 px-5 py-3 border-b border-border bg-white/[0.015]">
+            {/* Table header — hidden on mobile (rows stack instead) */}
+            <div className="hidden sm:grid grid-cols-[80px_1fr_1fr] gap-4 px-5 py-3 border-b border-border bg-white/[0.015]">
               <span className="text-[9px] font-black uppercase tracking-[0.3em] text-subtle">Method</span>
               <span className="text-[9px] font-black uppercase tracking-[0.3em] text-subtle">Endpoint</span>
               <span className="text-[9px] font-black uppercase tracking-[0.3em] text-subtle">Description</span>
             </div>
 
-            {/* Rows */}
+            {/* Rows — stacked on mobile, 3-col grid on sm+ */}
             {ENDPOINTS.map((ep, i) => {
               const m = METHOD_STYLE[ep.method]
               return (
                 <div
                   key={ep.path}
-                  className={`grid grid-cols-[80px_1fr_1fr] gap-4 px-5 py-4 items-start transition-colors hover:bg-surface ${
+                  className={`flex flex-col gap-2 sm:grid sm:grid-cols-[80px_1fr_1fr] sm:gap-4 sm:items-start px-4 sm:px-5 py-4 transition-colors hover:bg-surface ${
                     i < ENDPOINTS.length - 1 ? "border-b border-white/4" : ""
                   }`}
                 >
-                  <span className={`inline-flex items-center justify-center px-2 py-0.5 rounded-lg border text-[9px] font-black font-mono tracking-widest w-fit ${m.bg} ${m.text} ${m.border}`}>
-                    {ep.method}
-                  </span>
-                  <code className="text-xs font-mono text-muted break-all leading-relaxed">
-                    {ep.path}
-                  </code>
+                  <div className="flex items-center gap-3 sm:contents">
+                    <span className={`inline-flex items-center justify-center px-2 py-0.5 rounded-lg border text-[9px] font-black font-mono tracking-widest w-fit shrink-0 ${m.bg} ${m.text} ${m.border}`}>
+                      {ep.method}
+                    </span>
+                    <code className="text-xs font-mono text-muted break-all leading-relaxed">
+                      {ep.path}
+                    </code>
+                  </div>
                   <span className="text-xs text-muted leading-relaxed">{ep.description}</span>
                 </div>
               )
@@ -264,7 +266,7 @@ export default function ApiDocsPage() {
               href={OPENAPI_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-accent hover:bg-accent-bright text-xs font-black uppercase tracking-widest text-foreground transition-all"
+              className="flex items-center justify-center min-h-11 gap-1.5 px-4 py-2 rounded-xl bg-accent hover:bg-accent-bright text-xs font-black uppercase tracking-widest text-foreground transition-all active:scale-95"
             >
               Open Spec <ChevronRight size={12} />
             </a>

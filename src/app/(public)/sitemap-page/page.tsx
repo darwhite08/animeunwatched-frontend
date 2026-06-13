@@ -94,7 +94,7 @@ export default function SitemapPage() {
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[350px] bg-accent/6 blur-[130px] rounded-full" />
         </div>
 
-        <div className="relative z-10 max-w-5xl mx-auto px-6 pt-24 pb-16">
+        <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 pt-24 pb-16">
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -112,7 +112,7 @@ export default function SitemapPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.05 }}
-            className="text-5xl md:text-7xl font-black tracking-tighter uppercase italic leading-[0.92] text-foreground mb-5"
+            className="text-4xl sm:text-5xl md:text-7xl font-black tracking-tighter uppercase italic leading-[0.92] text-foreground mb-5"
           >
             Site<span className="text-accent-bright"> Map</span><span className="text-foreground">.</span>
           </motion.h1>
@@ -129,7 +129,7 @@ export default function SitemapPage() {
       </section>
 
       {/* ── Sitemap grid ── */}
-      <section className="max-w-5xl mx-auto px-6 pt-14">
+      <section className="max-w-5xl mx-auto px-4 sm:px-6 pt-14">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {SECTIONS.map((section, si) => (
             <motion.div
@@ -173,7 +173,7 @@ export default function SitemapPage() {
       </section>
 
       {/* ── Footer note ── */}
-      <div className="max-w-5xl mx-auto px-6 pt-14">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 pt-14">
         <motion.p
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}

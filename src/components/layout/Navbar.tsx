@@ -204,7 +204,7 @@ export default function Navbar() {
     || ["/watchlist", "/readlist", "/stats", "/streak", "/dashboard"].some(p => pathname.startsWith(p));
 
   return (
-    <header className="w-full flex flex-col items-center pt-3 px-5 pb-0">
+    <header className="w-full flex flex-col items-center px-5 pb-0 pt-[max(0.75rem,env(safe-area-inset-top))]">
 
       {/* Homepage section colour line */}
       {isHomePage && (
@@ -221,7 +221,7 @@ export default function Navbar() {
           boxShadow:       "none",
         }}
         transition={T}
-        className="relative flex w-full max-w-[1200px] items-center justify-between rounded-[2rem] px-6 backdrop-blur-2xl border"
+        className="relative flex w-full max-w-[1200px] items-center justify-between rounded-[2rem] px-4 sm:px-6 backdrop-blur-2xl border"
         style={{ paddingTop: scrolled ? "8px" : "11px", paddingBottom: scrolled ? "8px" : "11px" }}
       >
         {/* ── Logo ── */}
@@ -332,7 +332,7 @@ export default function Navbar() {
                 Sign in
               </Link>
               <Link href="/community"
-                className="px-5 py-2 rounded-full text-[10px] font-black text-black uppercase tracking-widest transition-all hover:scale-105"
+                className="inline-flex items-center min-h-9 px-4 sm:px-5 py-2 rounded-full text-[10px] font-black text-black uppercase tracking-widest transition-all hover:scale-105 active:scale-95"
                 style={{ background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))", boxShadow: "0 2px 12px color-mix(in srgb, var(--app-accent) 35%, transparent)" }}>
                 View Community
               </Link>
@@ -370,7 +370,7 @@ export default function Navbar() {
           ) : null}
 
           {/* Mobile hamburger */}
-          <button className="lg:hidden text-muted hover:text-foreground transition-colors p-2"
+          <button className="lg:hidden flex items-center justify-center min-h-11 min-w-11 text-muted hover:text-foreground transition-colors active:scale-95"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)} aria-label="Open menu">
             {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
@@ -389,13 +389,13 @@ export default function Navbar() {
             transition={{ duration: 0.2, ease: [0.32, 0.72, 0, 1] }}
             className="fixed inset-x-4 top-24 z-[90] lg:hidden bg-background/97 backdrop-blur-2xl rounded-3xl border border-border shadow-2xl overflow-hidden"
           >
-            <div className="p-4 max-h-[80vh] overflow-y-auto space-y-4">
+            <div className="p-4 pb-[max(1rem,env(safe-area-inset-bottom))] max-h-[80vh] overflow-y-auto scrollbar-hide space-y-4">
 
               <div>
                 <p className="text-[8px] font-black text-subtle uppercase tracking-[0.3em] px-3 mb-1">Navigate</p>
                 {[{ name: "Home", href: "/" }, { name: "Community", href: "/community" }, { name: "Blog", href: "/blog" }, { name: "Leaderboard", href: "/leaderboard" }].map(l => (
                   <Link key={l.href} href={l.href} onClick={() => setMobileMenuOpen(false)}
-                    className={`flex items-center px-3 py-3 rounded-xl text-xs font-bold transition-all ${pathname === l.href ? "text-foreground bg-surface" : "text-muted hover:text-foreground hover:bg-surface"}`}>
+                    className={`flex items-center min-h-11 px-3 py-3 rounded-xl text-xs font-bold transition-all active:scale-95 ${pathname === l.href ? "text-foreground bg-surface" : "text-muted hover:text-foreground hover:bg-surface"}`}>
                     {l.name}
                   </Link>
                 ))}
@@ -409,15 +409,21 @@ export default function Navbar() {
 
               <div className="border-t border-border pt-3">
                 {!isAuthenticated ? (
-                  <Link href="/login" onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center justify-center px-4 py-3 rounded-xl text-xs font-black text-black transition-all uppercase tracking-widest"
-                    style={{ background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))" }}>
-                    Sign In
-                  </Link>
+                  <div className="flex flex-col gap-2">
+                    <Link href="/register" onClick={() => setMobileMenuOpen(false)}
+                      className="flex items-center justify-center min-h-11 px-4 py-3 rounded-xl text-xs font-black text-black transition-all uppercase tracking-widest active:scale-95"
+                      style={{ background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))" }}>
+                      Get started — free
+                    </Link>
+                    <Link href="/login" onClick={() => setMobileMenuOpen(false)}
+                      className="flex items-center justify-center min-h-11 px-4 py-3 rounded-xl text-xs font-black text-muted hover:text-foreground border border-border transition-all uppercase tracking-widest active:scale-95">
+                      Sign In
+                    </Link>
+                  </div>
                 ) : (
                   <>
-                    <Link href="/dashboard" onClick={() => setMobileMenuOpen(false)} className="flex items-center px-3 py-3 rounded-xl text-xs font-bold text-muted hover:text-foreground hover:bg-surface transition-all">Dashboard</Link>
-                    <Link href="/me/settings/account"  onClick={() => setMobileMenuOpen(false)} className="flex items-center px-3 py-3 rounded-xl text-xs font-bold text-muted hover:text-foreground hover:bg-surface transition-all">Settings</Link>
+                    <Link href="/dashboard" onClick={() => setMobileMenuOpen(false)} className="flex items-center min-h-11 px-3 py-3 rounded-xl text-xs font-bold text-muted hover:text-foreground hover:bg-surface transition-all active:scale-95">Dashboard</Link>
+                    <Link href="/me/settings/account"  onClick={() => setMobileMenuOpen(false)} className="flex items-center min-h-11 px-3 py-3 rounded-xl text-xs font-bold text-muted hover:text-foreground hover:bg-surface transition-all active:scale-95">Settings</Link>
                   </>
                 )}
               </div>
@@ -437,7 +443,7 @@ function MobileSection({ title, links, onClose }: { title: string; links: DropIt
         const Icon = l.icon;
         return (
           <Link key={l.href} href={l.href} onClick={onClose}
-            className="flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-bold text-muted hover:text-foreground hover:bg-surface transition-all group">
+            className="flex items-center gap-3 min-h-11 px-3 py-2.5 rounded-xl text-xs font-bold text-muted hover:text-foreground hover:bg-surface transition-all active:scale-95 group">
             <div className="w-7 h-7 rounded-lg flex items-center justify-center shrink-0 transition-all group-hover:scale-110"
               style={{
                 background: "linear-gradient(135deg, color-mix(in srgb, var(--app-accent) 12%, transparent) 0%, color-mix(in srgb, var(--app-accent-bright) 6%, transparent) 100%)",

@@ -90,7 +90,7 @@ export default function AboutPage() {
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-accent/8 blur-[120px] rounded-full" />
         </div>
 
-        <div className="relative z-10 max-w-5xl mx-auto px-6 pt-24 pb-20 text-center">
+        <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 pt-24 pb-20 text-center">
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -103,7 +103,7 @@ export default function AboutPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.05 }}
-            className="text-5xl md:text-7xl font-black tracking-tighter uppercase italic leading-[0.92] text-foreground"
+            className="text-4xl sm:text-5xl md:text-7xl font-black tracking-tighter uppercase italic leading-[0.92] text-foreground"
           >
             We Built The Anime Social Platform That Should Have{" "}
             <span style={{color:"var(--app-accent)"}}>Existed Years Ago.</span>
@@ -122,7 +122,7 @@ export default function AboutPage() {
       </section>
 
       {/* ── Mission pillars ── */}
-      <section className="max-w-5xl mx-auto px-6 py-20">
+      <section className="max-w-5xl mx-auto px-4 sm:px-6 py-20">
         <div className="text-center mb-12">
           <p className="text-[10px] font-black uppercase tracking-[0.35em] text-subtle mb-3">Our Mission</p>
           <h2 className="text-3xl font-black tracking-tighter uppercase italic text-foreground">
@@ -154,7 +154,7 @@ export default function AboutPage() {
 
       {/* ── Stats strip ── */}
       <section className="border-y border-border bg-white/[0.015]">
-        <div className="max-w-5xl mx-auto px-6 py-12 grid grid-cols-2 md:grid-cols-4 gap-8">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-12 grid grid-cols-2 md:grid-cols-4 gap-8">
           {STATS.map((s, i) => (
             <motion.div
               key={s.label}
@@ -171,7 +171,7 @@ export default function AboutPage() {
       </section>
 
       {/* ── Team ── */}
-      <section className="max-w-5xl mx-auto px-6 py-20">
+      <section className="max-w-5xl mx-auto px-4 sm:px-6 py-20">
         <div className="text-center mb-12">
           <p className="text-[10px] font-black uppercase tracking-[0.35em] text-subtle mb-3">The Crew</p>
           <h2 className="text-3xl font-black tracking-tighter uppercase italic text-foreground">
@@ -208,7 +208,7 @@ export default function AboutPage() {
 
       {/* ── Tech stack ── */}
       <section className="border-t border-border bg-white/[0.01]">
-        <div className="max-w-5xl mx-auto px-6 py-20">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-20">
           <div className="text-center mb-12">
             <p className="text-[10px] font-black uppercase tracking-[0.35em] text-subtle mb-3">Engineering</p>
             <h2 className="text-3xl font-black tracking-tighter uppercase italic text-foreground">
@@ -240,7 +240,7 @@ export default function AboutPage() {
       </section>
 
       {/* ── CTA ── */}
-      <section className="max-w-5xl mx-auto px-6 py-12">
+      <section className="max-w-5xl mx-auto px-4 sm:px-6 py-12">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -259,7 +259,7 @@ export default function AboutPage() {
             </p>
             <Link
               href="/register"
-              className="inline-flex items-center gap-2.5 px-8 py-3.5 rounded-xl bg-accent hover:bg-accent-bright text-sm font-black uppercase tracking-widest text-foreground transition-all"
+              className="inline-flex items-center gap-2.5 px-8 py-3.5 rounded-xl bg-accent hover:bg-accent-bright text-sm font-black uppercase tracking-widest text-foreground transition-all active:scale-95"
             >
               Create Your Dojo Account <ArrowRight size={15} />
             </Link>

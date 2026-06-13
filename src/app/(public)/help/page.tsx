@@ -183,7 +183,7 @@ export default function HelpPage() {
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[700px] h-[400px] bg-accent/8 blur-[120px] rounded-full" />
         </div>
 
-        <div className="relative z-10 max-w-4xl mx-auto px-6 pt-24 pb-16 text-center">
+        <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 pt-24 pb-16 text-center">
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -196,7 +196,7 @@ export default function HelpPage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.05 }}
-            className="text-5xl md:text-6xl font-black tracking-tighter uppercase italic leading-[0.92] text-foreground mb-6"
+            className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tighter uppercase italic leading-[0.92] text-foreground mb-6"
           >
             Got Questions?<br />
             <span className="text-accent-bright">We Have Answers.</span>
@@ -224,7 +224,7 @@ export default function HelpPage() {
               placeholder="Search questions…"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              className="w-full bg-white/[0.04] border border-border rounded-2xl pl-11 pr-5 py-4 text-sm text-foreground placeholder:text-subtle focus:outline-none focus:border-accent/50 focus:bg-white/[0.06] transition-all"
+              className="w-full bg-white/[0.04] border border-border rounded-2xl pl-11 pr-5 py-4 text-base sm:text-sm text-foreground placeholder:text-subtle focus:outline-none focus:border-accent/50 focus:bg-white/[0.06] transition-all"
             />
             {query && (
               <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[10px] font-black text-subtle uppercase tracking-widest">
@@ -236,7 +236,7 @@ export default function HelpPage() {
       </section>
 
       {/* ── Body ── */}
-      <section className="max-w-7xl mx-auto px-6 py-16">
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 py-16">
         <div className="grid lg:grid-cols-3 gap-10">
 
           {/* FAQ list — 2/3 width */}

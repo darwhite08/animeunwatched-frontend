@@ -22,6 +22,7 @@ import {
   X,
   Bookmark,
   Share2,
+  ChevronDown,
 } from "lucide-react"
 import { api } from "@/lib/api/client"
 import { useToast } from "@/stores/toast.store"
@@ -79,6 +80,11 @@ function relativeTime(iso: string): string {
   if (d < 3600000) return `${Math.floor(d / 60000)}m ago`
   if (d < 86400000) return `${Math.floor(d / 3600000)}h ago`
   return `${Math.floor(d / 86400000)}d ago`
+}
+
+/** Total nested replies under a node (for the collapsed-thread label). */
+function countDescendants(r: ReplyItem): number {
+  return r.children.reduce((n, c) => n + 1 + countDescendants(c), 0)
 }
 
 /* ── Shared image-attach button + preview, used by both composers ── */
@@ -245,71 +251,104 @@ function ReplyNode({
   onSubmitReply: (payload: ReplyPayload) => void
   pending: boolean
 }) {
-  const avatarSize = depth > 0 ? 30 : 34
+  const [collapsed, setCollapsed] = useState(false)
+  const avatarSize = depth > 0 ? 28 : 34
+  const hasChildren = reply.children.length > 0
+  const total = hasChildren ? countDescendants(reply) : 0
+
   return (
     <div>
-      <div className="flex gap-2.5 sm:gap-3 py-3">
-        <Avatar src={reply.avatarUrl} name={reply.author} size={avatarSize} />
+      <div className="group flex gap-2 sm:gap-2.5 py-3">
+        {/* Collapse toggle + avatar */}
+        <button
+          onClick={() => setCollapsed(c => !c)}
+          aria-label={collapsed ? "Expand" : "Collapse"}
+          className="shrink-0 transition-transform active:scale-95"
+        >
+          <span className="relative block">
+            <Avatar src={reply.avatarUrl} name={reply.author} size={avatarSize} />
+            <span className="absolute -bottom-1 -right-1 grid h-4 w-4 place-items-center rounded-full border border-border bg-surface-2 text-subtle">
+              <ChevronDown size={10} className={`transition-transform ${collapsed ? "-rotate-90" : ""}`} />
+            </span>
+          </span>
+        </button>
+
         <div className="min-w-0 flex-1">
           {/* Author line */}
           <div className="flex items-center gap-1.5 text-[13px] leading-none">
             <span className="font-bold text-foreground truncate">{reply.author}</span>
             <VerifiedBadge kind={reply.verifiedKind} size={12} />
             <span className="text-subtle">· {reply.date}</span>
-          </div>
-
-          {/* Content */}
-          {reply.content !== "📷" && (
-            <p className="mt-1.5 text-sm text-foreground/90 leading-relaxed whitespace-pre-line break-words">{reply.content}</p>
-          )}
-
-          {/* Image */}
-          {reply.imageUrl && (
-            <a href={reply.imageUrl} target="_blank" rel="noopener noreferrer" className="mt-2 block">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={reply.imageUrl} alt="Reply attachment" className="max-h-80 w-auto rounded-xl border border-border object-contain bg-surface-2" />
-            </a>
-          )}
-
-          {/* Actions */}
-          <div className="mt-1.5 -ml-2 flex items-center gap-0.5">
-            <button
-              onClick={() => onLike(reply.id)}
-              aria-pressed={reply.liked}
-              className={`flex items-center gap-1.5 rounded-full px-2 py-1 text-xs font-semibold transition-colors active:scale-95 ${
-                reply.liked ? "text-rose-400" : "text-subtle hover:text-rose-400"
-              }`}
-            >
-              <Heart size={13} fill={reply.liked ? "currentColor" : "none"} />
-              {reply.likes > 0 ? reply.likes : "Like"}
-            </button>
-            {!locked && (
-              <button
-                onClick={() => onToggleReply(reply.id)}
-                className="flex items-center gap-1.5 rounded-full px-2 py-1 text-xs font-semibold text-subtle hover:text-accent-bright transition-colors active:scale-95"
-              >
-                <Reply size={12} /> Reply
+            {collapsed && total > 0 && (
+              <button onClick={() => setCollapsed(false)} className="text-subtle hover:text-accent-bright transition-colors">
+                · {total} repl{total === 1 ? "y" : "ies"}
               </button>
             )}
           </div>
 
-          {/* Inline reply composer */}
-          <AnimatePresence>
-            {replyingTo === reply.id && (
-              <InlineReply
-                authorName={reply.author}
-                onSubmit={onSubmitReply}
-                onCancel={() => onToggleReply(reply.id)}
-                pending={pending}
-              />
-            )}
-          </AnimatePresence>
+          {!collapsed && (
+            <>
+              {/* Content */}
+              {reply.content !== "📷" && (
+                <p className="mt-1.5 text-sm text-foreground/90 leading-relaxed whitespace-pre-line break-words">{reply.content}</p>
+              )}
+
+              {/* Image */}
+              {reply.imageUrl && (
+                <a href={reply.imageUrl} target="_blank" rel="noopener noreferrer" className="mt-2 block">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={reply.imageUrl} alt="Reply attachment" className="max-h-80 w-auto rounded-xl border border-border object-contain bg-surface-2" />
+                </a>
+              )}
+
+              {/* Actions */}
+              <div className="mt-1.5 -ml-2 flex items-center gap-0.5">
+                <button
+                  onClick={() => onLike(reply.id)}
+                  aria-pressed={reply.liked}
+                  className={`flex items-center gap-1.5 rounded-full px-2 py-1 text-xs font-semibold transition-colors active:scale-95 ${
+                    reply.liked ? "text-rose-400" : "text-subtle hover:bg-rose-500/10 hover:text-rose-400"
+                  }`}
+                >
+                  <Heart size={13} fill={reply.liked ? "currentColor" : "none"} />
+                  {reply.likes > 0 ? reply.likes : "Like"}
+                </button>
+                {!locked && (
+                  <button
+                    onClick={() => onToggleReply(reply.id)}
+                    className="flex items-center gap-1.5 rounded-full px-2 py-1 text-xs font-semibold text-subtle hover:bg-accent/10 hover:text-accent-bright transition-colors active:scale-95"
+                  >
+                    <Reply size={12} /> Reply
+                  </button>
+                )}
+              </div>
+
+              {/* Inline reply composer */}
+              <AnimatePresence>
+                {replyingTo === reply.id && (
+                  <InlineReply
+                    authorName={reply.author}
+                    onSubmit={onSubmitReply}
+                    onCancel={() => onToggleReply(reply.id)}
+                    pending={pending}
+                  />
+                )}
+              </AnimatePresence>
+            </>
+          )}
         </div>
       </div>
 
-      {/* Nested children — single connecting rail per level (Reddit-style) */}
-      {reply.children.length > 0 && (
-        <div className="ml-[1.0rem] sm:ml-[1.15rem] border-l border-border pl-2.5 sm:pl-4">
+      {/* Nested children — clickable rail collapses the thread (Reddit-style) */}
+      {hasChildren && !collapsed && (
+        <div className="group/rail relative ml-[0.85rem] sm:ml-[1.0rem] pl-3 sm:pl-4">
+          <button
+            onClick={() => setCollapsed(true)}
+            aria-label="Collapse thread"
+            className="absolute inset-y-0 left-0 w-3 cursor-pointer"
+          >
+            <span className="absolute inset-y-0 left-0 w-px bg-border transition-colors group-hover/rail:bg-accent/40" />
+          </button>
           {reply.children.map(child => (
             <ReplyNode
               key={child.id}

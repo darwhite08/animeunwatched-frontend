@@ -2,7 +2,8 @@
 
 import { useEffect, useRef, useState, useCallback, useMemo } from "react"
 import Link from "next/link"
-import { Heart, MessageCircle, Bookmark, Share2, Plus, Volume2, VolumeX, Clapperboard, Loader2, Play, Star } from "lucide-react"
+import { MessageCircle, Bookmark, Share2, Plus, Volume2, VolumeX, Clapperboard, Loader2, Play, Star } from "lucide-react"
+import { HeartLike } from "@/components/ui/HeartLike"
 import { api } from "@/lib/api/client"
 import { track } from "@/lib/analytics/ga"
 import { useAuthStore } from "@/stores/auth.store"
@@ -412,12 +413,12 @@ function ShotReel({ shot, active, near, muted }: { shot: Shot; active: boolean; 
 
       {/* TikTok-style right action rail */}
       <div className="absolute bottom-28 right-3 z-10 flex flex-col items-center gap-4">
-        <button onClick={toggleLike} aria-pressed={liked} aria-label={liked ? "Unlike" : "Like"} className="flex flex-col items-center gap-1 text-white transition-transform duration-200 ease-out active:scale-90">
+        <div className="flex flex-col items-center gap-1 text-white">
           <span className="grid h-12 w-12 place-items-center rounded-full bg-black/40 backdrop-blur">
-            <Heart size={26} className={liked ? "fill-rose-500 text-rose-500" : ""} />
+            <HeartLike liked={liked} onToggle={toggleLike} size={26} ariaLabel={liked ? "Unlike" : "Like"} />
           </span>
           <span className="text-[11px] font-semibold tabular-nums drop-shadow">{likes > 0 ? compact(likes) : "Like"}</span>
-        </button>
+        </div>
         <button onClick={openComments} aria-label="Comments" className="flex flex-col items-center gap-1 text-white transition-transform duration-200 ease-out active:scale-90">
           <span className="grid h-12 w-12 place-items-center rounded-full bg-black/40 backdrop-blur">
             <MessageCircle size={26} />

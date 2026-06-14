@@ -4,9 +4,10 @@ import { useState } from "react"
 import { motion } from "framer-motion"
 import {
   Flame, TrendingUp, MessageSquare, Vote,
-  Heart, ChevronRight, Star, BarChart2,
+  ChevronRight, Star, BarChart2,
   ArrowUpRight,
 } from "lucide-react"
+import { HeartLike } from "@/components/ui/HeartLike"
 import Link from "next/link"
 import Image from "next/image"
 import { useBrowseAnime } from "@/hooks/useAnime"
@@ -202,15 +203,10 @@ function PostCard({ post, index }: { post: TrendingPost; index: number }) {
 
       {/* Actions */}
       <div className="flex items-center gap-4 pt-1 border-t border-border">
-        <button
-          onClick={() => setLiked((l) => !l)}
-          className={`flex items-center gap-1.5 text-xs font-bold transition-colors ${
-            liked ? "text-rose-400" : "text-subtle hover:text-rose-400"
-          }`}
-        >
-          <Heart size={13} fill={liked ? "currentColor" : "none"} />
+        <span className={`flex items-center gap-1.5 text-xs font-bold ${liked ? "text-rose-400" : "text-subtle"}`}>
+          <HeartLike liked={liked} onToggle={() => setLiked((l) => !l)} size={15} />
           {liked ? post.likes + 1 : post.likes}
-        </button>
+        </span>
         <Link
           href={`/posts/${post.id}#comments`}
           className="flex items-center gap-1.5 text-xs font-bold text-subtle hover:text-accent-bright transition-colors"

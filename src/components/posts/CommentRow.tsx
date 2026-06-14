@@ -3,7 +3,8 @@
 import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
 import { motion, AnimatePresence } from "framer-motion"
-import { Heart, MessageSquare, Send, X, MoreHorizontal } from "lucide-react"
+import { MessageSquare, Send, X, MoreHorizontal } from "lucide-react"
+import { HeartLike } from "@/components/ui/HeartLike"
 import type { PostComment } from "@/lib/api/types"
 import { useAuthStore } from "@/stores/auth.store"
 import { useToast } from "@/stores/toast.store"
@@ -163,18 +164,12 @@ export function CommentRow({
 
         {/* Action bar */}
         <div className="flex items-center gap-1 mt-1.5 -ml-2">
-          <button onClick={toggleLike}
-            aria-pressed={liked}
-            aria-label={liked ? "Unlike" : "Like"}
-            className={`group/like flex items-center gap-1.5 min-h-8 px-2.5 rounded-full text-[11px] font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 ${
-              liked
-                ? "text-rose-400 bg-rose-500/10"
-                : "text-muted hover:text-rose-400 hover:bg-rose-500/8"
-            }`}>
-            <Heart size={13} fill={liked ? "currentColor" : "none"}
-              className="transition-transform group-active/like:scale-90 motion-reduce:transform-none" />
+          <span className={`flex items-center gap-1.5 min-h-8 px-2.5 rounded-full text-[11px] font-semibold transition-all ${
+            liked ? "text-rose-400 bg-rose-500/10" : "text-muted hover:bg-rose-500/8"
+          }`}>
+            <HeartLike liked={liked} onToggle={toggleLike} size={15} ariaLabel={liked ? "Unlike" : "Like"} />
             {likeCount > 0 && <span className="tabular-nums">{likeCount}</span>}
-          </button>
+          </span>
 
           <button onClick={() => setReplyOpen(o => !o)}
             aria-expanded={replyOpen}

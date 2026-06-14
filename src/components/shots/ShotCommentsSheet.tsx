@@ -5,7 +5,8 @@ import Link from "next/link"
 import { createPortal } from "react-dom"
 import { motion, AnimatePresence } from "framer-motion"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
-import { Send, Trash2, MessageCircle, Loader2, Heart, Pin, X, CornerDownRight } from "lucide-react"
+import { Send, Trash2, MessageCircle, Loader2, Pin, X, CornerDownRight } from "lucide-react"
+import { HeartLike } from "@/components/ui/HeartLike"
 import { VerifiedBadge } from "@/components/social/VerifiedBadge"
 import { api } from "@/lib/api/client"
 import { useAuthStore } from "@/stores/auth.store"
@@ -162,9 +163,9 @@ export function ShotCommentsSheet({
         </p>
         <p className="break-words text-sm text-foreground">{c.body}</p>
         <div className="mt-1 flex items-center gap-3 text-[11px] text-muted">
-          <button onClick={() => toggleLike(c)} className={`inline-flex items-center gap-1 transition-colors ${c.likedByMe ? "text-rose-400" : "hover:text-rose-400"}`}>
-            <Heart size={13} fill={c.likedByMe ? "currentColor" : "none"} /> {c.likeCount > 0 ? c.likeCount : ""}
-          </button>
+          <span className={`inline-flex items-center gap-1 ${c.likedByMe ? "text-rose-400" : ""}`}>
+            <HeartLike liked={c.likedByMe} onToggle={() => toggleLike(c)} size={15} /> {c.likeCount > 0 ? c.likeCount : ""}
+          </span>
           <button onClick={() => { setReplyTo({ id: c.id, name: c.author.username }); }} className="font-semibold transition-colors hover:text-foreground">
             Reply
           </button>

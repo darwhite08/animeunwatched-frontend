@@ -3,7 +3,8 @@
 import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
 import Image from "next/image"
-import { Heart, MessageCircle, Repeat2, ArrowUp } from "lucide-react"
+import { MessageCircle, Repeat2, ArrowUp } from "lucide-react"
+import { HeartLike } from "@/components/ui/HeartLike"
 import {
   useActivityFeed, useLikeActivity, useUnlikeActivity,
   useRepostActivity, useUnrepostActivity, useCreateActivity,
@@ -78,11 +79,10 @@ function ActivityCard({ a }: { a: Activity }) {
 
       {/* Engagement */}
       <div className="flex items-center gap-5 text-xs text-muted">
-        <button onClick={toggleLike} className="flex items-center gap-1.5 group hover:text-accent transition-colors disabled:opacity-50"
-          disabled={like.isPending || unlike.isPending}>
-          <Heart size={15} className={a.isLikedByMe ? "fill-accent text-accent" : "group-hover:fill-accent/20"} />
+        <span className={`flex items-center gap-1.5 ${a.isLikedByMe ? "text-rose-400" : ""}`}>
+          <HeartLike liked={a.isLikedByMe} onToggle={toggleLike} size={16} />
           <span className="tabular-nums">{a.likeCount}</span>
-        </button>
+        </span>
         <button onClick={toggleRepost} className="flex items-center gap-1.5 hover:text-accent transition-colors disabled:opacity-50"
           disabled={repost.isPending || unrepost.isPending}>
           <Repeat2 size={15} className={a.isRepostedByMe ? "text-accent" : ""} />

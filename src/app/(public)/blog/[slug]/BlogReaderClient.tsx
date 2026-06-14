@@ -3,9 +3,10 @@
 import { useState } from "react"
 import { motion } from "framer-motion"
 import {
-  Heart, Share2, Bookmark, ChevronLeft, Clock, User, Eye,
+  Share2, Bookmark, ChevronLeft, Clock, User, Eye,
   MessageSquare, Send, Loader2,
 } from "lucide-react"
+import { HeartLike } from "@/components/ui/HeartLike"
 import Link from "next/link"
 import { useToast } from "@/stores/toast.store"
 import { useBlog, type Blog } from "@/hooks/useBlogs"
@@ -534,17 +535,16 @@ export function BlogReaderClient({ slug, initialBlog }: { slug: string; initialB
 
         {/* Like / Share / Bookmark bar */}
         <div className="flex items-center gap-3 sm:gap-4 py-5 border-t border-b border-border">
-          <button
-            onClick={toggleLike}
-            className={`inline-flex min-h-11 items-center gap-2 px-4 sm:px-5 rounded-xl text-xs font-black uppercase tracking-widest transition-all active:scale-95 ${
+          <span
+            className={`inline-flex min-h-11 items-center gap-2 px-4 sm:px-5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${
               liked
                 ? "bg-rose-500/15 border border-rose-500/25 text-rose-400"
                 : "bg-white/[0.04] border border-border text-muted hover:text-rose-400 hover:border-rose-500/20"
             }`}
           >
-            <Heart size={14} fill={liked ? "currentColor" : "none"} />
+            <HeartLike liked={liked} onToggle={toggleLike} size={16} />
             {likeCount.toLocaleString()}
-          </button>
+          </span>
 
           <button
             onClick={share}

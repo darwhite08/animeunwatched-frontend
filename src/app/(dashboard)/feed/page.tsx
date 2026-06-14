@@ -29,6 +29,7 @@ import { useLiveFeed, useQueuedPosts } from "@/hooks/useRealtime"
 import { useLiveTime } from "@/hooks/useLiveTime"
 import { NewPostsBanner } from "@/components/feed/NewPostsBanner"
 import { PostLikersModal } from "@/components/posts/PostLikersModal"
+import { HeartLike } from "@/components/ui/HeartLike"
 
 // Renders an auto-updating relative timestamp ("just now" → "1m ago" → ...)
 function LiveTime({ iso }: { iso: string }) { return <>{useLiveTime(iso)}</> }
@@ -185,11 +186,10 @@ function RealPostCard({ post, index }: { post: Post; index: number }) {
       <PostLikersModal postId={post.id} open={likersOpen} onClose={() => setLikersOpen(false)} />
 
       <div className="flex items-center gap-5 pt-1 border-t border-border">
-        <button onClick={handleLike} disabled={likePost.isPending}
-          className={`flex items-center gap-1.5 text-xs font-bold transition-colors ${liked ? "text-rose-400" : "text-subtle hover:text-rose-400"}`}>
-          <Heart size={14} fill={liked ? "currentColor" : "none"} />
+        <span className={`flex items-center gap-1.5 text-xs font-bold ${liked ? "text-rose-400" : "text-subtle"}`}>
+          <HeartLike liked={liked} onToggle={handleLike} size={16} />
           {likeCount > 0 && likeCount}
-        </button>
+        </span>
         <Link
           href={`/posts/${post.id}#comments`}
           className="flex items-center gap-1.5 text-xs font-bold text-subtle hover:text-accent-bright transition-colors"

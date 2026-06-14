@@ -13,6 +13,7 @@ import {
   Heart, MessageSquare, Share2, ChevronLeft, Star, Send, MoreHorizontal,
   ChevronDown, ChevronUp, CornerDownRight,
 } from "lucide-react"
+import { HeartLike } from "@/components/ui/HeartLike"
 import Link from "next/link"
 import { useToast } from "@/stores/toast.store"
 import { PostMenu } from "@/components/ui/PostMenu"
@@ -176,15 +177,10 @@ function CommentCard({ comment, index }: { comment: Comment; index: number }) {
 
       {/* Actions */}
       <div className="flex items-center gap-4">
-        <button
-          onClick={() => setLiked(l => !l)}
-          className={`flex items-center gap-1.5 text-[10px] font-bold transition-colors ${
-            liked ? "text-rose-400" : "text-subtle hover:text-rose-400"
-          }`}
-        >
-          <Heart size={10} fill={liked ? "currentColor" : "none"} />
+        <span className={`flex items-center gap-1.5 text-[10px] font-bold ${liked ? "text-rose-400" : "text-subtle"}`}>
+          <HeartLike liked={liked} onToggle={() => setLiked(l => !l)} size={13} />
           {comment.likes + (liked ? 1 : 0)}
-        </button>
+        </span>
 
         {hasReplies && (
           <button
@@ -219,15 +215,10 @@ function CommentCard({ comment, index }: { comment: Comment; index: number }) {
                     <p className="text-[9px] text-subtle">{reply.time}</p>
                   </div>
                   <p className="ml-8 text-[11px] text-muted leading-relaxed">{reply.body}</p>
-                  <button
-                    onClick={() => setReplyLikes(prev => ({ ...prev, [reply.id]: !prev[reply.id] }))}
-                    className={`ml-8 flex items-center gap-1 text-[9px] font-bold transition-colors ${
-                      replyLikes[reply.id] ? "text-rose-400" : "text-subtle hover:text-rose-400"
-                    }`}
-                  >
-                    <Heart size={8} fill={replyLikes[reply.id] ? "currentColor" : "none"} />
+                  <span className={`ml-8 flex items-center gap-1 text-[9px] font-bold ${replyLikes[reply.id] ? "text-rose-400" : "text-subtle"}`}>
+                    <HeartLike liked={!!replyLikes[reply.id]} onToggle={() => setReplyLikes(prev => ({ ...prev, [reply.id]: !prev[reply.id] }))} size={12} />
                     {reply.likes + (replyLikes[reply.id] ? 1 : 0)}
-                  </button>
+                  </span>
                 </div>
               ))}
             </div>
@@ -432,15 +423,10 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
 
               {/* Action bar */}
               <div className="flex items-center gap-5 pt-2 border-t border-border">
-                <button
-                  onClick={toggleLike}
-                  className={`flex items-center gap-1.5 text-xs font-bold transition-colors ${
-                    liked ? "text-rose-400" : "text-subtle hover:text-rose-400"
-                  }`}
-                >
-                  <Heart size={14} fill={liked ? "currentColor" : "none"} />
+                <span className={`flex items-center gap-1.5 text-xs font-bold ${liked ? "text-rose-400" : "text-subtle"}`}>
+                  <HeartLike liked={liked} onToggle={toggleLike} size={16} />
                   {likeCount}
-                </button>
+                </span>
                 <span className="flex items-center gap-1.5 text-xs font-bold text-subtle">
                   <MessageSquare size={14} />
                   {post.comments}

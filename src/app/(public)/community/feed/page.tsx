@@ -3,7 +3,6 @@
 import { useState } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import {
-  Heart,
   MessageSquare,
   Share2,
   MoreHorizontal,
@@ -12,6 +11,7 @@ import {
   Clock,
 } from "lucide-react"
 import Link from "next/link"
+import { HeartLike } from "@/components/ui/HeartLike"
 import TrendingWidget from "@/components/social/TrendingWidget"
 import WatchlistPreviewWidget from "@/components/social/WatchlistPreviewWidget"
 import ShareCard from "@/components/ui/ShareCard"
@@ -112,15 +112,10 @@ function PostCard({
 
       {/* Actions */}
       <div className="flex items-center gap-5 pt-1 border-t border-border">
-        <button
-          onClick={() => onLike(post.id)}
-          className={`flex items-center gap-1.5 text-xs font-bold transition-colors ${
-            post.liked ? "text-rose-400" : "text-subtle hover:text-rose-400"
-          }`}
-        >
-          <Heart size={14} fill={post.liked ? "currentColor" : "none"} />
+        <div className={`flex items-center gap-1.5 text-xs font-bold transition-colors ${post.liked ? "text-rose-400" : "text-subtle"}`}>
+          <HeartLike liked={post.liked} onToggle={() => onLike(post.id)} size={18} />
           {post.likes}
-        </button>
+        </div>
         <Link
           href={`/posts/${post.id}#comments`}
           className="flex items-center gap-1.5 text-xs font-bold text-subtle hover:text-accent-bright transition-colors"

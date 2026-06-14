@@ -15,7 +15,6 @@ import {
   Lock,
   ChevronRight,
   Reply,
-  Heart,
   Flame,
   ImagePlus,
   Loader2,
@@ -25,6 +24,7 @@ import {
   Minus,
   Plus,
 } from "lucide-react"
+import { HeartLike } from "@/components/ui/HeartLike"
 import { api } from "@/lib/api/client"
 import { useToast } from "@/stores/toast.store"
 import { Avatar } from "@/components/ui/Avatar"
@@ -336,16 +336,10 @@ function ReplyNode({
 
               {/* Actions */}
               <div className="mt-1.5 -ml-2 flex items-center gap-0.5">
-                <button
-                  onClick={() => onLike(reply.id)}
-                  aria-pressed={reply.liked}
-                  className={`flex items-center gap-1.5 rounded-full px-2 py-1 text-xs font-semibold transition-colors active:scale-95 ${
-                    reply.liked ? "text-rose-400" : "text-subtle hover:bg-rose-500/10 hover:text-rose-400"
-                  }`}
-                >
-                  <Heart size={13} fill={reply.liked ? "currentColor" : "none"} />
+                <span className={`flex items-center gap-1.5 rounded-full px-2 py-1 text-xs font-semibold ${reply.liked ? "text-rose-400" : "text-subtle"}`}>
+                  <HeartLike liked={reply.liked} onToggle={() => onLike(reply.id)} size={15} />
                   {reply.likes > 0 ? reply.likes : "Like"}
-                </button>
+                </span>
                 {!locked && (
                   <button
                     onClick={() => onToggleReply(reply.id)}

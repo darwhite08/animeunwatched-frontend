@@ -4,7 +4,7 @@ import { useEffect } from "react"
 import Link from "next/link"
 import { X } from "lucide-react"
 import { useAuthStore } from "@/stores/auth.store"
-import { NAV_ITEMS, resolvePath, type FlyoutLink } from "../sidebarConfig"
+import { NAV_ITEMS, MOBILE_ITEMS, resolvePath, type FlyoutLink } from "../sidebarConfig"
 import { SidebarItem } from "../Sidebar/SidebarItem"
 import { SidebarGamification } from "../Sidebar/SidebarGamification"
 import { useSidebarStore } from "../useSidebarStore"
@@ -60,7 +60,9 @@ export function MobileDrawer() {
           <button onClick={close} aria-label="Close menu" className="rounded-lg p-1.5 text-muted hover:text-foreground"><X size={18} /></button>
         </div>
         <div className="flex flex-1 flex-col gap-1 overflow-y-auto [-webkit-overflow-scrolling:touch]" onClick={close}>
-          {NAV_ITEMS.map((item) => <SidebarItem key={item.key} item={item} slug={slug} collapsed={false} />)}
+          {/* Skip items already in the bottom tab bar (Home/Shots/Messages/Profile) —
+              the drawer is the SECONDARY surface (Anime, Discover, Clubs, Blog, Leaderboard, Library). */}
+          {NAV_ITEMS.filter((item) => !MOBILE_ITEMS.some((m) => m.key === item.key)).map((item) => <SidebarItem key={item.key} item={item} slug={slug} collapsed={false} />)}
           {NAV_ITEMS.filter((i) => i.flyout).map((i) => (
             <Section key={i.key} title={SECTION_TITLES[i.key] ?? i.label} links={i.flyout!} />
           ))}

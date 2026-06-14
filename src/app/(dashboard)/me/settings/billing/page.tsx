@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import Link from "next/link"
 import { Crown, CheckCircle2, Zap, Star, Shield, ExternalLink } from "lucide-react"
+import { DesktopOnly } from "@/components/layout/DesktopOnly"
 
 export const metadata: Metadata = { title: "Billing | Kaiveron" }
 
@@ -19,6 +20,7 @@ const PRO_FEATURES = [
 
 export default function BillingPage() {
   return (
+    <DesktopOnly title="Manage billing on desktop" note="Payment & billing settings open on a larger screen.">
     <div className="max-w-2xl mx-auto px-6 py-12 space-y-8 pb-32">
       {/* Header */}
       <div>
@@ -100,5 +102,6 @@ export default function BillingPage() {
         ))}
       </div>
     </div>
+    </DesktopOnly>
   )
 }

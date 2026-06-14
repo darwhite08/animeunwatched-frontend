@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation"
 import { useCreateBlog } from "@/hooks/useBlogs"
 import { useCreatorAccess } from "@/hooks/useCreator"
 import { Lock } from "lucide-react"
+import { DesktopOnly } from "@/components/layout/DesktopOnly"
 
 const CATEGORIES = ["Deep Dive", "Review", "Theory", "Opinion", "List", "Analysis"]
 const TOOLBAR = [
@@ -78,6 +79,7 @@ export default function NewBlogPage() {
   }
 
   return (
+    <DesktopOnly title="Write on desktop" note="The blog editor needs a keyboard and a bigger canvas — open kaiveron.com on a computer to write.">
     <div className="min-h-screen bg-background text-foreground pb-32">
       <div className="max-w-3xl mx-auto px-6 pt-32 space-y-8">
         {/* Header */}
@@ -190,5 +192,6 @@ export default function NewBlogPage() {
         </div>
       </div>
     </div>
+    </DesktopOnly>
   )
 }

@@ -9,6 +9,7 @@ import {
   Search, RotateCcw, Inbox, ListChecks, RefreshCw,
 } from "lucide-react"
 import { useToast } from "@/stores/toast.store"
+import { DesktopOnly } from "@/components/layout/DesktopOnly"
 
 type ContentType = "post" | "review" | "blog" | "user"
 type ReportStatus = "open" | "resolved" | "dismissed"
@@ -198,6 +199,7 @@ export default function ModerationPage() {
   }
 
   return (
+    <DesktopOnly title="Admin is desktop-only" note="The moderation console is built for a larger screen.">
     <div className="max-w-5xl mx-auto px-6 py-12 space-y-8 pb-32">
 
       {/* Header */}
@@ -393,6 +395,7 @@ export default function ModerationPage() {
         )}
       </div>
     </div>
+    </DesktopOnly>
   )
 }
 

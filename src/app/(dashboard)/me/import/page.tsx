@@ -6,6 +6,7 @@ import { Upload, CheckCircle, AlertCircle, Loader2, FileText, Download } from "l
 import { useToast } from "@/stores/toast.store"
 import { useAuthStore } from "@/stores/auth.store"
 import { api } from "@/lib/api/client"
+import { DesktopOnly } from "@/components/layout/DesktopOnly"
 
 type ImportStatus = "idle" | "parsing" | "importing" | "done" | "error"
 
@@ -123,6 +124,7 @@ export default function ImportPage() {
   }, [processFile])
 
   return (
+    <DesktopOnly title="Import on desktop" note="Bulk-importing your list is easier on a computer — open kaiveron.com on desktop.">
     <div className="space-y-6">
       <div>
         <p className="text-[9px] font-mono uppercase tracking-[0.4em] mb-1"
@@ -259,5 +261,6 @@ export default function ImportPage() {
         </p>
       </div>
     </div>
+    </DesktopOnly>
   )
 }

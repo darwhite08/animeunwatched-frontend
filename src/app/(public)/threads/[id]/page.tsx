@@ -15,18 +15,31 @@ import {
   Lock,
   ChevronRight,
   Reply,
-  Clock,
   Heart,
   Flame,
   ImagePlus,
   Loader2,
   X,
+  Bookmark,
+  Share2,
 } from "lucide-react"
+import { api } from "@/lib/api/client"
 import { useToast } from "@/stores/toast.store"
 import { Avatar } from "@/components/ui/Avatar"
 import { VerifiedBadge } from "@/components/social/VerifiedBadge"
 
 type VerifiedKind = "USER" | "CREATOR" | "STUDIO" | null | undefined
+
+/* ── Flair chips (mirror the Den feed) ── */
+const FLAIR_BY_ID: Record<string, { label: string; cls: string }> = {
+  discussion: { label: "Discussion", cls: "bg-indigo-500/15 text-indigo-300 border-indigo-500/30" },
+  theory:     { label: "Theory",     cls: "bg-violet-500/15 text-violet-300 border-violet-500/30" },
+  "fan-art":  { label: "Fan Art",    cls: "bg-pink-500/15 text-pink-300 border-pink-500/30" },
+  news:       { label: "News",       cls: "bg-sky-500/15 text-sky-300 border-sky-500/30" },
+  question:   { label: "Question",   cls: "bg-emerald-500/15 text-emerald-300 border-emerald-500/30" },
+  meme:       { label: "Meme",       cls: "bg-amber-500/15 text-amber-300 border-amber-500/30" },
+  spoiler:    { label: "Spoiler",    cls: "bg-red-500/15 text-red-300 border-red-500/30" },
+}
 
 /** Read heart-like state out of a reaction summary list. */
 function likeState(reactions?: ReactionSummary[]) {
@@ -240,27 +253,25 @@ function ReplyNode({
       exit={{ opacity: 0, scale: 0.97 }}
       className={depth > 0 ? "ml-5 sm:ml-8 border-l border-border pl-3 sm:pl-4" : ""}
     >
-      <div className="p-5 rounded-2xl bg-surface border border-border hover:border-border transition-all space-y-4">
+      <div className="p-4 rounded-2xl bg-surface border border-border hover:border-accent/20 transition-colors space-y-2.5">
         {/* Author */}
-        <div className="flex items-center gap-3">
-          <Avatar src={reply.avatarUrl} name={reply.author} size={36} />
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-black text-foreground flex items-center gap-1.5">
-              {reply.author}
-              <VerifiedBadge kind={reply.verifiedKind} size={13} />
-            </p>
-            <p className="text-[10px] text-subtle">{reply.date}</p>
-          </div>
+        <div className="flex items-center gap-2.5">
+          <Avatar src={reply.avatarUrl} name={reply.author} size={32} />
+          <p className="text-[13px] font-bold text-foreground flex items-center gap-1.5 min-w-0">
+            <span className="truncate">{reply.author}</span>
+            <VerifiedBadge kind={reply.verifiedKind} size={12} />
+            <span className="text-subtle font-normal">· {reply.date}</span>
+          </p>
         </div>
 
         {/* Content */}
         {reply.content !== "📷" && (
-          <p className="text-sm text-muted leading-relaxed whitespace-pre-line">{reply.content}</p>
+          <p className="text-sm text-foreground/90 leading-relaxed whitespace-pre-line pl-[2.625rem]">{reply.content}</p>
         )}
 
         {/* Image */}
         {reply.imageUrl && (
-          <a href={reply.imageUrl} target="_blank" rel="noopener noreferrer" className="block">
+          <a href={reply.imageUrl} target="_blank" rel="noopener noreferrer" className="block pl-[2.625rem]">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={reply.imageUrl}
@@ -271,11 +282,11 @@ function ReplyNode({
         )}
 
         {/* Actions */}
-        <div className="flex items-center gap-4 border-t border-border pt-3">
+        <div className="flex items-center gap-1 pl-[2.25rem]">
           <button
             onClick={() => onLike(reply.id)}
             aria-pressed={reply.liked}
-            className={`flex items-center gap-1.5 text-xs font-bold transition-colors active:scale-95 ${
+            className={`flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-xs font-bold transition-colors active:scale-95 ${
               reply.liked ? "text-rose-400" : "text-subtle hover:text-rose-400"
             }`}
           >
@@ -285,7 +296,7 @@ function ReplyNode({
           {!locked && (
             <button
               onClick={() => onToggleReply(reply.id)}
-              className="flex items-center gap-1.5 text-xs font-bold text-subtle hover:text-accent-bright transition-colors active:scale-95"
+              className="flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-xs font-bold text-subtle hover:text-accent-bright transition-colors active:scale-95"
             >
               <Reply size={12} /> Reply
             </button>
@@ -336,6 +347,7 @@ export default function ThreadDetailPage({
   const { id } = use(params)
   const { push } = useToast()
   const isAuthenticated = useAuthStore(s => s.isAuthenticated)
+  const me = useAuthStore(s => s.user)
 
   const { data: threadData, isLoading, isError } = useThread(id)
   const { data: repliesData } = useReplies(id)
@@ -350,6 +362,7 @@ export default function ThreadDetailPage({
   const [composerImage, setComposerImage] = useState<string | null>(null)
   const { upload: uploadComposer, isUploading: composerUploading } = useImageUpload("post")
   const [replyingTo, setReplyingTo] = useState<string | null>(null)
+  const [savedOverride, setSavedOverride] = useState<boolean | null>(null)
 
   const apiThread = threadData?.thread
 
@@ -386,7 +399,7 @@ export default function ThreadDetailPage({
 
   // Breadcrumb + back link follow the thread's real parent: anime or club.
   const crumb: Crumb = apiThread.club
-    ? { rootLabel: "Clubs", rootHref: "/clubs", label: apiThread.club.name, href: `/clubs/${apiThread.club.slug}` }
+    ? { rootLabel: "Dens", rootHref: "/clubs", label: apiThread.club.name, href: `/clubs/${apiThread.club.slug}` }
     : apiThread.anime
     ? { rootLabel: "Anime", rootHref: "/bestanimelist", label: apiThread.anime.titleEnglish || apiThread.anime.title, href: `/anime/${apiThread.anime.malId}` }
     : null
@@ -415,10 +428,25 @@ export default function ThreadDetailPage({
 
   const replyCount = apiThread._count?.replies ?? flat.length
   const threadHype = hypeState(apiThread.reactions)
+  const tags = apiThread.tags ?? []
+  const flair = tags.map(t => FLAIR_BY_ID[t]).find(Boolean)
+  const saved = savedOverride ?? !!apiThread.savedByMe
 
   const hypeThread = () => {
     if (!isAuthenticated) { push("Sign in to hype", "info"); return }
     reactThreadMut.mutate(HYPE_EMOJI)
+  }
+  const toggleSave = () => {
+    if (!isAuthenticated) { push("Sign in to save", "info"); return }
+    const next = !saved
+    setSavedOverride(next)
+    api(`/threads/${id}/save`, { method: next ? "POST" : "DELETE" })
+      .then(() => { if (next) push("Saved", "success") })
+      .catch(() => { setSavedOverride(!next); push("Couldn't update save", "error") })
+  }
+  const shareThread = () => {
+    navigator.clipboard?.writeText(`${window.location.origin}/threads/${id}`)
+      .then(() => push("Link copied", "success")).catch(() => {})
   }
   const likeReply = (replyId: string) => {
     if (!isAuthenticated) { push("Sign in to like", "info"); return }
@@ -488,6 +516,11 @@ export default function ThreadDetailPage({
         >
           {/* Badges */}
           <div className="flex items-center gap-2 flex-wrap mb-3">
+            {flair && (
+              <span className={`inline-flex items-center px-2.5 py-1 rounded-full border text-[9px] font-black uppercase tracking-wider ${flair.cls}`}>
+                {flair.label}
+              </span>
+            )}
             {apiThread.isPinned && (
               <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-accent/10 border border-accent/20 text-[9px] font-black uppercase tracking-wider text-accent-bright">
                 <Pin size={8} /> Pinned
@@ -512,9 +545,7 @@ export default function ThreadDetailPage({
                 {author}
                 <VerifiedBadge kind={apiThread.author?.verifiedKind} size={14} />
               </p>
-              <p className="text-[10px] text-subtle flex items-center gap-1">
-                <Clock size={9} /> {relativeTime(apiThread.createdAt)}
-              </p>
+              <p className="text-[10px] text-subtle">{relativeTime(apiThread.createdAt)}</p>
             </div>
           </div>
         </motion.div>
@@ -543,25 +574,44 @@ export default function ThreadDetailPage({
           )}
         </motion.div>
 
-        {/* Reply count + thread HYPE boost */}
-        <div className="flex items-center justify-between mb-6">
+        {/* Reply count + thread actions */}
+        <div className="flex items-center justify-between gap-3 mb-6">
           <p className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-subtle">
             <MessageSquare size={12} />
             {replyCount} repl{replyCount === 1 ? "y" : "ies"}
           </p>
-          <button
-            onClick={hypeThread}
-            aria-pressed={threadHype.hyped}
-            className={`flex items-center gap-2 px-5 py-2.5 rounded-2xl border text-[11px] font-black uppercase tracking-widest transition-all active:scale-95 ${
-              threadHype.hyped
-                ? "bg-amber-500/15 border-amber-500/40 text-amber-400 shadow-[0_0_24px_rgba(245,158,11,0.25)]"
-                : "bg-surface border-border text-subtle hover:text-amber-400 hover:border-amber-500/30"
-            }`}
-          >
-            <Flame size={14} fill={threadHype.hyped ? "currentColor" : "none"} />
-            {threadHype.hype > 0 && <span>{threadHype.hype}</span>}
-            <span>Hype</span>
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={shareThread}
+              aria-label="Copy link"
+              className="grid h-10 w-10 place-items-center rounded-2xl border border-border bg-surface text-subtle transition-all hover:text-foreground active:scale-95"
+            >
+              <Share2 size={15} />
+            </button>
+            <button
+              onClick={toggleSave}
+              aria-pressed={saved}
+              aria-label="Save"
+              className={`grid h-10 w-10 place-items-center rounded-2xl border transition-all active:scale-95 ${
+                saved ? "border-accent/40 bg-accent/15 text-accent-bright" : "border-border bg-surface text-subtle hover:text-foreground"
+              }`}
+            >
+              <Bookmark size={15} fill={saved ? "currentColor" : "none"} />
+            </button>
+            <button
+              onClick={hypeThread}
+              aria-pressed={threadHype.hyped}
+              className={`flex items-center gap-2 h-10 px-5 rounded-2xl border text-[11px] font-black uppercase tracking-widest transition-all active:scale-95 ${
+                threadHype.hyped
+                  ? "bg-amber-500/15 border-amber-500/40 text-amber-400 shadow-[0_0_24px_rgba(245,158,11,0.25)]"
+                  : "bg-surface border-border text-subtle hover:text-amber-400 hover:border-amber-500/30"
+              }`}
+            >
+              <Flame size={14} fill={threadHype.hyped ? "currentColor" : "none"} />
+              {threadHype.hype > 0 && <span>{threadHype.hype}</span>}
+              <span>Hype</span>
+            </button>
+          </div>
         </div>
 
         {/* Reply composer (top) */}
@@ -570,56 +620,53 @@ export default function ThreadDetailPage({
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.15 }}
-            className="p-5 rounded-2xl bg-surface-2 border border-border mb-8 space-y-4"
+            className="flex gap-3 mb-8"
             id="composer"
           >
-            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-subtle">
-              Your Reply
-            </p>
-            <textarea
-              value={composerText}
-              onChange={(e) => setComposerText(e.target.value)}
-              placeholder="Share your thoughts on this thread…"
-              rows={4}
-              maxLength={500}
-              className="w-full bg-transparent text-sm text-foreground placeholder:text-subtle resize-none outline-none leading-relaxed focus:outline-none"
-            />
-
-            {/* Image preview */}
-            {composerImage && (
-              <ImageAttach
-                imageUrl={composerImage}
-                uploading={composerUploading}
-                onPick={handleComposerPick}
-                onRemove={() => setComposerImage(null)}
+            <Avatar src={me?.avatarUrl ?? null} name={me?.displayName || me?.username || "You"} size={40} />
+            <div className="min-w-0 flex-1 rounded-2xl border border-border bg-surface transition-colors focus-within:border-accent/40">
+              <textarea
+                value={composerText}
+                onChange={(e) => setComposerText(e.target.value)}
+                placeholder="Share your thoughts…"
+                rows={composerText || composerImage ? 4 : 2}
+                maxLength={500}
+                className="w-full bg-transparent px-4 pt-3.5 text-sm text-foreground placeholder:text-subtle resize-none outline-none leading-relaxed"
               />
-            )}
 
-            <div className="flex items-center justify-between border-t border-border pt-3 gap-3">
-              <div className="flex items-center gap-3">
-                {!composerImage && (
+              {composerImage && (
+                <div className="px-4 pb-3">
                   <ImageAttach
-                    imageUrl={null}
+                    imageUrl={composerImage}
                     uploading={composerUploading}
                     onPick={handleComposerPick}
                     onRemove={() => setComposerImage(null)}
                   />
-                )}
-                <span
-                  className={`text-[10px] font-mono ${
-                    composerText.length > 450 ? "text-accent-bright" : "text-subtle"
-                  }`}
+                </div>
+              )}
+
+              <div className="flex items-center justify-between gap-3 border-t border-border px-3 py-2.5">
+                <div className="flex items-center gap-3">
+                  {!composerImage && (
+                    <ImageAttach
+                      imageUrl={null}
+                      uploading={composerUploading}
+                      onPick={handleComposerPick}
+                      onRemove={() => setComposerImage(null)}
+                    />
+                  )}
+                  <span className={`text-[10px] font-mono ${composerText.length > 450 ? "text-accent-bright" : "text-subtle"}`}>
+                    {500 - composerText.length}
+                  </span>
+                </div>
+                <button
+                  onClick={submitMainReply}
+                  disabled={!canPostMain}
+                  className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-accent hover:bg-accent-bright disabled:opacity-40 disabled:hover:bg-accent text-[10px] font-black uppercase tracking-widest text-black transition-all active:scale-95"
                 >
-                  {500 - composerText.length} chars left
-                </span>
+                  {createReplyMut.isPending || composerUploading ? <Loader2 size={11} className="animate-spin" /> : <Send size={11} />} Reply
+                </button>
               </div>
-              <button
-                onClick={submitMainReply}
-                disabled={!canPostMain}
-                className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-accent hover:bg-accent-bright disabled:opacity-40 text-[10px] font-black uppercase tracking-widest text-foreground transition-all active:scale-95"
-              >
-                {createReplyMut.isPending || composerUploading ? <Loader2 size={11} className="animate-spin" /> : <Send size={11} />} Post Reply
-              </button>
             </div>
           </motion.div>
         )}

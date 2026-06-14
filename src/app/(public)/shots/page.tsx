@@ -181,46 +181,42 @@ export default function ShotsPage() {
         <div className="absolute inset-0" style={{ background: "radial-gradient(65% 60% at 50% 42%, color-mix(in srgb, var(--app-accent) 12%, transparent), transparent 72%)" }} />
       </div>
 
-      {/* Section tabs — Shots / Trailers / For You */}
-      <div className="fixed left-1/2 top-[calc(env(safe-area-inset-top)+4.5rem)] z-30 flex -translate-x-1/2 gap-1 rounded-full border border-white/10 bg-black/55 p-1 backdrop-blur md:absolute md:top-[4.5rem]">
+      {/* Top scrim — keeps the controls legible over bright video */}
+      <div className="pointer-events-none fixed inset-x-0 top-0 z-20 h-32 bg-gradient-to-b from-black/55 to-transparent md:absolute" />
+
+      {/* Section tabs — TikTok-style centered text with an active underline */}
+      <div className="fixed left-1/2 top-[calc(env(safe-area-inset-top)+4.85rem)] z-30 flex -translate-x-1/2 items-center gap-5 md:absolute md:top-[4.85rem]">
         {([["all", "For You"], ["shots", "Shots"], ["trailers", "Trailers"]] as const).map(([m, label]) => (
           <button
             key={m}
             onClick={() => switchMode(m)}
-            className={`rounded-full px-3.5 py-2 text-[11px] font-black uppercase tracking-widest transition-all duration-200 ease-out active:scale-95 ${
-              mode === m ? "bg-white text-black" : "text-white/70 hover:text-white"
+            className={`relative text-[13px] font-bold tracking-wide drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)] transition-colors active:scale-95 ${
+              mode === m ? "text-white" : "text-white/55 hover:text-white/80"
             }`}
           >
             {label}
+            {mode === m && <span className="absolute -bottom-1.5 left-1/2 h-0.5 w-5 -translate-x-1/2 rounded-full bg-white" />}
           </button>
         ))}
       </div>
 
-      {/* Floating mute toggle */}
-      <button
-        onClick={() => setMuted((m) => !m)}
-        aria-label={muted ? "Unmute" : "Mute"}
-        className="fixed right-4 top-[calc(env(safe-area-inset-top)+4.5rem)] z-30 flex h-11 w-11 items-center justify-center rounded-full bg-black/50 text-white backdrop-blur transition-transform duration-200 ease-out hover:bg-black/70 active:scale-95 md:absolute md:right-6 md:top-[4.5rem]"
-      >
-        {muted ? <VolumeX size={18} /> : <Volume2 size={18} />}
-      </button>
-
-      {/* Post a Shot — labeled pill in the always-visible top bar (next to the tabs)
-          plus a bottom-left FAB. Kept clear of each reel's right-side action rail. */}
-      <button
-        onClick={openComposer}
-        aria-label="Post a shot"
-        className="fixed left-4 top-[calc(env(safe-area-inset-top)+4.5rem)] z-40 inline-flex items-center gap-1.5 rounded-full bg-accent px-4 py-2.5 text-[11px] font-black uppercase tracking-widest text-black shadow-[0_8px_28px_rgba(0,0,0,0.45)] transition-all duration-200 ease-out hover:bg-accent-bright active:scale-95 md:absolute md:left-6"
-      >
-        <Plus size={15} strokeWidth={2.75} /> Post
-      </button>
-      <button
-        onClick={openComposer}
-        aria-label="Post a shot"
-        className="fixed bottom-[calc(env(safe-area-inset-bottom)+5.5rem)] left-4 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-accent text-black shadow-[0_8px_28px_rgba(0,0,0,0.45)] transition-transform duration-200 ease-out hover:bg-accent-bright active:scale-95 md:bottom-8 md:left-6"
-      >
-        <Plus size={24} strokeWidth={2.5} />
-      </button>
+      {/* Top-right controls — a single Post entry + mute */}
+      <div className="fixed right-4 top-[calc(env(safe-area-inset-top)+4.5rem)] z-40 flex items-center gap-2 md:absolute md:right-6 md:top-[4.5rem]">
+        <button
+          onClick={openComposer}
+          aria-label="Post a shot"
+          className="grid h-11 w-11 place-items-center rounded-full bg-accent text-black shadow-[0_6px_20px_rgba(0,0,0,0.4)] transition-transform duration-200 ease-out hover:bg-accent-bright active:scale-95"
+        >
+          <Plus size={22} strokeWidth={2.75} />
+        </button>
+        <button
+          onClick={() => setMuted((m) => !m)}
+          aria-label={muted ? "Unmute" : "Mute"}
+          className="grid h-11 w-11 place-items-center rounded-full bg-black/45 text-white backdrop-blur transition-transform duration-200 ease-out hover:bg-black/65 active:scale-95"
+        >
+          {muted ? <VolumeX size={18} /> : <Volume2 size={18} />}
+        </button>
+      </div>
 
       {composing && (
         <ShotComposer

@@ -262,6 +262,35 @@ export const uploadPublicKey = (publicKey: string) =>
 export const getRecipientPublicKey = (userId: string) =>
   api<{ publicKey: string }>(`/chat/keys/${userId}`)
 
+/* ── Opt-in E2EE vault (UMK wraps + device keys) ── */
+export type E2eeWrap = { id: string; method: "PASSKEY_PRF" | "RECOVERY_CODE" | "FALLBACK_PASSPHRASE"; credentialId: string | null; label: string | null; wrappedUMK: string; wrapIv: string; kdfSalt: string | null; kdfParams: unknown; createdAt: string; lastUsedAt?: string | null }
+export type E2eeDevice = { id: string; name: string; publicKey?: string; wrappedPrivKey?: string; wrapIv?: string; revoked?: boolean; lastSeenAt?: string; createdAt: string }
+export type E2eeWrapInput = { method: "PASSKEY_PRF" | "RECOVERY_CODE" | "FALLBACK_PASSPHRASE"; credentialId?: string; wrappedUMK: string; wrapIv: string; kdfSalt?: string; kdfParams?: unknown; label?: string }
+export type E2eeDeviceInput = { publicKey: string; wrappedPrivKey: string; wrapIv: string; name: string }
+
+export const e2eeState = () =>
+  api<{ hasE2EE: boolean; wraps: E2eeWrap[]; devices: E2eeDevice[] }>("/e2ee/state")
+export const e2eeSetup = (body: { wraps: E2eeWrapInput[]; device: E2eeDeviceInput }) =>
+  api<{ ok: boolean; device: E2eeDevice }>("/e2ee/setup", { method: "POST", body: JSON.stringify(body) })
+export const e2eeAddWrap = (body: E2eeWrapInput) =>
+  api<{ id: string }>("/e2ee/wraps", { method: "POST", body: JSON.stringify(body) })
+export const e2eeRemoveWrap = (id: string) =>
+  api<{ ok: boolean }>(`/e2ee/wraps/${id}`, { method: "DELETE" })
+export const e2eeAddDevice = (body: E2eeDeviceInput) =>
+  api<E2eeDevice>("/e2ee/devices", { method: "POST", body: JSON.stringify(body) })
+export const e2eeRevokeDevice = (id: string) =>
+  api<{ ok: boolean }>(`/e2ee/devices/${id}`, { method: "DELETE" })
+
+/* ── WebAuthn (passkey) for the PRF key wrap ── */
+export const webauthnRegisterOptions = () =>
+  api<Record<string, unknown>>("/webauthn/register/options", { method: "POST", body: "{}" })
+export const webauthnRegisterVerify = (response: unknown) =>
+  api<{ verified: boolean; credentialId?: string }>("/webauthn/register/verify", { method: "POST", body: JSON.stringify({ response }) })
+export const webauthnAuthOptions = () =>
+  api<Record<string, unknown>>("/webauthn/auth/options", { method: "POST", body: "{}" })
+export const webauthnAuthVerify = (response: unknown) =>
+  api<{ verified: boolean }>("/webauthn/auth/verify", { method: "POST", body: JSON.stringify({ response }) })
+
 export const listConversations = () =>
   api<{ conversations: ConversationSummary[] }>("/chat/conversations")
 

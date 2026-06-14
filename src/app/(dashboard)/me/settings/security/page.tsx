@@ -19,6 +19,7 @@ import {
   Loader2,
 } from "lucide-react"
 import { useToast } from "@/stores/toast.store"
+import { EncryptionSettings } from "@/components/settings/EncryptionSettings"
 import { changePassword, logoutAll } from "@/lib/api/endpoints"
 import { useAuthStore } from "@/stores/auth.store"
 import { ApiError } from "@/lib/api/client"
@@ -455,6 +456,14 @@ export default function SecuritySettingsPage() {
           transition={{ delay: 0.15 }}
         >
           <PasswordChange />
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.18 }}
+        >
+          <EncryptionSettings />
         </motion.div>
 
         <motion.div

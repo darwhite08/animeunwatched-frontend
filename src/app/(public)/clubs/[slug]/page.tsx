@@ -11,8 +11,6 @@ import {
   ArrowLeft,
   Crown,
   Shield,
-  Clock,
-  ChevronRight,
   CalendarDays,
   BookOpen,
   AlertTriangle,
@@ -32,6 +30,7 @@ import { useAuthStore } from "@/stores/auth.store"
 import { ClubEventsTab } from "@/components/clubs/ClubEventsTab"
 import { ClubLeaderboardTab } from "@/components/clubs/ClubLeaderboardTab"
 import { ClubOnboarding } from "@/components/clubs/ClubOnboarding"
+import { DenFeed } from "@/components/clubs/DenFeed"
 
 /* ── Types ── */
 type ClubTab = "threads" | "events" | "challenges" | "members" | "leaderboard" | "about"
@@ -60,14 +59,6 @@ interface Challenge {
   replyCount: number
 }
 
-type ThreadEntry = {
-  id: string
-  title: string
-  author: string
-  replyCount: number
-  lastActivity: string
-}
-
 type MemberEntry = {
   id: string
   username: string
@@ -85,14 +76,6 @@ const ROLE_ICONS: Record<MemberEntry["role"], typeof Crown> = {
   ADMIN: Crown,
   MOD:   Shield,
   USER:  Users,
-}
-
-function relativeTime(iso: string): string {
-  const d = Date.now() - new Date(iso).getTime()
-  if (d < 60000) return "just now"
-  if (d < 3600000) return `${Math.floor(d / 60000)}m ago`
-  if (d < 86400000) return `${Math.floor(d / 3600000)}h ago`
-  return `${Math.floor(d / 86400000)}d ago`
 }
 
 function parseChallenge(thread: { id: string; title: string; content: string; author?: { displayName?: string; username?: string } | null; _count?: { replies: number } | null; createdAt: string }): Challenge | null {
@@ -407,17 +390,6 @@ export default function ClubDetailPage({
     isJoined: isMember,
   }
 
-  // Real threads only (challenges are filtered out — they have their own tab).
-  const displayThreads: ThreadEntry[] = (threadsData?.data ?? [])
-    .filter(t => !t.title.startsWith("[CHALLENGE]"))
-    .map(t => ({
-      id: t.id,
-      title: t.title,
-      author: t.author?.displayName ?? t.author?.username ?? "Anonymous",
-      replyCount: t._count?.replies ?? 0,
-      lastActivity: relativeTime(t.createdAt),
-    }))
-
   const apiMembers = membersData?.data ?? []
   const displayMembers: MemberEntry[] = apiMembers.map(m => ({
     id: m.userId,
@@ -558,7 +530,7 @@ export default function ClubDetailPage({
       {/* Tab content */}
       <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-8">
         <AnimatePresence mode="wait">
-          {/* ── Threads ── */}
+          {/* ── Threads (Reddit/Twitter-style Den feed) ── */}
           {activeTab === "threads" && (
             <motion.div
               key="threads"
@@ -566,68 +538,47 @@ export default function ClubDetailPage({
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.3 }}
-              className="space-y-4"
+              className="lg:grid lg:grid-cols-[minmax(0,1fr)_300px] lg:gap-8 lg:items-start"
             >
-              <div className="flex items-center justify-between mb-6">
-                <p className="text-[10px] font-black uppercase tracking-[0.2em] text-subtle">
-                  {club.threadCount} thread{club.threadCount !== 1 ? "s" : ""}
-                </p>
-                <Link
-                  href={`/clubs/${slug}/create-thread`}
-                  className="flex items-center gap-2 px-5 min-h-11 rounded-xl bg-accent hover:bg-accent-bright text-[10px] font-black uppercase tracking-widest text-foreground transition-all active:scale-95 shadow-[0_0_20px_rgba(99,102,241,0.25)]"
-                >
-                  <Plus size={11} /> New Thread
-                </Link>
-              </div>
+              {/* Feed */}
+              <DenFeed slug={slug} denName={club.name} isMember={isMember} />
 
-              {displayThreads.length === 0 ? (
-                <div className="py-16 text-center rounded-2xl bg-surface border border-border border-dashed">
-                  <MessageSquare size={22} className="mx-auto text-subtle mb-2" />
-                  <p className="text-sm font-bold text-muted">No threads yet</p>
-                  <p className="text-[11px] text-subtle mt-1 mb-4">Be the first to start a discussion in {club.name}.</p>
-                  <Link
-                    href={`/clubs/${slug}/create-thread`}
-                    className="inline-flex items-center gap-2 px-5 min-h-11 rounded-xl bg-accent hover:bg-accent-bright text-[10px] font-black uppercase tracking-widest text-black transition-all active:scale-95"
-                  >
-                    <Plus size={11} /> Start a thread
-                  </Link>
+              {/* Reddit-style sidebar (desktop) */}
+              <aside className="hidden lg:block lg:sticky lg:top-[var(--sticky-top,88px)] space-y-4">
+                <div className="rounded-2xl border border-border bg-surface p-5 space-y-3">
+                  <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-muted">About this Den</h2>
+                  <p className="text-sm text-muted leading-relaxed">{club.description}</p>
+                  <div className="grid grid-cols-2 gap-2 pt-1">
+                    <div className="rounded-xl bg-surface-2 px-3 py-2">
+                      <p className="text-base font-black text-foreground">{club.memberCount.toLocaleString()}</p>
+                      <p className="text-[9px] font-black uppercase tracking-widest text-subtle">Members</p>
+                    </div>
+                    <div className="rounded-xl bg-surface-2 px-3 py-2">
+                      <p className="text-base font-black text-foreground">{club.threadCount.toLocaleString()}</p>
+                      <p className="text-[9px] font-black uppercase tracking-widest text-subtle">Posts</p>
+                    </div>
+                  </div>
+                  <div className="space-y-1.5 pt-1 text-xs">
+                    <div className="flex items-center justify-between"><span className="text-subtle">Created</span><span className="font-bold text-muted">{club.createdAt}</span></div>
+                    <div className="flex items-center justify-between"><span className="text-subtle">Owner</span><span className="font-bold text-muted">@{club.owner}</span></div>
+                    <div className="flex items-center justify-between"><span className="text-subtle">Category</span><span className="font-bold text-muted">{club.category}</span></div>
+                  </div>
                 </div>
-              ) : (
-                displayThreads.map((thread, i) => (
-                  <motion.div
-                    key={thread.id}
-                    initial={{ opacity: 0, y: 8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: i * 0.05 }}
-                  >
-                    <Link
-                      href={`/threads/${thread.id}`}
-                      className="group flex items-center justify-between gap-4 p-4 sm:p-5 min-h-[3.5rem] rounded-2xl bg-surface border border-border hover:border-accent/25 hover:bg-surface active:scale-[0.99] transition-all"
-                    >
-                      <div className="flex-1 min-w-0 space-y-1.5">
-                        <h3 className="text-sm font-bold text-foreground group-hover:text-foreground transition-colors line-clamp-1">
-                          {thread.title}
-                        </h3>
-                        <div className="flex items-center gap-3 text-[10px] text-subtle">
-                          <span>by {thread.author}</span>
-                          <span className="flex items-center gap-1">
-                            <MessageSquare size={9} />
-                            {thread.replyCount} repl{thread.replyCount === 1 ? "y" : "ies"}
-                          </span>
-                          <span className="flex items-center gap-1">
-                            <Clock size={9} />
-                            {thread.lastActivity}
-                          </span>
-                        </div>
-                      </div>
-                      <ChevronRight
-                        size={14}
-                        className="text-subtle group-hover:text-accent-bright group-hover:translate-x-0.5 transition-all shrink-0"
-                      />
-                    </Link>
-                  </motion.div>
-                ))
-              )}
+
+                {club.rules.length > 0 && (
+                  <div className="rounded-2xl border border-border bg-surface p-5 space-y-3">
+                    <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-muted">Den Rules</h2>
+                    <ol className="space-y-2">
+                      {club.rules.map((rule, i) => (
+                        <li key={i} className="flex items-start gap-2.5 text-xs text-muted">
+                          <span className="shrink-0 h-4 w-4 rounded-full bg-accent/15 border border-accent/25 grid place-items-center text-[8px] font-black text-accent-bright">{i + 1}</span>
+                          {rule}
+                        </li>
+                      ))}
+                    </ol>
+                  </div>
+                )}
+              </aside>
             </motion.div>
           )}
 

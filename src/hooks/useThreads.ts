@@ -8,6 +8,11 @@ export type ReactionSummary = { emoji: string; count: number; reactedByMe: boole
 // reaction system the backend exposes for threads + replies.
 export const LIKE_EMOJI = "❤️"
 
+// "Hype" — Kaiveron's invented boost for Den threads (a flame, matching the
+// streak/Flame-Keeper motif). It rides the same reaction system but reads as a
+// Reddit-style upvote that powers Hot/Top sorting. Replies use the heart "like".
+export const HYPE_EMOJI = "🔥"
+
 type Thread = {
   id: string
   title: string
@@ -15,6 +20,7 @@ type Thread = {
   authorId: string
   clubId: string | null
   animeId: string | null
+  imageUrl?: string | null
   isPinned: boolean
   isLocked: boolean
   createdAt: string
@@ -32,6 +38,7 @@ type Reply = {
   authorId: string
   parentId: string | null
   content: string
+  imageUrl?: string | null
   createdAt: string
   author: { id: string; username: string; displayName: string; avatarUrl: string | null; verifiedKind?: "USER" | "CREATOR" | "STUDIO" | null }
   reactions?: ReactionSummary[]
@@ -75,7 +82,7 @@ export function useReplies(threadId: string) {
 export function useCreateReply(threadId: string) {
   const qc = useQueryClient()
   return useMutation({
-    mutationFn: (body: { content: string; parentId?: string }) =>
+    mutationFn: (body: { content: string; parentId?: string; imageUrl?: string | null }) =>
       api<{ reply: Reply }>(`/threads/${threadId}/replies`, {
         method: "POST",
         body:   JSON.stringify(body),
@@ -150,9 +157,41 @@ export function useClubThreads(clubSlug: string, page = 1) {
 export function useCreateClubThread(clubSlug: string) {
   const qc = useQueryClient()
   return useMutation({
-    mutationFn: (body: { title: string; content: string }) =>
+    mutationFn: (body: { title: string; content: string; imageUrl?: string | null }) =>
       api<{ thread: Thread }>(`/clubs/${clubSlug}/threads`, { method: "POST", body: JSON.stringify(body) }),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["club-threads", clubSlug] }),
+  })
+}
+
+/**
+ * Toggle a reaction (default 🔥 Hype) on a thread shown in a Den feed list,
+ * optimistically patching the club-threads cache so the count + active state
+ * flip instantly. Mirrors useReactThread but targets the list query.
+ */
+export function useReactClubThread(clubSlug: string, page = 1) {
+  const qc = useQueryClient()
+  const key = ["club-threads", clubSlug, page] as const
+  return useMutation({
+    mutationFn: ({ threadId, emoji = HYPE_EMOJI }: { threadId: string; emoji?: string }) =>
+      api<{ reactions: ReactionSummary[] }>(`/threads/${threadId}/reaction`, {
+        method: "PUT",
+        body: JSON.stringify({ emoji }),
+      }),
+    onMutate: async ({ threadId, emoji = HYPE_EMOJI }) => {
+      await qc.cancelQueries({ queryKey: key })
+      const prev = qc.getQueryData<Paginated<Thread>>(key)
+      if (prev) {
+        qc.setQueryData<Paginated<Thread>>(key, {
+          ...prev,
+          data: prev.data.map(t =>
+            t.id === threadId ? { ...t, reactions: toggleReaction(t.reactions, emoji) } : t
+          ),
+        })
+      }
+      return { prev }
+    },
+    onError: (_e, _v, ctx) => { if (ctx?.prev) qc.setQueryData(key, ctx.prev) },
+    onSettled: () => qc.invalidateQueries({ queryKey: key }),
   })
 }
 

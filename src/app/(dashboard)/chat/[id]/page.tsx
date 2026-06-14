@@ -610,14 +610,14 @@ function MsgRow({ m, isMine, text, authorSrc, authorName, onDelete, isMobile=fal
           onContextMenu={(e) => { if (onDelete && !isDeleted) { e.preventDefault(); setMenuOpen(true) } }}>
           {isDeleted ? (
             // Tombstone for messages deleted "for everyone" — visible to BOTH users
-            <div style={{ ...bubble, display:"inline-flex", alignItems:"center", gap:6, padding:"8px 13px 9px", ...(isMobile ? {} : { borderRadius:14 }), fontStyle:"italic", opacity:0.6 }}>
+            <div style={{ ...bubble, display:"inline-flex", alignItems:"center", gap:6, padding:"8px 13px 9px", ...(isMobile ? { borderRadius:16 } : { borderRadius:14 }), fontStyle:"italic", opacity:0.6 }}>
               <svg width={12} height={12} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round">
                 <path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/>
               </svg>
               <span style={{ fontSize:13 }}>{isMine ? "You deleted this message" : "This message was deleted"}</span>
             </div>
           ) : isDecrypting ? (
-            <div style={{ ...bubble, display:"inline-block", padding:"8px 13px 9px", ...(isMobile ? {} : { borderRadius:14 }) }}>
+            <div style={{ ...bubble, display:"inline-block", padding:"8px 13px 9px", ...(isMobile ? { borderRadius:16 } : { borderRadius:14 }) }}>
               <span style={{ color:"var(--ink-4)", fontSize:13, display:"flex", alignItems:"center", gap:6 }}>
                 🔒 <span style={{ opacity:0.6 }}>Decrypting…</span>
               </span>
@@ -632,7 +632,7 @@ function MsgRow({ m, isMine, text, authorSrc, authorName, onDelete, isMobile=fal
               <span style={{ fontSize:12, fontWeight:500 }}>Encrypted message</span>
             </div>
           ) : isError ? (
-            <div style={{ ...bubble, display:"inline-block", padding:"8px 13px 9px", ...(isMobile ? {} : { borderRadius:14 }) }}>
+            <div style={{ ...bubble, display:"inline-block", padding:"8px 13px 9px", ...(isMobile ? { borderRadius:16 } : { borderRadius:14 }) }}>
               <span style={{ color:"var(--amber)", fontSize:13 }}>⚠ {text?.slice(2)}</span>
             </div>
           ) : parts ? (
@@ -655,7 +655,7 @@ function MsgRow({ m, isMine, text, authorSrc, authorName, onDelete, isMobile=fal
               }
               if (!p.content.trim()) return null
               return (
-                <div key={i} style={{ ...bubble, display:"inline-block", padding: isMobile ? "8px 12px" : "8px 13px 9px", ...(isMobile ? {} : { borderRadius:14 }), fontSize:14, lineHeight:1.5, letterSpacing:"-0.003em", whiteSpace:"pre-wrap", wordBreak:"break-word" }}>
+                <div key={i} style={{ ...bubble, display:"inline-block", padding: isMobile ? "8px 12px" : "8px 13px 9px", ...(isMobile ? { borderRadius:16 } : { borderRadius:14 }), fontSize:14, lineHeight:1.5, letterSpacing:"-0.003em", whiteSpace:"pre-wrap", wordBreak:"break-word" }}>
                   {p.content}
                 </div>
               )

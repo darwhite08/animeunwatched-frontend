@@ -5,7 +5,6 @@ import { usePathname } from "next/navigation"
 import {
   User, Bell, Palette, Shield, CreditCard, Link2, Lock, Settings, Download,
 } from "lucide-react"
-import { motion } from "framer-motion"
 
 const NAV = [
   { href: "/me/settings/account",       icon: User,       label: "Account"       },
@@ -46,24 +45,14 @@ export default function MeSettingsLayout({ children }: { children: React.ReactNo
             const active = pathname === item.href || pathname.startsWith(item.href + "/")
             return (
               <Link key={item.href} href={item.href}
-                className={`relative flex shrink-0 whitespace-nowrap items-center gap-2.5 px-4 py-3 rounded-xl text-sm font-bold transition-all ${
-                  active ? "text-foreground" : "text-muted hover:text-foreground hover:bg-foreground/5"
+                className={`relative flex shrink-0 origin-left items-center gap-2.5 whitespace-nowrap px-4 py-3 font-bold transition-all duration-200 ${
+                  active
+                    ? "scale-[1.08] text-[15px] font-black text-foreground"
+                    : "text-sm text-muted hover:text-foreground"
                 }`}
               >
-                {active && (
-                  <motion.div layoutId="me-settings-pill"
-                    className="absolute inset-0 rounded-xl border border-accent/25"
-                    style={{
-                      background:
-                        "linear-gradient(135deg, color-mix(in srgb, var(--app-accent) 10%, transparent), color-mix(in srgb, var(--app-accent) 5%, transparent))",
-                    }}
-                    transition={{ type: "spring", stiffness: 320, damping: 30 }}
-                  />
-                )}
-                <item.icon size={15}
-                  className={`relative z-10 transition-colors ${active ? "text-accent" : ""}`}
-                />
-                <span className="relative z-10">{item.label}</span>
+                <item.icon size={active ? 17 : 15} className={`transition-colors ${active ? "text-accent" : ""}`} />
+                <span>{item.label}</span>
               </Link>
             )
           })}

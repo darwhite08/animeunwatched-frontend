@@ -1,6 +1,7 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { createPortal } from "react-dom"
 import { motion, AnimatePresence } from "framer-motion"
 import {
   Shield,
@@ -150,17 +151,9 @@ function ActiveSessions({
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: 10, scale: 0.97 }}
               transition={{ delay: i * 0.07 }}
-              className={`flex items-center gap-4 p-4 rounded-xl border transition-all ${
-                session.isCurrent
-                  ? "bg-accent/8 border-accent/20"
-                  : "bg-white/[0.015] border-border hover:border-border"
-              }`}
+              className="flex items-center gap-4 p-4 rounded-xl border border-border bg-white/[0.015] transition-all hover:border-border"
             >
-              <div
-                className={`h-10 w-10 rounded-xl flex items-center justify-center shrink-0 ${
-                  session.isCurrent ? "bg-accent/15" : "bg-surface"
-                }`}
-              >
+              <div className="h-10 w-10 rounded-xl flex items-center justify-center shrink-0 bg-surface">
                 <Icon
                   size={16}
                   className={session.isCurrent ? "text-accent-bright" : "text-subtle"}
@@ -334,65 +327,66 @@ function LoginHistory({ entries }: { entries: LoginEntry[] }) {
 /* ── Danger zone ── */
 function DangerZone({ onLogoutAll }: { onLogoutAll: () => void }) {
   const [confirm, setConfirm] = useState(false)
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => setMounted(true), [])
 
   return (
     <Section title="Danger Zone">
-      <AnimatePresence mode="wait">
-        {!confirm ? (
-          <motion.div
-            key="prompt"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="flex items-center justify-between gap-4 p-5 rounded-xl border border-red-500/15 bg-red-500/5"
-          >
-            <div>
-              <p className="text-sm font-black text-foreground">Logout All Other Devices</p>
-              <p className="text-xs text-subtle mt-0.5">
-                Revoke all active sessions except this browser.
-              </p>
-            </div>
-            <button
-              onClick={() => setConfirm(true)}
-              className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-red-500/30 text-red-400 text-[10px] font-black uppercase tracking-widest hover:bg-red-500/10 transition-all shrink-0"
+      <div className="flex items-center justify-between gap-4 p-5 rounded-xl border border-border bg-surface">
+        <div>
+          <p className="text-sm font-black text-foreground">Logout All Other Devices</p>
+          <p className="text-xs text-subtle mt-0.5">Revoke all active sessions except this browser.</p>
+        </div>
+        <button
+          onClick={() => setConfirm(true)}
+          className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-red-500/30 text-red-400 text-[10px] font-black uppercase tracking-widest hover:bg-red-500/10 transition-all shrink-0"
+        >
+          <Trash2 size={12} /> Logout All
+        </button>
+      </div>
+
+      {/* Confirmation overlay */}
+      {mounted && createPortal(
+        <AnimatePresence>
+          {confirm && (
+            <motion.div
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              className="fixed inset-0 z-[100] flex items-center justify-center bg-black/70 backdrop-blur-sm p-4"
+              onClick={() => setConfirm(false)}
             >
-              <Trash2 size={12} /> Logout All
-            </button>
-          </motion.div>
-        ) : (
-          <motion.div
-            key="confirm"
-            initial={{ opacity: 0, scale: 0.97 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0 }}
-            className="p-5 rounded-xl border border-red-500/30 bg-red-500/8 space-y-4"
-          >
-            <div className="flex items-center gap-2">
-              <AlertTriangle size={16} className="text-red-400 shrink-0" />
-              <p className="text-sm font-black text-foreground uppercase italic">
-                Are you absolutely sure?
-              </p>
-            </div>
-            <p className="text-xs text-muted leading-relaxed">
-              All sessions except your current browser will be immediately invalidated. Any unsaved work in other tabs will be lost.
-            </p>
-            <div className="flex gap-3">
-              <button
-                onClick={() => { onLogoutAll(); setConfirm(false) }}
-                className="flex-1 py-2.5 rounded-xl bg-red-600 hover:bg-red-500 text-xs font-black uppercase tracking-widest text-foreground transition-colors"
+              <motion.div
+                initial={{ opacity: 0, scale: 0.96, y: 12 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.96, y: 12 }}
+                transition={{ type: "spring", stiffness: 320, damping: 30 }}
+                onClick={(e) => e.stopPropagation()}
+                className="w-full max-w-sm rounded-2xl border border-border bg-surface p-6 space-y-4 shadow-2xl"
               >
-                Yes, Logout All
-              </button>
-              <button
-                onClick={() => setConfirm(false)}
-                className="flex-1 py-2.5 rounded-xl bg-surface hover:bg-surface text-xs font-bold text-muted transition-colors"
-              >
-                Cancel
-              </button>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+                <div className="flex items-center gap-2.5">
+                  <span className="grid h-9 w-9 place-items-center rounded-xl bg-red-500/15"><AlertTriangle size={16} className="text-red-400" /></span>
+                  <p className="text-sm font-black uppercase italic tracking-tight text-foreground">Log out everywhere else?</p>
+                </div>
+                <p className="text-xs leading-relaxed text-muted">
+                  All sessions except this browser will be signed out immediately. You&apos;ll stay logged in here.
+                </p>
+                <div className="flex gap-3 pt-1">
+                  <button
+                    onClick={() => { onLogoutAll(); setConfirm(false) }}
+                    className="flex-1 py-2.5 rounded-xl bg-red-600 hover:bg-red-500 text-[11px] font-black uppercase tracking-widest text-white transition-colors active:scale-95"
+                  >
+                    Yes, log out all
+                  </button>
+                  <button
+                    onClick={() => setConfirm(false)}
+                    className="flex-1 py-2.5 rounded-xl border border-border bg-surface-2 hover:bg-surface text-[11px] font-bold uppercase tracking-widest text-muted transition-colors active:scale-95"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>,
+        document.body,
+      )}
     </Section>
   )
 }

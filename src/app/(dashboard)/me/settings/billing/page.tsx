@@ -50,9 +50,9 @@ export default function BillingPage() {
       </div>
 
       {/* Pro upgrade */}
-      <div className="relative p-6 rounded-2xl border space-y-5 overflow-hidden"
+      <div className="relative mt-5 p-6 rounded-2xl border space-y-5"
         style={{ borderColor: "color-mix(in srgb, var(--app-accent) 30%, transparent)", background: "linear-gradient(160deg,color-mix(in srgb, var(--app-accent) 6%, transparent),color-mix(in srgb, var(--app-accent) 2%, transparent))", boxShadow: "0 0 60px color-mix(in srgb, var(--app-accent) 8%, transparent)" }}>
-        <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest text-black"
+        <div className="absolute -top-3 left-1/2 z-10 -translate-x-1/2 whitespace-nowrap px-4 py-1.5 rounded-full text-[9px] font-black uppercase tracking-widest text-black shadow-lg"
           style={{ background: "linear-gradient(135deg,var(--app-accent-bright),var(--app-accent))" }}>
           Coming Soon — Q3 2026
         </div>

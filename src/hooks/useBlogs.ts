@@ -16,10 +16,12 @@ export type Blog = {
 export const blogsKey  = ["blogs"]               as const
 export const blogKey   = (slug: string) => ["blog", slug] as const
 
-export function useBlogs(page = 1) {
+export type BlogSort = "trending" | "top" | "latest"
+
+export function useBlogs(page = 1, sort: BlogSort = "trending") {
   return useQuery({
-    queryKey: [...blogsKey, page],
-    queryFn:  () => api<Paginated<Blog>>(`/blogs?page=${page}`),
+    queryKey: [...blogsKey, page, sort],
+    queryFn:  () => api<Paginated<Blog>>(`/blogs?page=${page}&sort=${sort}`),
   })
 }
 

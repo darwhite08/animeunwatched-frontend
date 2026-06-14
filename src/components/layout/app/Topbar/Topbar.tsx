@@ -35,19 +35,20 @@ export function Topbar() {
           <KaiveronLogo size={26} showWordmark={false} />
         </Link>
 
-        {/* Search (left-grow) */}
+        {/* Search — icon-only on phones (the full pill eats the topbar width),
+            expands to a labelled bar from sm up. */}
         <button
           onClick={() => setSearchOpen(true)}
           aria-label="Search"
-          className="group flex h-11 max-w-xs flex-1 items-center gap-2.5 rounded-full border border-white/[0.07] bg-white/[0.03] px-4 text-muted shadow-[inset_0_1px_0_rgba(255,255,255,0.03)] transition-all hover:border-white/15 hover:bg-white/[0.05] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40 md:max-w-md"
+          className="group flex h-11 w-11 shrink-0 items-center justify-center gap-2.5 rounded-full border border-white/[0.07] bg-white/[0.03] px-0 text-muted shadow-[inset_0_1px_0_rgba(255,255,255,0.03)] transition-all hover:border-white/15 hover:bg-white/[0.05] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/40 sm:ml-1 sm:w-auto sm:max-w-md sm:flex-1 sm:justify-start sm:px-4"
         >
           <Search size={16} className="text-subtle transition-colors group-hover:text-accent-bright" />
-          <span className="truncate text-sm">Search anime, users, clubs…</span>
+          <span className="hidden truncate text-sm sm:inline">Search anime, users, clubs…</span>
           <kbd className="ml-auto hidden items-center rounded-md border border-white/10 bg-white/5 px-1.5 py-0.5 text-[10px] font-bold tracking-wide text-subtle sm:inline-flex">⌘K</kbd>
         </button>
 
         {/* Right utility cluster */}
-        <div className="ml-auto flex items-center gap-2">
+        <div className="ml-auto flex shrink-0 items-center gap-2">
           <CreateButton />
           <NotificationsButton />
           <AvatarMenu />

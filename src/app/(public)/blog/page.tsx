@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useMemo } from "react"
-import { useBlogs } from "@/hooks/useBlogs"
+import { useBlogs, type BlogSort } from "@/hooks/useBlogs"
 import { motion, AnimatePresence } from "framer-motion"
 import {
   BookOpen, Heart, Eye, Clock, User, TrendingUp, PenSquare, ChevronRight,
@@ -255,7 +255,8 @@ function BlogCard({ blog, index }: { blog: Blog; index: number }) {
 /* ── Page ── */
 export default function BlogListingPage() {
   const [activeCategory, setActiveCategory] = useState<Category>("All")
-  const { data: blogsData } = useBlogs()
+  const [sort, setSort] = useState<BlogSort>("trending")
+  const { data: blogsData } = useBlogs(1, sort)
 
   const apiBlogs: Blog[] = useMemo(() => (blogsData?.data ?? []).map(b => {
     const text = stripHtml(b.body)
@@ -348,6 +349,22 @@ export default function BlogListingPage() {
           <span className="hidden md:block text-base font-black tracking-tighter uppercase italic text-foreground leading-none shrink-0 mr-1">
             The Chronicle<span style={{color:"var(--app-accent)"}}>.</span>
           </span>
+          {/* Sort: Hot (trending) / Top (best-of) / New (latest) — drives the ranker. */}
+          <div className="flex shrink-0 items-center gap-0.5 rounded-full border border-border bg-surface p-0.5">
+            {([["trending", "Hot"], ["top", "Top"], ["latest", "New"]] as const).map(([s, label]) => (
+              <button
+                key={s}
+                onClick={() => setSort(s)}
+                aria-pressed={sort === s}
+                title={s === "trending" ? "Trending" : s === "top" ? "Top (all-time)" : "Latest"}
+                className={`min-h-9 rounded-full px-3 text-[10px] font-black uppercase tracking-widest transition-all active:scale-95 ${
+                  sort === s ? "bg-accent text-black" : "text-muted hover:text-foreground"
+                }`}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
           <div className="flex items-center gap-1.5 overflow-x-auto scrollbar-hide -mx-1 px-1">
             {CATEGORIES.map(cat => (
               <button

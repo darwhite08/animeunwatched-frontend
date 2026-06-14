@@ -25,7 +25,7 @@ export function AvatarMenu() {
   if (sessionReady && !isAuthenticated) {
     return (
       <Link href="/login"
-        className="flex h-11 items-center rounded-full px-5 text-[12px] font-black uppercase tracking-widest text-black transition-all hover:opacity-90 active:scale-95"
+        className="flex h-11 shrink-0 items-center whitespace-nowrap rounded-full px-4 sm:px-5 text-[12px] font-black uppercase tracking-widest text-black transition-all hover:opacity-90 active:scale-95"
         style={{ background: "linear-gradient(135deg,var(--app-accent-bright),var(--app-accent))" }}>
         Sign in
       </Link>

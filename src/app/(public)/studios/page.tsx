@@ -64,12 +64,12 @@ const DEFAULT_PALETTES: Array<[string, string]> = [
 function brandFor(name: string, count: number): Studio {
   const existing = STUDIO_BRAND[name]
   if (existing) return { name, ...existing }
-  const initials = name
-    .split(/\s+/)
-    .map(w => w[0]?.toUpperCase() ?? "")
-    .join("")
-    .slice(0, 2)
-    .padEnd(2, "·")
+  const words = name.split(/\s+/).filter(Boolean)
+  // Multi-word → first letter of each (up to 2); single word → first two letters.
+  const initials = (words.length > 1
+    ? words.map(w => w[0]).join("")
+    : (words[0] ?? name)
+  ).replace(/[^A-Za-z0-9]/g, "").slice(0, 2).toUpperCase() || "??"
   const hash = Array.from(name).reduce((a, c) => a + c.charCodeAt(0), 0)
   const palette = DEFAULT_PALETTES[hash % DEFAULT_PALETTES.length]
   return {
@@ -94,8 +94,16 @@ function StudioPanel({ studio, onAnimeClick }: { studio: StudioName; onAnimeClic
     <div className="mt-4 p-4 sm:p-6 rounded-2xl bg-surface border border-border">
       <div className="flex items-center justify-between mb-6 gap-3">
         <div className="flex items-center gap-3 min-w-0">
-          <div style={{ width: 40, height: 40, borderRadius: 10, background: `linear-gradient(135deg, ${s.colors[0]}, ${s.colors[1]})`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-            <span style={{ color: "white", fontWeight: 900, fontSize: 13, fontStyle: "italic", letterSpacing: "-0.02em" }}>{s.monogram}</span>
+          <div
+            style={{
+              width: 40, height: 40, flexShrink: 0, borderRadius: 12, position: "relative",
+              background: `linear-gradient(140deg, ${s.colors[0]}, ${s.colors[1]})`,
+              display: "flex", alignItems: "center", justifyContent: "center",
+              boxShadow: `0 5px 14px -6px ${s.colors[0]}80, inset 0 1px 0 rgba(255,255,255,0.35), inset 0 0 0 1px rgba(255,255,255,0.10)`,
+            }}
+          >
+            <span aria-hidden style={{ position: "absolute", inset: 0, borderRadius: 12, background: "radial-gradient(120% 80% at 30% 0%, rgba(255,255,255,0.30), transparent 60%)" }} />
+            <span style={{ position: "relative", color: "white", fontWeight: 900, fontSize: 13, letterSpacing: "0.01em", textShadow: "0 1px 2px rgba(0,0,0,0.25)" }}>{s.monogram}</span>
           </div>
           <h3 className="text-2xl font-black uppercase italic tracking-tight text-foreground truncate">{studio}</h3>
         </div>
@@ -217,8 +225,19 @@ export default function StudiosPage() {
                   <div className="p-5">
                     <div className="flex items-center justify-between mb-3">
                       <div className="flex items-center gap-3 min-w-0">
-                        <div style={{ width: 48, height: 48, borderRadius: 12, background: `linear-gradient(135deg, ${s.colors[0]}, ${s.colors[1]})`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                          <span style={{ color: "white", fontWeight: 900, fontSize: 14, fontStyle: "italic", letterSpacing: "-0.02em" }}>{s.monogram}</span>
+                        <div
+                          style={{
+                            width: 48, height: 48, flexShrink: 0,
+                            borderRadius: 14,
+                            background: `linear-gradient(140deg, ${s.colors[0]}, ${s.colors[1]})`,
+                            display: "flex", alignItems: "center", justifyContent: "center",
+                            position: "relative",
+                            boxShadow: `0 6px 18px -6px ${s.colors[0]}80, inset 0 1px 0 rgba(255,255,255,0.35), inset 0 0 0 1px rgba(255,255,255,0.10)`,
+                          }}
+                        >
+                          {/* soft top-light sheen for a crafted, badge-like finish */}
+                          <span aria-hidden style={{ position: "absolute", inset: 0, borderRadius: 14, background: "radial-gradient(120% 80% at 30% 0%, rgba(255,255,255,0.30), transparent 60%)" }} />
+                          <span style={{ position: "relative", color: "white", fontWeight: 900, fontSize: 15, letterSpacing: "0.01em", textShadow: "0 1px 2px rgba(0,0,0,0.25)" }}>{s.monogram}</span>
                         </div>
                         <div className="min-w-0">
                           <h2 className="text-base font-black uppercase italic tracking-tight text-foreground truncate">{s.name}</h2>

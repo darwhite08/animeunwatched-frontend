@@ -1,7 +1,7 @@
 "use client"
 
 import { motion } from "framer-motion"
-import { Link2, CheckCircle2, Plus } from "lucide-react"
+import { Link2, Lock, Plus } from "lucide-react"
 import { useQuery } from "@tanstack/react-query"
 import { api } from "@/lib/api/client"
 import { useAuthStore } from "@/stores/auth.store"
@@ -85,8 +85,8 @@ export default function ConnectedAccountsPage() {
               </div>
 
               {connected ? (
-                <span className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-[9px] font-black uppercase tracking-widest text-emerald-400 shrink-0">
-                  <CheckCircle2 size={10} /> Connected
+                <span className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-emerald-400 shrink-0">
+                  <Lock size={11} /> Connected
                 </span>
               ) : (
                 <a

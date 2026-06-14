@@ -17,6 +17,7 @@ const KeyboardShortcutsOverlay = lazy(() => import("@/components/ui/KeyboardShor
 const CookieConsent        = lazy(() => import("@/components/ui/CookieConsent"))
 const MessagesButton       = lazy(() => import("@/components/ui/MessagesButton"))
 const InstallPrompt        = lazy(() => import("@/components/pwa/InstallPrompt"))
+const NotificationPrompt   = lazy(() => import("@/components/notifications/NotificationPrompt"))
 const GoogleAnalytics      = lazy(() =>
   import("@/components/analytics/GoogleAnalytics").then(m => ({ default: m.GoogleAnalytics }))
 )
@@ -151,6 +152,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 {/* PWA "Add to home screen" pill — only shows when installable */}
                 <Suspense fallback={null}>
                   <InstallPrompt />
+                </Suspense>
+                {/* Post-install nudge to enable push (gesture-bound; can't auto-enable) */}
+                <Suspense fallback={null}>
+                  <NotificationPrompt />
                 </Suspense>
                 {/* Loads + runs ONLY when NEXT_PUBLIC_GA_MEASUREMENT_ID is set
                     AND the user has accepted the cookie banner */}

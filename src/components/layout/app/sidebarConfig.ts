@@ -1,5 +1,5 @@
 import {
-  House, Television, Sparkle, UsersThree, FilmReel,
+  House, Television, Sparkle, UsersThree, FilmReel, MagnifyingGlass,
   Trophy, ChatCircleText, Bookmarks, User,
   ListBullets, PlayCircle, Robot, CalendarBlank, CalendarCheck,
   Star, Tag, Buildings, Smiley, MagicWand, SquaresFour,
@@ -95,5 +95,11 @@ export function resolvePath(item: { path: string }, slug?: string | null): strin
   return slug ? `/user/${slug}/${item.path}` : "/login"
 }
 
-/** Bottom-tab items (<md). Capped at 5 per the spec. */
-export const MOBILE_ITEMS: NavItem[] = NAV_ITEMS.filter((i) => i.mobile).slice(0, 5)
+/** Bottom-tab items (<md). Explicit order: Home · Search · Messages · Shots · Profile. */
+export const MOBILE_ITEMS: NavItem[] = [
+  { key: "feed",    label: "Home",     path: "/community", icon: House,           mobile: true },
+  { key: "search",  label: "Search",   path: "/search",    icon: MagnifyingGlass, mobile: true },
+  { key: "chat",    label: "Messages", path: "/chat",      icon: ChatCircleText,  badgeKey: "unreadDms", mobile: true },
+  { key: "shots",   label: "Shots",    path: "/shots",     icon: FilmReel,        mobile: true },
+  { key: "profile", label: "Profile",  path: "profile",    icon: User,            mobile: true },
+]

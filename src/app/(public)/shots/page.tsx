@@ -205,11 +205,19 @@ export default function ShotsPage() {
         {muted ? <VolumeX size={18} /> : <Volume2 size={18} />}
       </button>
 
-      {/* Post a Shot */}
+      {/* Post a Shot — labeled pill in the always-visible top bar (next to the tabs)
+          plus a bottom-left FAB. Kept clear of each reel's right-side action rail. */}
       <button
         onClick={openComposer}
         aria-label="Post a shot"
-        className="fixed bottom-[calc(env(safe-area-inset-bottom)+5.5rem)] right-4 z-30 flex h-14 w-14 items-center justify-center rounded-full bg-accent text-black shadow-[0_8px_28px_rgba(0,0,0,0.45)] transition-transform duration-200 ease-out hover:bg-accent-bright active:scale-95 md:bottom-8 md:right-6"
+        className="fixed left-4 top-[calc(env(safe-area-inset-top)+4.5rem)] z-40 inline-flex items-center gap-1.5 rounded-full bg-accent px-4 py-2.5 text-[11px] font-black uppercase tracking-widest text-black shadow-[0_8px_28px_rgba(0,0,0,0.45)] transition-all duration-200 ease-out hover:bg-accent-bright active:scale-95 md:absolute md:left-6"
+      >
+        <Plus size={15} strokeWidth={2.75} /> Post
+      </button>
+      <button
+        onClick={openComposer}
+        aria-label="Post a shot"
+        className="fixed bottom-[calc(env(safe-area-inset-bottom)+5.5rem)] left-4 z-40 flex h-14 w-14 items-center justify-center rounded-full bg-accent text-black shadow-[0_8px_28px_rgba(0,0,0,0.45)] transition-transform duration-200 ease-out hover:bg-accent-bright active:scale-95 md:bottom-8 md:left-6"
       >
         <Plus size={24} strokeWidth={2.5} />
       </button>

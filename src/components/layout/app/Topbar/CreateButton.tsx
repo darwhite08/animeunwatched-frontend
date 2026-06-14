@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect } from "react"
 import { createPortal } from "react-dom"
 import Link from "next/link"
-import { Plus, PencilLine, BarChart3, MessageSquare } from "lucide-react"
+import { Plus, PencilLine, BarChart3, MessageSquare, Clapperboard } from "lucide-react"
 import { useCreatorAccess } from "@/hooks/useCreator"
 import { useAuthStore } from "@/stores/auth.store"
 import { useAuthPrompt } from "@/stores/authPrompt.store"
@@ -11,6 +11,7 @@ import { useAuthPrompt } from "@/stores/authPrompt.store"
 // `creatorOnly` items (blogs, polls) are hidden from regular members.
 const CREATE_ACTIONS = [
   { label: "New post", href: "/community", icon: MessageSquare, creatorOnly: false },
+  { label: "Shot (reel)", href: "/shots?compose=1", icon: Clapperboard, creatorOnly: false },
   { label: "Blog article", href: "/blog/new", icon: PencilLine, creatorOnly: true },
   { label: "Poll", href: "/poll", icon: BarChart3, creatorOnly: true },
 ]

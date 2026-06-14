@@ -9,6 +9,7 @@ import { useAuthStore } from "@/stores/auth.store"
 import { useToast } from "@/stores/toast.store"
 import { useAuthPrompt } from "@/stores/authPrompt.store"
 import { ShotCommentsSheet } from "@/components/shots/ShotCommentsSheet"
+import { ShotComposer } from "@/components/shots/ShotComposer"
 
 type Shot = {
   id: string
@@ -57,6 +58,20 @@ export default function ShotsPage() {
   const [mode, setMode] = useState<"all" | "shots" | "trailers">("all")
   const loadingRef = useRef(false)
   const scrollRef = useRef<HTMLDivElement>(null)
+
+  // Posting a shot
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated)
+  const showAuthPrompt = useAuthPrompt((s) => s.show)
+  const [composing, setComposing] = useState(false)
+  useEffect(() => {
+    if (typeof window !== "undefined" && new URLSearchParams(window.location.search).get("compose")) {
+      setComposing(true)
+    }
+  }, [])
+  const openComposer = () => {
+    if (!isAuthenticated) { showAuthPrompt(); return }
+    setComposing(true)
+  }
 
   // Well-being guardrail: the variable-reward feed is the strongest hook in the
   // product AND its highest addiction risk (engagement research §2). After 20
@@ -189,6 +204,22 @@ export default function ShotsPage() {
       >
         {muted ? <VolumeX size={18} /> : <Volume2 size={18} />}
       </button>
+
+      {/* Post a Shot */}
+      <button
+        onClick={openComposer}
+        aria-label="Post a shot"
+        className="fixed bottom-[calc(env(safe-area-inset-bottom)+5.5rem)] right-4 z-30 flex h-14 w-14 items-center justify-center rounded-full bg-accent text-black shadow-[0_8px_28px_rgba(0,0,0,0.45)] transition-transform duration-200 ease-out hover:bg-accent-bright active:scale-95 md:bottom-8 md:right-6"
+      >
+        <Plus size={24} strokeWidth={2.5} />
+      </button>
+
+      {composing && (
+        <ShotComposer
+          onClose={() => setComposing(false)}
+          onPosted={() => { setMode("shots"); setActive(0); scrollRef.current?.scrollTo({ top: 0 }); loadShots() }}
+        />
+      )}
 
       {/* Usage-awareness check-in (gentle, dismissible — never blocks for long) */}
       {showBreak && (

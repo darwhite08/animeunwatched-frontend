@@ -363,6 +363,16 @@ export const presignPostImageUpload = (contentType: string, size?: number) =>
     body: JSON.stringify({ contentType, size }),
   })
 
+export const presignShotVideoUpload = (contentType: string, size: number) =>
+  api<UploadIntent>("/uploads/shot-video", {
+    method: "POST",
+    body: JSON.stringify({ contentType, size }),
+  })
+
+/* ── Shots (video reels) ── */
+export const createShot = (body: { videoUrl: string; thumbnailUrl?: string; caption?: string; durationMs?: number; animeId?: string }) =>
+  api<{ shot: { id: string } }>("/shots", { method: "POST", body: JSON.stringify(body) })
+
 /* ── Search ── */
 export const search = (
   q: string,

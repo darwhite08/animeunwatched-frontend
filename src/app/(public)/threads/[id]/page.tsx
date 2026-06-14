@@ -22,7 +22,8 @@ import {
   X,
   Bookmark,
   Share2,
-  ChevronDown,
+  Minus,
+  Plus,
 } from "lucide-react"
 import { api } from "@/lib/api/client"
 import { useToast } from "@/stores/toast.store"
@@ -252,33 +253,40 @@ function ReplyNode({
   pending: boolean
 }) {
   const [collapsed, setCollapsed] = useState(false)
-  const avatarSize = depth > 0 ? 30 : 36
+  const avatarSize = depth >= 2 ? 24 : depth === 1 ? 28 : 34
   const hasChildren = reply.children.length > 0
   const total = hasChildren ? countDescendants(reply) : 0
 
+  // Width of the left gutter that holds the collapse circle + thread line.
+  // The vertical thread line for this node's children aligns under the circle's center.
+  const GUTTER = "w-7 sm:w-8" // ~28px / 32px
+
   return (
-    <div className="relative">
-      {/* Curved connector from the parent rail into this reply's avatar */}
-      {depth > 0 && (
-        <span
-          aria-hidden
-          className="pointer-events-none absolute left-[-1.35rem] sm:left-[-1.4rem] top-0 h-[1.65rem] w-[1.35rem] sm:w-[1.4rem] rounded-bl-[0.7rem] border-b border-l border-border"
-        />
-      )}
+    <div className="py-1.5">
+      {/* ── Header row: [collapse circle gutter] + avatar + author/meta ── */}
+      <div className="group flex items-start gap-2">
+        {/* Left gutter — collapse circle (only when there are replies) */}
+        <div className={`relative flex shrink-0 justify-center ${GUTTER}`}>
+          {hasChildren ? (
+            <button
+              onClick={() => setCollapsed(c => !c)}
+              aria-label={collapsed ? "Expand thread" : "Collapse thread"}
+              aria-expanded={!collapsed}
+              className="mt-0.5 grid h-[18px] w-[18px] shrink-0 place-items-center rounded-full border border-border bg-surface text-subtle transition-colors hover:border-accent/50 hover:text-accent-bright active:scale-95"
+            >
+              {collapsed ? <Plus size={11} /> : <Minus size={11} />}
+            </button>
+          ) : (
+            <span aria-hidden className="block h-[18px] w-[18px]" />
+          )}
+        </div>
 
-      <div className="group flex items-start gap-2 sm:gap-2.5 py-3">
-        {/* Collapse toggle + avatar */}
-        <button
-          onClick={() => setCollapsed(c => !c)}
-          aria-label={collapsed ? "Expand" : "Collapse"}
-          className="relative shrink-0 self-start transition-transform active:scale-95"
-        >
+        {/* Avatar */}
+        <div className="shrink-0 self-start pt-px">
           <Avatar src={reply.avatarUrl} name={reply.author} size={avatarSize} />
-          <span className="absolute -bottom-1 -right-1 grid h-4 w-4 place-items-center rounded-full border border-border bg-surface-2 text-subtle">
-            <ChevronDown size={10} className={`transition-transform ${collapsed ? "-rotate-90" : ""}`} />
-          </span>
-        </button>
+        </div>
 
+        {/* Content column */}
         <div className="min-w-0 flex-1 pt-0.5">
           {/* Author line */}
           <div className="flex items-center gap-1.5 text-[13px] leading-none">
@@ -345,29 +353,36 @@ function ReplyNode({
         </div>
       </div>
 
-      {/* Nested children — continuous rail; click it to collapse the thread (Reddit-style) */}
+      {/* ── Nested children ── */}
+      {/* The vertical thread line lives in a left rail aligned under this node's
+          collapse circle; clicking it collapses the subtree (Reddit affordance). */}
       {hasChildren && !collapsed && (
-        <div className="relative pl-[1.85rem] sm:pl-[2.05rem]">
+        <div className="flex">
+          {/* Rail column — same width as the gutter above so the line sits under the circle */}
           <button
             onClick={() => setCollapsed(true)}
             aria-label="Collapse thread"
-            className="group/rail absolute left-[0.5rem] sm:left-[0.65rem] top-1 bottom-2 z-10 w-4 -translate-x-1/2 cursor-pointer"
+            className={`group/rail relative flex shrink-0 justify-center ${GUTTER} cursor-pointer`}
           >
-            <span className="absolute inset-y-0 left-1/2 w-px -translate-x-1/2 rounded-full bg-border transition-colors group-hover/rail:bg-accent/50" />
+            <span className="absolute inset-y-0 left-1/2 w-px -translate-x-1/2 bg-border transition-colors group-hover/rail:bg-accent/50" />
           </button>
-          {reply.children.map(child => (
-            <ReplyNode
-              key={child.id}
-              reply={child}
-              depth={depth + 1}
-              locked={locked}
-              replyingTo={replyingTo}
-              onToggleReply={onToggleReply}
-              onLike={onLike}
-              onSubmitReply={onSubmitReply}
-              pending={pending}
-            />
-          ))}
+
+          {/* Children */}
+          <div className="min-w-0 flex-1">
+            {reply.children.map(child => (
+              <ReplyNode
+                key={child.id}
+                reply={child}
+                depth={depth + 1}
+                locked={locked}
+                replyingTo={replyingTo}
+                onToggleReply={onToggleReply}
+                onLike={onLike}
+                onSubmitReply={onSubmitReply}
+                pending={pending}
+              />
+            ))}
+          </div>
         </div>
       )}
     </div>

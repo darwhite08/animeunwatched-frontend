@@ -1,7 +1,7 @@
 "use client"
 
 import { useCallback, useState } from "react"
-import { presignAvatarUpload, presignPostImageUpload } from "@/lib/api/endpoints"
+import { presignAvatarUpload, presignPostImageUpload, presignShotVideoUpload } from "@/lib/api/endpoints"
 import { ApiError } from "@/lib/api/client"
 
 /**
@@ -19,14 +19,25 @@ import { ApiError } from "@/lib/api/client"
  *   error        — friendly error string or null
  */
 
-export type UploadScope = "avatar" | "post"
+export type UploadScope = "avatar" | "post" | "shot"
 
 type UploadResult = { publicUrl: string; key: string }
 
 const ALLOWED_MIMES = new Set(["image/jpeg", "image/jpg", "image/png", "image/webp", "image/gif"])
-const MAX_BYTES = { avatar: 5 * 1024 * 1024, post: 10 * 1024 * 1024 } as const
+// Shots accept short videos (phone-camera formats included).
+const ALLOWED_VIDEO_MIMES = new Set(["video/mp4", "video/webm", "video/quicktime", "video/3gpp"])
+const MAX_BYTES = { avatar: 5 * 1024 * 1024, post: 10 * 1024 * 1024, shot: 100 * 1024 * 1024 } as const
 
 function validate(file: File, scope: UploadScope): string | null {
+  if (scope === "shot") {
+    if (!ALLOWED_VIDEO_MIMES.has(file.type)) {
+      return "Only MP4, WebM, MOV, or 3GP videos are supported."
+    }
+    if (file.size > MAX_BYTES.shot) {
+      return `Video is too large — must be under ${MAX_BYTES.shot / 1024 / 1024}MB.`
+    }
+    return null
+  }
   if (!ALLOWED_MIMES.has(file.type)) {
     return "Only JPEG, PNG, WebP, or GIF images are supported."
   }
@@ -38,9 +49,9 @@ function validate(file: File, scope: UploadScope): string | null {
 }
 
 async function presign(scope: UploadScope, contentType: string, size: number) {
-  return scope === "avatar"
-    ? presignAvatarUpload(contentType, size)
-    : presignPostImageUpload(contentType, size)
+  if (scope === "avatar") return presignAvatarUpload(contentType, size)
+  if (scope === "shot")   return presignShotVideoUpload(contentType, size)
+  return presignPostImageUpload(contentType, size)
 }
 
 export function useImageUpload(scope: UploadScope) {

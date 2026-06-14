@@ -253,37 +253,36 @@ function ReplyNode({
   pending: boolean
 }) {
   const [collapsed, setCollapsed] = useState(false)
-  const avatarSize = depth >= 2 ? 24 : depth === 1 ? 28 : 34
+  const avatarSize = depth >= 2 ? 26 : depth === 1 ? 30 : 36
   const hasChildren = reply.children.length > 0
   const total = hasChildren ? countDescendants(reply) : 0
 
-  // Width of the left gutter that holds the collapse circle + thread line.
-  // The vertical thread line for this node's children aligns under the circle's center.
-  const GUTTER = "w-7 sm:w-8" // ~28px / 32px
-
   return (
-    <div className="py-1.5">
-      {/* ── Header row: [collapse circle gutter] + avatar + author/meta ── */}
-      <div className="group flex items-start gap-2">
-        {/* Left gutter — collapse circle (only when there are replies) */}
-        <div className={`relative flex shrink-0 justify-center ${GUTTER}`}>
-          {hasChildren ? (
+    <div className="relative py-1.5">
+      {/* Rounded connector — the parent's thread line curves into THIS reply's avatar,
+          so the comment being replied to and the reply are visibly linked. */}
+      {depth > 0 && (
+        <span
+          aria-hidden
+          className="pointer-events-none absolute -left-[16px] sm:-left-[19px] top-[0.55rem] h-[0.85rem] w-[16px] sm:w-[19px] rounded-bl-[11px] border-b-2 border-l-2 border-foreground/15"
+        />
+      )}
+
+      {/* ── Header row: avatar (+ collapse toggle) + author/meta ── */}
+      <div className="group flex items-start gap-2.5">
+        {/* Avatar with a Reddit-style collapse toggle on its corner */}
+        <div className="relative shrink-0 self-start">
+          <Avatar src={reply.avatarUrl} name={reply.author} size={avatarSize} />
+          {hasChildren && (
             <button
               onClick={() => setCollapsed(c => !c)}
               aria-label={collapsed ? "Expand thread" : "Collapse thread"}
               aria-expanded={!collapsed}
-              className="mt-0.5 grid h-[18px] w-[18px] shrink-0 place-items-center rounded-full border border-border bg-surface text-subtle transition-colors hover:border-accent/50 hover:text-accent-bright active:scale-95"
+              className="absolute -bottom-1 -right-1 z-10 grid h-[18px] w-[18px] place-items-center rounded-full border border-border bg-surface text-subtle transition-colors hover:border-accent/50 hover:text-accent-bright active:scale-95"
             >
               {collapsed ? <Plus size={11} /> : <Minus size={11} />}
             </button>
-          ) : (
-            <span aria-hidden className="block h-[18px] w-[18px]" />
           )}
-        </div>
-
-        {/* Avatar */}
-        <div className="shrink-0 self-start pt-px">
-          <Avatar src={reply.avatarUrl} name={reply.author} size={avatarSize} />
         </div>
 
         {/* Content column */}
@@ -357,32 +356,28 @@ function ReplyNode({
       {/* The vertical thread line lives in a left rail aligned under this node's
           collapse circle; clicking it collapses the subtree (Reddit affordance). */}
       {hasChildren && !collapsed && (
-        <div className="flex">
-          {/* Rail column — same width as the gutter above so the line sits under the circle */}
+        <div className="relative pl-[1.65rem] sm:pl-[1.95rem]">
+          {/* Continuous vertical thread line the elbows curve off of (click to collapse). */}
           <button
             onClick={() => setCollapsed(true)}
             aria-label="Collapse thread"
-            className={`group/rail relative flex shrink-0 justify-center ${GUTTER} cursor-pointer`}
+            className="group/rail absolute left-[0.65rem] top-0 bottom-1 z-0 w-4 -translate-x-1/2 cursor-pointer sm:left-[0.78rem]"
           >
             <span className="absolute inset-y-0 left-1/2 w-0.5 -translate-x-1/2 rounded-full bg-foreground/15 transition-colors group-hover/rail:bg-accent/60" />
           </button>
-
-          {/* Children */}
-          <div className="min-w-0 flex-1">
-            {reply.children.map(child => (
-              <ReplyNode
-                key={child.id}
-                reply={child}
-                depth={depth + 1}
-                locked={locked}
-                replyingTo={replyingTo}
-                onToggleReply={onToggleReply}
-                onLike={onLike}
-                onSubmitReply={onSubmitReply}
-                pending={pending}
-              />
-            ))}
-          </div>
+          {reply.children.map(child => (
+            <ReplyNode
+              key={child.id}
+              reply={child}
+              depth={depth + 1}
+              locked={locked}
+              replyingTo={replyingTo}
+              onToggleReply={onToggleReply}
+              onLike={onLike}
+              onSubmitReply={onSubmitReply}
+              pending={pending}
+            />
+          ))}
         </div>
       )}
     </div>

@@ -236,6 +236,7 @@ function InlineReply({
 function ReplyNode({
   reply,
   depth,
+  isLast = true,
   locked,
   replyingTo,
   onToggleReply,
@@ -245,6 +246,7 @@ function ReplyNode({
 }: {
   reply: ReplyItem
   depth: number
+  isLast?: boolean
   locked: boolean
   replyingTo: string | null
   onToggleReply: (id: string) => void
@@ -253,34 +255,52 @@ function ReplyNode({
   pending: boolean
 }) {
   const [collapsed, setCollapsed] = useState(false)
-  const avatarSize = depth >= 2 ? 26 : depth === 1 ? 30 : 36
+  const avatarSize = 30 // uniform so the line always drops from one avatar's centre into the next
   const hasChildren = reply.children.length > 0
   const total = hasChildren ? countDescendants(reply) : 0
 
   return (
     <div className="relative py-1.5">
-      {/* Rounded connector — the parent's thread line curves into THIS reply's avatar,
-          so the comment being replied to and the reply are visibly linked. */}
+      {/* Thread connector (depth>0): a rounded elbow curves from the parent's centre
+          line straight into THIS reply's avatar. For non-last siblings the vertical
+          line continues down to the next sibling; for the last it stops here (no dangle). */}
       {depth > 0 && (
-        <span
-          aria-hidden
-          className="pointer-events-none absolute -left-[16px] sm:-left-[19px] top-[0.55rem] h-[0.85rem] w-[16px] sm:w-[19px] rounded-bl-[11px] border-b-2 border-l-2 border-foreground/15"
-        />
+        <>
+          {!isLast && (
+            <span aria-hidden className="pointer-events-none absolute -left-[16px] top-0 bottom-0 w-0.5 bg-foreground/15" />
+          )}
+          <span
+            aria-hidden
+            className="pointer-events-none absolute -left-[16px] top-0 h-[1.3rem] w-[16px] rounded-bl-[11px] border-b-2 border-l-2 border-foreground/15"
+          />
+        </>
       )}
 
       {/* ── Header row: avatar (+ collapse toggle) + author/meta ── */}
-      <div className="group flex items-start gap-2.5">
-        {/* Avatar with a Reddit-style collapse toggle on its corner */}
-        <div className="relative shrink-0 self-start">
-          <Avatar src={reply.avatarUrl} name={reply.author} size={avatarSize} />
-          {hasChildren && (
+      <div className="group flex items-stretch gap-2.5">
+        {/* Left gutter — avatar + a vertical line that runs down alongside the content
+            to the replies, so the parent and its replies are visibly connected. */}
+        <div className="flex w-[30px] shrink-0 flex-col items-center">
+          <div className="relative">
+            <Avatar src={reply.avatarUrl} name={reply.author} size={avatarSize} />
+            {hasChildren && (
+              <button
+                onClick={() => setCollapsed(c => !c)}
+                aria-label={collapsed ? "Expand thread" : "Collapse thread"}
+                aria-expanded={!collapsed}
+                className="absolute -bottom-1 -right-1 z-10 grid h-[18px] w-[18px] place-items-center rounded-full border border-border bg-surface text-subtle transition-colors hover:border-accent/50 hover:text-accent-bright active:scale-95"
+              >
+                {collapsed ? <Plus size={11} /> : <Minus size={11} />}
+              </button>
+            )}
+          </div>
+          {hasChildren && !collapsed && (
             <button
-              onClick={() => setCollapsed(c => !c)}
-              aria-label={collapsed ? "Expand thread" : "Collapse thread"}
-              aria-expanded={!collapsed}
-              className="absolute -bottom-1 -right-1 z-10 grid h-[18px] w-[18px] place-items-center rounded-full border border-border bg-surface text-subtle transition-colors hover:border-accent/50 hover:text-accent-bright active:scale-95"
+              onClick={() => setCollapsed(true)}
+              aria-label="Collapse thread"
+              className="group/rail mt-1.5 flex w-4 flex-1 cursor-pointer justify-center"
             >
-              {collapsed ? <Plus size={11} /> : <Minus size={11} />}
+              <span className="w-0.5 flex-1 rounded-full bg-foreground/15 transition-colors group-hover/rail:bg-accent/60" />
             </button>
           )}
         </div>
@@ -352,24 +372,16 @@ function ReplyNode({
         </div>
       </div>
 
-      {/* ── Nested children ── */}
-      {/* The vertical thread line lives in a left rail aligned under this node's
-          collapse circle; clicking it collapses the subtree (Reddit affordance). */}
+      {/* ── Nested children (indent one avatar-width; each child draws its own
+          connector segment, so the line ends at the last reply with no dangle). ── */}
       {hasChildren && !collapsed && (
-        <div className="relative pl-[1.65rem] sm:pl-[1.95rem]">
-          {/* Continuous vertical thread line the elbows curve off of (click to collapse). */}
-          <button
-            onClick={() => setCollapsed(true)}
-            aria-label="Collapse thread"
-            className="group/rail absolute left-[0.65rem] top-0 bottom-1 z-0 w-4 -translate-x-1/2 cursor-pointer sm:left-[0.78rem]"
-          >
-            <span className="absolute inset-y-0 left-1/2 w-0.5 -translate-x-1/2 rounded-full bg-foreground/15 transition-colors group-hover/rail:bg-accent/60" />
-          </button>
-          {reply.children.map(child => (
+        <div className="pl-[1.875rem]">
+          {reply.children.map((child, i) => (
             <ReplyNode
               key={child.id}
               reply={child}
               depth={depth + 1}
+              isLast={i === reply.children.length - 1}
               locked={locked}
               replyingTo={replyingTo}
               onToggleReply={onToggleReply}
@@ -638,8 +650,8 @@ export default function ThreadDetailPage({
               onClick={toggleSave}
               aria-pressed={saved}
               aria-label="Save"
-              className={`grid h-10 w-10 place-items-center rounded-2xl border transition-all active:scale-95 ${
-                saved ? "border-accent/40 bg-accent/15 text-accent-bright" : "border-border bg-surface text-subtle hover:text-foreground"
+              className={`grid h-10 w-10 place-items-center rounded-2xl border border-border bg-surface transition-colors active:scale-95 ${
+                saved ? "text-accent-bright" : "text-subtle hover:text-foreground"
               }`}
             >
               <Bookmark size={15} fill={saved ? "currentColor" : "none"} />
@@ -647,10 +659,8 @@ export default function ThreadDetailPage({
             <button
               onClick={hypeThread}
               aria-pressed={threadHype.hyped}
-              className={`flex items-center gap-2 h-10 px-5 rounded-2xl border text-[11px] font-black uppercase tracking-widest transition-all active:scale-95 ${
-                threadHype.hyped
-                  ? "bg-amber-500/15 border-amber-500/40 text-amber-400 shadow-[0_0_24px_rgba(245,158,11,0.25)]"
-                  : "bg-surface border-border text-subtle hover:text-amber-400 hover:border-amber-500/30"
+              className={`flex items-center gap-2 h-10 px-5 rounded-2xl border border-border bg-surface text-[11px] font-black uppercase tracking-widest transition-colors active:scale-95 ${
+                threadHype.hyped ? "text-amber-400" : "text-subtle hover:text-amber-400"
               }`}
             >
               <Flame size={14} fill={threadHype.hyped ? "currentColor" : "none"} />

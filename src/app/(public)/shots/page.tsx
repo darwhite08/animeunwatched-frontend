@@ -468,8 +468,9 @@ function TrailerReel({ trailer, active, muted }: { trailer: Trailer; active: boo
         </div>
       </div>
 
-      {/* Trailer badge */}
-      <span className="absolute left-3 top-3 z-10 rounded-full bg-accent px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-white shadow-lg">Trailer</span>
+      {/* Trailer badge — sits BELOW the For You/Shots/Trailers tab bar (tabs are
+          at top-[safe+4.5rem], ~2.5rem tall) so it doesn't collide with them. */}
+      <span className="absolute left-3 top-[calc(env(safe-area-inset-top)+7.75rem)] z-10 rounded-full bg-accent px-3 py-1 text-[10px] font-black uppercase tracking-[0.2em] text-black shadow-lg md:top-[7.5rem]">Trailer</span>
 
       {/* Bottom meta */}
       <div className="absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-black via-black/80 to-transparent p-4 pt-14 pb-[max(1rem,env(safe-area-inset-bottom))]">

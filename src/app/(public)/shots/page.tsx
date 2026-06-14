@@ -47,6 +47,14 @@ type FeedItem = { kind: "shot"; shot: Shot } | { kind: "trailer"; trailer: Trail
 
 const TRAILER_EVERY = 3 // interleave a trailer after every N shots
 
+// Videos must be served straight from S3, not via the /cdn rewrite — the Vercel
+// proxy mishandles HTTP Range requests (returns a broken 200), so <video> can't
+// stream/seek and won't play. Images stay on /cdn (no Range needed).
+const S3_ORIGIN = process.env.NEXT_PUBLIC_S3_ORIGIN ?? "https://kaiveron-uploads.s3.us-east-1.amazonaws.com"
+function playableVideoUrl(url: string): string {
+  return url.replace(/^https?:\/\/(?:www\.)?kaiveron\.com\/cdn\//, `${S3_ORIGIN}/`)
+}
+
 export default function ShotsPage() {
   const [shots, setShots] = useState<Shot[]>([])
   const [trailers, setTrailers] = useState<Trailer[]>([])
@@ -379,7 +387,7 @@ function ShotReel({ shot, active, muted }: { shot: Shot; active: boolean; muted:
       ) : (
         <video
           ref={videoRef}
-          src={shot.videoUrl}
+          src={playableVideoUrl(shot.videoUrl)}
           poster={shot.thumbnailUrl ?? undefined}
           muted={muted}
           loop

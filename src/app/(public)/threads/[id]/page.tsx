@@ -252,28 +252,34 @@ function ReplyNode({
   pending: boolean
 }) {
   const [collapsed, setCollapsed] = useState(false)
-  const avatarSize = depth > 0 ? 28 : 34
+  const avatarSize = depth > 0 ? 30 : 36
   const hasChildren = reply.children.length > 0
   const total = hasChildren ? countDescendants(reply) : 0
 
   return (
-    <div>
-      <div className="group flex gap-2 sm:gap-2.5 py-3">
+    <div className="relative">
+      {/* Curved connector from the parent rail into this reply's avatar */}
+      {depth > 0 && (
+        <span
+          aria-hidden
+          className="pointer-events-none absolute left-[-1.35rem] sm:left-[-1.4rem] top-0 h-[1.65rem] w-[1.35rem] sm:w-[1.4rem] rounded-bl-[0.7rem] border-b border-l border-border"
+        />
+      )}
+
+      <div className="group flex items-start gap-2 sm:gap-2.5 py-3">
         {/* Collapse toggle + avatar */}
         <button
           onClick={() => setCollapsed(c => !c)}
           aria-label={collapsed ? "Expand" : "Collapse"}
-          className="shrink-0 transition-transform active:scale-95"
+          className="relative shrink-0 self-start transition-transform active:scale-95"
         >
-          <span className="relative block">
-            <Avatar src={reply.avatarUrl} name={reply.author} size={avatarSize} />
-            <span className="absolute -bottom-1 -right-1 grid h-4 w-4 place-items-center rounded-full border border-border bg-surface-2 text-subtle">
-              <ChevronDown size={10} className={`transition-transform ${collapsed ? "-rotate-90" : ""}`} />
-            </span>
+          <Avatar src={reply.avatarUrl} name={reply.author} size={avatarSize} />
+          <span className="absolute -bottom-1 -right-1 grid h-4 w-4 place-items-center rounded-full border border-border bg-surface-2 text-subtle">
+            <ChevronDown size={10} className={`transition-transform ${collapsed ? "-rotate-90" : ""}`} />
           </span>
         </button>
 
-        <div className="min-w-0 flex-1">
+        <div className="min-w-0 flex-1 pt-0.5">
           {/* Author line */}
           <div className="flex items-center gap-1.5 text-[13px] leading-none">
             <span className="font-bold text-foreground truncate">{reply.author}</span>
@@ -339,15 +345,15 @@ function ReplyNode({
         </div>
       </div>
 
-      {/* Nested children — clickable rail collapses the thread (Reddit-style) */}
+      {/* Nested children — continuous rail; click it to collapse the thread (Reddit-style) */}
       {hasChildren && !collapsed && (
-        <div className="group/rail relative ml-[0.85rem] sm:ml-[1.0rem] pl-3 sm:pl-4">
+        <div className="relative pl-[1.85rem] sm:pl-[2.05rem]">
           <button
             onClick={() => setCollapsed(true)}
             aria-label="Collapse thread"
-            className="absolute inset-y-0 left-0 w-3 cursor-pointer"
+            className="group/rail absolute left-[0.5rem] sm:left-[0.65rem] top-1 bottom-2 z-10 w-4 -translate-x-1/2 cursor-pointer"
           >
-            <span className="absolute inset-y-0 left-0 w-px bg-border transition-colors group-hover/rail:bg-accent/40" />
+            <span className="absolute inset-y-0 left-1/2 w-px -translate-x-1/2 rounded-full bg-border transition-colors group-hover/rail:bg-accent/50" />
           </button>
           {reply.children.map(child => (
             <ReplyNode

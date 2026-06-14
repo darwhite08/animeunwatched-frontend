@@ -68,10 +68,6 @@ export default function ShotsPage() {
       setComposing(true)
     }
   }, [])
-  const openComposer = () => {
-    if (!isAuthenticated) { showAuthPrompt(); return }
-    setComposing(true)
-  }
 
   // Well-being guardrail: the variable-reward feed is the strongest hook in the
   // product AND its highest addiction risk (engagement research §2). After 20
@@ -200,23 +196,14 @@ export default function ShotsPage() {
         ))}
       </div>
 
-      {/* Top-right controls — a single Post entry + mute */}
-      <div className="fixed right-4 top-[calc(env(safe-area-inset-top)+4.5rem)] z-40 flex items-center gap-2 md:absolute md:right-6 md:top-[4.5rem]">
-        <button
-          onClick={openComposer}
-          aria-label="Post a shot"
-          className="grid h-11 w-11 place-items-center rounded-full bg-accent text-black shadow-[0_6px_20px_rgba(0,0,0,0.4)] transition-transform duration-200 ease-out hover:bg-accent-bright active:scale-95"
-        >
-          <Plus size={22} strokeWidth={2.75} />
-        </button>
-        <button
-          onClick={() => setMuted((m) => !m)}
-          aria-label={muted ? "Unmute" : "Mute"}
-          className="grid h-11 w-11 place-items-center rounded-full bg-black/45 text-white backdrop-blur transition-transform duration-200 ease-out hover:bg-black/65 active:scale-95"
-        >
-          {muted ? <VolumeX size={18} /> : <Volume2 size={18} />}
-        </button>
-      </div>
+      {/* Mute toggle (posting lives in the top-bar + Create menu) */}
+      <button
+        onClick={() => setMuted((m) => !m)}
+        aria-label={muted ? "Unmute" : "Mute"}
+        className="fixed right-4 top-[calc(env(safe-area-inset-top)+4.5rem)] z-40 grid h-11 w-11 place-items-center rounded-full bg-black/45 text-white backdrop-blur transition-transform duration-200 ease-out hover:bg-black/65 active:scale-95 md:absolute md:right-6 md:top-[4.5rem]"
+      >
+        {muted ? <VolumeX size={18} /> : <Volume2 size={18} />}
+      </button>
 
       {composing && (
         <ShotComposer

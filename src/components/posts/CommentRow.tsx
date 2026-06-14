@@ -165,7 +165,7 @@ export function CommentRow({
         {/* Action bar */}
         <div className="flex items-center gap-1 mt-1.5 -ml-2">
           <span className={`flex items-center gap-1.5 min-h-8 px-2.5 rounded-full text-[11px] font-semibold transition-all ${
-            liked ? "text-rose-400 bg-rose-500/10" : "text-muted hover:bg-rose-500/8"
+            liked ? "text-rose-400" : "text-muted"
           }`}>
             <HeartLike liked={liked} onToggle={toggleLike} size={15} ariaLabel={liked ? "Unlike" : "Like"} />
             {likeCount > 0 && <span className="tabular-nums">{likeCount}</span>}

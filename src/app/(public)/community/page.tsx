@@ -375,7 +375,7 @@ function PostCard({ post }: { post: Post }) {
         <div className="flex items-center gap-1 pt-2 border-t border-border">
           {/* Like */}
           <span className={`flex items-center gap-2 min-h-11 px-3 rounded-xl text-sm font-bold transition-all ${
-            liked ? "text-rose-400 bg-rose-500/15" : "text-muted hover:text-rose-400 hover:bg-rose-500/10"
+            liked ? "text-rose-400" : "text-muted hover:text-rose-400"
           }`}>
             <HeartLike liked={liked} onToggle={handleLike} size={18} ariaLabel={liked ? `Unlike (${likeCount} likes)` : `Like (${likeCount} likes)`} />
             {likeCount > 0 && <span className="tabular-nums">{likeCount}</span>}

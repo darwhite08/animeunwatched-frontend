@@ -81,14 +81,9 @@ export function useImageUpload(scope: UploadScope) {
         setProgress(100)
         return { publicUrl: intent.publicUrl, key: intent.key }
       } catch (err) {
-        // Videos must go straight to S3 — the in-app proxy buffers the whole
-        // file and 502s on anything large, so never proxy a "shot".
-        if (scope === "shot") {
-          throw err instanceof Error
-            ? new Error(`Upload failed: ${err.message}. Try a smaller clip or a different network.`)
-            : new Error("Upload failed")
-        }
-        // Images: fall back to the server-side proxy (extension blocker / strict CSP).
+        // Direct-to-S3 blocked (extension / strict CSP / network). Fall back to
+        // the server-side proxy — now video-capable and pointed at the backend
+        // directly, so shots up to 100MB go through too.
         console.warn("[upload] direct upload failed, retrying via proxy:", err)
         setProgress(10)
       }
@@ -175,9 +170,12 @@ async function proxyUpload(
   const { useAuthStore } = await import("@/stores/auth.store")
   const token = useAuthStore.getState().accessToken
 
+  // Hit the backend DIRECTLY (not the relative /api which is rewritten through
+  // Vercel and capped at ~4.5MB) so large videos can be proxied to S3.
+  const base = process.env.NEXT_PUBLIC_API_BASE ?? ""
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest()
-    xhr.open("POST", `/api/v1/uploads/proxy?scope=${scope}`, true)
+    xhr.open("POST", `${base}/api/v1/uploads/proxy?scope=${scope}`, true)
     xhr.setRequestHeader("Content-Type", file.type)
     if (token) xhr.setRequestHeader("Authorization", `Bearer ${token}`)
     xhr.withCredentials = true

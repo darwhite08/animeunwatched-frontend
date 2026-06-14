@@ -245,80 +245,71 @@ function ReplyNode({
   onSubmitReply: (payload: ReplyPayload) => void
   pending: boolean
 }) {
+  const avatarSize = depth > 0 ? 30 : 34
   return (
-    <motion.div
-      layout
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, scale: 0.97 }}
-      className={depth > 0 ? "ml-5 sm:ml-8 border-l border-border pl-3 sm:pl-4" : ""}
-    >
-      <div className="p-4 rounded-2xl bg-surface border border-border hover:border-accent/20 transition-colors space-y-2.5">
-        {/* Author */}
-        <div className="flex items-center gap-2.5">
-          <Avatar src={reply.avatarUrl} name={reply.author} size={32} />
-          <p className="text-[13px] font-bold text-foreground flex items-center gap-1.5 min-w-0">
-            <span className="truncate">{reply.author}</span>
+    <div>
+      <div className="flex gap-2.5 sm:gap-3 py-3">
+        <Avatar src={reply.avatarUrl} name={reply.author} size={avatarSize} />
+        <div className="min-w-0 flex-1">
+          {/* Author line */}
+          <div className="flex items-center gap-1.5 text-[13px] leading-none">
+            <span className="font-bold text-foreground truncate">{reply.author}</span>
             <VerifiedBadge kind={reply.verifiedKind} size={12} />
-            <span className="text-subtle font-normal">· {reply.date}</span>
-          </p>
-        </div>
+            <span className="text-subtle">· {reply.date}</span>
+          </div>
 
-        {/* Content */}
-        {reply.content !== "📷" && (
-          <p className="text-sm text-foreground/90 leading-relaxed whitespace-pre-line pl-[2.625rem]">{reply.content}</p>
-        )}
+          {/* Content */}
+          {reply.content !== "📷" && (
+            <p className="mt-1.5 text-sm text-foreground/90 leading-relaxed whitespace-pre-line break-words">{reply.content}</p>
+          )}
 
-        {/* Image */}
-        {reply.imageUrl && (
-          <a href={reply.imageUrl} target="_blank" rel="noopener noreferrer" className="block pl-[2.625rem]">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={reply.imageUrl}
-              alt="Reply attachment"
-              className="max-h-80 w-auto rounded-xl border border-border object-contain bg-surface-2"
-            />
-          </a>
-        )}
+          {/* Image */}
+          {reply.imageUrl && (
+            <a href={reply.imageUrl} target="_blank" rel="noopener noreferrer" className="mt-2 block">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={reply.imageUrl} alt="Reply attachment" className="max-h-80 w-auto rounded-xl border border-border object-contain bg-surface-2" />
+            </a>
+          )}
 
-        {/* Actions */}
-        <div className="flex items-center gap-1 pl-[2.25rem]">
-          <button
-            onClick={() => onLike(reply.id)}
-            aria-pressed={reply.liked}
-            className={`flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-xs font-bold transition-colors active:scale-95 ${
-              reply.liked ? "text-rose-400" : "text-subtle hover:text-rose-400"
-            }`}
-          >
-            <Heart size={13} fill={reply.liked ? "currentColor" : "none"} />
-            {reply.likes > 0 ? reply.likes : "Like"}
-          </button>
-          {!locked && (
+          {/* Actions */}
+          <div className="mt-1.5 -ml-2 flex items-center gap-0.5">
             <button
-              onClick={() => onToggleReply(reply.id)}
-              className="flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-xs font-bold text-subtle hover:text-accent-bright transition-colors active:scale-95"
+              onClick={() => onLike(reply.id)}
+              aria-pressed={reply.liked}
+              className={`flex items-center gap-1.5 rounded-full px-2 py-1 text-xs font-semibold transition-colors active:scale-95 ${
+                reply.liked ? "text-rose-400" : "text-subtle hover:text-rose-400"
+              }`}
             >
-              <Reply size={12} /> Reply
+              <Heart size={13} fill={reply.liked ? "currentColor" : "none"} />
+              {reply.likes > 0 ? reply.likes : "Like"}
             </button>
-          )}
-        </div>
+            {!locked && (
+              <button
+                onClick={() => onToggleReply(reply.id)}
+                className="flex items-center gap-1.5 rounded-full px-2 py-1 text-xs font-semibold text-subtle hover:text-accent-bright transition-colors active:scale-95"
+              >
+                <Reply size={12} /> Reply
+              </button>
+            )}
+          </div>
 
-        {/* Inline reply composer */}
-        <AnimatePresence>
-          {replyingTo === reply.id && (
-            <InlineReply
-              authorName={reply.author}
-              onSubmit={onSubmitReply}
-              onCancel={() => onToggleReply(reply.id)}
-              pending={pending}
-            />
-          )}
-        </AnimatePresence>
+          {/* Inline reply composer */}
+          <AnimatePresence>
+            {replyingTo === reply.id && (
+              <InlineReply
+                authorName={reply.author}
+                onSubmit={onSubmitReply}
+                onCancel={() => onToggleReply(reply.id)}
+                pending={pending}
+              />
+            )}
+          </AnimatePresence>
+        </div>
       </div>
 
-      {/* Nested children */}
+      {/* Nested children — single connecting rail per level (Reddit-style) */}
       {reply.children.length > 0 && (
-        <div className="mt-3 space-y-3">
+        <div className="ml-[1.0rem] sm:ml-[1.15rem] border-l border-border pl-2.5 sm:pl-4">
           {reply.children.map(child => (
             <ReplyNode
               key={child.id}
@@ -334,7 +325,7 @@ function ReplyNode({
           ))}
         </div>
       )}
-    </motion.div>
+    </div>
   )
 }
 
@@ -679,22 +670,20 @@ export default function ThreadDetailPage({
             <p className="text-[11px] text-subtle mt-1">Be the first to reply to this thread.</p>
           </div>
         ) : (
-          <div className="space-y-4">
-            <AnimatePresence mode="popLayout">
-              {roots.map(reply => (
-                <ReplyNode
-                  key={reply.id}
-                  reply={reply}
-                  depth={0}
-                  locked={apiThread.isLocked}
-                  replyingTo={replyingTo}
-                  onToggleReply={(rid) => setReplyingTo(replyingTo === rid ? null : rid)}
-                  onLike={likeReply}
-                  onSubmitReply={(payload) => submitReply(payload, replyingTo)}
-                  pending={createReplyMut.isPending}
-                />
-              ))}
-            </AnimatePresence>
+          <div className="rounded-2xl border border-border bg-surface px-4 sm:px-5 divide-y divide-border/60">
+            {roots.map(reply => (
+              <ReplyNode
+                key={reply.id}
+                reply={reply}
+                depth={0}
+                locked={apiThread.isLocked}
+                replyingTo={replyingTo}
+                onToggleReply={(rid) => setReplyingTo(replyingTo === rid ? null : rid)}
+                onLike={likeReply}
+                onSubmitReply={(payload) => submitReply(payload, replyingTo)}
+                pending={createReplyMut.isPending}
+              />
+            ))}
           </div>
         )}
 

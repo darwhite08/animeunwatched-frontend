@@ -1,7 +1,10 @@
 "use client"
 
+import { useState } from "react"
 import { Bell, Check } from "lucide-react"
 import { usePushNotifications } from "@/hooks/usePushNotifications"
+import { api } from "@/lib/api/client"
+import { useToast } from "@/stores/toast.store"
 
 /**
  * Push-notification opt-in card. Requests permission inside a tap (required on
@@ -11,7 +14,24 @@ import { usePushNotifications } from "@/hooks/usePushNotifications"
  */
 export function EnableNotifications() {
   const { permission, subscribing, isSupported, requestPermission, isStandalone } = usePushNotifications()
+  const { push } = useToast()
+  const [testing, setTesting] = useState(false)
   const isIOS = typeof navigator !== "undefined" && /iphone|ipad|ipod/i.test(navigator.userAgent)
+
+  const sendTest = async () => {
+    setTesting(true)
+    try {
+      const res = await api<{ sent: number }>("/push/test", { method: "POST" })
+      push(
+        res.sent > 0 ? `Test sent to ${res.sent} device${res.sent === 1 ? "" : "s"} — check your notifications.` : "No devices registered yet — tap Enable first.",
+        res.sent > 0 ? "success" : "info",
+      )
+    } catch {
+      push("Couldn't send test push", "error")
+    } finally {
+      setTesting(false)
+    }
+  }
 
   if (isIOS && !isStandalone) {
     return (
@@ -59,6 +79,15 @@ export function EnableNotifications() {
           className="shrink-0 rounded-xl bg-accent px-4 py-2.5 text-xs font-black uppercase tracking-widest text-black transition-all hover:bg-accent-bright active:scale-95 disabled:opacity-50"
         >
           {subscribing ? "Enabling…" : "Enable"}
+        </button>
+      )}
+      {enabled && (
+        <button
+          onClick={sendTest}
+          disabled={testing}
+          className="shrink-0 rounded-xl border border-border bg-surface-2 px-4 py-2.5 text-xs font-black uppercase tracking-widest text-foreground transition-all hover:bg-surface active:scale-95 disabled:opacity-50"
+        >
+          {testing ? "Sending…" : "Send test"}
         </button>
       )}
     </div>

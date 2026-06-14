@@ -41,12 +41,12 @@ export default function MeSettingsLayout({ children }: { children: React.ReactNo
 
       <div className="flex flex-col lg:flex-row gap-8">
         {/* Sidebar nav */}
-        <nav className="lg:w-52 flex lg:flex-col gap-1 shrink-0">
+        <nav className="lg:w-52 flex lg:flex-col gap-1 shrink-0 overflow-x-auto scrollbar-hide -mx-4 px-4 sm:-mx-6 sm:px-6 lg:mx-0 lg:px-0 lg:overflow-x-visible">
           {NAV.map(item => {
             const active = pathname === item.href || pathname.startsWith(item.href + "/")
             return (
               <Link key={item.href} href={item.href}
-                className={`relative flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition-all ${
+                className={`relative flex shrink-0 whitespace-nowrap items-center gap-2.5 px-4 py-3 rounded-xl text-sm font-bold transition-all ${
                   active ? "text-foreground" : "text-muted hover:text-foreground hover:bg-foreground/5"
                 }`}
               >

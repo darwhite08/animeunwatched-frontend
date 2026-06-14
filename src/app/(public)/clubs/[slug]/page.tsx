@@ -541,7 +541,13 @@ export default function ClubDetailPage({
               className="lg:grid lg:grid-cols-[minmax(0,1fr)_300px] lg:gap-8 lg:items-start"
             >
               {/* Feed */}
-              <DenFeed slug={slug} denName={club.name} isMember={isMember} />
+              <DenFeed
+                slug={slug}
+                denName={club.name}
+                isMember={isMember}
+                canModerate={apiClub.myRole === "ADMIN" || apiClub.myRole === "MOD"}
+                currentUserId={authUser?.id}
+              />
 
               {/* Reddit-style sidebar (desktop) */}
               <aside className="hidden lg:block lg:sticky lg:top-[var(--sticky-top,88px)] space-y-4">

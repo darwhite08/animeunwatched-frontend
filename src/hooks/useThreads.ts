@@ -21,6 +21,7 @@ type Thread = {
   clubId: string | null
   animeId: string | null
   imageUrl?: string | null
+  tags?: string[]
   isPinned: boolean
   isLocked: boolean
   createdAt: string
@@ -30,6 +31,7 @@ type Thread = {
   club?: { slug: string; name: string } | null
   anime?: { malId: number; title: string; titleEnglish: string | null } | null
   reactions?: ReactionSummary[]
+  savedByMe?: boolean
 }
 
 type Reply = {
@@ -157,10 +159,55 @@ export function useClubThreads(clubSlug: string, page = 1) {
 export function useCreateClubThread(clubSlug: string) {
   const qc = useQueryClient()
   return useMutation({
-    mutationFn: (body: { title: string; content: string; imageUrl?: string | null }) =>
+    mutationFn: (body: { title: string; content: string; imageUrl?: string | null; tags?: string[] }) =>
       api<{ thread: Thread }>(`/clubs/${clubSlug}/threads`, { method: "POST", body: JSON.stringify(body) }),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["club-threads", clubSlug] }),
   })
+}
+
+/** Bookmark/unbookmark a thread, optimistically flipping savedByMe in the Den feed. */
+export function useSaveThread(clubSlug: string, page = 1) {
+  const qc = useQueryClient()
+  const key = ["club-threads", clubSlug, page] as const
+  return useMutation({
+    mutationFn: ({ threadId, save }: { threadId: string; save: boolean }) =>
+      api<{ saved: boolean }>(`/threads/${threadId}/save`, { method: save ? "POST" : "DELETE" }),
+    onMutate: async ({ threadId, save }) => {
+      await qc.cancelQueries({ queryKey: key })
+      const prev = qc.getQueryData<Paginated<Thread>>(key)
+      if (prev) {
+        qc.setQueryData<Paginated<Thread>>(key, {
+          ...prev,
+          data: prev.data.map(t => t.id === threadId ? { ...t, savedByMe: save } : t),
+        })
+      }
+      return { prev }
+    },
+    onError: (_e, _v, ctx) => { if (ctx?.prev) qc.setQueryData(key, ctx.prev) },
+    onSettled: () => qc.invalidateQueries({ queryKey: key }),
+  })
+}
+
+/** Pin/unpin (Den mod), lock/unlock (mod/author), or delete a thread — then refresh the feed. */
+export function useThreadModActions(clubSlug: string) {
+  const qc = useQueryClient()
+  const refresh = () => qc.invalidateQueries({ queryKey: ["club-threads", clubSlug] })
+  return {
+    pin: useMutation({
+      mutationFn: ({ threadId, pinned }: { threadId: string; pinned: boolean }) =>
+        api(`/threads/${threadId}/pin`, { method: "POST", body: JSON.stringify({ pinned }) }),
+      onSuccess: refresh,
+    }),
+    lock: useMutation({
+      mutationFn: ({ threadId, locked }: { threadId: string; locked: boolean }) =>
+        api(`/threads/${threadId}/lock`, { method: "POST", body: JSON.stringify({ locked }) }),
+      onSuccess: refresh,
+    }),
+    remove: useMutation({
+      mutationFn: (threadId: string) => api(`/threads/${threadId}`, { method: "DELETE" }),
+      onSuccess: refresh,
+    }),
+  }
 }
 
 /**

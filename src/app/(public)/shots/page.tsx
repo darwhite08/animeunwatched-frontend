@@ -266,7 +266,7 @@ export default function ShotsPage() {
           className="relative z-[1] flex h-full w-full snap-start snap-always items-center justify-center p-0 md:p-4"
         >
           {item.kind === "shot" ? (
-            <ShotReel shot={item.shot} active={active === idx} muted={muted} />
+            <ShotReel shot={item.shot} active={active === idx} near={Math.abs(idx - active) <= 1} muted={muted} />
           ) : (
             <TrailerReel trailer={item.trailer} active={active === idx} muted={muted} />
           )}
@@ -288,8 +288,9 @@ function MediaShell({ children }: { children: React.ReactNode }) {
   return <div className="relative h-full w-full overflow-hidden bg-black md:aspect-[9/16] md:max-h-full md:w-auto md:rounded-3xl md:ring-1 md:ring-white/10 md:shadow-[0_24px_70px_rgba(0,0,0,0.65)]">{children}</div>
 }
 
-function ShotReel({ shot, active, muted }: { shot: Shot; active: boolean; muted: boolean }) {
+function ShotReel({ shot, active, near, muted }: { shot: Shot; active: boolean; near: boolean; muted: boolean }) {
   const videoRef = useRef<HTMLVideoElement>(null)
+  const [buffering, setBuffering] = useState(false)
   const me = useAuthStore((s) => s.user)
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated)
   const { push } = useToast()
@@ -392,9 +393,20 @@ function ShotReel({ shot, active, muted }: { shot: Shot; active: boolean; muted:
           muted={muted}
           loop
           playsInline
+          // Preload the active clip AND the next/previous one so scrolling is
+          // instant; far-off reels don't fetch (saves data + reduces stalls).
+          preload={near ? "auto" : "none"}
+          onWaiting={() => setBuffering(true)}
+          onPlaying={() => setBuffering(false)}
+          onCanPlay={() => setBuffering(false)}
           onClick={(e) => { const v = e.currentTarget; v.paused ? v.play() : v.pause() }}
           className="h-full w-full object-cover"
         />
+      )}
+      {!isEmbed && active && buffering && (
+        <div className="pointer-events-none absolute inset-0 z-[5] flex items-center justify-center">
+          <Loader2 className="animate-spin text-white/80 drop-shadow" size={34} />
+        </div>
       )}
       {!isEmbed && <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/20" />}
 

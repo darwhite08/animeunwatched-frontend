@@ -170,7 +170,7 @@ type ClubMember = {
   clubId: string
   role: "USER" | "MOD" | "ADMIN"
   joinedAt: string
-  user: { id: string; username: string; displayName: string; avatarUrl: string | null; reputation: number }
+  user: { id: string; username: string; displayName: string; avatarUrl: string | null; reputation: number; verifiedKind?: "USER" | "CREATOR" | "STUDIO" | null }
 }
 
 export function useClubMembers(slug: string, page = 1) {

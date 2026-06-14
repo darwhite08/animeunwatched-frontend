@@ -32,6 +32,7 @@ import { ClubLeaderboardTab } from "@/components/clubs/ClubLeaderboardTab"
 import { ClubOnboarding } from "@/components/clubs/ClubOnboarding"
 import { DenFeed } from "@/components/clubs/DenFeed"
 import { Avatar } from "@/components/ui/Avatar"
+import { VerifiedBadge } from "@/components/social/VerifiedBadge"
 
 /* ── Types ── */
 type ClubTab = "threads" | "events" | "challenges" | "members" | "leaderboard" | "about"
@@ -65,6 +66,7 @@ type MemberEntry = {
   username: string
   displayName: string
   avatarUrl: string | null
+  verifiedKind: "USER" | "CREATOR" | "STUDIO" | null | undefined
   role: "USER" | "MOD" | "ADMIN"
 }
 
@@ -398,6 +400,7 @@ export default function ClubDetailPage({
     username: m.user.username,
     displayName: m.user.displayName || m.user.username,
     avatarUrl: m.user.avatarUrl ?? null,
+    verifiedKind: m.user.verifiedKind,
     role: m.role,
   }))
 
@@ -682,7 +685,10 @@ export default function ClubDetailPage({
                           >
                             <Avatar src={member.avatarUrl} name={member.displayName} size={44} />
                             <div className="min-w-0 flex-1">
-                              <p className="truncate text-sm font-bold text-foreground group-hover:text-accent-bright transition-colors">{member.displayName}</p>
+                              <p className="flex items-center gap-1 text-sm font-bold text-foreground group-hover:text-accent-bright transition-colors">
+                                <span className="truncate">{member.displayName}</span>
+                                <VerifiedBadge kind={member.verifiedKind} size={13} />
+                              </p>
                               <p className="truncate text-[11px] text-subtle">@{member.username}</p>
                             </div>
                             <span className={`shrink-0 inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full border text-[9px] font-black uppercase tracking-wider ${ROLE_STYLES[member.role]}`}>

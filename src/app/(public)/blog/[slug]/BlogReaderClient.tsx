@@ -536,10 +536,8 @@ export function BlogReaderClient({ slug, initialBlog }: { slug: string; initialB
         {/* Like / Share / Bookmark bar */}
         <div className="flex items-center gap-3 sm:gap-4 py-5 border-t border-b border-border">
           <span
-            className={`inline-flex min-h-11 items-center gap-2 px-4 sm:px-5 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${
-              liked
-                ? "bg-rose-500/15 border border-rose-500/25 text-rose-400"
-                : "bg-white/[0.04] border border-border text-muted hover:text-rose-400 hover:border-rose-500/20"
+            className={`inline-flex min-h-11 items-center gap-2 px-4 sm:px-5 rounded-xl text-xs font-black uppercase tracking-widest transition-all bg-white/[0.04] border border-border ${
+              liked ? "text-rose-400" : "text-muted hover:text-rose-400 hover:border-rose-500/20"
             }`}
           >
             <HeartLike liked={liked} onToggle={toggleLike} size={16} />

@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { createPortal } from "react-dom"
 import { AnimatePresence, motion } from "framer-motion"
 import { SPRING, DURATION } from "@/lib/design/tokens"
 
@@ -28,6 +29,11 @@ export function Sheet({
   className?: string
 }) {
   const [isMobile, setIsMobile] = useState(false)
+  // Portal to <body> so the sheet escapes any transformed ancestor's stacking
+  // context (e.g. the Shots reel) — otherwise z-[300] gets trapped *below* the
+  // bottom tab bar and the composer ends up hidden behind it.
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => setMounted(true), [])
 
   useEffect(() => {
     const mq = window.matchMedia("(max-width: 639px)")
@@ -58,7 +64,9 @@ export function Sheet({
         transition: SPRING.soft,
       }
 
-  return (
+  if (!mounted) return null
+
+  return createPortal(
     <AnimatePresence>
       {open && (
         <motion.div
@@ -83,6 +91,7 @@ export function Sheet({
           </motion.div>
         </motion.div>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body,
   )
 }

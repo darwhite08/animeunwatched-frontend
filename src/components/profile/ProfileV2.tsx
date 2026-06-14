@@ -377,7 +377,7 @@ function Heatmap() {
   const bestStreak = (user as { bestStreak?: number } | null)?.bestStreak ?? streakDays
   const grid = useMemo(() => buildHeatmap(streakDays), [streakDays])
   return (
-    <section className="rounded-2xl bg-surface border border-border p-4 sm:p-5">
+    <section className="min-w-0 overflow-hidden rounded-2xl bg-surface border border-border p-4 sm:p-5">
       <div className="flex items-start justify-between gap-3 mb-4">
         <div>
           <div className="flex items-center gap-2 text-sm font-bold text-foreground">

@@ -2,9 +2,13 @@
 
 import { useEffect, useRef, useState, useCallback, useMemo } from "react"
 import Link from "next/link"
-import { Heart, Volume2, VolumeX, Clapperboard, Loader2, Play, Star } from "lucide-react"
+import { Heart, MessageCircle, Bookmark, Share2, Plus, Volume2, VolumeX, Clapperboard, Loader2, Play, Star } from "lucide-react"
 import { api } from "@/lib/api/client"
 import { track } from "@/lib/analytics/ga"
+import { useAuthStore } from "@/stores/auth.store"
+import { useToast } from "@/stores/toast.store"
+import { useAuthPrompt } from "@/stores/authPrompt.store"
+import { ShotCommentsSheet } from "@/components/shots/ShotCommentsSheet"
 
 type Shot = {
   id: string
@@ -13,10 +17,19 @@ type Shot = {
   embedUrl: string | null
   sourceProvider: string | null
   thumbnailUrl: string | null
+  authorId?: string
   author: { id: string; username: string; displayName: string; avatarUrl: string | null }
   anime: { malId: number; title: string } | null
-  _count: { likes: number }
+  _count: { likes: number; comments?: number; saves?: number }
   isLikedByMe: boolean
+  isSavedByMe?: boolean
+  authorFollowedByMe?: boolean
+}
+
+function compact(n: number): string {
+  if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1).replace(/\.0$/, "")}M`
+  if (n >= 1_000) return `${(n / 1_000).toFixed(1).replace(/\.0$/, "")}K`
+  return String(n)
 }
 
 type Trailer = {
@@ -245,10 +258,25 @@ function MediaShell({ children }: { children: React.ReactNode }) {
 
 function ShotReel({ shot, active, muted }: { shot: Shot; active: boolean; muted: boolean }) {
   const videoRef = useRef<HTMLVideoElement>(null)
+  const me = useAuthStore((s) => s.user)
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated)
+  const { push } = useToast()
+  const showAuthPrompt = useAuthPrompt((s) => s.show)
+
   const [liked, setLiked] = useState(shot.isLikedByMe)
   const [likes, setLikes] = useState(shot._count.likes)
-  const [busy, setBusy] = useState(false)
+  const [saved, setSaved] = useState(shot.isSavedByMe ?? false)
+  const [saves, setSaves] = useState(shot._count.saves ?? 0)
+  const [comments, setComments] = useState(shot._count.comments ?? 0)
+  const [following, setFollowing] = useState(shot.authorFollowedByMe ?? false)
+  const [showComments, setShowComments] = useState(false)
+  const [likeBusy, setLikeBusy] = useState(false)
+  const [saveBusy, setSaveBusy] = useState(false)
+  const [followBusy, setFollowBusy] = useState(false)
   const isEmbed = Boolean(shot.embedUrl)
+
+  const authorId = shot.authorId ?? shot.author.id
+  const mine = me?.id === authorId
 
   useEffect(() => {
     const v = videoRef.current
@@ -258,15 +286,62 @@ function ShotReel({ shot, active, muted }: { shot: Shot; active: boolean; muted:
   }, [active, isEmbed])
 
   async function toggleLike() {
-    if (busy) return
-    setBusy(true)
+    if (!isAuthenticated) { showAuthPrompt({ subtitle: "Sign in to like Shots." }); return }
+    if (likeBusy) return
+    setLikeBusy(true)
     const next = !liked
-    setLiked(next); setLikes((n) => n + (next ? 1 : -1))
+    setLiked(next); setLikes((n) => Math.max(0, n + (next ? 1 : -1)))
     try {
       await api(`/shots/${shot.id}/like`, { method: next ? "POST" : "DELETE" })
     } catch {
-      setLiked(!next); setLikes((n) => n + (next ? -1 : 1))
-    } finally { setBusy(false) }
+      setLiked(!next); setLikes((n) => Math.max(0, n + (next ? -1 : 1)))
+    } finally { setLikeBusy(false) }
+  }
+
+  async function toggleSave() {
+    if (!isAuthenticated) { showAuthPrompt({ subtitle: "Sign in to save Shots." }); return }
+    if (saveBusy) return
+    setSaveBusy(true)
+    const next = !saved
+    setSaved(next); setSaves((n) => Math.max(0, n + (next ? 1 : -1)))
+    try {
+      await api(`/shots/${shot.id}/save`, { method: next ? "POST" : "DELETE" })
+    } catch {
+      setSaved(!next); setSaves((n) => Math.max(0, n + (next ? -1 : 1)))
+      push("Couldn't save — try again", "error")
+    } finally { setSaveBusy(false) }
+  }
+
+  function openComments() {
+    if (!isAuthenticated) { showAuthPrompt({ subtitle: "Sign in to read and post comments." }); return }
+    setShowComments(true)
+  }
+
+  async function share() {
+    const url = `${location.origin}/shots/${shot.id}`
+    const data = { title: "Kaiveron Shots", text: shot.caption || `Shot by @${shot.author.username}`, url }
+    try {
+      if (navigator.share) { await navigator.share(data); return }
+    } catch { return /* user dismissed the native sheet */ }
+    try {
+      await navigator.clipboard.writeText(url)
+      push("Link copied to clipboard", "success")
+    } catch {
+      push("Couldn't share this Shot", "error")
+    }
+  }
+
+  async function toggleFollow() {
+    if (!isAuthenticated) { showAuthPrompt({ subtitle: "Sign in to follow creators." }); return }
+    if (followBusy) return
+    setFollowBusy(true)
+    setFollowing(true)
+    try {
+      await api(`/users/${shot.author.username}/follow`, { method: "POST" })
+    } catch {
+      setFollowing(false)
+      push("Couldn't follow — try again", "error")
+    } finally { setFollowBusy(false) }
   }
 
   return (
@@ -291,25 +366,55 @@ function ShotReel({ shot, active, muted }: { shot: Shot; active: boolean; muted:
       )}
       {!isEmbed && <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/20" />}
 
+      {/* TikTok-style right action rail */}
       <div className="absolute bottom-28 right-3 z-10 flex flex-col items-center gap-4">
         <button onClick={toggleLike} aria-pressed={liked} aria-label={liked ? "Unlike" : "Like"} className="flex flex-col items-center gap-1 text-white transition-transform duration-200 ease-out active:scale-90">
-          <span className={`flex h-11 w-11 items-center justify-center rounded-full backdrop-blur transition-colors duration-200 ${liked ? "bg-rose-500" : "bg-black/40"}`}>
-            <Heart size={20} className={liked ? "fill-white" : ""} />
+          <span className="grid h-12 w-12 place-items-center rounded-full bg-black/40 backdrop-blur">
+            <Heart size={26} className={liked ? "fill-rose-500 text-rose-500" : ""} />
           </span>
-          <span className="text-[11px] font-bold tabular-nums">{likes}</span>
+          <span className="text-[11px] font-semibold tabular-nums drop-shadow">{likes > 0 ? compact(likes) : "Like"}</span>
+        </button>
+        <button onClick={openComments} aria-label="Comments" className="flex flex-col items-center gap-1 text-white transition-transform duration-200 ease-out active:scale-90">
+          <span className="grid h-12 w-12 place-items-center rounded-full bg-black/40 backdrop-blur">
+            <MessageCircle size={26} />
+          </span>
+          <span className="text-[11px] font-semibold tabular-nums drop-shadow">{comments > 0 ? compact(comments) : "Comment"}</span>
+        </button>
+        <button onClick={toggleSave} aria-pressed={saved} aria-label={saved ? "Unsave" : "Save"} className="flex flex-col items-center gap-1 text-white transition-transform duration-200 ease-out active:scale-90">
+          <span className="grid h-12 w-12 place-items-center rounded-full bg-black/40 backdrop-blur">
+            <Bookmark size={25} className={saved ? "fill-amber-400 text-amber-400" : ""} />
+          </span>
+          <span className="text-[11px] font-semibold tabular-nums drop-shadow">{saves > 0 ? compact(saves) : "Save"}</span>
+        </button>
+        <button onClick={share} aria-label="Share" className="flex flex-col items-center gap-1 text-white transition-transform duration-200 ease-out active:scale-90">
+          <span className="grid h-12 w-12 place-items-center rounded-full bg-black/40 backdrop-blur">
+            <Share2 size={26} />
+          </span>
+          <span className="text-[11px] font-semibold drop-shadow">Share</span>
         </button>
       </div>
 
-      <div className="absolute inset-x-0 bottom-0 p-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
-        <Link href={`/u/${shot.author.username}`} className="inline-flex max-w-full items-center gap-2 transition-transform duration-200 ease-out active:scale-[0.98]">
-          {shot.author.avatarUrl ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={shot.author.avatarUrl} alt="" className="h-8 w-8 shrink-0 rounded-full border border-white/30 object-cover" />
-          ) : (
-            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-accent text-xs font-black text-white">{shot.author.displayName?.[0]?.toUpperCase() ?? "?"}</span>
+      <div className="absolute inset-x-0 bottom-0 p-4 pr-20 pb-[max(1rem,env(safe-area-inset-bottom))]">
+        <div className="flex items-center gap-2">
+          <Link href={`/u/${shot.author.username}`} className="inline-flex max-w-full items-center gap-2 transition-transform duration-200 ease-out active:scale-[0.98]">
+            {shot.author.avatarUrl ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={shot.author.avatarUrl} alt="" className="h-8 w-8 shrink-0 rounded-full border border-white/30 object-cover" />
+            ) : (
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-accent text-xs font-black text-white">{shot.author.displayName?.[0]?.toUpperCase() ?? "?"}</span>
+            )}
+            <span className="truncate text-sm font-bold text-white">@{shot.author.username}</span>
+          </Link>
+          {!mine && !following && (
+            <button
+              onClick={toggleFollow}
+              disabled={followBusy}
+              className="inline-flex shrink-0 items-center gap-0.5 rounded-full border border-white/60 px-2.5 py-0.5 text-[11px] font-bold text-white transition-transform duration-200 ease-out active:scale-95 disabled:opacity-50"
+            >
+              <Plus size={11} strokeWidth={3} /> Follow
+            </button>
           )}
-          <span className="truncate text-sm font-bold text-white">@{shot.author.username}</span>
-        </Link>
+        </div>
         {shot.caption && <p className="mt-2 line-clamp-2 text-[13px] leading-snug text-white/90">{shot.caption}</p>}
         {shot.anime && (
           <Link href={`/anime/${shot.anime.malId}`} className="mt-2 inline-block max-w-full truncate rounded-full bg-white/15 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-white transition-transform duration-200 ease-out active:scale-95">
@@ -317,6 +422,14 @@ function ShotReel({ shot, active, muted }: { shot: Shot; active: boolean; muted:
           </Link>
         )}
       </div>
+
+      <ShotCommentsSheet
+        shotId={shot.id}
+        shotAuthorId={authorId}
+        open={showComments}
+        onClose={() => setShowComments(false)}
+        onCountChange={(d) => setComments((n) => Math.max(0, n + d))}
+      />
     </MediaShell>
   )
 }

@@ -31,6 +31,7 @@ import { ClubEventsTab } from "@/components/clubs/ClubEventsTab"
 import { ClubLeaderboardTab } from "@/components/clubs/ClubLeaderboardTab"
 import { ClubOnboarding } from "@/components/clubs/ClubOnboarding"
 import { DenFeed } from "@/components/clubs/DenFeed"
+import { Avatar } from "@/components/ui/Avatar"
 
 /* ── Types ── */
 type ClubTab = "threads" | "events" | "challenges" | "members" | "leaderboard" | "about"
@@ -62,7 +63,8 @@ interface Challenge {
 type MemberEntry = {
   id: string
   username: string
-  avatar: string
+  displayName: string
+  avatarUrl: string | null
   role: "USER" | "MOD" | "ADMIN"
 }
 
@@ -394,7 +396,8 @@ export default function ClubDetailPage({
   const displayMembers: MemberEntry[] = apiMembers.map(m => ({
     id: m.userId,
     username: m.user.username,
-    avatar: (m.user.displayName || m.user.username)[0]?.toUpperCase() ?? "?",
+    displayName: m.user.displayName || m.user.username,
+    avatarUrl: m.user.avatarUrl ?? null,
     role: m.role,
   }))
 
@@ -668,21 +671,24 @@ export default function ClubDetailPage({
                   <p className="text-[10px] font-black uppercase tracking-[0.2em] text-subtle mb-6">
                     {club.memberCount.toLocaleString()} member{club.memberCount !== 1 ? "s" : ""} total — showing {displayMembers.length}
                   </p>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                     {displayMembers.map((member, i) => {
                       const RoleIcon = ROLE_ICONS[member.role]
                       return (
-                        <motion.div key={member.id} initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: i * 0.06 }}
-                          className="p-5 rounded-2xl bg-surface border border-border hover:border-border transition-all flex flex-col items-center gap-3 text-center group">
-                          <div className="h-14 w-14 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center font-black text-xl text-foreground group-hover:scale-105 transition-transform">
-                            {member.avatar}
-                          </div>
-                          <div className="space-y-1">
-                            <p className="text-sm font-black text-foreground">{member.username}</p>
-                            <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full border text-[9px] font-black uppercase tracking-wider ${ROLE_STYLES[member.role]}`}>
+                        <motion.div key={member.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: Math.min(i * 0.04, 0.3) }}>
+                          <Link
+                            href={`/u/${member.username}`}
+                            className="group flex items-center gap-3 p-3 rounded-2xl bg-surface border border-border transition-colors hover:border-accent/25"
+                          >
+                            <Avatar src={member.avatarUrl} name={member.displayName} size={44} />
+                            <div className="min-w-0 flex-1">
+                              <p className="truncate text-sm font-bold text-foreground group-hover:text-accent-bright transition-colors">{member.displayName}</p>
+                              <p className="truncate text-[11px] text-subtle">@{member.username}</p>
+                            </div>
+                            <span className={`shrink-0 inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full border text-[9px] font-black uppercase tracking-wider ${ROLE_STYLES[member.role]}`}>
                               <RoleIcon size={8} />{member.role}
                             </span>
-                          </div>
+                          </Link>
                         </motion.div>
                       )
                     })}

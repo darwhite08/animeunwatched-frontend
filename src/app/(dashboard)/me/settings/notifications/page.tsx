@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
 import { Bell, BellOff, CheckCircle2 } from "lucide-react"
 import { useToast } from "@/stores/toast.store"
+import { EnableNotifications } from "@/components/settings/EnableNotifications"
 
 type PrefKey =
   | "new_follower" | "post_liked" | "comment_reply" | "mention"
@@ -70,6 +71,8 @@ export default function NotificationPrefsPage() {
           <Bell size={11} className="text-accent-bright" /> Choose what you want to be notified about.
         </p>
       </motion.div>
+
+      <EnableNotifications />
 
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
         className="space-y-3">

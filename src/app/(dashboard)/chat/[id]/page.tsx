@@ -43,7 +43,11 @@ const LOCKED = "\u0000LOCKED"
 
 function useDecrypt(msgs: DirectMessage[], key: CryptoKey | null, ready: boolean) {
   const [cache, setCache] = useState<Record<string, string>>({})
-  useEffect(() => { setCache({}) }, [key])
+  // Safety net: if crypto init stalls (network/key handshake never resolves),
+  // never leave messages stuck on "Decrypting…" — fall back to the tombstone.
+  const [timedOut, setTimedOut] = useState(false)
+  useEffect(() => { setCache({}); setTimedOut(false); const t = setTimeout(() => setTimedOut(true), 4000); return () => clearTimeout(t) }, [key])
+  const settled = ready || timedOut
   useEffect(() => {
     if (!msgs.length) return
     const todo = msgs.filter(m => !(m.id in cache))
@@ -56,11 +60,11 @@ function useDecrypt(msgs: DirectMessage[], key: CryptoKey | null, ready: boolean
           return [m.id, text] as const
         } catch { return [m.id, m.ciphertext] as const }
       }
-      // Legacy E2E messages — need the pairwise key
+      // Legacy/cross-client E2E messages — need the pairwise key
       if (!key) {
-        // Crypto init finished and there's still no key → this device can't
-        // decrypt; show the tombstone instead of a forever-pending placeholder.
-        return ready ? ([m.id, LOCKED] as const) : null
+        // No key (init done OR timed out) → this device can't decrypt; show the
+        // tombstone instead of a forever-pending "Decrypting…" placeholder.
+        return settled ? ([m.id, LOCKED] as const) : null
       }
       try { return [m.id, await decryptMessage(key, m.ciphertext, m.iv)] as const }
       catch { return [m.id, LOCKED] as const }
@@ -70,7 +74,7 @@ function useDecrypt(msgs: DirectMessage[], key: CryptoKey | null, ready: boolean
       setCache(p => { const n={...p}; valid.forEach(([id,t])=>n[id]=t); return n })
     })
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [msgs.length, key, ready])
+  }, [msgs.length, key, settled])
   return cache
 }
 

@@ -38,7 +38,7 @@ export function FilterCheckboxGroup({ title, options, selected, onChange }: Prop
               >
                 <span
                   className={`relative h-5 w-5 rounded border flex items-center justify-center transition-colors shrink-0 ${
-                    checked ? "bg-accent border-accent" : "bg-surface border-border group-hover:border-accent/50"
+                    checked ? "bg-accent border-accent" : "bg-surface border-border group-hover:border-white/50"
                   }`}
                 >
                   {checked && (

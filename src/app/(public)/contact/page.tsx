@@ -38,7 +38,7 @@ const CONTACT_CARDS = [
     color: "text-accent-bright",
     bg: "bg-accent/8",
     border: "border-accent/15",
-    hoverBorder: "hover:border-accent/35",
+    hoverBorder: "hover:border-white/35",
   },
 ]
 
@@ -266,7 +266,7 @@ export default function ContactPage() {
                 target="_blank"
                 rel="noopener noreferrer"
                 whileHover={{ y: -3, scale: 1.08 }}
-                className="flex items-center gap-2 px-5 py-2.5 rounded-xl border border-border bg-surface text-muted hover:text-foreground hover:border-accent/30 hover:bg-surface transition-all text-xs font-black uppercase tracking-wider"
+                className="flex items-center gap-2 px-5 py-2.5 rounded-xl border border-border bg-surface text-muted hover:text-foreground hover:border-white/30 hover:bg-surface transition-all text-xs font-black uppercase tracking-wider"
               >
                 <Icon size={14} />
                 {label}

@@ -55,7 +55,7 @@ export default function ProfileMenu({ user, isOpen, onClose, onLogout }: Profile
             <Link key={label} href={href} onClick={onClose}
               className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-[10px] font-black text-muted uppercase tracking-widest hover:text-foreground hover:bg-surface transition-all group"
             >
-              <Icon size={14} weight="duotone" className="text-accent-bright/60 group-hover:text-accent-bright transition-colors" />
+              <Icon size={14} weight="duotone" className="text-accent-bright/60 group-hover:text-white transition-colors" />
               {label}
             </Link>
           ))}

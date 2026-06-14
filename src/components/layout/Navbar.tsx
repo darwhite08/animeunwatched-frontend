@@ -105,7 +105,7 @@ function NavDropdown({ items, onClose }: { items: DropItem[]; onClose: () => voi
                     boxShadow: "0 2px 10px color-mix(in srgb, var(--app-accent) 15%, transparent), inset 0 1px 0 color-mix(in srgb, var(--app-fg) 8%, transparent)",
                   }}
                 >
-                  <Icon size={16} weight="duotone" className="text-accent-bright group-hover:text-accent-bright transition-colors" />
+                  <Icon size={16} weight="duotone" className="text-accent-bright group-hover:text-white transition-colors" />
                 </div>
 
                 <div className="min-w-0 flex-1">
@@ -118,7 +118,7 @@ function NavDropdown({ items, onClose }: { items: DropItem[]; onClose: () => voi
                 </div>
 
                 {/* Arrow indicator */}
-                <div className="text-white/0 group-hover:text-accent-bright/60 transition-all translate-x-0 group-hover:translate-x-0.5 shrink-0">
+                <div className="text-white/0 group-hover:text-white/60 transition-all translate-x-0 group-hover:translate-x-0.5 shrink-0">
                   <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
                     <path d="M2 5h6M5.5 2.5L8 5l-2.5 2.5" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
@@ -450,7 +450,7 @@ function MobileSection({ title, links, onClose }: { title: string; links: DropIt
                 border: "1px solid color-mix(in srgb, var(--app-accent) 20%, transparent)",
               }}
             >
-              <Icon size={14} weight="duotone" className="text-accent-bright/80 group-hover:text-accent-bright transition-colors" />
+              <Icon size={14} weight="duotone" className="text-accent-bright/80 group-hover:text-white transition-colors" />
             </div>
             <div>
               <p className="text-[11px] font-black uppercase tracking-wider leading-none">{l.name}</p>

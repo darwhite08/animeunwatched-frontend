@@ -206,10 +206,10 @@ function PollCard({ poll }: { poll: Poll }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-40px" }}
       transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-      className="relative group p-8 rounded-3xl border border-border bg-surface hover:border-accent/20 transition-all duration-500 overflow-hidden"
+      className="relative group p-8 rounded-3xl border border-border bg-surface hover:border-white/20 transition-all duration-500 overflow-hidden"
     >
       {/* ambient glow */}
-      <div className="absolute top-0 right-0 w-56 h-56 bg-accent/5 blur-[100px] pointer-events-none group-hover:bg-accent/8 transition-all" />
+      <div className="absolute top-0 right-0 w-56 h-56 bg-accent/5 blur-[100px] pointer-events-none group-hover:bg-white/8 transition-all" />
 
       <div className="relative z-10 space-y-6">
         {/* Header meta */}
@@ -597,7 +597,7 @@ export default function PollsPage() {
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: i * 0.04 }}
-                  className="px-3 py-1.5 rounded-full bg-surface border border-border text-[9px] font-bold text-muted hover:text-accent-bright hover:border-accent/25 cursor-pointer transition-all"
+                  className="px-3 py-1.5 rounded-full bg-surface border border-border text-[9px] font-bold text-muted hover:text-white hover:border-white/25 cursor-pointer transition-all"
                 >
                   {tag}
                 </motion.span>

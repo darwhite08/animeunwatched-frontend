@@ -75,11 +75,11 @@ export default function AnimeDiscussPage({ params }: { params: Promise<{ id: str
       <div className="max-w-3xl mx-auto px-6 pt-32">
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 mb-6 text-xs text-subtle">
-          <Link href={`/anime/${id}`} className="hover:text-accent-bright transition-colors flex items-center gap-1">
+          <Link href={`/anime/${id}`} className="hover:text-white transition-colors flex items-center gap-1">
             <ChevronLeft size={13} /> {anime?.title ?? "Anime"}
           </Link>
           <span>/</span>
-          <Link href={`/anime/${id}/episodes`} className="hover:text-accent-bright transition-colors">Episodes</Link>
+          <Link href={`/anime/${id}/episodes`} className="hover:text-white transition-colors">Episodes</Link>
           {ep && <><span>/</span><span className="text-muted">Ep {ep}</span></>}
         </div>
 
@@ -159,7 +159,7 @@ export default function AnimeDiscussPage({ params }: { params: Promise<{ id: str
               initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.05 }}>
               <Link href={`/threads/${thread.id}`}
-                className="block p-5 rounded-2xl border border-border bg-surface hover:border-accent/20 hover:bg-surface transition-all group">
+                className="block p-5 rounded-2xl border border-border bg-surface hover:border-white/20 hover:bg-surface transition-all group">
                 <div className="flex items-start justify-between gap-3 mb-2">
                   <p className="text-[13px] font-bold text-foreground group-hover:text-foreground transition-colors leading-snug">
                     {thread.title}

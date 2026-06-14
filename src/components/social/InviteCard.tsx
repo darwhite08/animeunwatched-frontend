@@ -116,7 +116,7 @@ export function InviteCard() {
                   )}
                 </Link>
                 <div className="min-w-0 flex-1">
-                  <Link href={`/u/${u.username}`} className="block truncate text-[13px] font-semibold text-foreground transition-colors hover:text-accent-bright">
+                  <Link href={`/u/${u.username}`} className="block truncate text-[13px] font-semibold text-foreground transition-colors hover:text-white">
                     {u.displayName}
                   </Link>
                   <p className="truncate text-[11px] text-subtle">@{u.username}</p>

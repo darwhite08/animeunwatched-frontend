@@ -61,7 +61,7 @@ export default function SettingsLayout({ children }: { children: React.ReactNode
                   />
                 )}
                 <item.icon size={15}
-                  className={`relative z-10 transition-colors ${active ? "text-accent-bright" : "group-hover:text-accent-bright/70"}`}
+                  className={`relative z-10 transition-colors ${active ? "text-accent-bright" : "group-hover:text-white/70"}`}
                 />
                 <span className="relative z-10">{item.label}</span>
               </Link>

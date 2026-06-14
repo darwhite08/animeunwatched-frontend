@@ -41,7 +41,7 @@ export const WatchCard = ({ anime, onRemove, onEdit }: { anime: WatchItem; onRem
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.9 }}
-      className="group relative rounded-[2.5rem] border border-border bg-background overflow-hidden flex flex-col h-full hover:border-accent/30 transition-all duration-500 shadow-[0_20px_40px_-10px_rgba(0,0,0,0.5)]"
+      className="group relative rounded-[2.5rem] border border-border bg-background overflow-hidden flex flex-col h-full hover:border-white/30 transition-all duration-500 shadow-[0_20px_40px_-10px_rgba(0,0,0,0.5)]"
       style={{ transformStyle: "preserve-3d" }}
     >
       {/* IMAGE */}
@@ -107,7 +107,7 @@ export const WatchCard = ({ anime, onRemove, onEdit }: { anime: WatchItem; onRem
         <div>
           <Link
             href={`/bestanimelist`}
-            className="text-xl font-black text-foreground tracking-tighter leading-tight hover:text-accent-bright transition-colors line-clamp-2"
+            className="text-xl font-black text-foreground tracking-tighter leading-tight hover:text-white transition-colors line-clamp-2"
           >
             {anime.title}
           </Link>

@@ -121,7 +121,7 @@ export default function ListShareCard() {
         {/* Twitter / X */}
         <button
           onClick={handleTwitter}
-          className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-2xl border border-accent/40 bg-accent/10 text-accent-bright hover:border-indigo-400 hover:bg-accent/20 transition-all duration-200 group"
+          className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-2xl border border-accent/40 bg-accent/10 text-accent-bright hover:border-indigo-400 hover:bg-white/20 transition-all duration-200 group"
         >
           <Share2 className="w-4 h-4 transition-transform duration-200 group-hover:scale-110" />
           <span className="text-[10px] font-black uppercase tracking-widest">Share on Twitter</span>

@@ -209,7 +209,7 @@ function PostCard({ post, index }: { post: TrendingPost; index: number }) {
         </span>
         <Link
           href={`/posts/${post.id}#comments`}
-          className="flex items-center gap-1.5 text-xs font-bold text-subtle hover:text-accent-bright transition-colors"
+          className="flex items-center gap-1.5 text-xs font-bold text-subtle hover:text-white transition-colors"
         >
           <MessageSquare size={13} />
           {post.comments}
@@ -287,7 +287,7 @@ export default function CommunityTrendingPage() {
             </div>
             <Link
               href="/community/feed"
-              className="flex items-center gap-1 text-[10px] font-black uppercase tracking-widest text-accent-bright hover:text-accent-bright transition-colors"
+              className="flex items-center gap-1 text-[10px] font-black uppercase tracking-widest text-accent-bright hover:text-white transition-colors"
             >
               View All <ArrowUpRight size={11} />
             </Link>
@@ -314,7 +314,7 @@ export default function CommunityTrendingPage() {
             </div>
             <Link
               href="/community/anime"
-              className="flex items-center gap-1 text-[10px] font-black uppercase tracking-widest text-accent-bright hover:text-accent-bright transition-colors"
+              className="flex items-center gap-1 text-[10px] font-black uppercase tracking-widest text-accent-bright hover:text-white transition-colors"
             >
               View All <ArrowUpRight size={11} />
             </Link>
@@ -327,7 +327,7 @@ export default function CommunityTrendingPage() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.05 + i * 0.07 }}
-                className="group relative rounded-2xl overflow-hidden border border-border hover:border-accent/30 transition-all cursor-pointer"
+                className="group relative rounded-2xl overflow-hidden border border-border hover:border-white/30 transition-all cursor-pointer"
               >
                 <Link href={`/anime/${anime.id}`} className="block">
                   <div className="relative aspect-[3/4]">
@@ -370,7 +370,7 @@ export default function CommunityTrendingPage() {
             </div>
             <Link
               href="/poll"
-              className="flex items-center gap-1 text-[10px] font-black uppercase tracking-widest text-accent-bright hover:text-accent-bright transition-colors"
+              className="flex items-center gap-1 text-[10px] font-black uppercase tracking-widest text-accent-bright hover:text-white transition-colors"
             >
               View All <ArrowUpRight size={11} />
             </Link>
@@ -383,7 +383,7 @@ export default function CommunityTrendingPage() {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.05 + i * 0.08 }}
-                className="p-5 rounded-2xl bg-surface border border-border hover:border-accent/20 transition-all space-y-4"
+                className="p-5 rounded-2xl bg-surface border border-border hover:border-white/20 transition-all space-y-4"
               >
                 <div>
                   <p className="text-sm font-black text-foreground leading-snug">{poll.question}</p>
@@ -405,7 +405,7 @@ export default function CommunityTrendingPage() {
                 </div>
                 <Link
                   href="/poll"
-                  className="block text-center text-[10px] font-black uppercase tracking-widest text-accent-bright/60 hover:text-accent-bright transition-colors"
+                  className="block text-center text-[10px] font-black uppercase tracking-widest text-accent-bright/60 hover:text-white transition-colors"
                 >
                   Vote →
                 </Link>
@@ -427,7 +427,7 @@ export default function CommunityTrendingPage() {
           </div>
           <Link
             href="/community/trending"
-            className="flex items-center gap-2 px-6 py-3 rounded-xl bg-accent/15 border border-accent/25 text-[11px] font-black uppercase tracking-widest text-accent-bright hover:bg-accent/25 transition-all"
+            className="flex items-center gap-2 px-6 py-3 rounded-xl bg-accent/15 border border-accent/25 text-[11px] font-black uppercase tracking-widest text-accent-bright hover:bg-white/25 transition-all"
           >
             Full Trending <ArrowUpRight size={12} />
           </Link>

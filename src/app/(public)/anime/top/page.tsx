@@ -66,7 +66,7 @@ export default function TopAnimePage() {
           <motion.div
             initial={{ opacity:0, y:20 }} animate={{ opacity:1, y:0 }}
             onClick={() => setSelected(filtered[0])}
-            className="group relative overflow-hidden rounded-[2.5rem] border border-accent/20 bg-gradient-to-br from-amber-900/30 to-amber-950/10 p-8 mb-10 cursor-pointer hover:border-accent/40 transition-all"
+            className="group relative overflow-hidden rounded-[2.5rem] border border-accent/20 bg-gradient-to-br from-amber-900/30 to-amber-950/10 p-8 mb-10 cursor-pointer hover:border-white/40 transition-all"
           >
             <div className="flex items-center gap-6">
               <div className="relative h-24 w-16 rounded-2xl overflow-hidden shrink-0 shadow-2xl">
@@ -89,7 +89,7 @@ export default function TopAnimePage() {
                   <span className="text-[10px] text-subtle">{filtered[0].genres.join(" · ")}</span>
                 </div>
               </div>
-              <ChevronRight size={20} className="text-subtle group-hover:text-accent-bright group-hover:translate-x-1 transition-all shrink-0" />
+              <ChevronRight size={20} className="text-subtle group-hover:text-white group-hover:translate-x-1 transition-all shrink-0" />
             </div>
           </motion.div>
         )}

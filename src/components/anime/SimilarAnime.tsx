@@ -68,7 +68,7 @@ export default function SimilarAnime({ currentId, genres }: SimilarAnimeProps) {
 
               {/* Info */}
               <div className="min-w-0 flex-1">
-                <p className="text-xs font-black text-foreground uppercase italic tracking-tighter leading-tight truncate group-hover:text-accent-bright transition-colors duration-300">
+                <p className="text-xs font-black text-foreground uppercase italic tracking-tighter leading-tight truncate group-hover:text-white transition-colors duration-300">
                   {anime.title}
                 </p>
                 <p className="text-[9px] font-bold text-subtle uppercase tracking-wider mt-0.5 truncate">

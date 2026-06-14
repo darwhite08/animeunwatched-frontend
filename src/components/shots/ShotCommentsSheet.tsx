@@ -170,7 +170,7 @@ export function ShotCommentsSheet({
             Reply
           </button>
           {isShotAuthor && (
-            <button onClick={() => togglePin(c)} className="inline-flex items-center gap-1 transition-colors hover:text-accent-bright">
+            <button onClick={() => togglePin(c)} className="inline-flex items-center gap-1 transition-colors hover:text-white">
               <Pin size={12} /> {c.pinned ? "Unpin" : "Pin"}
             </button>
           )}

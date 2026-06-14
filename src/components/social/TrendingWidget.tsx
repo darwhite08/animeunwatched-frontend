@@ -40,7 +40,7 @@ export default function TrendingWidget() {
           <TrendingUp size={14} className="text-accent-bright" />
           <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-muted">Trending</h3>
         </div>
-        <Link href="/community/trending" className="text-[9px] font-black uppercase tracking-widest text-accent-bright/60 hover:text-accent-bright transition-colors flex items-center gap-1">
+        <Link href="/community/trending" className="text-[9px] font-black uppercase tracking-widest text-accent-bright/60 hover:text-white transition-colors flex items-center gap-1">
           All <ArrowRight size={10} />
         </Link>
       </div>
@@ -56,7 +56,7 @@ export default function TrendingWidget() {
             className="w-full flex items-center justify-between px-3 py-2 rounded-xl hover:bg-surface transition-colors group"
           >
             <div className="flex items-center gap-2">
-              <Hash size={11} className="text-subtle group-hover:text-accent-bright transition-colors" />
+              <Hash size={11} className="text-subtle group-hover:text-white transition-colors" />
               <span className="text-sm font-bold text-muted group-hover:text-foreground transition-colors">
                 {tag}
               </span>

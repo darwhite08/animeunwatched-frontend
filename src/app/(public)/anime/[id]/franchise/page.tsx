@@ -49,14 +49,14 @@ export default function FranchisePage({ params }: { params: Promise<{ id: string
                   {rel.entry.map((entry, i) => (
                     <motion.div key={entry.mal_id}
                       initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.04 }}
-                      className="flex items-center gap-4 p-4 rounded-2xl border border-border bg-surface hover:border-accent/20 transition-all group">
+                      className="flex items-center gap-4 p-4 rounded-2xl border border-border bg-surface hover:border-white/20 transition-all group">
                       <div className="flex-1 min-w-0">
                         <p className="text-sm font-black text-foreground">{entry.name}</p>
                         <p className="text-[9px] text-subtle uppercase tracking-widest mt-0.5">{entry.type}</p>
                       </div>
                       {entry.type === "anime" && (
                         <Link href={`/anime/${entry.mal_id}`}
-                          className="flex items-center gap-1 px-3 py-1.5 rounded-xl text-[9px] font-black uppercase tracking-widest bg-accent/10 border border-accent/20 text-accent-bright hover:bg-accent/20 transition-all shrink-0">
+                          className="flex items-center gap-1 px-3 py-1.5 rounded-xl text-[9px] font-black uppercase tracking-widest bg-accent/10 border border-accent/20 text-accent-bright hover:bg-white/20 transition-all shrink-0">
                           View <ExternalLink size={9} />
                         </Link>
                       )}

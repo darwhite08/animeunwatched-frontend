@@ -30,7 +30,7 @@ export function LinkPreviewCard({ url }: { url: string }) {
 
   return (
     <a href={url} target="_blank" rel="noopener noreferrer nofollow"
-      className="group block max-w-[520px] overflow-hidden rounded-2xl border border-border bg-white/[0.02] transition-colors hover:border-accent/30">
+      className="group block max-w-[520px] overflow-hidden rounded-2xl border border-border bg-white/[0.02] transition-colors hover:border-white/30">
       {data.image && (
         /* eslint-disable-next-line @next/next/no-img-element */
         <img src={data.image} alt="" referrerPolicy="no-referrer" loading="lazy"
@@ -44,7 +44,7 @@ export function LinkPreviewCard({ url }: { url: string }) {
           )}
           <span className="text-[11px] font-bold uppercase tracking-widest text-subtle truncate">{data.siteName || host}</span>
         </div>
-        {data.title && <div className="text-sm font-bold text-foreground line-clamp-2 group-hover:text-accent-bright transition-colors">{data.title}</div>}
+        {data.title && <div className="text-sm font-bold text-foreground line-clamp-2 group-hover:text-white transition-colors">{data.title}</div>}
         {data.description && <div className="mt-1 text-xs text-muted line-clamp-2">{data.description}</div>}
       </div>
     </a>

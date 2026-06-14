@@ -185,7 +185,7 @@ function CommentCard({ comment, index }: { comment: Comment; index: number }) {
         {hasReplies && (
           <button
             onClick={() => setShowReplies(s => !s)}
-            className="flex items-center gap-1 text-[10px] font-bold text-subtle hover:text-accent-bright transition-colors"
+            className="flex items-center gap-1 text-[10px] font-bold text-subtle hover:text-white transition-colors"
           >
             {showReplies ? <ChevronUp size={10} /> : <ChevronDown size={10} />}
             {comment.replies!.length} {comment.replies!.length === 1 ? "reply" : "replies"}
@@ -341,7 +341,7 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
         <p className="text-[10px] font-black uppercase tracking-[0.3em] text-rose-400">Post unavailable</p>
         <h1 className="text-2xl font-black tracking-tighter text-foreground">We couldn&apos;t load this post.</h1>
         <p className="text-sm text-muted">It may have been deleted or hidden by its author.</p>
-        <Link href="/community" className="inline-flex items-center gap-1.5 text-[11px] font-black uppercase tracking-widest text-accent-bright hover:text-accent transition-colors">
+        <Link href="/community" className="inline-flex items-center gap-1.5 text-[11px] font-black uppercase tracking-widest text-accent-bright hover:text-white transition-colors">
           ← Back to community
         </Link>
       </div>
@@ -395,7 +395,7 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
               {post.anime && (
                 <Link
                   href="/bestanimelist"
-                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-accent/8 border border-accent/15 text-[10px] font-bold text-accent-bright hover:bg-accent/15 transition-colors"
+                  className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-accent/8 border border-accent/15 text-[10px] font-bold text-accent-bright hover:bg-white/15 transition-colors"
                 >
                   <Star size={9} /> {post.anime}
                 </Link>
@@ -414,7 +414,7 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
               {post.tags.length > 0 && (
                 <div className="flex flex-wrap gap-1.5">
                   {post.tags.map(tag => (
-                    <span key={tag} className="text-[9px] font-bold text-accent-bright/60 hover:text-accent-bright cursor-pointer transition-colors">
+                    <span key={tag} className="text-[9px] font-bold text-accent-bright/60 hover:text-white cursor-pointer transition-colors">
                       #{tag}
                     </span>
                   ))}
@@ -503,7 +503,7 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
                 >
                   <Link
                     href={`/posts/${rp.id}`}
-                    className="block p-4 rounded-2xl bg-surface border border-border hover:border-accent/25 hover:bg-surface transition-all group"
+                    className="block p-4 rounded-2xl bg-surface border border-border hover:border-white/25 hover:bg-surface transition-all group"
                   >
                     {rp.anime && (
                       <span className="inline-flex items-center gap-1 mb-2 text-[9px] font-bold text-accent-bright/60">

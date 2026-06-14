@@ -354,7 +354,7 @@ export default function LoginPage() {
                   <label className="block text-[10px] font-bold uppercase tracking-[0.2em] text-muted">
                     Password
                   </label>
-                  <Link href="/forgot-password" className="text-[10px] font-bold text-accent-bright/60 hover:text-accent-bright transition-colors">
+                  <Link href="/forgot-password" className="text-[10px] font-bold text-accent-bright/60 hover:text-white transition-colors">
                     Forgot password?
                   </Link>
                 </div>
@@ -410,7 +410,7 @@ export default function LoginPage() {
             </p>
             <p className="mt-6 text-sm text-center text-muted">
               Don&apos;t have an account?{" "}
-              <Link href="/register" className="text-accent-bright hover:text-accent-bright transition font-bold">
+              <Link href="/register" className="text-accent-bright hover:text-white transition font-bold">
                 Sign up
               </Link>
             </p>

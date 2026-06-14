@@ -114,7 +114,7 @@ function RealPostCard({ post, index }: { post: Post; index: number }) {
     <motion.article key={post.id} layout
       initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.04 }}
-      className="bg-surface-2 border border-white/[0.08] hover:border-accent/10 rounded-2xl p-6 space-y-4 transition-all duration-300"
+      className="bg-surface-2 border border-white/[0.08] hover:border-white/10 rounded-2xl p-6 space-y-4 transition-all duration-300"
     >
       <div className="flex items-start justify-between">
         <div className="flex items-center gap-3">
@@ -123,7 +123,7 @@ function RealPostCard({ post, index }: { post: Post; index: number }) {
           </Link>
           <div>
             <Link href={`/u/${post.author?.username ?? ""}`}
-              className="text-sm font-black text-foreground hover:text-accent-bright transition-colors">
+              className="text-sm font-black text-foreground hover:text-white transition-colors">
               {authorName}
             </Link>
             <p className="text-[10px] text-subtle mt-0.5"><LiveTime iso={post.createdAt} /></p>
@@ -144,7 +144,7 @@ function RealPostCard({ post, index }: { post: Post; index: number }) {
 
       {post.anime && (
         <Link href={`/anime/${post.anime.malId}`}
-          className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-accent/8 border border-accent/15 text-[10px] font-bold text-accent-bright hover:bg-accent/15 transition-colors">
+          className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-accent/8 border border-accent/15 text-[10px] font-bold text-accent-bright hover:bg-white/15 transition-colors">
           <Star size={9} fill="currentColor" /> {post.anime.title}
         </Link>
       )}
@@ -192,7 +192,7 @@ function RealPostCard({ post, index }: { post: Post; index: number }) {
         </span>
         <Link
           href={`/posts/${post.id}#comments`}
-          className="flex items-center gap-1.5 text-xs font-bold text-subtle hover:text-accent-bright transition-colors"
+          className="flex items-center gap-1.5 text-xs font-bold text-subtle hover:text-white transition-colors"
         >
           <MessageSquare size={14} />
           {post._count?.comments ?? 0}
@@ -388,7 +388,7 @@ export default function FeedPage() {
             <div className="flex items-center justify-between border-t border-border pt-3">
               <button
                 onClick={() => push("Emoji picker coming soon!", "info")}
-                className="p-1.5 text-subtle hover:text-accent-bright transition-colors"
+                className="p-1.5 text-subtle hover:text-white transition-colors"
               >
                 <Smile size={15} />
               </button>
@@ -511,7 +511,7 @@ export default function FeedPage() {
                   </Link>
                   <div className="flex-1 min-w-0">
                     <Link href={`/u/${s.username}`}>
-                      <p className="text-xs font-black text-foreground hover:text-accent-bright transition-colors truncate">
+                      <p className="text-xs font-black text-foreground hover:text-white transition-colors truncate">
                         @{s.username}
                       </p>
                     </Link>
@@ -537,7 +537,7 @@ export default function FeedPage() {
             </div>
             <Link
               href="/users"
-              className="flex items-center justify-center gap-1.5 pt-2 text-[10px] font-black uppercase tracking-widest text-accent-bright hover:text-accent-bright transition-colors border-t border-border"
+              className="flex items-center justify-center gap-1.5 pt-2 text-[10px] font-black uppercase tracking-widest text-accent-bright hover:text-white transition-colors border-t border-border"
             >
               See all recommendations <ChevronRight size={11} />
             </Link>
@@ -560,7 +560,7 @@ export default function FeedPage() {
                       {i + 1}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-xs font-black text-muted group-hover:text-accent-bright transition-colors truncate">{item.title}</p>
+                      <p className="text-xs font-black text-muted group-hover:text-white transition-colors truncate">{item.title}</p>
                       <div className="flex items-center gap-1 mt-0.5">
                         <Star size={8} className="text-accent-bright" fill="currentColor" />
                         <span className="text-[9px] text-accent-bright/70 font-bold">{(item.score ?? 0).toFixed(1)}</span>
@@ -581,7 +581,7 @@ export default function FeedPage() {
               <Users size={16} className="text-accent-bright" />
             </div>
             <div className="flex-1">
-              <p className="text-sm font-bold text-foreground group-hover:text-accent-bright transition-colors">
+              <p className="text-sm font-bold text-foreground group-hover:text-white transition-colors">
                 Community
               </p>
               <p className="text-[10px] text-subtle mt-0.5">
@@ -590,7 +590,7 @@ export default function FeedPage() {
             </div>
             <ChevronRight
               size={14}
-              className="text-subtle group-hover:text-accent-bright group-hover:translate-x-0.5 transition-all"
+              className="text-subtle group-hover:text-white group-hover:translate-x-0.5 transition-all"
             />
           </Link>
         </div>

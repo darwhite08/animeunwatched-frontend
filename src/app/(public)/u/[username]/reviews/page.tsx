@@ -219,7 +219,7 @@ export default function UserReviewsPage({
                     <div className="flex-1 min-w-0">
                       <Link
                         href={`/anime/${r.animeId}`}
-                        className="text-base font-black uppercase italic tracking-tighter text-foreground hover:text-accent-bright transition-colors leading-tight truncate block"
+                        className="text-base font-black uppercase italic tracking-tighter text-foreground hover:text-white transition-colors leading-tight truncate block"
                       >
                         {anime?.title ?? r.animeId}
                       </Link>
@@ -261,7 +261,7 @@ export default function UserReviewsPage({
                         </p>
                         <button
                           onClick={() => setRevealed(s => new Set([...s, r.id]))}
-                          className="absolute inset-0 flex items-center justify-center gap-2 bg-black/20 rounded-xl text-xs font-black uppercase tracking-widest text-accent-bright hover:text-accent-bright transition-colors"
+                          className="absolute inset-0 flex items-center justify-center gap-2 bg-black/20 rounded-xl text-xs font-black uppercase tracking-widest text-accent-bright hover:text-white transition-colors"
                         >
                           <EyeOff size={13} /> Reveal Spoilers
                         </button>
@@ -282,7 +282,7 @@ export default function UserReviewsPage({
                                 return n
                               })
                             }
-                            className="text-[10px] font-black text-accent-bright hover:text-accent-bright mt-1.5 transition-colors"
+                            className="text-[10px] font-black text-accent-bright hover:text-white mt-1.5 transition-colors"
                           >
                             {isExpanded ? "Show less" : "Read more"}
                           </button>

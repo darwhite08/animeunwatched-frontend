@@ -195,7 +195,7 @@ export default function GenresPage() {
             <Link
               key={g.slug}
               href={`/genres/${g.slug}`}
-              className="rounded-full border border-border bg-white/[0.02] px-3 py-1.5 text-xs font-semibold text-subtle transition hover:border-accent-bright/40 hover:text-foreground"
+              className="rounded-full border border-border bg-white/[0.02] px-3 py-1.5 text-xs font-semibold text-subtle transition hover:border-white/40 hover:text-foreground"
             >
               {g.emoji} Best {g.name} Anime
             </Link>

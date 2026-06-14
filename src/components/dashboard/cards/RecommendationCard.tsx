@@ -27,7 +27,7 @@ export default function RecommendationCard() {
   return (
     <div className="p-8 rounded-[2.5rem] border border-border bg-surface relative overflow-hidden group">
       {/* Glow */}
-      <div className="absolute top-0 right-0 w-64 h-64 bg-accent/8 blur-[60px] rounded-full pointer-events-none group-hover:bg-accent/14 transition-colors duration-700" />
+      <div className="absolute top-0 right-0 w-64 h-64 bg-accent/8 blur-[60px] rounded-full pointer-events-none group-hover:bg-white/14 transition-colors duration-700" />
 
       <div className="relative z-10 flex items-start justify-between mb-8">
         <div>
@@ -40,7 +40,7 @@ export default function RecommendationCard() {
         </div>
         <Link
           href="/ai-discover"
-          className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-accent-bright hover:text-accent-bright transition-colors"
+          className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-accent-bright hover:text-white transition-colors"
         >
           Discover All <ArrowRight size={11} />
         </Link>

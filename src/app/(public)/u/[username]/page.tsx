@@ -319,7 +319,7 @@ export default function UserProfilePage({
       value: user.stats.archived.toLocaleString(),
       icon: Bookmark,
       color: "text-accent-bright",
-      glow: "group-hover:bg-accent/10",
+      glow: "group-hover:bg-white/10",
     },
     {
       label: "Day Streak",
@@ -523,7 +523,7 @@ export default function UserProfilePage({
             </div>
             <Link
               href={`/u/${user.username}/list`}
-              className="group flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-accent-bright hover:text-accent-bright transition-colors"
+              className="group flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-accent-bright hover:text-white transition-colors"
             >
               See full list <ChevronRight size={11} className="group-hover:translate-x-0.5 transition-transform" />
             </Link>
@@ -556,7 +556,7 @@ export default function UserProfilePage({
                     transition={{ delay: i * 0.07 }}
                   >
                     <Link href={`/anime/${anime.id}`} className="group block">
-                      <div className="relative aspect-[3/4] rounded-xl overflow-hidden border border-border group-hover:border-accent/30 transition-all">
+                      <div className="relative aspect-[3/4] rounded-xl overflow-hidden border border-border group-hover:border-white/30 transition-all">
                         <CoverThumb src={anime.image} title={anime.title} sizes="(max-width: 768px) 25vw, 160px" />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
                         <div className="absolute bottom-2 left-2 right-2">
@@ -572,7 +572,7 @@ export default function UserProfilePage({
 
               <Link
                 href={`/u/${user.username}/list`}
-                className="flex items-center justify-between p-4 rounded-xl bg-surface border border-border hover:border-accent/20 hover:bg-surface transition-all group"
+                className="flex items-center justify-between p-4 rounded-xl bg-surface border border-border hover:border-white/20 hover:bg-surface transition-all group"
               >
                 <div className="flex items-center gap-3">
                   <BookOpen size={15} className="text-accent-bright" />
@@ -629,7 +629,7 @@ export default function UserProfilePage({
                   transition={{ delay: i * 0.08 }}
                   className="relative pl-20 group"
                 >
-                  <div className="absolute left-0 top-1/2 -translate-y-1/2 w-16 h-16 rounded-2xl bg-surface-2 border border-border flex items-center justify-center z-10 group-hover:border-accent/40 transition-all shadow-lg">
+                  <div className="absolute left-0 top-1/2 -translate-y-1/2 w-16 h-16 rounded-2xl bg-surface-2 border border-border flex items-center justify-center z-10 group-hover:border-white/40 transition-all shadow-lg">
                     <evt.icon size={20} className="text-accent-bright" />
                   </div>
                   <div className="p-5 rounded-[1.5rem] bg-surface border border-border group-hover:bg-white/[0.04] transition-all flex justify-between items-center">
@@ -676,7 +676,7 @@ export default function UserProfilePage({
                   {post.anime && (
                     <Link
                       href={`/anime/${post.anime.malId}`}
-                      className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-accent/8 border border-accent/15 text-[10px] font-bold text-accent-bright hover:bg-accent/15 transition-colors"
+                      className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-accent/8 border border-accent/15 text-[10px] font-bold text-accent-bright hover:bg-white/15 transition-colors"
                     >
                       <Star size={9} /> {post.anime.title}
                     </Link>
@@ -824,7 +824,7 @@ export default function UserProfilePage({
                   transition={{ delay: i * 0.07 }}
                 >
                   <Link href={`/anime/${anime.id}`} className="group block">
-                    <div className="relative aspect-[3/4] rounded-2xl overflow-hidden border border-border group-hover:border-accent/30 transition-all">
+                    <div className="relative aspect-[3/4] rounded-2xl overflow-hidden border border-border group-hover:border-white/30 transition-all">
                       <CoverThumb src={anime.image} title={anime.title} sizes="(max-width: 768px) 50vw, 200px" />
                       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
                       <div className="absolute bottom-3 left-3 right-3">
@@ -848,7 +848,7 @@ export default function UserProfilePage({
             {/* Reading list CTA */}
             <Link
               href="/bestanimelist"
-              className="flex items-center justify-between p-5 rounded-2xl bg-surface border border-border hover:border-accent/20 hover:bg-surface transition-all group"
+              className="flex items-center justify-between p-5 rounded-2xl bg-surface border border-border hover:border-white/20 hover:bg-surface transition-all group"
             >
               <div className="flex items-center gap-3">
                 <BookOpen size={18} className="text-accent-bright" />
@@ -861,7 +861,7 @@ export default function UserProfilePage({
                   </p>
                 </div>
               </div>
-              <ChevronRight size={14} className="text-subtle group-hover:text-accent-bright group-hover:translate-x-0.5 transition-all" />
+              <ChevronRight size={14} className="text-subtle group-hover:text-white group-hover:translate-x-0.5 transition-all" />
             </Link>
           </div>
         </div>

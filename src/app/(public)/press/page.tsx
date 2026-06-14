@@ -77,13 +77,13 @@ export default function PressPage() {
               <a
                 key={item}
                 href="mailto:press@kaiveron.com?subject=Brand%20Assets%20Request"
-                className="p-5 rounded-2xl bg-surface border border-border flex items-center justify-between hover:border-accent/30 hover:bg-surface transition-colors"
+                className="p-5 rounded-2xl bg-surface border border-border flex items-center justify-between hover:border-white/30 hover:bg-surface transition-colors"
               >
                 <div className="flex items-center gap-3">
                   <FileText size={16} className="text-accent-bright" />
                   <span className="text-sm font-bold text-muted">{item}</span>
                 </div>
-                <span className="p-2 rounded-lg bg-accent/10 text-accent-bright hover:bg-accent/20 transition-colors">
+                <span className="p-2 rounded-lg bg-accent/10 text-accent-bright hover:bg-white/20 transition-colors">
                   <Download size={13} />
                 </span>
               </a>

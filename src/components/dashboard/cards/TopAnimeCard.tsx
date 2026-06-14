@@ -76,7 +76,7 @@ export default function TopAnimeCard() {
         </div>
         <Link
           href="/rate"
-          className="flex items-center gap-1 text-[9px] font-black uppercase tracking-widest text-accent-bright/60 hover:text-accent-bright transition-colors"
+          className="flex items-center gap-1 text-[9px] font-black uppercase tracking-widest text-accent-bright/60 hover:text-white transition-colors"
         >
           Rate Another <ChevronRight size={10} />
         </Link>
@@ -87,7 +87,7 @@ export default function TopAnimeCard() {
         <div className="py-6 text-center">
           <Star size={20} className="mx-auto mb-2 text-subtle" fill="currentColor" />
           <p className="text-[10px] text-subtle font-black uppercase tracking-widest">No rated anime yet</p>
-          <Link href="/bestanimelist" className="mt-2 block text-[9px] text-accent-bright hover:text-accent-bright font-black uppercase tracking-widest">
+          <Link href="/bestanimelist" className="mt-2 block text-[9px] text-accent-bright hover:text-white font-black uppercase tracking-widest">
             Browse & Rate →
           </Link>
         </div>

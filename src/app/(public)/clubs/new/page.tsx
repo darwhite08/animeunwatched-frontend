@@ -261,7 +261,7 @@ export default function NewClubPage() {
                 type="button"
                 onClick={() => coverInputRef.current?.click()}
                 disabled={uploadingCover}
-                className="group relative block w-full aspect-[16/9] overflow-hidden rounded-2xl border border-dashed border-border bg-surface-2 transition-colors hover:border-accent/50"
+                className="group relative block w-full aspect-[16/9] overflow-hidden rounded-2xl border border-dashed border-border bg-surface-2 transition-colors hover:border-white/50"
               >
                 {coverUrl ? (
                   <>
@@ -277,7 +277,7 @@ export default function NewClubPage() {
                     {uploadingCover ? (
                       <Loader2 size={22} className="animate-spin" />
                     ) : (
-                      <ImagePlus size={22} className="transition-colors group-hover:text-accent-bright" />
+                      <ImagePlus size={22} className="transition-colors group-hover:text-white" />
                     )}
                     <span className="text-[11px] font-black uppercase tracking-widest">
                       {uploadingCover ? "Uploading…" : "Add a cover"}

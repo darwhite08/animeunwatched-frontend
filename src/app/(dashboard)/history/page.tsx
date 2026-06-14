@@ -454,7 +454,7 @@ function HistoryEntryRow({
   index: number
 }) {
   const rowClass =
-    "flex items-center gap-3 sm:gap-4 px-3 sm:px-4 py-3 min-h-11 rounded-2xl bg-surface border border-border hover:border-accent/30 active:scale-[0.99] transition-all group"
+    "flex items-center gap-3 sm:gap-4 px-3 sm:px-4 py-3 min-h-11 rounded-2xl bg-surface border border-border hover:border-white/30 active:scale-[0.99] transition-all group"
   const inner = (
     <>
       {/* Cover thumbnail */}
@@ -468,7 +468,7 @@ function HistoryEntryRow({
 
       {/* Info */}
       <div className="flex-1 min-w-0">
-        <p className="text-[13px] sm:text-sm font-black text-foreground uppercase italic tracking-tight truncate group-hover:text-accent-bright transition-colors">
+        <p className="text-[13px] sm:text-sm font-black text-foreground uppercase italic tracking-tight truncate group-hover:text-white transition-colors">
           {entry.animeTitle}
         </p>
         <p className="text-[10px] font-bold text-subtle uppercase tracking-widest mt-0.5 truncate">

@@ -27,7 +27,7 @@ export function SupportCreator({ username }: { username: string }) {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="flex items-center gap-2 rounded-xl border border-accent/30 bg-accent-soft px-4 py-2.5 text-xs font-black uppercase tracking-widest text-accent-bright transition hover:bg-accent/15"
+        className="flex items-center gap-2 rounded-xl border border-accent/30 bg-accent-soft px-4 py-2.5 text-xs font-black uppercase tracking-widest text-accent-bright transition hover:bg-white/15"
       >
         <Heart size={15} /> Support
       </button>

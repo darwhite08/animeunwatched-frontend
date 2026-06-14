@@ -107,7 +107,7 @@ export default function MyListsPage() {
                     {list.isPublic ? <Globe size={14} /> : <Lock size={14} />}
                   </button>
                   <button onClick={() => push("List editing coming soon!", "info")}
-                    className="p-2 rounded-lg text-subtle hover:text-accent-bright hover:bg-surface transition-colors"
+                    className="p-2 rounded-lg text-subtle hover:text-white hover:bg-surface transition-colors"
                   ><Edit2 size={14} /></button>
                   <button onClick={() => deleteList(list.id)}
                     className="p-2 rounded-lg text-subtle hover:text-red-400 hover:bg-red-500/5 transition-colors"

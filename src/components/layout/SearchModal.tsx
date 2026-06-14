@@ -147,7 +147,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                           className={`group flex items-center justify-between min-h-11 px-4 py-3 rounded-xl hover:bg-surface cursor-pointer transition-all active:scale-[0.98] ${cursor === i ? "bg-surface" : ""}`}
                         >
                           <div className="flex items-center gap-3 text-muted group-hover:text-foreground">
-                            <item.icon size={14} className="text-accent/70 group-hover:text-accent-bright" />
+                            <item.icon size={14} className="text-accent/70 group-hover:text-white" />
                             <span className="text-sm font-bold uppercase tracking-tight">{item.label}</span>
                           </div>
                           <span className="text-[9px] font-mono text-subtle group-hover:text-subtle">{item.cmd}</span>
@@ -162,10 +162,10 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                         <button
                           key={term}
                           onClick={() => setQuery(term)}
-                          className={`group w-full flex items-center justify-between min-h-11 px-4 py-3 rounded-xl hover:bg-accent/10 transition-all active:scale-[0.98] border border-transparent hover:border-accent/20 ${cursor === QUICK_ACTIONS.length + i ? "bg-accent/10 border-accent/20" : ""}`}
+                          className={`group w-full flex items-center justify-between min-h-11 px-4 py-3 rounded-xl hover:bg-white/10 transition-all active:scale-[0.98] border border-transparent hover:border-white/20 ${cursor === QUICK_ACTIONS.length + i ? "bg-accent/10 border-accent/20" : ""}`}
                         >
                           <div className="flex items-center gap-3">
-                            <div className="h-7 w-7 rounded-lg bg-surface flex items-center justify-center text-subtle group-hover:text-accent-bright">
+                            <div className="h-7 w-7 rounded-lg bg-surface flex items-center justify-center text-subtle group-hover:text-white">
                               <ArrowRight size={12} />
                             </div>
                             <span className="text-sm font-bold uppercase tracking-tight text-muted group-hover:text-foreground transition-colors">{term}</span>

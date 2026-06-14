@@ -190,7 +190,7 @@ function Composer({ slug, denName }: { slug: string; denName: string }) {
               </div>
 
               <div className="mt-3 flex items-center justify-between gap-2 border-t border-border pt-3">
-                <button onClick={() => fileRef.current?.click()} disabled={isUploading} className="inline-flex items-center gap-1.5 rounded-lg px-2.5 py-2 text-[11px] font-black uppercase tracking-widest text-muted transition-colors hover:text-accent-bright disabled:opacity-50">
+                <button onClick={() => fileRef.current?.click()} disabled={isUploading} className="inline-flex items-center gap-1.5 rounded-lg px-2.5 py-2 text-[11px] font-black uppercase tracking-widest text-muted transition-colors hover:text-white disabled:opacity-50">
                   {isUploading ? <Loader2 size={14} className="animate-spin" /> : <ImagePlus size={14} />}
                   {isUploading ? "Uploading…" : "Image"}
                 </button>
@@ -253,7 +253,7 @@ function PostCard({
   const stop = (e: React.MouseEvent) => { e.preventDefault(); e.stopPropagation() }
 
   return (
-    <Link href={`/threads/${row.id}`} className="group relative flex gap-3 rounded-2xl border border-border bg-surface p-3 transition-all hover:border-accent/25 sm:p-4">
+    <Link href={`/threads/${row.id}`} className="group relative flex gap-3 rounded-2xl border border-border bg-surface p-3 transition-all hover:border-white/25 sm:p-4">
       {/* Hype rail */}
       <div className="flex shrink-0 flex-col items-center gap-1 pt-0.5">
         <button
@@ -321,7 +321,7 @@ function PostCard({
         {/* Flair + title */}
         <div className="mt-1 flex items-center gap-2">
           {flair && <span className={`shrink-0 rounded-full border px-2 py-0.5 text-[9px] font-black uppercase tracking-wider ${flair.cls}`}>{flair.label}</span>}
-          <h3 className="text-sm font-black text-foreground transition-colors group-hover:text-accent-bright sm:text-base line-clamp-2">{row.title}</h3>
+          <h3 className="text-sm font-black text-foreground transition-colors group-hover:text-white sm:text-base line-clamp-2">{row.title}</h3>
         </div>
 
         {/* Body / spoiler-gated content */}
@@ -345,10 +345,10 @@ function PostCard({
         {/* Footer */}
         <div className="mt-2.5 flex items-center gap-1 text-subtle">
           <span className="inline-flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-[11px] font-bold"><MessageSquare size={13} /> {row.replies}</span>
-          <button onClick={share} className="inline-flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-[11px] font-bold transition-colors hover:text-accent-bright"><Share2 size={13} /> Share</button>
+          <button onClick={share} className="inline-flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-[11px] font-bold transition-colors hover:text-white"><Share2 size={13} /> Share</button>
           <button
             onClick={(e) => { e.preventDefault(); onSave(row.id, !row.savedByMe) }}
-            className={`inline-flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-[11px] font-bold transition-colors ${row.savedByMe ? "text-accent-bright" : "hover:text-accent-bright"}`}
+            className={`inline-flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-[11px] font-bold transition-colors ${row.savedByMe ? "text-accent-bright" : "hover:text-white"}`}
           >
             <Bookmark size={13} className={row.savedByMe ? "fill-current" : ""} /> {row.savedByMe ? "Saved" : "Save"}
           </button>

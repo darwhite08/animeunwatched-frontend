@@ -166,7 +166,7 @@ export default function FollowingPage() {
         <div className="py-16 text-center border border-dashed border-border rounded-[3rem]">
           <Users size={24} className="mx-auto mb-3 text-subtle" />
           <p className="text-subtle text-xs font-black uppercase tracking-widest">No results</p>
-          <Link href="/users" className="mt-4 inline-flex items-center gap-1.5 text-xs text-accent-bright hover:text-accent-bright font-black uppercase tracking-widest transition-colors">
+          <Link href="/users" className="mt-4 inline-flex items-center gap-1.5 text-xs text-accent-bright hover:text-white font-black uppercase tracking-widest transition-colors">
             Find Shinobi <ArrowRight size={11} />
           </Link>
         </div>

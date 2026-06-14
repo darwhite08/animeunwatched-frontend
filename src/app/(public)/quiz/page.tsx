@@ -128,7 +128,7 @@ export default function QuizPage() {
                       state === "correct" ? "bg-emerald-500/15 border-emerald-500/40 text-foreground" :
                       state === "wrong"   ? "bg-red-500/15 border-red-500/40 text-foreground" :
                       hasAnswered         ? "border-border bg-surface text-subtle" :
-                                            "border-border bg-surface text-muted hover:border-accent/40 hover:bg-accent/8 hover:text-foreground"
+                                            "border-border bg-surface text-muted hover:border-white/40 hover:bg-white/8 hover:text-foreground"
                     }`}
                   >
                     {opt}

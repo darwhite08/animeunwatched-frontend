@@ -66,7 +66,7 @@ export default function WatchPartyPage() {
           {FEATURES.map(({ icon: Icon, title, desc }, i) => (
             <motion.div key={title} initial={{ opacity:0, y:16 }} whileInView={{ opacity:1, y:0 }} viewport={{ once:true }}
               transition={{ delay: i*0.07 }}
-              className="p-6 rounded-2xl bg-surface border border-border hover:border-accent/20 transition-all group space-y-3"
+              className="p-6 rounded-2xl bg-surface border border-border hover:border-white/20 transition-all group space-y-3"
             >
               <div className="w-10 h-10 rounded-xl bg-accent/15 border border-accent/20 flex items-center justify-center group-hover:scale-110 transition-transform">
                 <Icon size={18} className="text-accent-bright" />

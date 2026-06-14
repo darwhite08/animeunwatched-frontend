@@ -76,15 +76,15 @@ export default function MangaPage() {
               href={`https://anilist.co/search/manga?search=${encodeURIComponent(m.title)}`}
               target="_blank" rel="noopener noreferrer"
               initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}
-              className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 min-h-11 rounded-2xl border border-border bg-surface hover:border-accent/30 active:scale-[0.98] transition-all group">
+              className="flex items-center gap-3 sm:gap-4 p-3 sm:p-4 min-h-11 rounded-2xl border border-border bg-surface hover:border-white/30 active:scale-[0.98] transition-all group">
               <div className="h-10 w-10 rounded-xl bg-violet-500/10 border border-violet-500/15 flex items-center justify-center shrink-0">
                 <BookOpen size={14} className="text-violet-400" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-black text-foreground truncate group-hover:text-accent-bright transition-colors">{m.title}</p>
+                <p className="text-sm font-black text-foreground truncate group-hover:text-white transition-colors">{m.title}</p>
                 <p className="text-[9px] text-subtle truncate">{m.author} · {m.genre} · {m.year}</p>
               </div>
-              <ExternalLink size={12} className="text-subtle group-hover:text-accent-bright transition-colors shrink-0" />
+              <ExternalLink size={12} className="text-subtle group-hover:text-white transition-colors shrink-0" />
             </motion.a>
           ))}
         </div>

@@ -62,7 +62,7 @@ export function ReaderSidebar({ excludeSlug }: { excludeSlug?: string }) {
           <div className="space-y-3">
             {blogs.map((b) => (
               <Link key={b.slug} href={`/blog/${b.slug}`} className="group block">
-                <p className="line-clamp-2 text-xs font-bold leading-snug text-muted transition-colors group-hover:text-accent-bright">{b.title}</p>
+                <p className="line-clamp-2 text-xs font-bold leading-snug text-muted transition-colors group-hover:text-white">{b.title}</p>
               </Link>
             ))}
           </div>

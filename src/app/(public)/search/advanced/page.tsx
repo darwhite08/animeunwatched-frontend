@@ -460,7 +460,7 @@ function AdvancedSearchContent() {
               <div className="flex items-end">
                 <button
                   onClick={handleSaveSearch}
-                  className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-accent/15 border border-accent/25 text-xs font-black uppercase tracking-widest text-accent-bright hover:bg-accent/25 transition-all"
+                  className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-accent/15 border border-accent/25 text-xs font-black uppercase tracking-widest text-accent-bright hover:bg-white/25 transition-all"
                 >
                   <Save size={13} /> Save Search
                 </button>
@@ -493,7 +493,7 @@ function AdvancedSearchContent() {
                 <p className="text-subtle text-sm font-black uppercase tracking-widest">No anime matched your filters</p>
                 <button
                   onClick={clearFilters}
-                  className="mt-4 text-[10px] font-black uppercase tracking-widest text-accent-bright hover:text-accent-bright transition-colors"
+                  className="mt-4 text-[10px] font-black uppercase tracking-widest text-accent-bright hover:text-white transition-colors"
                 >
                   Clear Filters →
                 </button>
@@ -519,7 +519,7 @@ function AdvancedSearchContent() {
                   {u.name[0]}
                 </div>
                 <div className="flex-1">
-                  <p className="font-black text-foreground group-hover:text-accent-bright transition-colors">{u.name}</p>
+                  <p className="font-black text-foreground group-hover:text-white transition-colors">{u.name}</p>
                   <p className="text-xs text-subtle mt-0.5">{u.bio}</p>
                 </div>
                 <div className="text-right">
@@ -566,7 +566,7 @@ function AdvancedSearchContent() {
                 initial={{ opacity: 0, y: 6 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: i * 0.06 }}
-                className="p-5 rounded-2xl bg-surface border border-border hover:border-accent/20 transition-all cursor-pointer"
+                className="p-5 rounded-2xl bg-surface border border-border hover:border-white/20 transition-all cursor-pointer"
               >
                 <div className="flex items-start justify-between gap-3 mb-2">
                   <p className="font-black text-foreground">{c.name}</p>

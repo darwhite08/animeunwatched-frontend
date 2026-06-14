@@ -21,7 +21,7 @@ export function PostGallery({ images, layout = "grid" }: { images: string[]; lay
   if (imgs.length === 1) {
     return (
       <a href={imgs[0]} target="_blank" rel="noopener noreferrer"
-        className="block rounded-2xl overflow-hidden border border-border max-w-[520px] hover:border-accent/30 transition-colors">
+        className="block rounded-2xl overflow-hidden border border-border max-w-[520px] hover:border-white/30 transition-colors">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={imgs[0]} alt="Post attachment" loading="lazy" decoding="async" referrerPolicy="no-referrer"
           className="w-full h-auto object-cover max-h-[520px]" />

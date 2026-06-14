@@ -60,7 +60,7 @@ export default function QuotesPage({ params }: { params: Promise<{ id: string }>
           {quotes.map((q, i) => (
             <motion.div key={i}
               initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.08 }}
-              className="relative p-6 rounded-2xl border border-border bg-surface hover:border-accent/20 transition-all">
+              className="relative p-6 rounded-2xl border border-border bg-surface hover:border-white/20 transition-all">
               {/* Large quote mark */}
               <span className="absolute top-4 left-5 text-5xl text-accent/10 font-serif leading-none select-none">"</span>
               <div className="pl-4">
@@ -79,7 +79,7 @@ export default function QuotesPage({ params }: { params: Promise<{ id: string }>
         <div className="mt-8 p-4 rounded-2xl border border-border bg-surface text-center">
           <p className="text-[10px] text-subtle">
             Know a great quote from this anime? Share it in the{" "}
-            <Link href={`/anime/${id}/discuss`} className="text-accent-bright/60 hover:text-accent-bright transition-colors">discussion thread</Link>.
+            <Link href={`/anime/${id}/discuss`} className="text-accent-bright/60 hover:text-white transition-colors">discussion thread</Link>.
           </p>
         </div>
       </div>

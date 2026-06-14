@@ -112,7 +112,7 @@ function ShareButton({
           ? "border-border bg-surface-2 text-muted cursor-not-allowed"
           : muted
           ? "border-border bg-surface-2 text-muted hover:border-border hover:text-muted hover:bg-surface-2"
-          : "border-accent/40 bg-accent/10 text-accent-bright hover:border-indigo-400 hover:bg-accent/20",
+          : "border-accent/40 bg-accent/10 text-accent-bright hover:border-indigo-400 hover:bg-white/20",
       ].join(" ")}
     >
       <span className="transition-transform duration-200 group-hover:scale-110">

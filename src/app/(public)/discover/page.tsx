@@ -71,7 +71,7 @@ function TrendingCard({
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay: index * 0.08 }}
-      className="group relative flex gap-0 bg-surface rounded-2xl border border-border hover:border-accent/20 overflow-hidden transition-all duration-500"
+      className="group relative flex gap-0 bg-surface rounded-2xl border border-border hover:border-white/20 overflow-hidden transition-all duration-500"
     >
       {/* Glow */}
       <div className="absolute -inset-px bg-gradient-to-r from-indigo-500/10 to-purple-500/10 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
@@ -114,7 +114,7 @@ function TrendingCard({
             <span className="text-[9px] font-black text-subtle uppercase">{anime.year}</span>
           </div>
 
-          <h3 className="text-base font-black text-foreground uppercase italic tracking-tighter leading-tight line-clamp-2 group-hover:text-accent-bright transition-colors duration-300">
+          <h3 className="text-base font-black text-foreground uppercase italic tracking-tighter leading-tight line-clamp-2 group-hover:text-white transition-colors duration-300">
             {anime.title}
           </h3>
 
@@ -154,7 +154,7 @@ function TrendingCard({
           </Link>
           <button
             onClick={() => onPreview(anime)}
-            className="flex items-center gap-1.5 min-h-11 px-4 py-2 rounded-xl border border-accent/20 bg-accent/5 text-accent-bright hover:bg-accent/10 transition-all active:scale-95 text-[10px] font-black uppercase tracking-widest"
+            className="flex items-center gap-1.5 min-h-11 px-4 py-2 rounded-xl border border-accent/20 bg-accent/5 text-accent-bright hover:bg-white/10 transition-all active:scale-95 text-[10px] font-black uppercase tracking-widest"
           >
             Quick Preview
           </button>

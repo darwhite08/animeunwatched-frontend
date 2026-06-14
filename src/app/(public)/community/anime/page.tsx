@@ -122,7 +122,7 @@ function FeaturedAnimeCard({ anime, index }: { anime: Anime; index: number }) {
       initial={{ opacity: 0, y: 24 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.1 * index, duration: 0.45 }}
-      className="relative rounded-[2rem] overflow-hidden border border-border bg-surface group hover:border-accent/30 transition-all duration-500"
+      className="relative rounded-[2rem] overflow-hidden border border-border bg-surface group hover:border-white/30 transition-all duration-500"
     >
       {/* Blurred BG */}
       <div className="absolute inset-0">

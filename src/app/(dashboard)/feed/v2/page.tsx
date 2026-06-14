@@ -31,7 +31,7 @@ function ActivityCard({ a }: { a: Activity }) {
   const toggleRepost = () => (a.isRepostedByMe ? unrepost.mutate(a.id) : repost.mutate({ id: a.id }))
 
   return (
-    <article className="p-5 rounded-2xl bg-surface border border-border hover:border-accent/25 transition-colors">
+    <article className="p-5 rounded-2xl bg-surface border border-border hover:border-white/25 transition-colors">
       {/* Header */}
       <div className="flex items-center gap-3 mb-3">
         <div className="w-10 h-10 rounded-full bg-surface-2 border border-border overflow-hidden flex items-center justify-center shrink-0">
@@ -40,7 +40,7 @@ function ActivityCard({ a }: { a: Activity }) {
             : <span className="font-black text-foreground">{a.author.displayName[0]}</span>}
         </div>
         <div className="min-w-0 flex-1">
-          <Link href={`/u/${handle}`} className="font-bold text-foreground hover:text-accent transition-colors text-sm">
+          <Link href={`/u/${handle}`} className="font-bold text-foreground hover:text-white transition-colors text-sm">
             {a.author.displayName}
           </Link>
           <div className="text-[11px] text-subtle font-mono uppercase tracking-widest">
@@ -56,7 +56,7 @@ function ActivityCard({ a }: { a: Activity }) {
 
       {/* Linked anime (list update) */}
       {a.linkedAnime && (
-        <Link href={`/anime/${a.linkedAnime.malId}`} className="flex items-center gap-3 p-3 mb-3 rounded-xl bg-surface-2 border border-border hover:border-accent/30 transition-colors">
+        <Link href={`/anime/${a.linkedAnime.malId}`} className="flex items-center gap-3 p-3 mb-3 rounded-xl bg-surface-2 border border-border hover:border-white/30 transition-colors">
           {a.linkedAnime.imageUrl && (
             <Image src={a.linkedAnime.imageUrl} alt={a.linkedAnime.title} width={44} height={62} className="rounded-md object-cover" />
           )}
@@ -83,12 +83,12 @@ function ActivityCard({ a }: { a: Activity }) {
           <HeartLike liked={a.isLikedByMe} onToggle={toggleLike} size={16} />
           <span className="tabular-nums">{a.likeCount}</span>
         </span>
-        <button onClick={toggleRepost} className="flex items-center gap-1.5 hover:text-accent transition-colors disabled:opacity-50"
+        <button onClick={toggleRepost} className="flex items-center gap-1.5 hover:text-white transition-colors disabled:opacity-50"
           disabled={repost.isPending || unrepost.isPending}>
           <Repeat2 size={15} className={a.isRepostedByMe ? "text-accent" : ""} />
           <span className="tabular-nums">{a.repostCount}</span>
         </button>
-        <Link href={`/posts/${a.id}`} className="flex items-center gap-1.5 hover:text-accent transition-colors">
+        <Link href={`/posts/${a.id}`} className="flex items-center gap-1.5 hover:text-white transition-colors">
           <MessageCircle size={15} />
           <span className="tabular-nums">{a.replyCount}</span>
         </Link>

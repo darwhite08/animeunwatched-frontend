@@ -46,7 +46,7 @@ export default function AnimeCard({ anime, index, onClick }: AnimeCardProps) {
         style={{ background: "linear-gradient(135deg, color-mix(in srgb, var(--app-accent) 25%, transparent), rgba(99,102,241,0.20))", filter: "blur(12px)" }}
       />
 
-      <div className="relative h-full w-full bg-background rounded-[1.7rem] overflow-hidden border border-white/[0.07] group-hover:border-accent/25 transition-colors duration-500"
+      <div className="relative h-full w-full bg-background rounded-[1.7rem] overflow-hidden border border-white/[0.07] group-hover:border-white/25 transition-colors duration-500"
         style={{ boxShadow: "0 4px 24px rgba(0,0,0,0.4)" }}
       >
         {/* Poster image */}

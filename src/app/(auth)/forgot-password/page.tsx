@@ -70,7 +70,7 @@ export default function ForgotPasswordPage() {
               <p className="text-[10px] text-subtle leading-relaxed">
                 Didn&apos;t receive it? Check your spam folder. Still nothing? The email might not be registered.
               </p>
-              <Link href="/login" className="inline-block text-xs font-black uppercase tracking-widest text-accent-bright hover:text-accent-bright transition-colors">
+              <Link href="/login" className="inline-block text-xs font-black uppercase tracking-widest text-accent-bright hover:text-white transition-colors">
                 Back to login →
               </Link>
             </motion.div>

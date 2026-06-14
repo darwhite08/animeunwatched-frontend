@@ -8,7 +8,7 @@ export const PollCard = ({ poll }: { poll: any }) => {
   const [voted, setVoted] = useState<string | null>(null)
 
   return (
-    <div className="relative group p-10 rounded-[3rem] border border-border bg-surface overflow-hidden transition-all duration-500 hover:border-accent/30">
+    <div className="relative group p-10 rounded-[3rem] border border-border bg-surface overflow-hidden transition-all duration-500 hover:border-white/30">
       {/* Background Ambient Glow */}
       <div className="absolute top-0 right-0 w-64 h-64 bg-accent/5 blur-[100px] pointer-events-none" />
       

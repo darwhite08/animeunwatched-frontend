@@ -329,7 +329,7 @@ export default function StatsPage() {
         </div>
         <button
           onClick={handleManualRefresh}
-          className="flex items-center gap-1.5 min-h-11 px-2 -mr-2 text-[10px] font-black uppercase tracking-widest text-accent-bright hover:text-accent-bright transition-colors active:scale-95"
+          className="flex items-center gap-1.5 min-h-11 px-2 -mr-2 text-[10px] font-black uppercase tracking-widest text-accent-bright hover:text-white transition-colors active:scale-95"
         >
           <RefreshCw size={11} className={statsQuery.isFetching ? "animate-spin" : ""} />
           Refresh

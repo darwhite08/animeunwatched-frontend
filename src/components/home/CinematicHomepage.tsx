@@ -213,7 +213,7 @@ function AIResultRow({
       </div>
 
       <div className="flex-1 min-w-0">
-        <p className="text-[13.5px] font-bold text-foreground truncate mb-1 group-hover:text-accent-bright transition-colors">{title}</p>
+        <p className="text-[13.5px] font-bold text-foreground truncate mb-1 group-hover:text-white transition-colors">{title}</p>
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-1">
             <Star size={9} className="fill-accent-bright text-accent-bright" />
@@ -486,10 +486,10 @@ function AIOracleSection() {
                   href="/ai-discover"
                   className="group flex items-center justify-between px-6 py-4 border-t border-white/[0.06] bg-white/[0.015] hover:bg-surface transition-colors"
                 >
-                  <span className="text-[11px] font-bold text-accent-bright/80 group-hover:text-accent-bright transition-colors uppercase tracking-[0.18em]">
+                  <span className="text-[11px] font-bold text-accent-bright/80 group-hover:text-white transition-colors uppercase tracking-[0.18em]">
                     Open AI Discovery
                   </span>
-                  <span className="flex items-center gap-1 text-accent-bright/60 group-hover:text-accent-bright transition-all group-hover:translate-x-0.5">
+                  <span className="flex items-center gap-1 text-accent-bright/60 group-hover:text-white transition-all group-hover:translate-x-0.5">
                     <ArrowRight size={12} />
                   </span>
                 </Link>
@@ -718,7 +718,7 @@ function CommunitySection() {
 
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1.5">
-                        <p className="text-[12.5px] font-bold text-foreground group-hover:text-accent-bright transition-colors tracking-[-0.005em]">{name}</p>
+                        <p className="text-[12.5px] font-bold text-foreground group-hover:text-white transition-colors tracking-[-0.005em]">{name}</p>
                         <span className="text-[8px] font-bold uppercase tracking-[0.1em] text-subtle bg-surface border border-white/[0.06] px-1.5 py-0.5 rounded shrink-0">{title}</span>
                       </div>
                       <div className="flex items-center gap-2">
@@ -747,10 +747,10 @@ function CommunitySection() {
                 href="/leaderboard"
                 className="group flex items-center justify-between px-6 py-4 border-t border-white/[0.06] bg-white/[0.015] hover:bg-surface transition-colors"
               >
-                <span className="text-[11px] font-bold text-accent-bright/80 group-hover:text-accent-bright transition-colors uppercase tracking-[0.18em]">
+                <span className="text-[11px] font-bold text-accent-bright/80 group-hover:text-white transition-colors uppercase tracking-[0.18em]">
                   View Full Leaderboard
                 </span>
-                <ArrowRight size={12} className="text-accent-bright/60 group-hover:text-accent-bright group-hover:translate-x-0.5 transition-all" />
+                <ArrowRight size={12} className="text-accent-bright/60 group-hover:text-white group-hover:translate-x-0.5 transition-all" />
               </Link>
             </div>
           </motion.div>
@@ -959,7 +959,7 @@ function ShowcaseSection() {
                   href={href}
                   className={`group/link inline-flex min-h-11 items-center gap-1.5 text-[11px] font-black uppercase tracking-[0.22em] transition-all active:scale-95 ${
                     accent === "indigo" ? "text-indigo-300/80 hover:text-indigo-200" :
-                    accent === "amber" ? "text-accent-bright/80 hover:text-accent-bright" :
+                    accent === "amber" ? "text-accent-bright/80 hover:text-white" :
                     "text-violet-300/80 hover:text-violet-200"
                   }`}
                 >

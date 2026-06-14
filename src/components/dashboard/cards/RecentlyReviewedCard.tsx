@@ -89,7 +89,7 @@ export default function RecentlyReviewedCard() {
         </div>
         <button
           onClick={() => push("Select an anime to review", "info")}
-          className="text-[9px] font-black uppercase tracking-widest text-accent-bright/60 hover:text-accent-bright transition-colors"
+          className="text-[9px] font-black uppercase tracking-widest text-accent-bright/60 hover:text-white transition-colors"
         >
           Write Review
         </button>
@@ -107,7 +107,7 @@ export default function RecentlyReviewedCard() {
         <div className="py-6 text-center relative z-10">
           <PenSquare size={20} className="mx-auto mb-2 text-subtle" />
           <p className="text-[10px] text-subtle font-black uppercase tracking-widest">No reviews yet</p>
-          <Link href="/bestanimelist" className="mt-2 block text-[9px] text-accent-bright hover:text-accent-bright font-black uppercase tracking-widest">
+          <Link href="/bestanimelist" className="mt-2 block text-[9px] text-accent-bright hover:text-white font-black uppercase tracking-widest">
             Find Anime to Review →
           </Link>
         </div>
@@ -122,7 +122,7 @@ export default function RecentlyReviewedCard() {
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.08 }}
-              className="group p-4 rounded-2xl border border-border hover:border-accent/15 hover:bg-white/[0.025] transition-all cursor-pointer"
+              className="group p-4 rounded-2xl border border-border hover:border-white/15 hover:bg-white/[0.025] transition-all cursor-pointer"
             >
               {/* Top row: anime info + date */}
               <div className="flex items-start justify-between gap-3 mb-2">
@@ -151,7 +151,7 @@ export default function RecentlyReviewedCard() {
       <div className="relative z-10 mt-6">
         <button
           onClick={() => push("Select an anime to review", "info")}
-          className="w-full py-3 rounded-2xl border border-dashed border-border hover:border-accent/30 text-[10px] font-black uppercase tracking-widest text-subtle hover:text-accent-bright transition-all"
+          className="w-full py-3 rounded-2xl border border-dashed border-border hover:border-white/30 text-[10px] font-black uppercase tracking-widest text-subtle hover:text-white transition-all"
         >
           + Write a Review
         </button>

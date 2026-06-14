@@ -134,7 +134,7 @@ export function ShotComposer({ onClose, onPosted }: { onClose: () => void; onPos
             {!previewUrl ? (
               <button
                 onClick={() => fileRef.current?.click()}
-                className="mx-auto flex aspect-[9/16] w-full max-w-[280px] flex-col items-center justify-center gap-3 rounded-2xl border border-dashed border-border bg-surface-2 text-subtle transition-colors hover:border-accent/50 hover:text-accent-bright"
+                className="mx-auto flex aspect-[9/16] w-full max-w-[280px] flex-col items-center justify-center gap-3 rounded-2xl border border-dashed border-border bg-surface-2 text-subtle transition-colors hover:border-white/50 hover:text-white"
               >
                 <Film size={30} />
                 <span className="text-[12px] font-black uppercase tracking-widest">Choose a video</span>

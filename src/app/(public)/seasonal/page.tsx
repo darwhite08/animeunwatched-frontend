@@ -194,7 +194,7 @@ export default function SeasonalPage() {
               Could not load {season} {year}
             </p>
             <button onClick={() => refetch()}
-              className="text-xs text-accent-bright hover:text-accent-bright font-black uppercase tracking-widest">
+              className="text-xs text-accent-bright hover:text-white font-black uppercase tracking-widest">
               Retry
             </button>
           </div>

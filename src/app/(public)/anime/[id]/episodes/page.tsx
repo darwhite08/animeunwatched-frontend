@@ -78,7 +78,7 @@ export default function EpisodesPage({ params }: { params: Promise<{ id: string 
               {episodes.map((ep, i) => (
                 <motion.div key={ep.mal_id}
                   initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.02 }}
-                  className="flex items-center gap-4 p-4 rounded-2xl border border-border bg-surface hover:border-accent/20 transition-all group">
+                  className="flex items-center gap-4 p-4 rounded-2xl border border-border bg-surface hover:border-white/20 transition-all group">
                   {/* Episode number */}
                   <div className="h-10 w-10 rounded-xl bg-accent/10 border border-accent/20 flex items-center justify-center shrink-0">
                     <span className="text-xs font-black text-accent-bright">{ep.mal_id}</span>

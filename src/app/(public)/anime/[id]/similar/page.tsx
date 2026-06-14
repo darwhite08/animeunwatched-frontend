@@ -89,7 +89,7 @@ export default function SimilarAnimePage({
           </Link>
           <div className="flex-1 min-w-0">
             <Link href={`/anime/${anime.id}`}>
-              <h1 className="text-xl font-black uppercase italic tracking-tighter text-foreground hover:text-accent-bright transition-colors leading-tight truncate">
+              <h1 className="text-xl font-black uppercase italic tracking-tighter text-foreground hover:text-white transition-colors leading-tight truncate">
                 {anime.title}
               </h1>
             </Link>
@@ -171,7 +171,7 @@ export default function SimilarAnimePage({
             <p className="text-subtle text-sm font-bold">No similar anime found with rating ≥ 7.5.</p>
             <Link
               href="/bestanimelist"
-              className="inline-flex items-center gap-2 mt-4 px-5 py-3 rounded-2xl bg-accent/15 border border-accent/20 text-[11px] font-black uppercase tracking-widest text-accent-bright hover:bg-accent/25 transition-all"
+              className="inline-flex items-center gap-2 mt-4 px-5 py-3 rounded-2xl bg-accent/15 border border-accent/20 text-[11px] font-black uppercase tracking-widest text-accent-bright hover:bg-white/25 transition-all"
             >
               Browse All Anime <ChevronRight size={12} />
             </Link>

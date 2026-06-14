@@ -9,7 +9,7 @@ export const StreakHeader = () => {
       <div className="space-y-2">
         <Link
           href="/dashboard"
-          className="inline-flex items-center gap-2 min-h-11 -ml-1 px-1 text-muted hover:text-accent-bright active:scale-95 transition-all text-xs font-black uppercase tracking-[0.2em] mb-2"
+          className="inline-flex items-center gap-2 min-h-11 -ml-1 px-1 text-muted hover:text-white active:scale-95 transition-all text-xs font-black uppercase tracking-[0.2em] mb-2"
         >
           <ChevronLeft size={14} /> Back to Hub
         </Link>

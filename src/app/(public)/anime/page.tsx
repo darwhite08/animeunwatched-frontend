@@ -92,7 +92,7 @@ export default function AnimeBrowsePage() {
         <div>
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-black tracking-tighter uppercase italic text-foreground">All-Time Best</h2>
-            <Link href="/bestanimelist" className="text-[10px] font-black uppercase tracking-widest text-accent-bright hover:text-accent-bright transition-colors">
+            <Link href="/bestanimelist" className="text-[10px] font-black uppercase tracking-widest text-accent-bright hover:text-white transition-colors">
               Full List →
             </Link>
           </div>
@@ -110,10 +110,10 @@ export default function AnimeBrowsePage() {
                 <p className="text-[10px] font-black uppercase tracking-widest text-subtle">{SEASON_LABELS[s]}</p>
                 {SEASONAL_YEARS.map(y => (
                   <Link key={y} href={`/anime/season/${y}/${s}`}
-                    className="flex items-center justify-between px-4 py-2.5 rounded-xl bg-surface border border-border hover:border-accent/25 hover:bg-surface transition-all group"
+                    className="flex items-center justify-between px-4 py-2.5 rounded-xl bg-surface border border-border hover:border-white/25 hover:bg-surface transition-all group"
                   >
                     <span className="text-sm font-bold text-muted group-hover:text-foreground transition-colors">{y}</span>
-                    <span className="text-[9px] text-subtle group-hover:text-accent-bright transition-colors font-mono">
+                    <span className="text-[9px] text-subtle group-hover:text-white transition-colors font-mono">
                       {animeList.filter(a => a.year === y).length} anime
                     </span>
                   </Link>

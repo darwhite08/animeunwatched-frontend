@@ -97,7 +97,7 @@ export const StreakInsights = () => {
         ))}
 
         {watching && (
-          <div className="p-6 rounded-[2rem] bg-accent/10 border border-accent/20 flex items-center gap-4 group cursor-pointer hover:bg-accent/20 transition-all">
+          <div className="p-6 rounded-[2rem] bg-accent/10 border border-accent/20 flex items-center gap-4 group cursor-pointer hover:bg-white/20 transition-all">
             <AlertCircle className="text-accent-bright shrink-0" size={20} />
             <p className="text-[11px] font-bold text-accent-bright leading-tight">
               Log today&apos;s episode of <span className="text-foreground">{watching.anime?.title ?? "your current show"}</span> to keep your streak alive.

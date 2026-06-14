@@ -38,7 +38,7 @@ export default function NotificationBell() {
         onClick={() => setIsOpen(!isOpen)}
         animate={shake ? { rotate: [0, -18, 18, -14, 14, -8, 8, 0] } : { rotate: 0 }}
         transition={{ duration: 0.8 }}
-        className="relative p-2.5 rounded-full bg-surface border border-border text-muted hover:text-foreground hover:bg-accent/10 transition-colors group"
+        className="relative p-2.5 rounded-full bg-surface border border-border text-muted hover:text-foreground hover:bg-white/10 transition-colors group"
       >
         <Bell size={18} className={unreadCount > 0 ? "text-accent-bright" : ""} />
 

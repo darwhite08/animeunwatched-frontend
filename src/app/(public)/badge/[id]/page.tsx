@@ -324,7 +324,7 @@ export default function BadgeDetailPage({ params }: { params: Promise<{ id: stri
                     initial={{ opacity: 0, scale: 0.94 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: 0.15 + i * 0.06 }}
-                    className="p-4 rounded-2xl bg-surface border border-border hover:border-accent/20 hover:bg-surface transition-all flex flex-col items-center gap-3 text-center group"
+                    className="p-4 rounded-2xl bg-surface border border-border hover:border-white/20 hover:bg-surface transition-all flex flex-col items-center gap-3 text-center group"
                   >
                     <div className={`h-12 w-12 rounded-xl bg-gradient-to-br ${earner.avatarColor} flex items-center justify-center font-black text-lg text-foreground group-hover:scale-105 transition-transform`}>
                       {earner.avatar}
@@ -375,7 +375,7 @@ export default function BadgeDetailPage({ params }: { params: Promise<{ id: stri
             {/* All badges link */}
             <Link
               href="/achievements"
-              className="block p-5 rounded-2xl bg-surface border border-border hover:border-accent/20 transition-all group text-center"
+              className="block p-5 rounded-2xl bg-surface border border-border hover:border-white/20 transition-all group text-center"
             >
               <p className="text-xs font-black uppercase italic tracking-tight text-muted group-hover:text-foreground transition-colors">
                 View All Badges

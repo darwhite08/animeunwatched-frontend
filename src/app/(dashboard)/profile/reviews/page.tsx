@@ -146,7 +146,7 @@ export default function MyReviewsPage() {
                   </div>
                 </div>
                 <div className="flex gap-2 shrink-0">
-                  <button onClick={() => push("Review editing coming soon!", "info")} className="p-2 rounded-lg text-subtle hover:text-accent-bright hover:bg-surface transition-colors">
+                  <button onClick={() => push("Review editing coming soon!", "info")} className="p-2 rounded-lg text-subtle hover:text-white hover:bg-surface transition-colors">
                     <Edit2 size={13} />
                   </button>
                   <button onClick={() => deleteReview(r.id)} className="p-2 rounded-lg text-subtle hover:text-red-400 hover:bg-red-500/5 transition-colors">
@@ -157,7 +157,7 @@ export default function MyReviewsPage() {
               <p className="text-sm text-muted leading-relaxed line-clamp-3">{r.body}</p>
               <div className="flex items-center justify-between pt-2 border-t border-border text-[9px] text-subtle">
                 <span>{r.helpful} people found this helpful</span>
-                <Link href={`/anime/${r.anime.id}/reviews`} className="text-accent-bright/60 hover:text-accent-bright transition-colors font-black uppercase tracking-widest">
+                <Link href={`/anime/${r.anime.id}/reviews`} className="text-accent-bright/60 hover:text-white transition-colors font-black uppercase tracking-widest">
                   View on Anime →
                 </Link>
               </div>

@@ -288,7 +288,7 @@ export default function WatchlistPage() {
                 {query ? `No anime matched "${query}"` : "No anime in this category"}
               </p>
               {query && (
-                <button onClick={() => setQuery("")} className="mt-4 text-xs text-accent-bright hover:text-accent-bright font-black uppercase tracking-widest transition-colors">
+                <button onClick={() => setQuery("")} className="mt-4 text-xs text-accent-bright hover:text-white font-black uppercase tracking-widest transition-colors">
                   Clear search
                 </button>
               )}

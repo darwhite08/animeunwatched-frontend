@@ -108,7 +108,7 @@ function ListCard({ entry, index, onAdd }: ListCardProps) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ delay: Math.min(index * 0.04, 0.4), duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
-      className="group relative rounded-2xl overflow-hidden border border-border bg-surface hover:border-accent/25 hover:bg-surface-2 transition-all duration-400"
+      className="group relative rounded-2xl overflow-hidden border border-border bg-surface hover:border-white/25 hover:bg-surface-2 transition-all duration-400"
     >
       {/* Cover */}
       <div className="relative aspect-[2/3] w-full">

@@ -219,7 +219,7 @@ export default function RatePage() {
                     whileHover={{ scale:1.02 }}
                     whileTap={{ scale:0.97 }}
                     onClick={() => selectAnime(a)}
-                    className="flex items-center gap-3 p-3 rounded-2xl bg-surface border border-border hover:border-accent/30 hover:bg-accent/8 transition-all text-left group"
+                    className="flex items-center gap-3 p-3 rounded-2xl bg-surface border border-border hover:border-white/30 hover:bg-white/8 transition-all text-left group"
                   >
                     <div className="relative h-12 w-9 rounded-lg overflow-hidden shrink-0">
                       <Image src={a.image} alt={a.title} fill className="object-cover" sizes="36px" />
@@ -266,7 +266,7 @@ export default function RatePage() {
                           ? "bg-accent border-accent text-black shadow-[0_0_20px_rgba(99,102,241,0.4)]"
                           : rating && n <= rating
                           ? "bg-accent/20 border-accent/30 text-accent-bright"
-                          : "bg-surface border-border text-subtle hover:border-accent/30 hover:text-foreground"
+                          : "bg-surface border-border text-subtle hover:border-white/30 hover:text-foreground"
                       }`}
                     >
                       {n}
@@ -323,7 +323,7 @@ export default function RatePage() {
                         className={`px-4 py-3 rounded-xl border text-sm text-left transition-all ${
                           answers[q.id] === opt
                             ? "bg-accent/20 border-accent text-foreground"
-                            : "border-border bg-surface text-muted hover:border-accent/30 hover:text-foreground"
+                            : "border-border bg-surface text-muted hover:border-white/30 hover:text-foreground"
                         }`}
                       >
                         {opt}

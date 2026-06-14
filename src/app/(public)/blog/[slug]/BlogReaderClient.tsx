@@ -382,7 +382,7 @@ export function BlogReaderClient({ slug, initialBlog }: { slug: string; initialB
         <p className="text-[10px] font-black uppercase tracking-[0.3em] text-rose-400">Article unavailable</p>
         <h1 className="text-2xl font-black tracking-tighter text-foreground">We couldn&apos;t load this story.</h1>
         <p className="text-sm text-muted">The blog may have been removed, or the API is offline. Try again from the listing.</p>
-        <Link href="/blog" className="inline-flex items-center gap-1.5 text-[11px] font-black uppercase tracking-widest text-accent-bright hover:text-accent transition-colors">
+        <Link href="/blog" className="inline-flex items-center gap-1.5 text-[11px] font-black uppercase tracking-widest text-accent-bright hover:text-white transition-colors">
           <ChevronLeft size={12} /> Back to The Chronicle
         </Link>
       </div>
@@ -495,7 +495,7 @@ export function BlogReaderClient({ slug, initialBlog }: { slug: string; initialB
               </div>
             )}
             <div>
-              <p className="text-sm font-black text-foreground flex items-center gap-1.5 group-hover:text-accent-bright transition-colors">
+              <p className="text-sm font-black text-foreground flex items-center gap-1.5 group-hover:text-white transition-colors">
                 {meta.author}
                 {apiBlog?.author?.verifiedKind && <VerifiedBadge kind={apiBlog.author.verifiedKind} size={14} />}
               </p>
@@ -556,7 +556,7 @@ export function BlogReaderClient({ slug, initialBlog }: { slug: string; initialB
             className={`ml-auto inline-flex min-h-11 items-center gap-2 px-4 sm:px-5 rounded-xl text-xs font-black uppercase tracking-widest transition-all active:scale-95 border ${
               bookmarked
                 ? "bg-accent/15 border-accent/25 text-accent-bright"
-                : "bg-white/[0.04] border-border text-muted hover:text-accent-bright"
+                : "bg-white/[0.04] border-border text-muted hover:text-white"
             }`}
           >
             <Bookmark size={14} fill={bookmarked ? "currentColor" : "none"} />

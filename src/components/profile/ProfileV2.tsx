@@ -311,7 +311,7 @@ function Hero({ isOwner }: { isOwner: boolean }) {
           </div>
 
           <Link href={user?.slug ? `/user/${user.slug}/profile/wrapped` : "/profile/wrapped"}
-            className="group relative flex items-center gap-3 min-h-11 px-4 py-3 rounded-xl text-left border border-accent/30 bg-accent/[0.06] hover:bg-accent/[0.10] active:scale-[0.98] transition-[transform,background-color] overflow-hidden">
+            className="group relative flex items-center gap-3 min-h-11 px-4 py-3 rounded-xl text-left border border-accent/30 bg-accent/[0.06] hover:bg-white/[0.10] active:scale-[0.98] transition-[transform,background-color] overflow-hidden">
             <span className="absolute inset-0 pointer-events-none opacity-50"
               style={{ background: "radial-gradient(60% 100% at 0% 50%, color-mix(in srgb, var(--app-accent) 22%, transparent), transparent 60%)" }} />
             <span className="relative w-8 h-8 rounded-lg grid place-items-center bg-accent/15 text-accent">
@@ -582,7 +582,7 @@ function Favorites() {
         <div className="flex items-center gap-2 text-sm font-bold text-foreground">
           <Crown size={15} className="text-accent" /> All-time favorites
         </div>
-        <button className="flex items-center gap-1 text-xs font-bold text-accent hover:text-accent-bright transition-colors">
+        <button className="flex items-center gap-1 text-xs font-bold text-accent hover:text-white transition-colors">
           Edit list <ChevronRight size={13} />
         </button>
       </div>
@@ -833,7 +833,7 @@ function ActivityFeed() {
         <div className="flex items-center gap-2 text-sm font-bold text-foreground">
           <Clock size={14} className="text-accent" /> Recent activity
         </div>
-        <Link href="/profile/activity" className="flex items-center gap-1 text-xs font-bold text-accent hover:text-accent-bright transition-colors">
+        <Link href="/profile/activity" className="flex items-center gap-1 text-xs font-bold text-accent hover:text-white transition-colors">
           All <ChevronRight size={13} />
         </Link>
       </div>

@@ -46,7 +46,7 @@ export default function FriendsActivityCard() {
 
   return (
     <div className="p-8 rounded-[2.5rem] border border-border bg-surface relative overflow-hidden group">
-      <div className="absolute -right-6 -bottom-6 w-32 h-32 bg-accent/5 blur-[40px] rounded-full pointer-events-none group-hover:bg-accent/10 transition-colors duration-700" />
+      <div className="absolute -right-6 -bottom-6 w-32 h-32 bg-accent/5 blur-[40px] rounded-full pointer-events-none group-hover:bg-white/10 transition-colors duration-700" />
 
       <div className="flex items-center justify-between mb-6 relative z-10">
         <div className="flex items-center gap-2">
@@ -55,7 +55,7 @@ export default function FriendsActivityCard() {
             Friends Watching
           </h4>
         </div>
-        <Link href="/following" className="text-[9px] font-black uppercase tracking-widest text-accent-bright/60 hover:text-accent-bright transition-colors flex items-center gap-1">
+        <Link href="/following" className="text-[9px] font-black uppercase tracking-widest text-accent-bright/60 hover:text-white transition-colors flex items-center gap-1">
           All <ChevronRight size={10} />
         </Link>
       </div>

@@ -120,7 +120,7 @@ export default function Sidebar() {
                     <div className="flex items-center gap-3 relative z-10">
                       <item.icon
                         size={15}
-                        className={active ? "text-accent" : "group-hover:text-accent/70 transition-colors"}
+                        className={active ? "text-accent" : "group-hover:text-white/70 transition-colors"}
                       />
                       <span className="text-[13px] font-bold">{item.name}</span>
                     </div>
@@ -152,7 +152,7 @@ export default function Sidebar() {
       {/* Streak footer */}
       <div className="px-4 pb-5 pt-3 border-t border-border">
         <Link href={slug ? userPath(slug, "streak") : "/streak"} className="block group">
-          <div className="p-4 rounded-2xl bg-surface-2 border border-border space-y-3 group-hover:bg-foreground/5 group-hover:border-accent/25 transition-all">
+          <div className="p-4 rounded-2xl bg-surface-2 border border-border space-y-3 group-hover:bg-foreground/5 group-hover:border-white/25 transition-all">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2.5">
                 <div className="p-1.5 rounded-lg bg-orange-500/10 text-orange-500">
@@ -163,7 +163,7 @@ export default function Sidebar() {
                   <p className="text-[9px] text-subtle uppercase tracking-tighter mt-0.5">Flame {grade}</p>
                 </div>
               </div>
-              <ChevronRight size={12} className="text-subtle group-hover:text-accent group-hover:translate-x-0.5 transition-all" />
+              <ChevronRight size={12} className="text-subtle group-hover:text-white group-hover:translate-x-0.5 transition-all" />
             </div>
             <div>
               <div className="flex justify-between text-[8px] font-black uppercase tracking-widest text-subtle mb-1">

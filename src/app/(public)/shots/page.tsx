@@ -520,7 +520,7 @@ function TrailerReel({ trailer, active, muted }: { trailer: Trailer; active: boo
       {/* Bottom meta */}
       <div className="absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-black via-black/80 to-transparent p-4 pt-14 pb-[max(1rem,env(safe-area-inset-bottom))]">
         <Link href={`/anime/${trailer.malId}`} className="block">
-          <h3 className="line-clamp-2 text-base font-black leading-tight tracking-tight text-white transition-colors hover:text-accent-bright sm:text-lg">{trailer.title}</h3>
+          <h3 className="line-clamp-2 text-base font-black leading-tight tracking-tight text-white transition-colors hover:text-white sm:text-lg">{trailer.title}</h3>
         </Link>
         <div className="mt-2 flex flex-wrap items-center gap-2 text-[11px] font-bold text-white/80">
           {trailer.score != null && <span className="inline-flex items-center gap-1"><Star size={12} className="fill-amber-400 text-amber-400" />{trailer.score.toFixed(1)}</span>}

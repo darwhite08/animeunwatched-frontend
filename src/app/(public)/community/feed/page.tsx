@@ -87,7 +87,7 @@ function PostCard({
       {post.anime && (
         <Link
           href="/bestanimelist"
-          className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-accent/8 border border-accent/15 text-[10px] font-bold text-accent-bright hover:bg-accent/15 transition-colors"
+          className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-accent/8 border border-accent/15 text-[10px] font-bold text-accent-bright hover:bg-white/15 transition-colors"
         >
           <Star size={9} /> {post.anime}
         </Link>
@@ -102,7 +102,7 @@ function PostCard({
           {post.tags.map((tag) => (
             <span
               key={tag}
-              className="text-[9px] font-bold text-accent-bright/60 hover:text-accent-bright cursor-pointer transition-colors"
+              className="text-[9px] font-bold text-accent-bright/60 hover:text-white cursor-pointer transition-colors"
             >
               #{tag}
             </span>
@@ -118,7 +118,7 @@ function PostCard({
         </div>
         <Link
           href={`/posts/${post.id}#comments`}
-          className="flex items-center gap-1.5 text-xs font-bold text-subtle hover:text-accent-bright transition-colors"
+          className="flex items-center gap-1.5 text-xs font-bold text-subtle hover:text-white transition-colors"
         >
           <MessageSquare size={14} />
           {post.comments}

@@ -126,7 +126,7 @@ function ChallengeCard({ challenge, onAccept, accepted }: { challenge: Challenge
     <motion.div
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      className="group relative overflow-hidden rounded-[2rem] border border-border bg-surface hover:border-accent/20 transition-all duration-300"
+      className="group relative overflow-hidden rounded-[2rem] border border-border bg-surface hover:border-white/20 transition-all duration-300"
     >
       <div className="flex gap-5 p-6">
         {/* Anime thumbnail */}
@@ -148,7 +148,7 @@ function ChallengeCard({ challenge, onAccept, accepted }: { challenge: Challenge
                 <Swords size={11} className="text-accent-bright" />
                 <span className="text-[9px] font-black uppercase tracking-[0.35em] text-accent-bright/70">Watch Challenge</span>
               </div>
-              <h3 className="text-base font-black uppercase italic tracking-tight text-foreground leading-snug group-hover:text-accent-bright transition-colors">
+              <h3 className="text-base font-black uppercase italic tracking-tight text-foreground leading-snug group-hover:text-white transition-colors">
                 {challenge.animeTitle}
               </h3>
             </div>
@@ -681,11 +681,11 @@ export default function ClubDetailPage({
                         <motion.div key={member.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: Math.min(i * 0.04, 0.3) }}>
                           <Link
                             href={`/u/${member.username}`}
-                            className="group flex items-center gap-3 p-3 rounded-2xl bg-surface border border-border transition-colors hover:border-accent/25"
+                            className="group flex items-center gap-3 p-3 rounded-2xl bg-surface border border-border transition-colors hover:border-white/25"
                           >
                             <Avatar src={member.avatarUrl} name={member.displayName} size={44} />
                             <div className="min-w-0 flex-1">
-                              <p className="flex items-center gap-1 text-sm font-bold text-foreground group-hover:text-accent-bright transition-colors">
+                              <p className="flex items-center gap-1 text-sm font-bold text-foreground group-hover:text-white transition-colors">
                                 <span className="truncate">{member.displayName}</span>
                                 <VerifiedBadge kind={member.verifiedKind} size={13} />
                               </p>

@@ -46,7 +46,7 @@ export default function StaffPage({ params }: { params: Promise<{ id: string }> 
             {staff.map((s, i) => (
               <motion.div key={`${s.person.mal_id}-${i}`}
                 initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.03 }}
-                className="flex items-center gap-4 p-4 rounded-2xl border border-border bg-surface hover:border-accent/20 transition-all">
+                className="flex items-center gap-4 p-4 rounded-2xl border border-border bg-surface hover:border-white/20 transition-all">
                 <div className="h-14 w-10 rounded-xl overflow-hidden bg-surface shrink-0">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img loading="lazy" decoding="async" src={s.person.images.jpg.image_url} alt={s.person.name}

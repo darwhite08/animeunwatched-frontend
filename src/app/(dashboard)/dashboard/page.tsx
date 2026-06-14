@@ -270,7 +270,7 @@ export default function DashboardPage() {
           <QuickCard href="/clubs"           icon={Users} label="Browse Clubs"
             color="from-violet-600/20 to-violet-900/5 border-violet-500/20 hover:border-violet-500/50" iconColor="text-violet-400" />
           <QuickCard href="/profile#reviews" icon={Star}  label="My Reviews"
-            color="from-accent/20 to-amber-900/5 border-accent/20 hover:border-accent/50"   iconColor="text-accent-bright" />
+            color="from-accent/20 to-amber-900/5 border-accent/20 hover:border-white/50"   iconColor="text-accent-bright" />
         </div>
       </div>
 

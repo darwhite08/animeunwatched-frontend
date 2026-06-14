@@ -121,7 +121,7 @@ export default function DailyQuestCard() {
               <Link href={q.href} className="flex items-center gap-3 group">
                 {complete
                   ? <CheckCircle2 size={16} className="text-emerald-400 shrink-0" fill="currentColor" />
-                  : <Circle size={16} className="text-subtle shrink-0 group-hover:text-accent-bright transition-colors" />
+                  : <Circle size={16} className="text-subtle shrink-0 group-hover:text-white transition-colors" />
                 }
                 <span className={`text-sm font-bold flex-1 transition-colors ${complete ? "text-muted line-through" : "text-muted group-hover:text-foreground"}`}>
                   {q.label}

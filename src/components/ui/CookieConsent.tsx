@@ -63,7 +63,7 @@ export default function CookieConsent() {
               <span className="text-foreground/80">Google Analytics</span>{" "}
               (anonymised IP) to understand which features are useful.
               No ad pixels, no cross-site trackers.{" "}
-              <Link href="/privacy" className="text-accent-bright/80 hover:text-accent-bright underline">
+              <Link href="/privacy" className="text-accent-bright/80 hover:text-white underline">
                 Privacy
               </Link>
             </p>

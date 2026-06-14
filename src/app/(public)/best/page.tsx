@@ -28,7 +28,7 @@ function YearCard({ year, index, allAnime }: { year: number; index: number; allA
       transition={{ delay: index * 0.06, duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
     >
       <Link href={`/best/${year}`} className="group block h-full">
-        <div className="relative h-64 rounded-2xl overflow-hidden border border-border group-hover:border-accent/25 transition-all">
+        <div className="relative h-64 rounded-2xl overflow-hidden border border-border group-hover:border-white/25 transition-all">
           {top ? (
             <>
               <Image
@@ -60,7 +60,7 @@ function YearCard({ year, index, allAnime }: { year: number; index: number; allA
           <div className="absolute bottom-0 left-0 right-0 p-4">
             {top ? (
               <>
-                <p className="text-xs font-black uppercase italic tracking-tight text-foreground leading-tight line-clamp-2 group-hover:text-accent-bright transition-colors">
+                <p className="text-xs font-black uppercase italic tracking-tight text-foreground leading-tight line-clamp-2 group-hover:text-white transition-colors">
                   {top.title}
                 </p>
                 <div className="flex items-center gap-2 mt-1.5">

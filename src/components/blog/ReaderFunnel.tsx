@@ -110,9 +110,9 @@ export function ReaderFunnel({ excludeSlug }: { excludeSlug?: string }) {
               <Link
                 key={b.slug}
                 href={`/blog/${b.slug}`}
-                className="group flex flex-col rounded-2xl border border-border bg-surface-2 p-5 transition-all hover:border-accent/30"
+                className="group flex flex-col rounded-2xl border border-border bg-surface-2 p-5 transition-all hover:border-white/30"
               >
-                <p className="line-clamp-2 text-sm font-black uppercase italic leading-snug tracking-tight text-foreground transition-colors group-hover:text-accent-bright">
+                <p className="line-clamp-2 text-sm font-black uppercase italic leading-snug tracking-tight text-foreground transition-colors group-hover:text-white">
                   {b.title}
                 </p>
                 <p className="mt-2 flex items-center gap-1.5 text-[10px] text-subtle">

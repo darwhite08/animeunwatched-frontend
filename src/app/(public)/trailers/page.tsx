@@ -86,7 +86,7 @@ function TrailerModal({ trailer, onClose }: { trailer: Trailer; onClose: () => v
         <div className="mb-3 flex items-center justify-between">
           <h2 className="text-lg font-black text-white">{trailer.title}</h2>
           <div className="flex items-center gap-3">
-            <Link href={`/anime/${trailer.malId}`} className="flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-accent-bright hover:text-accent">Details <ArrowUpRight size={13} /></Link>
+            <Link href={`/anime/${trailer.malId}`} className="flex items-center gap-1 text-xs font-bold uppercase tracking-widest text-accent-bright hover:text-white">Details <ArrowUpRight size={13} /></Link>
             <button onClick={onClose} className="text-white/60 hover:text-white"><X size={20} /></button>
           </div>
         </div>

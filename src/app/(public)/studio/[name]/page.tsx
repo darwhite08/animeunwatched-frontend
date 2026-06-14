@@ -31,7 +31,7 @@ export default function StudioPage({ params }: { params: Promise<{ name: string 
   return (
     <div className="min-h-screen bg-background text-foreground pb-32">
       <div className="max-w-7xl mx-auto px-6 pt-32">
-        <Link href="/studios" className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-accent-bright/60 hover:text-accent-bright transition-colors mb-6">
+        <Link href="/studios" className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-accent-bright/60 hover:text-white transition-colors mb-6">
           <ChevronLeft size={11}/> All Studios
         </Link>
 
@@ -55,7 +55,7 @@ export default function StudioPage({ params }: { params: Promise<{ name: string 
             {anime[0] && (
               <motion.div initial={{ opacity:0,y:16 }} animate={{ opacity:1,y:0 }}
                 onClick={() => setSelected(anime[0])}
-                className="group p-6 rounded-2xl bg-gradient-to-br from-indigo-600/15 to-violet-600/10 border border-accent/25 mb-8 cursor-pointer hover:border-accent/40 transition-all"
+                className="group p-6 rounded-2xl bg-gradient-to-br from-indigo-600/15 to-violet-600/10 border border-accent/25 mb-8 cursor-pointer hover:border-white/40 transition-all"
               >
                 <p className="text-[9px] font-black uppercase tracking-widest text-accent-bright/60 mb-2">Top Rated by {studioName}</p>
                 <div className="flex items-center gap-4">

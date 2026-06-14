@@ -43,7 +43,7 @@ function BlogCard({ post, index }: { post: BlogPost; index: number }) {
       initial={{ opacity: 0, y: 18 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.07, duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
-      className="group block bg-surface-2 border border-border hover:border-accent/30 rounded-2xl overflow-hidden transition-all"
+      className="group block bg-surface-2 border border-border hover:border-white/30 rounded-2xl overflow-hidden transition-all"
     >
       {/* Cover gradient */}
       <div className={`h-40 w-full bg-gradient-to-br ${post.coverGradient} relative`}>
@@ -56,7 +56,7 @@ function BlogCard({ post, index }: { post: BlogPost; index: number }) {
 
       {/* Body */}
       <div className="p-5 space-y-3">
-        <h2 className="text-sm font-black uppercase italic tracking-tight text-foreground leading-snug group-hover:text-accent-bright transition-colors line-clamp-2">
+        <h2 className="text-sm font-black uppercase italic tracking-tight text-foreground leading-snug group-hover:text-white transition-colors line-clamp-2">
           {post.title}
         </h2>
         <p className="text-xs text-muted leading-relaxed line-clamp-2">{post.excerpt}</p>
@@ -185,7 +185,7 @@ export default function UserBlogPage({
           </p>
           <Link
             href={`/u/${username}`}
-            className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-white/[0.04] border border-border hover:border-accent/30 hover:bg-surface text-sm font-black uppercase tracking-widest text-muted hover:text-foreground transition-all"
+            className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-white/[0.04] border border-border hover:border-white/30 hover:bg-surface text-sm font-black uppercase tracking-widest text-muted hover:text-foreground transition-all"
           >
             <PenSquare size={14} className="text-accent-bright" />
             More articles by @{username}

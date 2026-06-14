@@ -51,7 +51,7 @@ export default function CharactersPage({ params }: { params: Promise<{ id: strin
               return (
                 <motion.div key={c.character.mal_id}
                   initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.025 }}
-                  className="group rounded-2xl overflow-hidden border border-border bg-surface hover:border-accent/25 transition-all">
+                  className="group rounded-2xl overflow-hidden border border-border bg-surface hover:border-white/25 transition-all">
                   <div className="relative aspect-[3/4] bg-surface">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img loading="lazy" decoding="async" src={c.character.images.jpg.image_url} alt={c.character.name}

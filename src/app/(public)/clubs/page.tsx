@@ -89,7 +89,7 @@ function ClubCard({
 
       <div className="p-4 sm:p-5 space-y-4">
         {/* Name */}
-        <h3 className="text-base font-black uppercase italic tracking-tight text-foreground leading-snug group-hover:text-accent-bright transition-colors line-clamp-2">
+        <h3 className="text-base font-black uppercase italic tracking-tight text-foreground leading-snug group-hover:text-white transition-colors line-clamp-2">
           {club.name}
         </h3>
 
@@ -238,7 +238,7 @@ export default function ClubsPage() {
                 className={`shrink-0 px-4 min-h-11 rounded-xl text-[10px] font-black uppercase tracking-wider transition-all active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 ${
                   activeCategory === cat
                     ? "text-black border border-accent/60 shadow-[0_4px_16px_color-mix(in_srgb,var(--app-accent)_35%,transparent)]"
-                    : "bg-surface border border-border text-muted hover:text-foreground hover:border-accent/30 hover:bg-surface-2"
+                    : "bg-surface border border-border text-muted hover:text-foreground hover:border-white/30 hover:bg-surface-2"
                 }`}
                 style={activeCategory === cat ? {
                   background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))",
@@ -288,7 +288,7 @@ export default function ClubsPage() {
                   setSearch("")
                   setActiveCategory("All")
                 }}
-                className="mt-2 px-5 min-h-11 rounded-xl bg-accent/20 border border-accent/20 text-xs font-black uppercase tracking-widest text-accent-bright hover:bg-accent/30 active:scale-95 transition-all"
+                className="mt-2 px-5 min-h-11 rounded-xl bg-accent/20 border border-accent/20 text-xs font-black uppercase tracking-widest text-accent-bright hover:bg-white/30 active:scale-95 transition-all"
               >
                 Clear filters
               </button>

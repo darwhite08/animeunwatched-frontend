@@ -125,7 +125,7 @@ export default function RankingsPage() {
                         initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: i * 0.08 }}
                         onClick={() => setSelected(anime)}
-                        className={`group p-3.5 sm:p-5 rounded-2xl border cursor-pointer transition-all hover:border-accent/30 active:scale-95 ${
+                        className={`group p-3.5 sm:p-5 rounded-2xl border cursor-pointer transition-all hover:border-white/30 active:scale-95 ${
                           pos === 0 ? "border-accent/30 bg-accent/5" : "border-border bg-surface"
                         }`}
                       >

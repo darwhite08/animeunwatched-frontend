@@ -224,9 +224,9 @@ export default function AboutPage() {
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.07 }}
-                className="flex items-center gap-5 p-5 rounded-2xl border border-border bg-surface hover:border-accent/20 hover:bg-white/[0.035] transition-all group"
+                className="flex items-center gap-5 p-5 rounded-2xl border border-border bg-surface hover:border-white/20 hover:bg-white/[0.035] transition-all group"
               >
-                <div className="p-2.5 rounded-xl bg-accent/10 text-accent-bright shrink-0 group-hover:bg-accent/15 transition-colors">
+                <div className="p-2.5 rounded-xl bg-accent/10 text-accent-bright shrink-0 group-hover:bg-white/15 transition-colors">
                   <item.icon size={18} />
                 </div>
                 <div>

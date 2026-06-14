@@ -98,7 +98,7 @@ export default function NotificationsPage() {
           {unreadCount > 0 && (
             <button
               onClick={markAllRead}
-              className={`flex items-center justify-center gap-1.5 px-3 sm:px-4 ${ui.touch} rounded-xl text-[11px] sm:text-xs font-black uppercase tracking-wider text-accent-bright hover:bg-accent/10 active:scale-95 border border-accent/20 transition-all`}
+              className={`flex items-center justify-center gap-1.5 px-3 sm:px-4 ${ui.touch} rounded-xl text-[11px] sm:text-xs font-black uppercase tracking-wider text-accent-bright hover:bg-white/10 active:scale-95 border border-accent/20 transition-all`}
             >
               <CheckCheck size={13} /> <span className="hidden sm:inline">Mark all </span>read
             </button>
@@ -160,7 +160,7 @@ export default function NotificationsPage() {
                   className={`group relative flex items-start gap-3 sm:gap-4 p-4 sm:p-5 rounded-2xl border transition-all cursor-pointer active:scale-[0.99] ${
                     notif.read
                       ? "border-border bg-transparent hover:bg-surface"
-                      : "border-accent/15 bg-accent/5 hover:bg-accent/8"
+                      : "border-accent/15 bg-accent/5 hover:bg-white/8"
                   }`}
                 >
                   {/* Unread accent rail */}

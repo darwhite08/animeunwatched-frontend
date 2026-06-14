@@ -69,7 +69,7 @@ function ActivePollRow({ poll }: { poll: ActivePoll }) {
     }
   }
   return (
-    <div className="p-4 rounded-xl bg-surface border border-border hover:border-accent/20 transition-colors space-y-3">
+    <div className="p-4 rounded-xl bg-surface border border-border hover:border-white/20 transition-colors space-y-3">
       <div className="flex items-start justify-between gap-3">
         <p className="text-sm font-semibold text-foreground leading-tight">{poll.question}</p>
         <span className="font-mono text-[9px] uppercase tracking-widest text-muted shrink-0 tabular-nums mt-0.5">
@@ -92,7 +92,7 @@ function ActivePollRow({ poll }: { poll: ActivePoll }) {
                   ? "border-accent/60 bg-accent/[0.08]"
                   : voted
                     ? "border-border bg-surface-2"
-                    : "border-border bg-surface-2 hover:bg-surface hover:border-accent/30 cursor-pointer"
+                    : "border-border bg-surface-2 hover:bg-surface hover:border-white/30 cursor-pointer"
               }`}
             >
               <span
@@ -193,7 +193,7 @@ function SpoilerBlock({ text }: { text: string }) {
       </p>
       {!revealed && (
         <button onClick={() => setRevealed(true)}
-          className="absolute inset-0 flex items-center justify-center rounded-xl bg-accent/8 border border-accent/20 text-[11px] font-black uppercase tracking-widest text-accent-bright hover:bg-accent/15 transition-all">
+          className="absolute inset-0 flex items-center justify-center rounded-xl bg-accent/8 border border-accent/20 text-[11px] font-black uppercase tracking-widest text-accent-bright hover:bg-white/15 transition-all">
           ⚠️ Spoiler — click to reveal
         </button>
       )}
@@ -273,7 +273,7 @@ function PostCard({ post }: { post: Post }) {
   return (
     <motion.article layout initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
       transition={{ duration: DURATION.base, ease: EASE.out }}
-      className="bg-surface border border-border rounded-2xl overflow-hidden transition-colors hover:border-accent/25 hover:shadow-[0_8px_28px_color-mix(in_srgb,var(--app-fg)_7%,transparent)] focus-within:ring-2 focus-within:ring-accent/40"
+      className="bg-surface border border-border rounded-2xl overflow-hidden transition-colors hover:border-white/25 hover:shadow-[0_8px_28px_color-mix(in_srgb,var(--app-fg)_7%,transparent)] focus-within:ring-2 focus-within:ring-accent/40"
       style={{
         scrollMarginTop: "160px",  // account for sticky navbar + community header
       }}
@@ -287,7 +287,7 @@ function PostCard({ post }: { post: Post }) {
             </Link>
             <div>
               <Link href={`/u/${post.author?.username ?? ""}`} className="rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60">
-                <p className="flex items-center gap-1.5 text-[15px] font-semibold text-foreground hover:text-accent-bright transition-colors leading-tight">
+                <p className="flex items-center gap-1.5 text-[15px] font-semibold text-foreground hover:text-white transition-colors leading-tight">
                   {authorName}
                   <VerifiedBadge kind={(post.author as { verifiedKind?: "USER" | "CREATOR" | "STUDIO" | null })?.verifiedKind} size={15} />
                 </p>
@@ -301,7 +301,7 @@ function PostCard({ post }: { post: Post }) {
         {/* Anime tag */}
         {post.anime && (
           <Link href={`/anime/${post.anime.malId}`}
-            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-accent/10 border border-accent/20 text-[10px] font-bold text-accent-bright hover:bg-accent/20 transition-colors">
+            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg bg-accent/10 border border-accent/20 text-[10px] font-bold text-accent-bright hover:bg-white/20 transition-colors">
             <Star size={9} fill="currentColor" className="text-accent-bright" /> {post.anime.title}
           </Link>
         )}
@@ -388,7 +388,7 @@ function PostCard({ post }: { post: Post }) {
             className={`flex items-center gap-2 min-h-11 px-3 rounded-xl text-sm font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 ${
               showComments
                 ? "text-accent-bright bg-accent/15"
-                : "text-muted hover:text-accent-bright hover:bg-accent/10"
+                : "text-muted hover:text-white hover:bg-white/10"
             }`}>
             <MessageSquare size={16} />
             {commentCount > 0 && <span className="tabular-nums">{commentCount}</span>}
@@ -768,13 +768,13 @@ export default function CommunityPage() {
                         title="Mention a user (@)"
                         aria-label="Mention a user"
                         onClick={() => insertAtCursor("@")}
-                        className="flex h-10 w-10 items-center justify-center rounded-lg text-muted hover:text-accent-bright hover:bg-accent/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60"><AtSign size={15} /></button>
+                        className="flex h-10 w-10 items-center justify-center rounded-lg text-muted hover:text-white hover:bg-white/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60"><AtSign size={15} /></button>
                       <button
                         type="button"
                         title="Add a hashtag (#)"
                         aria-label="Add a hashtag"
                         onClick={() => insertAtCursor("#")}
-                        className="flex h-10 w-10 items-center justify-center rounded-lg text-muted hover:text-accent-bright hover:bg-accent/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60"><Hash size={15} /></button>
+                        className="flex h-10 w-10 items-center justify-center rounded-lg text-muted hover:text-white hover:bg-white/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60"><Hash size={15} /></button>
                       <input
                         ref={fileInputRef}
                         type="file"
@@ -797,14 +797,14 @@ export default function CommunityPage() {
                             ? "text-accent-bright animate-pulse"
                             : attachedImages.length > 0
                             ? "text-emerald-400"
-                            : "text-subtle hover:text-accent-bright"
+                            : "text-subtle hover:text-white"
                         }`}
                       ><ImageIcon size={15} /></button>
                       {/* Spoiler toggle */}
                       <button onClick={() => setIsSpoiler(s => !s)}
                         title="Mark as spoiler"
                         className={`flex items-center gap-1 px-2 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest transition-all ${
-                          isSpoiler ? "bg-accent/20 text-accent-bright border border-accent/30" : "text-subtle hover:text-accent-bright hover:bg-accent/10"
+                          isSpoiler ? "bg-accent/20 text-accent-bright border border-accent/30" : "text-subtle hover:text-white hover:bg-white/10"
                         }`}>
                         ⚠️ Spoiler
                       </button>
@@ -890,7 +890,7 @@ export default function CommunityPage() {
                 {liveTrendingTags.map((tag, i) => (
                   <motion.span key={tag} initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: i * 0.04 }}>
                     <Link href={`/search?q=${encodeURIComponent("#" + tag)}&type=posts`}
-                      className="px-3 py-1.5 rounded-full bg-surface-2 border border-border text-[10px] font-bold text-muted hover:text-accent-bright hover:border-accent/30 transition-colors inline-block">
+                      className="px-3 py-1.5 rounded-full bg-surface-2 border border-border text-[10px] font-bold text-muted hover:text-white hover:border-white/30 transition-colors inline-block">
                       #{tag}
                     </Link>
                   </motion.span>
@@ -907,7 +907,7 @@ export default function CommunityPage() {
                 <Vote size={14} className="text-accent-bright" />
                 <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-muted">Active Polls</h3>
               </div>
-              <Link href="/poll" className="text-[10px] font-bold text-accent-bright/80 hover:text-accent-bright transition-colors">
+              <Link href="/poll" className="text-[10px] font-bold text-accent-bright/80 hover:text-white transition-colors">
                 All →
               </Link>
             </div>
@@ -943,7 +943,7 @@ export default function CommunityPage() {
               <Users size={16} className="text-accent-bright" />
             </div>
             <div>
-              <p className="text-sm font-bold text-foreground group-hover:text-accent-bright transition-colors">Creator Studio</p>
+              <p className="text-sm font-bold text-foreground group-hover:text-white transition-colors">Creator Studio</p>
               <p className="text-[10px] text-subtle mt-0.5">Publish blogs, polls, and feeds</p>
             </div>
           </Link>

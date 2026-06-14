@@ -34,7 +34,7 @@ export function ReadCard({
   return (
     <motion.div layout initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.95 }}
       whileHover={{ y: -8 }} whileTap={{ scale: 0.98 }}
-      className="group relative rounded-3xl sm:rounded-[2.8rem] border border-border bg-background overflow-hidden transition-all duration-500 hover:border-accent/40 hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.8)]">
+      className="group relative rounded-3xl sm:rounded-[2.8rem] border border-border bg-background overflow-hidden transition-all duration-500 hover:border-white/40 hover:shadow-[0_30px_60px_-15px_rgba(0,0,0,0.8)]">
       {/* COVER */}
       <div className="relative aspect-[3/4] w-full overflow-hidden bg-surface">
         {coverUrl ? (
@@ -61,7 +61,7 @@ export function ReadCard({
       {/* CONTENT */}
       <div className="p-4 sm:p-6 lg:p-8 space-y-4 sm:space-y-6 relative">
         <div className="space-y-1">
-          <h3 className="text-base sm:text-lg lg:text-xl font-black text-foreground tracking-tight leading-tight line-clamp-2 group-hover:text-accent-bright transition-colors">{title}</h3>
+          <h3 className="text-base sm:text-lg lg:text-xl font-black text-foreground tracking-tight leading-tight line-clamp-2 group-hover:text-white transition-colors">{title}</h3>
           {author && <p className="text-[10px] sm:text-[11px] font-bold text-subtle uppercase tracking-[0.2em] truncate">{author}</p>}
         </div>
 

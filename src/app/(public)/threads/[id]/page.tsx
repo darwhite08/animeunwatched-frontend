@@ -364,7 +364,7 @@ function ReplyNode({
             aria-label="Collapse thread"
             className={`group/rail relative flex shrink-0 justify-center ${GUTTER} cursor-pointer`}
           >
-            <span className="absolute inset-y-0 left-1/2 w-px -translate-x-1/2 bg-border transition-colors group-hover/rail:bg-accent/50" />
+            <span className="absolute inset-y-0 left-1/2 w-0.5 -translate-x-1/2 rounded-full bg-foreground/15 transition-colors group-hover/rail:bg-accent/60" />
           </button>
 
           {/* Children */}

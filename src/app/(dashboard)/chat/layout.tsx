@@ -45,7 +45,10 @@ const GLOBAL_CSS = `
      behind it, and use dvh so the iOS URL bar doesn't clip the input. */
   .kv-chat-shell{height:100vh;height:100dvh}
   @media (max-width:767px){
-    .kv-chat-shell{height:calc(100vh - 4rem - env(safe-area-inset-bottom));height:calc(100dvh - 4rem - env(safe-area-inset-bottom))}
+    /* Full-screen chat on mobile — no bottom tab bar here, so don't reserve 4rem
+       for it (that left the settings/me-bar floating above an empty gap). The
+       me-bar carries its own safe-area padding so it sits flush at the bottom. */
+    .kv-chat-shell{height:100vh;height:100dvh}
   }
   /* Momentum scroll on iOS for every chat scroll region. */
   .kv-momentum{-webkit-overflow-scrolling:touch}
@@ -625,17 +628,17 @@ export default function ChatLayout({ children }: { children: React.ReactNode }) 
 
           {/* Me bar */}
           {me && (
-            <div style={{ padding:"10px 12px", borderTop:"1px solid var(--line)", display:"flex", alignItems:"center", gap:10 }}>
-              <Avatar name={me.displayName} src={me.avatarUrl} size={28} showStatus online/>
+            <div style={ isMobile ? { padding:"10px 14px max(12px, env(safe-area-inset-bottom))", borderTop:"1px solid var(--line)", background:"var(--bg-1)", display:"flex", alignItems:"center", gap:11, flexShrink:0 } : { padding:"10px 12px", borderTop:"1px solid var(--line)", display:"flex", alignItems:"center", gap:10, flexShrink:0 }}>
+              <Avatar name={me.displayName} src={me.avatarUrl} size={isMobile ? 36 : 28} showStatus online/>
               <div style={{ flex:1, minWidth:0 }}>
-                <div style={{ fontSize:12.5, fontWeight:600, color:"var(--ink)", overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{me.displayName}</div>
-                <div style={{ fontSize:10.5, color:"var(--ink-4)", display:"flex", alignItems:"center", gap:4, marginTop:1 }}>
+                <div style={{ fontSize:isMobile ? 14 : 12.5, fontWeight:600, color:"var(--ink)", overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{me.displayName}</div>
+                <div style={{ fontSize:isMobile ? 11.5 : 10.5, color:"var(--ink-4)", display:"flex", alignItems:"center", gap:4, marginTop:1 }}>
                   <svg width={8} height={8} viewBox="0 0 24 24" fill="none" stroke="var(--mint)" strokeWidth={2.4} strokeLinecap="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
                   Available · keys verified
                 </div>
               </div>
-              <Link href="/me/settings/account" style={{ background:"transparent", border:"none", color:"var(--ink-4)", cursor:"pointer", padding:4, display:"grid", placeItems:"center", borderRadius:6, textDecoration:"none" }}>
-                <svg width={14} height={14} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>
+              <Link href="/me/settings/account" aria-label="Settings" style={ isMobile ? { background:"var(--bg-2)", border:"1px solid var(--line)", color:"var(--ink-3)", cursor:"pointer", width:40, height:40, display:"grid", placeItems:"center", borderRadius:12, textDecoration:"none", flexShrink:0 } : { background:"transparent", border:"none", color:"var(--ink-4)", cursor:"pointer", padding:4, display:"grid", placeItems:"center", borderRadius:6, textDecoration:"none" }}>
+                <svg width={isMobile ? 18 : 14} height={isMobile ? 18 : 14} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z"/></svg>
               </Link>
             </div>
           )}

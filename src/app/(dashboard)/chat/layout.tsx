@@ -591,24 +591,26 @@ export default function ChatLayout({ children }: { children: React.ReactNode }) 
                         const hasUnread=!!conv.lastMessage&&conv.lastMessage.senderId!==me?.id&&!conv.lastMessage.readAt
                         return (
                           <Link key={conv.id} href={`/chat/${conv.id}`} className="active:scale-[0.98]" style={{ textDecoration:"none", display:"block", transition:"transform 120ms" }}>
-                            <div style={{ display:"flex", alignItems:"center", gap:10, minHeight:44, padding:"8px 9px", borderRadius:"var(--r-md)", cursor:"pointer", background:active?"var(--bg-2)":"transparent", boxShadow:active?"inset 0 0 0 1px var(--line-strong)":"none", position:"relative", transition:"background 100ms", marginBottom:1 }}
-                              onMouseEnter={e=>{if(!active)(e.currentTarget as HTMLDivElement).style.background="color-mix(in srgb, var(--app-fg) 3%, transparent)"}}
-                              onMouseLeave={e=>{if(!active)(e.currentTarget as HTMLDivElement).style.background="transparent"}}>
-                              {active&&<div style={{ position:"absolute", left:0, top:"50%", transform:"translateY(-50%)", width:3, height:18, background:"var(--indigo)", borderRadius:"0 2px 2px 0" }}/>}
-                              <Avatar name={conv.otherUser.displayName} src={conv.otherUser.avatarUrl} size={32} showStatus online/>
+                            <div style={ isMobile ? { display:"flex", alignItems:"center", gap:12, padding:"8px 8px", borderRadius:16, cursor:"pointer", background:active?"var(--bg-2)":"transparent", position:"relative", transition:"background 100ms", marginBottom:1 } : { display:"flex", alignItems:"center", gap:10, minHeight:44, padding:"8px 9px", borderRadius:"var(--r-md)", cursor:"pointer", background:active?"var(--bg-2)":"transparent", boxShadow:active?"inset 0 0 0 1px var(--line-strong)":"none", position:"relative", transition:"background 100ms", marginBottom:1 }}
+                              onMouseEnter={e=>{if(!isMobile&&!active)(e.currentTarget as HTMLDivElement).style.background="color-mix(in srgb, var(--app-fg) 3%, transparent)"}}
+                              onMouseLeave={e=>{if(!isMobile&&!active)(e.currentTarget as HTMLDivElement).style.background="transparent"}}>
+                              {!isMobile&&active&&<div style={{ position:"absolute", left:0, top:"50%", transform:"translateY(-50%)", width:3, height:18, background:"var(--indigo)", borderRadius:"0 2px 2px 0" }}/>}
+                              <Avatar name={conv.otherUser.displayName} src={conv.otherUser.avatarUrl} size={isMobile?50:32} showStatus online/>
                               <div style={{ flex:1, minWidth:0 }}>
                                 <div style={{ display:"flex", alignItems:"baseline", justifyContent:"space-between", gap:6 }}>
-                                  <span style={{ fontSize:13, fontWeight:hasUnread?600:500, color:"var(--ink)", overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{conv.otherUser.displayName}</span>
-                                  {conv.updatedAt&&<span style={{ fontSize:10.5, color:"var(--ink-4)", flexShrink:0 }}>{convTime(conv.updatedAt)}</span>}
+                                  <span style={{ fontSize:isMobile?15:13, fontWeight:hasUnread?(isMobile?700:600):(isMobile?600:500), color:"var(--ink)", overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{conv.otherUser.displayName}</span>
+                                  {conv.updatedAt&&<span style={{ fontSize:isMobile?11:10.5, fontWeight:isMobile&&hasUnread?600:undefined, color:isMobile&&hasUnread?"var(--indigo)":"var(--ink-4)", flexShrink:0 }}>{convTime(conv.updatedAt)}</span>}
                                 </div>
-                                <div style={{ fontSize:11.5, color:hasUnread?"var(--ink-2)":"var(--ink-4)", marginTop:1, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap", display:"flex", alignItems:"center", gap:4 }}>
-                                  <svg width={8} height={8} viewBox="0 0 24 24" fill="none" stroke="var(--mint)" strokeWidth={2.4} strokeLinecap="round" style={{ flexShrink:0, opacity:.7 }}><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>
+                                <div style={{ fontSize:isMobile?13:11.5, fontWeight:isMobile&&hasUnread?500:undefined, color:hasUnread?(isMobile?"var(--ink)":"var(--ink-2)"):(isMobile?"var(--ink-3)":"var(--ink-4)"), marginTop:isMobile?2:1, overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap", display:"flex", alignItems:"center", gap:4 }}>
+                                  {!isMobile&&<svg width={8} height={8} viewBox="0 0 24 24" fill="none" stroke="var(--mint)" strokeWidth={2.4} strokeLinecap="round" style={{ flexShrink:0, opacity:.7 }}><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>}
                                   {hasUnread
-                                    ? <strong style={{ overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{lastMessagePreview(conv.lastMessage)}</strong>
+                                    ? <strong style={{ overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap", fontWeight:"inherit" }}>{lastMessagePreview(conv.lastMessage)}</strong>
                                     : <span style={{ overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{lastMessagePreview(conv.lastMessage)}</span>}
                                 </div>
                               </div>
-                              {hasUnread&&<div style={{ width:7, height:7, borderRadius:"50%", background:"var(--indigo)", flexShrink:0 }}/>}
+                              {hasUnread&&(isMobile
+                                ? <span style={{ display:"grid", placeItems:"center", height:20, minWidth:20, borderRadius:9999, background:"var(--gold-2)", color:"#000", padding:"0 6px", fontSize:11, fontWeight:700, flexShrink:0 }}>•</span>
+                                : <div style={{ width:7, height:7, borderRadius:"50%", background:"var(--indigo)", flexShrink:0 }}/>)}
                             </div>
                           </Link>
                         )

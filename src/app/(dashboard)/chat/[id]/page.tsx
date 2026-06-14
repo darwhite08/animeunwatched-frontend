@@ -469,8 +469,22 @@ function FileCard({ name, size, isImage, isMine }: { name:string; size?:string; 
 /* ─── Message row ────────────────────────────────────────────────────────── */
 // Header sub-component — uses real presence so the green dot + "Active now"
 // reflects whether the other user actually has a live socket connection.
-function ChatHeaderUser({ other }: { other: { id: string; username: string; displayName: string; avatarUrl: string | null } }) {
+function ChatHeaderUser({ other, isMobile=false }: { other: { id: string; username: string; displayName: string; avatarUrl: string | null }; isMobile?:boolean }) {
   const isOnline = usePresence(other.id)
+  if (isMobile) {
+    // Kaiveron mobile-app header: avatar + name + status, compact and clean.
+    return (
+      <div style={{ display:"flex", minWidth:0, flex:1, alignItems:"center", gap:10 }}>
+        <Avatar name={other.displayName} src={other.avatarUrl} size={36} showStatus online={isOnline} />
+        <div style={{ minWidth:0 }}>
+          <p style={{ fontSize:15, fontWeight:600, lineHeight:1.2, color:"var(--ink)", overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>{other.displayName}</p>
+          <p style={{ fontSize:12, lineHeight:1.2, color: isOnline ? "oklch(0.78 0.16 145)" : "var(--ink-3)", overflow:"hidden", textOverflow:"ellipsis", whiteSpace:"nowrap" }}>
+            {isOnline ? "Active now" : `@${other.username}`}
+          </p>
+        </div>
+      </div>
+    )
+  }
   return (
     <>
       <Avatar name={other.displayName} src={other.avatarUrl} size={34} showStatus online={isOnline} />
@@ -491,7 +505,7 @@ function ChatHeaderUser({ other }: { other: { id: string; username: string; disp
   )
 }
 
-function MsgRow({ m, isMine, text, authorSrc, authorName, onDelete }: { m:GM; isMine:boolean; text?:string; authorSrc?:string|null; authorName:string; onDelete?: (id: string, scope: "me" | "everyone") => void }) {
+function MsgRow({ m, isMine, text, authorSrc, authorName, onDelete, isMobile=false }: { m:GM; isMine:boolean; text?:string; authorSrc?:string|null; authorName:string; onDelete?: (id: string, scope: "me" | "everyone") => void; isMobile?:boolean }) {
   const [hover, setHover] = useState(false)
   const [reacted, setReacted] = useState<string|null>(null)
   const [menuOpen, setMenuOpen] = useState(false)
@@ -503,9 +517,16 @@ function MsgRow({ m, isMine, text, authorSrc, authorName, onDelete }: { m:GM; is
   // Render tombstone for "delete for everyone" messages
   const isDeleted = !!m.deletedAt
 
-  const bubble: React.CSSProperties = isMine
-    ? { background:"linear-gradient(165deg,#fcc63a,#f59e0b)", color:"#241803", borderTopRightRadius:4, boxShadow:"0 6px 22px oklch(0.72 0.16 79/0.32),inset 0 1px 0 rgba(255,255,255,0.35)" }
-    : { background:"var(--bg-2)", border:"1px solid var(--line)", borderTopLeftRadius:4 }
+  // Mobile bubble = Kaiveron mobile-app look: rounded-2xl (16px) with a small
+  // tail corner only when the message is NOT grouped; gold gradient (mine) /
+  // surface-2 (received). Desktop keeps its existing 14px bubble.
+  const bubble: React.CSSProperties = isMobile
+    ? (isMine
+        ? { background:"linear-gradient(to bottom right,#f59e0b,#fbbf24)", color:"#000", borderRadius:16, ...(m.isGroupStart ? { borderTopRightRadius:4 } : {}), boxShadow:"0 1px 2px rgba(0,0,0,0.18)" }
+        : { background:"var(--bg-3)", color:"var(--ink)", borderRadius:16, ...(m.isGroupStart ? { borderTopLeftRadius:4 } : {}), boxShadow:"0 1px 2px rgba(0,0,0,0.18)" })
+    : (isMine
+        ? { background:"linear-gradient(165deg,#fcc63a,#f59e0b)", color:"#241803", borderTopRightRadius:4, boxShadow:"0 6px 22px oklch(0.72 0.16 79/0.32),inset 0 1px 0 rgba(255,255,255,0.35)" }
+        : { background:"var(--bg-2)", border:"1px solid var(--line)", borderTopLeftRadius:4 })
 
   const isDecrypting = text === undefined
   const isLocked     = text === LOCKED
@@ -548,7 +569,15 @@ function MsgRow({ m, isMine, text, authorSrc, authorName, onDelete }: { m:GM; is
   }
 
   return (
-    <div id={`msg-${m.id}`} className="kv-msgrow" style={{
+    <div id={`msg-${m.id}`} className="kv-msgrow" style={ isMobile ? {
+        display:"flex",
+        justifyContent: isMine ? "flex-end" : "flex-start",
+        marginTop: m.isGroupStart ? 8 : 2,
+        paddingLeft:12, paddingRight:12,
+        position:"relative",
+        animation:"msg-in 240ms cubic-bezier(0.22,1,0.36,1) both",
+        transition:"background 600ms",
+      } : {
         display:"grid",
         gridTemplateColumns:"52px minmax(0,1fr)",
         paddingTop:    m.isGroupStart ? 10 : 1,
@@ -560,14 +589,16 @@ function MsgRow({ m, isMine, text, authorSrc, authorName, onDelete }: { m:GM; is
       }}
       onMouseEnter={()=>setHover(true)} onMouseLeave={()=>setHover(false)}>
 
-      {/* Avatar col */}
+      {/* Avatar col — desktop only (mobile app shows no per-message avatar) */}
+      {!isMobile && (
       <div style={{ display:"flex", justifyContent:"flex-end", paddingRight:8, paddingTop:m.isGroupStart?2:0 }}>
         {!isMine && m.isGroupStart && <Avatar name={authorName} src={authorSrc} size={32} showStatus={false} />}
       </div>
+      )}
 
       {/* Content col */}
       <div style={{ minWidth:0, display:"flex", flexDirection:"column", alignItems:isMine?"flex-end":"flex-start" }}>
-        {m.isGroupStart && (
+        {!isMobile && m.isGroupStart && (
           <div style={{ display:"flex", alignItems:"baseline", gap:8, marginBottom:4, flexDirection:isMine?"row-reverse":"row" }}>
             <span style={{ fontSize:13.5, fontWeight:600, color:"var(--ink)", letterSpacing:"-0.005em" }}>{authorName}</span>
             <span className="mono" style={{ fontSize:11, color:"var(--ink-4)", marginLeft:2 }}>{ts(m.createdAt)}</span>
@@ -575,18 +606,18 @@ function MsgRow({ m, isMine, text, authorSrc, authorName, onDelete }: { m:GM; is
         )}
 
         {/* Bubble — renders file cards OR text bubble */}
-        <div style={{ maxWidth:"min(620px,94%)", position:"relative", display:"flex", flexDirection:"column", gap:4, alignItems:isMine?"flex-end":"flex-start" }}
+        <div style={{ maxWidth: isMobile ? "82%" : "min(620px,94%)", position:"relative", display:"flex", flexDirection:"column", gap:4, alignItems:isMine?"flex-end":"flex-start" }}
           onContextMenu={(e) => { if (onDelete && !isDeleted) { e.preventDefault(); setMenuOpen(true) } }}>
           {isDeleted ? (
             // Tombstone for messages deleted "for everyone" — visible to BOTH users
-            <div style={{ ...bubble, display:"inline-flex", alignItems:"center", gap:6, padding:"8px 13px 9px", borderRadius:14, fontStyle:"italic", opacity:0.6 }}>
+            <div style={{ ...bubble, display:"inline-flex", alignItems:"center", gap:6, padding:"8px 13px 9px", ...(isMobile ? {} : { borderRadius:14 }), fontStyle:"italic", opacity:0.6 }}>
               <svg width={12} height={12} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round">
                 <path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/>
               </svg>
               <span style={{ fontSize:13 }}>{isMine ? "You deleted this message" : "This message was deleted"}</span>
             </div>
           ) : isDecrypting ? (
-            <div style={{ ...bubble, display:"inline-block", padding:"8px 13px 9px", borderRadius:14 }}>
+            <div style={{ ...bubble, display:"inline-block", padding:"8px 13px 9px", ...(isMobile ? {} : { borderRadius:14 }) }}>
               <span style={{ color:"var(--ink-4)", fontSize:13, display:"flex", alignItems:"center", gap:6 }}>
                 🔒 <span style={{ opacity:0.6 }}>Decrypting…</span>
               </span>
@@ -601,7 +632,7 @@ function MsgRow({ m, isMine, text, authorSrc, authorName, onDelete }: { m:GM; is
               <span style={{ fontSize:12, fontWeight:500 }}>Encrypted message</span>
             </div>
           ) : isError ? (
-            <div style={{ ...bubble, display:"inline-block", padding:"8px 13px 9px", borderRadius:14 }}>
+            <div style={{ ...bubble, display:"inline-block", padding:"8px 13px 9px", ...(isMobile ? {} : { borderRadius:14 }) }}>
               <span style={{ color:"var(--amber)", fontSize:13 }}>⚠ {text?.slice(2)}</span>
             </div>
           ) : parts ? (
@@ -624,7 +655,7 @@ function MsgRow({ m, isMine, text, authorSrc, authorName, onDelete }: { m:GM; is
               }
               if (!p.content.trim()) return null
               return (
-                <div key={i} style={{ ...bubble, display:"inline-block", padding:"8px 13px 9px", borderRadius:14, fontSize:14, lineHeight:1.5, letterSpacing:"-0.003em", whiteSpace:"pre-wrap", wordBreak:"break-word" }}>
+                <div key={i} style={{ ...bubble, display:"inline-block", padding: isMobile ? "8px 12px" : "8px 13px 9px", ...(isMobile ? {} : { borderRadius:14 }), fontSize:14, lineHeight:1.5, letterSpacing:"-0.003em", whiteSpace:"pre-wrap", wordBreak:"break-word" }}>
                   {p.content}
                 </div>
               )
@@ -744,6 +775,16 @@ export default function ConversationPage() {
   const [sharedKey,    setSharedKey]    = useState<CryptoKey|null>(null)
   const sharedKeyRef = useRef<CryptoKey|null>(null)
   sharedKeyRef.current = sharedKey
+
+  // Mobile (<768px) renders the chat to match the Kaiveron mobile app's look.
+  // Desktop styling is unchanged — everything visual is gated behind isMobile.
+  const [isMobile, setIsMobile] = useState(false)
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 767px)")
+    const u = () => setIsMobile(mq.matches)
+    u(); mq.addEventListener("change", u)
+    return () => mq.removeEventListener("change", u)
+  }, [])
 
   const [input,        setInput]        = useState("")
   const [showEmoji,    setShowEmoji]    = useState(false)
@@ -1102,19 +1143,21 @@ export default function ConversationPage() {
           <AsanohaDoodle opacity={0.09} color="245,200,110" />
         </div>
 
-        {/* Header — clears the top safe area (notch / Dynamic Island) on mobile. */}
-        <div style={{ flexShrink:0, minHeight:60, paddingTop:"env(safe-area-inset-top)", paddingLeft:12, paddingRight:12, display:"flex", alignItems:"center", gap:10, borderBottom:"1px solid var(--line)", background:"var(--bg-0)", position:"relative", zIndex:1 }}>
+        {/* Header — clears the top safe area (notch / Dynamic Island) on mobile.
+            On mobile it mirrors the Kaiveron mobile app's WhatsApp-style header:
+            h-14, blurred surface, round 36px action buttons. */}
+        <div style={ isMobile ? { flexShrink:0, height:56, paddingTop:"env(safe-area-inset-top)", paddingLeft:8, paddingRight:8, display:"flex", alignItems:"center", gap:8, borderBottom:"1px solid var(--line)", background:"color-mix(in srgb, var(--bg-2) 95%, transparent)", backdropFilter:"blur(20px)", WebkitBackdropFilter:"blur(20px)", position:"relative", zIndex:1 } : { flexShrink:0, minHeight:60, paddingTop:"env(safe-area-inset-top)", paddingLeft:12, paddingRight:12, display:"flex", alignItems:"center", gap:10, borderBottom:"1px solid var(--line)", background:"var(--bg-0)", position:"relative", zIndex:1 }}>
           {/* Back arrow — Instagram-web style. Returns to the message list (mobile
               back); the Kaiveron logo in the far-left rail exits to the feed.
               44px tap target with press feedback for thumb reach. */}
           <Link href="/chat" title="Back to messages" className="active:scale-90"
-            style={{ width:44, height:44, borderRadius:"var(--r-md)", display:"grid", placeItems:"center", color:"var(--ink-3)", background:"transparent", textDecoration:"none", flexShrink:0, transition:"background 120ms,color 120ms,transform 120ms" }}
-            onMouseEnter={e=>Object.assign((e.currentTarget as HTMLElement).style,{background:"var(--bg-2)",color:"var(--ink)"})}
-            onMouseLeave={e=>Object.assign((e.currentTarget as HTMLElement).style,{background:"transparent",color:"var(--ink-3)"})}
+            style={ isMobile ? { width:36, height:36, borderRadius:8, display:"grid", placeItems:"center", color:"var(--ink)", background:"transparent", textDecoration:"none", flexShrink:0, transition:"background 120ms,transform 120ms" } : { width:44, height:44, borderRadius:"var(--r-md)", display:"grid", placeItems:"center", color:"var(--ink-3)", background:"transparent", textDecoration:"none", flexShrink:0, transition:"background 120ms,color 120ms,transform 120ms" }}
+            onMouseEnter={e=>!isMobile&&Object.assign((e.currentTarget as HTMLElement).style,{background:"var(--bg-2)",color:"var(--ink)"})}
+            onMouseLeave={e=>!isMobile&&Object.assign((e.currentTarget as HTMLElement).style,{background:"transparent",color:"var(--ink-3)"})}
           >
-            <svg width={18} height={18} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+            <svg width={isMobile?24:18} height={isMobile?24:18} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round"><path d="m15 18-6-6 6-6"/></svg>
           </Link>
-          {other && <ChatHeaderUser other={other} />}
+          {other && <ChatHeaderUser other={other} isMobile={isMobile} />}
 
           {/* Actions */}
           <div style={{ marginLeft:"auto", display:"flex", alignItems:"center", gap:2, flexShrink:0 }}>
@@ -1133,15 +1176,15 @@ export default function ConversationPage() {
               const blockedColor = micPerm === "denied" && isCall ? "rgba(239,68,68,0.7)" : "var(--ink-3)"
               return (
               <button key={id} onClick={disabled ? undefined : () => onClick()} title={title} className={disabled ? "" : "active:scale-90"}
-                style={{ width:40, height:40, borderRadius:"var(--r-md)", display:"grid", placeItems:"center", color: disabled ? "var(--ink-5)" : blockedColor, background:"transparent", border:"none", cursor: disabled ? "not-allowed" : "pointer", transition:"background 120ms,color 120ms,transform 120ms", opacity: disabled ? 0.4 : 1 }}
-                onMouseEnter={e=>!disabled && Object.assign((e.currentTarget as HTMLElement).style,{background:"var(--bg-2)",color:"var(--ink)"})}
-                onMouseLeave={e=>!disabled && Object.assign((e.currentTarget as HTMLElement).style,{background:"transparent",color: blockedColor})}>
-                <svg width={16} height={16} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round"><path d={d}/></svg>
+                style={ isMobile ? { width:36, height:36, borderRadius:9999, display:"grid", placeItems:"center", color: disabled ? "var(--ink-5)" : blockedColor, background:"transparent", border:"none", cursor: disabled ? "not-allowed" : "pointer", transition:"transform 120ms", opacity: disabled ? 0.4 : 1 } : { width:40, height:40, borderRadius:"var(--r-md)", display:"grid", placeItems:"center", color: disabled ? "var(--ink-5)" : blockedColor, background:"transparent", border:"none", cursor: disabled ? "not-allowed" : "pointer", transition:"background 120ms,color 120ms,transform 120ms", opacity: disabled ? 0.4 : 1 }}
+                onMouseEnter={e=>!isMobile && !disabled && Object.assign((e.currentTarget as HTMLElement).style,{background:"var(--bg-2)",color:"var(--ink)"})}
+                onMouseLeave={e=>!isMobile && !disabled && Object.assign((e.currentTarget as HTMLElement).style,{background:"transparent",color: blockedColor})}>
+                <svg width={isMobile?20:16} height={isMobile?20:16} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round"><path d={d}/></svg>
               </button>
             )})}
             <button onClick={()=>setShowContext(p=>!p)} title="Details" className="active:scale-90"
-              style={{ width:40, height:40, borderRadius:"var(--r-md)", display:"grid", placeItems:"center", background:showContext?"var(--indigo-soft)":"transparent", color:showContext?"var(--indigo)":"var(--ink-3)", border:showContext?"1px solid var(--indigo-ring)":"none", cursor:"pointer", transition:"all 120ms" }}>
-              <svg width={15} height={15} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
+              style={ isMobile ? { width:36, height:36, borderRadius:9999, display:"grid", placeItems:"center", background:showContext?"var(--indigo-soft)":"transparent", color:showContext?"var(--indigo)":"var(--ink)", border:"none", cursor:"pointer", transition:"transform 120ms" } : { width:40, height:40, borderRadius:"var(--r-md)", display:"grid", placeItems:"center", background:showContext?"var(--indigo-soft)":"transparent", color:showContext?"var(--indigo)":"var(--ink-3)", border:showContext?"1px solid var(--indigo-ring)":"none", cursor:"pointer", transition:"all 120ms" }}>
+              <svg width={isMobile?20:15} height={isMobile?20:15} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>
             </button>
           </div>
         </div>
@@ -1255,17 +1298,25 @@ export default function ConversationPage() {
             return (
               <div key={msg.id}>
                 {showDay && (
-                  <div style={{ display:"flex", alignItems:"center", gap:14, padding:"14px 24px 18px", fontSize:11, color:"var(--ink-4)", fontWeight:600, textTransform:"uppercase", letterSpacing:"0.08em" }}>
-                    <div style={{ flex:1, height:1, background:"var(--line)" }}/>
-                    {dayLabel(msg.createdAt)}
-                    <div style={{ flex:1, height:1, background:"var(--line)" }}/>
-                  </div>
+                  isMobile ? (
+                    /* Mobile-app look: centered pill chip */
+                    <div style={{ display:"flex", justifyContent:"center", margin:"12px 0" }}>
+                      <span style={{ borderRadius:6, background:"var(--bg-2)", padding:"4px 10px", fontSize:11, fontWeight:500, color:"var(--ink-3)", boxShadow:"0 1px 2px rgba(0,0,0,0.2)" }}>{dayLabel(msg.createdAt)}</span>
+                    </div>
+                  ) : (
+                    <div style={{ display:"flex", alignItems:"center", gap:14, padding:"14px 24px 18px", fontSize:11, color:"var(--ink-4)", fontWeight:600, textTransform:"uppercase", letterSpacing:"0.08em" }}>
+                      <div style={{ flex:1, height:1, background:"var(--line)" }}/>
+                      {dayLabel(msg.createdAt)}
+                      <div style={{ flex:1, height:1, background:"var(--line)" }}/>
+                    </div>
+                  )
                 )}
                 <MsgRow m={msg} isMine={isMine}
                   text={decrypted[msg.id]}
                   authorSrc={isMine ? me?.avatarUrl : other?.avatarUrl}
                   authorName={isMine ? (me?.displayName??"You") : (other?.displayName??"Them")}
                   onDelete={handleDeleteMessage}
+                  isMobile={isMobile}
                 />
               </div>
             )
@@ -1303,7 +1354,7 @@ export default function ConversationPage() {
         {/* Composer — pads for the iOS home indicator. On mobile the chat shell
             already reserves the bottom tab-bar height, so this inset is the final
             clearance over the home indicator itself. */}
-        <div className="kv-composer" style={{ flexShrink:0, padding:"12px 16px max(14px, env(safe-area-inset-bottom))", background:"var(--bg-0)", position:"relative", zIndex:1 }}>
+        <div className="kv-composer" style={ isMobile ? { flexShrink:0, padding:"6px 8px max(8px, env(safe-area-inset-bottom))", background:"var(--bg-0)", position:"relative", zIndex:1 } : { flexShrink:0, padding:"12px 16px max(14px, env(safe-area-inset-bottom))", background:"var(--bg-0)", position:"relative", zIndex:1 }}>
           {/* Slash command popup */}
           <AnimatePresence>
             {showSlash && (
@@ -1332,6 +1383,50 @@ export default function ConversationPage() {
             </div>
           )}
 
+          {isMobile ? (
+            /* ── Kaiveron mobile-app composer: a rounded-3xl pill of inline round
+                 icon buttons + the input, plus a separate round Send/Ask FAB. ── */
+            <div style={{ display:"flex", alignItems:"flex-end", gap:6 }}>
+              <div style={{ display:"flex", flex:1, alignItems:"flex-end", gap:4, borderRadius:24, border:`1px solid ${focus?"var(--indigo-ring)":"var(--line-strong)"}`, background:"var(--bg-2)", padding:"4px 6px", transition:"border-color 160ms" }}>
+                {/* Attach + image + anime collapse while typing to give text full width. */}
+                {!input.trim() && (
+                  <>
+                    <button onClick={()=>fileRef.current?.click()} title="Attach file" className="active:scale-90"
+                      style={{ width:36, height:36, flexShrink:0, display:"grid", placeItems:"center", borderRadius:9999, color:"var(--ink-3)", background:"transparent", border:"none", cursor:"pointer", transform:"rotate(-45deg)" }}>
+                      <svg width={20} height={20} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round"><path d="M21 8l-9.193 9.193a3 3 0 0 1-4.243-4.243l8.486-8.486a2 2 0 0 1 2.828 2.828l-8.486 8.486a1 1 0 0 1-1.414-1.414l7.778-7.778"/></svg>
+                    </button>
+                    <button onClick={()=>imgRef.current?.click()} title="Share image" className="active:scale-90"
+                      style={{ width:36, height:36, flexShrink:0, display:"grid", placeItems:"center", borderRadius:9999, color:"var(--ink-3)", background:"transparent", border:"none", cursor:"pointer" }}>
+                      <svg width={20} height={20} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="1.6"/><path d="m21 15-5-5L5 21"/></svg>
+                    </button>
+                  </>
+                )}
+                <div style={{ position:"relative", flexShrink:0 }}>
+                  <button onClick={()=>setShowEmoji(p=>!p)} title="Emoji" className="active:scale-90"
+                    style={{ width:36, height:36, display:"grid", placeItems:"center", borderRadius:9999, color:showEmoji?"var(--indigo)":"var(--ink-3)", background:"transparent", border:"none", cursor:"pointer", fontSize:18 }}>😊</button>
+                  <AnimatePresence>{showEmoji && <EmojiPicker onPick={e=>{ setInput(p=>p+e); setShowEmoji(false); inputRef.current?.focus() }} onClose={()=>setShowEmoji(false)}/>}</AnimatePresence>
+                </div>
+                <textarea ref={inputRef} value={input}
+                  onChange={handleInputChange}
+                  onFocus={()=>setFocus(true)} onBlur={()=>setFocus(false)}
+                  onKeyDown={onKey}
+                  placeholder="Message"
+                  disabled={!cryptoReady || sendMutation.isPending}
+                  rows={1}
+                  className="text-base"
+                  style={{ flex:1, maxHeight:112, minHeight:36, padding:"8px 6px", background:"transparent", border:"none", outline:"none", color:"var(--ink)", lineHeight:1.4, resize:"none", fontFamily:"inherit", opacity:!cryptoReady||sendMutation.isPending?0.5:1 }}
+                />
+              </div>
+              {/* Round Send FAB — matches the mobile app's bg-accent circle. */}
+              <button onClick={handleSend} disabled={!canSend} className={canSend ? "active:scale-90" : ""}
+                style={{ width:44, height:44, flexShrink:0, display:"grid", placeItems:"center", borderRadius:9999, background:canSend?"var(--gold-2)":"var(--bg-3)", color:canSend?"#000":"var(--ink-4)", border:"none", cursor:canSend?"pointer":"default", boxShadow:canSend?"0 2px 8px rgba(0,0,0,0.25)":"none", transition:"transform 120ms", opacity:canSend?1:0.5 }} aria-label="Send">
+                {sendMutation.isPending
+                  ? <div style={{ width:14, height:14, border:"2px solid color-mix(in srgb, var(--app-fg) 50%, transparent)", borderTopColor:"transparent", borderRadius:"50%", animation:"spin 0.6s linear infinite" }}/>
+                  : <svg width={19} height={19} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round"><path d="M22 2 11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+                }
+              </button>
+            </div>
+          ) : (
           <div style={{ background:"var(--bg-2)", border:`1px solid ${focus?"var(--indigo-ring)":"var(--line-strong)"}`, borderRadius:16, transition:"border-color 160ms,box-shadow 160ms", boxShadow:focus?"0 0 0 4px oklch(0.55 0.18 282/0.10)":"none" }}>
             <textarea ref={inputRef} value={input}
               onChange={handleInputChange}
@@ -1397,6 +1492,7 @@ export default function ConversationPage() {
               </button>
             </div>
           </div>
+          )}
 
           {/* Hints */}
           <div className="composer-hint" style={{ display:"flex", alignItems:"center", gap:12, marginTop:7, paddingLeft:4, fontSize:11, color:"var(--ink-4)" }}>

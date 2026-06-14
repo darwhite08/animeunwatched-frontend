@@ -161,13 +161,16 @@ export async function unlockVault(via: { password: string } | { passkey: true })
   if ("password" in via) {
     const wrap = state.wraps.find(w => w.method === "FALLBACK_PASSPHRASE")
     if (!wrap?.kdfSalt) throw new Error("No password unlock is set on this account")
-    const krk = await pbkdf2Krk(via.password, wrap.kdfSalt, (wrap.kdfParams as { iterations?: number })?.iterations ?? PBKDF2_ITERS)
-    umk = new Uint8Array(await unwrapUMK(wrap, krk)) // throws on wrong password
+    const iters = (wrap.kdfParams as { iterations?: number } | null)?.iterations ?? PBKDF2_ITERS
+    const krk = await pbkdf2Krk(via.password, wrap.kdfSalt, iters)
+    try { umk = new Uint8Array(await unwrapUMK(wrap, krk)) }
+    catch { throw new Error("Incorrect password — please try again.") }
   } else {
     const wrap = state.wraps.find(w => w.method === "PASSKEY_PRF")
     if (!wrap) throw new Error("No passkey is set on this account")
     const { krk } = await passkeyKrk()
-    umk = new Uint8Array(await unwrapUMK(wrap, krk))
+    try { umk = new Uint8Array(await unwrapUMK(wrap, krk)) }
+    catch { throw new Error("That passkey didn't match this account's encryption key.") }
   }
 
   const umkKey = await rawKrk(umk)

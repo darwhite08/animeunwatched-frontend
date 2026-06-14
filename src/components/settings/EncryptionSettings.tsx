@@ -50,6 +50,7 @@ export function EncryptionSettings() {
       setUnlocked(true); setUnlockPw(""); refresh()
       push("Unlocked on this device 🔓", "success")
     } catch (e) {
+      console.error("[e2ee] unlock failed:", e)
       push(e instanceof Error ? e.message : "Couldn't unlock — check your password", "error")
     } finally { setBusy(false) }
   }

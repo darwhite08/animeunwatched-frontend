@@ -233,7 +233,7 @@ export default function ShotsPage() {
       {feed.map((item, idx) => (
         <div
           key={item.kind === "shot" ? item.shot.id : `t-${item.trailer.malId}`}
-          className="relative z-[1] flex h-full w-full snap-start snap-always items-center justify-center p-2 sm:p-4"
+          className="relative z-[1] flex h-full w-full snap-start snap-always items-center justify-center p-0 md:p-4"
         >
           {item.kind === "shot" ? (
             <ShotReel shot={item.shot} active={active === idx} muted={muted} />
@@ -253,7 +253,9 @@ export default function ShotsPage() {
 }
 
 function MediaShell({ children }: { children: React.ReactNode }) {
-  return <div className="relative aspect-[9/16] h-full max-h-full w-auto overflow-hidden rounded-3xl bg-black ring-1 ring-white/10 shadow-[0_24px_70px_rgba(0,0,0,0.65)]">{children}</div>
+  // Full-bleed edge-to-edge on phones (real TikTok-style reel); a centered,
+  // rounded phone-width card on desktop.
+  return <div className="relative h-full w-full overflow-hidden bg-black md:aspect-[9/16] md:max-h-full md:w-auto md:rounded-3xl md:ring-1 md:ring-white/10 md:shadow-[0_24px_70px_rgba(0,0,0,0.65)]">{children}</div>
 }
 
 function ShotReel({ shot, active, muted }: { shot: Shot; active: boolean; muted: boolean }) {

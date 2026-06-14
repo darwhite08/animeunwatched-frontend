@@ -81,10 +81,15 @@ export function useImageUpload(scope: UploadScope) {
         setProgress(100)
         return { publicUrl: intent.publicUrl, key: intent.key }
       } catch (err) {
-        // Direct upload failed (extension blocker, strict CSP, corporate proxy).
-        // Fall back to the server-side proxy at /api/v1/uploads/proxy — same
-        // backend, but the bytes go through our app and S3 only sees our IP.
-        console.warn("[upload] direct PUT failed, retrying via proxy:", err)
+        // Videos must go straight to S3 — the in-app proxy buffers the whole
+        // file and 502s on anything large, so never proxy a "shot".
+        if (scope === "shot") {
+          throw err instanceof Error
+            ? new Error(`Upload failed: ${err.message}. Try a smaller clip or a different network.`)
+            : new Error("Upload failed")
+        }
+        // Images: fall back to the server-side proxy (extension blocker / strict CSP).
+        console.warn("[upload] direct upload failed, retrying via proxy:", err)
         setProgress(10)
       }
 

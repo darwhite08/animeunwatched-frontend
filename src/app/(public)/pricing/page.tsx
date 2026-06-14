@@ -11,7 +11,7 @@ const FREE_FEATURES = [
   "Track up to 500 anime",
   "Community feed + posts",
   "10 AI Oracle queries/day",
-  "Join & create clubs",
+  "Join & create dens",
   "Full episode tracker",
   "Discord-style chat",
   "Seasonal calendar",
@@ -135,7 +135,7 @@ export default function PricingPage() {
         {[
           {
             q: "Is Kaiveron really free forever?",
-            a: "Yes. The free tier is fully functional for tracking, social features, clubs, and community. Pro is genuinely optional.",
+            a: "Yes. The free tier is fully functional for tracking, social features, dens, and community. Pro is genuinely optional.",
           },
           {
             q: "Can I cancel Pro anytime?",

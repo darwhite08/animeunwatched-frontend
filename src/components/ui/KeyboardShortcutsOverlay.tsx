@@ -18,7 +18,7 @@ const SECTIONS = [
       { keys: ["g", "n"], desc: "Notifications" },
       { keys: ["g", "p"], desc: "My Profile" },
       { keys: ["g", "m"], desc: "Mood Picker" },
-      { keys: ["g", "k"], desc: "Clubs" },
+      { keys: ["g", "k"], desc: "Dens" },
       { keys: ["g", "e"], desc: "Seasonal Calendar" },
       { keys: ["g", "f"], desc: "Feed" },
     ],

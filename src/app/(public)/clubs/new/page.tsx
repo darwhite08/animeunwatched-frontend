@@ -1,7 +1,8 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { useCreateClub } from "@/hooks/useClubs"
+import { useImageUpload } from "@/hooks/useImageUpload"
 import { motion } from "framer-motion"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
@@ -12,6 +13,9 @@ import {
   ChevronDown,
   Sparkles,
   Shield,
+  ImagePlus,
+  Loader2,
+  X,
 } from "lucide-react"
 import { useToast } from "@/stores/toast.store"
 
@@ -51,7 +55,7 @@ function slugify(str: string): string {
 function validate(data: FormData): FieldErrors {
   const errors: FieldErrors = {}
   if (data.name.length < 3 || data.name.length > 60) {
-    errors.name = "Club name must be 3–60 characters."
+    errors.name = "Den name must be 3–60 characters."
   }
   if (!/^[a-z0-9-]{3,30}$/.test(data.slug)) {
     errors.slug = "Slug must be 3–30 lowercase letters, numbers, or hyphens."
@@ -108,6 +112,23 @@ export default function NewClubPage() {
   const [submitting, setSubmitting] = useState(false)
   const [slugEdited, setSlugEdited] = useState(false)
 
+  /* Cover image — uploaded to R2 via the shared image-upload hook (post scope). */
+  const [coverUrl, setCoverUrl] = useState<string | null>(null)
+  const { upload: uploadCover, isUploading: uploadingCover } = useImageUpload("post")
+  const coverInputRef = useRef<HTMLInputElement>(null)
+
+  const handleCoverPick = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    e.target.value = "" // allow re-picking the same file
+    if (!file) return
+    try {
+      const { publicUrl } = await uploadCover(file)
+      setCoverUrl(publicUrl)
+    } catch (err) {
+      push(err instanceof Error ? err.message : "Couldn't upload that image", "error")
+    }
+  }
+
   /* Auto-generate slug from name unless user has edited it */
   useEffect(() => {
     if (!slugEdited) {
@@ -137,20 +158,20 @@ export default function NewClubPage() {
     setErrors({})
     setSubmitting(true)
     createClub.mutate(
-      { name: form.name, slug: form.slug, description: form.description, category: form.category },
+      { name: form.name, slug: form.slug, description: form.description, category: form.category, bannerUrl: coverUrl },
       {
         onSuccess: () => {
           setSubmitting(false)
-          push("Club created!", "success")
+          push("Den created!", "success")
           router.push("/clubs")
         },
         onError: (e: Error) => {
           setSubmitting(false)
           // Surface the real backend message (e.g. "You need at least 50
-          // reputation to create a club") instead of a generic toast.
+          // reputation to create a den") instead of a generic toast.
           const msg = e.message?.includes("CONFLICT")
             ? "That slug is already taken"
-            : (e.message || "Failed to create club")
+            : (e.message || "Failed to create den")
           push(msg, "error")
         },
       }
@@ -175,7 +196,7 @@ export default function NewClubPage() {
           className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-subtle hover:text-muted transition-colors mb-10 group"
         >
           <ArrowLeft size={12} className="group-hover:-translate-x-0.5 transition-transform" />
-          Back to Clubs
+          Back to Dens
         </Link>
 
         {/* Header */}
@@ -186,7 +207,7 @@ export default function NewClubPage() {
           className="mb-10"
         >
           <h1 className="text-5xl font-black uppercase italic tracking-tighter text-foreground leading-none">
-            Create Club<span style={{color:"var(--app-accent)"}}>.</span>
+            Create Den<span style={{color:"var(--app-accent)"}}>.</span>
           </h1>
           <p className="mt-3 text-muted text-sm">
             Build a home for your anime corner of the community.
@@ -227,9 +248,57 @@ export default function NewClubPage() {
         >
           {/* Card wrapper */}
           <div className="p-8 rounded-3xl bg-surface border border-border space-y-7">
-            {/* Club Name */}
+            {/* Cover image */}
+            <Field label="Cover Image" hint="Optional. 16:9 looks best — JP, PNG, WebP up to 10MB.">
+              <input
+                ref={coverInputRef}
+                type="file"
+                accept="image/jpeg,image/png,image/webp,image/gif"
+                onChange={handleCoverPick}
+                className="hidden"
+              />
+              <button
+                type="button"
+                onClick={() => coverInputRef.current?.click()}
+                disabled={uploadingCover}
+                className="group relative block w-full aspect-[16/9] overflow-hidden rounded-2xl border border-dashed border-border bg-surface-2 transition-colors hover:border-accent/50"
+              >
+                {coverUrl ? (
+                  <>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={coverUrl} alt="Den cover" className="absolute inset-0 h-full w-full object-cover" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
+                    <span className="absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full bg-black/70 px-3 py-1 text-[10px] font-black uppercase tracking-widest text-white opacity-0 transition-opacity group-hover:opacity-100">
+                      Change cover
+                    </span>
+                  </>
+                ) : (
+                  <span className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-subtle">
+                    {uploadingCover ? (
+                      <Loader2 size={22} className="animate-spin" />
+                    ) : (
+                      <ImagePlus size={22} className="transition-colors group-hover:text-accent-bright" />
+                    )}
+                    <span className="text-[11px] font-black uppercase tracking-widest">
+                      {uploadingCover ? "Uploading…" : "Add a cover"}
+                    </span>
+                  </span>
+                )}
+              </button>
+              {coverUrl && !uploadingCover && (
+                <button
+                  type="button"
+                  onClick={() => setCoverUrl(null)}
+                  className="mt-2 inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-subtle transition-colors hover:text-red-400"
+                >
+                  <X size={11} /> Remove
+                </button>
+              )}
+            </Field>
+
+            {/* Den Name */}
             <Field
-              label="Club Name"
+              label="Den Name"
               error={getFieldError("name")}
               hint="3–60 characters. Be memorable."
             >
@@ -311,7 +380,7 @@ export default function NewClubPage() {
             <Field
               label="Description"
               error={getFieldError("description")}
-              hint="Optional. Tell people what this club is about."
+              hint="Optional. Tell people what this den is about."
             >
               <textarea
                 value={form.description}
@@ -330,7 +399,7 @@ export default function NewClubPage() {
               disabled={submitting}
               className="flex-1 py-3.5 rounded-2xl bg-accent hover:bg-accent-bright disabled:opacity-50 text-sm font-black uppercase tracking-widest text-foreground transition-all shadow-[0_0_32px_rgba(99,102,241,0.3)] hover:-translate-y-0.5 disabled:translate-y-0"
             >
-              {submitting ? "Creating…" : "Create Club"}
+              {submitting ? "Creating…" : "Create Den"}
             </button>
             <Link
               href="/clubs"

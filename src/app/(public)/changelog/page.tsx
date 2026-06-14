@@ -20,7 +20,7 @@ const RELEASES: Release[] = [
     tag: "Major",
     title: "Research-Driven Features: Viral Loops + Retention Engine",
     features: [
-      "Club Watch Challenges: watch anime together with countdown timers and acceptance flow",
+      "Den Watch Challenges: watch anime together with countdown timers and acceptance flow",
       "Shareable profile cards at /share/[username] with stats, top picks, and anime DNA",
       "Referral system: invite friends and earn +100 rep when they join",
       "Airing Today dashboard card showing what's airing today and tomorrow",
@@ -33,7 +33,7 @@ const RELEASES: Release[] = [
       "Milestone achievement notifications: 1, 10, 25, 50, 100, 250, 500 anime completed",
       "Streak updates on list activity and post creation (not just login)",
       "Genre filter bug fix in anime browse endpoint",
-      "Loading skeletons for anime detail, clubs, user profile, and calendar pages",
+      "Loading skeletons for anime detail, dens, user profile, and calendar pages",
     ],
   },
   {
@@ -103,12 +103,12 @@ const RELEASES: Release[] = [
     version: "v3.5.0",
     date: "2026-04-10",
     tag: "Minor",
-    title: "Community Features + Clubs",
+    title: "Community Features + Dens",
     features: [
       "Community feed with Trending / Following / Latest tabs",
       "Post composer with @mention, #hashtag, and image attachment toolbar",
-      "Clubs: create, join, leave, set member roles",
-      "Club thread system with nested reply tree and spoiler tags",
+      "Dens: create, join, leave, set member roles",
+      "Den thread system with nested reply tree and spoiler tags",
       "Active polls widget in community sidebar",
       "Real-time like and comment counts via Socket.io",
       "ShareCard modal for posts and reviews with copy-link and native share",

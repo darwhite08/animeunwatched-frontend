@@ -28,7 +28,7 @@ const FAQ = [
   },
   {
     q: "Does Kaiveron have a social feed and streaks?",
-    a: "Kaiveron has a community feed, clubs per anime, long-form blogs, reviews with author bios, leaderboards, and daily watch streaks. The community is currently in open beta.",
+    a: "Kaiveron has a community feed, dens per anime, long-form blogs, reviews with author bios, leaderboards, and daily watch streaks. The community is currently in open beta.",
   },
   {
     q: "How does Kaiveron compare to AniList and Kitsu?",

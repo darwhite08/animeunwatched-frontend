@@ -36,7 +36,7 @@ const SEARCH_TYPES: { id: SearchType; label: string; icon: typeof Search }[] = [
   { id: "anime",   label: "Anime",   icon: Star },
   { id: "users",   label: "Users",   icon: Users },
   { id: "posts",   label: "Posts",   icon: FileText },
-  { id: "clubs",   label: "Clubs",   icon: Shield },
+  { id: "clubs",   label: "Dens",   icon: Shield },
   { id: "blogs",   label: "Blogs",   icon: BookOpen },
   { id: "reviews", label: "Reviews", icon: MessageSquare },
 ]
@@ -65,7 +65,7 @@ const MOCK_POSTS = [
 ]
 
 const MOCK_CLUBS = [
-  { id: "c1", name: "Psychological Thriller Club", members: 2341, desc: "For fans of Monster, Lain, Eva and the dark stuff."  },
+  { id: "c1", name: "Psychological Thriller Den", members: 2341, desc: "For fans of Monster, Lain, Eva and the dark stuff."  },
   { id: "c2", name: "Shonen Warriors",             members: 5812, desc: "Discuss the biggest shonen titles past and present."  },
   { id: "c3", name: "Hidden Gems Collective",      members: 893,  desc: "Surface forgotten masterpieces."                    },
   { id: "c4", name: "Seasonal Watchers",           members: 4107, desc: "Follow every new season together."                  },
@@ -447,7 +447,7 @@ function AdvancedSearchContent() {
             <div className="flex items-center gap-3 mb-4">
               <SlidersHorizontal size={15} className="text-accent-bright" />
               <p className="text-sm font-black uppercase italic tracking-tighter text-foreground">
-                {searchType.charAt(0).toUpperCase() + searchType.slice(1)} Filters
+                {(SEARCH_TYPES.find((t) => t.id === searchType)?.label ?? searchType)} Filters
               </p>
             </div>
             <div className="grid sm:grid-cols-2 gap-4">

@@ -318,7 +318,7 @@ export default function PublicFeedPage() {
               Join Kaiveron<span className="text-accent-bright">.</span>
             </p>
             <p className="text-[11px] text-muted leading-relaxed">
-              Track what you watch, share your takes, join clubs, and discover hidden gems — all for free.
+              Track what you watch, share your takes, join dens, and discover hidden gems — all for free.
             </p>
             <span className="inline-flex items-center justify-center px-4 py-2 rounded-xl bg-accent hover:bg-accent-bright text-[11px] font-black uppercase tracking-widest text-foreground transition-all">
               Get Started Free

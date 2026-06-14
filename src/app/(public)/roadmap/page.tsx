@@ -40,7 +40,7 @@ const COLUMNS: Column[] = [
     glow: "bg-emerald-500/6",
     items: [
       { title: "AI Oracle Neural Engine",             icon: Sparkles,     note: "12-dimension taste profile + match %" },
-      { title: "Community System",                    icon: Star,         note: "Posts, clubs, threads, nested replies"  },
+      { title: "Community System",                    icon: Star,         note: "Posts, dens, threads, nested replies"  },
       { title: "Creator Studio",                      icon: Code2,        note: "Blogs, polls, feed posts + analytics"   },
       { title: "Gamification Engine",                 icon: Trophy,       note: "XP, badges, streaks, leaderboard"       },
       { title: "Anime Catalog + Jikan Integration",   icon: BookOpen,     note: "30,000+ titles, swappable provider"     },
@@ -51,7 +51,7 @@ const COLUMNS: Column[] = [
       { title: "Mood Picker",                         icon: Sparkles,     note: "9 vibes → real anime recommendations"  },
       { title: "Spoiler Tags",                        icon: Star,         note: "Blur-until-click in community posts"    },
       { title: "REWATCHING Status",                   icon: Trophy,       note: "Most-requested missing status added"    },
-      { title: "Club Watch Challenges",               icon: Trophy,       note: "Watch anime together with deadlines"    },
+      { title: "Den Watch Challenges",                icon: Trophy,       note: "Watch anime together with deadlines"    },
       { title: "Shareable Profile Cards",             icon: Star,         note: "/share/[username] for viral growth"     },
       { title: "Real-time Notifications",             icon: Bell,         note: "Socket.io + push badge + achievement"   },
       { title: "GDPR Cookie Consent",                 icon: Cpu,          note: "Non-blocking, localStorage persistence" },

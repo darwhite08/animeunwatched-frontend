@@ -23,7 +23,7 @@ const PILLARS = [
     color: "text-violet-400",
     bg: "bg-violet-500/10",
     border: "border-violet-500/20",
-    desc: "Discord-quality community tools inside a Letterboxd-quality product. Clubs, threads, polls, live debates — all built around anime, not around general chat.",
+    desc: "Discord-quality community tools inside a Letterboxd-quality product. Dens, threads, polls, live debates — all built around anime, not around general chat.",
   },
   {
     icon: BookOpen,

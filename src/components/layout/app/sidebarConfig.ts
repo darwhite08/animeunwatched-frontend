@@ -81,7 +81,7 @@ export const NAV_ITEMS: NavItem[] = [
   { key: "shots",       label: "Shots",       path: "/shots",         icon: FilmReel,       mobile: true },
   { key: "anime",       label: "Anime",       path: "/bestanimelist", icon: Television,     mobile: true, flyout: ANIME_FLYOUT },
   { key: "discover",    label: "Discover",    path: "/ai-discover",   icon: Sparkle },
-  { key: "clubs",       label: "Clubs",       path: "/clubs",         icon: UsersThree },
+  { key: "clubs",       label: "Dens",        path: "/clubs",         icon: UsersThree },
   { key: "blog",        label: "Blog",        path: "/blog",          icon: Article },
   { key: "leaderboard", label: "Leaderboard", path: "/leaderboard",   icon: Trophy },
   { key: "chat",        label: "Chat",        path: "/chat",          icon: ChatCircleText, badgeKey: "unreadDms", mobile: true },

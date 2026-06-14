@@ -67,9 +67,20 @@ export function useJoinClub(slug: string) {
 export function useCreateClub() {
   const qc = useQueryClient()
   return useMutation({
-    mutationFn: (body: { name: string; slug: string; description?: string; category?: string }) =>
+    mutationFn: (body: { name: string; slug: string; description?: string; category?: string; bannerUrl?: string | null; avatarUrl?: string | null }) =>
       api<{ club: Club }>("/clubs", { method: "POST", body: JSON.stringify(body) }),
     onSuccess: () => qc.invalidateQueries({ queryKey: clubsKey }),
+  })
+}
+
+export function useDeleteClub(slug: string) {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: () => api<{ ok: boolean }>(`/clubs/${slug}`, { method: "DELETE" }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: clubsKey })
+      qc.removeQueries({ queryKey: clubKey(slug) })
+    },
   })
 }
 

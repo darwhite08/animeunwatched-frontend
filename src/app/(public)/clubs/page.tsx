@@ -29,6 +29,7 @@ type Club = {
   threadCount: number
   category: string
   coverGradient: string
+  bannerUrl?: string | null
   reputation: number
   isJoined: boolean
 }
@@ -69,10 +70,14 @@ function ClubCard({
       transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
       className="group relative overflow-hidden rounded-3xl border border-border bg-surface-2 hover:border-border transition-all duration-300"
     >
-      {/* Cover gradient strip */}
+      {/* Cover — uploaded banner if present, otherwise the gradient strip */}
       <div
         className={`h-24 w-full bg-gradient-to-br ${club.coverGradient} relative overflow-hidden`}
       >
+        {club.bannerUrl && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={club.bannerUrl} alt="" className="absolute inset-0 h-full w-full object-cover" />
+        )}
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,color-mix(in srgb, var(--app-fg) 6%, transparent),transparent_60%)]" />
         <div className="absolute bottom-3 left-4">
           <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-black/40 backdrop-blur border border-border text-[9px] font-black uppercase tracking-widest text-muted">
@@ -116,7 +121,7 @@ function ClubCard({
             }`}
             style={!club.isJoined ? { background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))" } : undefined}
           >
-            {club.isJoined ? "Joined" : "Join Club"}
+            {club.isJoined ? "Joined" : "Join Den"}
           </button>
           <Link
             href={`/clubs/${club.slug}`}
@@ -144,6 +149,7 @@ export default function ClubsPage() {
     description: c.description ?? "A community for anime fans.",
     memberCount: c._count.members, threadCount: c._count.threads,
     category: c.category ?? "Other", coverGradient: "from-indigo-800/30 to-violet-800/20",
+    bannerUrl: c.bannerUrl ?? null,
     reputation: c.reputation, isJoined: false,
   }))
 
@@ -185,7 +191,7 @@ export default function ClubsPage() {
                   Community
                 </p>
                 <h1 className="text-4xl sm:text-5xl md:text-6xl font-black uppercase italic tracking-tighter text-foreground leading-none">
-                  Clubs<span style={{color:"var(--app-accent)"}}>.</span>
+                  Dens<span style={{color:"var(--app-accent)"}}>.</span>
                 </h1>
                 <p className="mt-3 text-muted text-sm max-w-md">
                   Join the conversation, build your community. Find your people.
@@ -195,7 +201,7 @@ export default function ClubsPage() {
                 href="/clubs/new"
                 className="flex items-center gap-2 px-5 sm:px-6 min-h-11 rounded-2xl text-sm font-black uppercase tracking-widest text-black transition-all hover:-translate-y-0.5 active:scale-95" style={{background:"linear-gradient(135deg,var(--app-accent-bright),var(--app-accent))",boxShadow:"0 0 32px color-mix(in srgb, var(--app-accent) 35%, transparent)"}}
               >
-                <Plus size={14} /> Create Club
+                <Plus size={14} /> Create Den
               </Link>
             </div>
           </motion.div>
@@ -219,7 +225,7 @@ export default function ClubsPage() {
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search clubs…"
+              placeholder="Search dens…"
               className="w-full pl-10 pr-4 min-h-11 rounded-xl bg-surface border border-border text-base sm:text-sm text-foreground placeholder:text-subtle focus:outline-none focus:border-accent/40 focus:bg-surface transition-all"
             />
           </div>
@@ -246,7 +252,7 @@ export default function ClubsPage() {
 
         {/* Results count */}
         <p className="text-[10px] font-black uppercase tracking-[0.2em] text-subtle mb-6">
-          {filtered.length} club{filtered.length !== 1 ? "s" : ""} found
+          {filtered.length} den{filtered.length !== 1 ? "s" : ""} found
         </p>
 
         {/* Grid */}
@@ -272,7 +278,7 @@ export default function ClubsPage() {
                 <Users size={28} className="text-subtle" />
               </div>
               <p className="text-lg font-black uppercase italic text-subtle">
-                No clubs found
+                No dens found
               </p>
               <p className="text-xs text-subtle">
                 Try a different search or category

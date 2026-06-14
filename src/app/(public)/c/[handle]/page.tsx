@@ -120,7 +120,7 @@ export default function StorefrontPage({ params }: { params: Promise<{ handle: s
 
       {/* Clubs */}
       {content.clubs.length > 0 && (
-        <Section icon={<Users2 size={16} />} title="Clubs">
+        <Section icon={<Users2 size={16} />} title="Dens">
           <div className="grid gap-2 sm:grid-cols-2">
             {content.clubs.map((c) => (
               <Link key={c.slug} href={`/clubs/${c.slug}`} className="flex items-center justify-between rounded-2xl border border-border bg-white/[0.02] px-5 py-3.5 hover:border-border-hover">

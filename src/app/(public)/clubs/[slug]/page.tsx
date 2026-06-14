@@ -3,6 +3,7 @@
 import { use, useState, useMemo } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import {
   Users,
   MessageSquare,
@@ -21,9 +22,10 @@ import {
   Timer,
   X,
   Loader2,
+  Trash2,
 } from "lucide-react"
 import { useToast } from "@/stores/toast.store"
-import { useClub, useJoinClub, useClubMembers } from "@/hooks/useClubs"
+import { useClub, useJoinClub, useClubMembers, useDeleteClub } from "@/hooks/useClubs"
 import { useClubThreads, useCreateClubThread } from "@/hooks/useThreads"
 import { api } from "@/lib/api/client"
 import { useAuthStore } from "@/stores/auth.store"
@@ -223,7 +225,7 @@ function CreateChallengeModal({ slug, onClose }: { slug: string; onClose: () => 
       animeTitle,
       malId: Number(malId),
       imageUrl: `https://cdn.myanimelist.net/images/anime/1/default.jpg`,
-      description: description || `Watch ${animeTitle} with the club!`,
+      description: description || `Watch ${animeTitle} with the den!`,
       deadline,
       prize: prize || undefined,
     }
@@ -323,17 +325,20 @@ export default function ClubDetailPage({
 }) {
   const { slug } = use(params)
   const { push } = useToast()
+  const router = useRouter()
   const authUser = useAuthStore(s => s.user)
   const { data: clubData, isLoading: clubLoading, isError: clubError } = useClub(slug)
   const { data: threadsData } = useClubThreads(slug)
   const { data: membersData } = useClubMembers(slug)
   const joinMut = useJoinClub(slug)
+  const deleteMut = useDeleteClub(slug)
 
   const [acceptedChallenges, setAcceptedChallenges] = useState<Set<string>>(new Set())
   const [showCreateChallenge, setShowCreateChallenge] = useState(false)
   const [activeTab, setActiveTab] = useState<ClubTab>("threads")
   const [joined, setJoined] = useState(false)
   const [onboardDismissed, setOnboardDismissed] = useState(false)
+  const [confirmDelete, setConfirmDelete] = useState(false)
 
   // Real challenges parsed out of the thread list (a challenge is a thread whose
   // title is prefixed [CHALLENGE] with a JSON body). No mock fallback.
@@ -360,7 +365,7 @@ export default function ClubDetailPage({
         <div className="h-20 w-20 rounded-3xl bg-surface border border-border flex items-center justify-center mb-5">
           <Users size={28} className="text-subtle" />
         </div>
-        <h1 className="text-2xl font-black uppercase italic tracking-tight text-foreground mb-2">Club not found</h1>
+        <h1 className="text-2xl font-black uppercase italic tracking-tight text-foreground mb-2">Den not found</h1>
         <p className="text-sm text-muted max-w-sm mb-6">
           There&apos;s no club at <span className="font-bold text-foreground">/{slug}</span>. It may have been removed, or the link is out of date.
         </p>
@@ -368,16 +373,12 @@ export default function ClubDetailPage({
           <Link
             href="/clubs"
             className="flex items-center px-5 min-h-11 rounded-xl bg-surface border border-border text-[10px] font-black uppercase tracking-widest text-muted hover:text-foreground hover:border-border active:scale-95 transition-all"
-          >
-            Browse Clubs
-          </Link>
+          >Browse Dens</Link>
           <Link
             href="/clubs/new"
             className="flex items-center px-5 min-h-11 rounded-xl text-[10px] font-black uppercase tracking-widest text-black active:scale-95 transition-all"
             style={{ background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))" }}
-          >
-            Create a Club
-          </Link>
+          >Create a Den</Link>
         </div>
       </div>
     )
@@ -386,13 +387,14 @@ export default function ClubDetailPage({
   // ── Real club — every value below comes from the API. ──
   const isMember = !!apiClub.isMember || joined
   const isAdmin = apiClub.myRole === "ADMIN"
+  const isOwner = !!authUser && authUser.id === apiClub.ownerId
   const showOnboarding = !!apiClub.isMember && !!apiClub.needsOnboarding && !onboardDismissed
 
   const rules = (apiClub.rules ?? "").split("\n").map(r => r.trim()).filter(Boolean)
   const club = {
     slug: apiClub.slug,
     name: apiClub.name,
-    description: apiClub.description?.trim() || "A community club for anime fans.",
+    description: apiClub.description?.trim() || "A community den for anime fans.",
     memberCount: apiClub._count?.members ?? 0,
     threadCount: apiClub._count?.threads ?? 0,
     category: apiClub.category?.trim() || "General",
@@ -424,8 +426,18 @@ export default function ClubDetailPage({
     role: m.role,
   }))
 
+  const handleDelete = () => {
+    deleteMut.mutate(undefined, {
+      onSuccess: () => {
+        push(`Deleted ${club.name}`, "success")
+        router.push("/clubs")
+      },
+      onError: (e: Error) => push(e?.message || "Failed to delete den", "error"),
+    })
+  }
+
   const toggleJoin = () => {
-    if (!authUser) { push("Sign in to join clubs", "info"); return }
+    if (!authUser) { push("Sign in to join dens", "info"); return }
     const next = !isMember
     joinMut.mutate(
       { join: next },
@@ -462,6 +474,10 @@ export default function ClubDetailPage({
         className={`relative overflow-hidden bg-gradient-to-br ${club.coverGradient}`}
         style={{ minHeight: "260px" }}
       >
+        {apiClub.bannerUrl && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={apiClub.bannerUrl} alt="" className="absolute inset-0 h-full w-full object-cover" />
+        )}
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,color-mix(in srgb, var(--app-fg) 5%, transparent),transparent_60%)]" />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/30 to-[var(--app-bg)]" />
 
@@ -471,9 +487,7 @@ export default function ClubDetailPage({
             href="/clubs"
             className="inline-flex items-center gap-1.5 min-h-11 text-[10px] font-black uppercase tracking-widest text-muted hover:text-muted active:scale-95 transition-all mb-6 sm:mb-8 group"
           >
-            <ArrowLeft size={11} className="group-hover:-translate-x-0.5 transition-transform" />
-            All Clubs
-          </Link>
+            <ArrowLeft size={11} className="group-hover:-translate-x-0.5 transition-transform" />All Dens</Link>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -507,7 +521,7 @@ export default function ClubDetailPage({
                   : "bg-accent hover:bg-accent-bright text-black shadow-[0_0_32px_rgba(99,102,241,0.4)] hover:-translate-y-0.5"
               }`}
             >
-              {club.isJoined ? "Leave Club" : "Join Club"}
+              {club.isJoined ? "Leave Den" : "Join Den"}
             </button>
           </motion.div>
         </div>
@@ -761,9 +775,7 @@ export default function ClubDetailPage({
                 <div className="p-6 rounded-2xl bg-surface border border-border space-y-4">
                   <div className="flex items-center gap-2">
                     <AlertTriangle size={14} className="text-accent-bright" />
-                    <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-muted">
-                      Club Rules
-                    </h2>
+                    <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-muted">Den Rules</h2>
                   </div>
                   <ol className="space-y-3">
                     {club.rules.map((rule, i) => (
@@ -782,9 +794,7 @@ export default function ClubDetailPage({
               <div className="p-6 rounded-2xl bg-surface border border-border space-y-4">
                 <div className="flex items-center gap-2">
                   <CalendarDays size={14} className="text-violet-400" />
-                  <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-muted">
-                    Club Info
-                  </h2>
+                  <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-muted">Den Info</h2>
                 </div>
                 <div className="space-y-3">
                   <div className="flex items-center justify-between text-sm">
@@ -801,6 +811,54 @@ export default function ClubDetailPage({
                   </div>
                 </div>
               </div>
+
+              {/* Danger zone — owner only */}
+              {isOwner && (
+                <div className="p-6 rounded-2xl bg-red-500/5 border border-red-500/20 space-y-4">
+                  <div className="flex items-center gap-2">
+                    <AlertTriangle size={14} className="text-red-400" />
+                    <h2 className="text-[10px] font-black uppercase tracking-[0.2em] text-red-400">
+                      Danger Zone
+                    </h2>
+                  </div>
+                  {!confirmDelete ? (
+                    <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                      <p className="text-sm text-muted">
+                        Permanently delete this den. Members and events are removed; threads are kept and detached.
+                      </p>
+                      <button
+                        onClick={() => setConfirmDelete(true)}
+                        className="shrink-0 inline-flex items-center justify-center gap-2 min-h-11 px-4 rounded-xl border border-red-500/30 bg-red-500/10 text-[11px] font-black uppercase tracking-widest text-red-300 transition-all hover:bg-red-500/20 active:scale-95"
+                      >
+                        <Trash2 size={13} /> Delete Den
+                      </button>
+                    </div>
+                  ) : (
+                    <div className="space-y-3">
+                      <p className="text-sm font-bold text-red-200">
+                        Delete <span className="italic">{club.name}</span>? This can&apos;t be undone.
+                      </p>
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={handleDelete}
+                          disabled={deleteMut.isPending}
+                          className="inline-flex items-center justify-center gap-2 min-h-11 px-4 rounded-xl bg-red-500 text-[11px] font-black uppercase tracking-widest text-white transition-all hover:bg-red-600 active:scale-95 disabled:opacity-50"
+                        >
+                          {deleteMut.isPending ? <Loader2 size={13} className="animate-spin" /> : <Trash2 size={13} />}
+                          {deleteMut.isPending ? "Deleting…" : "Yes, delete"}
+                        </button>
+                        <button
+                          onClick={() => setConfirmDelete(false)}
+                          disabled={deleteMut.isPending}
+                          className="min-h-11 px-4 rounded-xl bg-surface border border-border text-[11px] font-black uppercase tracking-widest text-muted transition-all hover:text-foreground active:scale-95 disabled:opacity-50"
+                        >
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
             </motion.div>
           )}
         </AnimatePresence>

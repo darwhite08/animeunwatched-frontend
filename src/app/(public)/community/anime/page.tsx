@@ -372,13 +372,13 @@ export default function AnimeDiscussionsPage() {
               Start a Discussion
             </h3>
             <p className="text-subtle text-sm font-medium leading-relaxed">
-              Have something to say about an anime? Create a thread in a club and invite the community.
+              Have something to say about an anime? Create a thread in a den and invite the community.
             </p>
             <Link
               href="/clubs"
               className="inline-flex items-center gap-2 px-8 py-4 rounded-2xl bg-accent hover:bg-accent-bright text-sm font-black uppercase tracking-widest text-foreground transition-all shadow-lg shadow-indigo-600/20 hover:shadow-indigo-500/30 active:scale-[0.98]"
             >
-              Browse Clubs <ArrowRight size={15} />
+              Browse Dens <ArrowRight size={15} />
             </Link>
           </div>
         </section>

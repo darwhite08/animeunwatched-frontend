@@ -213,9 +213,9 @@ function Hero({ isOwner }: { isOwner: boolean }) {
   const curations  = listData?.data?.length ?? 0
 
   return (
-    <section className="relative rounded-[22px] bg-surface border border-border overflow-hidden">
+    <section className="relative rounded-2xl bg-surface border border-border overflow-hidden">
       {/* Cover with aurora */}
-      <div className="relative h-[150px] overflow-hidden"
+      <div className="relative h-[120px] sm:h-[150px] overflow-hidden"
         style={{ background: "linear-gradient(120deg, var(--app-surface-2), var(--app-surface))" }}>
         {coverImage && (
           // eslint-disable-next-line @next/next/no-img-element
@@ -236,7 +236,7 @@ function Hero({ isOwner }: { isOwner: boolean }) {
           }} />
         {isOwner && (
           <button onClick={() => coverRef.current?.click()} disabled={coverUpload.isUploading}
-            className={`absolute top-3 right-3 z-[2] flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] font-mono uppercase tracking-widest text-muted backdrop-blur-md border border-border bg-background/40 hover:bg-background/70 transition-colors disabled:opacity-60 ${coverUpload.isUploading ? "animate-pulse" : ""}`}>
+            className={`absolute top-2.5 right-2.5 sm:top-3 sm:right-3 z-[2] flex items-center gap-1.5 px-2.5 sm:px-3 h-9 rounded-lg text-[10px] font-mono uppercase tracking-widest text-muted backdrop-blur-md border border-border bg-background/40 hover:bg-background/70 transition-colors disabled:opacity-60 ${coverUpload.isUploading ? "animate-pulse" : ""}`}>
             <Camera size={12} /> {coverUpload.isUploading ? "Uploading…" : "Edit cover"}
           </button>
         )}
@@ -246,64 +246,64 @@ function Hero({ isOwner }: { isOwner: boolean }) {
       {/* Body — 3-col grid on lg: [avatar | identity | actions]. All three
           start at the same top edge (pt-4); avatar gets its own negative
           margin so only IT pokes up over the cover. */}
-      <div className="px-4 sm:px-6 pb-6 grid gap-6 grid-cols-1 lg:grid-cols-[auto_minmax(0,1fr)_auto] lg:items-start">
-        <div className="-mt-10 sm:-mt-[54px] self-start">
+      <div className="px-4 sm:px-6 pb-5 sm:pb-6 grid gap-4 sm:gap-6 grid-cols-1 lg:grid-cols-[auto_minmax(0,1fr)_auto] lg:items-start">
+        <div className="-mt-12 sm:-mt-[54px] self-start">
           <ProfileAvatar progress={progress} level={level} name={displayName}
             avatarUrl={profile?.avatarUrl ?? user?.avatarUrl} editable={isOwner} />
         </div>
 
-        <div className="min-w-0 pt-4">
-          <div className="flex items-center gap-2 flex-wrap">
-            <h1 className="text-2xl sm:text-3xl font-black tracking-tighter text-foreground italic uppercase leading-none break-words">{displayName}</h1>
-            <span title="Verified" className="text-accent-bright"><ShieldCheck size={20} /></span>
+        <div className="min-w-0 pt-1 sm:pt-4">
+          <div className="flex items-center gap-x-2 gap-y-1.5 flex-wrap">
+            <h1 className="text-[22px] sm:text-3xl font-black tracking-tighter text-foreground italic uppercase leading-none break-words">{displayName}</h1>
+            <span title="Verified" className="text-accent-bright"><ShieldCheck size={18} className="sm:hidden" /><ShieldCheck size={20} className="hidden sm:inline" /></span>
             <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black uppercase tracking-widest text-accent border border-accent/40 bg-accent/10">
               <Sparkles size={11} /> Elite
             </span>
           </div>
-          <div className="flex items-center gap-2 mt-1.5 text-xs text-muted">
+          <div className="flex items-center flex-wrap gap-x-2 gap-y-0.5 mt-2 text-xs text-muted">
             <span>Lv {level} · {ninjaTier(reputation)}</span>
             <span className="opacity-40">•</span>
             <span className="font-mono uppercase tracking-widest text-muted">{handle}</span>
           </div>
-          <p className="text-sm text-muted mt-3 max-w-prose leading-relaxed">{bio}</p>
-          <div className="flex items-center flex-wrap gap-x-5 gap-y-2 mt-4">
+          <p className="text-[13px] sm:text-sm text-muted mt-2.5 sm:mt-3 max-w-prose leading-relaxed">{bio}</p>
+          <div className="flex items-center flex-wrap gap-x-4 sm:gap-x-5 gap-y-2 mt-3.5 sm:mt-4">
             {[
               { n: followers.toLocaleString(),  l: "Followers"  },
               { n: followingN.toLocaleString(), l: "Following"  },
               { n: curations.toLocaleString(),  l: "Curations"  },
             ].map(it => (
-              <button key={it.l} className="flex items-baseline gap-1.5 group">
+              <button key={it.l} className="flex items-baseline gap-1.5 group min-h-11 -my-1.5 py-1.5">
                 <span className="text-base font-black text-foreground tabular-nums">{it.n}</span>
                 <span className="font-mono text-[10px] uppercase tracking-widest text-muted group-hover:text-foreground transition-colors">{it.l}</span>
               </button>
             ))}
-            <span className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-widest text-muted">
+            <span className="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-widest text-muted whitespace-nowrap">
               <CalendarDays size={11} /> Joined {joined}
             </span>
           </div>
         </div>
 
-        <div className="flex flex-col gap-3 pt-4 w-full lg:w-[300px]">
-          <div className="flex items-center gap-2 lg:justify-end flex-wrap">
+        <div className="flex flex-col gap-3 pt-1 sm:pt-4 w-full lg:w-[300px]">
+          <div className="flex items-center gap-2 lg:justify-end">
             {isOwner ? (
               <>
                 <Link href={settingsHref}
-                  className="flex items-center justify-center gap-2 min-h-11 px-4 py-2 rounded-xl text-[11px] font-black uppercase tracking-widest text-black bg-accent hover:bg-accent-bright active:scale-95 transition-[transform,background-color]">
+                  className="flex flex-1 lg:flex-none items-center justify-center gap-2 min-h-11 px-4 py-2 rounded-xl text-[11px] font-black uppercase tracking-widest text-black bg-accent hover:bg-accent-bright active:scale-95 transition-[transform,background-color]">
                   <Settings size={14} /> Customize
                 </Link>
-                <button onClick={shareProfile} className="flex items-center justify-center gap-2 min-h-11 px-4 py-2 rounded-xl text-[11px] font-black uppercase tracking-widest text-foreground border border-border hover:bg-surface-2 active:scale-95 transition-[transform,background-color]">
+                <button onClick={shareProfile} className="flex flex-1 lg:flex-none items-center justify-center gap-2 min-h-11 px-4 py-2 rounded-xl text-[11px] font-black uppercase tracking-widest text-foreground border border-border hover:bg-surface-2 active:scale-95 transition-[transform,background-color]">
                   <Share2 size={13} /> Share
                 </button>
               </>
             ) : (
               <>
                 <button onClick={() => setFollowing(f => !f)}
-                  className={`flex items-center justify-center gap-2 min-h-11 px-4 py-2 rounded-xl text-[11px] font-black uppercase tracking-widest active:scale-95 transition-[transform,background-color] ${
+                  className={`flex flex-1 lg:flex-none items-center justify-center gap-2 min-h-11 px-4 py-2 rounded-xl text-[11px] font-black uppercase tracking-widest active:scale-95 transition-[transform,background-color] ${
                     following ? "text-foreground border border-border hover:bg-surface-2" : "text-black bg-accent hover:bg-accent-bright"
                   }`}>
                   {following ? <><Check size={14} /> Following</> : <><Plus size={14} /> Follow</>}
                 </button>
-                <button className="flex items-center justify-center gap-2 min-h-11 px-4 py-2 rounded-xl text-[11px] font-black uppercase tracking-widest text-foreground border border-border hover:bg-surface-2 active:scale-95 transition-[transform,background-color]">
+                <button className="flex flex-1 lg:flex-none items-center justify-center gap-2 min-h-11 px-4 py-2 rounded-xl text-[11px] font-black uppercase tracking-widest text-foreground border border-border hover:bg-surface-2 active:scale-95 transition-[transform,background-color]">
                   <MessageSquare size={13} /> Message
                 </button>
               </>
@@ -377,7 +377,7 @@ function Heatmap() {
   const bestStreak = (user as { bestStreak?: number } | null)?.bestStreak ?? streakDays
   const grid = useMemo(() => buildHeatmap(streakDays), [streakDays])
   return (
-    <section className="rounded-[22px] bg-surface border border-border p-6">
+    <section className="rounded-2xl bg-surface border border-border p-4 sm:p-5">
       <div className="flex items-start justify-between gap-3 mb-4">
         <div>
           <div className="flex items-center gap-2 text-sm font-bold text-foreground">
@@ -392,7 +392,7 @@ function Heatmap() {
             )}
           </div>
         </div>
-        <div className="flex items-center gap-1.5 font-mono text-[9px] uppercase tracking-widest text-subtle">
+        <div className="hidden sm:flex items-center gap-1.5 font-mono text-[9px] uppercase tracking-widest text-subtle">
           Less
           {[0, 1, 2, 3, 4].map(l => (
             <span key={l} className="w-[10px] h-[10px] rounded-[2px]" style={{ background: cellColor(l) }} />
@@ -438,12 +438,12 @@ function NowWatching() {
 
   if (!current) {
     return (
-      <section className="rounded-[22px] bg-surface border border-border p-6 flex flex-col gap-4 items-start">
+      <section className="rounded-2xl bg-surface border border-border p-4 sm:p-5 flex flex-col gap-3 items-start">
         <div className="flex items-center gap-2 text-sm font-bold text-foreground">
           <Play size={14} className="text-accent" /> Now watching
         </div>
-        <div className="text-xs text-muted">Nothing on the screen right now.</div>
-        <Link href="/discover" className="mt-auto flex items-center justify-center gap-2 min-h-11 px-4 py-2.5 rounded-xl text-[11px] font-black uppercase tracking-widest text-black bg-accent hover:bg-accent-bright active:scale-95 transition-[transform,background-color]">
+        <div className="text-[13px] text-muted">Nothing on the screen right now.</div>
+        <Link href="/discover" className="flex items-center justify-center gap-2 min-h-11 px-4 rounded-xl text-[11px] font-black uppercase tracking-widest text-black bg-accent hover:bg-accent-bright active:scale-95 transition-[transform,background-color]">
           <Sparkles size={13} /> Find something
         </Link>
       </section>
@@ -458,7 +458,7 @@ function NowWatching() {
   const malId = current.anime?.malId
 
   return (
-    <section className="rounded-[22px] bg-surface border border-border p-6 flex flex-col gap-4">
+    <section className="rounded-2xl bg-surface border border-border p-4 sm:p-5 flex flex-col gap-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2 text-sm font-bold text-foreground">
           <Play size={14} className="text-accent" />
@@ -513,7 +513,7 @@ function StatBand({ archiveCount }: { archiveCount: number }) {
     { id: "trust",    icon: ShieldCheck, value: Math.min(99, 50 + Math.floor(reputation / 20)).toString(), label: "Trust score", sub: "Reviewer reputation",   delta: "From your activity", up: true, color: "#3FB950",                 series: [50, 60, 70, 75, 80, 85, 90, 95] },
   ]
   return (
-    <section className="grid grid-cols-2 lg:grid-cols-4 rounded-[22px] bg-surface border border-border overflow-hidden divide-x divide-y lg:divide-y-0 divide-border">
+    <section className="grid grid-cols-2 lg:grid-cols-4 rounded-2xl bg-surface border border-border overflow-hidden divide-x divide-y lg:divide-y-0 divide-border">
       {stats.map((s, i) => {
         const Icon = s.icon
         return (
@@ -562,17 +562,22 @@ function Favorites() {
 
   if (list.length === 0) {
     return (
-      <section className="rounded-[22px] bg-surface border border-border p-6">
-        <div className="flex items-center gap-2 text-sm font-bold text-foreground mb-3">
+      <section className="rounded-2xl bg-surface border border-border p-4 sm:p-5">
+        <div className="flex items-center gap-2 text-sm font-bold text-foreground mb-2">
           <Crown size={15} className="text-accent" /> All-time favorites
         </div>
-        <div className="text-xs text-muted">Score some anime in your watchlist to see your top picks here.</div>
+        <div className="flex flex-col items-start gap-3 py-1">
+          <div className="text-[13px] text-muted">Score some anime in your watchlist to see your top picks here.</div>
+          <Link href="/watchlist" className="flex items-center justify-center gap-1.5 min-h-11 px-4 rounded-xl text-[11px] font-black uppercase tracking-widest text-foreground border border-border hover:bg-surface-2 active:scale-95 transition-[transform,background-color]">
+            <Star size={13} /> Rate your list
+          </Link>
+        </div>
       </section>
     )
   }
 
   return (
-    <section className="rounded-[22px] bg-surface border border-border p-6">
+    <section className="rounded-2xl bg-surface border border-border p-4 sm:p-5">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2 text-sm font-bold text-foreground">
           <Crown size={15} className="text-accent" /> All-time favorites
@@ -634,36 +639,50 @@ function TasteRadar() {
     .slice(0, 6)
   const data = top.length >= 3
     ? top.map(([label, count]) => ({
-        label: label.length > 9 ? label.slice(0, 8) + "…" : label,
+        label: label.length > 16 ? label.slice(0, 15) + "…" : label,
         val:   Math.min(1, count / (totalTags / Math.max(3, top.length))),
       }))
     : []
 
   if (data.length === 0) {
     return (
-      <section className="rounded-[22px] bg-surface border border-border p-6">
-        <div className="flex items-center gap-2 text-sm font-bold text-foreground mb-3">
+      <section className="rounded-2xl bg-surface border border-border p-4 sm:p-5">
+        <div className="flex items-center gap-2 text-sm font-bold text-foreground mb-2">
           <Heart size={14} className="text-accent" /> Taste profile
         </div>
-        <div className="text-xs text-muted">Add a few anime to your list to see your taste DNA.</div>
+        <div className="flex flex-col items-start gap-3 py-1">
+          <div className="text-[13px] text-muted">Add a few anime to your list to see your taste DNA.</div>
+          <Link href="/discover" className="flex items-center justify-center gap-1.5 min-h-11 px-4 rounded-xl text-[11px] font-black uppercase tracking-widest text-black bg-accent hover:bg-accent-bright active:scale-95 transition-[transform,background-color]">
+            <Sparkles size={13} /> Browse anime
+          </Link>
+        </div>
       </section>
     )
   }
+  // viewBox is widened horizontally (-50 → 290 = 340 wide) so left/right
+  // axis labels have room to sit fully inside without clipping.
   const cx = 120, cy = 116, R = 86, N = data.length
   const ang = (i: number) => -Math.PI / 2 + i * (2 * Math.PI / N)
   const pt = (i: number, rad: number) => [cx + Math.cos(ang(i)) * rad, cy + Math.sin(ang(i)) * rad] as [number, number]
   const poly = data.map((d, i) => pt(i, R * d.val).join(",")).join(" ")
   const rings = [0.25, 0.5, 0.75, 1]
+  // Anchor each label by its horizontal position so edge labels read inward.
+  const anchorFor = (x: number): "start" | "middle" | "end" => {
+    const dx = x - cx
+    if (dx > 6) return "start"
+    if (dx < -6) return "end"
+    return "middle"
+  }
   return (
-    <section className="rounded-[22px] bg-surface border border-border p-6">
-      <div className="flex items-center justify-between mb-3">
+    <section className="rounded-2xl bg-surface border border-border p-4 sm:p-5">
+      <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-2 text-sm font-bold text-foreground">
           <Heart size={14} className="text-accent" /> Taste profile
         </div>
         <span className="font-mono text-[10px] uppercase tracking-widest text-subtle">{data.length} dimensions</span>
       </div>
-      <div className="flex justify-center">
-        <svg viewBox="0 0 240 232" className="w-full max-w-[260px]">
+      <div className="flex justify-center py-1">
+        <svg viewBox="-50 0 340 240" className="w-full max-w-[320px]">
           {rings.map((rr, i) => (
             <polygon key={i} points={data.map((_, j) => pt(j, R * rr).join(",")).join(" ")}
               fill="none" stroke="color-mix(in srgb, var(--app-fg) 14%, transparent)" strokeWidth={1} />
@@ -678,11 +697,11 @@ function TasteRadar() {
             return <circle key={i} cx={x} cy={y} r={3} fill="var(--app-accent-bright)" />
           })}
           {data.map((d, i) => {
-            const [x, y] = pt(i, R + 16)
+            const [lx, ly] = pt(i, R + 18)
             return (
-              <text key={i} x={x} y={y} textAnchor="middle" dominantBaseline="middle"
-                fontSize={10} fill="var(--app-muted)"
-                style={{ textTransform: "uppercase", letterSpacing: "0.05em", fontFamily: "monospace" }}>
+              <text key={i} x={lx} y={ly} textAnchor={anchorFor(lx)} dominantBaseline="middle"
+                fontSize={9} fill="var(--app-muted)"
+                style={{ textTransform: "uppercase", letterSpacing: "0.04em", fontFamily: "monospace" }}>
                 {d.label}
               </text>
             )
@@ -723,7 +742,7 @@ function Achievements() {
   const unlocked = defs.filter(a => a.unlocked).length
 
   return (
-    <section className="rounded-[22px] bg-surface border border-border p-6">
+    <section className="rounded-2xl bg-surface border border-border p-4 sm:p-5">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2 text-sm font-bold text-foreground">
           <Medal size={15} className="text-accent" /> Achievements
@@ -794,17 +813,22 @@ function ActivityFeed() {
 
   if (events.length === 0) {
     return (
-      <section className="rounded-[22px] bg-surface border border-border p-6">
-        <div className="flex items-center gap-2 text-sm font-bold text-foreground mb-3">
+      <section className="rounded-2xl bg-surface border border-border p-4 sm:p-5">
+        <div className="flex items-center gap-2 text-sm font-bold text-foreground mb-2">
           <Clock size={14} className="text-accent" /> Recent activity
         </div>
-        <div className="text-xs text-muted">Your activity will appear here as you watch + rate + post.</div>
+        <div className="flex flex-col items-start gap-3 py-1">
+          <div className="text-[13px] text-muted">Your activity will appear here as you watch + rate + post.</div>
+          <Link href="/discover" className="flex items-center justify-center gap-1.5 min-h-11 px-4 rounded-xl text-[11px] font-black uppercase tracking-widest text-foreground border border-border hover:bg-surface-2 active:scale-95 transition-[transform,background-color]">
+            <Play size={13} /> Start watching
+          </Link>
+        </div>
       </section>
     )
   }
 
   return (
-    <section className="rounded-[22px] bg-surface border border-border p-6">
+    <section className="rounded-2xl bg-surface border border-border p-4 sm:p-5">
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2 text-sm font-bold text-foreground">
           <Clock size={14} className="text-accent" /> Recent activity
@@ -845,7 +869,7 @@ export default function ProfileV2() {
   const isOwner = true   // dashboard route → always owner; visitor view lives at /u/[username]
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8 space-y-5 pb-32">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 sm:py-8 space-y-4 sm:space-y-5 pb-32">
       <style jsx global>{`
         @keyframes aurora {
           0%   { transform: translateX(-6%) translateY(0)    scale(1.05); }
@@ -855,7 +879,7 @@ export default function ProfileV2() {
 
       <Hero isOwner={isOwner} />
 
-      <div className="grid gap-5 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
+      <div className="grid gap-4 sm:gap-5 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
         <Heatmap />
         <NowWatching />
       </div>
@@ -864,12 +888,12 @@ export default function ProfileV2() {
 
       <InviteCard />
 
-      <div className="grid gap-5 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)] items-start">
+      <div className="grid gap-4 sm:gap-5 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)] items-start">
         <Favorites />
         <TasteRadar />
       </div>
 
-      <div className="grid gap-5 lg:grid-cols-2 items-start">
+      <div className="grid gap-4 sm:gap-5 lg:grid-cols-2 items-start">
         <Achievements />
         <ActivityFeed />
       </div>

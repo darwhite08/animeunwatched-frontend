@@ -63,10 +63,10 @@ export default function PrivacySettingsPage() {
               </div>
               <p className="text-[10px] text-subtle mt-0.5 ml-5">{t.desc}</p>
             </div>
-            <button onClick={() => toggle(t.id)}
-              className={`relative w-11 h-6 rounded-full transition-colors shrink-0 ml-4 ${t.value ? "bg-accent" : "bg-surface"}`}
+            <button onClick={() => toggle(t.id)} role="switch" aria-checked={t.value} aria-label={t.label}
+              className={`relative ml-4 h-6 w-11 shrink-0 rounded-full transition-colors ${t.value ? "bg-accent" : "bg-white/15"}`}
             >
-              <span className={`absolute top-0.5 h-5 w-5 rounded-full bg-white shadow transition-transform ${t.value ? "translate-x-5" : "translate-x-0.5"}`} />
+              <span className={`absolute left-0.5 top-0.5 h-5 w-5 rounded-full bg-white shadow-sm transition-transform duration-200 ${t.value ? "translate-x-5" : "translate-x-0"}`} />
             </button>
           </div>
         ))}

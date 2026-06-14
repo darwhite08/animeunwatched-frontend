@@ -3,7 +3,6 @@
 import Link from "next/link"
 import { useParams, usePathname } from "next/navigation"
 import { User, Bell, Palette, Shield, CreditCard, Link2, Lock, Settings } from "lucide-react"
-import { motion } from "framer-motion"
 
 export default function UserSettingsLayout({ children }: { children: React.ReactNode }) {
   const params   = useParams<{ slug: string }>()
@@ -43,22 +42,14 @@ export default function UserSettingsLayout({ children }: { children: React.React
             const active = pathname === item.href
             return (
               <Link key={item.href} href={item.href}
-                className={`relative flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-bold transition-all ${
-                  active ? "text-foreground" : "text-muted hover:text-foreground hover:bg-surface"
+                className={`relative flex origin-left items-center gap-3 px-4 py-3 font-bold transition-all duration-200 ${
+                  active
+                    ? "scale-[1.08] text-[15px] font-black text-foreground"
+                    : "text-sm text-muted hover:text-foreground"
                 }`}
               >
-                {active && (
-                  <motion.div layoutId="user-settings-pill"
-                    className="absolute inset-0 rounded-xl"
-                    style={{
-                      background: "linear-gradient(135deg, color-mix(in srgb, var(--app-accent) 10%, transparent), color-mix(in srgb, var(--app-accent) 5%, transparent))",
-                      border: "1px solid color-mix(in srgb, var(--app-accent) 20%, transparent)",
-                    }}
-                    transition={{ type: "spring", stiffness: 320, damping: 30 }}
-                  />
-                )}
-                <item.icon size={15} className={`relative z-10 ${active ? "text-accent-bright" : ""}`} />
-                <span className="relative z-10">{item.label}</span>
+                <item.icon size={active ? 17 : 15} className={`transition-colors ${active ? "text-accent" : ""}`} />
+                <span>{item.label}</span>
               </Link>
             )
           })}

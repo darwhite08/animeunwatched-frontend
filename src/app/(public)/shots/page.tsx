@@ -2,10 +2,10 @@
 
 import { useEffect, useRef, useState, useCallback, useMemo } from "react"
 import Link from "next/link"
-import { MessageCircle, Bookmark, Share2, Plus, Volume2, VolumeX, Clapperboard, Loader2, Play, Star, Eye } from "lucide-react"
+import { MessageCircle, Bookmark, Share2, Plus, Volume2, VolumeX, Clapperboard, Loader2, Play, Star, Eye, MoreHorizontal, EyeOff } from "lucide-react"
 import { HeartLike } from "@/components/ui/HeartLike"
 import { api } from "@/lib/api/client"
-import { recordShotView } from "@/lib/api/endpoints"
+import { recordShotView, recordShotFeedback } from "@/lib/api/endpoints"
 import { getViewerKey } from "@/lib/shots/viewerKey"
 import { track } from "@/lib/analytics/ga"
 import { useAuthStore } from "@/stores/auth.store"
@@ -270,7 +270,8 @@ export default function ShotsPage() {
           className="relative z-[1] flex h-full w-full snap-start snap-always items-center justify-center p-0 md:p-4"
         >
           {item.kind === "shot" ? (
-            <ShotReel shot={item.shot} active={active === idx} near={Math.abs(idx - active) <= 1} muted={muted} />
+            <ShotReel shot={item.shot} active={active === idx} near={Math.abs(idx - active) <= 1} muted={muted}
+              onNotInterested={(id) => setShots((prev) => prev.filter((s) => s.id !== id))} />
           ) : (
             <TrailerReel trailer={item.trailer} active={active === idx} muted={muted} />
           )}
@@ -292,7 +293,7 @@ function MediaShell({ children }: { children: React.ReactNode }) {
   return <div className="relative h-full w-full overflow-hidden bg-black md:aspect-[9/16] md:max-h-full md:w-auto md:rounded-3xl md:ring-1 md:ring-white/10 md:shadow-[0_24px_70px_rgba(0,0,0,0.65)]">{children}</div>
 }
 
-function ShotReel({ shot, active, near, muted }: { shot: Shot; active: boolean; near: boolean; muted: boolean }) {
+function ShotReel({ shot, active, near, muted, onNotInterested }: { shot: Shot; active: boolean; near: boolean; muted: boolean; onNotInterested?: (id: string) => void }) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const [buffering, setBuffering] = useState(false)
   const me = useAuthStore((s) => s.user)
@@ -307,6 +308,9 @@ function ShotReel({ shot, active, near, muted }: { shot: Shot; active: boolean; 
   const [comments, setComments] = useState(shot._count.comments ?? 0)
   const [views, setViews] = useState(shot.viewCount ?? 0)
   const viewedRef = useRef(false) // fire the view beacon at most once per shot per session
+  const skippedRef = useRef(false)        // fire the SKIP beacon at most once
+  const activeSinceRef = useRef<number | null>(null)
+  const [menuOpen, setMenuOpen] = useState(false)
   const [following, setFollowing] = useState(shot.authorFollowedByMe ?? false)
   const [showComments, setShowComments] = useState(false)
   const [likeBusy, setLikeBusy] = useState(false)
@@ -352,6 +356,29 @@ function ShotReel({ shot, active, near, muted }: { shot: Shot; active: boolean; 
     const t = setTimeout(() => qualifyView(2000), 2000)
     return () => clearTimeout(t)
   }, [isEmbed, active, qualifyView])
+
+  // Negative signal — fast scroll-away. If the reel was on screen only briefly
+  // and never qualified as a view, record an implicit SKIP (feeds the ranker's
+  // suppression loop). Fires once per shot.
+  useEffect(() => {
+    if (active) { activeSinceRef.current = Date.now(); return }
+    const started = activeSinceRef.current
+    activeSinceRef.current = null
+    if (started && !viewedRef.current && !skippedRef.current && !mine) {
+      const elapsed = Date.now() - started
+      if (elapsed > 300 && elapsed < 2500) {
+        skippedRef.current = true
+        recordShotFeedback(shot.id, getViewerKey(), "SKIP", elapsed).catch(() => {})
+      }
+    }
+  }, [active, shot.id, mine])
+
+  function notInterested() {
+    setMenuOpen(false)
+    recordShotFeedback(shot.id, getViewerKey(), "NOT_INTERESTED").catch(() => {})
+    push("Got it — we'll show fewer like this", "success")
+    onNotInterested?.(shot.id)
+  }
 
   async function toggleLike() {
     if (!isAuthenticated) { showAuthPrompt({ subtitle: "Sign in to like Shots." }); return }
@@ -472,6 +499,25 @@ function ShotReel({ shot, active, near, muted }: { shot: Shot; active: boolean; 
           </span>
           <span className="text-[11px] font-semibold drop-shadow">Share</span>
         </button>
+        {!mine && (
+          <div className="relative flex flex-col items-center">
+            <button onClick={() => setMenuOpen((o) => !o)} aria-label="More" aria-expanded={menuOpen}
+              className="grid h-12 w-12 place-items-center rounded-full bg-black/40 text-white backdrop-blur transition-transform duration-200 ease-out active:scale-90">
+              <MoreHorizontal size={26} />
+            </button>
+            {menuOpen && (
+              <>
+                <button aria-hidden onClick={() => setMenuOpen(false)} className="fixed inset-0 z-10 cursor-default" />
+                <div className="absolute bottom-14 right-0 z-20 w-44 overflow-hidden rounded-2xl border border-white/15 bg-black/85 backdrop-blur-xl shadow-2xl">
+                  <button onClick={notInterested}
+                    className="flex w-full items-center gap-2.5 px-4 py-3 text-left text-[13px] font-semibold text-white transition-colors hover:bg-white/10">
+                    <EyeOff size={16} className="shrink-0" /> Not interested
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+        )}
       </div>
 
       <div className="absolute inset-x-0 bottom-0 p-4 pr-20 pb-[max(1rem,env(safe-area-inset-bottom))]">

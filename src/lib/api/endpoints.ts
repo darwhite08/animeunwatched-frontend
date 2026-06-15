@@ -419,6 +419,19 @@ export const recordShotView = (shotId: string, viewerKey: string, watchedMs?: nu
     body: JSON.stringify({ viewerKey, watchedMs }),
   })
 
+/** Negative feedback — "SKIP" (implicit fast scroll-away) or "NOT_INTERESTED"
+    (explicit). Feeds the ranker's suppression loop. */
+export const recordShotFeedback = (
+  shotId: string,
+  viewerKey: string,
+  kind: "SKIP" | "NOT_INTERESTED",
+  watchedMs?: number,
+) =>
+  api<{ ok: boolean; counted: boolean }>(`/shots/${shotId}/feedback`, {
+    method: "POST",
+    body: JSON.stringify({ viewerKey, kind, watchedMs }),
+  })
+
 /* ── Search ── */
 export const search = (
   q: string,

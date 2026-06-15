@@ -565,10 +565,8 @@ export function BlogReaderClient({ slug, initialBlog }: { slug: string; initialB
 
           <button
             onClick={() => { setBookmarked(b => !b); push(bookmarked ? "Removed bookmark" : "Bookmarked!", "success") }}
-            className={`ml-auto inline-flex min-h-11 items-center gap-2 px-4 sm:px-5 rounded-xl text-xs font-black uppercase tracking-widest transition-all active:scale-95 border ${
-              bookmarked
-                ? "bg-accent/15 border-accent/25 text-accent-bright"
-                : "bg-white/[0.04] border-border text-muted hover:text-white"
+            className={`ml-auto inline-flex min-h-11 items-center gap-2 px-4 sm:px-5 rounded-xl text-xs font-black uppercase tracking-widest transition-all active:scale-95 border bg-white/[0.04] border-border ${
+              bookmarked ? "text-accent-bright" : "text-muted hover:text-white"
             }`}
           >
             <Bookmark size={14} fill={bookmarked ? "currentColor" : "none"} />

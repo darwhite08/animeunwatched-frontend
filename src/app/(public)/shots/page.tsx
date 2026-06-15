@@ -67,8 +67,9 @@ export default function ShotsPage() {
   const [loading, setLoading] = useState(true)
   const [muted, setMuted] = useState(true)
   const [active, setActive] = useState(0)
-  const [mode, setMode] = useState<"all" | "shots" | "trailers">("all")
+  const [mode, setMode] = useState<"all" | "following" | "shots" | "trailers">("all")
   const loadingRef = useRef(false)
+  const filterRef = useRef<"following" | undefined>(undefined) // which feed source `shots` holds
   const scrollRef = useRef<HTMLDivElement>(null)
 
   // Posting a shot
@@ -100,8 +101,9 @@ export default function ShotsPage() {
     if (loadingRef.current) return
     loadingRef.current = true
     try {
+      const f = filterRef.current ? `&filter=${filterRef.current}` : ""
       const res = await api<{ data: Shot[]; meta: { nextCursor: string | null } }>(
-        `/shots/feed?limit=6${c ? `&cursor=${encodeURIComponent(c)}` : ""}`,
+        `/shots/feed?limit=6${f}${c ? `&cursor=${encodeURIComponent(c)}` : ""}`,
       )
       setShots((prev) => (c ? [...prev, ...res.data] : res.data))
       setCursor(res.meta.nextCursor)
@@ -124,7 +126,7 @@ export default function ShotsPage() {
   // Build the vertical feed for the selected tab.
   const feed = useMemo<FeedItem[]>(() => {
     if (mode === "trailers") return trailers.map((tr) => ({ kind: "trailer", trailer: tr }))
-    if (mode === "shots") return shots.map((s) => ({ kind: "shot", shot: s }))
+    if (mode === "shots" || mode === "following") return shots.map((s) => ({ kind: "shot", shot: s }))
     // "all" → interleave a trailer after every N shots
     const out: FeedItem[] = []
     let t = 0
@@ -140,10 +142,25 @@ export default function ShotsPage() {
     return out
   }, [shots, trailers, done, mode])
 
-  const switchMode = (m: "all" | "shots" | "trailers") => {
+  const switchMode = (m: "all" | "following" | "shots" | "trailers") => {
+    if (m === "following" && !isAuthenticated) {
+      showAuthPrompt({ subtitle: "Sign in to see Shots from creators you follow." })
+      return
+    }
+    const nextFilter = m === "following" ? "following" : undefined
     setMode(m)
     setActive(0)
     scrollRef.current?.scrollTo({ top: 0 })
+    // "all" and "shots" share the ranked `shots` data — only re-fetch when the
+    // feed SOURCE changes (ranked ⇄ following).
+    if (nextFilter !== filterRef.current) {
+      filterRef.current = nextFilter
+      setShots([])
+      setCursor(null)
+      setDone(false)
+      setLoading(true)
+      loadShots(null)
+    }
   }
 
   // Deterministic active-reel detection from scroll position (each reel fills
@@ -194,7 +211,7 @@ export default function ShotsPage() {
 
       {/* Section tabs — TikTok-style centered text with an active underline */}
       <div className="fixed left-1/2 top-[calc(env(safe-area-inset-top)+4.85rem)] z-30 flex -translate-x-1/2 items-center gap-5 md:absolute md:top-[4.85rem]">
-        {([["all", "For You"], ["shots", "Shots"], ["trailers", "Trailers"]] as const).map(([m, label]) => (
+        {([["all", "For You"], ["following", "Following"], ["shots", "Shots"], ["trailers", "Trailers"]] as const).map(([m, label]) => (
           <button
             key={m}
             onClick={() => switchMode(m)}
@@ -256,10 +273,10 @@ export default function ShotsPage() {
         <div className="flex h-full w-full flex-col items-center justify-center px-6 text-center">
           <Clapperboard className="mb-4 text-muted" size={32} />
           <h1 className="text-xl font-black uppercase italic tracking-tight text-foreground">
-            {mode === "shots" ? "No shots yet" : mode === "trailers" ? "No trailers yet" : "Nothing here yet"}
+            {mode === "following" ? "Nothing from your follows" : mode === "shots" ? "No shots yet" : mode === "trailers" ? "No trailers yet" : "Nothing here yet"}
           </h1>
           <p className="mt-2 text-sm text-muted">
-            {mode === "shots" ? "Be the first to post a short vertical clip." : "Check back soon."}
+            {mode === "following" ? "Follow some creators and their Shots show up here." : mode === "shots" ? "Be the first to post a short vertical clip." : "Check back soon."}
           </p>
         </div>
       )}

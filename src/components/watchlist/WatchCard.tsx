@@ -25,13 +25,13 @@ const STATUS_CONFIG: Record<string, { color: string; bg: string }> = {
   "Dropped":       { color: "text-red-400",     bg: "bg-red-500/10"     },
 }
 
-export const WatchCard = ({ anime, onRemove, onEdit }: { anime: WatchItem; onRemove?: (id: string | number) => void; onEdit?: () => void }) => {
+export const WatchCard = ({ anime, onRemove, onEdit, onMarkDone }: { anime: WatchItem; onRemove?: (id: string | number) => void; onEdit?: () => void; onMarkDone?: () => void }) => {
   const { push } = useToast()
   const [menuOpen, setMenuOpen] = useState(false)
   const statusStyle = STATUS_CONFIG[anime.status] ?? { color: "text-muted", bg: "bg-surface" }
 
   const handleMarkDone = () => {
-    push(`Marked "${anime.title}" as completed!`, "success")
+    onMarkDone?.()
     setMenuOpen(false)
   }
 
@@ -90,7 +90,7 @@ export const WatchCard = ({ anime, onRemove, onEdit }: { anime: WatchItem; onRem
                   <Edit2 size={13} /> Edit Entry
                 </button>
                 <button
-                  onClick={() => { onRemove?.(anime.id); push(`Removed "${anime.title}"`, "info") }}
+                  onClick={() => { onRemove?.(anime.id); setMenuOpen(false) }}
                   className="flex items-center gap-2 w-full px-4 py-3 text-xs font-bold text-muted hover:bg-red-500/10 hover:text-red-400 transition-colors"
                 >
                   <Trash2 size={13} /> Remove

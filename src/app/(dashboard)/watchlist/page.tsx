@@ -5,9 +5,10 @@ import { motion, AnimatePresence } from "framer-motion"
 import { Search, MonitorPlay, Plus, X, Share2, Loader2, LogIn } from "lucide-react"
 import Link from "next/link"
 import { WatchCard } from "@/components/watchlist/WatchCard"
+import { EditEntryModal, type EditEntryTarget } from "@/components/watchlist/EditEntryModal"
 import { useToast } from "@/stores/toast.store"
 import ListShareCard from "@/components/social/ListShareCard"
-import { useUserList } from "@/hooks/useLists"
+import { useUserList, useUpsertEntry, useRemoveEntry } from "@/hooks/useLists"
 import { useAuthStore } from "@/stores/auth.store"
 import { useLiveUserList } from "@/hooks/useRealtime"
 import type { WatchStatus } from "@/lib/api/types"
@@ -25,7 +26,11 @@ const STATUS_MAP: Record<WatchStatus, string> = {
 
 const TABS = ["All", "Watching", "Rewatching", "Plan to Watch", "Completed", "On Hold", "Dropped"]
 
-type WatchItem = { id: string; title: string; ep: string; progress: number; platform: string; status: string; image: string }
+type WatchItem = {
+  id: string; title: string; ep: string; progress: number; platform: string; status: string; image: string
+  // Raw fields needed to edit the entry (status enum, episode counts, score)
+  animeId: string; statusEnum: WatchStatus; episodesSeen: number; totalEpisodes: number; score: number | null
+}
 
 export default function WatchlistPage() {
   const { push } = useToast()
@@ -45,6 +50,27 @@ export default function WatchlistPage() {
   // Realtime: any list change from another tab/device syncs this list instantly
   useLiveUserList()
 
+  const upsertEntry = useUpsertEntry()
+  const removeEntry = useRemoveEntry()
+  const [editing, setEditing] = useState<WatchItem | null>(null)
+
+  const handleRemove = (item: WatchItem) => {
+    removeEntry.mutate(item.animeId, {
+      onSuccess: () => push(`Removed "${item.title}"`, "info"),
+      onError:   () => push("Couldn't remove. Try again.", "error"),
+    })
+  }
+
+  const handleMarkDone = (item: WatchItem) => {
+    upsertEntry.mutate(
+      { animeId: item.animeId, status: "COMPLETED", episodesSeen: item.totalEpisodes > 0 ? item.totalEpisodes : item.episodesSeen },
+      {
+        onSuccess: () => push(`Marked "${item.title}" as completed!`, "success"),
+        onError:   () => push("Couldn't update. Try again.", "error"),
+      },
+    )
+  }
+
   const items: WatchItem[] = useMemo(() => {
     if (!data?.data) return []
     return data.data.map(entry => {
@@ -61,6 +87,11 @@ export default function WatchlistPage() {
         platform: "",
         status: STATUS_MAP[entry.status],
         image: anime?.imageUrl ?? "/assets/png/tanjiro.png",
+        animeId: anime?.id ?? entry.animeId,
+        statusEnum: entry.status,
+        episodesSeen: seen,
+        totalEpisodes: total,
+        score: entry.score,
       }
     })
   }, [data])
@@ -275,7 +306,11 @@ export default function WatchlistPage() {
             <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
               <AnimatePresence mode="popLayout">
                 {filtered.map(anime => (
-                  <WatchCard key={anime.id} anime={anime} onRemove={() => push(`"${anime.title}" removed`, "info")} />
+                  <WatchCard key={anime.id} anime={anime}
+                    onEdit={() => setEditing(anime)}
+                    onRemove={() => handleRemove(anime)}
+                    onMarkDone={() => handleMarkDone(anime)}
+                  />
                 ))}
               </AnimatePresence>
             </motion.div>
@@ -295,6 +330,21 @@ export default function WatchlistPage() {
             </div>
           )}
         </>
+      )}
+
+      {/* Edit entry modal */}
+      {editing && (
+        <EditEntryModal
+          target={{
+            animeId:       editing.animeId,
+            title:         editing.title,
+            statusEnum:    editing.statusEnum,
+            episodesSeen:  editing.episodesSeen,
+            totalEpisodes: editing.totalEpisodes,
+            score:         editing.score,
+          } satisfies EditEntryTarget}
+          onClose={() => setEditing(null)}
+        />
       )}
     </div>
   )

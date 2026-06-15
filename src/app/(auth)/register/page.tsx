@@ -11,6 +11,7 @@ import { useRegister } from "@/hooks/useAuth"
 import { useToast } from "@/stores/toast.store"
 import { useAuthStore } from "@/stores/auth.store"
 import { ApiError, api } from "@/lib/api/client"
+import { getSignupConfig } from "@/lib/api/endpoints"
 import { connectSocket } from "@/lib/socket"
 import { useQueryClient } from "@tanstack/react-query"
 import type { User } from "@/lib/api/types"
@@ -29,6 +30,8 @@ export default function RegisterPage() {
   const [form, setForm] = useState({ username: "", email: "", password: "" })
   const [showPass, setShowPass] = useState(false)
   const [refBy, setRefBy] = useState<string | null>(null)
+  const [inviteOnly, setInviteOnly] = useState(false)
+  const [inviteCode, setInviteCode] = useState("")
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
@@ -42,6 +45,11 @@ export default function RegisterPage() {
       const stored = sessionStorage.getItem("aw_ref")
       if (stored) setRefBy(stored)
     }
+    // Prefill an invite code from the link (kaiveron.com/register?invite=XXXX)
+    const inv = params.get("invite")
+    if (inv) setInviteCode(inv.trim().toUpperCase())
+    // Is the platform invite-only right now?
+    getSignupConfig().then((c) => setInviteOnly(!!c.inviteOnly)).catch(() => {})
   }, [])
   const [oauthLoading, setOauthLoading] = useState<"google" | "apple" | null>(null)
   const [error, setError] = useState("")
@@ -91,6 +99,7 @@ export default function RegisterPage() {
     if (!form.password) { setError("Password is required."); return }
     if (form.password.length < 8) { setError("Password must be at least 8 characters."); return }
     if (form.password.length > 128) { setError("Password must be 128 characters or less."); return }
+    if (inviteOnly && !inviteCode.trim()) { setError("Kaiveron is invite-only right now — enter your invite code."); return }
 
     register.mutate(
       {
@@ -100,6 +109,7 @@ export default function RegisterPage() {
         displayName: form.username.trim(),
         password:    form.password,
         ...(refBy ? { referredBy: refBy.toLowerCase() } : {}),
+        ...(inviteCode.trim() ? { inviteCode: inviteCode.trim() } : {}),
       } as Parameters<typeof register.mutate>[0],
       {
         onSuccess: () => {
@@ -218,6 +228,13 @@ export default function RegisterPage() {
           </div>
         )}
 
+        {inviteOnly && (
+          <div className="mb-4 px-4 py-3 rounded-2xl bg-accent/10 border border-accent/25 text-center">
+            <p className="text-xs font-black text-accent-bright uppercase tracking-widest">Invite-only beta</p>
+            <p className="text-[10px] text-muted mt-0.5">Kaiveron is invite-only right now — enter your code below to join.</p>
+          </div>
+        )}
+
         <div className="border border-border bg-surface backdrop-blur-xl rounded-3xl p-8 shadow-[0_0_60px_rgba(99,102,241,0.1)]">
           <div className="text-center mb-8">
             <h1 className="text-2xl font-black uppercase italic tracking-tighter text-foreground">
@@ -226,7 +243,10 @@ export default function RegisterPage() {
             <p className="text-sm text-muted mt-2">Join 12,402 Shinobi on the Neural Network</p>
           </div>
 
-          {/* OAuth */}
+          {/* OAuth — hidden during invite-only since the provider flow can't
+              carry an invite code; users must sign up with email + code. */}
+          {!inviteOnly && (
+          <>
           <div className="space-y-3 mb-6">
             {/* Google — redirect flow (works on localhost without Google Console setup) */}
             <motion.a
@@ -257,9 +277,27 @@ export default function RegisterPage() {
             <span className="text-[10px] font-black text-subtle uppercase tracking-widest">or</span>
             <div className="flex-1 h-px bg-surface" />
           </div>
+          </>
+          )}
 
           {/* Email form */}
           <form onSubmit={handleSubmit} className="space-y-4">
+            {inviteOnly && (
+              <div>
+                <label className="block text-[10px] font-black uppercase tracking-[0.2em] text-muted mb-2">
+                  Invite Code
+                </label>
+                <input
+                  value={inviteCode}
+                  onChange={(e) => setInviteCode(e.target.value.toUpperCase())}
+                  placeholder="ABCD2345"
+                  autoCapitalize="characters"
+                  maxLength={40}
+                  disabled={isDisabled}
+                  className="w-full h-12 rounded-2xl bg-surface border border-accent/30 px-4 font-mono tracking-widest text-base sm:text-sm text-foreground placeholder:text-subtle outline-none focus:border-accent/60 transition-all disabled:opacity-50"
+                />
+              </div>
+            )}
             <div>
               <label className="block text-[10px] font-black uppercase tracking-[0.2em] text-muted mb-2">
                 Username

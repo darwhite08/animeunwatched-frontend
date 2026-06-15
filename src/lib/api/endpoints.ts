@@ -10,8 +10,25 @@ import type {
 
 /* ── Auth ── */
 export const register = (body: {
-  email: string; username: string; displayName: string; password: string; referredBy?: string
+  email: string; username: string; displayName: string; password: string; referredBy?: string; inviteCode?: string
 }) => api<AuthResponse>("/auth/register", { method: "POST", body: JSON.stringify(body) })
+
+/* ── Signup access (invite-only gate) ── */
+export const getSignupConfig = () =>
+  api<{ inviteOnly: boolean }>("/config/signup")
+
+export type SignupInvite = {
+  id: string; code: string; label: string | null; maxUses: number; uses: number
+  expiresAt: string | null; revokedAt: string | null; createdAt: string
+}
+export const adminGetSignupAccess = () =>
+  api<{ inviteOnly: boolean; invites: SignupInvite[] }>("/admin/signup-access")
+export const adminSetInviteOnly = (inviteOnly: boolean) =>
+  api<{ inviteOnly: boolean }>("/admin/signup-access", { method: "PUT", body: JSON.stringify({ inviteOnly }) })
+export const adminCreateInvite = (body: { label?: string; maxUses?: number; expiresInDays?: number }) =>
+  api<SignupInvite>("/admin/signup-invites", { method: "POST", body: JSON.stringify(body) })
+export const adminRevokeInvite = (id: string) =>
+  api<SignupInvite>(`/admin/signup-invites/${id}`, { method: "DELETE" })
 
 /* ── Referrals (invite link) ── */
 export interface MyReferrals {

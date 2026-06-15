@@ -2,9 +2,11 @@
 
 import { useEffect, useRef, useState, useCallback, useMemo } from "react"
 import Link from "next/link"
-import { MessageCircle, Bookmark, Share2, Plus, Volume2, VolumeX, Clapperboard, Loader2, Play, Star } from "lucide-react"
+import { MessageCircle, Bookmark, Share2, Plus, Volume2, VolumeX, Clapperboard, Loader2, Play, Star, Eye } from "lucide-react"
 import { HeartLike } from "@/components/ui/HeartLike"
 import { api } from "@/lib/api/client"
+import { recordShotView } from "@/lib/api/endpoints"
+import { getViewerKey } from "@/lib/shots/viewerKey"
 import { track } from "@/lib/analytics/ga"
 import { useAuthStore } from "@/stores/auth.store"
 import { useToast } from "@/stores/toast.store"
@@ -23,6 +25,7 @@ type Shot = {
   author: { id: string; username: string; displayName: string; avatarUrl: string | null }
   anime: { malId: number; title: string } | null
   _count: { likes: number; comments?: number; saves?: number }
+  viewCount?: number
   isLikedByMe: boolean
   isSavedByMe?: boolean
   authorFollowedByMe?: boolean
@@ -302,6 +305,8 @@ function ShotReel({ shot, active, near, muted }: { shot: Shot; active: boolean; 
   const [saved, setSaved] = useState(shot.isSavedByMe ?? false)
   const [saves, setSaves] = useState(shot._count.saves ?? 0)
   const [comments, setComments] = useState(shot._count.comments ?? 0)
+  const [views, setViews] = useState(shot.viewCount ?? 0)
+  const viewedRef = useRef(false) // fire the view beacon at most once per shot per session
   const [following, setFollowing] = useState(shot.authorFollowedByMe ?? false)
   const [showComments, setShowComments] = useState(false)
   const [likeBusy, setLikeBusy] = useState(false)
@@ -318,6 +323,35 @@ function ShotReel({ shot, active, near, muted }: { shot: Shot; active: boolean; 
     if (active) v.play().catch(() => {})
     else { v.pause(); v.currentTime = 0 }
   }, [active, isEmbed])
+
+  // ── View counting (see backend docs/shots-view-counting.md) ──
+  // Reels-style "it played" qualification: count a view once the clip has been
+  // watched ≥2s (or ≥50% for clips < 4s). Fires at most once per shot per
+  // session; the server dedupes per viewer per day and skips the author's own
+  // views, so this is safe to call optimistically.
+  const qualifyView = useCallback((watchedMs: number) => {
+    if (viewedRef.current || mine) return
+    viewedRef.current = true
+    recordShotView(shot.id, getViewerKey(), Math.round(watchedMs))
+      .then((r) => { if (r.counted) setViews(r.viewCount) })
+      .catch(() => { viewedRef.current = false }) // allow a retry on transient failure
+  }, [shot.id, mine])
+
+  // Native <video>: qualify from the playhead as it advances.
+  const onVideoTime = useCallback(() => {
+    const v = videoRef.current
+    if (!v || viewedRef.current || !active) return
+    const dur = isFinite(v.duration) && v.duration > 0 ? v.duration : 4
+    const need = Math.min(2, dur * 0.5) // ≥2s, or ≥50% for very short clips
+    if (v.currentTime >= need) qualifyView(v.currentTime * 1000)
+  }, [active, qualifyView])
+
+  // Embeds (TikTok/IG iframes — no playhead access): best-effort 2s active timer.
+  useEffect(() => {
+    if (!isEmbed || !active || viewedRef.current) return
+    const t = setTimeout(() => qualifyView(2000), 2000)
+    return () => clearTimeout(t)
+  }, [isEmbed, active, qualifyView])
 
   async function toggleLike() {
     if (!isAuthenticated) { showAuthPrompt({ subtitle: "Sign in to like Shots." }); return }
@@ -400,6 +434,7 @@ function ShotReel({ shot, active, near, muted }: { shot: Shot; active: boolean; 
           onWaiting={() => setBuffering(true)}
           onPlaying={() => setBuffering(false)}
           onCanPlay={() => setBuffering(false)}
+          onTimeUpdate={onVideoTime}
           onClick={(e) => { const v = e.currentTarget; v.paused ? v.play() : v.pause() }}
           className="h-full w-full object-cover"
         />
@@ -461,6 +496,9 @@ function ShotReel({ shot, active, near, muted }: { shot: Shot; active: boolean; 
           )}
         </div>
         {shot.caption && <p className="mt-2 line-clamp-2 text-[13px] leading-snug text-white/90">{shot.caption}</p>}
+        <p className="mt-1.5 flex items-center gap-1 text-[11px] font-semibold text-white/70">
+          <Eye size={13} /> <span className="tabular-nums">{compact(views)}</span> {views === 1 ? "view" : "views"}
+        </p>
         {shot.anime && (
           <Link href={`/anime/${shot.anime.malId}`} className="mt-2 inline-block max-w-full truncate rounded-full bg-white/15 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-white transition-transform duration-200 ease-out active:scale-95">
             {shot.anime.title}

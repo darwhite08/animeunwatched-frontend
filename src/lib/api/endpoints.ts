@@ -410,6 +410,15 @@ export const presignShotVideoUpload = (contentType: string, size: number) =>
 export const createShot = (body: { videoUrl: string; thumbnailUrl?: string; caption?: string; durationMs?: number; animeId?: string }) =>
   api<{ shot: { id: string } }>("/shots", { method: "POST", body: JSON.stringify(body) })
 
+/** Record a qualified Shot view (fired once per shot per session after the
+    watch threshold). Server dedupes per viewer per day. See
+    backend docs/shots-view-counting.md. */
+export const recordShotView = (shotId: string, viewerKey: string, watchedMs?: number) =>
+  api<{ viewCount: number; counted: boolean }>(`/shots/${shotId}/view`, {
+    method: "POST",
+    body: JSON.stringify({ viewerKey, watchedMs }),
+  })
+
 /* ── Search ── */
 export const search = (
   q: string,

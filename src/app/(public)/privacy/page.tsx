@@ -12,7 +12,11 @@ const SECTIONS = [
   },
   {
     title: "Data We Collect",
-    content: "We collect information you provide directly: account details (email, username, display name, password hashed with argon2id), content you create (posts, reviews, anime lists, comments, blogs), and engagement data (likes, follows, votes). Server logs include request method, path, status code, latency, and an anonymized request ID. We do not sell your data to third parties. Ever.",
+    content: "We collect information you provide directly: account details (email, username, display name, password hashed with argon2id), content you create (posts, reviews, anime lists, comments, blogs), and engagement data (likes, follows, votes). When you use messaging and creator features you may share photos, videos, voice notes, and the audio/video of voice and video calls. On mobile we also process a push-notification token to deliver alerts, and crash/diagnostic logs to keep the app stable. Server logs include request method, path, status code, latency, and an anonymized request ID. We do not sell your data to third parties. Ever.",
+  },
+  {
+    title: "Camera, Microphone & Media",
+    content: "Some features need access to your device camera, microphone, and media. We access your camera and microphone only at the moment you start a voice or video call, record a voice note, or capture/upload a photo or video — never in the background. We process and transmit only the media you choose to send; calls are real-time and the media stream is not stored by us beyond what you explicitly post. You can grant or revoke camera, microphone, and photo permissions at any time in your device settings, and the rest of the app keeps working without them.",
   },
   {
     title: "How We Use It",

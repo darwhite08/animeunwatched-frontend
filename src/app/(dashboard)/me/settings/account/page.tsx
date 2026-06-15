@@ -3,13 +3,13 @@
 import { useState, useEffect, useRef } from "react"
 import { motion } from "framer-motion"
 import NextImage from "next/image"
-import { Camera, Trash2, Download, Loader2, CheckCircle2, Link2, AlertCircle, Lock } from "lucide-react"
+import { Camera, Trash2, Download, Loader2, CheckCircle2, Link2, AlertCircle, Lock, AtSign } from "lucide-react"
 import { useToast } from "@/stores/toast.store"
 import { useAuthStore } from "@/stores/auth.store"
 import { useUpdateMe } from "@/hooks/useUsers"
 import { useImageUpload } from "@/hooks/useImageUpload"
-import { updateSlug, checkSlugAvailable, exportMyData, deleteAccount } from "@/lib/api/endpoints"
-import { validateSlug } from "@/lib/utils/slug"
+import { updateSlug, checkSlugAvailable, changeUsername, checkUsernameAvailable, exportMyData, deleteAccount } from "@/lib/api/endpoints"
+import { validateSlug, validateUsername } from "@/lib/utils/slug"
 import { useRouter } from "next/navigation"
 
 export default function AccountSettingsPage() {
@@ -78,6 +78,49 @@ export default function AccountSettingsPage() {
       push("Failed to update URL slug. Try again.", "error")
     } finally {
       setSlugSaving(false)
+    }
+  }
+
+  // Username (@handle) change state. Follows/blocks/DMs are keyed by user id on
+  // the backend, so they all survive — only the displayed handle moves.
+  const [nameInput,   setNameInput]   = useState(storeUser?.username ?? "")
+  const [nameStatus,  setNameStatus]  = useState<"idle" | "checking" | "available" | "taken" | "invalid">("idle")
+  const [nameError,   setNameError]   = useState<string | null>(null)
+  const [nameSaving,  setNameSaving]  = useState(false)
+  const nameChanged = nameInput !== (storeUser?.username ?? "")
+
+  useEffect(() => {
+    if (!nameChanged || !nameInput) { setNameStatus("idle"); setNameError(null); return }
+    const err = validateUsername(nameInput)
+    if (err) { setNameStatus("invalid"); setNameError(err); return }
+
+    setNameStatus("checking")
+    const timer = setTimeout(async () => {
+      try {
+        const res = await checkUsernameAvailable(nameInput)
+        setNameStatus(res.available ? "available" : "taken")
+        setNameError(res.available ? null : (res.error ?? "That username is taken"))
+      } catch {
+        setNameStatus("idle")
+      }
+    }, 400)
+    return () => clearTimeout(timer)
+  }, [nameInput, nameChanged])
+
+  const saveUsername = async () => {
+    if (nameStatus !== "available" || !nameChanged) return
+    setNameSaving(true)
+    try {
+      const res = await changeUsername(nameInput)
+      if (storeUser) setUser({ ...storeUser, username: res.user.username })
+      setNameInput(res.user.username)
+      setNameStatus("idle")
+      push("Username updated! Your follows, blocks and DMs are unchanged.", "success")
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "Failed to change username. Try again."
+      push(msg, "error")
+    } finally {
+      setNameSaving(false)
     }
   }
 
@@ -214,12 +257,49 @@ export default function AccountSettingsPage() {
         </div>
         <div>
           <label className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-[0.2em] text-subtle mb-1.5">
-            Username <Lock size={9} className="text-subtle" />
+            Username
           </label>
-          <input type="text" value={storeUser?.username ?? ""} disabled
-            className="w-full rounded-2xl bg-black/40 border border-border px-4 py-3 text-sm text-muted cursor-not-allowed"
-          />
-          <p className="text-[9px] text-subtle mt-1">Username is permanent. Need to change it? Use a custom URL slug below.</p>
+          <div className="relative">
+            <div className="absolute left-4 top-1/2 -translate-y-1/2 text-sm font-mono text-subtle pointer-events-none select-none">@</div>
+            <input
+              type="text"
+              value={nameInput}
+              onChange={e => setNameInput(e.target.value.replace(/[^a-zA-Z0-9_]/g, ""))}
+              placeholder={storeUser?.username ?? "username"}
+              maxLength={30}
+              className="w-full rounded-2xl border px-4 pl-9 py-3 text-base sm:text-sm font-mono text-foreground placeholder:text-subtle outline-none transition-colors bg-black/30"
+              style={{
+                borderColor: nameStatus === "available" ? "color-mix(in srgb, var(--app-accent) 40%, transparent)"
+                  : nameStatus === "taken" || nameStatus === "invalid" ? "rgba(239,68,68,0.4)"
+                  : "color-mix(in srgb, var(--app-fg) 10%, transparent)",
+              }}
+            />
+            <div className="absolute right-4 top-1/2 -translate-y-1/2">
+              {nameStatus === "checking"  && <Loader2 size={14} className="animate-spin text-subtle" />}
+              {nameStatus === "available" && <CheckCircle2 size={14} className="text-accent-bright" />}
+              {(nameStatus === "taken" || nameStatus === "invalid") && <AlertCircle size={14} className="text-red-400" />}
+            </div>
+          </div>
+          {nameError && <p className="text-[10px] text-red-400 font-bold mt-1.5">{nameError}</p>}
+          {nameStatus === "available" && nameChanged && <p className="text-[10px] text-accent-bright font-bold mt-1.5">✓ Available</p>}
+          <p className="text-[9px] text-subtle mt-1.5 leading-relaxed">
+            3–30 chars · letters, numbers & underscores. Your follows, blocks, DMs and posts stay intact —
+            only your <span className="font-mono">@handle</span> and profile link change. Old <span className="font-mono">@mentions</span> won&apos;t auto-update.
+          </p>
+          {nameChanged && (
+            <div className="flex justify-end mt-2.5">
+              <button
+                onClick={saveUsername}
+                disabled={nameStatus !== "available" || nameSaving}
+                className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest transition-all disabled:opacity-30 disabled:cursor-not-allowed text-black"
+                style={nameStatus === "available"
+                  ? { background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))", boxShadow: "0 4px 16px color-mix(in srgb, var(--app-accent) 35%, transparent)" }
+                  : { background: "color-mix(in srgb, var(--app-fg) 8%, transparent)" }}
+              >
+                {nameSaving ? <><Loader2 size={12} className="animate-spin" /> Saving…</> : <><AtSign size={12} /> Change Username</>}
+              </button>
+            </div>
+          )}
         </div>
         <div>
           <label className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-[0.2em] text-subtle mb-1.5">

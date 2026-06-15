@@ -87,6 +87,14 @@ export const completeOnboarding = (favoriteGenres: string[]) =>
 export const checkSlugAvailable = (slug: string) =>
   api<{ available: boolean; error?: string }>(`/users/slug-check?slug=${encodeURIComponent(slug)}`)
 
+/** Change the @handle. Relationships (follows, blocks, DMs) are keyed by user id,
+    so they survive the change — only the displayed handle + /u/:username URL move. */
+export const changeUsername = (username: string) =>
+  api<{ user: User }>("/users/me/username", { method: "PATCH", body: JSON.stringify({ username }) })
+
+export const checkUsernameAvailable = (username: string) =>
+  api<{ available: boolean; error?: string }>(`/users/username-check?username=${encodeURIComponent(username)}`)
+
 export const follow = (username: string) =>
   api<void>(`/users/${username}/follow`, { method: "POST" })
 

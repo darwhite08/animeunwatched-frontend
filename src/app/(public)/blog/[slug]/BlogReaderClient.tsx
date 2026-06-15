@@ -424,6 +424,10 @@ export function BlogReaderClient({ slug, initialBlog }: { slug: string; initialB
 
       {/* Hero banner */}
       <div className={`relative h-[45vh] min-h-[320px] w-full bg-gradient-to-br ${meta.coverGradient} overflow-hidden`}>
+        {/* Cinematic backdrop image (gradient above is the fallback while it loads) */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src="/assets/blog-hero.jpg" alt="" aria-hidden
+          className="absolute inset-0 h-full w-full object-cover object-center" />
         <div className="absolute inset-0 bg-black/50" />
         <div className="absolute inset-0 bg-gradient-to-t from-[var(--app-bg)] via-[var(--app-bg)]/40 to-transparent" />
 

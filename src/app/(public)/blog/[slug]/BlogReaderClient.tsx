@@ -270,7 +270,7 @@ function BlogComments({ slug }: { slug: string }) {
 
   const { data, isLoading } = useQuery({
     queryKey: ["blog-comments", slug],
-    queryFn:  () => api<{ data: Array<{ id: string; content: string; createdAt: string; author: { username: string; displayName: string; avatarUrl: string | null } }> }>(`/blogs/${slug}/comments`),
+    queryFn:  () => api<{ data: Array<{ id: string; content: string; createdAt: string; author: { username: string; displayName: string; avatarUrl: string | null; verifiedKind?: "USER" | "CREATOR" | "STUDIO" | null } }> }>(`/blogs/${slug}/comments`),
     staleTime: 60_000,
   })
 
@@ -316,11 +316,23 @@ function BlogComments({ slug }: { slug: string }) {
             <motion.div key={c.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.04 }}
               className="p-5 rounded-2xl bg-surface border border-border space-y-3">
               <div className="flex items-center gap-3">
-                <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-xs font-black shrink-0">
-                  {(c.author.displayName || c.author.username)[0]?.toUpperCase()}
-                </div>
+                <Link href={`/u/${c.author.username}`} className="shrink-0">
+                  {c.author.avatarUrl ? (
+                    /* eslint-disable-next-line @next/next/no-img-element */
+                    <img src={c.author.avatarUrl} alt={c.author.displayName || c.author.username}
+                      className="h-8 w-8 rounded-xl object-cover" />
+                  ) : (
+                    <div className="h-8 w-8 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-xs font-black">
+                      {(c.author.displayName || c.author.username)[0]?.toUpperCase()}
+                    </div>
+                  )}
+                </Link>
                 <div>
-                  <p className="text-xs font-black text-foreground">{c.author.displayName || c.author.username}</p>
+                  <Link href={`/u/${c.author.username}`}
+                    className="text-xs font-black text-foreground hover:text-white transition-colors flex items-center gap-1">
+                    {c.author.displayName || c.author.username}
+                    {c.author.verifiedKind && <VerifiedBadge kind={c.author.verifiedKind} size={12} />}
+                  </Link>
                   <p className="text-[9px] text-subtle">{new Date(c.createdAt).toLocaleDateString()}</p>
                 </div>
               </div>

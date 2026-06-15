@@ -33,6 +33,12 @@ export function useBlog(slug: string, initialBlog?: Blog) {
     // Seeded from the server component so the article body is in the SSR HTML
     // (crawlable / link-previewable) and there's no client-fetch flash.
     initialData: initialBlog ? { blog: initialBlog } : undefined,
+    // The SSR seed is fetched UNAUTHENTICATED, so per-viewer fields like
+    // `likedByMe` are always false in it. Force a client refetch on mount (with
+    // the auth token) so the like button renders in the correct state — without
+    // this, a refresh shows your own like in the count but a grey/unfilled heart.
+    refetchOnMount: "always",
+    staleTime: 0,
   })
 }
 

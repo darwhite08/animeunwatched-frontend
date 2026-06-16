@@ -335,13 +335,13 @@ export default function HelpPage() {
                   </a>
 
                   <a
-                    href="mailto:info@athavita.com"
+                    href="mailto:aws@kaiveron.com"
                     className="flex items-center gap-3 px-4 py-3.5 rounded-xl border border-border bg-surface hover:border-white/30 hover:bg-surface transition-all group"
                   >
                     <Mail size={16} className="text-muted group-hover:text-white transition-colors" />
                     <div>
                       <p className="text-xs font-black text-muted group-hover:text-foreground transition-colors">Email Support</p>
-                      <p className="text-[10px] text-subtle">info@athavita.com</p>
+                      <p className="text-[10px] text-subtle">aws@kaiveron.com</p>
                     </div>
                   </a>
                 </div>

@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 const SECTIONS = [
   {
     title: "Who We Are (Data Fiduciary)",
-    content: "Kaiveron is operated by Priyanshu Chandra (Athavita). Under India's Digital Personal Data Protection Act 2023 (DPDP), we are the Data Fiduciary for the personal data you share with us. Contact: info@athavita.com.",
+    content: "Kaiveron is operated by Kaiveron. Under India's Digital Personal Data Protection Act 2023 (DPDP), we are the Data Fiduciary for the personal data you share with us. Contact: aws@kaiveron.com.",
   },
   {
     title: "Data We Collect",
@@ -28,7 +28,7 @@ const SECTIONS = [
   },
   {
     title: "Your Rights",
-    content: "Under DPDP §11–§14 you have the right to: access (Settings → Privacy → Export Data), correction (Settings → Profile), erasure (Settings → Account → Delete — immediate cascade), and grievance redressal (info@athavita.com, 7-day SLA). You may withdraw analytics consent at any time via the cookie banner; the service still works without it.",
+    content: "Under DPDP §11–§14 you have the right to: access (Settings → Privacy → Export Data), correction (Settings → Profile), erasure (Settings → Account → Delete — immediate cascade), and grievance redressal (aws@kaiveron.com, 7-day SLA). You may withdraw analytics consent at any time via the cookie banner; the service still works without it.",
   },
   {
     title: "Cookies & Analytics",
@@ -44,11 +44,11 @@ const SECTIONS = [
   },
   {
     title: "Children",
-    content: "Kaiveron is not directed to children under 13. If you believe a child has registered, email info@athavita.com and we will delete the account.",
+    content: "Kaiveron is not directed to children under 13. If you believe a child has registered, email aws@kaiveron.com and we will delete the account.",
   },
   {
     title: "Contact",
-    content: "Privacy questions: info@athavita.com. We respond within 48 hours. DPDP §13 grievance officer requests: same address, 7-day SLA.",
+    content: "Privacy questions: aws@kaiveron.com. We respond within 48 hours. DPDP §13 grievance officer requests: same address, 7-day SLA.",
   },
 ]
 

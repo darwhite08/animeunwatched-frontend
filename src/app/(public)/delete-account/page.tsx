@@ -55,8 +55,8 @@ export default function DeleteAccountPage() {
             </h2>
             <p className="text-muted leading-relaxed font-medium">
               Can&apos;t sign in? Email{" "}
-              <a href="mailto:info@athavita.com" className="text-accent-bright underline">
-                info@athavita.com
+              <a href="mailto:aws@kaiveron.com" className="text-accent-bright underline">
+                aws@kaiveron.com
               </a>{" "}
               from the address on your account with the subject &quot;Delete my account&quot;. We verify ownership
               and complete the deletion within 7 days (DPDP grievance SLA).
@@ -91,8 +91,8 @@ export default function DeleteAccountPage() {
             </h2>
             <p className="text-muted leading-relaxed font-medium">
               Contact{" "}
-              <a href="mailto:info@athavita.com" className="text-accent-bright underline">
-                info@athavita.com
+              <a href="mailto:aws@kaiveron.com" className="text-accent-bright underline">
+                aws@kaiveron.com
               </a>
               . See our{" "}
               <a href="/privacy" className="text-accent-bright underline">

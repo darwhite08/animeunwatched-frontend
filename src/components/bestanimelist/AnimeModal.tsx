@@ -92,7 +92,10 @@ export default function AnimeModal({ isOpen, onClose, anime }: AnimeModalProps) 
                     ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
                     : "bg-surface border-border text-muted"
                 }`}>
-                  {anime.status === "airing" ? "Airing" : "Completed"}
+                  {/* "Airing"/"Completed" reads wrong for films — movies release. */}
+                  {anime.type?.toLowerCase() === "movie"
+                    ? (anime.status === "airing" ? "Releasing" : "Released")
+                    : (anime.status === "airing" ? "Airing" : "Completed")}
                 </span>
                 <span className="px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-wider bg-accent/10 border border-accent/20 text-accent-bright">
                   {anime.type}
@@ -111,17 +114,24 @@ export default function AnimeModal({ isOpen, onClose, anime }: AnimeModalProps) 
                 </h2>
               </div>
 
-              {/* Meta row */}
+              {/* Meta row — each item only renders when it has a real value, so
+                  we never show a stray "0" (missing year) or an empty studio. */}
               <div className="flex flex-wrap gap-x-5 gap-y-1.5 text-[10px] font-black text-muted uppercase tracking-widest">
                 <span className="flex items-center gap-1.5">
                   <Clock size={11} />
-                  {anime.episodes ? `${anime.episodes} Episodes` : "Ongoing"}
+                  {anime.type?.toLowerCase() === "movie"
+                    ? "Movie"
+                    : anime.episodes
+                      ? `${anime.episodes} Episodes`
+                      : "Ongoing"}
                 </span>
-                <span className="flex items-center gap-1.5">
-                  <Monitor size={11} />
-                  {anime.studio}
-                </span>
-                <span className="text-subtle">{anime.year}</span>
+                {anime.studio && (
+                  <span className="flex items-center gap-1.5">
+                    <Monitor size={11} />
+                    {anime.studio}
+                  </span>
+                )}
+                {anime.year ? <span className="text-subtle">{anime.year}</span> : null}
               </div>
 
               {/* Genres */}

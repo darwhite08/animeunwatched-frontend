@@ -20,7 +20,10 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
   useEffect(() => {
     const alreadyOnboarded = localStorage.getItem("aw_onboarded") === "1";
     const isAuth = useAuthStore.getState().isAuthenticated;
-    if (!alreadyOnboarded && isAuth) setShowOnboarding(true);
+    // Skip the first-time onboarding ("what type of watcher are you") on phones —
+    // it only runs on tablet/desktop widths (Tailwind md breakpoint = 768px).
+    const isPhone = window.matchMedia("(max-width: 767px)").matches;
+    if (!alreadyOnboarded && isAuth && !isPhone) setShowOnboarding(true);
   }, []);
 
   const handleOnboardingComplete = () => {

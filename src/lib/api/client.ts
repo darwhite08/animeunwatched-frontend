@@ -21,12 +21,15 @@ function getApiBase(): string {
 }
 const BASE = getApiBase()
 
+export type ApiIssue = { path: (string | number)[]; message: string }
+
 export class ApiError extends Error {
   name = "ApiError" as const
   constructor(
     public status: number,
     public code: string,
     message: string,
+    public issues?: ApiIssue[],
   ) {
     super(message)
     Object.setPrototypeOf(this, new.target.prototype)
@@ -75,6 +78,7 @@ export async function api<T>(path: string, opts: ApiOptions = {}): Promise<T> {
       res.status,
       body?.error?.code ?? "INTERNAL",
       body?.error?.message ?? res.statusText,
+      body?.error?.issues,
     )
   }
 

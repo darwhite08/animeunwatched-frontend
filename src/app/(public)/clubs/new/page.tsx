@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react"
 import { useCreateClub } from "@/hooks/useClubs"
+import { ApiError } from "@/lib/api/client"
 import { useImageUpload } from "@/hooks/useImageUpload"
 import { motion } from "framer-motion"
 import { useRouter } from "next/navigation"
@@ -62,6 +63,9 @@ function validate(data: FormData): FieldErrors {
   }
   if (!data.category) {
     errors.category = "Please select a category."
+  }
+  if (data.description.length > 1000) {
+    errors.description = `Description must be 1000 characters or fewer (currently ${data.description.length}).`
   }
   return errors
 }
@@ -139,12 +143,16 @@ export default function NewClubPage() {
   const setField = <K extends keyof FormData>(key: K, value: FormData[K]) => {
     setForm((prev) => ({ ...prev, [key]: value }))
     setTouched((prev) => ({ ...prev, [key]: true }))
+    // Clear any stale backend error for this field once the user edits it.
+    setErrors((prev) => (prev[key] ? { ...prev, [key]: undefined } : prev))
     if (key === "slug") setSlugEdited(true)
   }
 
   const getFieldError = (key: keyof FormData): string | undefined => {
     if (!touched[key]) return undefined
-    return validate(form)[key]
+    // Live client validation takes priority; fall back to any backend-reported
+    // error stored for this field (e.g. "slug already taken").
+    return validate(form)[key] ?? errors[key]
   }
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -169,10 +177,30 @@ export default function NewClubPage() {
           setSubmitting(false)
           // Surface the real backend message (e.g. "You need at least 50
           // reputation to create a den") instead of a generic toast.
-          const msg = e.message?.includes("CONFLICT")
-            ? "That slug is already taken"
-            : (e.message || "Failed to create den")
-          push(msg, "error")
+          if (e instanceof ApiError) {
+            // Map a backend validation rejection to the offending field so the
+            // user sees WHICH field is wrong, not a bare "Validation failed".
+            if (e.code === "VALIDATION" && e.issues?.length) {
+              const fieldErrs: FieldErrors = {}
+              for (const issue of e.issues) {
+                const key = issue.path[0]
+                if (key === "name" || key === "slug" || key === "description" || key === "category") {
+                  fieldErrs[key] = issue.message
+                }
+              }
+              if (Object.keys(fieldErrs).length) {
+                setErrors(fieldErrs)
+                setTouched({ name: true, slug: true, description: true, category: true })
+                push(Object.values(fieldErrs)[0], "error")
+                return
+              }
+            }
+            if (e.code === "CONFLICT" || e.message?.includes("CONFLICT")) {
+              push("That slug is already taken", "error")
+              return
+            }
+          }
+          push(e.message || "Failed to create den", "error")
         },
       }
     )
@@ -387,8 +415,20 @@ export default function NewClubPage() {
                 onChange={(e) => setField("description", e.target.value)}
                 placeholder="What will members discuss here?"
                 rows={4}
-                className={`${inputClass} resize-none leading-relaxed`}
+                maxLength={1000}
+                className={`${inputClass} resize-none leading-relaxed ${
+                  getFieldError("description") ? "border-red-500/40" : ""
+                }`}
               />
+              <div className="flex justify-end mt-1">
+                <span
+                  className={`text-[9px] font-mono ${
+                    form.description.length > 900 ? "text-accent-bright" : "text-subtle"
+                  }`}
+                >
+                  {form.description.length}/1000
+                </span>
+              </div>
             </Field>
           </div>
 

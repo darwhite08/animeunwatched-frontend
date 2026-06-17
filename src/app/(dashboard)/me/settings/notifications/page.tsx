@@ -2,9 +2,12 @@
 
 import { useState, useEffect } from "react"
 import { motion } from "framer-motion"
-import { Bell, BellOff, CheckCircle2 } from "lucide-react"
+import { Bell, BellOff, CheckCircle2, Mail, Loader2 } from "lucide-react"
 import { useToast } from "@/stores/toast.store"
 import { EnableNotifications } from "@/components/settings/EnableNotifications"
+import { useSession } from "@/lib/auth/useSession"
+import { useAuthStore } from "@/stores/auth.store"
+import * as ep from "@/lib/api/endpoints"
 
 type PrefKey =
   | "new_follower" | "post_liked" | "comment_reply" | "mention"
@@ -74,6 +77,8 @@ export default function NotificationPrefsPage() {
 
       <EnableNotifications />
 
+      <DmEmailSetting />
+
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
         className="space-y-3">
         {PREFS.map((pref, i) => {
@@ -114,5 +119,56 @@ export default function NotificationPrefsPage() {
         {saving ? "Saving…" : "Save Preferences"}
       </button>
     </div>
+  )
+}
+
+/**
+ * Real, backend-backed toggle for the offline "new message" email digest.
+ * Reads the current value from the session user and persists via PATCH /users/me
+ * (instant save — no need for the localStorage "Save Preferences" button above).
+ */
+function DmEmailSetting() {
+  const { push } = useToast()
+  const user = useSession().user
+  const setUser = useAuthStore((s) => s.setUser)
+  const [on, setOn] = useState(user?.emailOnNewMessage !== false)
+  const [busy, setBusy] = useState(false)
+
+  useEffect(() => { if (user) setOn(user.emailOnNewMessage !== false) }, [user])
+
+  const toggle = async () => {
+    if (busy) return
+    const next = !on
+    setOn(next) // optimistic
+    setBusy(true)
+    try {
+      const { user: updated } = await ep.updateMe({ emailOnNewMessage: next })
+      setUser(updated)
+      push(next ? "You'll get an email for messages when you're away." : "Message emails turned off.", "success")
+    } catch {
+      setOn(!next) // revert
+      push("Couldn't save that — try again.", "error")
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  return (
+    <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.08 }}
+      className="flex items-start gap-4 p-5 rounded-2xl border border-border bg-surface">
+      <div className={`h-10 w-10 rounded-xl flex items-center justify-center shrink-0 ${on ? "bg-accent/15" : "bg-surface"}`}>
+        <Mail size={16} className={on ? "text-accent-bright" : "text-subtle"} />
+      </div>
+      <div className="flex-1 min-w-0">
+        <p className="text-sm font-black text-foreground">Direct message emails</p>
+        <p className="text-[10px] text-subtle mt-0.5">Email me when someone messages me while I&apos;m offline (batched, never more than once an hour).</p>
+      </div>
+      <button onClick={toggle} disabled={busy} aria-pressed={on}
+        className={`relative h-6 w-11 shrink-0 rounded-full transition-colors ${on ? "bg-accent-bright" : "bg-border"} disabled:opacity-60`}>
+        <span className={`absolute top-0.5 h-5 w-5 rounded-full bg-white transition-all flex items-center justify-center ${on ? "left-[1.375rem]" : "left-0.5"}`}>
+          {busy && <Loader2 size={11} className="animate-spin text-black/60" />}
+        </span>
+      </button>
+    </motion.div>
   )
 }

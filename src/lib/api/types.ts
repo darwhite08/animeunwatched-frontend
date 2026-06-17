@@ -50,6 +50,8 @@ export interface User {
   avatarUrl: string | null
   role: Role
   reputation: number
+  /** Email me when I get a DM while offline (default true). */
+  emailOnNewMessage?: boolean
   createdAt: string
 }
 

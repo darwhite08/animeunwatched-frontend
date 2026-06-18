@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { motion } from "framer-motion"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
@@ -52,6 +52,9 @@ export default function RegisterPage() {
     getSignupConfig().then((c) => setInviteOnly(!!c.inviteOnly)).catch(() => {})
   }, [])
   const [oauthLoading, setOauthLoading] = useState<"google" | "apple" | null>(null)
+  // Always-fresh invite/referral for the Google callback (avoids stale closure).
+  const oauthExtra = useRef<{ inviteCode: string; refBy: string }>({ inviteCode: "", refBy: "" })
+  oauthExtra.current = { inviteCode, refBy: refBy ?? "" }
   const [error, setError] = useState("")
 
   const set = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement>) =>
@@ -170,7 +173,12 @@ export default function RegisterPage() {
               setOauthLoading("google")
               const data = await api<{ accessToken: string; user: User }>("/auth/google", {
                 method: "POST",
-                body: JSON.stringify({ idToken: response.credential }),
+                body: JSON.stringify({
+                  idToken: response.credential,
+                  // Pass invite/referral so Google works under invite-only.
+                  ...(oauthExtra.current.inviteCode ? { inviteCode: oauthExtra.current.inviteCode } : {}),
+                  ...(oauthExtra.current.refBy ? { referredBy: oauthExtra.current.refBy.toLowerCase() } : {}),
+                }),
               })
               handleOAuthSuccess(data.user, data.accessToken)
             } catch (err) {
@@ -243,14 +251,17 @@ export default function RegisterPage() {
             <p className="text-sm text-muted mt-2">Join 12,402 Shinobi on the Neural Network</p>
           </div>
 
-          {/* OAuth — hidden during invite-only since the provider flow can't
-              carry an invite code; users must sign up with email + code. */}
-          {!inviteOnly && (
+          {/* OAuth — works under invite-only too: the invite code / referral
+              rides through the Google flow (cookie on redirect, body on One Tap). */}
           <>
           <div className="space-y-3 mb-6">
-            {/* Google — redirect flow (works on localhost without Google Console setup) */}
+            {/* Google — redirect flow; carries invite/referral so it works under invite-only */}
             <motion.a
-              href="/api/v1/auth/google/redirect"
+              href={`/api/v1/auth/google/redirect${
+                (inviteCode || refBy)
+                  ? `?${new URLSearchParams({ ...(inviteCode ? { invite: inviteCode } : {}), ...(refBy ? { ref: refBy } : {}) }).toString()}`
+                  : ""
+              }`}
               whileHover={{ scale: 1.015 }}
               whileTap={{ scale: 0.985 }}
               className="w-full h-12 rounded-2xl border border-border bg-surface hover:bg-surface transition-all flex items-center justify-center gap-3 text-sm font-bold"
@@ -278,7 +289,6 @@ export default function RegisterPage() {
             <div className="flex-1 h-px bg-surface" />
           </div>
           </>
-          )}
 
           {/* Email form */}
           <form onSubmit={handleSubmit} className="space-y-4">

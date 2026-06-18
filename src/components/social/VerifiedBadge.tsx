@@ -51,15 +51,19 @@ export function CountryPioneerBadge({ country }: { country?: string | null; size
   if (!country) return null
   return (
     <span
-      title={`First member from ${countryNameOf(country)}`}
-      className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.12em] text-amber-300"
+      title={`First member from ${countryNameOf(country)} — representing their country`}
+      className="inline-flex items-center gap-2.5 rounded-2xl px-3 py-1.5"
       style={{
-        background: "linear-gradient(135deg, rgba(253,224,71,0.16), rgba(245,158,11,0.08))",
-        border: "1px solid rgba(251,191,36,0.4)",
+        background: "linear-gradient(135deg, rgba(253,224,71,0.18), rgba(245,158,11,0.09))",
+        border: "1px solid rgba(251,191,36,0.45)",
+        boxShadow: "0 2px 12px rgba(245,158,11,0.18)",
       }}
     >
-      <span style={{ fontSize: 13, lineHeight: 1 }}>{countryFlag(country)}</span>
-      1st in {countryNameOf(country)}
+      <span style={{ fontSize: 30, lineHeight: 1, filter: "drop-shadow(0 1px 2px rgba(0,0,0,0.35))" }}>{countryFlag(country)}</span>
+      <span className="flex flex-col leading-none">
+        <span className="text-[8px] font-black uppercase tracking-[0.22em] text-amber-300/70">Representing</span>
+        <span className="text-[13px] font-black uppercase tracking-tight text-amber-200">{countryNameOf(country)}</span>
+      </span>
     </span>
   )
 }

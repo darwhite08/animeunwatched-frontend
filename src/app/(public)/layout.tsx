@@ -5,8 +5,8 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import OnboardingModal from "@/components/onboarding/OnboardingModal";
 import { SmoothScroll } from "@/providers/SmoothScroll";
-import { motion, AnimatePresence } from "framer-motion";
 import { usePathname } from "next/navigation";
+import { PageTransition } from "@/components/layout/PageTransition";
 import AnnouncementBanner from "@/components/ui/AnnouncementBanner";
 import { useAuthStore } from "@/stores/auth.store";
 import { AppShell } from "@/components/layout/app/AppShell";
@@ -58,17 +58,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
         />
         <Navbar />
       </div>
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={pathname}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.18, ease: "easeInOut" }}
-        >
-          {children}
-        </motion.div>
-      </AnimatePresence>
+      <PageTransition>{children}</PageTransition>
       <Footer />
       <OnboardingModal isOpen={showOnboarding} onComplete={handleOnboardingComplete} />
     </SmoothScroll>

@@ -6,6 +6,7 @@ import { BottomTabBar } from "./MobileNav/BottomTabBar"
 import { MobileDrawer } from "./MobileNav/MobileDrawer"
 import { EmailVerifyBanner } from "./EmailVerifyBanner"
 import { useSidebarStore } from "./useSidebarStore"
+import { PageTransition } from "../PageTransition"
 
 /**
  * Authenticated app chrome: collapsible left sidebar + slim utility topbar on
@@ -34,7 +35,9 @@ export function AppShell({ children, publicMode = false }: { children: React.Rea
       <div className={`flex min-h-screen flex-col transition-[margin] duration-200 motion-reduce:transition-none ${collapsed ? "md:ml-16" : "md:ml-60"}`}>
         <Topbar />
         <EmailVerifyBanner />
-        <main id="main-content" tabIndex={-1} className="flex-1 pb-[calc(4rem+env(safe-area-inset-bottom))] outline-none md:pb-0">{children}</main>
+        <main id="main-content" tabIndex={-1} className="flex-1 pb-[calc(4rem+env(safe-area-inset-bottom))] outline-none md:pb-0">
+          <PageTransition>{children}</PageTransition>
+        </main>
       </div>
 
       <BottomTabBar />

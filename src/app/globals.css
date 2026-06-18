@@ -515,3 +515,15 @@ nav[aria-label="Primary mobile"] {
 @keyframes kvRingOut { 0%{transform:translate(-50%,-50%) scale(.4);opacity:.9} 100%{transform:translate(-50%,-50%) scale(2.4);opacity:0} }
 .kv-fx { position: absolute; inset: 0; pointer-events: none; overflow: visible; z-index: 1; }
 @media (prefers-reduced-motion: reduce) { .kv-like.on .kv-heart, .kv-like.on .kv-halo { animation: none !important; } }
+
+/* Accessibility safety net: users who ask for reduced motion get near-instant
+   CSS transitions/animations site-wide. (JS/framer-motion paths honor it via
+   useReducedMotion — see components/layout/PageTransition.tsx.) */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

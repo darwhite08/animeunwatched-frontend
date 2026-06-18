@@ -221,6 +221,7 @@ export interface UserProfile {
   user: User & {
     coverImage?: string | null
     verifiedKind?: "USER" | "CREATOR" | "STUDIO" | null
+    communityLead?: boolean
     isFollowing?: boolean
     followRequested?: boolean
   }
@@ -297,6 +298,7 @@ export interface BoardLeaderboardRow {
     displayName: string
     avatarUrl: string | null
     verifiedKind: "USER" | "CREATOR" | "STUDIO" | null
+    communityLead?: boolean
     reputation: number
     level: number
   }

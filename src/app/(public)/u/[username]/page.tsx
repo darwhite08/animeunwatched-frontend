@@ -29,7 +29,7 @@ import { useToast } from "@/stores/toast.store"
 import { BADGE_META, TIER_COLOR } from "@/lib/badges"
 import { useUserProfile, useFollow } from "@/hooks/useUsers"
 import { SupportCreator } from "@/components/social/SupportCreator"
-import { VerifiedBadge } from "@/components/social/VerifiedBadge"
+import { VerifiedBadge, CommunityLeadBadge } from "@/components/social/VerifiedBadge"
 import { FoundingBadge } from "@/components/social/FoundingBadge"
 import { useUserList } from "@/hooks/useLists"
 import { useActivityFeed } from "@/hooks/useActivityFeed"
@@ -420,6 +420,7 @@ export default function UserProfilePage({
                 <h1 className="flex items-center justify-center gap-2 sm:gap-3 flex-wrap text-4xl sm:text-5xl md:text-7xl font-black tracking-tighter uppercase italic text-foreground leading-none md:justify-start break-words">
                   {user.displayName}
                   <VerifiedBadge kind={realUser?.verifiedKind} size={36} />
+                  <CommunityLeadBadge show={realUser?.communityLead} size={32} />
                   {foundingSerial != null && <FoundingBadge serial={foundingSerial} size={22} />}
                 </h1>
                 <p className="text-muted text-sm font-mono flex items-center gap-2">

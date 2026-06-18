@@ -423,13 +423,18 @@ export default function UserProfilePage({
                   <VerifiedBadge kind={realUser?.verifiedKind} size={36} />
                   <CommunityLeadBadge show={realUser?.communityLead} size={32} />
                   {foundingSerial != null && <FoundingBadge serial={foundingSerial} size={22} />}
-                  <CountryPioneerBadge country={pioneerCountry} size={26} />
-                  <DayOneBadge show={hasDayOne(profileData?.badges)} size={26} />
                 </h1>
                 <p className="text-muted text-sm font-mono flex items-center gap-2">
                   @{user.username}
                   {realUser?.id && <PresenceLabel userId={realUser.id} />}
                 </p>
+                {/* Prestige flair pills — clean labelled chips, not cramped circles */}
+                {(pioneerCountry || hasDayOne(profileData?.badges)) && (
+                  <div className="flex flex-wrap items-center gap-2 mt-3 justify-center md:justify-start">
+                    <CountryPioneerBadge country={pioneerCountry} />
+                    <DayOneBadge show={hasDayOne(profileData?.badges)} />
+                  </div>
+                )}
               </motion.div>
 
               <motion.p

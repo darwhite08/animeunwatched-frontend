@@ -47,40 +47,19 @@ export function countryNameOf(code: string): string {
  * "First from <country>" pioneer flair — the country flag in a subtle ring.
  * Pass the ISO-2 country code (parsed from a FIRST_FROM_XX badge). Nothing if absent.
  */
-export function CountryPioneerBadge({ country, size = 16 }: { country?: string | null; size?: number }) {
+export function CountryPioneerBadge({ country }: { country?: string | null; size?: number }) {
   if (!country) return null
-  const label = `First member from ${countryNameOf(country)} · Founding pioneer`
-  const d = size + 14
   return (
     <span
-      title={label}
-      aria-label={label}
-      className="relative inline-flex shrink-0 items-center justify-center rounded-full align-middle"
+      title={`First member from ${countryNameOf(country)}`}
+      className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.12em] text-amber-300"
       style={{
-        width: d,
-        height: d,
-        fontSize: size,
-        lineHeight: 1,
-        background: "radial-gradient(circle at 32% 26%, rgba(253,224,71,0.30), rgba(245,158,11,0.10) 70%)",
-        border: "1.5px solid rgba(251,191,36,0.65)",
-        boxShadow: "0 0 14px rgba(245,158,11,0.45), inset 0 1px 4px rgba(253,224,71,0.30)",
+        background: "linear-gradient(135deg, rgba(253,224,71,0.16), rgba(245,158,11,0.08))",
+        border: "1px solid rgba(251,191,36,0.4)",
       }}
     >
-      <span style={{ filter: "drop-shadow(0 1px 1px rgba(0,0,0,0.35))" }}>{countryFlag(country)}</span>
-      {/* tiny "1st" pip — marks the founding-pioneer status */}
-      <span
-        className="absolute -bottom-1 -right-1 flex items-center justify-center rounded-full font-black text-black"
-        style={{
-          width: Math.round(d * 0.5),
-          height: Math.round(d * 0.5),
-          fontSize: Math.max(7, Math.round(d * 0.26)),
-          background: "linear-gradient(135deg,#fde047,#f59e0b)",
-          border: "1.5px solid #0a0a0a",
-          lineHeight: 1,
-        }}
-      >
-        1
-      </span>
+      <span style={{ fontSize: 13, lineHeight: 1 }}>{countryFlag(country)}</span>
+      1st in {countryNameOf(country)}
     </span>
   )
 }
@@ -95,22 +74,19 @@ export function pioneerCountryFromBadges(badges?: Array<{ code: string }> | null
  * "Day One" founding-member flair — a glowing violet seal with a ⚡. Granted to
  * the first 1,000 members; a prestige "I was here at the start" mark.
  */
-export function DayOneBadge({ show, size = 16 }: { show?: boolean | null; size?: number }) {
+export function DayOneBadge({ show }: { show?: boolean | null; size?: number }) {
   if (!show) return null
-  const d = size + 14
   return (
     <span
-      title="Day One — here from the very beginning"
-      aria-label="Day One founding member"
-      className="relative inline-flex shrink-0 items-center justify-center rounded-full align-middle"
+      title="Day One — one of the first 1,000 members"
+      className="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-black uppercase tracking-[0.12em] text-violet-300"
       style={{
-        width: d, height: d, fontSize: Math.round(size * 0.9), lineHeight: 1,
-        background: "radial-gradient(circle at 30% 25%, rgba(216,180,254,0.35), rgba(147,51,234,0.15) 70%)",
-        border: "1.5px solid rgba(192,132,252,0.7)",
-        boxShadow: "0 0 16px rgba(168,85,247,0.55), inset 0 1px 5px rgba(216,180,254,0.35)",
+        background: "linear-gradient(135deg, rgba(216,180,254,0.18), rgba(147,51,234,0.10))",
+        border: "1px solid rgba(192,132,252,0.45)",
       }}
     >
-      <span style={{ filter: "drop-shadow(0 1px 2px rgba(0,0,0,0.4))" }}>⚡</span>
+      <span style={{ fontSize: 12, lineHeight: 1 }}>⚡</span>
+      Day One
     </span>
   )
 }

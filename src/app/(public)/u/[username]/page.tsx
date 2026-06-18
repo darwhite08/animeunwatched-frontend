@@ -29,7 +29,7 @@ import { useToast } from "@/stores/toast.store"
 import { BADGE_META, TIER_COLOR } from "@/lib/badges"
 import { useUserProfile, useFollow } from "@/hooks/useUsers"
 import { SupportCreator } from "@/components/social/SupportCreator"
-import { VerifiedBadge, CommunityLeadBadge, CountryPioneerBadge, pioneerCountryFromBadges, countryFlag, countryNameOf } from "@/components/social/VerifiedBadge"
+import { VerifiedBadge, CommunityLeadBadge, CountryPioneerBadge, DayOneBadge, hasDayOne, pioneerCountryFromBadges, countryFlag, countryNameOf } from "@/components/social/VerifiedBadge"
 import { FoundingBadge } from "@/components/social/FoundingBadge"
 import { useUserList } from "@/hooks/useLists"
 import { useActivityFeed } from "@/hooks/useActivityFeed"
@@ -424,6 +424,7 @@ export default function UserProfilePage({
                   <CommunityLeadBadge show={realUser?.communityLead} size={32} />
                   {foundingSerial != null && <FoundingBadge serial={foundingSerial} size={22} />}
                   <CountryPioneerBadge country={pioneerCountry} size={26} />
+                  <DayOneBadge show={hasDayOne(profileData?.badges)} size={26} />
                 </h1>
                 <p className="text-muted text-sm font-mono flex items-center gap-2">
                   @{user.username}

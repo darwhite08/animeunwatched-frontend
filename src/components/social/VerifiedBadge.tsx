@@ -90,3 +90,30 @@ export function pioneerCountryFromBadges(badges?: Array<{ code: string }> | null
   const m = badges?.map(b => /^FIRST_FROM_([A-Z]{2})$/.exec(b.code)).find(Boolean)
   return m ? m[1] : null
 }
+
+/**
+ * "Day One" founding-member flair — a glowing violet seal with a ⚡. Granted to
+ * the first 1,000 members; a prestige "I was here at the start" mark.
+ */
+export function DayOneBadge({ show, size = 16 }: { show?: boolean | null; size?: number }) {
+  if (!show) return null
+  const d = size + 14
+  return (
+    <span
+      title="Day One — here from the very beginning"
+      aria-label="Day One founding member"
+      className="relative inline-flex shrink-0 items-center justify-center rounded-full align-middle"
+      style={{
+        width: d, height: d, fontSize: Math.round(size * 0.9), lineHeight: 1,
+        background: "radial-gradient(circle at 30% 25%, rgba(216,180,254,0.35), rgba(147,51,234,0.15) 70%)",
+        border: "1.5px solid rgba(192,132,252,0.7)",
+        boxShadow: "0 0 16px rgba(168,85,247,0.55), inset 0 1px 5px rgba(216,180,254,0.35)",
+      }}
+    >
+      <span style={{ filter: "drop-shadow(0 1px 2px rgba(0,0,0,0.4))" }}>⚡</span>
+    </span>
+  )
+}
+
+export const hasDayOne = (badges?: Array<{ code: string }> | null): boolean =>
+  !!badges?.some(b => b.code === "DAY_ONE")

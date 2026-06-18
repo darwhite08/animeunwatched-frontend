@@ -16,6 +16,7 @@ export const BADGE_META: Record<string, { name: string; desc: string; tier: stri
   ARC_CLEARED_50: { name: "Archive Master",  desc: "Completed 50 series",                   tier: "rare",       emoji: "🏯" },
   STREAK_7:       { name: "One Week Strong", desc: "Kept a 7-day streak",                   tier: "milestone",  emoji: "🔥" },
   STREAK_30:      { name: "Thirty Days",     desc: "Kept a 30-day streak",                  tier: "rare",       emoji: "🌙" },
+  DAY_ONE:        { name: "Day One",         desc: "Here from the beginning — one of the first 1,000 members", tier: "founding", emoji: "⚡" },
 }
 
 export const TIER_COLOR: Record<string, string> = {
@@ -23,4 +24,5 @@ export const TIER_COLOR: Record<string, string> = {
   completion: "oklch(0.75 0.14 162)", // mint
   milestone:  "oklch(0.78 0.14 75)",  // amber
   rare:       "oklch(0.80 0.13 90)",  // gold
+  founding:   "oklch(0.74 0.18 300)", // violet — prestige
 }

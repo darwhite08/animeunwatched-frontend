@@ -31,3 +31,36 @@ export function CommunityLeadBadge({ show, size = 16 }: { show?: boolean | null;
     </span>
   )
 }
+
+/** ISO-3166 alpha-2 → flag emoji. */
+export function countryFlag(code: string): string {
+  if (!code || !/^[A-Za-z]{2}$/.test(code)) return "🌐"
+  return String.fromCodePoint(...[...code.toUpperCase()].map((c) => 0x1f1e6 + c.charCodeAt(0) - 65))
+}
+let _rn: Intl.DisplayNames | null = null
+export function countryNameOf(code: string): string {
+  try { _rn ??= new Intl.DisplayNames(["en"], { type: "region" }); return _rn.of(code.toUpperCase()) ?? code }
+  catch { return code }
+}
+
+/**
+ * "First from <country>" pioneer flair — the country flag in a subtle ring.
+ * Pass the ISO-2 country code (parsed from a FIRST_FROM_XX badge). Nothing if absent.
+ */
+export function CountryPioneerBadge({ country, size = 16 }: { country?: string | null; size?: number }) {
+  if (!country) return null
+  const label = `First member from ${countryNameOf(country)}`
+  return (
+    <span title={label} aria-label={label}
+      className="inline-flex shrink-0 items-center justify-center rounded-full border border-amber-400/40 bg-amber-400/10"
+      style={{ width: size + 8, height: size + 8, fontSize: size - 2, lineHeight: 1 }}>
+      {countryFlag(country)}
+    </span>
+  )
+}
+
+/** Extract the country code from a user's badges (e.g. FIRST_FROM_RO → "RO"). */
+export function pioneerCountryFromBadges(badges?: Array<{ code: string }> | null): string | null {
+  const m = badges?.map(b => /^FIRST_FROM_([A-Z]{2})$/.exec(b.code)).find(Boolean)
+  return m ? m[1] : null
+}

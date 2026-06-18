@@ -29,7 +29,7 @@ import { useToast } from "@/stores/toast.store"
 import { BADGE_META, TIER_COLOR } from "@/lib/badges"
 import { useUserProfile, useFollow } from "@/hooks/useUsers"
 import { SupportCreator } from "@/components/social/SupportCreator"
-import { VerifiedBadge, CommunityLeadBadge } from "@/components/social/VerifiedBadge"
+import { VerifiedBadge, CommunityLeadBadge, CountryPioneerBadge, pioneerCountryFromBadges, countryFlag, countryNameOf } from "@/components/social/VerifiedBadge"
 import { FoundingBadge } from "@/components/social/FoundingBadge"
 import { useUserList } from "@/hooks/useLists"
 import { useActivityFeed } from "@/hooks/useActivityFeed"
@@ -256,6 +256,7 @@ export default function UserProfilePage({
   const isOwnProfile = currentUser?.username === username
   // Founding Creator serial (1..250) if this user holds the badge.
   const foundingSerial = profileData?.badges?.find(b => b.code === "FOUNDING_CREATOR")?.serial ?? null
+  const pioneerCountry = pioneerCountryFromBadges(profileData?.badges)
 
   // Follow state is hydrated from the API; local override applies after the
   // viewer toggles it in this session.
@@ -422,6 +423,7 @@ export default function UserProfilePage({
                   <VerifiedBadge kind={realUser?.verifiedKind} size={36} />
                   <CommunityLeadBadge show={realUser?.communityLead} size={32} />
                   {foundingSerial != null && <FoundingBadge serial={foundingSerial} size={22} />}
+                  <CountryPioneerBadge country={pioneerCountry} size={26} />
                 </h1>
                 <p className="text-muted text-sm font-mono flex items-center gap-2">
                   @{user.username}
@@ -775,7 +777,11 @@ export default function UserProfilePage({
             ) : (
               <div className="p-5 rounded-[2rem] border border-border bg-surface grid grid-cols-2 gap-3">
                 {(profileData?.badges ?? []).map(b => {
-                  const meta = BADGE_META[b.code]
+                  // Country-pioneer badges are dynamic (FIRST_FROM_RO, …) — synthesize meta.
+                  const pioneer = /^FIRST_FROM_([A-Z]{2})$/.exec(b.code)
+                  const meta = BADGE_META[b.code] ?? (pioneer
+                    ? { name: `First from ${countryNameOf(pioneer[1])}`, desc: `Kaiveron's first member from ${countryNameOf(pioneer[1])}`, tier: "rare", emoji: countryFlag(pioneer[1]) }
+                    : null)
                   if (!meta) return null
                   return (
                     <div key={b.code} title={meta.desc}

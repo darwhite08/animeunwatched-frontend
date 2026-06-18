@@ -49,12 +49,38 @@ export function countryNameOf(code: string): string {
  */
 export function CountryPioneerBadge({ country, size = 16 }: { country?: string | null; size?: number }) {
   if (!country) return null
-  const label = `First member from ${countryNameOf(country)}`
+  const label = `First member from ${countryNameOf(country)} · Founding pioneer`
+  const d = size + 14
   return (
-    <span title={label} aria-label={label}
-      className="inline-flex shrink-0 items-center justify-center rounded-full border border-amber-400/40 bg-amber-400/10"
-      style={{ width: size + 8, height: size + 8, fontSize: size - 2, lineHeight: 1 }}>
-      {countryFlag(country)}
+    <span
+      title={label}
+      aria-label={label}
+      className="relative inline-flex shrink-0 items-center justify-center rounded-full align-middle"
+      style={{
+        width: d,
+        height: d,
+        fontSize: size,
+        lineHeight: 1,
+        background: "radial-gradient(circle at 32% 26%, rgba(253,224,71,0.30), rgba(245,158,11,0.10) 70%)",
+        border: "1.5px solid rgba(251,191,36,0.65)",
+        boxShadow: "0 0 14px rgba(245,158,11,0.45), inset 0 1px 4px rgba(253,224,71,0.30)",
+      }}
+    >
+      <span style={{ filter: "drop-shadow(0 1px 1px rgba(0,0,0,0.35))" }}>{countryFlag(country)}</span>
+      {/* tiny "1st" pip — marks the founding-pioneer status */}
+      <span
+        className="absolute -bottom-1 -right-1 flex items-center justify-center rounded-full font-black text-black"
+        style={{
+          width: Math.round(d * 0.5),
+          height: Math.round(d * 0.5),
+          fontSize: Math.max(7, Math.round(d * 0.26)),
+          background: "linear-gradient(135deg,#fde047,#f59e0b)",
+          border: "1.5px solid #0a0a0a",
+          lineHeight: 1,
+        }}
+      >
+        1
+      </span>
     </span>
   )
 }

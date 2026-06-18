@@ -188,19 +188,23 @@ function SearchContent() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.05 }}
                   whileTap={{ scale: 0.98 }}
-                  className="flex items-center gap-4 p-4 sm:p-5 rounded-2xl bg-surface border border-border hover:border-border hover:bg-surface transition-all group cursor-pointer"
                 >
-                  <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-lg font-black shrink-0">
-                    {u.name[0]}
-                  </div>
-                  <div className="flex-1">
-                    <p className="font-black text-foreground group-hover:text-white transition-colors">{u.name}</p>
-                    <p className="text-xs text-subtle mt-0.5">{u.bio}</p>
-                  </div>
-                  <div className="text-right">
-                    <p className="text-lg font-black text-foreground">{u.archived}</p>
-                    <p className="text-[9px] text-subtle uppercase tracking-wider">Archived</p>
-                  </div>
+                  <Link
+                    href={`/u/${u.id}`}
+                    className="flex items-center gap-4 p-4 sm:p-5 rounded-2xl bg-surface border border-border hover:border-accent/40 hover:bg-surface transition-all group cursor-pointer"
+                  >
+                    <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-lg font-black shrink-0">
+                      {u.name[0]}
+                    </div>
+                    <div className="flex-1">
+                      <p className="font-black text-foreground group-hover:text-white transition-colors">{u.name}</p>
+                      <p className="text-xs text-subtle mt-0.5">{u.bio}</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-lg font-black text-foreground">{u.archived}</p>
+                      <p className="text-[9px] text-subtle uppercase tracking-wider">Archived</p>
+                    </div>
+                  </Link>
                 </motion.div>
               )) : <EmptyState query={query} tab="users" />}
             </motion.div>

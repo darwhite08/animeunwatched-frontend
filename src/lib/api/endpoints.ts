@@ -17,6 +17,13 @@ export const register = (body: {
 export const getSignupConfig = () =>
   api<{ inviteOnly: boolean }>("/config/signup")
 
+// Join the invite-only waitlist (public). Idempotent per email.
+export const joinWaitlist = (email: string, source = "register", referredBy?: string) =>
+  api<{ ok: true; alreadyOn: boolean }>("/waitlist", {
+    method: "POST",
+    body: JSON.stringify({ email, source, ...(referredBy ? { referredBy } : {}) }),
+  })
+
 export type SignupInvite = {
   id: string; code: string; label: string | null; maxUses: number; uses: number
   expiresAt: string | null; revokedAt: string | null; createdAt: string

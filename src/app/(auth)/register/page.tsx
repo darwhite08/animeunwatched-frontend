@@ -6,12 +6,12 @@ import { useRouter } from "next/navigation"
 import Link from "next/link"
 import Image from "next/image"
 import Script from "next/script"
-import { Eye, EyeOff, Loader2, Sparkles } from "lucide-react"
+import { Eye, EyeOff, Loader2, Sparkles, CheckCircle2 } from "lucide-react"
 import { useRegister } from "@/hooks/useAuth"
 import { useToast } from "@/stores/toast.store"
 import { useAuthStore } from "@/stores/auth.store"
 import { ApiError, api } from "@/lib/api/client"
-import { getSignupConfig } from "@/lib/api/endpoints"
+import { getSignupConfig, joinWaitlist } from "@/lib/api/endpoints"
 import { connectSocket } from "@/lib/socket"
 import { useQueryClient } from "@tanstack/react-query"
 import type { User } from "@/lib/api/types"
@@ -32,6 +32,15 @@ export default function RegisterPage() {
   const [refBy, setRefBy] = useState<string | null>(null)
   const [inviteOnly, setInviteOnly] = useState(false)
   const [inviteCode, setInviteCode] = useState("")
+  // True when the visitor arrived via an invite link (?invite=…). Only then —
+  // or when not invite-only — do we show the actual signup form.
+  const [hasInviteLink, setHasInviteLink] = useState(false)
+  // Escape hatch: a code-holder without a link can reveal the form manually.
+  const [showCodeEntry, setShowCodeEntry] = useState(false)
+  // Waitlist (shown when invite-only and there's no invite link).
+  const [wlEmail, setWlEmail] = useState("")
+  const [wlState, setWlState] = useState<"idle" | "loading" | "done">("idle")
+  const [wlError, setWlError] = useState("")
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
@@ -45,9 +54,10 @@ export default function RegisterPage() {
       const stored = sessionStorage.getItem("aw_ref")
       if (stored) setRefBy(stored)
     }
-    // Prefill an invite code from the link (kaiveron.com/register?invite=XXXX)
+    // Prefill an invite code from the link (kaiveron.com/register?invite=XXXX).
+    // Arriving via an invite link unlocks the real signup form under invite-only.
     const inv = params.get("invite")
-    if (inv) setInviteCode(inv.trim().toUpperCase())
+    if (inv) { setInviteCode(inv.trim().toUpperCase()); setHasInviteLink(true) }
     // Is the platform invite-only right now?
     getSignupConfig().then((c) => setInviteOnly(!!c.inviteOnly)).catch(() => {})
   }, [])
@@ -157,6 +167,29 @@ export default function RegisterPage() {
     push("Apple Sign In requires credentials — use email for now.", "info")
   }
 
+  // Show the real signup form only when the platform is open, OR the visitor
+  // came through an invite link, OR they explicitly chose to enter a code.
+  // Otherwise (invite-only + no invite) they see the waitlist instead.
+  const canSignup = !inviteOnly || hasInviteLink || showCodeEntry
+
+  const handleWaitlist = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setWlError("")
+    const email = wlEmail.trim()
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setWlError("Please enter a valid email address."); return
+    }
+    setWlState("loading")
+    try {
+      await joinWaitlist(email, "register", refBy ?? undefined)
+      setWlState("done")
+      void import("@/lib/analytics/ga").then(({ track }) => track("waitlist_join", { method: "email" })).catch(() => {})
+    } catch (err) {
+      setWlState("idle")
+      setWlError(err instanceof ApiError ? err.message : "Could not join the waitlist. Please try again.")
+    }
+  }
+
   const isSubmitting = register.isPending
   const isDisabled = oauthLoading !== null || isSubmitting
 
@@ -236,7 +269,7 @@ export default function RegisterPage() {
           </div>
         )}
 
-        {inviteOnly && (
+        {inviteOnly && canSignup && (
           <div className="mb-4 px-4 py-3 rounded-2xl bg-accent/10 border border-accent/25 text-center">
             <p className="text-xs font-black text-accent-bright uppercase tracking-widest">Invite-only beta</p>
             <p className="text-[10px] text-muted mt-0.5">Kaiveron is invite-only right now — enter your code below to join.</p>
@@ -244,6 +277,8 @@ export default function RegisterPage() {
         )}
 
         <div className="border border-border bg-surface backdrop-blur-xl rounded-3xl p-8 shadow-[0_0_60px_rgba(99,102,241,0.1)]">
+          {canSignup ? (
+          <>
           <div className="text-center mb-8">
             <h1 className="text-2xl font-black uppercase italic tracking-tighter text-foreground">
               Initialize Account
@@ -414,6 +449,73 @@ export default function RegisterPage() {
             {" "}&{" "}
             <Link href="/privacy" className="text-muted hover:text-foreground transition-colors">Privacy Policy</Link>
           </p>
+          </>
+          ) : (
+          <>
+          {/* Waitlist — shown when invite-only and the visitor has no invite link */}
+          <div className="text-center mb-8">
+            <h1 className="text-2xl font-black uppercase italic tracking-tighter text-foreground">
+              Join the Waitlist
+            </h1>
+            <p className="text-sm text-muted mt-2">
+              Kaiveron is invite-only right now. Drop your email and we&apos;ll send you an
+              invite as spots open up.
+            </p>
+          </div>
+
+          {wlState === "done" ? (
+            <div className="rounded-2xl bg-emerald-500/10 border border-emerald-500/20 p-6 text-center">
+              <CheckCircle2 className="mx-auto mb-2 text-emerald-400" size={28} />
+              <p className="text-sm font-black text-emerald-400 uppercase tracking-widest">You&apos;re on the list</p>
+              <p className="text-xs text-muted mt-1">
+                We&apos;ll email <span className="text-foreground">{wlEmail.trim()}</span> when your invite is ready.
+              </p>
+            </div>
+          ) : (
+            <form onSubmit={handleWaitlist} className="space-y-4">
+              <div>
+                <label className="block text-[10px] font-black uppercase tracking-[0.2em] text-muted mb-2">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  value={wlEmail}
+                  onChange={(e) => setWlEmail(e.target.value)}
+                  placeholder="you@domain.com"
+                  autoComplete="email"
+                  disabled={wlState === "loading"}
+                  className="w-full h-12 rounded-2xl bg-surface border border-border px-4 text-base sm:text-sm text-foreground placeholder:text-subtle outline-none focus:border-accent/50 transition-all disabled:opacity-50"
+                />
+              </div>
+
+              {wlError && (
+                <motion.p initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }} className="text-xs text-red-400 font-bold">
+                  {wlError}
+                </motion.p>
+              )}
+
+              <motion.button
+                whileHover={{ scale: 1.01 }}
+                whileTap={{ scale: 0.98 }}
+                type="submit"
+                disabled={wlState === "loading"}
+                className="w-full h-12 rounded-2xl disabled:opacity-50 disabled:cursor-not-allowed transition-all active:scale-[0.98] font-black text-[11px] uppercase tracking-widest text-black flex items-center justify-center gap-2"
+                style={{ background: "linear-gradient(135deg,var(--app-accent-bright),var(--app-accent))", boxShadow: "0 0 30px color-mix(in srgb, var(--app-accent) 35%, transparent)" }}
+              >
+                {wlState === "loading" ? <><Loader2 size={15} className="animate-spin" /> Joining…</> : "Join the waitlist"}
+              </motion.button>
+
+              <button
+                type="button"
+                onClick={() => setShowCodeEntry(true)}
+                className="w-full text-center text-xs text-subtle hover:text-foreground transition-colors pt-1"
+              >
+                Have an invite code? Enter it →
+              </button>
+            </form>
+          )}
+          </>
+          )}
 
           <p className="mt-4 text-sm text-center text-muted">
             Already have an account?{" "}

@@ -253,8 +253,8 @@ export default function LoginPage() {
             style={{ boxShadow: "0 0 40px color-mix(in srgb, var(--app-accent) 10%, transparent), 0 20px 60px rgba(0,0,0,0.5)" }}>
 
             {/* Logo */}
-            <div className="flex flex-col items-center gap-3 mb-8">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="52" height="52"
+            <div className="flex flex-col items-center gap-2 mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="44" height="44"
                 style={{ filter: "drop-shadow(0 0 16px color-mix(in srgb, var(--app-accent) 40%, transparent))" }}>
                 <defs>
                   <linearGradient id="loginKGold" x1="0" y1="0" x2="0" y2="1">
@@ -276,7 +276,7 @@ export default function LoginPage() {
               </div>
             </div>
 
-            <div className="text-center space-y-2 mb-8">
+            <div className="text-center space-y-1 mb-5">
               <h1 className="text-2xl font-black tracking-tighter text-foreground italic uppercase">
                 Welcome Back
               </h1>
@@ -287,7 +287,7 @@ export default function LoginPage() {
             <div ref={googleBtnRef} style={{ position: "absolute", opacity: 0, pointerEvents: "none", width: 1, height: 1, overflow: "hidden" }} aria-hidden />
 
             {/* OAuth Buttons */}
-            <div className="mt-10 space-y-4">
+            <div className="mt-2 space-y-2.5">
 
               {/* Google — redirect flow (works on localhost without Google Console setup) */}
               <motion.a
@@ -324,7 +324,7 @@ export default function LoginPage() {
             </div>
 
             {/* Divider */}
-            <div className="flex items-center gap-4 mt-8 mb-6">
+            <div className="flex items-center gap-4 mt-5 mb-5">
               <div className="flex-1 h-px bg-surface" />
               <span className="text-xs text-subtle uppercase tracking-widest font-semibold">
                 or continue with email
@@ -333,7 +333,7 @@ export default function LoginPage() {
             </div>
 
             {/* Email + password form */}
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-3">
               <div>
                 <label className="block text-[10px] font-bold uppercase tracking-[0.2em] text-muted mb-2">
                   Email
@@ -402,13 +402,13 @@ export default function LoginPage() {
               </motion.button>
             </form>
 
-            <p className="mt-8 text-xs text-center text-muted">
+            <p className="mt-5 text-xs text-center text-muted">
               By continuing, you agree to our{" "}
               <Link href="/terms" className="text-muted hover:text-foreground transition">Terms</Link>{" "}
               &{" "}
               <Link href="/privacy" className="text-muted hover:text-foreground transition">Privacy Policy</Link>
             </p>
-            <p className="mt-6 text-sm text-center text-muted">
+            <p className="mt-4 text-sm text-center text-muted">
               Don&apos;t have an account?{" "}
               <Link href="/register" className="text-accent-bright hover:text-white transition font-bold">
                 Sign up

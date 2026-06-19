@@ -458,8 +458,9 @@ export default function RegisterPage() {
               Join the Waitlist
             </h1>
             <p className="text-sm text-muted mt-2">
-              Kaiveron is invite-only right now. Drop your email and we&apos;ll send you an
-              invite as spots open up.
+              Kaiveron is a curated home for serious anime fans. Invite-only, by design —
+              we&apos;d rather grow slow and keep the community tight. Drop your email and
+              we&apos;ll send an invite as spots open up.
             </p>
           </div>
 

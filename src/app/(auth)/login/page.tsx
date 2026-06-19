@@ -92,6 +92,16 @@ export default function LoginPage() {
   const [showPass, setShowPass] = useState(false)
   const [formError, setFormError] = useState("")
 
+  // Friendly message when the Google redirect callback bounced back with an error
+  // (e.g. a non-registered user tried to sign in → ?error=no_account).
+  const urlError = params.get("error")
+  const oauthErrorMsg =
+    urlError === "no_account"
+      ? "No Kaiveron account is linked to that Google account — sign up or join the waitlist first."
+      : urlError === "google_failed"
+        ? "Google sign-in didn't complete. Please try again."
+        : ""
+
   const set = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement>) =>
     setForm(f => ({ ...f, [k]: e.target.value }))
 
@@ -205,7 +215,8 @@ export default function LoginPage() {
                 setOauthLoading("google")
                 const data = await api<{ accessToken: string; user: User }>("/auth/google", {
                   method: "POST",
-                  body: JSON.stringify({ idToken: response.credential }),
+                  // Sign-IN only: never create an account from the login page.
+                  body: JSON.stringify({ idToken: response.credential, allowCreate: false }),
                 })
                 handleOAuthSuccess(data.user, data.accessToken)
               } catch (err) {
@@ -283,15 +294,27 @@ export default function LoginPage() {
               <p className="text-sm text-muted">Continue your anime journey</p>
             </div>
 
+            {oauthErrorMsg && (
+              <div className="mb-4 px-4 py-3 rounded-xl bg-red-500/10 border border-red-500/25 text-center">
+                <p className="text-xs font-bold text-red-300">{oauthErrorMsg}</p>
+                {urlError === "no_account" && (
+                  <Link href="/register" className="text-[11px] font-black text-accent-bright hover:text-white transition mt-1 inline-block">
+                    Join the waitlist →
+                  </Link>
+                )}
+              </div>
+            )}
+
             {/* Hidden Google renderButton container — our visible button triggers it */}
             <div ref={googleBtnRef} style={{ position: "absolute", opacity: 0, pointerEvents: "none", width: 1, height: 1, overflow: "hidden" }} aria-hidden />
 
             {/* OAuth Buttons */}
             <div className="mt-2 space-y-2.5">
 
-              {/* Google — redirect flow (works on localhost without Google Console setup) */}
+              {/* Google — redirect flow. mode=login → backend signs IN only and
+                  rejects unknown accounts (no silent sign-up from the login page). */}
               <motion.a
-                href="/api/v1/auth/google/redirect"
+                href="/api/v1/auth/google/redirect?mode=login"
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 className="w-full h-12 rounded-xl border border-border bg-surface hover:bg-surface transition flex items-center justify-center gap-3 font-medium focus:outline-none focus:ring-2 focus:ring-accent"

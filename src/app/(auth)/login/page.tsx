@@ -304,23 +304,6 @@ export default function LoginPage() {
                     </>
                 }
               </motion.a>
-
-              {/* Apple */}
-              <motion.button
-                onClick={handleAppleLogin}
-                disabled={isDisabled}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className="w-full h-12 rounded-xl border border-border bg-surface hover:bg-surface transition flex items-center justify-center gap-3 font-medium focus:outline-none focus:ring-2 focus:ring-accent disabled:opacity-60 disabled:cursor-not-allowed"
-              >
-                {oauthLoading === "apple"
-                  ? <><Loader2 size={16} className="animate-spin" /> Signing in...</>
-                  : <>
-                      <Image src="/assets/icons/apple.png" alt="Apple" width={18} height={18} className="object-contain invert" />
-                      Continue with Apple
-                    </>
-                }
-              </motion.button>
             </div>
 
             {/* Divider */}

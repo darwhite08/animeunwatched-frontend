@@ -269,17 +269,6 @@ export default function RegisterPage() {
               <Image src="/assets/icons/google.png" alt="google" width={22} height={22} className="object-contain" />
               Continue with Google
             </motion.a>
-            {/* Apple */}
-            <motion.button
-              whileHover={{ scale: 1.015 }}
-              whileTap={{ scale: 0.985 }}
-              onClick={() => handleOAuth("apple")}
-              disabled={isDisabled}
-              className="w-full h-12 rounded-2xl border border-border bg-surface hover:bg-surface transition-all flex items-center justify-center gap-3 text-sm font-bold disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              <Image src="/assets/icons/apple.png" alt="apple" width={22} height={22} className="object-contain" />
-              {oauthLoading === "apple" ? "Connecting…" : "Continue with Apple"}
-            </motion.button>
           </div>
 
           {/* Divider */}

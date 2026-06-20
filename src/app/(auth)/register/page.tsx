@@ -226,7 +226,7 @@ export default function RegisterPage() {
         })
       }}
     />
-    <main className="relative min-h-screen bg-background text-foreground flex items-center justify-center px-6 py-20">
+    <main className="relative min-h-screen overflow-x-hidden bg-background text-foreground flex items-center justify-center px-6 py-20">
       {/* Background glows */}
       <div className="absolute inset-0 -z-10 pointer-events-none">
         <div className="absolute top-[-200px] left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-accent/15 blur-[150px] rounded-full" />

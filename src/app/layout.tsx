@@ -31,9 +31,10 @@ export const viewport = {
   themeColor: "#020202",
   width: "device-width",
   initialScale: 1,
-  // Lock zoom for an app-like feel (note: this reduces pinch-zoom a11y).
-  maximumScale: 1,
-  userScalable: false,
+  // Allow pinch-zoom (WCAG 1.4.4 + store-review safe). maximumScale:5 keeps an
+  // app-like feel while not trapping users who need to zoom.
+  maximumScale: 5,
+  userScalable: true,
   // Extend under the notch / home indicator; paired with safe-area padding in CSS.
   viewportFit: "cover",
 }

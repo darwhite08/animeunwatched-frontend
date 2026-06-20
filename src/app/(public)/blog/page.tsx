@@ -450,7 +450,7 @@ export default function BlogListingPage() {
                 onClick={() => setSort(s)}
                 aria-pressed={sort === s}
                 title={s === "trending" ? "Trending" : s === "top" ? "Top (all-time)" : "Latest"}
-                className={`min-h-9 rounded-full px-3 text-[10px] font-black uppercase tracking-widest transition-all active:scale-95 ${
+                className={`min-h-11 rounded-full px-3 text-[10px] font-black uppercase tracking-widest transition-all active:scale-95 ${
                   sort === s ? "bg-accent text-black" : "text-muted hover:text-foreground"
                 }`}
               >

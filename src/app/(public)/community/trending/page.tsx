@@ -214,7 +214,7 @@ export default function CommunityTrendingPage() {
 
   return (
     <div className="min-h-screen bg-background text-foreground pb-32">
-      <div className="max-w-5xl mx-auto px-6 pt-28">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 pt-6 sm:pt-28">
 
         {/* Breadcrumb */}
         <nav className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-subtle mb-8">
@@ -232,19 +232,19 @@ export default function CommunityTrendingPage() {
           <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-accent-bright/60 mb-3">
             Live · Updated every 15 min
           </p>
-          <div className="flex items-center gap-4 mb-2">
-            <h1 className="text-5xl sm:text-6xl font-black tracking-tighter uppercase italic text-foreground leading-none">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mb-2">
+            <h1 className="text-4xl sm:text-6xl font-black tracking-tighter uppercase italic text-foreground leading-none">
               Trending<br />
               <span className="text-accent-bright">Now</span>
               <span style={{color:"var(--app-accent)"}}>.</span>
             </h1>
             {/* Live pulse */}
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-rose-500/15 border border-rose-500/25 self-start mt-4">
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-rose-500/15 border border-rose-500/25 self-start sm:mt-4">
               <span className="h-2 w-2 rounded-full bg-rose-400 animate-pulse" />
               <span className="text-[9px] font-black uppercase tracking-widest text-rose-400">Live</span>
             </div>
           </div>
-          <p className="text-subtle text-sm">What the Shinobi community can&apos;t stop talking about.</p>
+          <p className="text-subtle text-sm">What the Kaiveron community can&apos;t stop talking about.</p>
         </motion.div>
 
         {/* ── SECTION 1: Trending Posts ── */}
@@ -303,7 +303,7 @@ export default function CommunityTrendingPage() {
             </Link>
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
             {ANIME_DISCUSSION.map((anime, i) => (
               <motion.div
                 key={anime.id}
@@ -420,7 +420,7 @@ export default function CommunityTrendingPage() {
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
-          className="mt-4 pt-8 border-t border-border flex items-center justify-between"
+          className="mt-4 pt-8 border-t border-border flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4"
         >
           <div>
             <p className="text-[10px] font-black uppercase tracking-widest text-subtle">Want more?</p>

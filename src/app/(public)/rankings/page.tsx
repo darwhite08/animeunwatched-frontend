@@ -69,7 +69,7 @@ export default function RankingsPage() {
 
   return (
     <div className="min-h-screen bg-background text-foreground pb-32">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-32 pb-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-6 sm:pt-32 pb-10">
         <p className="text-[9px] font-mono uppercase tracking-[0.4em] text-accent-bright/60 mb-3">Neural Leaderboard</p>
         <h1 className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tighter uppercase italic text-foreground leading-none mb-2">
           Leaderboard<span style={{color:"var(--app-accent)"}}>.</span>

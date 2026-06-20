@@ -110,7 +110,7 @@ export default function WatchlistPage() {
 
   if (!isAuthenticated) {
     return (
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8 py-32 flex flex-col items-center justify-center min-h-[60vh] space-y-6">
+      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8 py-16 sm:py-32 flex flex-col items-center justify-center min-h-[60vh] space-y-6">
         <MonitorPlay size={48} className="text-subtle" />
         <h2 className="text-2xl sm:text-3xl font-black text-foreground tracking-tighter">Your Archives Await</h2>
         <p className="text-muted text-sm max-w-xs text-center">Sign in to track your anime journey, manage your watchlist, and sync across devices.</p>

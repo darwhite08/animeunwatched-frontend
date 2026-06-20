@@ -54,7 +54,7 @@ function ResetPasswordContent() {
   }
 
   return (
-    <main className="relative min-h-screen bg-background text-foreground flex items-center justify-center px-6 py-20">
+    <main className="relative min-h-screen overflow-x-hidden bg-background text-foreground flex items-center justify-center px-6 py-20">
       <div className="absolute inset-0 -z-10 pointer-events-none">
         <div className="absolute top-[-200px] left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-accent/10 blur-[150px] rounded-full" />
       </div>

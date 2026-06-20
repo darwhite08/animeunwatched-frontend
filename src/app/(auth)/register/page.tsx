@@ -112,7 +112,9 @@ export default function RegisterPage() {
     if (!form.password) { setError("Password is required."); return }
     if (form.password.length < 8) { setError("Password must be at least 8 characters."); return }
     if (form.password.length > 128) { setError("Password must be 128 characters or less."); return }
-    if (inviteOnly && !inviteCode.trim()) { setError("Kaiveron is invite-only right now — enter your invite code."); return }
+    // A member referral (refBy) satisfies the gate on its own — only require a
+    // code when invite-only AND there's no referral and no code.
+    if (inviteOnly && !inviteCode.trim() && !refBy) { setError("Kaiveron is invite-only right now — enter your invite code."); return }
 
     register.mutate(
       {
@@ -167,10 +169,11 @@ export default function RegisterPage() {
     push("Apple Sign In requires credentials — use email for now.", "info")
   }
 
-  // Show the real signup form only when the platform is open, OR the visitor
-  // came through an invite link, OR they explicitly chose to enter a code.
-  // Otherwise (invite-only + no invite) they see the waitlist instead.
-  const canSignup = !inviteOnly || hasInviteLink || showCodeEntry
+  // Show the real signup form when the platform is open, OR the visitor came
+  // through an invite link (?invite=), OR a member referral (?ref= — referrals
+  // let people join too), OR they explicitly chose to enter a code. Otherwise
+  // (invite-only with none of those) they see the waitlist instead.
+  const canSignup = !inviteOnly || hasInviteLink || showCodeEntry || !!refBy
 
   const handleWaitlist = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -269,7 +272,7 @@ export default function RegisterPage() {
           </div>
         )}
 
-        {inviteOnly && canSignup && (
+        {inviteOnly && canSignup && !refBy && (
           <div className="mb-4 px-4 py-3 rounded-2xl bg-accent/10 border border-accent/25 text-center">
             <p className="text-xs font-black text-accent-bright uppercase tracking-widest">Invite-only beta</p>
             <p className="text-[10px] text-muted mt-0.5">Kaiveron is invite-only right now — enter your code below to join.</p>
@@ -316,7 +319,7 @@ export default function RegisterPage() {
 
           {/* Email form */}
           <form onSubmit={handleSubmit} className="space-y-4">
-            {inviteOnly && (
+            {inviteOnly && !refBy && (
               <div>
                 <label className="block text-[10px] font-black uppercase tracking-[0.2em] text-muted mb-2">
                   Invite Code

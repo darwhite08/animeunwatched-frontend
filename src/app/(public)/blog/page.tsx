@@ -316,6 +316,27 @@ export default function BlogListingPage() {
 
   void TOP_AUTHORS; void POPULAR_TAGS
 
+  // Masthead featured well: the highest-viewed article (falls back to the first
+  // in the current sort — i.e. latest/trending — when view counts are all 0).
+  const featured = useMemo<Blog | null>(() => {
+    if (allBlogs.length === 0) return null
+    const byViews = [...allBlogs].sort((a, b) => b.views - a.views)
+    return (byViews[0]?.views ?? 0) > 0 ? byViews[0] : allBlogs[0]
+  }, [allBlogs])
+
+  // Newswire ticker — real headlines (category + title) from the latest articles.
+  const wireItems = useMemo(
+    () => allBlogs.slice(0, 6).map(b => ({ cat: b.category, title: b.title })),
+    [allBlogs],
+  )
+  const wireFallback = [
+    { cat: "Deep Dive", title: "The economics of a 12-episode cour" },
+    { cat: "Theory", title: "Who really wins the succession arc" },
+    { cat: "Review", title: "The season's quietest masterpiece" },
+    { cat: "Opinion", title: "In defense of the slow burn" },
+  ]
+  const wire = wireItems.length > 0 ? wireItems : wireFallback
+
   const filtered =
     activeCategory === "All"
       ? allBlogs
@@ -324,20 +345,92 @@ export default function BlogListingPage() {
   return (
     <div className="min-h-screen bg-background text-foreground pb-32">
 
-      {/* Hero — scrolls away with the page (NOT sticky), so once you scroll the
-          cards get the full viewport. Compact so it doesn't dominate on load. */}
-      <div className="relative overflow-hidden">
-        <div aria-hidden className="absolute inset-0 bg-gradient-to-br from-indigo-950/40 via-violet-950/20 to-transparent pointer-events-none" />
-        <div className={`max-w-6xl mx-auto ${ui.screenX} relative pt-[calc(var(--sticky-top,0px)+28px)] pb-6`}>
-          <span className="px-3 py-1 rounded-full bg-accent/10 border border-accent/20 text-[10px] font-black uppercase tracking-widest text-accent-bright">
-            Community Long-form
-          </span>
-          <h1 className="mt-3 text-3xl md:text-4xl font-black tracking-tighter uppercase italic text-foreground leading-none">
-            The Chronicle<span style={{color:"var(--app-accent)"}}>.</span>
-          </h1>
-          <p className="mt-2 text-muted text-sm max-w-lg">
-            Long-form anime journalism by the community — deep dives, reviews, theories, and takes.
-          </p>
+      {/* Hero — The Chronicle masthead. Scrolls away with the page (NOT sticky)
+          so the cards get the full viewport once you scroll. The cover well is
+          a live article (highest-viewed / latest). */}
+      <div className={`max-w-6xl mx-auto ${ui.screenX} pt-[calc(var(--sticky-top,0px)+20px)] pb-6`}>
+        <div className="chron chron-serif" role="img" aria-label="The Chronicle — long-form anime journalism by the community: deep dives, reviews, theories, and takes.">
+          <div className="chron-wrap">
+
+            {/* edition rule */}
+            <div className="chron-edition">
+              <span className="gold">VOL. I</span>
+              <span>NO. {Math.max(allBlogs.length, 1)}</span>
+              <span className="faint">EST. MMXXVI</span>
+              <span className="spacer" />
+              <span className="star">&#10022;</span>
+              <span className="spacer" />
+              <span className="hidden sm:inline">Community Bureau</span>
+              <span className="faint">{featured?.publishedAt || "JUN 2026"}</span>
+            </div>
+
+            {/* body: lead + featured cover */}
+            <div className="chron-body">
+              <div className="chron-lead">
+                <span className="chron-overline">
+                  Community Long-Form<span className="sep" /><span className="jp">クロニクル</span>
+                </span>
+                <div className="chron-titlewrap">
+                  <h1 className="chron-title">The Chronicle<span className="gold">.</span></h1>
+                  <svg className="chron-brush" viewBox="0 0 600 26" preserveAspectRatio="none" aria-hidden="true">
+                    <path d="M3 16 C 150 7, 330 6, 470 10 C 522 11.5, 560 15, 597 9 C 565 21, 472 19.5, 300 18.5 C 178 17.8, 78 20, 5 23 Z" />
+                  </svg>
+                </div>
+                <p className="chron-tagline">Deep dives, reviews, theories &amp; takes — by the community.</p>
+              </div>
+
+              {/* featured cover well — the live highest-viewed / latest article */}
+              {featured ? (
+                <Link href={`/blog/${featured.slug}`} className="chron-cover" aria-label={`Featured: ${featured.title}`}>
+                  <div className="chron-cover-bg" aria-hidden="true"><div className="lines" /></div>
+                  {featured.coverImage && (
+                    /* eslint-disable-next-line @next/next/no-img-element */
+                    <img src={featured.coverImage} alt="" loading="lazy" />
+                  )}
+                  <div className="chron-cover-frame">
+                    <span className="chron-tab">&#9733; Featured</span>
+                    <div className="chron-kanji">特集</div>
+                    <div className="chron-cap">
+                      <div className="chron-eyebrow">{featured.category}</div>
+                      <div className="chron-headline">{featured.title}</div>
+                    </div>
+                  </div>
+                </Link>
+              ) : (
+                <div className="chron-cover" aria-hidden="true">
+                  <div className="chron-cover-bg"><div className="lines" /></div>
+                  <div className="chron-cover-frame">
+                    <span className="chron-tab">&#9733; Featured</span>
+                    <div className="chron-kanji">特集</div>
+                    <div className="chron-cap">
+                      <div className="chron-eyebrow">Coming soon</div>
+                      <div className="chron-headline">The first issue is being written.</div>
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* newswire ticker — real headlines */}
+            <div className="chron-wire" aria-hidden="true">
+              <span className="chron-wire-tag"><span className="pulse" />On the Wire</span>
+              <div className="chron-wire-feed">
+                <div className="chron-wire-track">
+                  {[0, 1].map(dup => (
+                    <span key={dup}>
+                      {wire.map((w, i) => (
+                        <span key={`${dup}-${i}`}>
+                          <span className="cat">{w.cat.toUpperCase()}</span>&nbsp;&nbsp;{w.title}
+                          <span className="dot">&bull;</span>
+                        </span>
+                      ))}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+          </div>
         </div>
       </div>
 

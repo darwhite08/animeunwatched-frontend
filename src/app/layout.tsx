@@ -111,7 +111,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           Only the weights actually used in the UI are requested (500–800) to minimize payload.
         */}
         <link
-          href="https://fonts.googleapis.com/css2?family=Caveat+Brush&family=Bowlby+One+SC&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Special+Elite&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Caveat+Brush&family=Bowlby+One+SC&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,500;1,600&family=Special+Elite&display=swap"
           rel="stylesheet"
         />
         {/* Site-wide schema.org: Organization + WebSite (with SearchAction)

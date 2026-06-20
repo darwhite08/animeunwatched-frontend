@@ -679,3 +679,167 @@ nav[aria-label="Primary mobile"] {
   100% { transform: rotate(0); }
 }
 .notif-ringing { animation: notif-ring 0.9s ease-in-out; transform-origin: top center; }
+
+/* ── The Chronicle masthead (blog hero) ─────────────────────────────────────
+   Editorial newspaper banner. Uses app tokens only: gold accent + dark
+   surfaces. The cover well is filled by a real article (highest-viewed /
+   latest) from the page. */
+.chron-serif { font-family: 'Playfair Display', Georgia, 'Times New Roman', serif; }
+.chron {
+  position: relative; width: 100%;
+  container-type: inline-size;
+  border: 1px solid var(--app-border);
+  border-radius: 18px; overflow: hidden; isolation: isolate;
+  color: var(--app-fg);
+  background:
+    radial-gradient(120% 160% at 92% -30%, color-mix(in oklab, var(--app-accent) 22%, transparent), transparent 55%),
+    radial-gradient(90% 130% at 2% 130%, color-mix(in oklab, var(--app-accent) 7%, transparent), transparent 60%),
+    linear-gradient(155deg, var(--app-surface-2), var(--app-bg));
+  box-shadow: 0 24px 60px rgba(0,0,0,0.45), inset 0 1px 0 color-mix(in srgb, var(--app-fg) 6%, transparent);
+}
+.chron::after {
+  content: ""; position: absolute; inset: 0; z-index: 7; pointer-events: none; border-radius: 18px;
+  box-shadow: inset 0 0 120px rgba(0,0,0,0.45);
+}
+.chron-wrap {
+  position: relative; z-index: 4; display: flex; flex-direction: column;
+  padding: clamp(15px,2.2cqw,26px) clamp(18px,3cqw,38px);
+  gap: clamp(10px,1.4cqw,16px);
+}
+/* edition rule */
+.chron-edition {
+  display: flex; align-items: center; gap: clamp(10px,1.6cqw,20px);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: clamp(9px,0.9cqw,11px); letter-spacing: .26em; text-transform: uppercase;
+  color: var(--app-muted);
+  padding-bottom: clamp(7px,1cqw,11px); border-bottom: 1px solid var(--app-border);
+}
+.chron-edition .gold { color: var(--app-accent); }
+.chron-edition .faint { color: var(--app-subtle); }
+.chron-edition .spacer { flex: 1; }
+.chron-edition .star { color: var(--app-accent); }
+/* body: lead + cover */
+.chron-body { display: flex; align-items: stretch; gap: clamp(16px,2.6cqw,38px); }
+.chron-lead { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center; gap: clamp(5px,0.7cqw,9px); }
+.chron-overline {
+  display: inline-flex; align-items: center; gap: clamp(8px,1.1cqw,14px);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: clamp(8.5px,0.88cqw,10.5px); letter-spacing: .38em; text-transform: uppercase;
+  color: var(--app-accent); white-space: nowrap;
+  opacity: 0; animation: chron-ink .7s ease .2s forwards;
+}
+.chron-overline .jp { letter-spacing: .2em; color: var(--app-subtle); font-weight: 500; }
+.chron-overline .sep { width: 1px; height: 11px; background: var(--app-border); }
+.chron-titlewrap { position: relative; align-self: flex-start; }
+.chron-title {
+  margin: 0; font-weight: 900; font-size: clamp(36px,7.4cqw,96px); line-height: .88; letter-spacing: -0.015em;
+  opacity: 0; filter: blur(14px); transform: translateY(6px);
+  animation: chron-settle 1s cubic-bezier(.2,.7,.2,1) .15s forwards;
+}
+.chron-title .gold { color: var(--app-accent); }
+.chron-brush {
+  position: absolute; left: 0.04em; bottom: -0.07em; width: min(100%, 9.6em); height: 0.2em;
+  color: var(--app-accent); overflow: visible;
+  transform: scaleX(0); transform-origin: left center;
+  animation: chron-brush .7s cubic-bezier(.6,0,.2,1) 1s forwards;
+}
+.chron-brush path { fill: currentColor; }
+@keyframes chron-settle { to { opacity: 1; filter: blur(0); transform: none; } }
+@keyframes chron-ink { to { opacity: 1; } }
+@keyframes chron-brush { to { transform: scaleX(1); } }
+.chron-tagline {
+  margin: clamp(9px,1.3cqw,16px) 0 0; max-width: 92%;
+  font-style: italic; font-weight: 500;
+  font-size: clamp(13px,1.45cqw,21px); line-height: 1.35; color: var(--app-muted);
+  opacity: 0; animation: chron-fade .8s ease 1.1s forwards;
+}
+@keyframes chron-fade { to { opacity: 1; } }
+/* featured cover well — holds a real article */
+.chron-cover {
+  flex: none; width: clamp(210px,32cqw,460px); align-self: center;
+  position: relative; aspect-ratio: 16 / 10; max-height: 100%;
+  border-radius: 14px; overflow: hidden;
+  border: 1px solid var(--app-border);
+  box-shadow: 0 18px 40px rgba(0,0,0,0.5);
+  opacity: 0; transform: translateY(10px) scale(.99);
+  animation: chron-fadeup .8s cubic-bezier(.2,.7,.2,1) .45s forwards;
+  text-decoration: none; color: inherit; display: block;
+}
+@keyframes chron-fadeup { to { opacity: 1; transform: none; } }
+.chron-cover-bg {
+  position: absolute; inset: 0; z-index: 0;
+  background:
+    radial-gradient(120% 120% at 50% 45%, color-mix(in oklab, var(--app-accent) 16%, transparent), transparent 70%),
+    linear-gradient(150deg, var(--app-surface-2), var(--app-bg));
+}
+.chron-cover-bg .lines {
+  position: absolute; inset: -30%;
+  background: repeating-conic-gradient(from 0deg at 50% 48%,
+    color-mix(in srgb, var(--app-fg) 7%, transparent) 0deg 0.5deg, transparent 0.5deg 2.2deg);
+  -webkit-mask-image: radial-gradient(circle at 50% 48%, transparent 14%, #000 60%, transparent 92%);
+          mask-image: radial-gradient(circle at 50% 48%, transparent 14%, #000 60%, transparent 92%);
+  animation: chron-spin 90s linear infinite;
+}
+@keyframes chron-spin { to { transform: rotate(360deg); } }
+.chron-cover img { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; object-fit: cover; transition: transform .5s cubic-bezier(.2,.7,.2,1); }
+.chron-cover:hover img { transform: scale(1.05); }
+.chron-cover-frame { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
+.chron-tab {
+  position: absolute; top: 11px; left: 11px;
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px 10px; border-radius: 7px;
+  background: var(--app-accent); color: var(--app-on-accent);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-weight: 600;
+  font-size: clamp(8px,0.82cqw,10px); letter-spacing: .14em; text-transform: uppercase;
+}
+.chron-kanji {
+  position: absolute; top: 12px; right: 13px; bottom: 12px;
+  writing-mode: vertical-rl; text-orientation: upright;
+  font-weight: 700; font-size: clamp(11px,1.25cqw,17px); letter-spacing: .12em;
+  color: color-mix(in srgb, var(--app-fg) 28%, transparent);
+}
+.chron-cap {
+  position: absolute; left: 0; right: 0; bottom: 0;
+  padding: clamp(12px,1.6cqw,20px) clamp(11px,1.4cqw,16px) clamp(10px,1.3cqw,14px);
+  background: linear-gradient(to top, rgba(0,0,0,0.92), rgba(0,0,0,0.42) 55%, transparent);
+}
+.chron-eyebrow {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: clamp(8px,0.82cqw,10px);
+  letter-spacing: .22em; text-transform: uppercase; color: var(--app-accent-bright); margin-bottom: 5px;
+}
+.chron-headline { font-weight: 700; font-size: clamp(14px,1.6cqw,23px); line-height: 1.12; letter-spacing: -0.01em; color: var(--app-fg); text-wrap: balance; }
+/* bottom newswire */
+.chron-wire { display: flex; align-items: center; gap: clamp(11px,1.5cqw,18px); border-top: 1px solid var(--app-border); padding-top: clamp(7px,1cqw,11px); }
+.chron-wire-tag {
+  display: inline-flex; align-items: center; gap: 8px; flex: none;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: clamp(8.5px,0.9cqw,11px); letter-spacing: .22em; text-transform: uppercase;
+  color: var(--app-accent); font-weight: 600;
+}
+.chron-wire-tag .pulse { width: 7px; height: 7px; border-radius: 50%; background: var(--app-accent); animation: chron-pulse 1.8s ease-out infinite; }
+@keyframes chron-pulse { 0% { box-shadow: 0 0 0 0 color-mix(in oklab, var(--app-accent) 70%, transparent); } 70% { box-shadow: 0 0 0 8px transparent; } 100% { box-shadow: 0 0 0 0 transparent; } }
+.chron-wire-feed {
+  position: relative; flex: 1; overflow: hidden; min-width: 0;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 4%, #000 92%, transparent);
+          mask-image: linear-gradient(90deg, transparent, #000 4%, #000 92%, transparent);
+}
+.chron-wire-track { display: flex; white-space: nowrap; width: max-content; animation: chron-wire 32s linear infinite; }
+.chron-wire-track span {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: clamp(8.5px,0.9cqw,11px);
+  letter-spacing: .1em; color: var(--app-muted); display: inline-flex; align-items: center;
+}
+.chron-wire-track .cat { color: var(--app-accent); font-weight: 600; }
+.chron-wire-track .dot { color: var(--app-subtle); padding: 0 clamp(11px,1.5cqw,20px); }
+@keyframes chron-wire { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+/* stack on narrow screens */
+@container (max-width: 640px) {
+  .chron-cover { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .chron-overline, .chron-title, .chron-tagline, .chron-brush, .chron-cover,
+  .chron-cover-bg .lines, .chron-wire-track, .chron-wire-tag .pulse { animation: none !important; }
+  .chron-title { opacity: 1; filter: none; transform: none; }
+  .chron-overline, .chron-tagline { opacity: 1; }
+  .chron-brush { transform: scaleX(1); }
+  .chron-cover { opacity: 1; transform: none; }
+}

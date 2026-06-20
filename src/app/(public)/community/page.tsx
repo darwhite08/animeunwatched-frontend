@@ -24,6 +24,7 @@ import { PostGallery } from "@/components/posts/PostGallery"
 import { LinkPreviewCard, firstUrl } from "@/components/posts/LinkPreviewCard"
 import { useLiveFeed } from "@/hooks/useRealtime"
 import { useImageUpload } from "@/hooks/useImageUpload"
+import { useScrollDirection } from "@/hooks/useScrollDirection"
 import { PostMenu } from "@/components/ui/PostMenu"
 import { useAuthStore } from "@/stores/auth.store"
 import { VerifiedBadge } from "@/components/social/VerifiedBadge"
@@ -298,6 +299,17 @@ function PostCard({ post }: { post: Post }) {
           <PostMenu postId={post.id} />
         </div>
 
+        {/* Hero media — image-led: first large element after the author row,
+            capped ~60vh so the next card peeks above the fold (research §3). */}
+        {(() => {
+          const gallery = post.imageUrls && post.imageUrls.length ? post.imageUrls : post.imageUrl ? [post.imageUrl] : []
+          return gallery.length > 0 ? (
+            <div className="max-h-[60vh] overflow-hidden rounded-xl">
+              <PostGallery images={gallery} layout={post.galleryLayout} />
+            </div>
+          ) : null
+        })()}
+
         {/* Anime tag */}
         {post.anime && (
           <Link href={`/anime/${post.anime.malId}`}
@@ -320,14 +332,6 @@ function PostCard({ post }: { post: Post }) {
           const display = previewUrl ? post.content.replace(/https?:\/\/[^\s<]+/i, "").trim() : post.content
           if (!display) return null
           return <p className="text-[15px] text-foreground leading-[1.6] max-w-[65ch] whitespace-pre-wrap break-words"><RichBody text={display} /></p>
-        })()}
-
-        {/* Image attachment(s) — single image renders plainly; multi-image posts
-            get a viewer-toggled grid/carousel gallery. Falls back to imageUrl for
-            posts created before the gallery field existed. */}
-        {(() => {
-          const gallery = post.imageUrls && post.imageUrls.length ? post.imageUrls : post.imageUrl ? [post.imageUrl] : []
-          return gallery.length > 0 ? <PostGallery images={gallery} layout={post.galleryLayout} /> : null
         })()}
 
         {/* Rich link preview — unfurls the first URL in the post (no preview if
@@ -485,6 +489,11 @@ export default function CommunityPage() {
   const showAuthPrompt = useAuthPrompt(s => s.show)
   const [feedTab, setFeedTab] = useState<FeedTab>("trending")
   const [composing, setComposing] = useState(false)
+  // Scroll-direction drives chrome-stripping: at top, NEW POST is the big header
+  // CTA; once scrolling into the feed it collapses to a floating + (attention
+  // research §5 — let content fill the high-attention zone).
+  const { dir: scrollDir, atTop } = useScrollDirection()
+  const scrolledIn = scrollDir === "down" && !atTop
   // Open the composer for members; pop the sign-in wall for guests.
   const openComposer = useCallback(() => {
     if (isAuthenticated) setComposing(c => !c)
@@ -644,17 +653,7 @@ export default function CommunityPage() {
           strip from top of viewport to bottom of the tabs, so scrolling
           content cannot peek through the navbar's transparent margins. */}
       <div className="sticky top-[var(--sticky-top,0px)] z-40 bg-background border-b border-border shadow-[0_4px_12px_color-mix(in_srgb,var(--app-fg)_4%,transparent)]">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-[var(--page-top,120px)] pb-0 flex items-start justify-between gap-4">
-          <h1 className="text-2xl sm:text-3xl font-black tracking-tighter uppercase italic text-foreground">
-            Community<span style={{ color: "var(--app-accent)" }}>.</span>
-          </h1>
-          <button onClick={openComposer}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest text-black transition-all hover:scale-[1.03] motion-reduce:transform-none shrink-0 mt-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70"
-            style={{ background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))", boxShadow: "0 4px 16px color-mix(in srgb, var(--app-accent) 35%, transparent)" }}>
-            <Plus size={13} /> New Post
-          </button>
-        </div>
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 mt-3 flex items-center justify-between gap-4">
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-[var(--page-top,120px)] flex items-center justify-between gap-4">
           <div className="flex items-center gap-1">
             {(["trending", "following", "latest"] as FeedTab[]).map(t => (
               <button key={t} onClick={() => setFeedTab(t)}
@@ -673,27 +672,38 @@ export default function CommunityPage() {
               </button>
             ))}
           </div>
-          <p className="hidden sm:block text-[11px] text-muted font-mono uppercase tracking-widest tabular-nums shrink-0">
-            {posts.length > 0 ? `${posts.length}+ posts · The Dojo` : "The Dojo — share your thoughts"}
-          </p>
+          <div className="flex items-center gap-4 shrink-0">
+            <p className="hidden lg:block text-[11px] text-muted font-mono uppercase tracking-widest tabular-nums">
+              {posts.length > 0 ? `${posts.length}+ posts · The Dojo` : "The Dojo — share your thoughts"}
+            </p>
+            {/* Single primary CTA — collapses to the floating + on scroll-down */}
+            <button onClick={openComposer}
+              className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest text-black transition-all hover:scale-[1.03] motion-reduce:transform-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70 ${scrolledIn ? "pointer-events-none opacity-0" : ""}`}
+              style={{ background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))", boxShadow: "0 4px 16px color-mix(in srgb, var(--app-accent) 35%, transparent)" }}>
+              <Plus size={13} /> New Post
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* Floating New Post button — visible after scrolling past header */}
+      {/* Floating + — appears once scrolled into the feed (all viewports), the
+          single CTA in the marking-pattern zone. */}
       <motion.button
-        initial={{ opacity: 0, scale: 0.8 }}
-        animate={{ opacity: 1, scale: 1 }}
+        initial={false}
+        animate={{ opacity: scrolledIn ? 1 : 0, scale: scrolledIn ? 1 : 0.8 }}
+        transition={{ duration: 0.2 }}
         onClick={openComposer}
-        className="fixed bottom-8 right-8 z-40 flex items-center gap-2 px-5 py-3 rounded-2xl text-xs font-black uppercase tracking-widest text-black transition-all hover:scale-105 md:hidden"
+        aria-label="New post"
+        className={`fixed bottom-8 right-8 z-40 grid h-14 w-14 place-items-center rounded-full text-black transition-transform hover:scale-105 motion-reduce:transition-none ${scrolledIn ? "" : "pointer-events-none"}`}
         style={{ background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))", boxShadow: "0 8px 24px color-mix(in srgb, var(--app-accent) 50%, transparent)" }}
       >
-        <Plus size={14} /> Post
+        <Plus size={22} strokeWidth={3} />
       </motion.button>
 
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-6 grid lg:grid-cols-3 gap-8">
+      <div className="max-w-[1024px] mx-auto px-4 sm:px-6 pt-6 grid gap-8 lg:grid-cols-[minmax(0,1fr)_300px]">
 
-        {/* Feed */}
-        <div className="lg:col-span-2 space-y-5">
+        {/* Feed — capped ~680px so it stays in the high-attention reading column */}
+        <div className="min-w-0 space-y-5">
 
           {/* Composer */}
           <AnimatePresence>
@@ -880,6 +890,9 @@ export default function CommunityPage() {
           data-lenis-prevent
           className="hidden lg:block lg:sticky lg:top-[220px] lg:self-start lg:max-h-[calc(100vh-240px)] lg:overflow-y-auto lg:overscroll-contain space-y-6 lg:pr-2"
         >
+          {/* Now Airing / your watchlist — the daily-return hook gets the warmest rail slot */}
+          <WatchlistPreviewWidget />
+
           <div className="p-5 rounded-2xl bg-surface border border-border space-y-4">
             <div className="flex items-center gap-2">
               <TrendingUp size={14} className="text-accent-bright" />
@@ -901,22 +914,6 @@ export default function CommunityPage() {
             )}
           </div>
 
-          <div className="p-5 rounded-2xl bg-surface border border-border space-y-4">
-            <div className="flex items-center justify-between gap-2">
-              <div className="flex items-center gap-2">
-                <Vote size={14} className="text-accent-bright" />
-                <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-muted">Active Polls</h3>
-              </div>
-              <Link href="/poll" className="text-[10px] font-bold text-accent-bright/80 hover:text-foreground transition-colors">
-                All →
-              </Link>
-            </div>
-            {livePolls.length > 0
-              ? livePolls.map(poll => <ActivePollRow key={poll.id} poll={poll} />)
-              : <p className="text-[11px] text-muted">No active polls right now. <Link href="/creators/create/polls" className="text-accent-bright hover:underline">Create one</Link>.</p>}
-          </div>
-
-          <WatchlistPreviewWidget />
           <WhoToFollowWidget />
           <TrendingWidget />
 
@@ -936,6 +933,20 @@ export default function CommunityPage() {
               </div>
             ))}
           </div>
+
+          {/* Active Polls — lowest-value slot; not rendered at all when empty */}
+          {livePolls.length > 0 && (
+            <div className="p-5 rounded-2xl bg-surface border border-border space-y-4">
+              <div className="flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2">
+                  <Vote size={14} className="text-accent-bright" />
+                  <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-muted">Active Polls</h3>
+                </div>
+                <Link href="/poll" className="text-[10px] font-bold text-accent-bright/80 hover:text-foreground transition-colors">All →</Link>
+              </div>
+              {livePolls.map(poll => <ActivePollRow key={poll.id} poll={poll} />)}
+            </div>
+          )}
 
           <Link href="/creators"
             className="flex items-center gap-3 p-5 rounded-2xl bg-gradient-to-br from-indigo-600/15 to-violet-600/10 border border-accent/20 hover:from-indigo-600/20 transition-all group">

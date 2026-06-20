@@ -172,39 +172,43 @@ export default function ClubsPage() {
 
   return (
     <div className="min-h-screen bg-background text-foreground pb-32">
-      {/* Hero header */}
-      <div className="relative overflow-hidden border-b border-border">
-        <div className="absolute inset-0 pointer-events-none">
-          <div className="absolute top-[-30%] right-[-5%] w-[40%] h-[200%] bg-indigo-700/15 blur-[120px] rounded-full" />
-          <div className="absolute bottom-[-20%] left-[-10%] w-[35%] h-[150%] bg-violet-900/10 blur-[100px] rounded-full" />
-        </div>
-        <div className={`relative z-10 max-w-6xl mx-auto ${ui.screenX} py-10 sm:py-16`}>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            className="space-y-4"
-          >
-            <div className="flex items-end justify-between gap-4 flex-wrap">
-              <div>
-                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-accent-bright/70 mb-3">
-                  Community
-                </p>
-                <h1 className="text-4xl sm:text-5xl md:text-6xl font-black uppercase italic tracking-tighter text-foreground leading-none">
-                  Dens<span style={{color:"var(--app-accent)"}}>.</span>
-                </h1>
-                <p className="mt-3 text-muted text-sm max-w-md">
-                  Join the conversation, build your community. Find your people.
-                </p>
-              </div>
-              <Link
-                href="/clubs/new"
-                className="flex items-center gap-2 px-5 sm:px-6 min-h-11 rounded-2xl text-sm font-black uppercase tracking-widest text-black transition-all hover:-translate-y-0.5 active:scale-95" style={{background:"linear-gradient(135deg,var(--app-accent-bright),var(--app-accent))",boxShadow:"0 0 32px color-mix(in srgb, var(--app-accent) 35%, transparent)"}}
-              >
-                <Plus size={14} /> Create Den
-              </Link>
+      {/* Hero header — animated "DENS." poster banner (Kaiveron token-adapted) */}
+      <div className="border-b border-border">
+        <div className={`max-w-6xl mx-auto ${ui.screenX} py-6`}>
+          <div className="dens-banner" role="img" aria-label="Dens — community. Join the conversation, build your community, find your people.">
+            <div className="dens-ghost" aria-hidden="true">
+              <span>DENS&nbsp;DENS&nbsp;DENS&nbsp;DENS&nbsp;</span>
+              <span>DENS&nbsp;DENS&nbsp;DENS&nbsp;DENS&nbsp;</span>
             </div>
-          </motion.div>
+            <div className="dens-grid" aria-hidden="true" />
+            <div className="dens-scan" aria-hidden="true" />
+            <div className="dens-content">
+              <div className="dens-top">
+                <div className="dens-kicker"><span className="dens-dot" /><span>Community</span></div>
+                <Link
+                  href="/clubs/new"
+                  className="flex items-center gap-2 px-4 sm:px-5 min-h-10 rounded-xl text-[11px] sm:text-xs font-black uppercase tracking-widest text-black transition-all hover:-translate-y-0.5 active:scale-95 shrink-0"
+                  style={{ background: "linear-gradient(135deg,var(--app-accent-bright),var(--app-accent))", boxShadow: "0 0 28px color-mix(in srgb, var(--app-accent) 35%, transparent)" }}
+                >
+                  <Plus size={14} /> Create Den
+                </Link>
+              </div>
+              <div className="dens-mid">
+                <h1 className="dens-headline" aria-hidden="true">
+                  <span className="dens-clip"><span className="ch">D</span><span className="ch">E</span><span className="ch">N</span><span className="ch">S</span><span className="period">.</span></span>
+                </h1>
+                <div className="dens-tagwrap">
+                  <p className="dens-tag">Join the conversation, <b>build your community.</b> Find your people.</p>
+                </div>
+              </div>
+              <div className="dens-ticker" aria-hidden="true">
+                <div className="dens-ticker-track">
+                  <span><span className="hot">SERIES&nbsp;DISCUSSION</span><span className="sep">/</span>RANKINGS<span className="sep">/</span>RECOMMENDATIONS<span className="sep">/</span><span className="hot">STUDIO&nbsp;FAN&nbsp;CLUB</span><span className="sep">/</span>GENRE&nbsp;FOCUS<span className="sep">/</span>FIND&nbsp;YOUR&nbsp;PEOPLE<span className="sep">/</span></span>
+                  <span><span className="hot">SERIES&nbsp;DISCUSSION</span><span className="sep">/</span>RANKINGS<span className="sep">/</span>RECOMMENDATIONS<span className="sep">/</span><span className="hot">STUDIO&nbsp;FAN&nbsp;CLUB</span><span className="sep">/</span>GENRE&nbsp;FOCUS<span className="sep">/</span>FIND&nbsp;YOUR&nbsp;PEOPLE<span className="sep">/</span></span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 

@@ -578,3 +578,92 @@ nav[aria-label="Primary mobile"] {
     scroll-behavior: auto !important;
   }
 }
+
+/* ── Dens animated banner (adapted to Kaiveron's dark + gold tokens) ──────── */
+.dens-banner {
+  position: relative; width: 100%; aspect-ratio: 1600 / 360; max-height: 360px;
+  background: var(--app-bg); color: var(--app-fg);
+  border-radius: 18px; overflow: hidden; isolation: isolate;
+  container-type: inline-size;
+  border: 1px solid var(--app-border);
+}
+.dens-banner::after {
+  content: ""; position: absolute; inset: 0; z-index: 6; pointer-events: none;
+  background: radial-gradient(140% 120% at 78% 50%, transparent 55%, rgba(0,0,0,0.55) 100%);
+  mix-blend-mode: multiply;
+}
+.dens-ghost {
+  position: absolute; top: 50%; left: 0; transform: translateY(-50%); z-index: 0;
+  display: flex; white-space: nowrap; will-change: transform;
+  animation: dens-drift 26s linear infinite;
+}
+.dens-ghost span {
+  font-weight: 900; font-style: italic; font-size: clamp(120px, 30cqw, 360px);
+  line-height: .82; letter-spacing: -0.04em;
+  -webkit-text-stroke: 1.4px color-mix(in srgb, var(--app-fg) 8%, transparent);
+  color: transparent; padding-right: .18em;
+}
+@keyframes dens-drift { from { transform: translate(0,-50%); } to { transform: translate(-50%,-50%); } }
+.dens-grid {
+  position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background: linear-gradient(90deg, var(--app-border) 1px, transparent 1px) 0 0 / 25% 100%;
+  opacity: .5;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 18%, #000 60%, transparent);
+          mask-image: linear-gradient(90deg, transparent, #000 18%, #000 60%, transparent);
+}
+.dens-scan {
+  position: absolute; top: 0; bottom: 0; width: 2px; z-index: 2;
+  background: linear-gradient(to bottom, transparent, color-mix(in srgb, var(--app-accent) 60%, transparent), transparent);
+  filter: blur(.3px); will-change: transform, opacity;
+  animation: dens-scan 7s cubic-bezier(.7,0,.3,1) infinite;
+}
+@keyframes dens-scan {
+  0% { transform: translateX(-40px); opacity: 0; } 8% { opacity: .9; }
+  46% { opacity: .9; } 60%,100% { transform: translateX(1640px); opacity: 0; }
+}
+.dens-content {
+  position: absolute; inset: 0; z-index: 4;
+  display: flex; flex-direction: column; justify-content: space-between;
+  padding: clamp(18px,3.4cqw,40px) clamp(22px,4cqw,50px);
+}
+.dens-top { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.dens-kicker {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: clamp(10px,1cqw,13px); letter-spacing: .42em; text-transform: uppercase;
+  color: var(--app-muted); display: flex; align-items: center; gap: 14px;
+}
+.dens-kicker .dens-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--app-accent); animation: dens-blink 1.6s steps(1,end) infinite; }
+@keyframes dens-blink { 0%,55% { opacity: 1; } 56%,100% { opacity: .18; } }
+.dens-mid { display: flex; align-items: flex-end; gap: clamp(18px,2.6cqw,40px); }
+.dens-headline {
+  margin: 0; font-weight: 900; font-style: italic; text-transform: uppercase;
+  font-size: clamp(60px,17.5cqw,240px); line-height: .78; letter-spacing: -0.045em;
+  display: flex; align-items: flex-end;
+}
+.dens-clip { overflow: hidden; display: inline-flex; padding-bottom: .04em; }
+.dens-headline .ch { display: inline-block; transform: translateY(116%); animation: dens-rise .9s cubic-bezier(.16,1,.3,1) forwards; }
+.dens-headline .ch:nth-child(1) { animation-delay: .05s; }
+.dens-headline .ch:nth-child(2) { animation-delay: .13s; }
+.dens-headline .ch:nth-child(3) { animation-delay: .21s; }
+.dens-headline .ch:nth-child(4) { animation-delay: .29s; }
+.dens-headline .period { color: var(--app-accent); display: inline-block; transform: translateY(116%); animation: dens-rise .9s cubic-bezier(.16,1,.3,1) .42s forwards; }
+@keyframes dens-rise { to { transform: translateY(0); } }
+.dens-tagwrap { padding-bottom: clamp(6px,1.1cqw,16px); max-width: 42%; opacity: 0; transform: translateY(10px); animation: dens-fade .8s ease .7s forwards; }
+.dens-tag { margin: 0; font-weight: 300; font-size: clamp(12px,1.5cqw,21px); line-height: 1.3; color: var(--app-muted); }
+.dens-tag b { font-weight: 600; color: var(--app-fg); }
+@keyframes dens-fade { to { opacity: 1; transform: translateY(0); } }
+.dens-ticker {
+  position: relative; z-index: 4; border-top: 1px solid var(--app-border);
+  padding-top: clamp(8px,1.3cqw,14px); overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+          mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent);
+}
+.dens-ticker-track { display: flex; white-space: nowrap; width: max-content; will-change: transform; animation: dens-march 22s linear infinite; }
+.dens-ticker-track span {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: clamp(10px,1cqw,13px); letter-spacing: .26em; text-transform: uppercase;
+  color: var(--app-muted); display: inline-flex; align-items: center;
+}
+.dens-ticker-track .sep { color: var(--app-subtle); padding: 0 clamp(14px,1.8cqw,28px); }
+.dens-ticker-track .hot { color: var(--app-accent); }
+@keyframes dens-march { from { transform: translateX(0); } to { transform: translateX(-50%); } }

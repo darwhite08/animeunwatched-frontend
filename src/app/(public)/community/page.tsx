@@ -689,7 +689,8 @@ export default function CommunityPage() {
                     onFocus={openComposer}
                     placeholder={isAuthenticated ? "What's happening?" : "Sign in to post…"}
                     rows={composing ? 3 : 1} disabled={!isAuthenticated}
-                    className="w-full bg-transparent text-lg sm:text-base text-foreground placeholder:text-muted resize-none outline-none leading-relaxed disabled:opacity-40 pt-1.5" />
+                    style={{ color: "var(--app-fg)" }}
+                    className="w-full bg-transparent text-lg sm:text-base placeholder:text-muted resize-none outline-none leading-relaxed disabled:opacity-40 pt-1.5" />
 
                   {/* Attached image previews — thumbnails, remove each */}
                   {attachedImages.length > 0 && (

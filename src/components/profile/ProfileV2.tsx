@@ -114,7 +114,7 @@ function ProfileAvatar({ size = 128, progress, level, name, avatarUrl, editable 
     }
   }
   return (
-    <div className="relative shrink-0" style={{ width: size, height: size }}>
+    <div className="relative shrink-0 rounded-full ring-4 ring-background" style={{ width: size, height: size }}>
       <svg className="absolute inset-0 z-[2]" width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
         <circle cx={size / 2} cy={size / 2} r={r} fill="none"
           stroke="color-mix(in srgb, var(--app-fg) 14%, transparent)" strokeWidth={3.5} />
@@ -247,7 +247,7 @@ function Hero({ isOwner }: { isOwner: boolean }) {
           start at the same top edge (pt-4); avatar gets its own negative
           margin so only IT pokes up over the cover. */}
       <div className="px-4 sm:px-6 pb-5 sm:pb-6 grid gap-4 sm:gap-6 grid-cols-1 lg:grid-cols-[auto_minmax(0,1fr)_auto] lg:items-start">
-        <div className="-mt-12 sm:-mt-[54px] self-start">
+        <div className="relative z-20 -mt-16 sm:-mt-[80px] self-start">
           <ProfileAvatar progress={progress} level={level} name={displayName}
             avatarUrl={profile?.avatarUrl ?? user?.avatarUrl} editable={isOwner} />
         </div>

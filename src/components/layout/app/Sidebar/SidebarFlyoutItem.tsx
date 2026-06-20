@@ -64,15 +64,12 @@ export function SidebarFlyoutItem({
   return (
     <div ref={ref} className="relative" onMouseEnter={openFlyout} onMouseLeave={scheduleClose}>
       <div
-        className={`relative flex items-center rounded-xl text-sm font-bold transition-all ${
+        className={`relative flex items-center rounded-xl text-sm transition-all ${
           active
-            ? "bg-gradient-to-r from-accent/20 to-accent/[0.06] text-accent-bright shadow-[inset_0_0_0_1px_color-mix(in_srgb,var(--app-accent)_25%,transparent)]"
-            : "text-muted hover:bg-white/5 hover:text-foreground"
+            ? "font-black text-foreground"
+            : "font-bold text-muted hover:bg-white/5 hover:text-foreground"
         }`}
       >
-        {active && (
-          <span aria-hidden className="absolute left-0 top-1/2 h-5 w-1 -translate-y-1/2 rounded-r-full bg-accent-bright shadow-[0_0_10px_color-mix(in_srgb,var(--app-accent)_70%,transparent)]" />
-        )}
         <Link
           href={href}
           aria-current={active ? "page" : undefined}
@@ -120,10 +117,10 @@ export function SidebarFlyoutItem({
                 aria-current={lActive ? "page" : undefined}
                 onClick={() => closeNow()}
                 className={`flex items-center gap-3 rounded-xl px-2.5 py-2 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 ${
-                  lActive ? "bg-accent/15 text-accent-bright" : "text-muted hover:bg-white/5 hover:text-foreground"
+                  lActive ? "text-foreground" : "text-muted hover:bg-white/5 hover:text-foreground"
                 }`}
               >
-                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-white/5 text-accent-bright">
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-white/5 text-foreground">
                   <LIcon size={16} weight={lActive ? "fill" : "regular"} />
                 </span>
                 <span className="min-w-0">

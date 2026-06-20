@@ -2,11 +2,9 @@
 
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { motion } from "framer-motion"
 import { useAuthStore } from "@/stores/auth.store"
 import { MOBILE_ITEMS, resolvePath } from "../sidebarConfig"
 import { useNavBadges } from "../useNavBadges"
-import { SPRING } from "@/lib/design/tokens"
 
 function active(pathname: string, href: string) {
   const tail = href.split("/").filter(Boolean).pop() ?? ""
@@ -38,18 +36,11 @@ export function BottomTabBar() {
             className="group relative flex flex-1 flex-col items-center justify-center gap-1 pb-1 pt-2"
           >
             <span className="relative flex h-9 w-14 items-center justify-center">
-              {isOn && (
-                <motion.span
-                  layoutId="tabbar-active"
-                  transition={SPRING.snappy}
-                  className="absolute inset-0 rounded-full bg-accent/15"
-                />
-              )}
               <Icon
                 size={23}
                 weight={isOn ? "fill" : "regular"}
                 className={`relative transition-colors ${
-                  isOn ? "text-accent-bright" : "text-muted group-active:text-foreground"
+                  isOn ? "text-foreground" : "text-muted group-active:text-foreground"
                 }`}
               />
               {count > 0 && (
@@ -63,7 +54,7 @@ export function BottomTabBar() {
             </span>
             <span
               className={`text-[11px] font-semibold tracking-wide transition-colors ${
-                isOn ? "text-accent-bright" : "text-subtle"
+                isOn ? "text-foreground" : "text-subtle"
               }`}
             >
               {item.label}

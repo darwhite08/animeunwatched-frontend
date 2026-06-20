@@ -227,7 +227,7 @@ export default function ShotsPage() {
       tabIndex={0}
       aria-label="Shots feed — use Up and Down arrows to move between videos"
       style={{ paddingTop: 0 }}
-      className="relative h-[calc(100dvh-3.5rem-4rem-env(safe-area-inset-bottom))] w-full snap-y snap-mandatory overflow-y-scroll overflow-x-hidden overscroll-y-contain bg-background outline-none md:h-[calc(100dvh-3.5rem)] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden [&::-webkit-scrollbar]:w-0"
+      className="relative h-[calc(100dvh-4rem-env(safe-area-inset-top)-4rem-env(safe-area-inset-bottom))] w-full snap-y snap-mandatory overflow-y-scroll overflow-x-hidden overscroll-y-contain bg-background outline-none md:h-[calc(100dvh-4rem-env(safe-area-inset-top))] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden [&::-webkit-scrollbar]:w-0"
     >
       {/* Premium ambient backdrop — the active poster, blurred + dimmed, fills the
           black void around the vertical card with a soft gold glow. */}

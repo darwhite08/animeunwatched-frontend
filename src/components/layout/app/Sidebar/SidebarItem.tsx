@@ -29,18 +29,14 @@ export function SidebarItem({
       href={href}
       aria-current={active ? "page" : undefined}
       title={collapsed ? item.label : undefined}
-      className={`group relative flex items-center rounded-xl text-sm font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 ${
+      className={`group relative flex items-center rounded-xl text-sm transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 ${
         collapsed ? "justify-center px-0 py-3" : "gap-3 px-3 py-2.5"
       } ${
         active
-          ? "bg-gradient-to-r from-accent/20 to-accent/[0.06] text-accent-bright shadow-[inset_0_0_0_1px_color-mix(in_srgb,var(--app-accent)_25%,transparent)]"
-          : "text-muted hover:bg-white/5 hover:text-foreground"
+          ? "font-black text-foreground"
+          : "font-bold text-muted hover:bg-white/5 hover:text-foreground"
       }`}
     >
-      {/* Premium active indicator — accent bar on the left edge */}
-      {active && (
-        <span aria-hidden className="absolute left-0 top-1/2 h-5 w-1 -translate-y-1/2 rounded-r-full bg-accent-bright shadow-[0_0_10px_color-mix(in_srgb,var(--app-accent)_70%,transparent)]" />
-      )}
       <span className="relative shrink-0">
         <Icon size={20} weight={active ? "fill" : "regular"} />
         {count > 0 && collapsed && (

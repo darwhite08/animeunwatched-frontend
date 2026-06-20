@@ -81,6 +81,10 @@ export default function ShotsPage() {
   const [loading, setLoading] = useState(true)
   const [muted, setMuted] = useState(true)
   const [active, setActive] = useState(0)
+  // Comments open-state lives here (not per-reel) so the panel FOLLOWS the active
+  // shot as you scroll: each reel renders its own sheet gated by `active`, so the
+  // open one moves with the feed and always shows the current shot's comments.
+  const [commentsOpen, setCommentsOpen] = useState(false)
   const [mode, setMode] = useState<"all" | "following" | "shots" | "trailers">("all")
   const loadingRef = useRef(false)
   const filterRef = useRef<"following" | undefined>(undefined) // which feed source `shots` holds
@@ -223,7 +227,7 @@ export default function ShotsPage() {
       tabIndex={0}
       aria-label="Shots feed — use Up and Down arrows to move between videos"
       style={{ paddingTop: 0 }}
-      className="relative h-[calc(100dvh-3.5rem-4rem-env(safe-area-inset-bottom))] w-full snap-y snap-mandatory overflow-y-scroll overscroll-y-contain bg-background outline-none md:h-[calc(100dvh-3.5rem)] [&::-webkit-scrollbar]:hidden"
+      className="relative h-[calc(100dvh-3.5rem-4rem-env(safe-area-inset-bottom))] w-full snap-y snap-mandatory overflow-y-scroll overflow-x-hidden overscroll-y-contain bg-background outline-none md:h-[calc(100dvh-3.5rem)] [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden [&::-webkit-scrollbar]:w-0"
     >
       {/* Premium ambient backdrop — the active poster, blurred + dimmed, fills the
           black void around the vertical card with a soft gold glow. */}
@@ -319,6 +323,7 @@ export default function ShotsPage() {
         >
           {item.kind === "shot" ? (
             <ShotReel shot={item.shot} active={active === idx} near={Math.abs(idx - active) <= 1} muted={muted}
+              commentsOpen={commentsOpen} onCommentsOpenChange={setCommentsOpen}
               onNotInterested={(id) => setShots((prev) => prev.filter((s) => s.id !== id))} />
           ) : (
             <TrailerReel trailer={item.trailer} active={active === idx} muted={muted} />
@@ -341,7 +346,7 @@ function MediaShell({ children }: { children: React.ReactNode }) {
   return <div className="relative h-full w-full overflow-hidden bg-background md:aspect-[9/16] md:max-h-full md:w-auto md:rounded-3xl md:ring-1 md:ring-white/10 md:shadow-[0_24px_70px_rgba(0,0,0,0.65)]">{children}</div>
 }
 
-function ShotReel({ shot, active, near, muted, onNotInterested }: { shot: Shot; active: boolean; near: boolean; muted: boolean; onNotInterested?: (id: string) => void }) {
+function ShotReel({ shot, active, near, muted, commentsOpen, onCommentsOpenChange, onNotInterested }: { shot: Shot; active: boolean; near: boolean; muted: boolean; commentsOpen: boolean; onCommentsOpenChange: (open: boolean) => void; onNotInterested?: (id: string) => void }) {
   const videoRef = useRef<HTMLVideoElement>(null)
   const [buffering, setBuffering] = useState(false)
   const me = useAuthStore((s) => s.user)
@@ -360,7 +365,6 @@ function ShotReel({ shot, active, near, muted, onNotInterested }: { shot: Shot; 
   const activeSinceRef = useRef<number | null>(null)
   const [menuOpen, setMenuOpen] = useState(false)
   const [following, setFollowing] = useState(shot.authorFollowedByMe ?? false)
-  const [showComments, setShowComments] = useState(false)
   const [likeBusy, setLikeBusy] = useState(false)
   const [saveBusy, setSaveBusy] = useState(false)
   const [followBusy, setFollowBusy] = useState(false)
@@ -481,7 +485,7 @@ function ShotReel({ shot, active, near, muted, onNotInterested }: { shot: Shot; 
 
   function openComments() {
     if (!isAuthenticated) { showAuthPrompt({ subtitle: "Sign in to read and post comments." }); return }
-    setShowComments(true)
+    onCommentsOpenChange(true)
   }
 
   async function share() {
@@ -689,8 +693,8 @@ function ShotReel({ shot, active, near, muted, onNotInterested }: { shot: Shot; 
       <ShotCommentsSheet
         shotId={shot.id}
         shotAuthorId={authorId}
-        open={showComments}
-        onClose={() => setShowComments(false)}
+        open={commentsOpen && active}
+        onClose={() => onCommentsOpenChange(false)}
         onCountChange={(d) => setComments((n) => Math.max(0, n + d))}
       />
       </MediaShell>

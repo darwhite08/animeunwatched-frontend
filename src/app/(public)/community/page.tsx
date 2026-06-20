@@ -890,7 +890,7 @@ export default function CommunityPage() {
                 {liveTrendingTags.map((tag, i) => (
                   <motion.span key={tag} initial={{ opacity: 0, scale: 0.9 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: i * 0.04 }}>
                     <Link href={`/search?q=${encodeURIComponent("#" + tag)}&type=posts`}
-                      className="px-3 py-1.5 rounded-full bg-surface-2 border border-border text-[10px] font-bold text-muted hover:text-white hover:border-white/30 transition-colors inline-block">
+                      className="px-3 py-1.5 rounded-full bg-foreground/[0.06] border border-foreground/10 text-[10px] font-bold text-foreground/70 hover:text-foreground hover:border-foreground/25 transition-colors inline-block">
                       #{tag}
                     </Link>
                   </motion.span>

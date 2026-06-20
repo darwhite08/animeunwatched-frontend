@@ -343,7 +343,7 @@ export default function ShotsPage() {
 function MediaShell({ children }: { children: React.ReactNode }) {
   // Full-bleed edge-to-edge on phones (real TikTok-style reel); a centered,
   // rounded phone-width card on desktop.
-  return <div className="relative h-full w-full overflow-hidden bg-background md:aspect-[9/16] md:max-h-full md:w-auto md:rounded-3xl md:ring-1 md:ring-white/10 md:shadow-[0_24px_70px_rgba(0,0,0,0.65)]">{children}</div>
+  return <div className="relative h-full w-full overflow-hidden bg-background md:aspect-[9/16] md:max-h-full md:w-auto md:rounded-lg md:ring-1 md:ring-white/10 md:shadow-[0_24px_70px_rgba(0,0,0,0.65)]">{children}</div>
 }
 
 function ShotReel({ shot, active, near, muted, commentsOpen, onCommentsOpenChange, onNotInterested }: { shot: Shot; active: boolean; near: boolean; muted: boolean; commentsOpen: boolean; onCommentsOpenChange: (open: boolean) => void; onNotInterested?: (id: string) => void }) {

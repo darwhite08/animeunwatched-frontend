@@ -1,5 +1,5 @@
 import {
-  House, Television, Sparkle, UsersThree, FilmReel, MagnifyingGlass,
+  House, Television, Sparkle, UsersThree, MagnifyingGlass,
   Trophy, ChatCircleText, Bookmarks, User,
   ListBullets, PlayCircle, Robot, CalendarBlank, CalendarCheck,
   Star, Tag, Buildings, Smiley, MagicWand, SquaresFour,
@@ -8,6 +8,7 @@ import {
   Newspaper, TrendUp, Article,
   type Icon as PhosphorIcon,
 } from "@phosphor-icons/react"
+import { ShotsGlyph } from "@/components/icons/ShotsGlyph"
 
 /**
  * Single source of truth for the authenticated app navigation.
@@ -78,7 +79,7 @@ export const PROFILE_FLYOUT: FlyoutLink[] = [
 
 export const NAV_ITEMS: NavItem[] = [
   { key: "feed",        label: "Home",        path: "/community",     icon: House,           mobile: true, flyout: HOME_FLYOUT },
-  { key: "shots",       label: "Shots",       path: "/shots",         icon: FilmReel,       mobile: true },
+  { key: "shots",       label: "Shots",       path: "/shots",         icon: ShotsGlyph,       mobile: true },
   { key: "anime",       label: "Anime",       path: "/bestanimelist", icon: Television,     mobile: true, flyout: ANIME_FLYOUT },
   { key: "discover",    label: "Discover",    path: "/ai-discover",   icon: Sparkle },
   { key: "clubs",       label: "Dens",        path: "/clubs",         icon: UsersThree },
@@ -100,6 +101,6 @@ export const MOBILE_ITEMS: NavItem[] = [
   { key: "feed",    label: "Home",     path: "/community", icon: House,           mobile: true },
   { key: "search",  label: "Search",   path: "/search",    icon: MagnifyingGlass, mobile: true },
   { key: "chat",    label: "Messages", path: "/chat",      icon: ChatCircleText,  badgeKey: "unreadDms", mobile: true },
-  { key: "shots",   label: "Shots",    path: "/shots",     icon: FilmReel,        mobile: true },
+  { key: "shots",   label: "Shots",    path: "/shots",     icon: ShotsGlyph,        mobile: true },
   { key: "profile", label: "Profile",  path: "profile",    icon: User,            mobile: true },
 ]

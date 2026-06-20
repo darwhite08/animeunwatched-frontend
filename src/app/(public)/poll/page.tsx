@@ -597,7 +597,7 @@ export default function PollsPage() {
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: i * 0.04 }}
-                  className="px-3 py-1.5 rounded-full bg-surface border border-border text-[9px] font-bold text-muted hover:text-white hover:border-white/25 cursor-pointer transition-all"
+                  className="px-3 py-1.5 rounded-full bg-surface border border-border text-[9px] font-bold text-muted hover:text-foreground hover:border-white/25 cursor-pointer transition-all"
                 >
                   {tag}
                 </motion.span>

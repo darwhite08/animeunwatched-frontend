@@ -138,7 +138,7 @@ export default function EpisodeTracker({ totalEpisodes, currentEpisode: initialE
       {current > 0 && !isCompleted && (
         <button
           onClick={markAll}
-          className="w-full text-center text-[10px] font-black uppercase tracking-widest text-subtle hover:text-white transition-colors pt-1"
+          className="w-full text-center text-[10px] font-black uppercase tracking-widest text-subtle hover:text-foreground transition-colors pt-1"
         >
           Mark all complete
         </button>

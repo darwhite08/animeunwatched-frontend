@@ -118,7 +118,7 @@ function RankedRow({ anime, rank, index }: { anime: Anime; rank: number; index: 
 
       {/* Info */}
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-black uppercase italic tracking-tight text-foreground truncate group-hover:text-white transition-colors">
+        <p className="text-sm font-black uppercase italic tracking-tight text-foreground truncate group-hover:text-foreground transition-colors">
           {anime.title}
         </p>
         <p className="text-[10px] text-subtle font-bold mt-0.5">{anime.studio}</p>
@@ -226,7 +226,7 @@ export default function BestOfYearPage({ params }: { params: Promise<{ year: str
             </p>
             <p className="text-subtle text-xs">
               Try{" "}
-              <Link href={`/best/${year - 1}`} className="text-accent-bright hover:text-white underline transition-colors">
+              <Link href={`/best/${year - 1}`} className="text-accent-bright hover:text-foreground underline transition-colors">
                 {year - 1}
               </Link>{" "}
               instead.
@@ -277,7 +277,7 @@ export default function BestOfYearPage({ params }: { params: Promise<{ year: str
           </Link>
           <Link
             href="/bestanimelist"
-            className="text-[10px] font-black uppercase tracking-[0.3em] text-accent-bright hover:text-white transition-colors"
+            className="text-[10px] font-black uppercase tracking-[0.3em] text-accent-bright hover:text-foreground transition-colors"
           >
             All Years
           </Link>

@@ -55,7 +55,7 @@ export default function FriendsActivityCard() {
             Friends Watching
           </h4>
         </div>
-        <Link href="/following" className="text-[9px] font-black uppercase tracking-widest text-accent-bright/60 hover:text-white transition-colors flex items-center gap-1">
+        <Link href="/following" className="text-[9px] font-black uppercase tracking-widest text-accent-bright/60 hover:text-foreground transition-colors flex items-center gap-1">
           All <ChevronRight size={10} />
         </Link>
       </div>

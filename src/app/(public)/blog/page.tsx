@@ -214,7 +214,7 @@ function BlogCard({ blog, index }: { blog: Blog; index: number }) {
 
         {/* Body */}
         <div className="p-4 sm:p-5 space-y-3">
-          <h2 className="text-[15px] sm:text-sm font-black uppercase italic tracking-tight text-foreground leading-snug group-hover:text-white transition-colors line-clamp-2">
+          <h2 className="text-[15px] sm:text-sm font-black uppercase italic tracking-tight text-foreground leading-snug group-hover:text-foreground transition-colors line-clamp-2">
             {blog.title}
           </h2>
           <p className="text-[13px] sm:text-xs text-muted leading-relaxed line-clamp-2">{blog.excerpt}</p>
@@ -436,7 +436,7 @@ export default function BlogListingPage() {
                       </div>
                     )}
                     <div className="flex-1 min-w-0">
-                      <p className="text-xs font-bold text-foreground truncate group-hover:text-white transition-colors flex items-center gap-1">
+                      <p className="text-xs font-bold text-foreground truncate group-hover:text-foreground transition-colors flex items-center gap-1">
                         <span className="truncate">{author.name}</span>
                         {author.verified && <VerifiedBadge kind={author.verified} size={12} />}
                       </p>
@@ -465,7 +465,7 @@ export default function BlogListingPage() {
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: i * 0.03 }}
-                  className="inline-flex min-h-11 items-center px-3.5 rounded-full bg-surface-2 border border-border text-[11px] font-bold text-muted hover:text-white hover:border-white/30 cursor-pointer transition-colors active:scale-95"
+                  className="inline-flex min-h-11 items-center px-3.5 rounded-full bg-surface-2 border border-border text-[11px] font-bold text-muted hover:text-foreground hover:border-white/30 cursor-pointer transition-colors active:scale-95"
                 >
                   #{tag}
                 </motion.span>
@@ -485,12 +485,12 @@ export default function BlogListingPage() {
               <PenSquare size={16} className="text-accent-bright" />
             </div>
             <div>
-              <p className="text-sm font-bold text-foreground group-hover:text-white transition-colors">
+              <p className="text-sm font-bold text-foreground group-hover:text-foreground transition-colors">
                 Write for The Chronicle
               </p>
               <p className="text-[10px] text-subtle mt-0.5">Share your takes with the community</p>
             </div>
-            <ChevronRight size={14} className="text-accent-bright/40 group-hover:text-white ml-auto transition-all group-hover:translate-x-0.5" />
+            <ChevronRight size={14} className="text-accent-bright/40 group-hover:text-foreground ml-auto transition-all group-hover:translate-x-0.5" />
           </Link>
         </aside>
       </div>

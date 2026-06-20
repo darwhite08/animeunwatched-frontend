@@ -185,7 +185,7 @@ function CommentCard({ comment, index }: { comment: Comment; index: number }) {
         {hasReplies && (
           <button
             onClick={() => setShowReplies(s => !s)}
-            className="flex items-center gap-1 text-[10px] font-bold text-subtle hover:text-white transition-colors"
+            className="flex items-center gap-1 text-[10px] font-bold text-subtle hover:text-foreground transition-colors"
           >
             {showReplies ? <ChevronUp size={10} /> : <ChevronDown size={10} />}
             {comment.replies!.length} {comment.replies!.length === 1 ? "reply" : "replies"}
@@ -341,7 +341,7 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
         <p className="text-[10px] font-black uppercase tracking-[0.3em] text-rose-400">Post unavailable</p>
         <h1 className="text-2xl font-black tracking-tighter text-foreground">We couldn&apos;t load this post.</h1>
         <p className="text-sm text-muted">It may have been deleted or hidden by its author.</p>
-        <Link href="/community" className="inline-flex items-center gap-1.5 text-[11px] font-black uppercase tracking-widest text-accent-bright hover:text-white transition-colors">
+        <Link href="/community" className="inline-flex items-center gap-1.5 text-[11px] font-black uppercase tracking-widest text-accent-bright hover:text-foreground transition-colors">
           ← Back to community
         </Link>
       </div>
@@ -414,7 +414,7 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
               {post.tags.length > 0 && (
                 <div className="flex flex-wrap gap-1.5">
                   {post.tags.map(tag => (
-                    <span key={tag} className="text-[9px] font-bold text-accent-bright/60 hover:text-white cursor-pointer transition-colors">
+                    <span key={tag} className="text-[9px] font-bold text-accent-bright/60 hover:text-foreground cursor-pointer transition-colors">
                       #{tag}
                     </span>
                   ))}

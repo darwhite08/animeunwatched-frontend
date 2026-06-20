@@ -61,7 +61,7 @@ export function ReadCard({
       {/* CONTENT */}
       <div className="p-4 sm:p-6 lg:p-8 space-y-4 sm:space-y-6 relative">
         <div className="space-y-1">
-          <h3 className="text-base sm:text-lg lg:text-xl font-black text-foreground tracking-tight leading-tight line-clamp-2 group-hover:text-white transition-colors">{title}</h3>
+          <h3 className="text-base sm:text-lg lg:text-xl font-black text-foreground tracking-tight leading-tight line-clamp-2 group-hover:text-foreground transition-colors">{title}</h3>
           {author && <p className="text-[10px] sm:text-[11px] font-bold text-subtle uppercase tracking-[0.2em] truncate">{author}</p>}
         </div>
 

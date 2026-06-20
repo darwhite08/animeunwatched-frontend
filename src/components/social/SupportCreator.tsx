@@ -69,9 +69,9 @@ function SupportModal({ data, onClose }: { data: CreatorMon; onClose: () => void
 
         <div className="mb-5 flex gap-1 rounded-full border border-border p-1">
           {data.tiers.length > 0 && (
-            <button onClick={() => setTab("subscribe")} className={`flex-1 rounded-full py-2 text-[11px] font-black uppercase tracking-widest ${tab === "subscribe" ? "bg-accent text-white" : "text-muted"}`}>Subscribe</button>
+            <button onClick={() => setTab("subscribe")} className={`flex-1 rounded-full py-2 text-[11px] font-black uppercase tracking-widest ${tab === "subscribe" ? "bg-accent text-foreground" : "text-muted"}`}>Subscribe</button>
           )}
-          <button onClick={() => setTab("tip")} className={`flex-1 rounded-full py-2 text-[11px] font-black uppercase tracking-widest ${tab === "tip" ? "bg-accent text-white" : "text-muted"}`}>Tip</button>
+          <button onClick={() => setTab("tip")} className={`flex-1 rounded-full py-2 text-[11px] font-black uppercase tracking-widest ${tab === "tip" ? "bg-accent text-foreground" : "text-muted"}`}>Tip</button>
         </div>
 
         {tab === "subscribe" ? (
@@ -88,7 +88,7 @@ function SupportModal({ data, onClose }: { data: CreatorMon; onClose: () => void
                     <button
                       onClick={() => !mine && subscribe(t.id)}
                       disabled={!!busy || mine}
-                      className={`flex items-center gap-1.5 rounded-full px-4 py-2 text-[11px] font-black uppercase tracking-widest ${mine ? "bg-emerald-500/15 text-emerald-400" : "bg-accent text-white hover:opacity-90"} disabled:opacity-60`}
+                      className={`flex items-center gap-1.5 rounded-full px-4 py-2 text-[11px] font-black uppercase tracking-widest ${mine ? "bg-emerald-500/15 text-emerald-400" : "bg-accent text-foreground hover:opacity-90"} disabled:opacity-60`}
                     >
                       {busy === t.id ? <Loader2 size={13} className="animate-spin" /> : mine ? <Check size={13} /> : <Sparkles size={13} />}
                       {mine ? "Member" : "Subscribe"}
@@ -112,7 +112,7 @@ function SupportModal({ data, onClose }: { data: CreatorMon; onClose: () => void
                 <button key={c} onClick={() => setTipCents(c)} className={`rounded-xl border py-3 text-sm font-black ${tipCents === c ? "border-accent bg-accent-soft text-accent-bright" : "border-border text-muted"}`}>{usd(c)}</button>
               ))}
             </div>
-            <button onClick={tip} disabled={!!busy} className="flex w-full items-center justify-center gap-2 rounded-full bg-accent py-3 text-[12px] font-black uppercase tracking-widest text-white hover:opacity-90 disabled:opacity-60">
+            <button onClick={tip} disabled={!!busy} className="flex w-full items-center justify-center gap-2 rounded-full bg-accent py-3 text-[12px] font-black uppercase tracking-widest text-foreground hover:opacity-90 disabled:opacity-60">
               {busy === "tip" ? <Loader2 size={14} className="animate-spin" /> : <Heart size={14} />} Tip {usd(tipCents)}
             </button>
           </div>

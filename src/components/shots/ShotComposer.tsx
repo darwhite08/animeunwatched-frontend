@@ -134,7 +134,7 @@ export function ShotComposer({ onClose, onPosted }: { onClose: () => void; onPos
             {!previewUrl ? (
               <button
                 onClick={() => fileRef.current?.click()}
-                className="mx-auto flex aspect-[9/16] w-full max-w-[280px] flex-col items-center justify-center gap-3 rounded-2xl border border-dashed border-border bg-surface-2 text-subtle transition-colors hover:border-white/50 hover:text-white"
+                className="mx-auto flex aspect-[9/16] w-full max-w-[280px] flex-col items-center justify-center gap-3 rounded-2xl border border-dashed border-border bg-surface-2 text-subtle transition-colors hover:border-white/50 hover:text-foreground"
               >
                 <Film size={30} />
                 <span className="text-[12px] font-black uppercase tracking-widest">Choose a video</span>
@@ -143,12 +143,12 @@ export function ShotComposer({ onClose, onPosted }: { onClose: () => void; onPos
             ) : (
               <div className="space-y-4">
                 {/* Media preview */}
-                <div className="relative mx-auto aspect-[9/16] max-h-[58vh] w-auto overflow-hidden rounded-2xl border border-border bg-black sm:max-h-[48vh]">
+                <div className="relative mx-auto aspect-[9/16] max-h-[58vh] w-auto overflow-hidden rounded-2xl border border-border bg-background sm:max-h-[48vh]">
                   {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
                   <video ref={videoRef} src={previewUrl} onLoadedMetadata={onMeta} className="h-full w-full object-contain" controls playsInline muted />
                   <button
                     onClick={() => fileRef.current?.click()}
-                    className="absolute right-2 top-2 rounded-full bg-black/70 px-3 py-1.5 text-[10px] font-black uppercase tracking-widest text-white transition-transform active:scale-95"
+                    className="absolute right-2 top-2 rounded-full bg-black/70 px-3 py-1.5 text-[10px] font-black uppercase tracking-widest text-foreground transition-transform active:scale-95"
                   >
                     Change
                   </button>
@@ -156,7 +156,7 @@ export function ShotComposer({ onClose, onPosted }: { onClose: () => void; onPos
 
                 {/* Instagram-style caption row: thumbnail + caption */}
                 <div className="flex items-start gap-3">
-                  <div className="h-14 w-14 shrink-0 overflow-hidden rounded-lg border border-border bg-black">
+                  <div className="h-14 w-14 shrink-0 overflow-hidden rounded-lg border border-border bg-background">
                     {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
                     <video src={previewUrl} className="h-full w-full object-cover" muted playsInline />
                   </div>

@@ -123,7 +123,7 @@ function RealPostCard({ post, index }: { post: Post; index: number }) {
           </Link>
           <div>
             <Link href={`/u/${post.author?.username ?? ""}`}
-              className="text-sm font-black text-foreground hover:text-white transition-colors">
+              className="text-sm font-black text-foreground hover:text-foreground transition-colors">
               {authorName}
             </Link>
             <p className="text-[10px] text-subtle mt-0.5"><LiveTime iso={post.createdAt} /></p>
@@ -164,7 +164,7 @@ function RealPostCard({ post, index }: { post: Post; index: number }) {
                   /* eslint-disable-next-line @next/next/no-img-element */
                   <img key={i} src={u.avatarUrl} alt="" className="h-5 w-5 rounded-full object-cover ring-2 ring-background" />
                 ) : (
-                  <span key={i} className="h-5 w-5 rounded-full ring-2 ring-background bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-[8px] font-black text-white">
+                  <span key={i} className="h-5 w-5 rounded-full ring-2 ring-background bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-[8px] font-black text-foreground">
                     {u.displayName[0]?.toUpperCase()}
                   </span>
                 ),
@@ -192,7 +192,7 @@ function RealPostCard({ post, index }: { post: Post; index: number }) {
         </span>
         <Link
           href={`/posts/${post.id}#comments`}
-          className="flex items-center gap-1.5 text-xs font-bold text-subtle hover:text-white transition-colors"
+          className="flex items-center gap-1.5 text-xs font-bold text-subtle hover:text-foreground transition-colors"
         >
           <MessageSquare size={14} />
           {post._count?.comments ?? 0}
@@ -388,7 +388,7 @@ export default function FeedPage() {
             <div className="flex items-center justify-between border-t border-border pt-3">
               <button
                 onClick={() => push("Emoji picker coming soon!", "info")}
-                className="p-1.5 text-subtle hover:text-white transition-colors"
+                className="p-1.5 text-subtle hover:text-foreground transition-colors"
               >
                 <Smile size={15} />
               </button>
@@ -511,7 +511,7 @@ export default function FeedPage() {
                   </Link>
                   <div className="flex-1 min-w-0">
                     <Link href={`/u/${s.username}`}>
-                      <p className="text-xs font-black text-foreground hover:text-white transition-colors truncate">
+                      <p className="text-xs font-black text-foreground hover:text-foreground transition-colors truncate">
                         @{s.username}
                       </p>
                     </Link>
@@ -537,7 +537,7 @@ export default function FeedPage() {
             </div>
             <Link
               href="/users"
-              className="flex items-center justify-center gap-1.5 pt-2 text-[10px] font-black uppercase tracking-widest text-accent-bright hover:text-white transition-colors border-t border-border"
+              className="flex items-center justify-center gap-1.5 pt-2 text-[10px] font-black uppercase tracking-widest text-accent-bright hover:text-foreground transition-colors border-t border-border"
             >
               See all recommendations <ChevronRight size={11} />
             </Link>
@@ -560,7 +560,7 @@ export default function FeedPage() {
                       {i + 1}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-xs font-black text-muted group-hover:text-white transition-colors truncate">{item.title}</p>
+                      <p className="text-xs font-black text-muted group-hover:text-foreground transition-colors truncate">{item.title}</p>
                       <div className="flex items-center gap-1 mt-0.5">
                         <Star size={8} className="text-accent-bright" fill="currentColor" />
                         <span className="text-[9px] text-accent-bright/70 font-bold">{(item.score ?? 0).toFixed(1)}</span>
@@ -581,7 +581,7 @@ export default function FeedPage() {
               <Users size={16} className="text-accent-bright" />
             </div>
             <div className="flex-1">
-              <p className="text-sm font-bold text-foreground group-hover:text-white transition-colors">
+              <p className="text-sm font-bold text-foreground group-hover:text-foreground transition-colors">
                 Community
               </p>
               <p className="text-[10px] text-subtle mt-0.5">
@@ -590,7 +590,7 @@ export default function FeedPage() {
             </div>
             <ChevronRight
               size={14}
-              className="text-subtle group-hover:text-white group-hover:translate-x-0.5 transition-all"
+              className="text-subtle group-hover:text-foreground group-hover:translate-x-0.5 transition-all"
             />
           </Link>
         </div>

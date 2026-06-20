@@ -209,7 +209,7 @@ function PostCard({ post, index }: { post: TrendingPost; index: number }) {
         </span>
         <Link
           href={`/posts/${post.id}#comments`}
-          className="flex items-center gap-1.5 text-xs font-bold text-subtle hover:text-white transition-colors"
+          className="flex items-center gap-1.5 text-xs font-bold text-subtle hover:text-foreground transition-colors"
         >
           <MessageSquare size={13} />
           {post.comments}
@@ -287,7 +287,7 @@ export default function CommunityTrendingPage() {
             </div>
             <Link
               href="/community/feed"
-              className="flex items-center gap-1 text-[10px] font-black uppercase tracking-widest text-accent-bright hover:text-white transition-colors"
+              className="flex items-center gap-1 text-[10px] font-black uppercase tracking-widest text-accent-bright hover:text-foreground transition-colors"
             >
               View All <ArrowUpRight size={11} />
             </Link>
@@ -314,7 +314,7 @@ export default function CommunityTrendingPage() {
             </div>
             <Link
               href="/community/anime"
-              className="flex items-center gap-1 text-[10px] font-black uppercase tracking-widest text-accent-bright hover:text-white transition-colors"
+              className="flex items-center gap-1 text-[10px] font-black uppercase tracking-widest text-accent-bright hover:text-foreground transition-colors"
             >
               View All <ArrowUpRight size={11} />
             </Link>
@@ -370,7 +370,7 @@ export default function CommunityTrendingPage() {
             </div>
             <Link
               href="/poll"
-              className="flex items-center gap-1 text-[10px] font-black uppercase tracking-widest text-accent-bright hover:text-white transition-colors"
+              className="flex items-center gap-1 text-[10px] font-black uppercase tracking-widest text-accent-bright hover:text-foreground transition-colors"
             >
               View All <ArrowUpRight size={11} />
             </Link>
@@ -405,7 +405,7 @@ export default function CommunityTrendingPage() {
                 </div>
                 <Link
                   href="/poll"
-                  className="block text-center text-[10px] font-black uppercase tracking-widest text-accent-bright/60 hover:text-white transition-colors"
+                  className="block text-center text-[10px] font-black uppercase tracking-widest text-accent-bright/60 hover:text-foreground transition-colors"
                 >
                   Vote →
                 </Link>

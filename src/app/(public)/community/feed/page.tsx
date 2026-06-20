@@ -102,7 +102,7 @@ function PostCard({
           {post.tags.map((tag) => (
             <span
               key={tag}
-              className="text-[9px] font-bold text-accent-bright/60 hover:text-white cursor-pointer transition-colors"
+              className="text-[9px] font-bold text-accent-bright/60 hover:text-foreground cursor-pointer transition-colors"
             >
               #{tag}
             </span>
@@ -118,7 +118,7 @@ function PostCard({
         </div>
         <Link
           href={`/posts/${post.id}#comments`}
-          className="flex items-center gap-1.5 text-xs font-bold text-subtle hover:text-white transition-colors"
+          className="flex items-center gap-1.5 text-xs font-bold text-subtle hover:text-foreground transition-colors"
         >
           <MessageSquare size={14} />
           {post.comments}

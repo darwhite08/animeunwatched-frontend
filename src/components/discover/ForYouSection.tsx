@@ -38,7 +38,7 @@ export function ForYouSection({ limit = 12 }: { limit?: number }) {
         </div>
         <Link
           href="/bestanimelist"
-          className="hidden sm:inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-accent-bright/80 hover:text-white transition-colors"
+          className="hidden sm:inline-flex items-center gap-1 text-[10px] font-bold uppercase tracking-widest text-accent-bright/80 hover:text-foreground transition-colors"
         >
           Browse all <ArrowRight size={11} />
         </Link>

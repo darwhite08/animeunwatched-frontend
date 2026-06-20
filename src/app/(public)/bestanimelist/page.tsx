@@ -300,7 +300,7 @@ export default function BestAnimeListPage() {
         {isError && !isLoading && (
           <div className="py-32 text-center">
             <p className="text-subtle font-black uppercase tracking-widest text-xs mb-4">Failed to load archives</p>
-            <button onClick={handleReset} className="text-xs text-accent-bright hover:text-white font-black uppercase tracking-widest">
+            <button onClick={handleReset} className="text-xs text-accent-bright hover:text-foreground font-black uppercase tracking-widest">
               Try again
             </button>
           </div>
@@ -312,7 +312,7 @@ export default function BestAnimeListPage() {
             <p className="text-[10px] font-black text-subtle uppercase tracking-widest">
               {filtered.length} result{filtered.length !== 1 ? "s" : ""}
             </p>
-            <button onClick={handleReset} className="text-[10px] font-black text-accent-bright hover:text-white uppercase tracking-widest">
+            <button onClick={handleReset} className="text-[10px] font-black text-accent-bright hover:text-foreground uppercase tracking-widest">
               Clear all
             </button>
           </motion.div>
@@ -334,7 +334,7 @@ export default function BestAnimeListPage() {
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
             className="py-32 text-center border border-dashed border-border rounded-[3rem]">
             <p className="text-subtle font-black uppercase tracking-widest text-xs">No archives match your query</p>
-            <button onClick={handleReset} className="mt-6 text-xs text-accent-bright hover:text-white font-black uppercase tracking-widest">Clear filters</button>
+            <button onClick={handleReset} className="mt-6 text-xs text-accent-bright hover:text-foreground font-black uppercase tracking-widest">Clear filters</button>
           </motion.div>
         )}
 

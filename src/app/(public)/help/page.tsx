@@ -251,7 +251,7 @@ export default function HelpPage() {
                 <p className="text-subtle text-sm">No questions match &quot;{query}&quot;</p>
                 <button
                   onClick={() => setQuery("")}
-                  className="mt-4 text-accent-bright text-xs font-black uppercase tracking-widest hover:text-white transition-colors"
+                  className="mt-4 text-accent-bright text-xs font-black uppercase tracking-widest hover:text-foreground transition-colors"
                 >
                   Clear search
                 </button>
@@ -338,7 +338,7 @@ export default function HelpPage() {
                     href="mailto:aws@kaiveron.com"
                     className="flex items-center gap-3 px-4 py-3.5 rounded-xl border border-border bg-surface hover:border-white/30 hover:bg-surface transition-all group"
                   >
-                    <Mail size={16} className="text-muted group-hover:text-white transition-colors" />
+                    <Mail size={16} className="text-muted group-hover:text-foreground transition-colors" />
                     <div>
                       <p className="text-xs font-black text-muted group-hover:text-foreground transition-colors">Email Support</p>
                       <p className="text-[10px] text-subtle">aws@kaiveron.com</p>

@@ -89,7 +89,7 @@ export default function TopAnimePage() {
                   <span className="text-[10px] text-subtle">{filtered[0].genres.join(" · ")}</span>
                 </div>
               </div>
-              <ChevronRight size={20} className="text-subtle group-hover:text-white group-hover:translate-x-1 transition-all shrink-0" />
+              <ChevronRight size={20} className="text-subtle group-hover:text-foreground group-hover:translate-x-1 transition-all shrink-0" />
             </div>
           </motion.div>
         )}

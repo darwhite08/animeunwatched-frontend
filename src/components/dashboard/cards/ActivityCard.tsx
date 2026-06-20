@@ -66,7 +66,7 @@ export const ActivityCard = () => {
         <h4 className="text-xs font-black uppercase tracking-[0.28em] text-subtle flex items-center gap-2">
           <Clock size={12} className="text-subtle" /> Recent Journey
         </h4>
-        <Link href="/watchlist" className="text-[9px] font-black uppercase tracking-widest text-accent-bright/60 hover:text-white transition-colors flex items-center gap-1">
+        <Link href="/watchlist" className="text-[9px] font-black uppercase tracking-widest text-accent-bright/60 hover:text-foreground transition-colors flex items-center gap-1">
           All <ArrowRight size={10} />
         </Link>
       </div>

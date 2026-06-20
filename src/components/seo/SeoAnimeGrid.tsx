@@ -18,7 +18,7 @@ export function SeoAnimeGrid({ items }: { items: SeoAnime[] }) {
           <li key={a.malId} className="list-none">
             <Link
               href={`/anime/${a.malId}`}
-              className="group block overflow-hidden rounded-xl border border-border bg-white/[0.02] transition hover:border-amber-500/40"
+              className="group block overflow-hidden rounded-xl border border-border bg-white/[0.02] transition hover:border-accent/40"
             >
               <div className="relative aspect-[2/3] overflow-hidden bg-white/[0.03]">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -28,17 +28,17 @@ export function SeoAnimeGrid({ items }: { items: SeoAnime[] }) {
                   loading={i < 5 ? "eager" : "lazy"}
                   className="h-full w-full object-cover transition duration-300 group-hover:scale-105"
                 />
-                <span className="absolute left-1.5 top-1.5 rounded-md bg-black/70 px-1.5 py-0.5 text-[11px] font-bold text-amber-300">
+                <span className="absolute left-1.5 top-1.5 rounded-md bg-black/70 px-1.5 py-0.5 text-[11px] font-bold text-accent-bright">
                   #{i + 1}
                 </span>
                 {a.score != null && (
-                  <span className="absolute right-1.5 top-1.5 rounded-md bg-black/70 px-1.5 py-0.5 text-[11px] font-bold text-amber-200">
+                  <span className="absolute right-1.5 top-1.5 rounded-md bg-black/70 px-1.5 py-0.5 text-[11px] font-bold text-accent-bright">
                     ★ {a.score.toFixed(1)}
                   </span>
                 )}
               </div>
               <div className="p-2">
-                <h3 className="line-clamp-2 text-sm font-semibold text-foreground group-hover:text-amber-300">
+                <h3 className="line-clamp-2 text-sm font-semibold text-foreground group-hover:text-accent-bright">
                   {title}
                 </h3>
                 <p className="mt-0.5 text-xs text-muted">

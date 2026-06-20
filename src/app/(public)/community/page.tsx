@@ -287,7 +287,7 @@ function PostCard({ post }: { post: Post }) {
             </Link>
             <div>
               <Link href={`/u/${post.author?.username ?? ""}`} className="rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60">
-                <p className="flex items-center gap-1.5 text-[15px] font-semibold text-foreground hover:text-white transition-colors leading-tight">
+                <p className="flex items-center gap-1.5 text-[15px] font-semibold text-foreground hover:text-foreground transition-colors leading-tight">
                   {authorName}
                   <VerifiedBadge kind={(post.author as { verifiedKind?: "USER" | "CREATOR" | "STUDIO" | null })?.verifiedKind} size={15} />
                 </p>
@@ -350,7 +350,7 @@ function PostCard({ post }: { post: Post }) {
                     /* eslint-disable-next-line @next/next/no-img-element */
                     <img key={i} src={u.avatarUrl} alt="" referrerPolicy="no-referrer" className="h-5 w-5 rounded-full object-cover ring-2 ring-background" />
                   ) : (
-                    <span key={i} className="h-5 w-5 rounded-full ring-2 ring-background bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-[8px] font-black text-white">
+                    <span key={i} className="h-5 w-5 rounded-full ring-2 ring-background bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-[8px] font-black text-foreground">
                       {u.displayName[0]?.toUpperCase()}
                     </span>
                   ),
@@ -388,7 +388,7 @@ function PostCard({ post }: { post: Post }) {
             className={`flex items-center gap-2 min-h-11 px-3 rounded-xl text-sm font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 ${
               showComments
                 ? "text-accent-bright bg-accent/15"
-                : "text-muted hover:text-white hover:bg-white/10"
+                : "text-muted hover:text-foreground hover:bg-white/10"
             }`}>
             <MessageSquare size={16} />
             {commentCount > 0 && <span className="tabular-nums">{commentCount}</span>}
@@ -768,13 +768,13 @@ export default function CommunityPage() {
                         title="Mention a user (@)"
                         aria-label="Mention a user"
                         onClick={() => insertAtCursor("@")}
-                        className="flex h-10 w-10 items-center justify-center rounded-lg text-muted hover:text-white hover:bg-white/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60"><AtSign size={15} /></button>
+                        className="flex h-10 w-10 items-center justify-center rounded-lg text-muted hover:text-foreground hover:bg-white/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60"><AtSign size={15} /></button>
                       <button
                         type="button"
                         title="Add a hashtag (#)"
                         aria-label="Add a hashtag"
                         onClick={() => insertAtCursor("#")}
-                        className="flex h-10 w-10 items-center justify-center rounded-lg text-muted hover:text-white hover:bg-white/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60"><Hash size={15} /></button>
+                        className="flex h-10 w-10 items-center justify-center rounded-lg text-muted hover:text-foreground hover:bg-white/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60"><Hash size={15} /></button>
                       <input
                         ref={fileInputRef}
                         type="file"
@@ -797,14 +797,14 @@ export default function CommunityPage() {
                             ? "text-accent-bright animate-pulse"
                             : attachedImages.length > 0
                             ? "text-emerald-400"
-                            : "text-subtle hover:text-white"
+                            : "text-subtle hover:text-foreground"
                         }`}
                       ><ImageIcon size={15} /></button>
                       {/* Spoiler toggle */}
                       <button onClick={() => setIsSpoiler(s => !s)}
                         title="Mark as spoiler"
                         className={`flex items-center gap-1 px-2 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest transition-all ${
-                          isSpoiler ? "bg-accent/20 text-accent-bright border border-accent/30" : "text-subtle hover:text-white hover:bg-white/10"
+                          isSpoiler ? "bg-accent/20 text-accent-bright border border-accent/30" : "text-subtle hover:text-foreground hover:bg-white/10"
                         }`}>
                         ⚠️ Spoiler
                       </button>
@@ -907,7 +907,7 @@ export default function CommunityPage() {
                 <Vote size={14} className="text-accent-bright" />
                 <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-muted">Active Polls</h3>
               </div>
-              <Link href="/poll" className="text-[10px] font-bold text-accent-bright/80 hover:text-white transition-colors">
+              <Link href="/poll" className="text-[10px] font-bold text-accent-bright/80 hover:text-foreground transition-colors">
                 All →
               </Link>
             </div>
@@ -943,7 +943,7 @@ export default function CommunityPage() {
               <Users size={16} className="text-accent-bright" />
             </div>
             <div>
-              <p className="text-sm font-bold text-foreground group-hover:text-white transition-colors">Creator Studio</p>
+              <p className="text-sm font-bold text-foreground group-hover:text-foreground transition-colors">Creator Studio</p>
               <p className="text-[10px] text-subtle mt-0.5">Publish blogs, polls, and feeds</p>
             </div>
           </Link>

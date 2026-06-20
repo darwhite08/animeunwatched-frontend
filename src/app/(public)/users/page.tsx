@@ -98,7 +98,7 @@ export default function UsersPage() {
                   </span>
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="font-black text-foreground group-hover:text-white transition-colors">{user.displayName}</p>
+                  <p className="font-black text-foreground group-hover:text-foreground transition-colors">{user.displayName}</p>
                   <p className="text-xs text-subtle">@{user.username} · Lv.{user.level} {user.title}</p>
                 </div>
                 <div className="hidden sm:flex items-center gap-6 text-xs text-subtle shrink-0">

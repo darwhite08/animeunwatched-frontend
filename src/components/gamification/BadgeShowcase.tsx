@@ -82,7 +82,7 @@ const RARITY_CONFIG = {
     color: "text-accent-bright",
     borderEarned: "border-accent/60",
     borderLocked: "border-amber-800/30",
-    glow: "hover:shadow-amber-500/20",
+    glow: "hover:shadow-accent/20",
     bg: "bg-accent/10",
     bar: "bg-accent-bright",
     pill: "bg-amber-900/60 text-accent-bright",

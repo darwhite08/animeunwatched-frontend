@@ -56,7 +56,7 @@ export default function TopAnimeCard() {
   if (isLoading) {
     return (
       <div className="p-8 rounded-[2.5rem] border border-border bg-surface relative overflow-hidden h-48 flex items-center justify-center">
-        <div className="w-8 h-8 rounded-full border-2 border-accent/30 border-t-amber-500 animate-spin" />
+        <div className="w-8 h-8 rounded-full border-2 border-accent/30 border-t-accent animate-spin" />
       </div>
     )
   }
@@ -76,7 +76,7 @@ export default function TopAnimeCard() {
         </div>
         <Link
           href="/rate"
-          className="flex items-center gap-1 text-[9px] font-black uppercase tracking-widest text-accent-bright/60 hover:text-white transition-colors"
+          className="flex items-center gap-1 text-[9px] font-black uppercase tracking-widest text-accent-bright/60 hover:text-foreground transition-colors"
         >
           Rate Another <ChevronRight size={10} />
         </Link>
@@ -87,7 +87,7 @@ export default function TopAnimeCard() {
         <div className="py-6 text-center">
           <Star size={20} className="mx-auto mb-2 text-subtle" fill="currentColor" />
           <p className="text-[10px] text-subtle font-black uppercase tracking-widest">No rated anime yet</p>
-          <Link href="/bestanimelist" className="mt-2 block text-[9px] text-accent-bright hover:text-white font-black uppercase tracking-widest">
+          <Link href="/bestanimelist" className="mt-2 block text-[9px] text-accent-bright hover:text-foreground font-black uppercase tracking-widest">
             Browse & Rate →
           </Link>
         </div>

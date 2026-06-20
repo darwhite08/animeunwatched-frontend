@@ -40,7 +40,7 @@ export default function RecommendationCard() {
         </div>
         <Link
           href="/ai-discover"
-          className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-accent-bright hover:text-white transition-colors"
+          className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-accent-bright hover:text-foreground transition-colors"
         >
           Discover All <ArrowRight size={11} />
         </Link>

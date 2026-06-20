@@ -50,7 +50,7 @@ export function Avatar({ src, name, size = 32, className = "", fallbackClassName
   return (
     <span
       aria-label={name ?? "avatar"}
-      className={`${base} bg-gradient-to-tr from-indigo-500 to-purple-500 font-bold text-white ${fallbackClassName}`}
+      className={`${base} bg-gradient-to-tr from-indigo-500 to-purple-500 font-bold text-foreground ${fallbackClassName}`}
       style={style}
     >
       {initial}

@@ -81,10 +81,10 @@ export default function MangaPage() {
                 <BookOpen size={14} className="text-violet-400" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-black text-foreground truncate group-hover:text-white transition-colors">{m.title}</p>
+                <p className="text-sm font-black text-foreground truncate group-hover:text-foreground transition-colors">{m.title}</p>
                 <p className="text-[9px] text-subtle truncate">{m.author} · {m.genre} · {m.year}</p>
               </div>
-              <ExternalLink size={12} className="text-subtle group-hover:text-white transition-colors shrink-0" />
+              <ExternalLink size={12} className="text-subtle group-hover:text-foreground transition-colors shrink-0" />
             </motion.a>
           ))}
         </div>

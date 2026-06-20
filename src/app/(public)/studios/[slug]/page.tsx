@@ -110,9 +110,9 @@ export default async function StudioPage({
       <JsonLd data={orgJsonLd} />
 
       <nav className="mb-4 text-xs text-muted" aria-label="Breadcrumb">
-        <Link href="/" className="hover:text-amber-300">Home</Link>
+        <Link href="/" className="hover:text-accent-bright">Home</Link>
         <span className="mx-1.5">/</span>
-        <Link href="/studios" className="hover:text-amber-300">Studios</Link>
+        <Link href="/studios" className="hover:text-accent-bright">Studios</Link>
         <span className="mx-1.5">/</span>
         <span className="text-foreground">{name}</span>
       </nav>
@@ -127,13 +127,13 @@ export default async function StudioPage({
           {top.slice(0, 3).map((a, i) => (
             <span key={a.malId}>
               {i > 0 ? ", " : ""}
-              <Link href={`/anime/${a.malId}`} className="text-amber-400 hover:text-amber-300">
+              <Link href={`/anime/${a.malId}`} className="text-accent-bright hover:text-accent-bright">
                 {a.titleEnglish ?? a.title}
               </Link>
             </span>
           ))}
           . Track what you&apos;ve watched and rate each one —{" "}
-          <Link href="/register" className="text-amber-400 underline hover:text-amber-300">
+          <Link href="/register" className="text-accent-bright underline hover:text-accent-bright">
             free forever
           </Link>.
         </p>
@@ -148,7 +148,7 @@ export default async function StudioPage({
             <Link
               key={n}
               href={`/studios/${toSlug(n)}`}
-              className="rounded-full border border-border bg-white/[0.02] px-3 py-1.5 text-sm text-muted transition hover:border-amber-500/40 hover:text-amber-300"
+              className="rounded-full border border-border bg-white/[0.02] px-3 py-1.5 text-sm text-muted transition hover:border-accent/40 hover:text-accent-bright"
             >
               {n}
             </Link>

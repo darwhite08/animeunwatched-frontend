@@ -175,7 +175,7 @@ export default function ShotsPage() {
 
   if (loading) {
     return (
-      <div className="flex h-[calc(100dvh-3.5rem-4rem-env(safe-area-inset-bottom))] items-center justify-center bg-black md:h-[calc(100dvh-3.5rem)]">
+      <div className="flex h-[calc(100dvh-3.5rem-4rem-env(safe-area-inset-bottom))] items-center justify-center bg-background md:h-[calc(100dvh-3.5rem)]">
         <Loader2 className="animate-spin text-accent" size={28} />
       </div>
     )
@@ -192,7 +192,7 @@ export default function ShotsPage() {
       ref={scrollRef}
       onScroll={handleScroll}
       style={{ paddingTop: 0 }}
-      className="relative h-[calc(100dvh-3.5rem-4rem-env(safe-area-inset-bottom))] w-full snap-y snap-mandatory overflow-y-scroll overscroll-y-contain bg-black md:h-[calc(100dvh-3.5rem)] [&::-webkit-scrollbar]:hidden"
+      className="relative h-[calc(100dvh-3.5rem-4rem-env(safe-area-inset-bottom))] w-full snap-y snap-mandatory overflow-y-scroll overscroll-y-contain bg-background md:h-[calc(100dvh-3.5rem)] [&::-webkit-scrollbar]:hidden"
     >
       {/* Premium ambient backdrop — the active poster, blurred + dimmed, fills the
           black void around the vertical card with a soft gold glow. */}
@@ -216,7 +216,7 @@ export default function ShotsPage() {
             key={m}
             onClick={() => switchMode(m)}
             className={`relative text-[13px] font-bold tracking-wide drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)] transition-colors active:scale-95 ${
-              mode === m ? "text-white" : "text-white/55 hover:text-white/80"
+              mode === m ? "text-foreground" : "text-white/55 hover:text-white/80"
             }`}
           >
             {label}
@@ -229,7 +229,7 @@ export default function ShotsPage() {
       <button
         onClick={() => setMuted((m) => !m)}
         aria-label={muted ? "Unmute" : "Mute"}
-        className="fixed right-4 top-[calc(env(safe-area-inset-top)+4.5rem)] z-40 grid h-11 w-11 place-items-center rounded-full bg-black/45 text-white backdrop-blur transition-transform duration-200 ease-out hover:bg-black/65 active:scale-95 md:absolute md:right-6 md:top-[4.5rem]"
+        className="fixed right-4 top-[calc(env(safe-area-inset-top)+4.5rem)] z-40 grid h-11 w-11 place-items-center rounded-full bg-black/45 text-foreground backdrop-blur transition-transform duration-200 ease-out hover:bg-black/65 active:scale-95 md:absolute md:right-6 md:top-[4.5rem]"
       >
         {muted ? <VolumeX size={18} /> : <Volume2 size={18} />}
       </button>
@@ -246,7 +246,7 @@ export default function ShotsPage() {
         <div className="fixed inset-0 z-40 flex items-center justify-center bg-black/80 p-6 backdrop-blur-sm">
           <div className="w-full max-w-sm rounded-3xl border border-white/10 bg-zinc-900 p-7 text-center">
             <p className="text-3xl">🍵</p>
-            <h2 className="mt-3 text-lg font-black uppercase italic tracking-tight text-white">
+            <h2 className="mt-3 text-lg font-black uppercase italic tracking-tight text-foreground">
               Still scrolling?
             </h2>
             <p className="mt-2 text-sm leading-relaxed text-white/60">
@@ -261,7 +261,7 @@ export default function ShotsPage() {
               </Link>
               <button
                 onClick={() => { setShowBreak(false); setBreakCycle(c => c + 1); track("shots_break_dismissed", { cycle: breakCycle + 1 }) }}
-                className="rounded-2xl border border-white/15 px-5 py-3 text-sm font-bold uppercase tracking-widest text-white/70 transition-transform duration-200 ease-out hover:text-white active:scale-[0.98]">
+                className="rounded-2xl border border-white/15 px-5 py-3 text-sm font-bold uppercase tracking-widest text-white/70 transition-transform duration-200 ease-out hover:text-foreground active:scale-[0.98]">
                 Keep watching
               </button>
             </div>
@@ -307,7 +307,7 @@ export default function ShotsPage() {
 function MediaShell({ children }: { children: React.ReactNode }) {
   // Full-bleed edge-to-edge on phones (real TikTok-style reel); a centered,
   // rounded phone-width card on desktop.
-  return <div className="relative h-full w-full overflow-hidden bg-black md:aspect-[9/16] md:max-h-full md:w-auto md:rounded-3xl md:ring-1 md:ring-white/10 md:shadow-[0_24px_70px_rgba(0,0,0,0.65)]">{children}</div>
+  return <div className="relative h-full w-full overflow-hidden bg-background md:aspect-[9/16] md:max-h-full md:w-auto md:rounded-3xl md:ring-1 md:ring-white/10 md:shadow-[0_24px_70px_rgba(0,0,0,0.65)]">{children}</div>
 }
 
 function ShotReel({ shot, active, near, muted, onNotInterested }: { shot: Shot; active: boolean; near: boolean; muted: boolean; onNotInterested?: (id: string) => void }) {
@@ -492,25 +492,25 @@ function ShotReel({ shot, active, near, muted, onNotInterested }: { shot: Shot; 
 
       {/* TikTok-style right action rail */}
       <div className="absolute bottom-28 right-3 z-10 flex flex-col items-center gap-4">
-        <div className="flex flex-col items-center gap-1 text-white">
+        <div className="flex flex-col items-center gap-1 text-foreground">
           <span className="grid h-12 w-12 place-items-center rounded-full bg-black/40 backdrop-blur">
             <HeartLike liked={liked} onToggle={toggleLike} size={26} ariaLabel={liked ? "Unlike" : "Like"} />
           </span>
           <span className="text-[11px] font-semibold tabular-nums drop-shadow">{likes > 0 ? compact(likes) : "Like"}</span>
         </div>
-        <button onClick={openComments} aria-label="Comments" className="flex flex-col items-center gap-1 text-white transition-transform duration-200 ease-out active:scale-90">
+        <button onClick={openComments} aria-label="Comments" className="flex flex-col items-center gap-1 text-foreground transition-transform duration-200 ease-out active:scale-90">
           <span className="grid h-12 w-12 place-items-center rounded-full bg-black/40 backdrop-blur">
             <MessageCircle size={26} />
           </span>
           <span className="text-[11px] font-semibold tabular-nums drop-shadow">{comments > 0 ? compact(comments) : "Comment"}</span>
         </button>
-        <button onClick={toggleSave} aria-pressed={saved} aria-label={saved ? "Unsave" : "Save"} className="flex flex-col items-center gap-1 text-white transition-transform duration-200 ease-out active:scale-90">
+        <button onClick={toggleSave} aria-pressed={saved} aria-label={saved ? "Unsave" : "Save"} className="flex flex-col items-center gap-1 text-foreground transition-transform duration-200 ease-out active:scale-90">
           <span className="grid h-12 w-12 place-items-center rounded-full bg-black/40 backdrop-blur">
-            <Bookmark size={25} className={saved ? "fill-amber-400 text-amber-400" : ""} />
+            <Bookmark size={25} className={saved ? "fill-accent-bright text-accent-bright" : ""} />
           </span>
           <span className="text-[11px] font-semibold tabular-nums drop-shadow">{saves > 0 ? compact(saves) : "Save"}</span>
         </button>
-        <button onClick={share} aria-label="Share" className="flex flex-col items-center gap-1 text-white transition-transform duration-200 ease-out active:scale-90">
+        <button onClick={share} aria-label="Share" className="flex flex-col items-center gap-1 text-foreground transition-transform duration-200 ease-out active:scale-90">
           <span className="grid h-12 w-12 place-items-center rounded-full bg-black/40 backdrop-blur">
             <Share2 size={26} />
           </span>
@@ -519,7 +519,7 @@ function ShotReel({ shot, active, near, muted, onNotInterested }: { shot: Shot; 
         {!mine && (
           <div className="relative flex flex-col items-center">
             <button onClick={() => setMenuOpen((o) => !o)} aria-label="More" aria-expanded={menuOpen}
-              className="grid h-12 w-12 place-items-center rounded-full bg-black/40 text-white backdrop-blur transition-transform duration-200 ease-out active:scale-90">
+              className="grid h-12 w-12 place-items-center rounded-full bg-black/40 text-foreground backdrop-blur transition-transform duration-200 ease-out active:scale-90">
               <MoreHorizontal size={26} />
             </button>
             {menuOpen && (
@@ -527,7 +527,7 @@ function ShotReel({ shot, active, near, muted, onNotInterested }: { shot: Shot; 
                 <button aria-hidden onClick={() => setMenuOpen(false)} className="fixed inset-0 z-10 cursor-default" />
                 <div className="absolute bottom-14 right-0 z-20 w-44 overflow-hidden rounded-2xl border border-white/15 bg-black/85 backdrop-blur-xl shadow-2xl">
                   <button onClick={notInterested}
-                    className="flex w-full items-center gap-2.5 px-4 py-3 text-left text-[13px] font-semibold text-white transition-colors hover:bg-white/10">
+                    className="flex w-full items-center gap-2.5 px-4 py-3 text-left text-[13px] font-semibold text-foreground transition-colors hover:bg-white/10">
                     <EyeOff size={16} className="shrink-0" /> Not interested
                   </button>
                 </div>
@@ -544,15 +544,15 @@ function ShotReel({ shot, active, near, muted, onNotInterested }: { shot: Shot; 
               // eslint-disable-next-line @next/next/no-img-element
               <img src={shot.author.avatarUrl} alt="" className="h-8 w-8 shrink-0 rounded-full border border-white/30 object-cover" />
             ) : (
-              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-accent text-xs font-black text-white">{shot.author.displayName?.[0]?.toUpperCase() ?? "?"}</span>
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-accent text-xs font-black text-foreground">{shot.author.displayName?.[0]?.toUpperCase() ?? "?"}</span>
             )}
-            <span className="truncate text-sm font-bold text-white">@{shot.author.username}</span>
+            <span className="truncate text-sm font-bold text-foreground">@{shot.author.username}</span>
           </Link>
           {!mine && !following && (
             <button
               onClick={toggleFollow}
               disabled={followBusy}
-              className="inline-flex shrink-0 items-center gap-0.5 rounded-full border border-white/60 px-2.5 py-0.5 text-[11px] font-bold text-white transition-transform duration-200 ease-out active:scale-95 disabled:opacity-50"
+              className="inline-flex shrink-0 items-center gap-0.5 rounded-full border border-white/60 px-2.5 py-0.5 text-[11px] font-bold text-foreground transition-transform duration-200 ease-out active:scale-95 disabled:opacity-50"
             >
               <Plus size={11} strokeWidth={3} /> Follow
             </button>
@@ -563,7 +563,7 @@ function ShotReel({ shot, active, near, muted, onNotInterested }: { shot: Shot; 
           <Eye size={13} /> <span className="tabular-nums">{compact(views)}</span> {views === 1 ? "view" : "views"}
         </p>
         {shot.anime && (
-          <Link href={`/anime/${shot.anime.malId}`} className="mt-2 inline-block max-w-full truncate rounded-full bg-white/15 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-white transition-transform duration-200 ease-out active:scale-95">
+          <Link href={`/anime/${shot.anime.malId}`} className="mt-2 inline-block max-w-full truncate rounded-full bg-white/15 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-foreground transition-transform duration-200 ease-out active:scale-95">
             {shot.anime.title}
           </Link>
         )}
@@ -593,7 +593,7 @@ function TrailerReel({ trailer, active, muted }: { trailer: Trailer; active: boo
 
       {/* Centered 16:9 player */}
       <div className="absolute inset-0 flex items-center justify-center px-1">
-        <div className="relative aspect-video w-full overflow-hidden rounded-xl bg-black shadow-2xl ring-1 ring-white/10">
+        <div className="relative aspect-video w-full overflow-hidden rounded-xl bg-background shadow-2xl ring-1 ring-white/10">
           {active ? (
             <iframe
               key={`${trailer.youtubeId}-${muted ? "m" : "s"}`}
@@ -607,7 +607,7 @@ function TrailerReel({ trailer, active, muted }: { trailer: Trailer; active: boo
             <>
               <Poster src={trailer.imageUrl} />
               <div className="absolute inset-0 flex items-center justify-center">
-                <span className="flex h-12 w-12 items-center justify-center rounded-full bg-black/55 text-white backdrop-blur"><Play size={20} className="ml-0.5 fill-white" /></span>
+                <span className="flex h-12 w-12 items-center justify-center rounded-full bg-black/55 text-foreground backdrop-blur"><Play size={20} className="ml-0.5 fill-white" /></span>
               </div>
             </>
           )}
@@ -621,10 +621,10 @@ function TrailerReel({ trailer, active, muted }: { trailer: Trailer; active: boo
       {/* Bottom meta */}
       <div className="absolute inset-x-0 bottom-0 z-10 bg-gradient-to-t from-black via-black/80 to-transparent p-4 pt-14 pb-[max(1rem,env(safe-area-inset-bottom))]">
         <Link href={`/anime/${trailer.malId}`} className="block">
-          <h3 className="line-clamp-2 text-base font-black leading-tight tracking-tight text-white transition-colors hover:text-white sm:text-lg">{trailer.title}</h3>
+          <h3 className="line-clamp-2 text-base font-black leading-tight tracking-tight text-foreground transition-colors hover:text-foreground sm:text-lg">{trailer.title}</h3>
         </Link>
         <div className="mt-2 flex flex-wrap items-center gap-2 text-[11px] font-bold text-white/80">
-          {trailer.score != null && <span className="inline-flex items-center gap-1"><Star size={12} className="fill-amber-400 text-amber-400" />{trailer.score.toFixed(1)}</span>}
+          {trailer.score != null && <span className="inline-flex items-center gap-1"><Star size={12} className="fill-accent-bright text-accent-bright" />{trailer.score.toFixed(1)}</span>}
           {trailer.type && <span className="rounded-full bg-white/15 px-2 py-0.5 uppercase tracking-widest">{trailer.type}</span>}
           {trailer.year && <span>{trailer.year}</span>}
           <Link href={`/anime/${trailer.malId}`} className="ml-auto inline-flex min-h-9 items-center gap-1 rounded-full bg-accent/90 px-3 py-1.5 text-[10px] font-black uppercase tracking-widest text-black transition-transform duration-200 ease-out hover:scale-105 active:scale-95">

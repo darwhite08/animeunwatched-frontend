@@ -473,7 +473,7 @@ function AnimeDetail({ anime, rawAnime, currentEpisode = 0 }: { anime: Anime; ra
                   <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-subtle">Community Reviews</h2>
                   <button
                     onClick={() => setReviewOpen(true)}
-                    className="-mr-2 flex min-h-11 items-center gap-1.5 px-2 text-[10px] font-black uppercase tracking-widest text-accent-bright hover:text-white active:scale-95 transition-transform"
+                    className="-mr-2 flex min-h-11 items-center gap-1.5 px-2 text-[10px] font-black uppercase tracking-widest text-accent-bright hover:text-foreground active:scale-95 transition-transform"
                   >
                     <PenSquare size={11} /> Write a Review
                   </button>
@@ -624,7 +624,7 @@ function AnimeDetail({ anime, rawAnime, currentEpisode = 0 }: { anime: Anime; ra
                 <p className="text-sm font-bold text-foreground">Find Similar Anime</p>
                 <p className="text-[10px] text-subtle mt-0.5">Use Neural Oracle to discover more</p>
               </div>
-              <ChevronLeft size={14} className="text-accent-bright/50 group-hover:text-white rotate-180 ml-auto transition-all group-hover:translate-x-0.5" />
+              <ChevronLeft size={14} className="text-accent-bright/50 group-hover:text-foreground rotate-180 ml-auto transition-all group-hover:translate-x-0.5" />
             </Link>
           </div>
         </div>

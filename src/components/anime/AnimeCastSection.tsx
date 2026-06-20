@@ -51,7 +51,7 @@ export function AnimeCastSection({ malId, mode = "both" }: { malId: number; mode
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-subtle">Characters & Voice Cast</h2>
           {chars.length > 12 && (
-            <button onClick={() => setShowAllChars(v => !v)} className="-mr-2 flex min-h-11 items-center px-2 text-[10px] font-black uppercase tracking-widest text-accent-bright hover:text-white active:scale-95 transition-transform">
+            <button onClick={() => setShowAllChars(v => !v)} className="-mr-2 flex min-h-11 items-center px-2 text-[10px] font-black uppercase tracking-widest text-accent-bright hover:text-foreground active:scale-95 transition-transform">
               {showAllChars ? "Show less" : `Show all ${chars.length}`}
             </button>
           )}
@@ -107,7 +107,7 @@ export function AnimeCastSection({ malId, mode = "both" }: { malId: number; mode
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-subtle">Staff</h2>
             {staffList.length > 8 && (
-              <button onClick={() => setShowAllStaff(v => !v)} className="-mr-2 flex min-h-11 items-center px-2 text-[10px] font-black uppercase tracking-widest text-accent-bright hover:text-white active:scale-95 transition-transform">
+              <button onClick={() => setShowAllStaff(v => !v)} className="-mr-2 flex min-h-11 items-center px-2 text-[10px] font-black uppercase tracking-widest text-accent-bright hover:text-foreground active:scale-95 transition-transform">
                 {showAllStaff ? "Show less" : `Show all ${staffList.length}`}
               </button>
             )}

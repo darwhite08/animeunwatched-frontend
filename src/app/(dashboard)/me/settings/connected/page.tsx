@@ -14,7 +14,7 @@ interface ConnectedProvider {
 
 const PROVIDER_META: Record<string, { label: string; box: string }> = {
   google: { label: "Google", box: "bg-white" },
-  apple:  { label: "Apple",  box: "bg-black border border-white/15" },
+  apple:  { label: "Apple",  box: "bg-background border border-white/15" },
 }
 
 /* Official provider marks (used on Sign-in-with buttons). */

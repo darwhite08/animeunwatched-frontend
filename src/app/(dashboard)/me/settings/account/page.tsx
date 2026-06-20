@@ -238,7 +238,7 @@ export default function AccountSettingsPage() {
               type="button"
               onClick={() => fileRef.current?.click()}
               disabled={avatarUploading}
-              className="block text-xs font-black uppercase tracking-widest text-accent-bright hover:text-white transition-colors disabled:opacity-50"
+              className="block text-xs font-black uppercase tracking-widest text-accent-bright hover:text-foreground transition-colors disabled:opacity-50"
             >{avatarUploading ? `Uploading ${avatarProgress}%…` : "Upload photo"}</button>
             <p className="text-[9px] text-subtle">JPG, PNG, WebP, or GIF · Max 5MB</p>
             {avatarError && <p className="text-[10px] text-rose-400">{avatarError}</p>}

@@ -150,7 +150,7 @@ export function CommentRow({
         {/* Header row */}
         <div className="flex items-baseline gap-2 flex-wrap">
           <Link href={`/u/${comment.author?.username ?? ""}`}
-            className="text-[12px] font-bold text-foreground hover:text-white transition-colors rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60">
+            className="text-[12px] font-bold text-foreground hover:text-foreground transition-colors rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60">
             {name}
           </Link>
           {me?.username && comment.author?.username === me.username && (
@@ -177,7 +177,7 @@ export function CommentRow({
             className={`flex items-center gap-1.5 min-h-8 px-2.5 rounded-full text-[11px] font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 ${
               replyOpen
                 ? "text-accent-bright bg-accent/12"
-                : "text-muted hover:text-white hover:bg-white/8"
+                : "text-muted hover:text-foreground hover:bg-white/8"
             }`}>
             <MessageSquare size={12} />
             Reply
@@ -186,7 +186,7 @@ export function CommentRow({
           {(comment.replyCount ?? 0) > 0 && (
             <button onClick={() => setShowReplies(s => !s)}
               aria-expanded={showReplies}
-              className="ml-1 text-[11px] font-semibold text-accent-bright/85 hover:text-white transition-colors px-2 min-h-8 rounded-full hover:bg-white/8 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60">
+              className="ml-1 text-[11px] font-semibold text-accent-bright/85 hover:text-foreground transition-colors px-2 min-h-8 rounded-full hover:bg-white/8 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60">
               {showReplies
                 ? `Hide ${comment.replyCount} ${comment.replyCount === 1 ? "reply" : "replies"}`
                 : `View ${comment.replyCount} ${comment.replyCount === 1 ? "reply" : "replies"}`}

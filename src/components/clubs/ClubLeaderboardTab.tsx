@@ -31,7 +31,7 @@ export function ClubLeaderboardTab({ slug, ownerId }: { slug: string; ownerId?: 
               <span className="w-8 text-center text-sm font-bold text-foreground">{medal(r.rank)}</span>
               <div className="flex min-w-0 flex-1 items-center gap-1">
                 <span className="truncate text-sm font-semibold text-foreground">{r.user.displayName ?? r.user.username}</span>
-                {ownerId === r.user.id ? <Crown size={13} className="text-amber-400" /> : r.role === "ADMIN" ? <Shield size={13} className="text-accent" /> : r.role === "MOD" ? <Shield size={13} className="text-sky-400" /> : null}
+                {ownerId === r.user.id ? <Crown size={13} className="text-accent-bright" /> : r.role === "ADMIN" ? <Shield size={13} className="text-accent" /> : r.role === "MOD" ? <Shield size={13} className="text-sky-400" /> : null}
               </div>
               <span className="rounded-full bg-background px-2.5 py-0.5 text-xs font-bold text-accent">{r.xp} XP</span>
             </div>

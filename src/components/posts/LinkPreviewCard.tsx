@@ -44,7 +44,7 @@ export function LinkPreviewCard({ url }: { url: string }) {
           )}
           <span className="text-[11px] font-bold uppercase tracking-widest text-subtle truncate">{data.siteName || host}</span>
         </div>
-        {data.title && <div className="text-sm font-bold text-foreground line-clamp-2 group-hover:text-white transition-colors">{data.title}</div>}
+        {data.title && <div className="text-sm font-bold text-foreground line-clamp-2 group-hover:text-foreground transition-colors">{data.title}</div>}
         {data.description && <div className="mt-1 text-xs text-muted line-clamp-2">{data.description}</div>}
       </div>
     </a>

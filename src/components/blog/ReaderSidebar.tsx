@@ -37,7 +37,7 @@ export function ReaderSidebar({ excludeSlug }: { excludeSlug?: string }) {
             {anime.map((a, i) => (
               <Link key={a.malId} href={`/anime/${a.malId}`} className="group flex items-center gap-3">
                 <span className="w-4 shrink-0 text-center text-sm font-black text-subtle">{i + 1}</span>
-                <div className="h-12 w-9 shrink-0 overflow-hidden rounded-md border border-border bg-black">
+                <div className="h-12 w-9 shrink-0 overflow-hidden rounded-md border border-border bg-background">
                   {a.imageUrl && (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img src={a.imageUrl} alt="" referrerPolicy="no-referrer" loading="lazy" className="h-full w-full object-cover" />
@@ -46,7 +46,7 @@ export function ReaderSidebar({ excludeSlug }: { excludeSlug?: string }) {
                 <div className="min-w-0">
                   <p className="line-clamp-2 text-xs font-bold leading-snug text-muted transition-colors group-hover:text-foreground">{a.titleEnglish || a.title}</p>
                   {a.score != null && (
-                    <p className="mt-0.5 flex items-center gap-0.5 text-[10px] font-bold text-amber-300"><Star size={8} className="fill-amber-300 text-amber-300" />{a.score.toFixed(1)}</p>
+                    <p className="mt-0.5 flex items-center gap-0.5 text-[10px] font-bold text-accent-bright"><Star size={8} className="fill-accent-bright text-accent-bright" />{a.score.toFixed(1)}</p>
                   )}
                 </div>
               </Link>
@@ -62,7 +62,7 @@ export function ReaderSidebar({ excludeSlug }: { excludeSlug?: string }) {
           <div className="space-y-3">
             {blogs.map((b) => (
               <Link key={b.slug} href={`/blog/${b.slug}`} className="group block">
-                <p className="line-clamp-2 text-xs font-bold leading-snug text-muted transition-colors group-hover:text-white">{b.title}</p>
+                <p className="line-clamp-2 text-xs font-bold leading-snug text-muted transition-colors group-hover:text-foreground">{b.title}</p>
               </Link>
             ))}
           </div>

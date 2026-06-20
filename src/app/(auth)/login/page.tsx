@@ -298,7 +298,7 @@ export default function LoginPage() {
               <div className="mb-4 px-4 py-3 rounded-xl bg-red-500/10 border border-red-500/25 text-center">
                 <p className="text-xs font-bold text-red-300">{oauthErrorMsg}</p>
                 {urlError === "no_account" && (
-                  <Link href="/register" className="text-[11px] font-black text-accent-bright hover:text-white transition mt-1 inline-block">
+                  <Link href="/register" className="text-[11px] font-black text-accent-bright hover:text-foreground transition mt-1 inline-block">
                     Join the waitlist →
                   </Link>
                 )}
@@ -360,7 +360,7 @@ export default function LoginPage() {
                   <label className="block text-[10px] font-bold uppercase tracking-[0.2em] text-muted">
                     Password
                   </label>
-                  <Link href="/forgot-password" className="text-[10px] font-bold text-accent-bright/60 hover:text-white transition-colors">
+                  <Link href="/forgot-password" className="text-[10px] font-bold text-accent-bright/60 hover:text-foreground transition-colors">
                     Forgot password?
                   </Link>
                 </div>
@@ -416,7 +416,7 @@ export default function LoginPage() {
             </p>
             <p className="mt-4 text-sm text-center text-muted">
               Don&apos;t have an account?{" "}
-              <Link href="/register" className="text-accent-bright hover:text-white transition font-bold">
+              <Link href="/register" className="text-accent-bright hover:text-foreground transition font-bold">
                 Sign up
               </Link>
             </p>

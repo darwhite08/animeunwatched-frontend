@@ -532,7 +532,7 @@ export default function UserProfilePage({
             </div>
             <Link
               href={`/u/${user.username}/list`}
-              className="group flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-accent-bright hover:text-white transition-colors"
+              className="group flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-accent-bright hover:text-foreground transition-colors"
             >
               See full list <ChevronRight size={11} className="group-hover:translate-x-0.5 transition-transform" />
             </Link>
@@ -874,7 +874,7 @@ export default function UserProfilePage({
                   </p>
                 </div>
               </div>
-              <ChevronRight size={14} className="text-subtle group-hover:text-white group-hover:translate-x-0.5 transition-all" />
+              <ChevronRight size={14} className="text-subtle group-hover:text-foreground group-hover:translate-x-0.5 transition-all" />
             </Link>
           </div>
         </div>

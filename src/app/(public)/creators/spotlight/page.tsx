@@ -231,7 +231,7 @@ function CreatorGridCard({ creator, index }: { creator: Creator; index: number }
           {creator.avatarLetter}
         </div>
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-black text-foreground uppercase italic tracking-tight truncate group-hover:text-white transition-colors">
+          <p className="text-sm font-black text-foreground uppercase italic tracking-tight truncate group-hover:text-foreground transition-colors">
             {creator.displayName}
           </p>
           <p className="text-[10px] text-subtle font-bold">@{creator.username}</p>
@@ -261,7 +261,7 @@ function CreatorGridCard({ creator, index }: { creator: Creator; index: number }
       {/* Best article */}
       <Link
         href={`/blog/${creator.bestArticleSlug}`}
-        className="block text-[10px] text-accent-bright/70 hover:text-white font-bold transition-colors line-clamp-2 leading-relaxed"
+        className="block text-[10px] text-accent-bright/70 hover:text-foreground font-bold transition-colors line-clamp-2 leading-relaxed"
       >
         → {creator.bestArticleTitle}
       </Link>
@@ -271,7 +271,7 @@ function CreatorGridCard({ creator, index }: { creator: Creator; index: number }
         <span className="text-[9px] text-subtle font-bold">{creator.joinedMonth}</span>
         <Link
           href={`/u/${creator.username}`}
-          className="text-[9px] font-black uppercase tracking-widest text-subtle hover:text-white transition-colors flex items-center gap-1"
+          className="text-[9px] font-black uppercase tracking-widest text-subtle hover:text-foreground transition-colors flex items-center gap-1"
         >
           Profile <ChevronRight size={9} />
         </Link>

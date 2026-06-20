@@ -25,7 +25,7 @@ export function AppShell({ children, publicMode = false }: { children: React.Rea
       {/* Keyboard/screen-reader: jump straight past the nav to the page content */}
       <a
         href="#main-content"
-        className="sr-only rounded-lg bg-accent px-4 py-2 text-sm font-bold text-white focus:not-sr-only focus:fixed focus:left-4 focus:top-3 focus:z-[100] focus:outline-none focus:ring-2 focus:ring-accent/60"
+        className="sr-only rounded-lg bg-accent px-4 py-2 text-sm font-bold text-foreground focus:not-sr-only focus:fixed focus:left-4 focus:top-3 focus:z-[100] focus:outline-none focus:ring-2 focus:ring-accent/60"
       >
         Skip to content
       </a>

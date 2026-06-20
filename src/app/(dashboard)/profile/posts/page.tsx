@@ -52,7 +52,7 @@ export default function ProfilePostsPage() {
             <MessageSquare size={24} className="text-subtle" />
           </div>
           <p className="text-sm font-black uppercase tracking-widest text-subtle">No posts yet</p>
-          <Link href="/community" className="text-xs font-black uppercase tracking-widest text-accent-bright hover:text-white transition-colors">
+          <Link href="/community" className="text-xs font-black uppercase tracking-widest text-accent-bright hover:text-foreground transition-colors">
             Write your first post →
           </Link>
         </div>

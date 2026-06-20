@@ -73,7 +73,7 @@ export default function ShareProfilePage({ params }: { params: Promise<{ usernam
   if (isLoading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
-        <div className="h-8 w-8 rounded-full border-2 border-accent/30 border-t-amber-500 animate-spin" />
+        <div className="h-8 w-8 rounded-full border-2 border-accent/30 border-t-accent animate-spin" />
       </div>
     )
   }

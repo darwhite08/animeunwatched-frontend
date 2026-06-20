@@ -98,7 +98,7 @@ export function EncryptionSettings() {
               <span className="flex items-center gap-1.5 text-sm text-muted"><Fingerprint size={14} className="text-accent-bright" /> Also add a passkey (Face ID / fingerprint)</span>
             </label>
           )}
-          <p className="text-[11px] leading-relaxed text-amber-400/80">
+          <p className="text-[11px] leading-relaxed text-accent-bright/80">
             ⚠ If you forget this password (and have no passkey), your encrypted messages can&apos;t be recovered. There&apos;s no reset.
           </p>
           <button onClick={doSetup} disabled={busy} className="flex w-full items-center justify-center gap-2 rounded-xl bg-accent py-3 text-[11px] font-black uppercase tracking-widest text-black transition-all hover:bg-accent-bright active:scale-[0.99] disabled:opacity-50">

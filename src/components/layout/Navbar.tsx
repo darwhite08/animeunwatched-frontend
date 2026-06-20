@@ -105,7 +105,7 @@ function NavDropdown({ items, onClose }: { items: DropItem[]; onClose: () => voi
                     boxShadow: "0 2px 10px color-mix(in srgb, var(--app-accent) 15%, transparent), inset 0 1px 0 color-mix(in srgb, var(--app-fg) 8%, transparent)",
                   }}
                 >
-                  <Icon size={16} weight="duotone" className="text-accent-bright group-hover:text-white transition-colors" />
+                  <Icon size={16} weight="duotone" className="text-accent-bright group-hover:text-foreground transition-colors" />
                 </div>
 
                 <div className="min-w-0 flex-1">
@@ -450,7 +450,7 @@ function MobileSection({ title, links, onClose }: { title: string; links: DropIt
                 border: "1px solid color-mix(in srgb, var(--app-accent) 20%, transparent)",
               }}
             >
-              <Icon size={14} weight="duotone" className="text-accent-bright/80 group-hover:text-white transition-colors" />
+              <Icon size={14} weight="duotone" className="text-accent-bright/80 group-hover:text-foreground transition-colors" />
             </div>
             <div>
               <p className="text-[11px] font-black uppercase tracking-wider leading-none">{l.name}</p>

@@ -148,7 +148,7 @@ function ChallengeCard({ challenge, onAccept, accepted }: { challenge: Challenge
                 <Swords size={11} className="text-accent-bright" />
                 <span className="text-[9px] font-black uppercase tracking-[0.35em] text-accent-bright/70">Watch Challenge</span>
               </div>
-              <h3 className="text-base font-black uppercase italic tracking-tight text-foreground leading-snug group-hover:text-white transition-colors">
+              <h3 className="text-base font-black uppercase italic tracking-tight text-foreground leading-snug group-hover:text-foreground transition-colors">
                 {challenge.animeTitle}
               </h3>
             </div>
@@ -685,7 +685,7 @@ export default function ClubDetailPage({
                           >
                             <Avatar src={member.avatarUrl} name={member.displayName} size={44} />
                             <div className="min-w-0 flex-1">
-                              <p className="flex items-center gap-1 text-sm font-bold text-foreground group-hover:text-white transition-colors">
+                              <p className="flex items-center gap-1 text-sm font-bold text-foreground group-hover:text-foreground transition-colors">
                                 <span className="truncate">{member.displayName}</span>
                                 <VerifiedBadge kind={member.verifiedKind} size={13} />
                               </p>
@@ -811,7 +811,7 @@ export default function ClubDetailPage({
                         <button
                           onClick={handleDelete}
                           disabled={deleteMut.isPending}
-                          className="inline-flex items-center justify-center gap-2 min-h-11 px-4 rounded-xl bg-red-500 text-[11px] font-black uppercase tracking-widest text-white transition-all hover:bg-red-600 active:scale-95 disabled:opacity-50"
+                          className="inline-flex items-center justify-center gap-2 min-h-11 px-4 rounded-xl bg-red-500 text-[11px] font-black uppercase tracking-widest text-foreground transition-all hover:bg-red-600 active:scale-95 disabled:opacity-50"
                         >
                           {deleteMut.isPending ? <Loader2 size={13} className="animate-spin" /> : <Trash2 size={13} />}
                           {deleteMut.isPending ? "Deleting…" : "Yes, delete"}

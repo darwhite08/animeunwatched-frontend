@@ -151,7 +151,7 @@ function ListCard({ list, onClick, allAnime }: ListCardProps) {
 
         {/* Info */}
         <div className="flex-1 min-w-0">
-          <h3 className="text-sm font-black uppercase italic tracking-tighter text-foreground leading-tight mb-1 line-clamp-2 group-hover:text-white transition-colors">
+          <h3 className="text-sm font-black uppercase italic tracking-tighter text-foreground leading-tight mb-1 line-clamp-2 group-hover:text-foreground transition-colors">
             {list.title}
           </h3>
           <div className="flex items-center gap-2 text-[10px] text-subtle">
@@ -185,7 +185,7 @@ function ListCard({ list, onClick, allAnime }: ListCardProps) {
         <span className="flex items-center gap-1.5 text-[10px] font-black text-subtle">
           <Heart size={11} /> {list.likes.toLocaleString()}
         </span>
-        <span className="flex items-center gap-1 text-[10px] font-black uppercase tracking-widest text-accent-bright/50 group-hover:text-white transition-colors">
+        <span className="flex items-center gap-1 text-[10px] font-black uppercase tracking-widest text-accent-bright/50 group-hover:text-foreground transition-colors">
           View List <ChevronRight size={11} />
         </span>
       </div>
@@ -301,7 +301,7 @@ function ListDetailModal({ list, onClose, onAnimeClick, allAnime }: ListModalPro
                     <span>{anime.year}</span>
                   </div>
                 </div>
-                <Check size={13} className="text-accent-bright/40 group-hover:text-white shrink-0 transition-colors" />
+                <Check size={13} className="text-accent-bright/40 group-hover:text-foreground shrink-0 transition-colors" />
               </motion.div>
             ))}
 

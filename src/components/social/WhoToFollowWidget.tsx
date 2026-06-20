@@ -36,7 +36,7 @@ export function WhoToFollowWidget() {
           <Users size={14} className="text-accent-bright" />
           <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-muted">Who to follow</h3>
         </div>
-        <Link href="/users" className="text-[10px] font-bold text-accent-bright/80 hover:text-white transition-colors">
+        <Link href="/users" className="text-[10px] font-bold text-accent-bright/80 hover:text-foreground transition-colors">
           More →
         </Link>
       </div>
@@ -85,7 +85,7 @@ export function WhoToFollowWidget() {
                 <div className="flex-1 min-w-0">
                   <Link
                     href={`/u/${user.username}`}
-                    className="block text-sm sm:text-xs font-bold text-foreground hover:text-white transition-colors truncate py-0.5"
+                    className="block text-sm sm:text-xs font-bold text-foreground hover:text-foreground transition-colors truncate py-0.5"
                   >
                     {user.displayName}
                   </Link>

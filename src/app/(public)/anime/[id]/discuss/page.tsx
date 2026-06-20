@@ -75,11 +75,11 @@ export default function AnimeDiscussPage({ params }: { params: Promise<{ id: str
       <div className="max-w-3xl mx-auto px-6 pt-32">
         {/* Breadcrumb */}
         <div className="flex items-center gap-2 mb-6 text-xs text-subtle">
-          <Link href={`/anime/${id}`} className="hover:text-white transition-colors flex items-center gap-1">
+          <Link href={`/anime/${id}`} className="hover:text-foreground transition-colors flex items-center gap-1">
             <ChevronLeft size={13} /> {anime?.title ?? "Anime"}
           </Link>
           <span>/</span>
-          <Link href={`/anime/${id}/episodes`} className="hover:text-white transition-colors">Episodes</Link>
+          <Link href={`/anime/${id}/episodes`} className="hover:text-foreground transition-colors">Episodes</Link>
           {ep && <><span>/</span><span className="text-muted">Ep {ep}</span></>}
         </div>
 

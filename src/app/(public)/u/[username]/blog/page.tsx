@@ -56,7 +56,7 @@ function BlogCard({ post, index }: { post: BlogPost; index: number }) {
 
       {/* Body */}
       <div className="p-5 space-y-3">
-        <h2 className="text-sm font-black uppercase italic tracking-tight text-foreground leading-snug group-hover:text-white transition-colors line-clamp-2">
+        <h2 className="text-sm font-black uppercase italic tracking-tight text-foreground leading-snug group-hover:text-foreground transition-colors line-clamp-2">
           {post.title}
         </h2>
         <p className="text-xs text-muted leading-relaxed line-clamp-2">{post.excerpt}</p>

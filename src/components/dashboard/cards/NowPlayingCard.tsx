@@ -78,7 +78,7 @@ export default function NowPlayingCard() {
   if (isLoading || !subject) {
     return (
       <div className="relative rounded-[2.5rem] overflow-hidden border border-border bg-surface h-48 flex items-center justify-center">
-        <div className="w-8 h-8 rounded-full border-2 border-accent/30 border-t-amber-500 animate-spin" />
+        <div className="w-8 h-8 rounded-full border-2 border-accent/30 border-t-accent animate-spin" />
       </div>
     )
   }
@@ -89,7 +89,7 @@ export default function NowPlayingCard() {
       <div className="relative rounded-[2.5rem] overflow-hidden border border-border bg-surface h-48 flex flex-col items-center justify-center gap-3 p-8">
         <MonitorPlay size={24} className="text-subtle" />
         <p className="text-xs font-black uppercase tracking-widest text-subtle">Nothing playing</p>
-        <Link href="/bestanimelist" className="text-[10px] font-black uppercase tracking-widest text-accent-bright hover:text-white transition-colors">
+        <Link href="/bestanimelist" className="text-[10px] font-black uppercase tracking-widest text-accent-bright hover:text-foreground transition-colors">
           Browse Anime →
         </Link>
       </div>
@@ -158,7 +158,7 @@ export default function NowPlayingCard() {
             </button>
           </div>
           <Link href={`/anime/${subject.id}`}
-            className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest text-accent-bright/60 hover:text-white transition-colors"
+            className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest text-accent-bright/60 hover:text-foreground transition-colors"
           >
             Details <ExternalLink size={10} />
           </Link>

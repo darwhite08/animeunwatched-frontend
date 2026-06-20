@@ -110,7 +110,7 @@ const FILTER_TABS: { id: FilterTab; label: string }[] = [
 
 const CONTENT_TYPE_CONFIG: Record<ContentType, { label: string; color: string; tile: string; icon: typeof FileText }> = {
   post:   { label: "Post",   color: "bg-sky-500/15 text-sky-300 border-sky-500/25",        tile: "bg-sky-500/10 text-sky-300",        icon: FileText },
-  review: { label: "Review", color: "bg-amber-500/15 text-amber-300 border-amber-500/25",  tile: "bg-amber-500/10 text-amber-300",    icon: Star     },
+  review: { label: "Review", color: "bg-accent/15 text-accent-bright border-accent/25",  tile: "bg-accent/10 text-accent-bright",    icon: Star     },
   blog:   { label: "Blog",   color: "bg-violet-500/15 text-violet-300 border-violet-500/25", tile: "bg-violet-500/10 text-violet-300", icon: BookOpen },
   user:   { label: "User",   color: "bg-rose-500/15 text-rose-300 border-rose-500/25",      tile: "bg-rose-500/10 text-rose-300",      icon: User     },
 }

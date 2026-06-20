@@ -162,7 +162,7 @@ export function AnimeThreadsSection({ animeId, animeTitle }: AnimeThreadsSection
         </h2>
         <button
           onClick={openComposer}
-          className="text-[10px] font-black uppercase tracking-widest text-accent-bright hover:text-white transition-colors flex items-center gap-1.5"
+          className="text-[10px] font-black uppercase tracking-widest text-accent-bright hover:text-foreground transition-colors flex items-center gap-1.5"
         >
           {composing ? <X size={11} /> : <MessageSquare size={11} />} {composing ? "Cancel" : "Start Thread"}
         </button>
@@ -291,7 +291,7 @@ export function AnimeThreadsSection({ animeId, animeTitle }: AnimeThreadsSection
       {threads.length > 0 && (
         <Link
           href="/community"
-          className="mt-4 flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-accent-bright/70 hover:text-white transition-colors"
+          className="mt-4 flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-accent-bright/70 hover:text-foreground transition-colors"
         >
           View All Discussions <ChevronRight size={11} />
         </Link>

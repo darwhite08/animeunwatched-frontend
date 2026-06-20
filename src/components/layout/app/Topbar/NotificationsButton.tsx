@@ -22,7 +22,7 @@ export function NotificationsButton() {
     >
       <Bell size={19} />
       {unreadNotifications > 0 && (
-        <span className="absolute -right-0.5 -top-0.5 min-w-[18px] rounded-full bg-rose-500 px-1 text-center text-[10px] font-black leading-[18px] text-white ring-2 ring-background">
+        <span className="absolute -right-0.5 -top-0.5 min-w-[18px] rounded-full bg-rose-500 px-1 text-center text-[10px] font-black leading-[18px] text-foreground ring-2 ring-background">
           {unreadNotifications > 9 ? "9+" : unreadNotifications}
         </span>
       )}

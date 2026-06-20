@@ -468,7 +468,7 @@ function HistoryEntryRow({
 
       {/* Info */}
       <div className="flex-1 min-w-0">
-        <p className="text-[13px] sm:text-sm font-black text-foreground uppercase italic tracking-tight truncate group-hover:text-white transition-colors">
+        <p className="text-[13px] sm:text-sm font-black text-foreground uppercase italic tracking-tight truncate group-hover:text-foreground transition-colors">
           {entry.animeTitle}
         </p>
         <p className="text-[10px] font-bold text-subtle uppercase tracking-widest mt-0.5 truncate">

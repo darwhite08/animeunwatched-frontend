@@ -134,7 +134,7 @@ export default function CommunityReviewsPage() {
 
               <div>
                 {r.hasSpoilers && !revealed.has(r.id)
-                  ? <button onClick={()=>setRevealed(s=>new Set([...s,r.id]))} className="text-xs font-bold text-accent-bright hover:text-white transition-colors">
+                  ? <button onClick={()=>setRevealed(s=>new Set([...s,r.id]))} className="text-xs font-bold text-accent-bright hover:text-foreground transition-colors">
                       <Eye size={12} className="inline mr-1"/>Reveal spoiler review
                     </button>
                   : <p className="text-sm text-muted leading-relaxed line-clamp-3">{r.body}</p>

@@ -29,22 +29,38 @@
   --color-border-hover:  var(--app-border-hover);
   --color-accent:        var(--app-accent);
   --color-accent-bright: var(--app-accent-bright);
+  --color-accent-deep:   var(--app-accent-deep);
   --color-accent-soft:   var(--app-accent-soft);
+  --color-on-accent:     var(--app-on-accent);
+  --color-success:       var(--app-success);
+  --color-danger:        var(--app-danger);
+  --color-like:          var(--app-like);
 }
 
 /* ── Default theme: dark + amber ── */
 :root {
-  --app-bg:            #020202;
-  --app-surface:       #0a0a0a;
-  --app-surface-2:     #111120;
-  --app-fg:            #ffffff;
-  --app-muted:         rgba(255,255,255,0.55);
-  --app-subtle:        rgba(255,255,255,0.30);
+  /* ── Surfaces — softened off-black ramp (no more pure #000) ── */
+  --app-bg:            #0B0B0C;   /* base page */
+  --app-surface:       #131316;   /* cards */
+  --app-surface-2:     #1C1C21;   /* raised / hover (was navy #111120) */
+  /* ── Text — off-white, never pure #FFF ── */
+  --app-fg:            #F5F5F4;   /* primary */
+  --app-muted:         #A1A1AA;   /* secondary */
+  --app-subtle:        #71717A;   /* tertiary */
   --app-border:        rgba(255,255,255,0.08);
-  --app-border-hover:  rgba(255,255,255,0.15);
-  --app-accent:        #f59e0b;
-  --app-accent-bright: #fbbf24;
-  --app-accent-soft:   rgba(245,158,11,0.12);
+  --app-border-hover:  rgba(255,255,255,0.14);
+  /* ── Brand gold — the only personality accent ── */
+  --app-accent:        #F5C451;
+  --app-accent-bright: #FFD66B;
+  --app-accent-deep:   #D99A2B;
+  --app-accent-soft:   rgba(245,196,81,0.10);   /* gold ghost bg */
+  --app-accent-ghost-border: rgba(245,196,81,0.30);
+  --app-accent-grad:   linear-gradient(135deg, #FFD66B, #D99A2B);
+  --app-on-accent:     #1A1206;   /* text on solid gold — never white */
+  /* ── Semantic — status only, kept separate from brand ── */
+  --app-success:       #34D399;   /* airing */
+  --app-danger:        #F87171;   /* notif badge */
+  --app-like:          #EC4899;   /* heart */
 
   /* Legacy Kaiveron palette — alias to the new tokens so existing .k-* utilities flip too */
   --k-bg:           var(--app-bg);
@@ -56,8 +72,8 @@
   --k-gold:         var(--app-accent);
   --k-gold-bright:  var(--app-accent-bright);
   --k-gold-dim:     var(--app-accent-soft);
-  --k-gold-border:  rgba(245,158,11,0.28);
-  --k-gold-glow:    0 0 20px rgba(245,158,11,0.18);
+  --k-gold-border:  rgba(245,196,81,0.30);
+  --k-gold-glow:    0 0 20px rgba(245,196,81,0.18);
   --k-text:         var(--app-fg);
   --k-text-muted:   var(--app-muted);
   --k-text-subtle:  var(--app-subtle);

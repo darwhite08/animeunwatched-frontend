@@ -5,7 +5,7 @@ type Kind = "USER" | "CREATOR" | "STUDIO" | null | undefined
 const STYLES: Record<string, { className: string; label: string }> = {
   USER:    { className: "text-sky-400",    label: "Verified" },
   CREATOR: { className: "text-violet-400", label: "Verified creator" },
-  STUDIO:  { className: "text-amber-400",  label: "Official studio" },
+  STUDIO:  { className: "text-accent-bright",  label: "Official studio" },
 }
 
 /** Renders the admin-granted verified badge next to a name. Nothing if unverified. */
@@ -61,8 +61,8 @@ export function CountryPioneerBadge({ country }: { country?: string | null; size
     >
       <span style={{ fontSize: 30, lineHeight: 1, filter: "drop-shadow(0 1px 2px rgba(0,0,0,0.35))" }}>{countryFlag(country)}</span>
       <span className="flex flex-col leading-none">
-        <span className="text-[8px] font-black uppercase tracking-[0.22em] text-amber-300/70">Representing</span>
-        <span className="text-[13px] font-black uppercase tracking-tight text-amber-200">{countryNameOf(country)}</span>
+        <span className="text-[8px] font-black uppercase tracking-[0.22em] text-accent-bright/70">Representing</span>
+        <span className="text-[13px] font-black uppercase tracking-tight text-accent-bright">{countryNameOf(country)}</span>
       </span>
     </span>
   )

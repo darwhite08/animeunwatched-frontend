@@ -76,7 +76,7 @@ My only minor criticism is that the middle section has a few episodes that feel 
             <Image src={anime?.image ?? ""} alt={anime?.title ?? ""} fill className="object-cover" sizes="40px" />
           </div>
           <div>
-            <Link href={`/anime/${id}`} className="font-black text-foreground hover:text-white transition-colors">{anime?.title ?? id}</Link>
+            <Link href={`/anime/${id}`} className="font-black text-foreground hover:text-foreground transition-colors">{anime?.title ?? id}</Link>
             <p className="text-[10px] text-subtle mt-0.5">{anime?.studio} · {anime?.year}</p>
           </div>
         </div>
@@ -90,7 +90,7 @@ My only minor criticism is that the middle section has a few episodes that feel 
                 {review.author[0]}
               </Link>
               <div>
-                <Link href={`/u/${review.author}`} className="font-black text-foreground hover:text-white transition-colors">{review.author}</Link>
+                <Link href={`/u/${review.author}`} className="font-black text-foreground hover:text-foreground transition-colors">{review.author}</Link>
                 <p className="text-[10px] text-subtle mt-0.5">{review.date}</p>
               </div>
             </div>
@@ -134,7 +134,7 @@ My only minor criticism is that the middle section has a few episodes that feel 
             >
               <Flag size={13}/> Report
             </button>
-            <Link href={`/anime/${id}/reviews`} className="ml-auto flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-accent-bright hover:text-white transition-colors">
+            <Link href={`/anime/${id}/reviews`} className="ml-auto flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-accent-bright hover:text-foreground transition-colors">
               <ChevronLeft size={11}/> All Reviews
             </Link>
           </div>

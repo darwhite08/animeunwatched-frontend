@@ -40,7 +40,7 @@ export default function ContinueWatchingCard() {
           <MonitorPlay size={14} className="text-accent-bright" />
           <h4 className="text-xs font-black uppercase tracking-[0.28em] text-subtle">Continue Watching</h4>
         </div>
-        <Link href="/watchlist" className="text-[9px] font-black uppercase tracking-widest text-accent-bright/60 hover:text-white transition-colors flex items-center gap-1">
+        <Link href="/watchlist" className="text-[9px] font-black uppercase tracking-widest text-accent-bright/60 hover:text-foreground transition-colors flex items-center gap-1">
           All <ChevronRight size={10} />
         </Link>
       </div>
@@ -50,7 +50,7 @@ export default function ContinueWatchingCard() {
           <div className="py-6 text-center">
             <MonitorPlay size={20} className="mx-auto mb-2 text-subtle" />
             <p className="text-[10px] text-subtle font-black uppercase tracking-widest">Nothing in progress</p>
-            <Link href="/bestanimelist" className="mt-2 block text-[9px] text-accent-bright hover:text-white font-black uppercase tracking-widest">
+            <Link href="/bestanimelist" className="mt-2 block text-[9px] text-accent-bright hover:text-foreground font-black uppercase tracking-widest">
               Browse Anime →
             </Link>
           </div>

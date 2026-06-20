@@ -34,11 +34,11 @@ export function SidebarGamification({ slug, collapsed }: { slug?: string | null;
   return (
     <Link href={href} className="block rounded-2xl border border-border bg-white/[0.02] p-3 hover:border-border-hover">
       <div className="flex items-center gap-1.5 text-[10px] font-black uppercase tracking-widest text-muted">
-        <Medal size={12} className="text-amber-400" /> {tier}
+        <Medal size={12} className="text-accent-bright" /> {tier}
       </div>
       <div className="mt-2 grid grid-cols-2 gap-2">
         <div className="flex items-center gap-1.5">
-          <Star size={14} className="text-amber-400" />
+          <Star size={14} className="text-accent-bright" />
           <span className="text-sm font-black tabular-nums text-foreground">{rep.toLocaleString()}</span>
           <span className="text-[10px] text-muted">XP</span>
         </div>

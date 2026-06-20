@@ -493,7 +493,7 @@ function AdvancedSearchContent() {
                 <p className="text-subtle text-sm font-black uppercase tracking-widest">No anime matched your filters</p>
                 <button
                   onClick={clearFilters}
-                  className="mt-4 text-[10px] font-black uppercase tracking-widest text-accent-bright hover:text-white transition-colors"
+                  className="mt-4 text-[10px] font-black uppercase tracking-widest text-accent-bright hover:text-foreground transition-colors"
                 >
                   Clear Filters →
                 </button>
@@ -519,7 +519,7 @@ function AdvancedSearchContent() {
                   {u.name[0]}
                 </div>
                 <div className="flex-1">
-                  <p className="font-black text-foreground group-hover:text-white transition-colors">{u.name}</p>
+                  <p className="font-black text-foreground group-hover:text-foreground transition-colors">{u.name}</p>
                   <p className="text-xs text-subtle mt-0.5">{u.bio}</p>
                 </div>
                 <div className="text-right">

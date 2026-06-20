@@ -37,7 +37,7 @@ describe("timeAgo", () => {
 // ── Score color logic (from anime detail page) ────────────────────────────────
 function scoreColor(rating: number): string {
   if (rating >= 9) return "text-emerald-400"
-  if (rating >= 8) return "text-amber-400"
+  if (rating >= 8) return "text-accent-bright"
   return "text-white/60"
 }
 
@@ -48,8 +48,8 @@ describe("scoreColor", () => {
   })
 
   it("returns amber for 8–8.9", () => {
-    expect(scoreColor(8.0)).toBe("text-amber-400")
-    expect(scoreColor(8.9)).toBe("text-amber-400")
+    expect(scoreColor(8.0)).toBe("text-accent-bright")
+    expect(scoreColor(8.9)).toBe("text-accent-bright")
   })
 
   it("returns white/60 for below 8", () => {

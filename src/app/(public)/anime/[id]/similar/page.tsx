@@ -89,7 +89,7 @@ export default function SimilarAnimePage({
           </Link>
           <div className="flex-1 min-w-0">
             <Link href={`/anime/${anime.id}`}>
-              <h1 className="text-xl font-black uppercase italic tracking-tighter text-foreground hover:text-white transition-colors leading-tight truncate">
+              <h1 className="text-xl font-black uppercase italic tracking-tighter text-foreground hover:text-foreground transition-colors leading-tight truncate">
                 {anime.title}
               </h1>
             </Link>

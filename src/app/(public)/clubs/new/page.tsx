@@ -296,7 +296,7 @@ export default function NewClubPage() {
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src={coverUrl} alt="Den cover" className="absolute inset-0 h-full w-full object-cover" />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 transition-opacity group-hover:opacity-100" />
-                    <span className="absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full bg-black/70 px-3 py-1 text-[10px] font-black uppercase tracking-widest text-white opacity-0 transition-opacity group-hover:opacity-100">
+                    <span className="absolute bottom-3 left-1/2 -translate-x-1/2 rounded-full bg-black/70 px-3 py-1 text-[10px] font-black uppercase tracking-widest text-foreground opacity-0 transition-opacity group-hover:opacity-100">
                       Change cover
                     </span>
                   </>
@@ -305,7 +305,7 @@ export default function NewClubPage() {
                     {uploadingCover ? (
                       <Loader2 size={22} className="animate-spin" />
                     ) : (
-                      <ImagePlus size={22} className="transition-colors group-hover:text-white" />
+                      <ImagePlus size={22} className="transition-colors group-hover:text-foreground" />
                     )}
                     <span className="text-[11px] font-black uppercase tracking-widest">
                       {uploadingCover ? "Uploading…" : "Add a cover"}

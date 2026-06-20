@@ -7,7 +7,7 @@ import { describe, it, expect } from "vitest"
 
 function getScoreColor(score: number): string {
   if (score >= 9) return "text-emerald-400"
-  if (score >= 8) return "text-amber-400"
+  if (score >= 8) return "text-accent-bright"
   if (score >= 7) return "text-yellow-400"
   return "text-white/60"
 }
@@ -20,8 +20,8 @@ describe("getScoreColor", () => {
   })
 
   it("returns amber for 8.0-8.9", () => {
-    expect(getScoreColor(8.0)).toBe("text-amber-400")
-    expect(getScoreColor(8.9)).toBe("text-amber-400")
+    expect(getScoreColor(8.0)).toBe("text-accent-bright")
+    expect(getScoreColor(8.9)).toBe("text-accent-bright")
   })
 
   it("returns yellow for 7.0-7.9", () => {

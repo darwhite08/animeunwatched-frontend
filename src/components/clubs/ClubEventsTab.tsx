@@ -59,7 +59,7 @@ function EventCard({ ev, canDelete, onRsvp, onDelete }: { ev: ClubEvent; canDele
     <div className="rounded-2xl border border-border bg-surface p-4">
       <div className="flex items-center justify-between gap-2">
         <span className="text-[11px] font-bold uppercase tracking-wide text-accent">{KIND_LABEL[ev.kind] ?? ev.kind}</span>
-        <span className={`flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold ${cd.live ? "bg-rose-500/20 text-rose-300" : cd.soon ? "bg-amber-500/20 text-amber-300" : "bg-background text-muted"}`}><Clock size={10} /> {cd.label}</span>
+        <span className={`flex items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold ${cd.live ? "bg-rose-500/20 text-rose-300" : cd.soon ? "bg-accent/20 text-accent-bright" : "bg-background text-muted"}`}><Clock size={10} /> {cd.label}</span>
       </div>
       <h3 className="mt-1 text-base font-bold italic text-foreground">{ev.title}</h3>
       <p className="text-xs text-muted">{new Date(ev.startsAt).toLocaleString([], { weekday: "short", month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}{ev.episodeNumber ? ` · Ep ${ev.episodeNumber}` : ""}</p>
@@ -72,7 +72,7 @@ function EventCard({ ev, canDelete, onRsvp, onDelete }: { ev: ClubEvent; canDele
         {(["GOING", "MAYBE", "NOT_GOING"] as const).map((s) => (
           <button key={s} onClick={() => onRsvp(s)} className={`rounded-full px-3 py-1 text-[11px] font-bold transition ${ev.myRsvp === s ? "bg-accent text-black" : "bg-background text-muted hover:text-foreground"}`}>{s === "GOING" ? "Going" : s === "MAYBE" ? "Maybe" : "Can't"}</button>
         ))}
-        {cd.live && <span className="flex items-center gap-1 rounded-full bg-rose-500 px-3 py-1 text-[11px] font-bold text-white"><Tv size={11} /> Live</span>}
+        {cd.live && <span className="flex items-center gap-1 rounded-full bg-rose-500 px-3 py-1 text-[11px] font-bold text-foreground"><Tv size={11} /> Live</span>}
         {canDelete && <button onClick={onDelete} className="ml-auto text-muted transition hover:text-rose-400"><Trash2 size={15} /></button>}
       </div>
     </div>

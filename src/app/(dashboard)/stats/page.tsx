@@ -170,7 +170,7 @@ export default function StatsPage() {
           {stats.genreData.length === 0 ? (
             <div className="py-4 text-center">
               <p className="text-[10px] text-subtle font-black uppercase tracking-widest">No data yet</p>
-              <Link href="/bestanimelist" className="mt-2 block text-[9px] text-accent-bright hover:text-white font-black uppercase tracking-widest">
+              <Link href="/bestanimelist" className="mt-2 block text-[9px] text-accent-bright hover:text-foreground font-black uppercase tracking-widest">
                 Add Anime to List →
               </Link>
             </div>
@@ -203,7 +203,7 @@ export default function StatsPage() {
           {stats.topStudios.length === 0 ? (
             <div className="py-4 text-center">
               <p className="text-[10px] text-subtle font-black uppercase tracking-widest">No data yet</p>
-              <Link href="/bestanimelist" className="mt-2 block text-[9px] text-accent-bright hover:text-white font-black uppercase tracking-widest">
+              <Link href="/bestanimelist" className="mt-2 block text-[9px] text-accent-bright hover:text-foreground font-black uppercase tracking-widest">
                 Add Anime to List →
               </Link>
             </div>

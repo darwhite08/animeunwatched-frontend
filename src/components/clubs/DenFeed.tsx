@@ -43,7 +43,7 @@ const FLAIRS: Flair[] = [
   { id: "fan-art",    label: "Fan Art",    cls: "bg-pink-500/15 text-pink-300 border-pink-500/30" },
   { id: "news",       label: "News",       cls: "bg-sky-500/15 text-sky-300 border-sky-500/30" },
   { id: "question",   label: "Question",   cls: "bg-emerald-500/15 text-emerald-300 border-emerald-500/30" },
-  { id: "meme",       label: "Meme",       cls: "bg-amber-500/15 text-amber-300 border-amber-500/30" },
+  { id: "meme",       label: "Meme",       cls: "bg-accent/15 text-accent-bright border-accent/30" },
   { id: "spoiler",    label: "Spoiler",    cls: "bg-red-500/15 text-red-300 border-red-500/30" },
 ]
 const FLAIR_BY_ID = Object.fromEntries(FLAIRS.map(f => [f.id, f]))
@@ -163,7 +163,7 @@ function Composer({ slug, denName }: { slug: string; denName: string }) {
             <div className="relative mt-2 inline-block">
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img src={image} alt="" className="max-h-56 rounded-xl border border-border object-cover" />
-              <button onClick={() => setImage(null)} className="absolute right-2 top-2 grid h-7 w-7 place-items-center rounded-full bg-black/70 text-white transition-transform active:scale-90" aria-label="Remove image">
+              <button onClick={() => setImage(null)} className="absolute right-2 top-2 grid h-7 w-7 place-items-center rounded-full bg-black/70 text-foreground transition-transform active:scale-90" aria-label="Remove image">
                 <X size={14} />
               </button>
             </div>
@@ -190,7 +190,7 @@ function Composer({ slug, denName }: { slug: string; denName: string }) {
               </div>
 
               <div className="mt-3 flex items-center justify-between gap-2 border-t border-border pt-3">
-                <button onClick={() => fileRef.current?.click()} disabled={isUploading} className="inline-flex items-center gap-1.5 rounded-lg px-2.5 py-2 text-[11px] font-black uppercase tracking-widest text-muted transition-colors hover:text-white disabled:opacity-50">
+                <button onClick={() => fileRef.current?.click()} disabled={isUploading} className="inline-flex items-center gap-1.5 rounded-lg px-2.5 py-2 text-[11px] font-black uppercase tracking-widest text-muted transition-colors hover:text-foreground disabled:opacity-50">
                   {isUploading ? <Loader2 size={14} className="animate-spin" /> : <ImagePlus size={14} />}
                   {isUploading ? "Uploading…" : "Image"}
                 </button>
@@ -259,13 +259,13 @@ function PostCard({
         <button
           onClick={(e) => { e.preventDefault(); onHype(row.id) }}
           className={`grid h-9 w-9 place-items-center rounded-xl border transition-all active:scale-90 ${
-            mine ? "border-amber-400/40 bg-amber-400/15 text-amber-400" : "border-border bg-surface-2 text-subtle hover:border-amber-400/30 hover:text-amber-400"
+            mine ? "border-accent-bright/40 bg-accent-bright/15 text-accent-bright" : "border-border bg-surface-2 text-subtle hover:border-accent-bright/30 hover:text-accent-bright"
           }`}
           aria-label="Hype this"
         >
-          <Flame size={16} className={mine ? "fill-amber-400/40" : ""} />
+          <Flame size={16} className={mine ? "fill-accent-bright/40" : ""} />
         </button>
-        <span className={`text-xs font-black tabular-nums ${mine ? "text-amber-400" : "text-muted"}`}>{count}</span>
+        <span className={`text-xs font-black tabular-nums ${mine ? "text-accent-bright" : "text-muted"}`}>{count}</span>
       </div>
 
       {/* Body */}
@@ -321,7 +321,7 @@ function PostCard({
         {/* Flair + title */}
         <div className="mt-1 flex items-center gap-2">
           {flair && <span className={`shrink-0 rounded-full border px-2 py-0.5 text-[9px] font-black uppercase tracking-wider ${flair.cls}`}>{flair.label}</span>}
-          <h3 className="text-sm font-black text-foreground transition-colors group-hover:text-white sm:text-base line-clamp-2">{row.title}</h3>
+          <h3 className="text-sm font-black text-foreground transition-colors group-hover:text-foreground sm:text-base line-clamp-2">{row.title}</h3>
         </div>
 
         {/* Body / spoiler-gated content */}
@@ -345,10 +345,10 @@ function PostCard({
         {/* Footer */}
         <div className="mt-2.5 flex items-center gap-1 text-subtle">
           <span className="inline-flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-[11px] font-bold"><MessageSquare size={13} /> {row.replies}</span>
-          <button onClick={share} className="inline-flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-[11px] font-bold transition-colors hover:text-white"><Share2 size={13} /> Share</button>
+          <button onClick={share} className="inline-flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-[11px] font-bold transition-colors hover:text-foreground"><Share2 size={13} /> Share</button>
           <button
             onClick={(e) => { e.preventDefault(); onSave(row.id, !row.savedByMe) }}
-            className={`inline-flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-[11px] font-bold transition-colors ${row.savedByMe ? "text-accent-bright" : "hover:text-white"}`}
+            className={`inline-flex items-center gap-1.5 rounded-lg px-2 py-1.5 text-[11px] font-bold transition-colors ${row.savedByMe ? "text-accent-bright" : "hover:text-foreground"}`}
           >
             <Bookmark size={13} className={row.savedByMe ? "fill-current" : ""} /> {row.savedByMe ? "Saved" : "Save"}
           </button>

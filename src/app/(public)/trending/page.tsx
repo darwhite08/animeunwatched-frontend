@@ -172,7 +172,7 @@ export default function TrendingPage() {
                   <div className="flex-1 min-w-0 flex flex-col justify-center gap-2">
                     <div className="flex items-start justify-between gap-3">
                       <div className="min-w-0">
-                        <p className="text-sm font-black text-foreground group-hover:text-white transition-colors truncate">{anime.title}</p>
+                        <p className="text-sm font-black text-foreground group-hover:text-foreground transition-colors truncate">{anime.title}</p>
                         <p className="text-[10px] text-subtle mt-0.5">{anime.studios[0] ?? "Unknown"} · {anime.year}</p>
                       </div>
                       <span className="shrink-0 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-[10px] font-black text-emerald-400">

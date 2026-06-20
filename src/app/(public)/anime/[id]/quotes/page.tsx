@@ -79,7 +79,7 @@ export default function QuotesPage({ params }: { params: Promise<{ id: string }>
         <div className="mt-8 p-4 rounded-2xl border border-border bg-surface text-center">
           <p className="text-[10px] text-subtle">
             Know a great quote from this anime? Share it in the{" "}
-            <Link href={`/anime/${id}/discuss`} className="text-accent-bright/60 hover:text-white transition-colors">discussion thread</Link>.
+            <Link href={`/anime/${id}/discuss`} className="text-accent-bright/60 hover:text-foreground transition-colors">discussion thread</Link>.
           </p>
         </div>
       </div>

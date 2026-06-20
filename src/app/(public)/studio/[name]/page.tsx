@@ -31,7 +31,7 @@ export default function StudioPage({ params }: { params: Promise<{ name: string 
   return (
     <div className="min-h-screen bg-background text-foreground pb-32">
       <div className="max-w-7xl mx-auto px-6 pt-32">
-        <Link href="/studios" className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-accent-bright/60 hover:text-white transition-colors mb-6">
+        <Link href="/studios" className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-accent-bright/60 hover:text-foreground transition-colors mb-6">
           <ChevronLeft size={11}/> All Studios
         </Link>
 

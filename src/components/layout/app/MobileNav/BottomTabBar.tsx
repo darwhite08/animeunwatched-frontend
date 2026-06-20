@@ -55,7 +55,7 @@ export function BottomTabBar() {
               {count > 0 && (
                 <span
                   aria-label={`${count} unread`}
-                  className="absolute right-1.5 top-0 min-w-[17px] rounded-full bg-rose-500 px-1 text-center text-[9px] font-black leading-[17px] text-white ring-2 ring-background"
+                  className="absolute right-1.5 top-0 min-w-[17px] rounded-full bg-rose-500 px-1 text-center text-[9px] font-black leading-[17px] text-foreground ring-2 ring-background"
                 >
                   {count > 9 ? "9+" : count}
                 </span>

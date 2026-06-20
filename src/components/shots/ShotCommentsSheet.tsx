@@ -148,7 +148,7 @@ export function ShotCommentsSheet({
           // eslint-disable-next-line @next/next/no-img-element
           <img src={c.author.avatarUrl} alt="" className={`${isReply ? "h-7 w-7" : "h-8 w-8"} rounded-full object-cover`} />
         ) : (
-          <span className={`flex ${isReply ? "h-7 w-7" : "h-8 w-8"} items-center justify-center rounded-full bg-white/10 text-xs font-black text-white`}>
+          <span className={`flex ${isReply ? "h-7 w-7" : "h-8 w-8"} items-center justify-center rounded-full bg-white/10 text-xs font-black text-foreground`}>
             {c.author.username[0]?.toUpperCase()}
           </span>
         )}
@@ -170,7 +170,7 @@ export function ShotCommentsSheet({
             Reply
           </button>
           {isShotAuthor && (
-            <button onClick={() => togglePin(c)} className="inline-flex items-center gap-1 transition-colors hover:text-white">
+            <button onClick={() => togglePin(c)} className="inline-flex items-center gap-1 transition-colors hover:text-foreground">
               <Pin size={12} /> {c.pinned ? "Unpin" : "Pin"}
             </button>
           )}

@@ -1,6 +1,6 @@
 export default function Loading() {
   return (
-    <div className="flex h-[calc(100dvh-3.5rem)] w-full items-center justify-center bg-black">
+    <div className="flex h-[calc(100dvh-3.5rem)] w-full items-center justify-center bg-background">
       {/* Vertical reel card skeleton */}
       <div className="relative aspect-[9/16] h-full max-h-full w-auto overflow-hidden rounded-3xl bg-zinc-900 ring-1 ring-white/10 animate-pulse">
         <div className="absolute inset-x-0 bottom-0 p-4 space-y-3">

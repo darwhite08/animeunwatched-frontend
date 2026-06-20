@@ -41,7 +41,7 @@ export function AvatarMenu() {
         aria-label="Account menu"
         aria-haspopup="menu"
         aria-expanded={open}
-        className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-accent-bright to-accent text-sm font-black text-white ring-2 ring-white/10 transition-all hover:ring-white/50 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60"
+        className="flex h-11 w-11 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-accent-bright to-accent text-sm font-black text-foreground ring-2 ring-white/10 transition-all hover:ring-white/50 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60"
       >
         {user?.avatarUrl ? (
           // eslint-disable-next-line @next/next/no-img-element

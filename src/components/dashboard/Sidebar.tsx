@@ -163,7 +163,7 @@ export default function Sidebar() {
                   <p className="text-[9px] text-subtle uppercase tracking-tighter mt-0.5">Flame {grade}</p>
                 </div>
               </div>
-              <ChevronRight size={12} className="text-subtle group-hover:text-white group-hover:translate-x-0.5 transition-all" />
+              <ChevronRight size={12} className="text-subtle group-hover:text-foreground group-hover:translate-x-0.5 transition-all" />
             </div>
             <div>
               <div className="flex justify-between text-[8px] font-black uppercase tracking-widest text-subtle mb-1">

@@ -143,9 +143,9 @@ export default function CreateThreadPage({
 
         {/* Breadcrumb */}
         <nav className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-subtle flex-wrap">
-          <Link href="/clubs" className="hover:text-white transition-colors">Clubs</Link>
+          <Link href="/clubs" className="hover:text-foreground transition-colors">Clubs</Link>
           <ChevronRight size={10} className="text-subtle" />
-          <Link href={`/clubs/${slug}`} className="hover:text-white transition-colors">
+          <Link href={`/clubs/${slug}`} className="hover:text-foreground transition-colors">
             {name}
           </Link>
           <ChevronRight size={10} className="text-subtle" />
@@ -207,7 +207,7 @@ export default function CreateThreadPage({
               <button
                 type="button"
                 onClick={() => setPreview((p) => !p)}
-                className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest text-subtle hover:text-white transition-colors"
+                className="flex items-center gap-1.5 text-[9px] font-black uppercase tracking-widest text-subtle hover:text-foreground transition-colors"
               >
                 {preview ? <EyeOff size={11} /> : <Eye size={11} />}
                 {preview ? "Edit" : "Preview"}

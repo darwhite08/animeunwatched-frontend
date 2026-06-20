@@ -60,7 +60,7 @@ function YearCard({ year, index, allAnime }: { year: number; index: number; allA
           <div className="absolute bottom-0 left-0 right-0 p-4">
             {top ? (
               <>
-                <p className="text-xs font-black uppercase italic tracking-tight text-foreground leading-tight line-clamp-2 group-hover:text-white transition-colors">
+                <p className="text-xs font-black uppercase italic tracking-tight text-foreground leading-tight line-clamp-2 group-hover:text-foreground transition-colors">
                   {top.title}
                 </p>
                 <div className="flex items-center gap-2 mt-1.5">

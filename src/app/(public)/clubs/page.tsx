@@ -89,7 +89,7 @@ function ClubCard({
 
       <div className="p-4 sm:p-5 space-y-4">
         {/* Name */}
-        <h3 className="text-base font-black uppercase italic tracking-tight text-foreground leading-snug group-hover:text-white transition-colors line-clamp-2">
+        <h3 className="text-base font-black uppercase italic tracking-tight text-foreground leading-snug group-hover:text-foreground transition-colors line-clamp-2">
           {club.name}
         </h3>
 

@@ -51,7 +51,7 @@ export function SidebarItem({
       {!collapsed && count > 0 && (
         <span
           aria-label={`${count} unread`}
-          className="ml-auto min-w-[20px] rounded-full bg-rose-500 px-1.5 py-0.5 text-center text-[10px] font-black text-white"
+          className="ml-auto min-w-[20px] rounded-full bg-rose-500 px-1.5 py-0.5 text-center text-[10px] font-black text-foreground"
         >
           {count > 9 ? "9+" : count}
         </span>

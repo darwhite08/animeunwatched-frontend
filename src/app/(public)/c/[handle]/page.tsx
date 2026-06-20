@@ -43,7 +43,7 @@ export default function StorefrontPage({ params }: { params: Promise<{ handle: s
           // eslint-disable-next-line @next/next/no-img-element
           <img src={creator.avatarUrl} alt="" className="mx-auto h-24 w-24 rounded-full border-2 border-accent/40 object-cover" />
         ) : (
-          <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-accent text-3xl font-black text-white">{creator.displayName?.[0]?.toUpperCase() ?? "?"}</div>
+          <div className="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-accent text-3xl font-black text-foreground">{creator.displayName?.[0]?.toUpperCase() ?? "?"}</div>
         )}
         <h1 className="mt-4 flex items-center justify-center gap-2 text-3xl font-black uppercase italic tracking-tighter text-foreground">
           {creator.displayName} <VerifiedBadge kind={creator.verifiedKind} size={22} />
@@ -56,11 +56,11 @@ export default function StorefrontPage({ params }: { params: Promise<{ handle: s
 
         <div className="mt-5 flex items-center justify-center gap-5 text-sm">
           <span className="flex items-center gap-1.5 text-foreground"><Users size={15} className="text-muted" /> <b>{stats.followers.toLocaleString()}</b> <span className="text-muted">followers</span></span>
-          <span className="flex items-center gap-1.5 text-foreground"><Star size={15} className="text-amber-400" /> <b>{stats.reputation.toLocaleString()}</b> <span className="text-muted">rep</span></span>
+          <span className="flex items-center gap-1.5 text-foreground"><Star size={15} className="text-accent-bright" /> <b>{stats.reputation.toLocaleString()}</b> <span className="text-muted">rep</span></span>
         </div>
 
         <div className="mt-6 flex items-center justify-center gap-3">
-          <Link href={`/u/${creator.username}`} className="rounded-xl bg-accent px-6 py-2.5 text-xs font-black uppercase tracking-widest text-white hover:opacity-90">View profile</Link>
+          <Link href={`/u/${creator.username}`} className="rounded-xl bg-accent px-6 py-2.5 text-xs font-black uppercase tracking-widest text-foreground hover:opacity-90">View profile</Link>
           <SupportCreator username={creator.username} />
         </div>
         <p className="mt-4 flex items-center justify-center gap-1.5 text-[11px] text-muted"><Calendar size={12} /> Creator since {new Date(creator.joinedAt).toLocaleDateString(undefined, { month: "long", year: "numeric" })}</p>
@@ -73,7 +73,7 @@ export default function StorefrontPage({ params }: { params: Promise<{ handle: s
         <Section icon={<Clapperboard size={16} />} title="Shots" href="/shots">
           <div className="grid grid-cols-3 gap-3 sm:grid-cols-6">
             {content.shots.map((s) => (
-              <Link key={s.id} href="/shots" className="aspect-[9/16] overflow-hidden rounded-xl border border-border bg-black">
+              <Link key={s.id} href="/shots" className="aspect-[9/16] overflow-hidden rounded-xl border border-border bg-background">
                 {s.thumbnailUrl ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img src={s.thumbnailUrl} alt="" className="h-full w-full object-cover" />
@@ -109,7 +109,7 @@ export default function StorefrontPage({ params }: { params: Promise<{ handle: s
                   <img src={r.anime.imageUrl} alt="" className="h-16 w-12 shrink-0 rounded-lg object-cover" />
                 )}
                 <div className="min-w-0">
-                  <div className="flex items-center gap-2"><span className="truncate font-bold text-foreground">{r.anime?.title ?? "Anime"}</span><span className="flex items-center gap-0.5 text-xs font-black text-amber-400"><Star size={11} className="fill-amber-400" /> {r.score}</span></div>
+                  <div className="flex items-center gap-2"><span className="truncate font-bold text-foreground">{r.anime?.title ?? "Anime"}</span><span className="flex items-center gap-0.5 text-xs font-black text-accent-bright"><Star size={11} className="fill-accent-bright" /> {r.score}</span></div>
                   <p className="mt-1 line-clamp-2 text-xs text-muted">{r.snippet}</p>
                 </div>
               </Link>

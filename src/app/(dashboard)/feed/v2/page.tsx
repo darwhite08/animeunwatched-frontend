@@ -40,7 +40,7 @@ function ActivityCard({ a }: { a: Activity }) {
             : <span className="font-black text-foreground">{a.author.displayName[0]}</span>}
         </div>
         <div className="min-w-0 flex-1">
-          <Link href={`/u/${handle}`} className="font-bold text-foreground hover:text-white transition-colors text-sm">
+          <Link href={`/u/${handle}`} className="font-bold text-foreground hover:text-foreground transition-colors text-sm">
             {a.author.displayName}
           </Link>
           <div className="text-[11px] text-subtle font-mono uppercase tracking-widest">
@@ -83,12 +83,12 @@ function ActivityCard({ a }: { a: Activity }) {
           <HeartLike liked={a.isLikedByMe} onToggle={toggleLike} size={16} />
           <span className="tabular-nums">{a.likeCount}</span>
         </span>
-        <button onClick={toggleRepost} className="flex items-center gap-1.5 hover:text-white transition-colors disabled:opacity-50"
+        <button onClick={toggleRepost} className="flex items-center gap-1.5 hover:text-foreground transition-colors disabled:opacity-50"
           disabled={repost.isPending || unrepost.isPending}>
           <Repeat2 size={15} className={a.isRepostedByMe ? "text-accent" : ""} />
           <span className="tabular-nums">{a.repostCount}</span>
         </button>
-        <Link href={`/posts/${a.id}`} className="flex items-center gap-1.5 hover:text-white transition-colors">
+        <Link href={`/posts/${a.id}`} className="flex items-center gap-1.5 hover:text-foreground transition-colors">
           <MessageCircle size={15} />
           <span className="tabular-nums">{a.replyCount}</span>
         </Link>

@@ -129,9 +129,9 @@ export default async function GenrePage({
 
       {/* Breadcrumb trail (crawlable internal links) */}
       <nav className="mb-4 text-xs text-muted" aria-label="Breadcrumb">
-        <Link href="/" className="hover:text-amber-300">Home</Link>
+        <Link href="/" className="hover:text-accent-bright">Home</Link>
         <span className="mx-1.5">/</span>
-        <Link href="/genres" className="hover:text-amber-300">Genres</Link>
+        <Link href="/genres" className="hover:text-accent-bright">Genres</Link>
         <span className="mx-1.5">/</span>
         <span className="text-foreground">{genre.name}</span>
       </nav>
@@ -145,7 +145,7 @@ export default async function GenrePage({
           The definitive ranked list of {genre.name.toLowerCase()} anime — {genre.blurb}.
           Every title below is ranked by community score and links to its full page
           with episodes, ratings, trailers, and one-tap tracking.
-          {" "}<Link href="/register" className="text-amber-400 underline hover:text-amber-300">
+          {" "}<Link href="/register" className="text-accent-bright underline hover:text-accent-bright">
             Create a free account
           </Link>{" "}to build your own {genre.name.toLowerCase()} watchlist and get AI
           recommendations tuned to your taste.
@@ -162,7 +162,7 @@ export default async function GenrePage({
             <Link
               key={g.slug}
               href={`/genres/${g.slug}`}
-              className="rounded-full border border-border bg-white/[0.02] px-3 py-1.5 text-sm text-muted transition hover:border-amber-500/40 hover:text-amber-300"
+              className="rounded-full border border-border bg-white/[0.02] px-3 py-1.5 text-sm text-muted transition hover:border-accent/40 hover:text-accent-bright"
             >
               {g.emoji} {g.name}
             </Link>
@@ -170,9 +170,9 @@ export default async function GenrePage({
         </div>
         <p className="mt-6 text-sm text-muted">
           Looking for something specific? Try{" "}
-          <Link href="/ai-discover" className="text-amber-400 hover:text-amber-300">AI Discover</Link>,{" "}
-          <Link href="/mood" className="text-amber-400 hover:text-amber-300">browse by mood</Link>, or see the{" "}
-          <Link href="/bestanimelist" className="text-amber-400 hover:text-amber-300">all-time best anime list</Link>.
+          <Link href="/ai-discover" className="text-accent-bright hover:text-accent-bright">AI Discover</Link>,{" "}
+          <Link href="/mood" className="text-accent-bright hover:text-accent-bright">browse by mood</Link>, or see the{" "}
+          <Link href="/bestanimelist" className="text-accent-bright hover:text-accent-bright">all-time best anime list</Link>.
         </p>
       </section>
     </main>

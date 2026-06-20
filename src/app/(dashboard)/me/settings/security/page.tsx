@@ -370,7 +370,7 @@ function DangerZone({ onLogoutAll }: { onLogoutAll: () => void }) {
                 <div className="flex gap-3 pt-1">
                   <button
                     onClick={() => { onLogoutAll(); setConfirm(false) }}
-                    className="flex-1 py-2.5 rounded-xl bg-red-600 hover:bg-red-500 text-[11px] font-black uppercase tracking-widest text-white transition-colors active:scale-95"
+                    className="flex-1 py-2.5 rounded-xl bg-red-600 hover:bg-red-500 text-[11px] font-black uppercase tracking-widest text-foreground transition-colors active:scale-95"
                   >
                     Yes, log out all
                   </button>

@@ -48,7 +48,7 @@ export function PostGallery({ images, layout = "grid" }: { images: string[]; lay
 
   // Carousel
   return (
-    <div className="relative rounded-2xl overflow-hidden border border-border bg-black max-w-[520px] select-none">
+    <div className="relative rounded-2xl overflow-hidden border border-border bg-background max-w-[520px] select-none">
       <a href={imgs[index]} target="_blank" rel="noopener noreferrer" className="block">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={imgs[index]} alt={`Photo ${index + 1} of ${imgs.length}`} loading="lazy" decoding="async" referrerPolicy="no-referrer"
@@ -56,15 +56,15 @@ export function PostGallery({ images, layout = "grid" }: { images: string[]; lay
       </a>
 
       <button type="button" onClick={() => setIndex(clamp(index - 1))} aria-label="Previous photo"
-        className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/55 backdrop-blur-sm text-white flex items-center justify-center hover:bg-black/80 transition-colors">
+        className="absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/55 backdrop-blur-sm text-foreground flex items-center justify-center hover:bg-black/80 transition-colors">
         <ChevronLeft size={18} />
       </button>
       <button type="button" onClick={() => setIndex(clamp(index + 1))} aria-label="Next photo"
-        className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/55 backdrop-blur-sm text-white flex items-center justify-center hover:bg-black/80 transition-colors">
+        className="absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-black/55 backdrop-blur-sm text-foreground flex items-center justify-center hover:bg-black/80 transition-colors">
         <ChevronRight size={18} />
       </button>
 
-      <div className="absolute top-2 right-2 px-2 py-0.5 rounded-full bg-black/60 backdrop-blur-sm text-white text-[11px] font-bold tabular-nums">
+      <div className="absolute top-2 right-2 px-2 py-0.5 rounded-full bg-black/60 backdrop-blur-sm text-foreground text-[11px] font-bold tabular-nums">
         {index + 1}/{imgs.length}
       </div>
 

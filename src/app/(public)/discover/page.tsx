@@ -114,7 +114,7 @@ function TrendingCard({
             <span className="text-[9px] font-black text-subtle uppercase">{anime.year}</span>
           </div>
 
-          <h3 className="text-base font-black text-foreground uppercase italic tracking-tighter leading-tight line-clamp-2 group-hover:text-white transition-colors duration-300">
+          <h3 className="text-base font-black text-foreground uppercase italic tracking-tighter leading-tight line-clamp-2 group-hover:text-foreground transition-colors duration-300">
             {anime.title}
           </h3>
 

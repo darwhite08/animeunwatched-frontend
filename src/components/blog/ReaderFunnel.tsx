@@ -62,8 +62,8 @@ export function ReaderFunnel({ excludeSlug }: { excludeSlug?: string }) {
                     <div className="h-full w-full bg-gradient-to-br from-zinc-800 to-black" />
                   )}
                   {a.score != null && (
-                    <span className="absolute left-1.5 top-1.5 inline-flex items-center gap-0.5 rounded-md bg-black/60 px-1.5 py-0.5 text-[10px] font-black text-amber-300">
-                      <Star size={9} className="fill-amber-300 text-amber-300" />{a.score.toFixed(1)}
+                    <span className="absolute left-1.5 top-1.5 inline-flex items-center gap-0.5 rounded-md bg-black/60 px-1.5 py-0.5 text-[10px] font-black text-accent-bright">
+                      <Star size={9} className="fill-accent-bright text-accent-bright" />{a.score.toFixed(1)}
                     </span>
                   )}
                 </div>
@@ -112,7 +112,7 @@ export function ReaderFunnel({ excludeSlug }: { excludeSlug?: string }) {
                 href={`/blog/${b.slug}`}
                 className="group flex flex-col rounded-2xl border border-border bg-surface-2 p-5 transition-all hover:border-white/30"
               >
-                <p className="line-clamp-2 text-sm font-black uppercase italic leading-snug tracking-tight text-foreground transition-colors group-hover:text-white">
+                <p className="line-clamp-2 text-sm font-black uppercase italic leading-snug tracking-tight text-foreground transition-colors group-hover:text-foreground">
                   {b.title}
                 </p>
                 <p className="mt-2 flex items-center gap-1.5 text-[10px] text-subtle">

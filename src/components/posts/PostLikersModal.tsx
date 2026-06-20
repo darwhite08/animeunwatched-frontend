@@ -70,7 +70,7 @@ export function PostLikersModal({ postId, open, onClose }: { postId: string; ope
                           /* eslint-disable-next-line @next/next/no-img-element */
                           <img src={liker.avatarUrl} alt="" className="h-10 w-10 rounded-full object-cover shrink-0" />
                         ) : (
-                          <div className="h-10 w-10 rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-sm font-black text-white shrink-0">
+                          <div className="h-10 w-10 rounded-full bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-sm font-black text-foreground shrink-0">
                             {liker.displayName[0]?.toUpperCase()}
                           </div>
                         )}

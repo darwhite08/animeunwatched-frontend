@@ -169,7 +169,7 @@ export default function ReviewsPage() {
                     <div className="relative">
                       <p className="text-sm text-muted leading-relaxed blur-[4px] select-none line-clamp-3">{r.body}</p>
                       <button onClick={() => setRevealed(s => new Set([...s, r.id]))}
-                        className="absolute inset-0 flex items-center justify-center gap-2 bg-black/20 rounded-xl text-xs font-black uppercase tracking-widest text-accent-bright hover:text-white transition-colors"
+                        className="absolute inset-0 flex items-center justify-center gap-2 bg-black/20 rounded-xl text-xs font-black uppercase tracking-widest text-accent-bright hover:text-foreground transition-colors"
                       >
                         <EyeOff size={13} /> Reveal Spoilers
                       </button>
@@ -181,7 +181,7 @@ export default function ReviewsPage() {
                       </p>
                       {r.body.length > TRUNCATE && (
                         <button onClick={() => setExpanded(s => { const n = new Set(s); isExpanded ? n.delete(r.id) : n.add(r.id); return n })}
-                          className="text-[10px] font-black text-accent-bright hover:text-white mt-1 transition-colors"
+                          className="text-[10px] font-black text-accent-bright hover:text-foreground mt-1 transition-colors"
                         >
                           {isExpanded ? "Show less" : "Read more"}
                         </button>

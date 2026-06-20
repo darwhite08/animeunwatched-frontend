@@ -582,7 +582,7 @@ function Favorites() {
         <div className="flex items-center gap-2 text-sm font-bold text-foreground">
           <Crown size={15} className="text-accent" /> All-time favorites
         </div>
-        <button className="flex items-center gap-1 text-xs font-bold text-accent hover:text-white transition-colors">
+        <button className="flex items-center gap-1 text-xs font-bold text-accent hover:text-foreground transition-colors">
           Edit list <ChevronRight size={13} />
         </button>
       </div>
@@ -833,7 +833,7 @@ function ActivityFeed() {
         <div className="flex items-center gap-2 text-sm font-bold text-foreground">
           <Clock size={14} className="text-accent" /> Recent activity
         </div>
-        <Link href="/profile/activity" className="flex items-center gap-1 text-xs font-bold text-accent hover:text-white transition-colors">
+        <Link href="/profile/activity" className="flex items-center gap-1 text-xs font-bold text-accent hover:text-foreground transition-colors">
           All <ChevronRight size={13} />
         </Link>
       </div>

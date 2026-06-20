@@ -39,7 +39,7 @@ const FLAIR_BY_ID: Record<string, { label: string; cls: string }> = {
   "fan-art":  { label: "Fan Art",    cls: "bg-pink-500/15 text-pink-300 border-pink-500/30" },
   news:       { label: "News",       cls: "bg-sky-500/15 text-sky-300 border-sky-500/30" },
   question:   { label: "Question",   cls: "bg-emerald-500/15 text-emerald-300 border-emerald-500/30" },
-  meme:       { label: "Meme",       cls: "bg-amber-500/15 text-amber-300 border-amber-500/30" },
+  meme:       { label: "Meme",       cls: "bg-accent/15 text-accent-bright border-accent/30" },
   spoiler:    { label: "Spoiler",    cls: "bg-red-500/15 text-red-300 border-red-500/30" },
 }
 
@@ -126,7 +126,7 @@ function ImageAttach({
             type="button"
             onClick={onRemove}
             aria-label="Remove image"
-            className="absolute -top-2 -right-2 h-6 w-6 rounded-full bg-black/80 border border-border flex items-center justify-center text-white hover:bg-red-500/80 transition-colors active:scale-95"
+            className="absolute -top-2 -right-2 h-6 w-6 rounded-full bg-black/80 border border-border flex items-center justify-center text-foreground hover:bg-red-500/80 transition-colors active:scale-95"
           >
             <X size={12} />
           </button>
@@ -137,7 +137,7 @@ function ImageAttach({
         onClick={() => inputRef.current?.click()}
         disabled={uploading}
         aria-label="Attach image"
-        className="flex h-9 w-9 items-center justify-center rounded-xl bg-surface border border-border text-subtle hover:text-white hover:border-white/30 disabled:opacity-40 transition-all active:scale-95"
+        className="flex h-9 w-9 items-center justify-center rounded-xl bg-surface border border-border text-subtle hover:text-foreground hover:border-white/30 disabled:opacity-40 transition-all active:scale-95"
       >
         {uploading ? <Loader2 size={14} className="animate-spin" /> : <ImagePlus size={14} />}
       </button>
@@ -288,7 +288,7 @@ function ReplyNode({
                 onClick={() => setCollapsed(c => !c)}
                 aria-label={collapsed ? "Expand thread" : "Collapse thread"}
                 aria-expanded={!collapsed}
-                className="absolute -bottom-1 -right-1 z-10 grid h-[18px] w-[18px] place-items-center rounded-full border border-border bg-surface text-subtle transition-colors hover:border-white/50 hover:text-white active:scale-95"
+                className="absolute -bottom-1 -right-1 z-10 grid h-[18px] w-[18px] place-items-center rounded-full border border-border bg-surface text-subtle transition-colors hover:border-white/50 hover:text-foreground active:scale-95"
               >
                 {collapsed ? <Plus size={11} /> : <Minus size={11} />}
               </button>
@@ -313,7 +313,7 @@ function ReplyNode({
             <VerifiedBadge kind={reply.verifiedKind} size={12} />
             <span className="text-subtle">· {reply.date}</span>
             {collapsed && total > 0 && (
-              <button onClick={() => setCollapsed(false)} className="text-subtle hover:text-white transition-colors">
+              <button onClick={() => setCollapsed(false)} className="text-subtle hover:text-foreground transition-colors">
                 · {total} repl{total === 1 ? "y" : "ies"}
               </button>
             )}
@@ -343,7 +343,7 @@ function ReplyNode({
                 {!locked && (
                   <button
                     onClick={() => onToggleReply(reply.id)}
-                    className="flex items-center gap-1.5 rounded-full px-2 py-1 text-xs font-semibold text-subtle hover:bg-white/10 hover:text-white transition-colors active:scale-95"
+                    className="flex items-center gap-1.5 rounded-full px-2 py-1 text-xs font-semibold text-subtle hover:bg-white/10 hover:text-foreground transition-colors active:scale-95"
                   >
                     <Reply size={12} /> Reply
                   </button>
@@ -654,7 +654,7 @@ export default function ThreadDetailPage({
               onClick={hypeThread}
               aria-pressed={threadHype.hyped}
               className={`flex items-center gap-2 h-10 px-5 rounded-2xl border border-border bg-surface text-[11px] font-black uppercase tracking-widest transition-colors active:scale-95 ${
-                threadHype.hyped ? "text-amber-400" : "text-subtle hover:text-amber-400"
+                threadHype.hyped ? "text-accent-bright" : "text-subtle hover:text-accent-bright"
               }`}
             >
               <Flame size={14} fill={threadHype.hyped ? "currentColor" : "none"} />

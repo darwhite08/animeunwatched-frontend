@@ -77,7 +77,7 @@ export default function ProfileForm() {
           <button
             type="button"
             onClick={() => push("Avatar upload coming soon", "info")}
-            className="mt-2 flex items-center gap-1.5 text-[10px] font-black uppercase tracking-wider text-accent-bright hover:text-white transition-colors"
+            className="mt-2 flex items-center gap-1.5 text-[10px] font-black uppercase tracking-wider text-accent-bright hover:text-foreground transition-colors"
           >
             <Upload size={11} /> Change avatar
           </button>

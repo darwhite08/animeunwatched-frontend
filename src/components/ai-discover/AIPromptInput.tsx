@@ -111,7 +111,7 @@ export default function AIPromptInput({ onSearch }: AIPromptInputProps) {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.06 }}
                 onClick={() => setPrompt(text)}
-                className="group/btn relative shrink-0 px-3 py-1.5 text-[10px] font-bold rounded-lg border border-border text-muted hover:text-white hover:border-white/20 active:scale-95 transition-all duration-300"
+                className="group/btn relative shrink-0 px-3 py-1.5 text-[10px] font-bold rounded-lg border border-border text-muted hover:text-foreground hover:border-white/20 active:scale-95 transition-all duration-300"
               >
                 <span className="relative z-10 uppercase tracking-wider">{text}</span>
               </motion.button>

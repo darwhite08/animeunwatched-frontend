@@ -89,7 +89,7 @@ export default function RecentlyReviewedCard() {
         </div>
         <button
           onClick={() => push("Select an anime to review", "info")}
-          className="text-[9px] font-black uppercase tracking-widest text-accent-bright/60 hover:text-white transition-colors"
+          className="text-[9px] font-black uppercase tracking-widest text-accent-bright/60 hover:text-foreground transition-colors"
         >
           Write Review
         </button>
@@ -98,7 +98,7 @@ export default function RecentlyReviewedCard() {
       {/* Loading state */}
       {isLoading && (
         <div className="py-8 flex justify-center relative z-10">
-          <div className="w-6 h-6 rounded-full border-2 border-accent/30 border-t-amber-500 animate-spin" />
+          <div className="w-6 h-6 rounded-full border-2 border-accent/30 border-t-accent animate-spin" />
         </div>
       )}
 
@@ -107,7 +107,7 @@ export default function RecentlyReviewedCard() {
         <div className="py-6 text-center relative z-10">
           <PenSquare size={20} className="mx-auto mb-2 text-subtle" />
           <p className="text-[10px] text-subtle font-black uppercase tracking-widest">No reviews yet</p>
-          <Link href="/bestanimelist" className="mt-2 block text-[9px] text-accent-bright hover:text-white font-black uppercase tracking-widest">
+          <Link href="/bestanimelist" className="mt-2 block text-[9px] text-accent-bright hover:text-foreground font-black uppercase tracking-widest">
             Find Anime to Review →
           </Link>
         </div>
@@ -151,7 +151,7 @@ export default function RecentlyReviewedCard() {
       <div className="relative z-10 mt-6">
         <button
           onClick={() => push("Select an anime to review", "info")}
-          className="w-full py-3 rounded-2xl border border-dashed border-border hover:border-white/30 text-[10px] font-black uppercase tracking-widest text-subtle hover:text-white transition-all"
+          className="w-full py-3 rounded-2xl border border-dashed border-border hover:border-white/30 text-[10px] font-black uppercase tracking-widest text-subtle hover:text-foreground transition-all"
         >
           + Write a Review
         </button>

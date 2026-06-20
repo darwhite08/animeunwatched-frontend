@@ -107,7 +107,7 @@ export const WatchCard = ({ anime, onRemove, onEdit, onMarkDone }: { anime: Watc
         <div>
           <Link
             href={`/bestanimelist`}
-            className="text-xl font-black text-foreground tracking-tighter leading-tight hover:text-white transition-colors line-clamp-2"
+            className="text-xl font-black text-foreground tracking-tighter leading-tight hover:text-foreground transition-colors line-clamp-2"
           >
             {anime.title}
           </Link>

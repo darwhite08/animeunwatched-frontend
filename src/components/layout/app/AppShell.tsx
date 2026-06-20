@@ -5,7 +5,7 @@ import { Topbar } from "./Topbar/Topbar"
 import { BottomTabBar } from "./MobileNav/BottomTabBar"
 import { MobileDrawer } from "./MobileNav/MobileDrawer"
 import { EmailVerifyBanner } from "./EmailVerifyBanner"
-import { useSidebarStore } from "./useSidebarStore"
+import { useEffectiveCollapsed } from "./useSidebarStore"
 import { PageTransition } from "../PageTransition"
 
 /**
@@ -18,7 +18,7 @@ import { PageTransition } from "../PageTransition"
  * topbar provides the offset) and exposes --sticky-top / --page-top.
  */
 export function AppShell({ children, publicMode = false }: { children: React.ReactNode; publicMode?: boolean }) {
-  const collapsed = useSidebarStore((s) => s.collapsed)
+  const collapsed = useEffectiveCollapsed()
 
   return (
     <div className={`min-h-screen bg-background ${publicMode ? "app-public-shell" : ""}`}>

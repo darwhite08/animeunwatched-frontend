@@ -7,13 +7,13 @@ import { NAV_ITEMS } from "../sidebarConfig"
 import { SidebarItem } from "./SidebarItem"
 import { SidebarFlyoutItem } from "./SidebarFlyoutItem"
 import { SidebarGamification } from "./SidebarGamification"
-import { useSidebarStore } from "../useSidebarStore"
+import { useSidebarStore, useEffectiveCollapsed } from "../useSidebarStore"
 import KaiveronLogo from "@/components/ui/KaiveronLogo"
 
 export function Sidebar() {
   const user = useAuthStore((s) => s.user)
   const slug = user?.slug
-  const collapsed = useSidebarStore((s) => s.collapsed)
+  const collapsed = useEffectiveCollapsed()
   const toggle = useSidebarStore((s) => s.toggle)
 
   return (

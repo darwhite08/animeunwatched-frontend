@@ -1,6 +1,7 @@
 "use client"
 
 import { create } from "zustand"
+import { useEffect, useState } from "react"
 
 interface SidebarState {
   collapsed: boolean
@@ -29,3 +30,22 @@ export const useSidebarStore = create<SidebarState>((set) => ({
   },
   setMobileDrawer: (v) => set({ mobileDrawerOpen: v }),
 }))
+
+/**
+ * Effective collapsed state: the user's preference OR auto-collapsed when the
+ * viewport is below `lg` (1024px) — the same breakpoint where the feed's right
+ * rail disappears, so the rail and the nav rail strip away together and the feed
+ * gets the reclaimed width. Above lg, the user's toggle wins.
+ */
+export function useEffectiveCollapsed(): boolean {
+  const userCollapsed = useSidebarStore((s) => s.collapsed)
+  const [narrow, setNarrow] = useState(false)
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 1023px)")
+    setNarrow(mq.matches)
+    const on = () => setNarrow(mq.matches)
+    mq.addEventListener("change", on)
+    return () => mq.removeEventListener("change", on)
+  }, [])
+  return userCollapsed || narrow
+}

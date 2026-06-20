@@ -348,7 +348,7 @@ export default function BlogListingPage() {
       {/* Hero — The Chronicle masthead. Scrolls away with the page (NOT sticky)
           so the cards get the full viewport once you scroll. The cover well is
           a live article (highest-viewed / latest). */}
-      <div className="pt-[2px] pb-6 px-[2px]">
+      <div className="pt-[2px] pb-4 px-[5px]">
         <div className="chron chron-serif" role="img" aria-label="The Chronicle — long-form anime journalism by the community: deep dives, reviews, theories, and takes.">
           <div className="chron-wrap">
 

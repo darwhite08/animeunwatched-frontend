@@ -36,14 +36,8 @@ export const useNotifications = () => {
         qc.invalidateQueries({ queryKey: ["notifications"] })
         qc.invalidateQueries({ queryKey: ["notifications/unread"] })
 
-        // 2. Notification sound — same file used by chat new-message
-        if (typeof window !== "undefined") {
-          try {
-            const audio = new Audio("/sounds/new-message.mp3")
-            audio.volume = 0.4
-            void audio.play().catch(() => {})
-          } catch { /* autoplay blocked */ }
-        }
+        // 2. Sound is handled globally in RealtimeListeners (robust audio pool),
+        //    so it fires once everywhere — don't double-play here.
 
         // 3. Toast preview so a user not looking at the bell still notices
         const msg = payload?.payload?.message ?? payload?.payload?.title ?? "New notification"

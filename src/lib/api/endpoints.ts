@@ -279,7 +279,7 @@ export const markAllRead = () =>
 
 /* ── Leaderboard ── */
 export const getLeaderboard = (limit = 50, period = "all-time") =>
-  api<{ data: Array<{ rank: number; id: string; username: string; displayName: string; avatarUrl: string | null; reputation: number; xp: number; level: number; archived: number; reviews: number; posts: number }>; meta: { total: number; period: string } }>(`/users/leaderboard/top?limit=${limit}&period=${period}`)
+  api<{ data: Array<{ rank: number; id: string; username: string; displayName: string; avatarUrl: string | null; verifiedKind: "USER" | "CREATOR" | "STUDIO" | null; reputation: number; xp: number; level: number; archived: number; reviews: number; posts: number }>; meta: { total: number; period: string } }>(`/users/leaderboard/top?limit=${limit}&period=${period}`)
 
 export interface PostLiker {
   id: string; username: string; slug: string | null; displayName: string

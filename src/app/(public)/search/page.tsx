@@ -12,6 +12,10 @@ import Image from "next/image"
 import { useSearchAnimeApi, useBrowseAnime } from "@/hooks/useAnime"
 import { useLeaderboard } from "@/hooks/useLeaderboard"
 import { useDiscover } from "@/hooks/usePosts"
+import { Avatar } from "@/components/ui/Avatar"
+import { VerifiedBadge } from "@/components/social/VerifiedBadge"
+
+type VerifiedKind = "USER" | "CREATOR" | "STUDIO" | null
 
 function mapDTO(a: AnimeDTO, i: number): Anime {
   return {
@@ -27,10 +31,10 @@ function mapDTO(a: AnimeDTO, i: number): Anime {
 
 type Tab = "anime" | "users" | "posts"
 
-const MOCK_USERS = [
-  { id: "u1", name: "Otaku_Arch",    bio: "Legendary Shinobi • Level 99",    archived: 312 },
-  { id: "u2", name: "ShadowWatcher", bio: "Arch-Mage • Psychological fanatic", archived: 208 },
-  { id: "u3", name: "NeuralBot_X",   bio: "Elite Jonin • Shonen completionist", archived: 145 },
+const MOCK_USERS: { id: string; name: string; bio: string; archived: number; avatarUrl: string | null; verifiedKind: VerifiedKind }[] = [
+  { id: "u1", name: "Otaku_Arch",    bio: "Legendary Shinobi • Level 99",    archived: 312, avatarUrl: null, verifiedKind: null },
+  { id: "u2", name: "ShadowWatcher", bio: "Arch-Mage • Psychological fanatic", archived: 208, avatarUrl: null, verifiedKind: null },
+  { id: "u3", name: "NeuralBot_X",   bio: "Elite Jonin • Shonen completionist", archived: 145, avatarUrl: null, verifiedKind: null },
 ]
 
 function SearchContent() {
@@ -52,7 +56,7 @@ function SearchContent() {
     return (browseData?.data ?? []).map(mapDTO)
   }, [searchQ, searchData, browseData])
 
-  const apiUsers = (lbData?.data ?? []).map(u => ({ id: u.username, name: u.displayName, bio: `Level ${u.level} Shinobi`, archived: u.archived }))
+  const apiUsers = (lbData?.data ?? []).map(u => ({ id: u.username, name: u.displayName, bio: `Level ${u.level} Shinobi`, archived: u.archived, avatarUrl: u.avatarUrl, verifiedKind: u.verifiedKind as VerifiedKind }))
   const userResults = useMemo(() => {
     const base = apiUsers.length > 0 ? apiUsers : MOCK_USERS
     return base.filter(u => !query || u.name.toLowerCase().includes(query.toLowerCase()) || u.id.toLowerCase().includes(query.toLowerCase()))
@@ -193,11 +197,12 @@ function SearchContent() {
                     href={`/u/${u.id}`}
                     className="flex items-center gap-4 p-4 sm:p-5 rounded-2xl bg-surface border border-border hover:border-accent/40 hover:bg-surface transition-all group cursor-pointer"
                   >
-                    <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-lg font-black shrink-0">
-                      {u.name[0]}
-                    </div>
-                    <div className="flex-1">
-                      <p className="font-black text-foreground group-hover:text-foreground transition-colors">{u.name}</p>
+                    <Avatar src={u.avatarUrl} name={u.name} size={48} fallbackClassName="bg-gradient-to-br from-indigo-500 to-violet-600 text-lg font-black" />
+                    <div className="flex-1 min-w-0">
+                      <p className="flex items-center gap-1.5 font-black text-foreground group-hover:text-foreground transition-colors">
+                        <span className="truncate">{u.name}</span>
+                        <VerifiedBadge kind={u.verifiedKind} size={15} />
+                      </p>
                       <p className="text-xs text-subtle mt-0.5">{u.bio}</p>
                     </div>
                     <div className="text-right">

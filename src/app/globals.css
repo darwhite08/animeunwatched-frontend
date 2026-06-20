@@ -667,3 +667,15 @@ nav[aria-label="Primary mobile"] {
 .dens-ticker-track .sep { color: var(--app-subtle); padding: 0 clamp(14px,1.8cqw,28px); }
 .dens-ticker-track .hot { color: var(--app-accent); }
 @keyframes dens-march { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+/* ── Notification bell ring (plays when a new notification arrives) ───────── */
+@keyframes notif-ring {
+  0%   { transform: rotate(0); }
+  15%  { transform: rotate(16deg); }
+  30%  { transform: rotate(-14deg); }
+  45%  { transform: rotate(11deg); }
+  60%  { transform: rotate(-8deg); }
+  75%  { transform: rotate(5deg); }
+  100% { transform: rotate(0); }
+}
+.notif-ringing { animation: notif-ring 0.9s ease-in-out; transform-origin: top center; }

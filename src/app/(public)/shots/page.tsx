@@ -5,7 +5,7 @@ import Link from "next/link"
 import { MessageCircle, Bookmark, Share2, Plus, Volume2, VolumeX, Clapperboard, Loader2, Play, Pause, Star, Eye, MoreHorizontal, EyeOff, Captions } from "lucide-react"
 import { HeartLike } from "@/components/ui/HeartLike"
 import { api } from "@/lib/api/client"
-import { recordShotView, recordShotFeedback } from "@/lib/api/endpoints"
+import { recordShotView, recordShotFeedback, setAudioPref } from "@/lib/api/endpoints"
 import { getViewerKey } from "@/lib/shots/viewerKey"
 import { track } from "@/lib/analytics/ga"
 import { useAuthStore } from "@/stores/auth.store"
@@ -92,8 +92,28 @@ export default function ShotsPage() {
 
   // Posting a shot
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated)
+  const user = useAuthStore((s) => s.user)
   const showAuthPrompt = useAuthPrompt((s) => s.show)
   const [composing, setComposing] = useState(false)
+
+  // Restore the member's saved audio preference once on load — "unmute once" =
+  // sound on every future session, synced across devices (default: muted).
+  const audioPrefApplied = useRef(false)
+  useEffect(() => {
+    if (audioPrefApplied.current || user?.audioEnabled === undefined) return
+    audioPrefApplied.current = true
+    setMuted(!user.audioEnabled)
+  }, [user?.audioEnabled])
+
+  // Toggle + persist (fire-and-forget, only on an actual tap) so the choice
+  // sticks server-side. Player gain stays at the device level (never boosted).
+  const toggleMuted = useCallback(() => {
+    setMuted((m) => {
+      const next = !m
+      if (isAuthenticated) setAudioPref(!next).catch(() => {})
+      return next
+    })
+  }, [isAuthenticated])
   useEffect(() => {
     if (typeof window !== "undefined" && new URLSearchParams(window.location.search).get("compose")) {
       setComposing(true)
@@ -262,7 +282,7 @@ export default function ShotsPage() {
 
       {/* Mute toggle (posting lives in the top-bar + Create menu) */}
       <button
-        onClick={() => setMuted((m) => !m)}
+        onClick={toggleMuted}
         aria-label={muted ? "Unmute" : "Mute"}
         className="fixed right-4 top-[calc(env(safe-area-inset-top)+4.5rem)] z-40 grid h-11 w-11 place-items-center rounded-full bg-black/45 text-foreground backdrop-blur transition-transform duration-200 ease-out hover:bg-black/65 active:scale-95 md:absolute md:right-6 md:top-[4.5rem]"
       >

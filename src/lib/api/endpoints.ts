@@ -24,6 +24,13 @@ export const joinWaitlist = (email: string, source = "register", referredBy?: st
     body: JSON.stringify({ email, source, ...(referredBy ? { referredBy } : {}) }),
   })
 
+// Persist the member's feed-audio on/off choice (synced across devices).
+export const setAudioPref = (enabled: boolean) =>
+  api<{ audioEnabled: boolean }>("/auth/audio", {
+    method: "PATCH",
+    body: JSON.stringify({ enabled }),
+  })
+
 export type SignupInvite = {
   id: string; code: string; label: string | null; maxUses: number; uses: number
   expiresAt: string | null; revokedAt: string | null; createdAt: string

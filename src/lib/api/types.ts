@@ -52,6 +52,8 @@ export interface User {
   reputation: number
   /** Email me when I get a DM while offline (default true). */
   emailOnNewMessage?: boolean
+  /** Feed (Shots) sound on/off, synced across devices (default false). */
+  audioEnabled?: boolean
   createdAt: string
 }
 

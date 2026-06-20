@@ -9,13 +9,17 @@ import { useAuthStore } from "@/stores/auth.store"
 const BACKEND_FALLBACK = "https://api.kaiveron.com"
 
 function getSocketUrl(): string {
-  const envUrl = process.env.NEXT_PUBLIC_SOCKET_URL
-  if (typeof window === "undefined") return envUrl ?? BACKEND_FALLBACK
+  // IMPORTANT: trim + treat empty string as "unset". NEXT_PUBLIC_SOCKET_URL is
+  // configured as "" on Vercel, and `"" ?? fallback` returns "" — which would
+  // point the socket at the current origin (kaiveron.com), where Vercel does
+  // NOT proxy WebSockets, killing all realtime. `|| fallback` fixes that.
+  const envUrl = process.env.NEXT_PUBLIC_SOCKET_URL?.trim()
+  if (typeof window === "undefined") return envUrl || BACKEND_FALLBACK
   const host = window.location.hostname
   const isLocal = host === "localhost" || /^192\.168\.|^10\.|^172\.(1[6-9]|2\d|3[01])\./.test(host)
   if (isLocal) return `http://${host}:4000`
   // Production: prefer env var, fall back to api.kaiveron.com (never localhost)
-  return envUrl ?? BACKEND_FALLBACK
+  return envUrl || BACKEND_FALLBACK
 }
 const SOCKET_URL = getSocketUrl()
 

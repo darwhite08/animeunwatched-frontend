@@ -42,7 +42,7 @@ export default function AnimeModal({ isOpen, onClose, anime }: AnimeModalProps) 
   }
 
   return (
-    <Sheet open={isOpen && anime !== null} onClose={onClose} ariaLabel={anime?.title} className="sm:max-w-2xl">
+    <Sheet open={isOpen && anime !== null} onClose={onClose} ariaLabel={anime?.title} className="sm:max-w-3xl">
       {anime && (
         <div className="relative">
           {/* Cover */}
@@ -149,8 +149,9 @@ export default function AnimeModal({ isOpen, onClose, anime }: AnimeModalProps) 
               </p>
             </div>
 
-            {/* Actions */}
-            <div className="flex flex-wrap gap-3 pt-6 border-t border-border mt-6">
+            {/* Actions — pinned to the bottom of the scroll area so they're
+                always visible no matter how long the synopsis runs. */}
+            <div className="sticky bottom-0 z-10 -mx-6 sm:-mx-8 mt-6 flex flex-wrap gap-3 border-t border-border bg-background/95 px-6 sm:px-8 pt-4 pb-5 backdrop-blur supports-[backdrop-filter]:bg-background/80">
               <button
                 onClick={handleToggleList}
                 className={`flex-1 min-w-[140px] min-h-11 py-3.5 rounded-2xl font-black uppercase tracking-widest text-xs flex items-center justify-center gap-2.5 active:scale-[0.98] transition-all ${

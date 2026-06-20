@@ -11,8 +11,9 @@ import { HeartLike } from "@/components/ui/HeartLike"
 import Link from "next/link"
 import Image from "next/image"
 import { useBrowseAnime } from "@/hooks/useAnime"
-// useDiscover removed — this page renders only anime cards now;
-// algorithm-ranked posts live at /trending via useTrending.
+import { useTrending } from "@/hooks/usePosts"
+import { useQuery } from "@tanstack/react-query"
+import { api } from "@/lib/api/client"
 import type { AnimeDTO } from "@/lib/api/types"
 import type { Anime } from "@/lib/data/anime"
 
@@ -20,135 +21,58 @@ function mapDTO(a: AnimeDTO, i: number): Anime {
   return { id: String(a.malId), title: a.title, titleJapanese: a.titleJapanese ?? "", rating: a.score ?? 0, year: a.year ?? 0, episodes: a.episodes, type: (["TV","Movie","OVA"] as const).includes(a.type as any) ? a.type as any : "TV", status: a.status?.toLowerCase().includes("airing") ? "airing" : "finished", studio: a.studios[0] ?? "Unknown", genres: a.genres, synopsis: a.synopsis ?? "", image: a.imageUrl ?? "", tags: a.genres.map(g => g.toLowerCase().replace(/\s/g, "-")), category: "all", rank: i+1 }
 }
 
-/* ── Mock data ── */
+/* ── Types (all data is live; see hooks below) ── */
 type TrendingPost = {
-  id: number
+  id: string
   author: string
   avatar: string
+  avatarUrl?: string | null
   content: string
   anime?: string
   likes: number
   comments: number
   timeAgo: string
   tags: string[]
+  liked?: boolean
 }
 
-const TRENDING_POSTS: TrendingPost[] = [
-  {
-    id: 1,
-    author: "Otaku_Arch",
-    avatar: "O",
-    content:
-      "Frieren's mana concealment arc is the single best power-scaling episode of the decade. Fight me.",
-    anime: "Frieren: Beyond Journey's End",
-    likes: 842,
-    comments: 137,
-    timeAgo: "14m ago",
-    tags: ["frieren", "power-scaling", "must-watch"],
-  },
-  {
-    id: 2,
-    author: "NeuralBot_X",
-    avatar: "N",
-    content:
-      "Johan Liebert is the greatest villain in anime history and Monster deserves a 4K remaster. This is not up for debate.",
-    anime: "Monster",
-    likes: 619,
-    comments: 84,
-    timeAgo: "32m ago",
-    tags: ["monster", "villain", "underrated"],
-  },
-  {
-    id: 3,
-    author: "ShadowWatcher",
-    avatar: "S",
-    content:
-      "Just rewatched Brotherhood start to finish in 3 days. Some anime just never age. The alchemy system is still unmatched worldbuilding.",
-    anime: "Fullmetal Alchemist: Brotherhood",
-    likes: 507,
-    comments: 62,
-    timeAgo: "1h ago",
-    tags: ["FMA", "rewatch", "worldbuilding"],
-  },
-  {
-    id: 4,
-    author: "VoidSeeker",
-    avatar: "V",
-    content:
-      "Hot take: Chainsaw Man Part 2 is actually better than Part 1 once you stop expecting a sequel and treat it as something entirely new.",
-    anime: "Chainsaw Man",
-    likes: 388,
-    comments: 201,
-    timeAgo: "2h ago",
-    tags: ["chainsaw-man", "hot-take", "part2"],
-  },
-  {
-    id: 5,
-    author: "Cipher_Ronin",
-    avatar: "C",
-    content:
-      "Vinland Saga Season 2 is one of the quietest, most profound things anime has ever done. No fights. Just philosophy and farming. Perfection.",
-    anime: "Vinland Saga",
-    likes: 344,
-    comments: 49,
-    timeAgo: "3h ago",
-    tags: ["vinland-saga", "masterpiece", "slow-burn"],
-  },
-  {
-    id: 6,
-    author: "GlitchMage",
-    avatar: "G",
-    content:
-      "Dungeon Meshi is proof that the premise doesn't matter — execution is everything. 'Cooking dungeon monsters' became the most wholesome show of 2024.",
-    anime: "Delicious in Dungeon",
-    likes: 301,
-    comments: 37,
-    timeAgo: "4h ago",
-    tags: ["dungeon-meshi", "cozy", "cooking"],
-  },
-]
+type ApiPoll = {
+  id: string
+  question: string
+  options: { id: string; text: string; votes: number }[]
+  totalVotes?: number
+  expiresAt?: string | null
+}
 
 type TrendingPoll = {
-  id: number
+  id: string
   question: string
   votes: number
   options: { label: string; pct: number }[]
 }
 
-const TRENDING_POLLS: TrendingPoll[] = [
-  {
-    id: 1,
-    question: "Best anime of 2024?",
-    votes: 14832,
-    options: [
-      { label: "Dungeon Meshi", pct: 48 },
-      { label: "Solo Leveling", pct: 30 },
-      { label: "Frieren S2",    pct: 22 },
-    ],
-  },
-  {
-    id: 2,
-    question: "Most rewatch-worthy anime ever?",
-    votes: 9410,
-    options: [
-      { label: "FMA: Brotherhood", pct: 41 },
-      { label: "Steins;Gate",      pct: 35 },
-      { label: "Hunter x Hunter",  pct: 24 },
-    ],
-  },
-  {
-    id: 3,
-    question: "Which MAPPA show wins AOTY?",
-    votes: 7203,
-    options: [
-      { label: "Chainsaw Man",  pct: 52 },
-      { label: "Attack on Titan Final", pct: 33 },
-      { label: "Jujutsu Kaisen S2",     pct: 15 },
-    ],
-  },
-]
+/* Compact relative time, e.g. "14m ago", "3h ago", "2d ago". */
+function relativeTime(iso: string): string {
+  const d = Date.now() - new Date(iso).getTime()
+  if (d < 60_000) return "just now"
+  if (d < 3_600_000) return `${Math.floor(d / 60_000)}m ago`
+  if (d < 86_400_000) return `${Math.floor(d / 3_600_000)}h ago`
+  return `${Math.floor(d / 86_400_000)}d ago`
+}
 
-const DISCUSSION_COUNTS = [2841, 1940, 1603, 1287]
+/* Pull #hashtags out of a post body (first 3) for the tag row. */
+function extractTags(content: string): string[] {
+  const out: string[] = []
+  const re = /(^|\s)#([a-zA-Z0-9_-]+)/g
+  let m: RegExpExecArray | null
+  while ((m = re.exec(content)) !== null && out.length < 3) out.push(m[2].toLowerCase())
+  return out
+}
+
+/* Strip [spoiler] wrappers so previews read cleanly. */
+function cleanContent(content: string): string {
+  return content.replace(/\[\/?spoiler\]/gi, "").trim()
+}
 
 /* ── Sub-components ── */
 function PostCard({ post, index }: { post: TrendingPost; index: number }) {
@@ -171,9 +95,14 @@ function PostCard({ post, index }: { post: TrendingPost; index: number }) {
 
       {/* Author */}
       <div className="flex items-center gap-3">
-        <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center font-black text-sm shrink-0">
-          {post.avatar}
-        </div>
+        {post.avatarUrl ? (
+          /* eslint-disable-next-line @next/next/no-img-element */
+          <img src={post.avatarUrl} alt="" className="h-9 w-9 rounded-xl object-cover shrink-0" />
+        ) : (
+          <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center font-black text-sm shrink-0">
+            {post.avatar}
+          </div>
+        )}
         <div>
           <p className="text-sm font-black text-foreground">{post.author}</p>
           <p className="text-[10px] text-subtle">{post.timeAgo}</p>
@@ -236,8 +165,53 @@ const POLL_COLORS = ["bg-accent", "bg-violet-500", "bg-blue-500"]
 
 /* ── Page ── */
 export default function CommunityTrendingPage() {
+  // Live anime for the "Trending Discussions" rail
   const { data: browseData } = useBrowseAnime({ limit: 4 })
   const ANIME_DISCUSSION = (browseData?.data ?? []).map(mapDTO).slice(0, 4)
+
+  // Live algorithm-ranked posts (HN-style score, 60s refresh)
+  const { data: trendingData } = useTrending(12)
+  const TRENDING_POSTS: TrendingPost[] = (trendingData?.data ?? []).map(p => {
+    const name = p.author.displayName || p.author.username
+    return {
+      id: p.id,
+      author: name,
+      avatar: name[0]?.toUpperCase() ?? "?",
+      avatarUrl: p.author.avatarUrl,
+      content: cleanContent(p.content),
+      anime: p.anime?.title,
+      likes: p._count?.likes ?? 0,
+      comments: p._count?.comments ?? 0,
+      timeAgo: relativeTime(p.createdAt),
+      tags: extractTags(p.content),
+      liked: p.isLikedByMe,
+    }
+  })
+
+  // Live polls (active only, top by votes)
+  const { data: pollsData } = useQuery({
+    queryKey: ["trending-polls"],
+    queryFn:  () => api<{ data: ApiPoll[] }>("/polls?limit=12"),
+    refetchInterval: 30_000,
+    staleTime: 15_000,
+  })
+  const TRENDING_POLLS: TrendingPoll[] = (pollsData?.data ?? [])
+    .filter(p => !p.expiresAt || new Date(p.expiresAt) > new Date())
+    .map(p => {
+      const total = p.totalVotes ?? p.options.reduce((s, o) => s + o.votes, 0)
+      return {
+        id: p.id,
+        question: p.question,
+        votes: total,
+        options: [...p.options]
+          .sort((a, b) => b.votes - a.votes)
+          .slice(0, 3)
+          .map(o => ({ label: o.text, pct: total > 0 ? Math.round((o.votes / total) * 100) : 0 })),
+      }
+    })
+    .sort((a, b) => b.votes - a.votes)
+    .slice(0, 3)
+
   return (
     <div className="min-h-screen bg-background text-foreground pb-32">
       <div className="max-w-5xl mx-auto px-6 pt-28">
@@ -293,11 +267,20 @@ export default function CommunityTrendingPage() {
             </Link>
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {TRENDING_POSTS.map((post, i) => (
-              <PostCard key={post.id} post={post} index={i} />
-            ))}
-          </div>
+          {TRENDING_POSTS.length > 0 ? (
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {TRENDING_POSTS.map((post, i) => (
+                <PostCard key={post.id} post={post} index={i} />
+              ))}
+            </div>
+          ) : (
+            <div className="rounded-2xl border border-dashed border-border py-12 text-center">
+              <p className="text-sm font-bold text-muted">No trending posts yet.</p>
+              <Link href="/community" className="mt-2 inline-block text-[11px] font-black uppercase tracking-widest text-accent-bright hover:text-foreground transition-colors">
+                Start the conversation →
+              </Link>
+            </div>
+          )}
         </section>
 
         {/* ── SECTION 2: Trending Anime Discussions ── */}
@@ -343,10 +326,19 @@ export default function CommunityTrendingPage() {
                         {anime.title}
                       </p>
                       <div className="flex items-center gap-1.5">
-                        <MessageSquare size={10} className="text-accent-bright" />
-                        <span className="text-[10px] font-black text-muted">
-                          {DISCUSSION_COUNTS[i].toLocaleString()} posts
-                        </span>
+                        {anime.rating > 0 ? (
+                          <>
+                            <Star size={10} className="text-accent-bright" fill="currentColor" />
+                            <span className="text-[10px] font-black text-muted">
+                              {anime.rating.toFixed(1)} · Discuss
+                            </span>
+                          </>
+                        ) : (
+                          <>
+                            <MessageSquare size={10} className="text-accent-bright" />
+                            <span className="text-[10px] font-black text-muted">Discuss</span>
+                          </>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -376,6 +368,14 @@ export default function CommunityTrendingPage() {
             </Link>
           </div>
 
+          {TRENDING_POLLS.length === 0 ? (
+            <div className="rounded-2xl border border-dashed border-border py-12 text-center">
+              <p className="text-sm font-bold text-muted">No active polls right now.</p>
+              <Link href="/poll" className="mt-2 inline-block text-[11px] font-black uppercase tracking-widest text-accent-bright hover:text-foreground transition-colors">
+                Create a poll →
+              </Link>
+            </div>
+          ) : (
           <div className="grid sm:grid-cols-3 gap-4">
             {TRENDING_POLLS.map((poll, i) => (
               <motion.div
@@ -412,6 +412,7 @@ export default function CommunityTrendingPage() {
               </motion.div>
             ))}
           </div>
+          )}
         </section>
 
         {/* CTA — full trending page */}
@@ -423,13 +424,13 @@ export default function CommunityTrendingPage() {
         >
           <div>
             <p className="text-[10px] font-black uppercase tracking-widest text-subtle">Want more?</p>
-            <p className="text-sm text-muted mt-0.5">See the full trending board with live rankings.</p>
+            <p className="text-sm text-muted mt-0.5">See the full anime rankings board with live scores.</p>
           </div>
           <Link
-            href="/community/trending"
+            href="/rankings"
             className="flex items-center gap-2 px-6 py-3 rounded-xl bg-accent/15 border border-accent/25 text-[11px] font-black uppercase tracking-widest text-accent-bright hover:bg-white/25 transition-all"
           >
-            Full Trending <ArrowUpRight size={12} />
+            Full Rankings <ArrowUpRight size={12} />
           </Link>
         </motion.div>
       </div>

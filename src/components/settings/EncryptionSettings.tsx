@@ -66,7 +66,7 @@ export function EncryptionSettings() {
   const hasPasskey = !!data?.wraps?.some(w => w.method === "PASSKEY_PRF")
   const devices = data?.devices ?? []
 
-  const input = "w-full rounded-xl bg-black/40 border border-border px-4 py-3 text-base sm:text-sm text-foreground placeholder:text-subtle outline-none focus:border-accent/50 transition-colors"
+  const input = "w-full rounded-xl bg-black/40 border border-border px-4 py-3 text-base sm:text-sm text-foreground placeholder:text-muted outline-none focus:border-accent/50 transition-colors"
 
   return (
     <div className="p-6 rounded-2xl bg-surface border border-border space-y-5">

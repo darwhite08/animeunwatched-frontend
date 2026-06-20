@@ -351,7 +351,7 @@ export default function LoginPage() {
                   placeholder="you@domain.com"
                   autoComplete="email"
                   disabled={isDisabled}
-                  className="w-full h-12 rounded-xl bg-surface border border-border px-4 text-base sm:text-sm text-foreground placeholder:text-subtle outline-none focus:border-accent/50 focus:bg-surface transition-all disabled:opacity-50"
+                  className="w-full h-12 rounded-xl bg-surface border border-border px-4 text-base sm:text-sm text-foreground placeholder:text-muted outline-none focus:border-accent/50 focus:bg-surface transition-all disabled:opacity-50"
                 />
               </div>
 
@@ -372,7 +372,7 @@ export default function LoginPage() {
                     placeholder="Your password"
                     autoComplete="current-password"
                     disabled={isDisabled}
-                    className="w-full h-12 rounded-xl bg-surface border border-border px-4 pr-12 text-base sm:text-sm text-foreground placeholder:text-subtle outline-none focus:border-accent/50 focus:bg-surface transition-all disabled:opacity-50"
+                    className="w-full h-12 rounded-xl bg-surface border border-border px-4 pr-12 text-base sm:text-sm text-foreground placeholder:text-muted outline-none focus:border-accent/50 focus:bg-surface transition-all disabled:opacity-50"
                   />
                   <button
                     type="button"

@@ -35,6 +35,19 @@
   --color-success:       var(--app-success);
   --color-danger:        var(--app-danger);
   --color-like:          var(--app-like);
+
+  /* Spec-canonical Tailwind names (aliases → same source vars) */
+  --color-base:          var(--app-bg);
+  --color-surface-1:     var(--app-surface);
+  --color-ink-1:         var(--app-fg);
+  --color-ink-2:         var(--app-muted);
+  --color-ink-3:         var(--app-subtle);
+  --color-gold:          var(--app-accent);
+  --color-gold-bright:   var(--app-accent-bright);
+  --color-gold-deep:     var(--app-accent-deep);
+  --color-status-airing: var(--app-success);
+  --color-status-danger: var(--app-danger);
+  --color-status-like:   var(--app-like);
 }
 
 /* ── Default theme: dark + amber ── */
@@ -61,6 +74,28 @@
   --app-success:       #34D399;   /* airing */
   --app-danger:        #F87171;   /* notif badge */
   --app-like:          #EC4899;   /* heart */
+
+  /* ── Canonical aliases (kaiveron-color-system spec) — same values, spec names.
+        The --app-* set above stays the in-use API; these expose the spec's
+        vocabulary so either name resolves to one source of truth. ── */
+  --bg-base:           var(--app-bg);
+  --surface-1:         var(--app-surface);
+  --surface-2:         var(--app-surface-2);
+  --border:            var(--app-border);
+  --border-hover:      var(--app-border-hover);
+  --text-primary:      var(--app-fg);
+  --text-secondary:    var(--app-muted);
+  --text-tertiary:     var(--app-subtle);
+  --gold:              var(--app-accent);
+  --gold-bright:       var(--app-accent-bright);
+  --gold-deep:         var(--app-accent-deep);
+  --gold-grad:         var(--app-accent-grad);
+  --gold-ghost-bg:     var(--app-accent-soft);
+  --gold-ghost-border: var(--app-accent-ghost-border);
+  --on-gold:           var(--app-on-accent);
+  --success:           var(--app-success);
+  --danger:            var(--app-danger);
+  --like:              var(--app-like);
 
   /* Legacy Kaiveron palette — alias to the new tokens so existing .k-* utilities flip too */
   --k-bg:           var(--app-bg);

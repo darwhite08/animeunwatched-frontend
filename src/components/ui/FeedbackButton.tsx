@@ -124,7 +124,7 @@ export default function FeedbackButton() {
                 placeholder={type === "bug" ? "Describe what broke and how to reproduce it…" : type === "suggestion" ? "What would make Kaiveron better?" : type === "love" ? "What do you love about Kaiveron?" : "What's on your mind?"}
                 rows={4}
                 maxLength={1000}
-                className="w-full px-4 py-3 rounded-xl bg-surface border border-border text-sm text-foreground placeholder:text-subtle focus:outline-none focus:border-accent/30 resize-none transition-all"
+                className="w-full px-4 py-3 rounded-xl bg-surface border border-border text-sm text-foreground placeholder:text-muted focus:outline-none focus:border-accent/30 resize-none transition-all"
               />
 
               <div className="flex items-center justify-between">

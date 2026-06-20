@@ -263,7 +263,7 @@ function CreateChallengeModal({ slug, onClose }: { slug: string; onClose: () => 
                 value={value}
                 onChange={e => setter(e.target.value)}
                 placeholder={placeholder}
-                className="w-full px-4 py-2.5 rounded-xl bg-surface border border-border text-sm text-foreground placeholder:text-subtle focus:outline-none focus:border-accent/40 transition-all"
+                className="w-full px-4 py-2.5 rounded-xl bg-surface border border-border text-sm text-foreground placeholder:text-muted focus:outline-none focus:border-accent/40 transition-all"
               />
             </div>
           ))}
@@ -286,7 +286,7 @@ function CreateChallengeModal({ slug, onClose }: { slug: string; onClose: () => 
               onChange={e => setDescription(e.target.value)}
               placeholder="What's the challenge about? Any rules?"
               rows={3}
-              className="w-full px-4 py-2.5 rounded-xl bg-surface border border-border text-sm text-foreground placeholder:text-subtle focus:outline-none focus:border-accent/40 resize-none transition-all"
+              className="w-full px-4 py-2.5 rounded-xl bg-surface border border-border text-sm text-foreground placeholder:text-muted focus:outline-none focus:border-accent/40 resize-none transition-all"
             />
           </div>
         </div>

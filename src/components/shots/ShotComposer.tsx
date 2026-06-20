@@ -166,7 +166,7 @@ export function ShotComposer({ onClose, onPosted }: { onClose: () => void; onPos
                     placeholder="Write a caption…"
                     rows={3}
                     maxLength={2200}
-                    className="min-h-[3.5rem] flex-1 resize-none bg-transparent text-sm text-foreground placeholder:text-subtle outline-none"
+                    className="min-h-[3.5rem] flex-1 resize-none bg-transparent text-sm text-foreground placeholder:text-muted outline-none"
                   />
                 </div>
               </div>

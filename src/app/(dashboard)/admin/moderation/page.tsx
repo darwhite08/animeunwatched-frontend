@@ -287,7 +287,7 @@ export default function ModerationPage() {
             value={query}
             onChange={e => setQuery(e.target.value)}
             placeholder="Search reporter, reason…"
-            className="w-full pl-10 pr-3 py-2.5 rounded-xl bg-surface border border-border text-sm text-foreground placeholder:text-subtle font-medium focus:outline-none focus:border-border-hover transition-all"
+            className="w-full pl-10 pr-3 py-2.5 rounded-xl bg-surface border border-border text-sm text-foreground placeholder:text-muted font-medium focus:outline-none focus:border-border-hover transition-all"
           />
         </div>
       </div>

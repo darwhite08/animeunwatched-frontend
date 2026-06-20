@@ -296,7 +296,7 @@ function BlogComments({ slug }: { slug: string }) {
         <div className="flex gap-3">
           <textarea value={draft} onChange={e => setDraft(e.target.value)}
             placeholder="Share your thoughts…" rows={2} maxLength={1000}
-            className="flex-1 px-4 py-3 rounded-xl bg-surface border border-border text-base sm:text-sm text-foreground placeholder:text-subtle focus:outline-none focus:border-accent/30 resize-none transition-all" />
+            className="flex-1 px-4 py-3 rounded-xl bg-surface border border-border text-base sm:text-sm text-foreground placeholder:text-muted focus:outline-none focus:border-accent/30 resize-none transition-all" />
           <button onClick={() => draft.trim() && createMut.mutate(draft.trim())}
             disabled={!draft.trim() || createMut.isPending}
             className="min-h-11 min-w-11 inline-flex items-center justify-center rounded-xl text-black transition-all disabled:opacity-40 hover:scale-105 active:scale-95"

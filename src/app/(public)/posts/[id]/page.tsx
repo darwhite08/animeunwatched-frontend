@@ -473,7 +473,7 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
                   onChange={e => setCommentText(e.target.value)}
                   placeholder="Share your thoughts…"
                   rows={3}
-                  className="w-full bg-transparent text-sm text-foreground placeholder:text-subtle resize-none outline-none leading-relaxed"
+                  className="w-full bg-transparent text-sm text-foreground placeholder:text-muted resize-none outline-none leading-relaxed"
                 />
                 <div className="flex justify-end border-t border-border pt-3">
                   <button

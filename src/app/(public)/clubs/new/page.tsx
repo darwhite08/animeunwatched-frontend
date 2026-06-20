@@ -207,7 +207,7 @@ export default function NewClubPage() {
   }
 
   const inputClass =
-    "w-full px-4 py-3 rounded-xl bg-surface border border-border text-sm text-foreground placeholder:text-subtle focus:outline-none focus:border-accent/50 focus:bg-surface transition-all"
+    "w-full px-4 py-3 rounded-xl bg-surface border border-border text-sm text-foreground placeholder:text-muted focus:outline-none focus:border-accent/50 focus:bg-surface transition-all"
 
   return (
     <div className="min-h-screen bg-background text-foreground pb-32">

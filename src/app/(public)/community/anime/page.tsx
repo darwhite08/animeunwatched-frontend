@@ -329,7 +329,7 @@ export default function AnimeDiscussionsPage() {
               placeholder="Search discussions by anime, topic, or author…"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              className="w-full pl-11 pr-5 py-4 rounded-2xl bg-white/[0.04] border border-border focus:border-accent/40 focus:bg-white/[0.06] text-foreground text-sm font-medium placeholder:text-subtle outline-none transition-all"
+              className="w-full pl-11 pr-5 py-4 rounded-2xl bg-white/[0.04] border border-border focus:border-accent/40 focus:bg-white/[0.06] text-foreground text-sm font-medium placeholder:text-muted outline-none transition-all"
             />
           </div>
         </section>

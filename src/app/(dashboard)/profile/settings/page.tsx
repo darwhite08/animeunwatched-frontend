@@ -100,7 +100,7 @@ export default function ProfileSettingsIndex() {
             value={form.displayName}
             onChange={setField("displayName")}
             placeholder="Your name"
-            className="w-full rounded-2xl bg-black/30 border border-border px-4 py-3 text-sm text-foreground placeholder:text-subtle outline-none focus:border-accent/40 transition-colors"
+            className="w-full rounded-2xl bg-black/30 border border-border px-4 py-3 text-sm text-foreground placeholder:text-muted outline-none focus:border-accent/40 transition-colors"
           />
         </div>
         <div>
@@ -113,7 +113,7 @@ export default function ProfileSettingsIndex() {
             rows={2}
             maxLength={200}
             placeholder="Tell the community about yourself…"
-            className="w-full rounded-2xl bg-black/30 border border-border px-4 py-3 text-sm text-foreground placeholder:text-subtle outline-none focus:border-accent/40 resize-none transition-colors"
+            className="w-full rounded-2xl bg-black/30 border border-border px-4 py-3 text-sm text-foreground placeholder:text-muted outline-none focus:border-accent/40 resize-none transition-colors"
           />
           <p className="text-[9px] text-right text-subtle mt-1">{form.bio.length}/200</p>
         </div>

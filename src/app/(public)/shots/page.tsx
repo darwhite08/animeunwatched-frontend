@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback, useMemo } from "react"
 import Link from "next/link"
-import { MessageCircle, Bookmark, Share2, Plus, Volume2, VolumeX, Clapperboard, Loader2, Play, Star, Eye, MoreHorizontal, EyeOff } from "lucide-react"
+import { MessageCircle, Bookmark, Share2, Plus, Volume2, VolumeX, Clapperboard, Loader2, Play, Pause, Star, Eye, MoreHorizontal, EyeOff, Captions } from "lucide-react"
 import { HeartLike } from "@/components/ui/HeartLike"
 import { api } from "@/lib/api/client"
 import { recordShotView, recordShotFeedback } from "@/lib/api/endpoints"
@@ -35,6 +35,20 @@ function compact(n: number): string {
   if (n >= 1_000_000) return `${(n / 1_000_000).toFixed(1).replace(/\.0$/, "")}M`
   if (n >= 1_000) return `${(n / 1_000).toFixed(1).replace(/\.0$/, "")}K`
   return String(n)
+}
+
+// WCAG 2.2.2 / 2.3 — honor the OS "reduce motion" setting: when on, we don't
+// autoplay the reel; the user presses play. SSR-safe (defaults to false).
+function usePrefersReducedMotion(): boolean {
+  const [reduced, setReduced] = useState(false)
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)")
+    setReduced(mq.matches)
+    const on = () => setReduced(mq.matches)
+    mq.addEventListener("change", on)
+    return () => mq.removeEventListener("change", on)
+  }, [])
+  return reduced
 }
 
 type Trailer = {
@@ -173,6 +187,20 @@ export default function ShotsPage() {
     if (idx >= feed.length - 2 && !done && !loadingRef.current && cursor) loadShots(cursor)
   }, [feed.length, done, cursor, loadShots])
 
+  // Keyboard navigation (WCAG 2.1.1): ↑/↓ move between reels. Ignore when a form
+  // control (seek bar, comment box) is focused so we don't hijack their keys.
+  const handleKeyNav = useCallback((e: React.KeyboardEvent) => {
+    const tag = (e.target as HTMLElement)?.tagName
+    if (tag === "INPUT" || tag === "TEXTAREA" || (e.target as HTMLElement)?.isContentEditable) return
+    const el = scrollRef.current
+    if (!el) return
+    if (e.key === "ArrowDown" || e.key === "PageDown") {
+      e.preventDefault(); el.scrollBy({ top: el.clientHeight, behavior: "smooth" })
+    } else if (e.key === "ArrowUp" || e.key === "PageUp") {
+      e.preventDefault(); el.scrollBy({ top: -el.clientHeight, behavior: "smooth" })
+    }
+  }, [])
+
   if (loading) {
     return (
       <div className="flex h-[calc(100dvh-3.5rem-4rem-env(safe-area-inset-bottom))] items-center justify-center bg-background md:h-[calc(100dvh-3.5rem)]">
@@ -191,12 +219,15 @@ export default function ShotsPage() {
     <div
       ref={scrollRef}
       onScroll={handleScroll}
+      onKeyDown={handleKeyNav}
+      tabIndex={0}
+      aria-label="Shots feed — use Up and Down arrows to move between videos"
       style={{ paddingTop: 0 }}
-      className="relative h-[calc(100dvh-3.5rem-4rem-env(safe-area-inset-bottom))] w-full snap-y snap-mandatory overflow-y-scroll overscroll-y-contain bg-background md:h-[calc(100dvh-3.5rem)] [&::-webkit-scrollbar]:hidden"
+      className="relative h-[calc(100dvh-3.5rem-4rem-env(safe-area-inset-bottom))] w-full snap-y snap-mandatory overflow-y-scroll overscroll-y-contain bg-background outline-none md:h-[calc(100dvh-3.5rem)] [&::-webkit-scrollbar]:hidden"
     >
       {/* Premium ambient backdrop — the active poster, blurred + dimmed, fills the
           black void around the vertical card with a soft gold glow. */}
-      <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
+      <div aria-hidden className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
         {backdropImg && (
           // eslint-disable-next-line @next/next/no-img-element
           <img key={backdropImg} src={backdropImg} alt="" referrerPolicy="no-referrer"
@@ -207,7 +238,7 @@ export default function ShotsPage() {
       </div>
 
       {/* Top scrim — keeps the controls legible over bright video */}
-      <div className="pointer-events-none fixed inset-x-0 top-0 z-20 h-32 bg-gradient-to-b from-black/55 to-transparent md:absolute" />
+      <div aria-hidden className="pointer-events-none fixed inset-x-0 top-0 z-20 h-32 bg-gradient-to-b from-black/55 to-transparent md:absolute" />
 
       {/* Section tabs — TikTok-style centered text with an active underline */}
       <div className="fixed left-1/2 top-[calc(env(safe-area-inset-top)+4.85rem)] z-30 flex -translate-x-1/2 items-center gap-5 md:absolute md:top-[4.85rem]">
@@ -335,15 +366,37 @@ function ShotReel({ shot, active, near, muted, onNotInterested }: { shot: Shot; 
   const [followBusy, setFollowBusy] = useState(false)
   const isEmbed = Boolean(shot.embedUrl)
 
+  // Playback state (native <video> only) — drives the visible play/pause control
+  // and the accessible seek bar.
+  const reducedMotion = usePrefersReducedMotion()
+  const [paused, setPaused] = useState(false)
+  const [progress, setProgress] = useState(0)   // 0..1
+  const [duration, setDuration] = useState(0)
+  const [captionExpanded, setCaptionExpanded] = useState(false)
+
   const authorId = shot.authorId ?? shot.author.id
   const mine = me?.id === authorId
 
   useEffect(() => {
     const v = videoRef.current
     if (!v || isEmbed) return
-    if (active) v.play().catch(() => {})
-    else { v.pause(); v.currentTime = 0 }
-  }, [active, isEmbed])
+    // Reduced-motion: never autoplay — render the active reel paused so the user
+    // chooses to start it (WCAG 2.2.2). Otherwise autoplay the active reel.
+    if (active && !reducedMotion) v.play().catch(() => {})
+    else { v.pause(); if (!active) v.currentTime = 0 }
+  }, [active, isEmbed, reducedMotion])
+
+  const togglePlay = useCallback(() => {
+    const v = videoRef.current
+    if (!v) return
+    if (v.paused) v.play().catch(() => {}); else v.pause()
+  }, [])
+
+  const onSeek = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const v = videoRef.current
+    if (!v || !isFinite(v.duration)) return
+    v.currentTime = (Number(e.target.value) / 1000) * v.duration
+  }, [])
 
   // ── View counting (see backend docs/shots-view-counting.md) ──
   // Reels-style "it played" qualification: count a view once the clip has been
@@ -361,7 +414,9 @@ function ShotReel({ shot, active, near, muted, onNotInterested }: { shot: Shot; 
   // Native <video>: qualify from the playhead as it advances.
   const onVideoTime = useCallback(() => {
     const v = videoRef.current
-    if (!v || viewedRef.current || !active) return
+    if (!v || !active) return
+    if (isFinite(v.duration) && v.duration > 0) setProgress(v.currentTime / v.duration)
+    if (viewedRef.current) return
     const dur = isFinite(v.duration) && v.duration > 0 ? v.duration : 4
     const need = Math.min(2, dur * 0.5) // ≥2s, or ≥50% for very short clips
     if (v.currentTime >= need) qualifyView(v.currentTime * 1000)
@@ -456,8 +511,66 @@ function ShotReel({ shot, active, near, muted, onNotInterested }: { shot: Shot; 
     } finally { setFollowBusy(false) }
   }
 
+  // Shared action rail — rendered overlaid on the video on mobile (dark chips +
+  // icon halos) and OFF the video in the desktop right gutter (solid surface-2
+  // chips, no overlay-contrast problem). Same handlers/state either way.
+  const railChip = (gutter: boolean) =>
+    gutter
+      ? "grid h-12 w-12 place-items-center rounded-full bg-surface-2 border border-border"
+      : "grid h-12 w-12 place-items-center rounded-full bg-black/40 backdrop-blur [filter:drop-shadow(0_1px_2px_rgba(0,0,0,0.9))]"
+  const railLabel = (gutter: boolean) =>
+    gutter ? "text-[11px] font-semibold tabular-nums text-muted" : "text-[11px] font-semibold tabular-nums text-foreground drop-shadow"
+  const railBtn = "flex flex-col items-center gap-1 text-foreground transition-transform duration-200 ease-out active:scale-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded-2xl"
+
+  const renderRail = (gutter: boolean) => (
+    <div className={gutter ? "flex flex-col items-center gap-5" : "absolute bottom-28 right-3 z-10 flex flex-col items-center gap-4 md:hidden"}>
+      <div className="flex flex-col items-center gap-1 text-foreground">
+        <span className={railChip(gutter)}>
+          <HeartLike liked={liked} onToggle={toggleLike} size={26} ariaLabel={liked ? "Unlike" : "Like"} />
+        </span>
+        <span className={railLabel(gutter)}>{likes > 0 ? compact(likes) : "Like"}</span>
+      </div>
+      <button onClick={openComments} aria-label="Comments" className={railBtn}>
+        <span className={railChip(gutter)}><MessageCircle size={26} /></span>
+        <span className={railLabel(gutter)}>{comments > 0 ? compact(comments) : "Comment"}</span>
+      </button>
+      <button onClick={toggleSave} aria-pressed={saved} aria-label={saved ? "Unsave" : "Save"} className={railBtn}>
+        <span className={railChip(gutter)}><Bookmark size={25} className={saved ? "fill-accent-bright text-accent-bright" : ""} /></span>
+        <span className={railLabel(gutter)}>{saves > 0 ? compact(saves) : "Save"}</span>
+      </button>
+      <button onClick={share} aria-label="Share" className={railBtn}>
+        <span className={railChip(gutter)}><Share2 size={26} /></span>
+        <span className={railLabel(gutter)}>Share</span>
+      </button>
+      <button onClick={() => push("Captions for Shots are coming soon", "info")} aria-label="Captions (unavailable)" className={railBtn}>
+        <span className={railChip(gutter)}><Captions size={24} /></span>
+        <span className={railLabel(gutter)}>CC</span>
+      </button>
+      {!mine && (
+        <div className="relative flex flex-col items-center">
+          <button onClick={() => setMenuOpen((o) => !o)} aria-label="More" aria-expanded={menuOpen}
+            className={`${railChip(gutter)} text-foreground transition-transform duration-200 ease-out active:scale-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent`}>
+            <MoreHorizontal size={26} />
+          </button>
+          {menuOpen && (
+            <>
+              <button aria-hidden onClick={() => setMenuOpen(false)} className="fixed inset-0 z-10 cursor-default" />
+              <div className="absolute bottom-14 right-0 z-20 w-44 overflow-hidden rounded-2xl border border-border bg-black/85 backdrop-blur-xl shadow-2xl">
+                <button onClick={notInterested}
+                  className="flex w-full items-center gap-2.5 px-4 py-3 text-left text-[13px] font-semibold text-foreground transition-colors hover:bg-white/10">
+                  <EyeOff size={16} className="shrink-0" /> Not interested
+                </button>
+              </div>
+            </>
+          )}
+        </div>
+      )}
+    </div>
+  )
+
   return (
-    <MediaShell>
+    <div className="relative flex h-full items-center justify-center gap-3 md:gap-5">
+      <MediaShell>
       {isEmbed ? (
         active ? (
           <iframe src={shot.embedUrl!} className="h-full w-full" allow="autoplay; encrypted-media; fullscreen" allowFullScreen title={shot.caption ?? "Shot"} />
@@ -479,7 +592,10 @@ function ShotReel({ shot, active, near, muted, onNotInterested }: { shot: Shot; 
           onPlaying={() => setBuffering(false)}
           onCanPlay={() => setBuffering(false)}
           onTimeUpdate={onVideoTime}
-          onClick={(e) => { const v = e.currentTarget; v.paused ? v.play() : v.pause() }}
+          onPlay={() => setPaused(false)}
+          onPause={() => setPaused(true)}
+          onLoadedMetadata={(e) => setDuration(e.currentTarget.duration || 0)}
+          onClick={togglePlay}
           className="h-full w-full object-cover"
         />
       )}
@@ -488,54 +604,41 @@ function ShotReel({ shot, active, near, muted, onNotInterested }: { shot: Shot; 
           <Loader2 className="animate-spin text-white/80 drop-shadow" size={34} />
         </div>
       )}
-      {!isEmbed && <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-black/20" />}
+      {!isEmbed && <div aria-hidden className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-black/20" />}
 
-      {/* TikTok-style right action rail */}
-      <div className="absolute bottom-28 right-3 z-10 flex flex-col items-center gap-4">
-        <div className="flex flex-col items-center gap-1 text-foreground">
-          <span className="grid h-12 w-12 place-items-center rounded-full bg-black/40 backdrop-blur">
-            <HeartLike liked={liked} onToggle={toggleLike} size={26} ariaLabel={liked ? "Unlike" : "Like"} />
-          </span>
-          <span className="text-[11px] font-semibold tabular-nums drop-shadow">{likes > 0 ? compact(likes) : "Like"}</span>
-        </div>
-        <button onClick={openComments} aria-label="Comments" className="flex flex-col items-center gap-1 text-foreground transition-transform duration-200 ease-out active:scale-90">
-          <span className="grid h-12 w-12 place-items-center rounded-full bg-black/40 backdrop-blur">
-            <MessageCircle size={26} />
-          </span>
-          <span className="text-[11px] font-semibold tabular-nums drop-shadow">{comments > 0 ? compact(comments) : "Comment"}</span>
+      {/* Visible, keyboard-reachable play/pause (WCAG 2.2.2). Prominent when
+          paused; otherwise only shows on keyboard focus so it doesn't cover the
+          clip. Tapping the video also toggles. */}
+      {!isEmbed && active && (
+        <button
+          type="button"
+          onClick={togglePlay}
+          aria-label={paused ? "Play" : "Pause"}
+          className={`absolute left-1/2 top-1/2 z-10 grid h-16 w-16 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-black/45 text-foreground backdrop-blur transition-opacity duration-200 focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent ${paused ? "opacity-100" : "opacity-0"}`}
+        >
+          {paused ? <Play size={30} className="ml-1 fill-current" /> : <Pause size={28} className="fill-current" />}
         </button>
-        <button onClick={toggleSave} aria-pressed={saved} aria-label={saved ? "Unsave" : "Save"} className="flex flex-col items-center gap-1 text-foreground transition-transform duration-200 ease-out active:scale-90">
-          <span className="grid h-12 w-12 place-items-center rounded-full bg-black/40 backdrop-blur">
-            <Bookmark size={25} className={saved ? "fill-accent-bright text-accent-bright" : ""} />
-          </span>
-          <span className="text-[11px] font-semibold tabular-nums drop-shadow">{saves > 0 ? compact(saves) : "Save"}</span>
-        </button>
-        <button onClick={share} aria-label="Share" className="flex flex-col items-center gap-1 text-foreground transition-transform duration-200 ease-out active:scale-90">
-          <span className="grid h-12 w-12 place-items-center rounded-full bg-black/40 backdrop-blur">
-            <Share2 size={26} />
-          </span>
-          <span className="text-[11px] font-semibold drop-shadow">Share</span>
-        </button>
-        {!mine && (
-          <div className="relative flex flex-col items-center">
-            <button onClick={() => setMenuOpen((o) => !o)} aria-label="More" aria-expanded={menuOpen}
-              className="grid h-12 w-12 place-items-center rounded-full bg-black/40 text-foreground backdrop-blur transition-transform duration-200 ease-out active:scale-90">
-              <MoreHorizontal size={26} />
-            </button>
-            {menuOpen && (
-              <>
-                <button aria-hidden onClick={() => setMenuOpen(false)} className="fixed inset-0 z-10 cursor-default" />
-                <div className="absolute bottom-14 right-0 z-20 w-44 overflow-hidden rounded-2xl border border-white/15 bg-black/85 backdrop-blur-xl shadow-2xl">
-                  <button onClick={notInterested}
-                    className="flex w-full items-center gap-2.5 px-4 py-3 text-left text-[13px] font-semibold text-foreground transition-colors hover:bg-white/10">
-                    <EyeOff size={16} className="shrink-0" /> Not interested
-                  </button>
-                </div>
-              </>
-            )}
-          </div>
-        )}
-      </div>
+      )}
+
+      {/* Accessible seek bar (WCAG 4.1.2 — native range, not a bare div). Gold
+          fill via accent-color. Stops propagation so dragging doesn't toggle
+          play; arrow keys adjust position (feed nav ignores focused inputs). */}
+      {!isEmbed && active && duration > 0 && (
+        <input
+          type="range"
+          min={0}
+          max={1000}
+          value={Math.round(progress * 1000)}
+          onChange={onSeek}
+          onClick={(e) => e.stopPropagation()}
+          aria-label="Playback position"
+          className="absolute inset-x-0 bottom-0 z-20 h-1 w-full cursor-pointer appearance-none bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+          style={{ accentColor: "var(--app-accent)" }}
+        />
+      )}
+
+      {/* Mobile/overlay action rail — on the video, dark chips + icon halos */}
+      {renderRail(false)}
 
       <div className="absolute inset-x-0 bottom-0 p-4 pr-20 pb-[max(1rem,env(safe-area-inset-bottom))]">
         <div className="flex items-center gap-2">
@@ -558,9 +661,23 @@ function ShotReel({ shot, active, near, muted, onNotInterested }: { shot: Shot; 
             </button>
           )}
         </div>
-        {shot.caption && <p className="mt-2 line-clamp-2 text-[13px] leading-snug text-white/90">{shot.caption}</p>}
-        <p className="mt-1.5 flex items-center gap-1 text-[11px] font-semibold text-white/70">
-          <Eye size={13} /> <span className="tabular-nums">{compact(views)}</span> {views === 1 ? "view" : "views"}
+        {shot.caption && (
+          <div className="mt-2">
+            <p className={`text-[13px] leading-snug text-foreground ${captionExpanded ? "" : "line-clamp-2"}`}>{shot.caption}</p>
+            {shot.caption.length > 80 && (
+              <button
+                type="button"
+                onClick={() => setCaptionExpanded((v) => !v)}
+                aria-expanded={captionExpanded}
+                className="mt-0.5 text-[12px] font-bold text-accent-bright transition-opacity hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent rounded"
+              >
+                {captionExpanded ? "less" : "more"}
+              </button>
+            )}
+          </div>
+        )}
+        <p className="mt-1.5 flex items-center gap-1 text-[11px] font-semibold text-muted">
+          <Eye size={13} aria-hidden /> <span className="tabular-nums">{compact(views)}</span> {views === 1 ? "view" : "views"}
         </p>
         {shot.anime && (
           <Link href={`/anime/${shot.anime.malId}`} className="mt-2 inline-block max-w-full truncate rounded-full bg-white/15 px-3 py-1.5 text-[10px] font-bold uppercase tracking-widest text-foreground transition-transform duration-200 ease-out active:scale-95">
@@ -576,7 +693,12 @@ function ShotReel({ shot, active, near, muted, onNotInterested }: { shot: Shot; 
         onClose={() => setShowComments(false)}
         onCountChange={(d) => setComments((n) => Math.max(0, n + d))}
       />
-    </MediaShell>
+      </MediaShell>
+
+      {/* Desktop gutter rail — lives in the void beside the video on solid
+          chips, so the controls never fight a bright frame (spec §2.2). */}
+      <div className="hidden md:flex">{renderRail(true)}</div>
+    </div>
   )
 }
 

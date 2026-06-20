@@ -224,7 +224,7 @@ export default function HelpPage() {
               placeholder="Search questions…"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              className="w-full bg-white/[0.04] border border-border rounded-2xl pl-11 pr-5 py-4 text-base sm:text-sm text-foreground placeholder:text-subtle focus:outline-none focus:border-accent/50 focus:bg-white/[0.06] transition-all"
+              className="w-full bg-white/[0.04] border border-border rounded-2xl pl-11 pr-5 py-4 text-base sm:text-sm text-foreground placeholder:text-muted focus:outline-none focus:border-accent/50 focus:bg-white/[0.06] transition-all"
             />
             {query && (
               <span className="absolute right-4 top-1/2 -translate-y-1/2 text-[10px] font-black text-subtle uppercase tracking-widest">

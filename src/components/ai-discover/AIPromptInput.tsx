@@ -87,7 +87,7 @@ export default function AIPromptInput({ onSearch }: AIPromptInputProps) {
               onKeyDown={handleKey}
               placeholder="Query the archives… (e.g. 'Seinen with philosophical depth and no filler')"
               rows={3}
-              className="w-full bg-transparent border-none rounded-xl p-3 sm:p-4 text-base sm:text-lg text-foreground placeholder:text-subtle focus:outline-none resize-none font-medium leading-relaxed"
+              className="w-full bg-transparent border-none rounded-xl p-3 sm:p-4 text-base sm:text-lg text-foreground placeholder:text-muted focus:outline-none resize-none font-medium leading-relaxed"
             />
             <AnimatePresence>
               {isFocused && (

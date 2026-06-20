@@ -190,7 +190,7 @@ function InlineReply({
           onChange={(e) => setText(e.target.value)}
           placeholder="Write your reply…"
           rows={3}
-          className="w-full bg-transparent text-sm text-foreground placeholder:text-subtle resize-none outline-none leading-relaxed"
+          className="w-full bg-transparent text-sm text-foreground placeholder:text-muted resize-none outline-none leading-relaxed"
         />
         {imageUrl && (
           <ImageAttach
@@ -681,7 +681,7 @@ export default function ThreadDetailPage({
                 placeholder="Share your thoughts…"
                 rows={composerText || composerImage ? 4 : 2}
                 maxLength={500}
-                className="w-full bg-transparent px-4 pt-3.5 text-sm text-foreground placeholder:text-subtle resize-none outline-none leading-relaxed"
+                className="w-full bg-transparent px-4 pt-3.5 text-sm text-foreground placeholder:text-muted resize-none outline-none leading-relaxed"
               />
 
               {composerImage && (

@@ -252,7 +252,7 @@ export default function AccountSettingsPage() {
         <div>
           <label className="block text-[10px] font-black uppercase tracking-[0.2em] text-subtle mb-1.5">Display Name</label>
           <input type="text" value={form.displayName} onChange={set("displayName")} placeholder="Your name" maxLength={60}
-            className="w-full rounded-2xl bg-black/30 border border-border px-4 py-3 text-base sm:text-sm text-foreground placeholder:text-subtle outline-none focus:border-accent/40 transition-colors"
+            className="w-full rounded-2xl bg-black/30 border border-border px-4 py-3 text-base sm:text-sm text-foreground placeholder:text-muted outline-none focus:border-accent/40 transition-colors"
           />
         </div>
         <div>
@@ -267,7 +267,7 @@ export default function AccountSettingsPage() {
               onChange={e => setNameInput(e.target.value.replace(/[^a-zA-Z0-9_]/g, ""))}
               placeholder={storeUser?.username ?? "username"}
               maxLength={30}
-              className="w-full rounded-2xl border px-4 pl-9 py-3 text-base sm:text-sm font-mono text-foreground placeholder:text-subtle outline-none transition-colors bg-black/30"
+              className="w-full rounded-2xl border px-4 pl-9 py-3 text-base sm:text-sm font-mono text-foreground placeholder:text-muted outline-none transition-colors bg-black/30"
               style={{
                 borderColor: nameStatus === "available" ? "color-mix(in srgb, var(--app-accent) 40%, transparent)"
                   : nameStatus === "taken" || nameStatus === "invalid" ? "rgba(239,68,68,0.4)"
@@ -313,7 +313,7 @@ export default function AccountSettingsPage() {
         <div>
           <label className="block text-[10px] font-black uppercase tracking-[0.2em] text-subtle mb-1.5">Bio</label>
           <textarea value={form.bio} onChange={set("bio")} rows={3} maxLength={200}
-            className="w-full rounded-2xl bg-black/30 border border-border px-4 py-3 text-base sm:text-sm text-foreground placeholder:text-subtle outline-none focus:border-accent/40 resize-none transition-colors"
+            className="w-full rounded-2xl bg-black/30 border border-border px-4 py-3 text-base sm:text-sm text-foreground placeholder:text-muted outline-none focus:border-accent/40 resize-none transition-colors"
           />
           <p className="text-[9px] text-right text-subtle mt-1">{form.bio.length}/200</p>
         </div>
@@ -357,7 +357,7 @@ export default function AccountSettingsPage() {
               onChange={e => setSlugInput(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ""))}
               placeholder={storeUser?.slug ?? "your-slug"}
               maxLength={50}
-              className="w-full rounded-2xl border px-4 pl-14 py-3 text-base sm:text-sm font-mono text-foreground placeholder:text-subtle outline-none transition-colors bg-black/30"
+              className="w-full rounded-2xl border px-4 pl-14 py-3 text-base sm:text-sm font-mono text-foreground placeholder:text-muted outline-none transition-colors bg-black/30"
               style={{
                 borderColor: slugStatus === "available" ? "color-mix(in srgb, var(--app-accent) 40%, transparent)"
                   : slugStatus === "taken" || slugStatus === "invalid" ? "rgba(239,68,68,0.4)"
@@ -466,7 +466,7 @@ export default function AccountSettingsPage() {
                 value={deletePassword}
                 onChange={e => setDeletePassword(e.target.value)}
                 placeholder="Leave blank if you signed in with Google"
-                className="w-full rounded-2xl bg-black/40 border border-border px-4 py-3 text-base sm:text-sm text-foreground placeholder:text-subtle outline-none focus:border-red-500/40 transition-colors"
+                className="w-full rounded-2xl bg-black/40 border border-border px-4 py-3 text-base sm:text-sm text-foreground placeholder:text-muted outline-none focus:border-red-500/40 transition-colors"
                 autoFocus
               />
             </div>

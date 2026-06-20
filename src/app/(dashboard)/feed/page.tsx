@@ -382,7 +382,7 @@ export default function FeedPage() {
                 onChange={(e) => setDraft(e.target.value)}
                 placeholder="Share a theory, hot take, or reaction…"
                 rows={3}
-                className="flex-1 bg-transparent text-sm text-foreground placeholder:text-subtle resize-none outline-none leading-relaxed pt-1"
+                className="flex-1 bg-transparent text-sm text-foreground placeholder:text-muted resize-none outline-none leading-relaxed pt-1"
               />
             </div>
             <div className="flex items-center justify-between border-t border-border pt-3">

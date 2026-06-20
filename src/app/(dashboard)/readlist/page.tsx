@@ -72,7 +72,7 @@ export default function ReadlistPage() {
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-subtle group-focus-within:text-accent-bright transition-colors" size={18} />
             <input type="text" placeholder="Search your chronicles..." value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
-              className="w-full pl-11 pr-6 min-h-11 py-3 rounded-2xl bg-surface border border-border text-foreground text-base sm:text-sm placeholder:text-subtle focus:outline-none focus:border-accent/50 transition-all" />
+              className="w-full pl-11 pr-6 min-h-11 py-3 rounded-2xl bg-surface border border-border text-foreground text-base sm:text-sm placeholder:text-muted focus:outline-none focus:border-accent/50 transition-all" />
           </div>
           {isOwner && (
             <button onClick={() => setAddOpen(true)}
@@ -183,7 +183,7 @@ function AddMangaModal({ onClose, existing, onAdded }: { onClose: () => void; ex
         <div className="flex items-center gap-3 p-4 border-b border-border">
           <Search size={18} className="text-subtle" />
           <input autoFocus value={q} onChange={e => setQ(e.target.value)} placeholder="Search manga (AniList)…"
-            className="flex-1 min-h-11 bg-transparent text-foreground placeholder:text-subtle outline-none text-base sm:text-sm" />
+            className="flex-1 min-h-11 bg-transparent text-foreground placeholder:text-muted outline-none text-base sm:text-sm" />
           {searching && <Loader2 size={16} className="animate-spin text-accent" />}
           <button onClick={onClose} aria-label="Close" className={`${ui.touch} grid place-items-center text-subtle hover:text-foreground active:scale-95 transition-transform`}><X size={18} /></button>
         </div>

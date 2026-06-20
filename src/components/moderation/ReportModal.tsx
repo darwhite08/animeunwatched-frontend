@@ -86,7 +86,7 @@ export default function ReportModal({ isOpen, onClose, contentType, contentId }:
                     onChange={e => setNote(e.target.value)}
                     placeholder="Describe the issue in more detail…"
                     rows={3}
-                    className="w-full rounded-2xl bg-surface border border-border px-4 py-3 text-sm text-foreground placeholder:text-subtle outline-none focus:border-red-500/30 resize-none"
+                    className="w-full rounded-2xl bg-surface border border-border px-4 py-3 text-sm text-foreground placeholder:text-muted outline-none focus:border-red-500/30 resize-none"
                   />
                 </div>
 

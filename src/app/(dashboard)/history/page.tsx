@@ -352,7 +352,7 @@ export default function HistoryPage() {
             placeholder="Filter by anime name…"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            className="w-full pl-11 pr-11 min-h-11 py-3 rounded-2xl bg-surface border border-border text-foreground placeholder:text-subtle focus:outline-none focus:border-accent/40 transition-all text-base sm:text-sm"
+            className="w-full pl-11 pr-11 min-h-11 py-3 rounded-2xl bg-surface border border-border text-foreground placeholder:text-muted focus:outline-none focus:border-accent/40 transition-all text-base sm:text-sm"
           />
           {query && (
             <button

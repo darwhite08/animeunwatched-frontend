@@ -120,7 +120,7 @@ export default function AnimeDiscussPage({ params }: { params: Promise<{ id: str
             disabled={!isAuthenticated}
             rows={3}
             maxLength={2000}
-            className="w-full bg-transparent text-sm text-foreground placeholder:text-subtle resize-none outline-none leading-relaxed disabled:opacity-40"
+            className="w-full bg-transparent text-sm text-foreground placeholder:text-muted resize-none outline-none leading-relaxed disabled:opacity-40"
           />
           <div className="flex items-center justify-between mt-3 pt-3 border-t border-border">
             <span className="text-[9px] text-subtle font-mono">{2000 - draft.length} chars</span>

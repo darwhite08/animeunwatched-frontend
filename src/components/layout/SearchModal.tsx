@@ -119,7 +119,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                   onChange={e => setQuery(e.target.value)}
                   onKeyDown={handleKeyDown}
                   placeholder="Search anime, genres, or tags…"
-                  className="flex-1 min-h-11 bg-transparent border-none outline-none text-base sm:text-lg font-medium text-foreground placeholder:text-subtle"
+                  className="flex-1 min-h-11 bg-transparent border-none outline-none text-base sm:text-lg font-medium text-foreground placeholder:text-muted"
                 />
                 {query ? (
                   <button onClick={() => setQuery("")} className="shrink-0 h-11 w-11 -mr-2 flex items-center justify-center rounded-xl text-subtle hover:text-foreground active:scale-95 transition-all">

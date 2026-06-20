@@ -94,7 +94,7 @@ function ResetPasswordContent() {
                       value={password}
                       onChange={e => setPassword(e.target.value)}
                       placeholder="••••••••••"
-                      className="w-full pl-10 pr-11 py-3 rounded-xl bg-surface border border-border text-base sm:text-sm text-foreground placeholder:text-subtle focus:outline-none focus:border-accent/40 transition-all"
+                      className="w-full pl-10 pr-11 py-3 rounded-xl bg-surface border border-border text-base sm:text-sm text-foreground placeholder:text-muted focus:outline-none focus:border-accent/40 transition-all"
                     />
                     <button type="button" onClick={() => setShow(s => !s)} className="absolute right-3 top-1/2 -translate-y-1/2 text-subtle hover:text-muted transition-colors">
                       {show ? <EyeOff size={14} /> : <Eye size={14} />}
@@ -112,7 +112,7 @@ function ResetPasswordContent() {
                       value={confirm}
                       onChange={e => setConfirm(e.target.value)}
                       placeholder="Repeat password"
-                      className="w-full pl-10 pr-4 py-3 rounded-xl bg-surface border border-border text-base sm:text-sm text-foreground placeholder:text-subtle focus:outline-none focus:border-accent/40 transition-all"
+                      className="w-full pl-10 pr-4 py-3 rounded-xl bg-surface border border-border text-base sm:text-sm text-foreground placeholder:text-muted focus:outline-none focus:border-accent/40 transition-all"
                     />
                   </div>
                 </div>

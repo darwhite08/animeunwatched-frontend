@@ -176,7 +176,7 @@ export function AnimeThreadsSection({ animeId, animeTitle }: AnimeThreadsSection
             onChange={(e) => setTitle(e.target.value)}
             maxLength={120}
             placeholder={`Start a discussion about ${animeTitle}…`}
-            className="w-full bg-transparent text-sm font-bold text-foreground placeholder:text-subtle outline-none"
+            className="w-full bg-transparent text-sm font-bold text-foreground placeholder:text-muted outline-none"
             autoFocus
           />
           <textarea
@@ -185,7 +185,7 @@ export function AnimeThreadsSection({ animeId, animeTitle }: AnimeThreadsSection
             maxLength={20000}
             rows={3}
             placeholder="What's on your mind? Add 'spoiler' to the title to flag spoilers."
-            className="w-full bg-transparent text-sm text-muted placeholder:text-subtle outline-none resize-none"
+            className="w-full bg-transparent text-sm text-muted placeholder:text-muted outline-none resize-none"
           />
           <div className="flex items-center justify-between">
             <span className="text-[10px] text-subtle">{title.length}/120</span>

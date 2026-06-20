@@ -455,7 +455,7 @@ function PostCard({ post }: { post: Post }) {
                     placeholder="Write a comment… (⌘Enter to post)"
                     rows={2}
                     maxLength={500}
-                    className="w-full bg-surface border border-border rounded-xl px-3 py-2.5 text-base sm:text-[13px] text-foreground placeholder:text-subtle resize-none outline-none focus:border-accent/40 transition-colors disabled:opacity-40"
+                    className="w-full bg-surface border border-border rounded-xl px-3 py-2.5 text-base sm:text-[13px] text-foreground placeholder:text-muted resize-none outline-none focus:border-accent/40 transition-colors disabled:opacity-40"
                   />
                   <div className="flex items-center justify-between mt-2">
                     <span className="text-[9px] text-subtle font-mono">{500 - commentDraft.length} chars</span>
@@ -703,7 +703,7 @@ export default function CommunityPage() {
                   <textarea ref={composerRef} value={draft} onChange={e => setDraft(e.target.value)}
                     placeholder={isAuthenticated ? "Share a theory, hot take, or reaction…" : "Sign in to post…"}
                     rows={4} autoFocus disabled={!isAuthenticated}
-                    className="w-full bg-transparent text-base sm:text-sm text-foreground placeholder:text-subtle resize-none outline-none leading-relaxed disabled:opacity-40" />
+                    className="w-full bg-transparent text-base sm:text-sm text-foreground placeholder:text-muted resize-none outline-none leading-relaxed disabled:opacity-40" />
 
                   {/* Attached image previews — thumbnails, remove each */}
                   {attachedImages.length > 0 && (

@@ -189,7 +189,7 @@ export default function CreateThreadPage({
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Give your thread a compelling title…"
               maxLength={120}
-              className={`w-full rounded-2xl bg-black/30 border px-5 py-3.5 text-sm text-foreground placeholder:text-subtle outline-none transition-colors ${
+              className={`w-full rounded-2xl bg-black/30 border px-5 py-3.5 text-sm text-foreground placeholder:text-muted outline-none transition-colors ${
                 title.trim().length > 0 && !titleOk
                   ? "border-accent/30 focus:border-accent/50"
                   : "border-border focus:border-accent/40"
@@ -233,7 +233,7 @@ export default function CreateThreadPage({
                   onChange={(e) => setContent(e.target.value)}
                   placeholder={"Write your thread…\n\nSupports basic markdown:\n# Heading\n**bold**, *italic*, `code`\n> blockquote\n- list item"}
                   rows={10}
-                  className={`w-full rounded-2xl bg-black/30 border px-5 py-4 text-sm text-foreground placeholder:text-subtle outline-none resize-none leading-relaxed transition-colors font-mono ${
+                  className={`w-full rounded-2xl bg-black/30 border px-5 py-4 text-sm text-foreground placeholder:text-muted outline-none resize-none leading-relaxed transition-colors font-mono ${
                     content.trim().length > 0 && !contentOk
                       ? "border-accent/30 focus:border-accent/50"
                       : "border-border focus:border-accent/40"
@@ -266,7 +266,7 @@ export default function CreateThreadPage({
               value={tagsRaw}
               onChange={(e) => setTagsRaw(e.target.value)}
               placeholder="e.g. theory, episode-5, spoilers, hot-take"
-              className="w-full rounded-2xl bg-black/30 border border-border px-5 py-3.5 text-sm text-foreground placeholder:text-subtle outline-none focus:border-accent/40 transition-colors"
+              className="w-full rounded-2xl bg-black/30 border border-border px-5 py-3.5 text-sm text-foreground placeholder:text-muted outline-none focus:border-accent/40 transition-colors"
             />
             {tags.length > 0 && (
               <div className="flex flex-wrap gap-2 pt-1">

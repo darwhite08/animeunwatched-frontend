@@ -71,7 +71,7 @@ export default function UsersPage() {
             <Search size={14} className="absolute left-4 top-1/2 -translate-y-1/2 text-subtle" />
             <input value={query} onChange={e => setQuery(e.target.value)}
               placeholder="Search Shinobi…"
-              className="w-full pl-10 pr-4 py-3 bg-surface border border-border rounded-2xl text-sm text-foreground placeholder:text-subtle outline-none focus:border-accent/40"
+              className="w-full pl-10 pr-4 py-3 bg-surface border border-border rounded-2xl text-sm text-foreground placeholder:text-muted outline-none focus:border-accent/40"
             />
           </div>
           <div className="flex gap-2">

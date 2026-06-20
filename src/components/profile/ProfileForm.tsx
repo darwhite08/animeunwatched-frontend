@@ -113,7 +113,7 @@ export default function ProfileForm() {
             onChange={set("bio")}
             rows={3}
             maxLength={200}
-            className="w-full rounded-2xl bg-black/30 border border-border px-4 py-3 text-sm text-foreground placeholder:text-subtle outline-none focus:border-accent/50 focus:bg-white/[0.04] transition-all resize-none"
+            className="w-full rounded-2xl bg-black/30 border border-border px-4 py-3 text-sm text-foreground placeholder:text-muted outline-none focus:border-accent/50 focus:bg-white/[0.04] transition-all resize-none"
           />
           <p className="text-[9px] text-subtle text-right mt-1">{form.bio.length}/200</p>
         </div>
@@ -164,7 +164,7 @@ function Field({
           type={type}
           value={value}
           onChange={onChange}
-          className={`w-full rounded-2xl bg-black/30 border border-border py-3 text-sm text-foreground placeholder:text-subtle outline-none focus:border-accent/50 focus:bg-white/[0.04] transition-all ${prefix ? "pl-7 pr-4" : "px-4"}`}
+          className={`w-full rounded-2xl bg-black/30 border border-border py-3 text-sm text-foreground placeholder:text-muted outline-none focus:border-accent/50 focus:bg-white/[0.04] transition-all ${prefix ? "pl-7 pr-4" : "px-4"}`}
         />
       </div>
     </div>

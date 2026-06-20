@@ -141,7 +141,7 @@ export default function WatchlistPage() {
           <div className="relative group flex-1 sm:w-72">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-subtle group-focus-within:text-accent-bright transition-colors" size={16} />
             <input type="text" placeholder="Search watchlist…"
-              className="w-full pl-11 pr-10 py-3.5 min-h-11 rounded-2xl bg-surface border border-border text-foreground placeholder:text-subtle focus:outline-none focus:border-accent/40 transition-all text-base sm:text-sm"
+              className="w-full pl-11 pr-10 py-3.5 min-h-11 rounded-2xl bg-surface border border-border text-foreground placeholder:text-muted focus:outline-none focus:border-accent/40 transition-all text-base sm:text-sm"
               value={query} onChange={e => setQuery(e.target.value)} />
             {query && (
               <button onClick={() => setQuery("")} className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center justify-center min-h-11 min-w-11 text-subtle hover:text-foreground transition-colors">

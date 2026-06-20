@@ -58,7 +58,7 @@ export default function BlogCommentsPage({ params }: { params: Promise<{ slug: s
           <textarea value={draft} onChange={e=>setDraft(e.target.value)}
             placeholder="Share your thoughts…"
             rows={3}
-            className="w-full bg-transparent text-sm text-foreground placeholder:text-subtle resize-none outline-none leading-relaxed"
+            className="w-full bg-transparent text-sm text-foreground placeholder:text-muted resize-none outline-none leading-relaxed"
           />
           <div className="flex items-center justify-between border-t border-border pt-3">
             <span className={`text-[10px] font-mono ${500-draft.length<50?"text-accent-bright":"text-subtle"}`}>{500-draft.length}</span>

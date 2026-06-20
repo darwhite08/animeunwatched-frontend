@@ -331,7 +331,7 @@ export default function RegisterPage() {
                   autoCapitalize="characters"
                   maxLength={40}
                   disabled={isDisabled}
-                  className="w-full h-12 rounded-2xl bg-surface border border-accent/30 px-4 font-mono tracking-widest text-base sm:text-sm text-foreground placeholder:text-subtle outline-none focus:border-accent/60 transition-all disabled:opacity-50"
+                  className="w-full h-12 rounded-2xl bg-surface border border-accent/30 px-4 font-mono tracking-widest text-base sm:text-sm text-foreground placeholder:text-muted outline-none focus:border-accent/60 transition-all disabled:opacity-50"
                 />
               </div>
             )}
@@ -347,7 +347,7 @@ export default function RegisterPage() {
                 minLength={3}
                 maxLength={30}
                 disabled={isDisabled}
-                className={`w-full h-12 rounded-2xl bg-surface border px-4 text-base sm:text-sm text-foreground placeholder:text-subtle outline-none focus:border-accent/50 focus:bg-surface transition-all disabled:opacity-50 ${
+                className={`w-full h-12 rounded-2xl bg-surface border px-4 text-base sm:text-sm text-foreground placeholder:text-muted outline-none focus:border-accent/50 focus:bg-surface transition-all disabled:opacity-50 ${
                   form.username && form.username.length < 3 ? "border-red-500/50" : "border-border"
                 }`}
               />
@@ -374,7 +374,7 @@ export default function RegisterPage() {
                 placeholder="you@domain.com"
                 autoComplete="email"
                 disabled={isDisabled}
-                className="w-full h-12 rounded-2xl bg-surface border border-border px-4 text-base sm:text-sm text-foreground placeholder:text-subtle outline-none focus:border-accent/50 focus:bg-surface transition-all disabled:opacity-50"
+                className="w-full h-12 rounded-2xl bg-surface border border-border px-4 text-base sm:text-sm text-foreground placeholder:text-muted outline-none focus:border-accent/50 focus:bg-surface transition-all disabled:opacity-50"
               />
             </div>
 
@@ -390,7 +390,7 @@ export default function RegisterPage() {
                   placeholder="Min. 8 characters"
                   autoComplete="new-password"
                   disabled={isDisabled}
-                  className="w-full h-12 rounded-2xl bg-surface border border-border px-4 pr-12 text-base sm:text-sm text-foreground placeholder:text-subtle outline-none focus:border-accent/50 focus:bg-surface transition-all disabled:opacity-50"
+                  className="w-full h-12 rounded-2xl bg-surface border border-border px-4 pr-12 text-base sm:text-sm text-foreground placeholder:text-muted outline-none focus:border-accent/50 focus:bg-surface transition-all disabled:opacity-50"
                 />
                 <button
                   type="button"
@@ -488,7 +488,7 @@ export default function RegisterPage() {
                   placeholder="you@domain.com"
                   autoComplete="email"
                   disabled={wlState === "loading"}
-                  className="w-full h-12 rounded-2xl bg-surface border border-border px-4 text-base sm:text-sm text-foreground placeholder:text-subtle outline-none focus:border-accent/50 transition-all disabled:opacity-50"
+                  className="w-full h-12 rounded-2xl bg-surface border border-border px-4 text-base sm:text-sm text-foreground placeholder:text-muted outline-none focus:border-accent/50 transition-all disabled:opacity-50"
                 />
               </div>
 

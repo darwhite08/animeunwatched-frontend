@@ -175,7 +175,7 @@ export default function ContactPage() {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   placeholder="Your name"
-                  className="w-full bg-surface border border-border rounded-xl px-4 py-3.5 text-base sm:text-sm text-foreground placeholder:text-subtle focus:outline-none focus:border-accent/50 focus:bg-surface transition-all"
+                  className="w-full bg-surface border border-border rounded-xl px-4 py-3.5 text-base sm:text-sm text-foreground placeholder:text-muted focus:outline-none focus:border-accent/50 focus:bg-surface transition-all"
                 />
               </div>
 
@@ -190,7 +190,7 @@ export default function ContactPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="you@example.com"
-                  className="w-full bg-surface border border-border rounded-xl px-4 py-3.5 text-base sm:text-sm text-foreground placeholder:text-subtle focus:outline-none focus:border-accent/50 focus:bg-surface transition-all"
+                  className="w-full bg-surface border border-border rounded-xl px-4 py-3.5 text-base sm:text-sm text-foreground placeholder:text-muted focus:outline-none focus:border-accent/50 focus:bg-surface transition-all"
                 />
               </div>
             </div>
@@ -224,7 +224,7 @@ export default function ContactPage() {
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 placeholder="Write your message here…"
-                className="w-full bg-surface border border-border rounded-xl px-4 py-3.5 text-base sm:text-sm text-foreground placeholder:text-subtle focus:outline-none focus:border-accent/50 focus:bg-surface transition-all resize-none"
+                className="w-full bg-surface border border-border rounded-xl px-4 py-3.5 text-base sm:text-sm text-foreground placeholder:text-muted focus:outline-none focus:border-accent/50 focus:bg-surface transition-all resize-none"
               />
             </div>
 

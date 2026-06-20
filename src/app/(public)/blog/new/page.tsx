@@ -115,7 +115,7 @@ export default function NewBlogPage() {
           {/* Cover URL */}
           <div className="px-6 pt-6">
             <input value={coverUrl} onChange={e=>setCoverUrl(e.target.value)} placeholder="Cover image URL (optional)"
-              className="w-full bg-surface-2 rounded-xl px-4 py-3 text-sm outline-none placeholder:text-subtle focus:ring-1 focus:ring-purple-500/50 transition-all"
+              className="w-full bg-surface-2 rounded-xl px-4 py-3 text-sm outline-none placeholder:text-muted focus:ring-1 focus:ring-purple-500/50 transition-all"
             />
             {coverUrl && <div className="mt-3 rounded-xl overflow-hidden h-40 bg-surface-2"><img loading="lazy" decoding="async" src={coverUrl} alt="cover" className="w-full h-full object-cover"/></div>}
           </div>
@@ -123,7 +123,7 @@ export default function NewBlogPage() {
           {/* Title */}
           <div className="px-6 pt-4">
             <input value={title} onChange={e=>setTitle(e.target.value)} placeholder="Article title…"
-              className="w-full bg-transparent text-2xl font-semibold outline-none placeholder:text-subtle"
+              className="w-full bg-transparent text-2xl font-semibold outline-none placeholder:text-muted"
             />
           </div>
 
@@ -160,7 +160,7 @@ export default function NewBlogPage() {
               <textarea value={body} onChange={e=>setBody(e.target.value)}
                 placeholder="Start writing your article… Markdown is supported."
                 rows={12}
-                className="w-full bg-transparent text-sm resize-none outline-none placeholder:text-subtle leading-relaxed"
+                className="w-full bg-transparent text-sm resize-none outline-none placeholder:text-muted leading-relaxed"
               />
             )}
           </div>

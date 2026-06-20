@@ -200,7 +200,7 @@ function InputField({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="w-full px-4 py-2.5 rounded-xl bg-white/[0.04] border border-border text-sm text-foreground placeholder:text-subtle outline-none focus:border-accent/40 transition-colors"
+        className="w-full px-4 py-2.5 rounded-xl bg-white/[0.04] border border-border text-sm text-foreground placeholder:text-muted outline-none focus:border-accent/40 transition-colors"
       />
     </div>
   )

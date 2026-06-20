@@ -124,7 +124,7 @@ function Composer() {
         placeholder="What's on your mind?"
         maxLength={2000}
         rows={3}
-        className="w-full bg-transparent text-sm text-foreground placeholder:text-subtle resize-none focus:outline-none"
+        className="w-full bg-transparent text-sm text-foreground placeholder:text-muted resize-none focus:outline-none"
       />
       <div className="flex items-center justify-between">
         <span className="font-mono text-[10px] uppercase tracking-widest text-subtle">{body.length}/2000</span>

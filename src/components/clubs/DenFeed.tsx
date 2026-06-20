@@ -147,7 +147,7 @@ function Composer({ slug, denName }: { slug: string; denName: string }) {
               onChange={(e) => setTitle(e.target.value)}
               placeholder="Title (optional)"
               maxLength={120}
-              className="mb-2 w-full bg-transparent text-base sm:text-lg font-black text-foreground placeholder:text-subtle/70 focus:outline-none"
+              className="mb-2 w-full bg-transparent text-base sm:text-lg font-black text-foreground placeholder:text-muted/70 focus:outline-none"
             />
           )}
           <textarea
@@ -156,7 +156,7 @@ function Composer({ slug, denName }: { slug: string; denName: string }) {
             onFocus={() => setOpen(true)}
             placeholder={`Start a discussion in ${denName}…`}
             rows={open ? 3 : 1}
-            className="w-full resize-none bg-transparent text-base text-foreground placeholder:text-subtle focus:outline-none leading-relaxed"
+            className="w-full resize-none bg-transparent text-base text-foreground placeholder:text-muted focus:outline-none leading-relaxed"
           />
 
           {image && (

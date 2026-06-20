@@ -226,7 +226,7 @@ export default function ClubsPage() {
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search dens…"
-              className="w-full pl-10 pr-4 min-h-11 rounded-xl bg-surface border border-border text-base sm:text-sm text-foreground placeholder:text-subtle focus:outline-none focus:border-accent/40 focus:bg-surface transition-all"
+              className="w-full pl-10 pr-4 min-h-11 rounded-xl bg-surface border border-border text-base sm:text-sm text-foreground placeholder:text-muted focus:outline-none focus:border-accent/40 focus:bg-surface transition-all"
             />
           </div>
           <div className="flex items-center gap-2 overflow-x-auto scrollbar-hide -mx-4 px-4 sm:mx-0 sm:px-0 sm:flex-wrap">

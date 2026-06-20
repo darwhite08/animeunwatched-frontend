@@ -208,7 +208,7 @@ export default function RatePage() {
                   onChange={e => setQuery(e.target.value)}
                   placeholder="Search anime to rate…"
                   autoFocus
-                  className="w-full pl-11 pr-4 py-4 bg-surface border border-border rounded-2xl text-foreground placeholder:text-subtle outline-none focus:border-accent/50 text-sm"
+                  className="w-full pl-11 pr-4 py-4 bg-surface border border-border rounded-2xl text-foreground placeholder:text-muted outline-none focus:border-accent/50 text-sm"
                 />
               </div>
 

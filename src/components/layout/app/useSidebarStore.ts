@@ -32,16 +32,17 @@ export const useSidebarStore = create<SidebarState>((set) => ({
 }))
 
 /**
- * Effective collapsed state: the user's preference OR auto-collapsed when the
- * viewport is below `lg` (1024px) — the same breakpoint where the feed's right
- * rail disappears, so the rail and the nav rail strip away together and the feed
- * gets the reclaimed width. Above lg, the user's toggle wins.
+ * Effective collapsed state: the user's preference OR auto-collapsed below `xl`
+ * (1280px). The expanded 240px rail + feed + the right rail need ~1280px to sit
+ * comfortably, so the left rail strips to icons as the layout starts to get
+ * cramped — before the feed is squeezed — rather than only once the right rail
+ * has already dropped at 1024. Above xl, the user's toggle wins.
  */
 export function useEffectiveCollapsed(): boolean {
   const userCollapsed = useSidebarStore((s) => s.collapsed)
   const [narrow, setNarrow] = useState(false)
   useEffect(() => {
-    const mq = window.matchMedia("(max-width: 1023px)")
+    const mq = window.matchMedia("(max-width: 1279px)")
     setNarrow(mq.matches)
     const on = () => setNarrow(mq.matches)
     mq.addEventListener("change", on)

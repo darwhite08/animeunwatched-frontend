@@ -24,7 +24,6 @@ import { PostGallery } from "@/components/posts/PostGallery"
 import { LinkPreviewCard, firstUrl } from "@/components/posts/LinkPreviewCard"
 import { useLiveFeed } from "@/hooks/useRealtime"
 import { useImageUpload } from "@/hooks/useImageUpload"
-import { useScrollDirection } from "@/hooks/useScrollDirection"
 import { PostMenu } from "@/components/ui/PostMenu"
 import { useAuthStore } from "@/stores/auth.store"
 import { VerifiedBadge } from "@/components/social/VerifiedBadge"
@@ -486,17 +485,15 @@ function PostCard({ post }: { post: Post }) {
 export default function CommunityPage() {
   const { push } = useToast()
   const isAuthenticated = useAuthStore(s => s.isAuthenticated)
+  const me = useAuthStore(s => s.user)
   const showAuthPrompt = useAuthPrompt(s => s.show)
   const [feedTab, setFeedTab] = useState<FeedTab>("trending")
+  // X-style: the composer lives inline at the top of the feed and expands on
+  // focus (`composing`). No separate "New Post" button needed.
   const [composing, setComposing] = useState(false)
-  // Scroll-direction drives chrome-stripping: at top, NEW POST is the big header
-  // CTA; once scrolling into the feed it collapses to a floating + (attention
-  // research §5 — let content fill the high-attention zone).
-  const { dir: scrollDir, atTop } = useScrollDirection()
-  const scrolledIn = scrollDir === "down" && !atTop
   // Open the composer for members; pop the sign-in wall for guests.
   const openComposer = useCallback(() => {
-    if (isAuthenticated) setComposing(c => !c)
+    if (isAuthenticated) setComposing(true)
     else showAuthPrompt({ subtitle: "Sign in to share a post with the community." })
   }, [isAuthenticated, showAuthPrompt])
   const [draft, setDraft] = useState("")
@@ -672,48 +669,27 @@ export default function CommunityPage() {
               </button>
             ))}
           </div>
-          <div className="flex items-center gap-4 shrink-0">
-            <p className="hidden lg:block text-[11px] text-muted font-mono uppercase tracking-widest tabular-nums">
-              {posts.length > 0 ? `${posts.length}+ posts · The Dojo` : "The Dojo — share your thoughts"}
-            </p>
-            {/* Single primary CTA — collapses to the floating + on scroll-down */}
-            <button onClick={openComposer}
-              className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-widest text-black transition-all hover:scale-[1.03] motion-reduce:transform-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/70 ${scrolledIn ? "pointer-events-none opacity-0" : ""}`}
-              style={{ background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))", boxShadow: "0 4px 16px color-mix(in srgb, var(--app-accent) 35%, transparent)" }}>
-              <Plus size={13} /> New Post
-            </button>
-          </div>
+          <p className="hidden sm:block text-[11px] text-muted font-mono uppercase tracking-widest tabular-nums shrink-0">
+            {posts.length > 0 ? `${posts.length}+ posts · The Dojo` : "The Dojo — share your thoughts"}
+          </p>
         </div>
       </div>
-
-      {/* Floating + — appears once scrolled into the feed (all viewports), the
-          single CTA in the marking-pattern zone. */}
-      <motion.button
-        initial={false}
-        animate={{ opacity: scrolledIn ? 1 : 0, scale: scrolledIn ? 1 : 0.8 }}
-        transition={{ duration: 0.2 }}
-        onClick={openComposer}
-        aria-label="New post"
-        className={`fixed bottom-8 right-8 z-40 grid h-14 w-14 place-items-center rounded-full text-black transition-transform hover:scale-105 motion-reduce:transition-none ${scrolledIn ? "" : "pointer-events-none"}`}
-        style={{ background: "linear-gradient(135deg, var(--app-accent-bright), var(--app-accent))", boxShadow: "0 8px 24px color-mix(in srgb, var(--app-accent) 50%, transparent)" }}
-      >
-        <Plus size={22} strokeWidth={3} />
-      </motion.button>
 
       <div className="max-w-[1024px] mx-auto px-4 sm:px-6 pt-6 grid gap-8 lg:grid-cols-[minmax(0,1fr)_300px]">
 
         {/* Feed — capped ~680px so it stays in the high-attention reading column */}
         <div className="min-w-0 space-y-5">
 
-          {/* Composer */}
-          <AnimatePresence>
-            {composing && (
-              <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }} exit={{ opacity: 0, height: 0 }} className="overflow-hidden">
-                <div className="bg-surface-2 border border-accent/20 rounded-2xl p-5 space-y-4">
+          {/* X-style inline composer — always at the top of the feed, expands on focus */}
+          <div className="bg-surface border border-border rounded-2xl p-4">
+            <div className="flex gap-3">
+              <Avatar src={me?.avatarUrl} name={me?.displayName ?? "You"} size={40} fallbackClassName="bg-gradient-to-br from-accent to-orange-600" />
+              <div className="min-w-0 flex-1 space-y-3">
                   <textarea ref={composerRef} value={draft} onChange={e => setDraft(e.target.value)}
-                    placeholder={isAuthenticated ? "Share a theory, hot take, or reaction…" : "Sign in to post…"}
-                    rows={4} autoFocus disabled={!isAuthenticated}
-                    className="w-full bg-transparent text-base sm:text-sm text-foreground placeholder:text-muted resize-none outline-none leading-relaxed disabled:opacity-40" />
+                    onFocus={openComposer}
+                    placeholder={isAuthenticated ? "What's happening?" : "Sign in to post…"}
+                    rows={composing ? 3 : 1} disabled={!isAuthenticated}
+                    className="w-full bg-transparent text-lg sm:text-base text-foreground placeholder:text-muted resize-none outline-none leading-relaxed disabled:opacity-40 pt-1.5" />
 
                   {/* Attached image previews — thumbnails, remove each */}
                   {attachedImages.length > 0 && (
@@ -822,16 +798,15 @@ export default function CommunityPage() {
                     <div className="flex items-center gap-2">
                       <span className={`text-[10px] font-mono ${500 - draft.length < 50 ? "text-accent-bright" : "text-subtle"}`}>{500 - draft.length}</span>
                       <button onClick={submitPost} disabled={!draft.trim() || createPost.isPending}
-                        className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-accent hover:bg-accent-bright disabled:opacity-40 text-xs font-black uppercase tracking-wider text-black transition-all active:scale-95">
+                        className="flex items-center gap-2 px-5 py-2 rounded-full bg-accent hover:bg-accent-bright disabled:opacity-40 text-xs font-black uppercase tracking-wider text-black transition-all active:scale-95">
                         {createPost.isPending ? <Loader2 size={12} className="animate-spin" /> : <Send size={12} />}
                         Post
                       </button>
                     </div>
                   </div>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
+              </div>
+            </div>
+          </div>
 
           {/* Loading skeleton */}
           {isLoading && (

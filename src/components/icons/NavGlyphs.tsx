@@ -82,3 +82,8 @@ export const NavProfile = (({ size = 24, weight, className }: GlyphProps) => svg
   <path fill="#F4F2EC" d="M5.4 19.6a6.6 6.6 0 0 1 13.2 0 .5.5 0 0 1-.5.45H5.9a.5.5 0 0 1-.5-.45Z" />
   <circle fill="#F5A623" cx="12" cy="8.3" r="3.6" />
 </>)) as unknown as PhosphorIcon
+
+export const NavWatch = (({ size = 24, weight, className }: GlyphProps) => svg(size, className, weight, <>
+  <rect fill="#F4F2EC" x="3" y="5" width="18" height="14" rx="3.2" />
+  <path fill="#F5A623" d="M10.4 9.1a.72.72 0 0 0-1.1.62v4.56a.72.72 0 0 0 1.1.62l3.95-2.28a.72.72 0 0 0 0-1.24z" />
+</>)) as unknown as PhosphorIcon

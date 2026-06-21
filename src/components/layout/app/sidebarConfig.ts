@@ -9,7 +9,7 @@ import {
 } from "@phosphor-icons/react"
 import {
   NavHome, NavShots, NavAnime, NavDiscover, NavDens,
-  NavBlog, NavLeaderboard, NavChat, NavLibrary, NavProfile,
+  NavBlog, NavLeaderboard, NavChat, NavLibrary, NavProfile, NavWatch,
 } from "@/components/icons/NavGlyphs"
 
 /**
@@ -82,6 +82,7 @@ export const PROFILE_FLYOUT: FlyoutLink[] = [
 export const NAV_ITEMS: NavItem[] = [
   { key: "feed",        label: "Home",        path: "/community",     icon: NavHome,        mobile: true, flyout: HOME_FLYOUT },
   { key: "shots",       label: "Shots",       path: "/shots",         icon: NavShots,       mobile: true },
+  { key: "watch",       label: "Watch",       path: "/watch",         icon: NavWatch },
   { key: "anime",       label: "Anime",       path: "/bestanimelist", icon: NavAnime,       mobile: true, flyout: ANIME_FLYOUT },
   { key: "discover",    label: "Discover",    path: "/ai-discover",   icon: NavDiscover },
   { key: "clubs",       label: "Dens",        path: "/clubs",         icon: NavDens },

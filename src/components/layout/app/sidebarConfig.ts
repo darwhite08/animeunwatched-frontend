@@ -1,14 +1,16 @@
 import {
-  House, Television, Sparkle, UsersThree, MagnifyingGlass,
-  Trophy, ChatCircleText, Bookmarks, User,
+  MagnifyingGlass, User,
   ListBullets, PlayCircle, Robot, CalendarBlank, CalendarCheck,
   Star, Tag, Buildings, Smiley, MagicWand, SquaresFour,
   MonitorPlay, BookOpen, Books, ClockCounterClockwise, Flame,
   Medal, ChartBar, Users, BellSimple, Gear,
-  Newspaper, TrendUp, Article,
+  Newspaper, TrendUp,
   type Icon as PhosphorIcon,
 } from "@phosphor-icons/react"
-import { ShotsGlyph } from "@/components/icons/ShotsGlyph"
+import {
+  NavHome, NavShots, NavAnime, NavDiscover, NavDens,
+  NavBlog, NavLeaderboard, NavChat, NavLibrary, NavProfile,
+} from "@/components/icons/NavGlyphs"
 
 /**
  * Single source of truth for the authenticated app navigation.
@@ -78,16 +80,16 @@ export const PROFILE_FLYOUT: FlyoutLink[] = [
 ]
 
 export const NAV_ITEMS: NavItem[] = [
-  { key: "feed",        label: "Home",        path: "/community",     icon: House,           mobile: true, flyout: HOME_FLYOUT },
-  { key: "shots",       label: "Shots",       path: "/shots",         icon: ShotsGlyph,       mobile: true },
-  { key: "anime",       label: "Anime",       path: "/bestanimelist", icon: Television,     mobile: true, flyout: ANIME_FLYOUT },
-  { key: "discover",    label: "Discover",    path: "/ai-discover",   icon: Sparkle },
-  { key: "clubs",       label: "Dens",        path: "/clubs",         icon: UsersThree },
-  { key: "blog",        label: "Blog",        path: "/blog",          icon: Article },
-  { key: "leaderboard", label: "Leaderboard", path: "/leaderboard",   icon: Trophy },
-  { key: "chat",        label: "Chat",        path: "/chat",          icon: ChatCircleText, badgeKey: "unreadDms", mobile: true },
-  { key: "library",     label: "Library",     path: "watchlist",      icon: Bookmarks,      flyout: LIBRARY_FLYOUT },
-  { key: "profile",     label: "Profile",     path: "profile",        icon: User,           mobile: true, flyout: PROFILE_FLYOUT },
+  { key: "feed",        label: "Home",        path: "/community",     icon: NavHome,        mobile: true, flyout: HOME_FLYOUT },
+  { key: "shots",       label: "Shots",       path: "/shots",         icon: NavShots,       mobile: true },
+  { key: "anime",       label: "Anime",       path: "/bestanimelist", icon: NavAnime,       mobile: true, flyout: ANIME_FLYOUT },
+  { key: "discover",    label: "Discover",    path: "/ai-discover",   icon: NavDiscover },
+  { key: "clubs",       label: "Dens",        path: "/clubs",         icon: NavDens },
+  { key: "blog",        label: "Blog",        path: "/blog",          icon: NavBlog },
+  { key: "leaderboard", label: "Leaderboard", path: "/leaderboard",   icon: NavLeaderboard },
+  { key: "chat",        label: "Chat",        path: "/chat",          icon: NavChat,        badgeKey: "unreadDms", mobile: true },
+  { key: "library",     label: "Library",     path: "watchlist",      icon: NavLibrary,     flyout: LIBRARY_FLYOUT },
+  { key: "profile",     label: "Profile",     path: "profile",        icon: NavProfile,     mobile: true, flyout: PROFILE_FLYOUT },
 ]
 
 /** Resolve a NavItem's href given the current user slug. */
@@ -98,9 +100,9 @@ export function resolvePath(item: { path: string }, slug?: string | null): strin
 
 /** Bottom-tab items (<md). Explicit order: Home · Search · Messages · Shots · Profile. */
 export const MOBILE_ITEMS: NavItem[] = [
-  { key: "feed",    label: "Home",     path: "/community", icon: House,           mobile: true },
+  { key: "feed",    label: "Home",     path: "/community", icon: NavHome,         mobile: true },
   { key: "search",  label: "Search",   path: "/search",    icon: MagnifyingGlass, mobile: true },
-  { key: "chat",    label: "Messages", path: "/chat",      icon: ChatCircleText,  badgeKey: "unreadDms", mobile: true },
-  { key: "shots",   label: "Shots",    path: "/shots",     icon: ShotsGlyph,        mobile: true },
-  { key: "profile", label: "Profile",  path: "profile",    icon: User,            mobile: true },
+  { key: "chat",    label: "Messages", path: "/chat",      icon: NavChat,         badgeKey: "unreadDms", mobile: true },
+  { key: "shots",   label: "Shots",    path: "/shots",     icon: NavShots,        mobile: true },
+  { key: "profile", label: "Profile",  path: "profile",    icon: NavProfile,      mobile: true },
 ]

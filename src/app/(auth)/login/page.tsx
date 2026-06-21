@@ -93,14 +93,22 @@ export default function LoginPage() {
   const [formError, setFormError] = useState("")
 
   // Friendly message when the Google redirect callback bounced back with an error
-  // (e.g. a non-registered user tried to sign in → ?error=no_account).
-  const urlError = params.get("error")
+  // (e.g. a non-registered user tried to sign in → ?error=no_account, or an
+  // un-invited account hit the invite-only gate → ?reason=...). Prefer the
+  // explicit `reason` the backend sends so we show the REAL cause (e.g.
+  // "Kaiveron is invite-only right now…") instead of a vague "try again".
+  const urlError  = params.get("error")
+  const urlReason = params.get("reason")?.trim()
   const oauthErrorMsg =
-    urlError === "no_account"
-      ? "No Kaiveron account is linked to that Google account — sign up or join the waitlist first."
-      : urlError === "google_failed"
-        ? "Google sign-in didn't complete. Please try again."
-        : ""
+    urlReason
+      ? urlReason
+      : urlError === "no_account"
+        ? "No Kaiveron account is linked to that Google account — sign up or join the waitlist first."
+        : urlError === "google_failed"
+          ? "Google sign-in didn't complete. Please try again."
+          : ""
+  // Invite-only rejections should nudge toward the waitlist, not "try again".
+  const isInviteOnly = /invite-only|invite code|waitlist/i.test(urlReason ?? "")
 
   const set = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement>) =>
     setForm(f => ({ ...f, [k]: e.target.value }))
@@ -297,7 +305,7 @@ export default function LoginPage() {
             {oauthErrorMsg && (
               <div className="mb-4 px-4 py-3 rounded-xl bg-red-500/10 border border-red-500/25 text-center">
                 <p className="text-xs font-bold text-red-300">{oauthErrorMsg}</p>
-                {urlError === "no_account" && (
+                {(urlError === "no_account" || isInviteOnly) && (
                   <Link href="/register" className="text-[11px] font-black text-accent-bright hover:text-foreground transition mt-1 inline-block">
                     Join the waitlist →
                   </Link>

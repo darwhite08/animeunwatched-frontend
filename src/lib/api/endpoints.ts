@@ -154,6 +154,18 @@ export const browseAnime = (params: {
 export const getAnime = (malId: number) =>
   api<{ anime: AnimeDTO; listEntry: ListEntry | null }>(`/anime/${malId}`)
 
+export type WatchSource = {
+  videoId: string
+  title: string
+  channel: string
+  durationSec: number
+  episode: number | null
+  blockedRegions: string[]
+  allowedRegions: string[]
+}
+export const getWatchSources = (malId: number | string) =>
+  api<{ sources: WatchSource[]; enabled: boolean; quota?: boolean }>(`/anime/${malId}/watch-sources`)
+
 export const getAnimeCharacters = (malId: number | string) =>
   api<{ data: AnimeCharacterEntry[] }>(`/anime/${malId}/characters`)
 export const getAnimeStaff = (malId: number | string) =>

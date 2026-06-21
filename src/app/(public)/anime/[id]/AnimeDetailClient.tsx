@@ -292,6 +292,14 @@ function AnimeDetail({ anime, rawAnime, currentEpisode = 0 }: { anime: Anime; ra
 
           {/* Actions */}
           <div className="w-full sm:w-auto sm:ml-auto flex flex-wrap items-center gap-2 sm:gap-3">
+            <Link
+              href={`/anime/${malId}/watch`}
+              className="flex min-h-11 items-center gap-2 px-5 py-3 rounded-2xl text-xs font-black uppercase tracking-widest text-black transition-all active:scale-[0.98]"
+              style={{ background: "linear-gradient(135deg,var(--app-accent-bright),var(--app-accent))", boxShadow: "0 4px 18px color-mix(in srgb, var(--app-accent) 30%, transparent)" }}
+            >
+              <Tv size={15} /> Watch
+            </Link>
+
             {trailerYoutubeId && (
               <a
                 href={rawAnime?.trailerUrl ?? `https://www.youtube.com/watch?v=${trailerYoutubeId}`}

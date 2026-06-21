@@ -600,8 +600,11 @@ function MsgRow({ m, isMine, text, authorSrc, authorName, onDelete, isMobile=fal
       </div>
       )}
 
-      {/* Content col */}
-      <div style={{ minWidth:0, display:"flex", flexDirection:"column", alignItems:isMine?"flex-end":"flex-start" }}>
+      {/* Content col. On mobile the row is a flexbox, so without a width basis
+          this column collapses to min-content and the bubble's % max-width
+          resolves to ~1 char (breaking "hi" → "h"/"i"). flex:1 gives it the full
+          row width; the bubble then sizes to its text up to maxWidth. */}
+      <div style={{ minWidth:0, ...(isMobile ? { flex:"1 1 0%", width:"100%" } : {}), display:"flex", flexDirection:"column", alignItems:isMine?"flex-end":"flex-start" }}>
         {!isMobile && m.isGroupStart && (
           <div style={{ display:"flex", alignItems:"baseline", gap:8, marginBottom:4, flexDirection:isMine?"row-reverse":"row" }}>
             <span style={{ fontSize:13.5, fontWeight:600, color:"var(--ink)", letterSpacing:"-0.005em" }}>{authorName}</span>

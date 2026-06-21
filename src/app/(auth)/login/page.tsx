@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect } from "react"
 import { motion } from "framer-motion"
 import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
@@ -109,6 +109,22 @@ export default function LoginPage() {
           : ""
   // Invite-only rejections should nudge toward the waitlist, not "try again".
   const isInviteOnly = /invite-only|invite code|waitlist/i.test(urlReason ?? "")
+
+  // Google sign-in href. If the visitor arrived via an invite/referral (?invite=,
+  // ?ref=, or the aw_ref that /join/<handle> stores), thread it through Google so
+  // signup passes the invite-only gate — and DON'T force mode=login, so a referred
+  // new account can be created with Google straight from here. Otherwise it's a
+  // pure sign-IN (mode=login → backend never silently creates an account).
+  const [googleHref, setGoogleHref] = useState("/api/v1/auth/google/redirect?mode=login")
+  useEffect(() => {
+    const invite = params.get("invite")?.trim()
+    let ref = params.get("ref")?.trim() || undefined
+    try { if (!ref) ref = sessionStorage.getItem("aw_ref")?.trim() || undefined } catch { /* private mode */ }
+    if (invite || ref) {
+      const qs = new URLSearchParams({ ...(invite ? { invite } : {}), ...(ref ? { ref } : {}) })
+      setGoogleHref(`/api/v1/auth/google/redirect?${qs.toString()}`)
+    }
+  }, [params])
 
   const set = (k: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement>) =>
     setForm(f => ({ ...f, [k]: e.target.value }))
@@ -319,10 +335,11 @@ export default function LoginPage() {
             {/* OAuth Buttons */}
             <div className="mt-2 space-y-2.5">
 
-              {/* Google — redirect flow. mode=login → backend signs IN only and
-                  rejects unknown accounts (no silent sign-up from the login page). */}
+              {/* Google — redirect flow. Pure login uses mode=login (no silent
+                  sign-up); an invited/referred visitor carries invite/ref so
+                  Google signup passes the invite-only gate. */}
               <motion.a
-                href="/api/v1/auth/google/redirect?mode=login"
+                href={googleHref}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 className="w-full h-12 rounded-xl border border-border bg-surface hover:bg-surface transition flex items-center justify-center gap-3 font-medium focus:outline-none focus:ring-2 focus:ring-accent"

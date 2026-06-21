@@ -1,8 +1,10 @@
 "use client"
 
+import { useState } from "react"
 import Link from "next/link"
 import { Play, Info, ChevronRight, Tv } from "lucide-react"
 import { useBrowseAnime, useSeasonal } from "@/hooks/useAnime"
+import { WatchModal } from "@/components/anime/WatchModal"
 import type { AnimeDTO } from "@/lib/api/types"
 
 /* Current season for the "New This Season" row. */
@@ -13,10 +15,10 @@ function currentSeason(): { year: number; season: string } {
   return { year: d.getFullYear(), season }
 }
 
-function PosterCard({ a }: { a: AnimeDTO }) {
+function PosterCard({ a, onOpen }: { a: AnimeDTO; onOpen: (a: AnimeDTO) => void }) {
   const title = a.titleEnglish || a.title
   return (
-    <Link href={`/anime/${a.malId}/watch`} className="group relative w-[118px] shrink-0 sm:w-[150px]">
+    <button onClick={() => onOpen(a)} className="group relative w-[118px] shrink-0 text-left sm:w-[150px]">
       <div className="relative aspect-[2/3] overflow-hidden rounded-lg border border-border bg-surface">
         {a.imageUrl && (
           /* eslint-disable-next-line @next/next/no-img-element */
@@ -33,11 +35,11 @@ function PosterCard({ a }: { a: AnimeDTO }) {
         ) : null}
       </div>
       <p className="mt-1.5 line-clamp-1 text-[11px] font-bold text-muted transition group-hover:text-foreground">{title}</p>
-    </Link>
+    </button>
   )
 }
 
-function Row({ title, items, loading }: { title: string; items: AnimeDTO[]; loading?: boolean }) {
+function Row({ title, items, loading, onOpen }: { title: string; items: AnimeDTO[]; loading?: boolean; onOpen: (a: AnimeDTO) => void }) {
   if (!loading && items.length === 0) return null
   return (
     <section className="space-y-3">
@@ -45,13 +47,14 @@ function Row({ title, items, loading }: { title: string; items: AnimeDTO[]; load
       <div className="flex gap-3 overflow-x-auto scrollbar-hide -mx-4 px-4 sm:-mx-6 sm:px-6 pb-1">
         {loading
           ? Array.from({ length: 8 }).map((_, i) => <div key={i} className="aspect-[2/3] w-[118px] shrink-0 animate-pulse rounded-lg bg-surface sm:w-[150px]" />)
-          : items.map(a => <PosterCard key={a.malId} a={a} />)}
+          : items.map(a => <PosterCard key={a.malId} a={a} onOpen={onOpen} />)}
       </div>
     </section>
   )
 }
 
 export default function WatchHubPage() {
+  const [open, setOpen] = useState<AnimeDTO | null>(null)
   const { year, season } = currentSeason()
   const trending = useBrowseAnime({ limit: 24 })
   const seasonal = useSeasonal(year, season)
@@ -81,12 +84,12 @@ export default function WatchHubPage() {
                 <h1 className="text-2xl font-black uppercase italic leading-none tracking-tighter sm:text-4xl">{featuredTitle}</h1>
                 <p className="mt-2 line-clamp-2 text-xs text-muted sm:text-sm">{featured.synopsis}</p>
                 <div className="mt-5 flex flex-wrap gap-2">
-                  <Link href={`/anime/${featured.malId}/watch`} className="inline-flex items-center gap-2 rounded-xl bg-accent px-5 py-3 text-[11px] font-black uppercase tracking-widest text-black transition hover:opacity-90 active:scale-95">
+                  <button onClick={() => setOpen(featured)} className="inline-flex items-center gap-2 rounded-xl bg-accent px-5 py-3 text-[11px] font-black uppercase tracking-widest text-black transition hover:opacity-90 active:scale-95">
                     <Play size={15} fill="currentColor" /> Watch
-                  </Link>
-                  <Link href={`/anime/${featured.malId}`} className="inline-flex items-center gap-2 rounded-xl border border-border bg-surface/80 px-5 py-3 text-[11px] font-black uppercase tracking-widest text-foreground backdrop-blur transition hover:bg-surface-2 active:scale-95">
+                  </button>
+                  <button onClick={() => setOpen(featured)} className="inline-flex items-center gap-2 rounded-xl border border-border bg-surface/80 px-5 py-3 text-[11px] font-black uppercase tracking-widest text-foreground backdrop-blur transition hover:bg-surface-2 active:scale-95">
                     <Info size={15} /> Details
-                  </Link>
+                  </button>
                 </div>
               </div>
             </div>
@@ -104,12 +107,14 @@ export default function WatchHubPage() {
         </div>
 
         <div className="space-y-8">
-          <Row title="Trending Now"      items={trendingList}             loading={trending.isLoading} />
-          <Row title="New This Season"   items={seasonal.data?.data ?? []} loading={seasonal.isLoading} />
-          <Row title="Series"            items={tv.data?.data ?? []}       loading={tv.isLoading} />
-          <Row title="Movies"            items={movies.data?.data ?? []}   loading={movies.isLoading} />
+          <Row title="Trending Now"      items={trendingList}             loading={trending.isLoading} onOpen={setOpen} />
+          <Row title="New This Season"   items={seasonal.data?.data ?? []} loading={seasonal.isLoading} onOpen={setOpen} />
+          <Row title="Series"            items={tv.data?.data ?? []}       loading={tv.isLoading} onOpen={setOpen} />
+          <Row title="Movies"            items={movies.data?.data ?? []}   loading={movies.isLoading} onOpen={setOpen} />
         </div>
       </div>
+
+      {open && <WatchModal anime={open} onClose={() => setOpen(null)} />}
     </div>
   )
 }

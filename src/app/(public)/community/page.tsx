@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from "framer-motion"
 import {
   Flame, TrendingUp, Users, Vote,
   Heart, MessageSquare, Share2, MoreHorizontal,
-  Plus, Send, AtSign, Hash, Image as ImageIcon, Star, Loader2, ChevronDown,
+  Plus, Send, AtSign, Hash, Image as ImageIcon, Star, Loader2, ChevronDown, RotateCw,
 } from "lucide-react"
 import Link from "next/link"
 import { useToast } from "@/stores/toast.store"
@@ -30,7 +30,7 @@ import { VerifiedBadge } from "@/components/social/VerifiedBadge"
 import type { Post, PostComment } from "@/lib/api/types"
 import { EASE, DURATION } from "@/lib/design/tokens"
 
-type FeedTab = "trending" | "following" | "latest"
+type FeedTab = "foryou" | "trending" | "following"
 
 /** Tally `#hashtag` occurrences across a set of post bodies. Returns the
     top-N most common as plain strings (no leading '#'). */
@@ -487,7 +487,7 @@ export default function CommunityPage() {
   const isAuthenticated = useAuthStore(s => s.isAuthenticated)
   const me = useAuthStore(s => s.user)
   const showAuthPrompt = useAuthPrompt(s => s.show)
-  const [feedTab, setFeedTab] = useState<FeedTab>("trending")
+  const [feedTab, setFeedTab] = useState<FeedTab>("foryou")
   // X-style: the composer lives inline at the top of the feed and expands on
   // focus (`composing`). No separate "New Post" button needed.
   const [composing, setComposing] = useState(false)
@@ -581,6 +581,23 @@ export default function CommunityPage() {
     ? (following.data?.pages.flatMap(p => p.data) ?? [])
     : (discover.data?.pages.flatMap(p => p.data) ?? [])
 
+  // Manual "show newest posts" refresh — refetches the active feed from the top
+  // and scrolls up (X-style). Lets users pull in fresh posts without a full
+  // page reload.
+  const [refreshing, setRefreshing] = useState(false)
+  const refreshFeed = useCallback(async () => {
+    if (refreshing) return
+    setRefreshing(true)
+    try {
+      if (active === "trending") await trending.refetch()
+      else if (active === "following") await following.refetch()
+      else await discover.refetch()
+      if (typeof window !== "undefined") window.scrollTo({ top: 0, behavior: "smooth" })
+    } finally {
+      setRefreshing(false)
+    }
+  }, [refreshing, active, trending, following, discover])
+
   // ── Sidebar real-data sources ──────────────────────────────────────
   // Trending tags: derived from the actual #hashtag tokens in the latest
   // 50+ discover posts. Recomputed on every refetch.
@@ -652,16 +669,20 @@ export default function CommunityPage() {
       <div className="sticky top-[var(--sticky-top,0px)] z-40 bg-background border-b border-border shadow-[0_4px_12px_color-mix(in_srgb,var(--app-fg)_4%,transparent)]">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-[var(--page-top,120px)] flex items-center justify-between gap-4">
           <div className="flex items-center gap-1">
-            {(["trending", "following", "latest"] as FeedTab[]).map(t => (
-              <button key={t} onClick={() => setFeedTab(t)}
-                aria-pressed={feedTab === t}
-                className={`relative px-5 py-3 text-[11px] font-black uppercase tracking-widest capitalize transition-colors rounded-t-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 ${
-                  feedTab === t
+            {([
+              { key: "foryou",    label: "For You" },
+              { key: "trending",  label: "Trending" },
+              { key: "following", label: "Following" },
+            ] as { key: FeedTab; label: string }[]).map(({ key, label }) => (
+              <button key={key} onClick={() => setFeedTab(key)}
+                aria-pressed={feedTab === key}
+                className={`relative px-5 py-3 text-[11px] font-black uppercase tracking-widest transition-colors rounded-t-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent/60 ${
+                  feedTab === key
                     ? "text-foreground"
                     : "text-muted hover:text-foreground hover:bg-surface/60"
                 }`}>
-                {t}
-                {feedTab === t && (
+                {label}
+                {feedTab === key && (
                   <motion.div layoutId="feed-tab-line"
                     transition={{ type: "spring", stiffness: 320, damping: 28 }}
                     className="absolute bottom-0 left-3 right-3 h-[2px] bg-accent rounded-full motion-reduce:transition-none" />
@@ -808,6 +829,16 @@ export default function CommunityPage() {
               </div>
             </div>
           </div>
+
+          {/* Show newest posts — manual refresh of the active feed (X-style) */}
+          <button
+            onClick={refreshFeed}
+            disabled={refreshing}
+            className="w-full flex items-center justify-center gap-2 rounded-2xl border border-border bg-surface py-3 text-[11px] font-black uppercase tracking-widest text-accent-bright transition-colors hover:bg-surface-2 disabled:opacity-60 active:scale-[0.99]"
+          >
+            <RotateCw size={13} className={refreshing ? "animate-spin" : ""} />
+            {refreshing ? "Refreshing…" : "Show newest posts"}
+          </button>
 
           {/* Loading skeleton */}
           {isLoading && (

@@ -7,6 +7,7 @@ import { NAV_ITEMS } from "../sidebarConfig"
 import { SidebarItem } from "./SidebarItem"
 import { SidebarFlyoutItem } from "./SidebarFlyoutItem"
 import { SidebarGamification } from "./SidebarGamification"
+import { SidebarFooter } from "./SidebarFooter"
 import { useSidebarStore, useEffectiveCollapsed } from "../useSidebarStore"
 import KaiveronLogo from "@/components/ui/KaiveronLogo"
 
@@ -45,6 +46,9 @@ export function Sidebar() {
           )
         )}
       </div>
+
+      {/* Notifications + account (moved out of the top bar) */}
+      <SidebarFooter slug={slug} collapsed={collapsed} />
 
       {/* Gamification strip */}
       <div className="mt-3">

@@ -7,8 +7,9 @@ import { useAuthStore } from "@/stores/auth.store"
 /**
  * The "/" landing is marketing chrome (topbar + hero). Logged-in users should
  * land in the app, not the marketing page — so once the session has resolved,
- * redirect them into their app home (which renders the AppShell sidebar). The
- * marketing landing is hidden during the redirect to avoid a flash.
+ * redirect them straight into Shots (the default app home, TikTok-style). The
+ * marketing landing is hidden during the redirect to avoid a flash. Guests keep
+ * seeing the marketing page (SEO + waitlist signup funnel).
  */
 export function LandingGate({ children }: { children: React.ReactNode }) {
   const router = useRouter()
@@ -18,7 +19,7 @@ export function LandingGate({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (!sessionReady || !isAuthenticated || !user) return
-    router.replace("/community")
+    router.replace("/shots")
   }, [sessionReady, isAuthenticated, user, router])
 
   // Hide the marketing landing for authenticated users while the redirect fires.

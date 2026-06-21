@@ -4,8 +4,8 @@ import { useState, useEffect, useRef, useCallback } from "react"
 import Link from "next/link"
 import { useQuery } from "@tanstack/react-query"
 import {
-  Play, Info, Film, ChevronRight, ChevronLeft, ChevronDown, Star, Plus, Check,
-  ThumbsUp, X, Volume2, VolumeX, LayoutGrid, Zap,
+  Play, Info, ChevronRight, ChevronLeft, ChevronDown, Star, Plus, Check,
+  ThumbsUp, X, Zap,
 } from "lucide-react"
 import { useBrowseAnime, useSeasonal } from "@/hooks/useAnime"
 import { getWatchSources } from "@/lib/api/endpoints"
@@ -132,25 +132,6 @@ function HeroBtns({ s, onPlay, onMore }: { s: S; onPlay: (s: S) => void; onMore:
 function Dots({ list, active, onDot }: { list: S[]; active: number; onDot: (i: number) => void }) {
   return <div className="hero-dots">{list.map((s, i) => <button key={s.id} className={"hero-dot" + (i === active ? " on" : "")} onClick={() => onDot(i)} aria-label={`Spotlight ${i + 1}`} />)}</div>
 }
-function HeroCine({ s, list, active, onDot, onPlay, onMore, muted, onMute }: { s: S; list: S[]; active: number; onDot: (i: number) => void; onPlay: (s: S) => void; onMore: (s: S) => void; muted: boolean; onMute: () => void }) {
-  return (
-    <div className="hero hero-cine" key={s.id}>
-      <div className="hero-bg"><Art src={s.imageUrl} vig={false} /></div>
-      <div className="hero-scrim" /><div className="hero-scrim-bottom" />
-      <div className="hero-content">
-        <div className="hero-eyebrow mono"><span className="feat-ic"><Film size={14} /></span> Featured</div>
-        <h1 className="hero-title">{s.title}</h1>
-        {s.synopsis && <p className="hero-synopsis">{s.synopsis}</p>}
-        <HeroBtns s={s} onPlay={onPlay} onMore={onMore} />
-      </div>
-      <div className="hero-rail">
-        <button className="hero-mute" onClick={onMute} aria-label="Toggle sound">{muted ? <VolumeX size={18} /> : <Volume2 size={18} />}</button>
-        <span className="hero-rating-tag mono">{s.rating}</span>
-      </div>
-      <Dots list={list} active={active} onDot={onDot} />
-    </div>
-  )
-}
 function HeroSplit({ s, list, active, onDot, onPlay, onMore }: { s: S; list: S[]; active: number; onDot: (i: number) => void; onPlay: (s: S) => void; onMore: (s: S) => void }) {
   return (
     <div className="hero hero-split" key={s.id}>
@@ -176,16 +157,6 @@ function HeroSplit({ s, list, active, onDot, onPlay, onMore }: { s: S; list: S[]
     </div>
   )
 }
-function HeroSwitcher({ dir, onSet }: { dir: string; onSet: (d: string) => void }) {
-  return (
-    <div className="hero-switch">
-      <span className="hero-switch-lab mono">HERO</span>
-      <button className={"hero-switch-btn" + (dir === "cine" ? " on" : "")} onClick={() => onSet("cine")}><Film size={14} /> Cinematic</button>
-      <button className={"hero-switch-btn" + (dir === "split" ? " on" : "")} onClick={() => onSet("split")}><LayoutGrid size={14} /> Editorial</button>
-    </div>
-  )
-}
-
 /* ── hover preview (Netflix floating card) ────────────────────────────── */
 function HoverPreview({ data, inList, onOpen, onPlay, onToggle, onLike, onEnter, onLeave }: { data: { s: S; rect: DOMRect } | null; inList: boolean; onOpen: (s: S) => void; onPlay: (s: S) => void; onToggle: (s: S) => void; onLike: (s: S) => void; onEnter: () => void; onLeave: () => void }) {
   if (!data) return null
@@ -286,9 +257,7 @@ export default function WatchHubPage() {
   const tv = useBrowseAnime({ type: "TV", limit: 24 })
   const movies = useBrowseAnime({ type: "Movie", limit: 24 })
 
-  const [dir, setDir] = useState("cine")
   const [spot, setSpot] = useState(0)
-  const [muted, setMuted] = useState(true)
   const [list, setList] = useState<Set<number>>(new Set())
   const [detail, setDetail] = useState<S | null>(null)
   const [hover, setHover] = useState<{ s: S; rect: DOMRect } | null>(null)
@@ -298,9 +267,8 @@ export default function WatchHubPage() {
   const hideT = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   // localStorage: My List + hero dir + recently opened (continue)
-  useEffect(() => { try { setList(new Set(JSON.parse(localStorage.getItem("ks-list") || "[]"))); setDir(localStorage.getItem("ks-herodir") || "cine") } catch { /* */ } }, [])
+  useEffect(() => { try { setList(new Set(JSON.parse(localStorage.getItem("ks-list") || "[]"))) } catch { /* */ } }, [])
   useEffect(() => { try { localStorage.setItem("ks-list", JSON.stringify([...list])) } catch { /* */ } }, [list])
-  useEffect(() => { try { localStorage.setItem("ks-herodir", dir) } catch { /* */ } }, [dir])
 
   const trendingS = (trending.data?.data ?? []).map(toS)
   const seasonalS = (seasonal.data?.data ?? []).map(toS)
@@ -335,15 +303,14 @@ export default function WatchHubPage() {
 
   return (
     <div className="ks-stream min-h-screen bg-background text-foreground pb-24">
-      <div className="mx-auto max-w-6xl px-4 sm:px-6 pt-4 sm:pt-20">
+      <div className="pt-2 sm:pt-14">
+        {/* Full-bleed editorial hero */}
         <div className="hero-wrap">
-          <HeroSwitcher dir={dir} onSet={setDir} />
-          {s ? (dir === "cine"
-            ? <HeroCine s={s} list={spotlight} active={spot} onDot={setSpot} onPlay={play} onMore={open} muted={muted} onMute={() => setMuted((m) => !m)} />
-            : <HeroSplit s={s} list={spotlight} active={spot} onDot={setSpot} onPlay={play} onMore={open} />
-          ) : <div className="hero hero-cine animate-pulse" style={{ background: "var(--app-surface)" }} />}
+          {s ? <HeroSplit s={s} list={spotlight} active={spot} onDot={setSpot} onPlay={play} onMore={open} />
+            : <div className="hero hero-split animate-pulse" style={{ background: "var(--app-surface)" }} />}
         </div>
 
+        <div className="px-4 sm:px-8">
         <div className="section-head">
           <div><h2 className="section-title">Watch</h2><p className="section-sub">Stream official episodes — picks, seasonal, films &amp; series</p></div>
           <Link href="/bestanimelist" className="browse-all">Browse all <ChevronRight size={15} /></Link>
@@ -361,6 +328,7 @@ export default function WatchHubPage() {
         </div>
 
         <footer className="ks-foot mono">KAIVERON STREAM · OFFICIAL EPISODES · SUB &amp; DUB</footer>
+        </div>
       </div>
 
       <HoverPreview data={hover} inList={hover ? inList(hover.s) : false} onOpen={open} onPlay={play} onToggle={toggle} onLike={like}

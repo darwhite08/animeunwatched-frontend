@@ -25,7 +25,7 @@ export default function WatchPartyPage() {
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-accent/25 bg-accent/8"
           >
             <span className="w-2 h-2 rounded-full bg-accent-bright animate-pulse" />
-            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-accent-bright">Coming Soon</span>
+            <span className="text-[10px] font-black uppercase tracking-[0.3em] text-accent-bright">Live</span>
           </motion.div>
 
           <motion.h1 initial={{ opacity:0, y:20 }} animate={{ opacity:1, y:0 }} transition={{ delay:0.1 }}
@@ -43,12 +43,12 @@ export default function WatchPartyPage() {
           <motion.div initial={{ opacity:0, y:10 }} animate={{ opacity:1, y:0 }} transition={{ delay:0.3 }}
             className="flex flex-wrap gap-3 justify-center"
           >
-            <button
-              onClick={() => alert("Watch Party launches Q3 2026 — sign up for early access!")}
-              className="flex items-center gap-2 px-8 py-4 rounded-2xl bg-accent hover:bg-accent-bright text-sm font-black uppercase tracking-widest text-foreground transition-all active:scale-95 shadow-[0_0_30px_rgba(99,102,241,0.4)]"
+            <Link
+              href="/watch"
+              className="flex items-center gap-2 px-8 py-4 rounded-2xl bg-accent hover:bg-accent-bright text-sm font-black uppercase tracking-widest text-black transition-all active:scale-95 shadow-[0_0_30px_rgba(99,102,241,0.4)]"
             >
-              <Play size={14} /> Get Early Access
-            </button>
+              <Play size={14} /> Start a Party
+            </Link>
             <Link href="/community" className="flex items-center gap-2 px-8 py-4 rounded-2xl border border-border bg-white/[0.04] text-sm font-black uppercase tracking-widest text-muted hover:text-foreground hover:bg-surface transition-all active:scale-95">
               <Users size={14} /> Join Community
             </Link>

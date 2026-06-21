@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react"
 import { createPortal } from "react-dom"
 import { useQuery } from "@tanstack/react-query"
-import { X, Tv, ExternalLink, Loader2, Star } from "lucide-react"
+import { X, Tv, ExternalLink, Loader2, Star, Users } from "lucide-react"
 import { getWatchSources } from "@/lib/api/endpoints"
 import { WatchPlayer } from "./WatchPlayer"
 import type { AnimeDTO } from "@/lib/api/types"
@@ -25,6 +25,7 @@ export function WatchModal({ anime, onClose }: { anime: AnimeDTO; onClose: () =>
   const sources = data?.sources ?? []
   const current = sources[Math.min(selected, Math.max(sources.length - 1, 0))]
   const title = anime.titleEnglish || anime.title
+  const [partyId] = useState(() => Math.random().toString(36).slice(2, 10))
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose()
@@ -80,9 +81,15 @@ export function WatchModal({ anime, onClose }: { anime: AnimeDTO; onClose: () =>
           </div>
 
           {current && (
-            <p className="text-[11px] text-subtle">
-              Streaming the official upload from <span className="font-bold text-muted">{current.channel}</span> · plays via YouTube
-            </p>
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <p className="text-[11px] text-subtle">
+                Streaming the official upload from <span className="font-bold text-muted">{current.channel}</span> · plays via YouTube
+              </p>
+              <a href={`/watch-party/${partyId}?v=${current.videoId}`}
+                className="inline-flex items-center gap-2 rounded-xl border border-accent/30 bg-accent/10 px-4 py-2 text-[11px] font-black uppercase tracking-widest text-accent-bright transition hover:bg-accent/20 active:scale-95">
+                <Users size={14} /> Watch Party
+              </a>
+            </div>
           )}
 
           {anime.synopsis && <p className="text-sm leading-relaxed text-muted line-clamp-4">{anime.synopsis}</p>}

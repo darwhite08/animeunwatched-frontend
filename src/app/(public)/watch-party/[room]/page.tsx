@@ -61,9 +61,15 @@ export default function WatchPartyRoom() {
     const p = playerRef.current
     if (!p?.getCurrentTime) return
     applyingRemote.current = true
-    const target = st.time + (st.playing ? (Date.now() - st.at) / 1000 : 0)
+    // Don't extrapolate with `Date.now() - st.at`: st.at is the SERVER's wall
+    // clock while Date.now() is the PARTICIPANT's, so any client/server clock
+    // skew (frequently several seconds) landed directly in the seek target —
+    // that was the drift. The host's reported time is only ~one network hop
+    // stale, so a small fixed compensation keeps everyone aligned without ever
+    // trusting two machines' clocks to agree.
+    const target = st.time + (st.playing ? 0.4 : 0)
     try {
-      if (Math.abs((p.getCurrentTime() || 0) - target) > 2) p.seekTo(target, true)
+      if (Math.abs((p.getCurrentTime() || 0) - target) > 1) p.seekTo(target, true)
       if (st.playing) p.playVideo(); else p.pauseVideo()
     } catch { /* noop */ }
     setTimeout(() => { applyingRemote.current = false }, 700)
@@ -136,7 +142,7 @@ export default function WatchPartyRoom() {
     const t = setInterval(() => {
       const p = playerRef.current
       if (isHostRef.current && p?.getPlayerState && p.getPlayerState() === 1) emitSync({ playing: true, time: p.getCurrentTime() })
-    }, 5000)
+    }, 3000)
     return () => clearInterval(t)
   }, [emitSync])
 

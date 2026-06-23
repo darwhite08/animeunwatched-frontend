@@ -34,8 +34,9 @@ const securityHeaders = [
     key: "Content-Security-Policy",
     value: [
       "default-src 'self'",
-      // Apple Sign In SDK + Google
-      "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://accounts.google.com https://apis.google.com https://appleid.cdn-apple.com",
+      // Apple Sign In SDK + Google; YouTube IFrame API (watch-party sync) loads
+      // its loader from www.youtube.com and player JS from s.ytimg.com
+      "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://accounts.google.com https://apis.google.com https://appleid.cdn-apple.com https://www.youtube.com https://s.ytimg.com",
       // Google Accounts CSS needed for Sign In button styling
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://accounts.google.com",
       "font-src 'self' https://fonts.gstatic.com data:",

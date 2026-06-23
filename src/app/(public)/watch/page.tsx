@@ -7,8 +7,7 @@ import {
   Play, Info, ChevronRight, ChevronLeft, ChevronDown, Star, Plus, Check,
   ThumbsUp, X, Zap,
 } from "lucide-react"
-import { useBrowseAnime, useSeasonal } from "@/hooks/useAnime"
-import { getWatchSources } from "@/lib/api/endpoints"
+import { getWatchSources, getWatchCatalog } from "@/lib/api/endpoints"
 import { WatchModal } from "@/components/anime/WatchModal"
 import type { AnimeDTO } from "@/lib/api/types"
 
@@ -251,11 +250,8 @@ function DetailModal({ s, inList, onClose, onPlay, onToggle }: { s: S; inList: b
 const seasonNow = () => { const d = new Date(); const m = d.getMonth(); return { year: d.getFullYear(), season: m <= 2 ? "winter" : m <= 5 ? "spring" : m <= 8 ? "summer" : "fall" } }
 
 export default function WatchHubPage() {
-  const { year, season } = seasonNow()
-  const trending = useBrowseAnime({ limit: 30 })
-  const seasonal = useSeasonal(year, season)
-  const tv = useBrowseAnime({ type: "TV", limit: 24 })
-  const movies = useBrowseAnime({ type: "Movie", limit: 24 })
+  // Only anime that actually have wired (playable) episodes.
+  const catalog = useQuery({ queryKey: ["watch-catalog"], queryFn: getWatchCatalog, staleTime: 5 * 60_000 })
 
   const [spot, setSpot] = useState(0)
   const [list, setList] = useState<Set<number>>(new Set())
@@ -270,16 +266,11 @@ export default function WatchHubPage() {
   useEffect(() => { try { setList(new Set(JSON.parse(localStorage.getItem("ks-list") || "[]"))) } catch { /* */ } }, [])
   useEffect(() => { try { localStorage.setItem("ks-list", JSON.stringify([...list])) } catch { /* */ } }, [list])
 
-  const trendingS = (trending.data?.data ?? []).map(toS)
-  const seasonalS = (seasonal.data?.data ?? []).map(toS)
-  const tvS = (tv.data?.data ?? []).map(toS)
-  const moviesS = (movies.data?.data ?? []).map(toS)
+  const wired = (catalog.data?.data ?? []).map(toS)
   const pool = new Map<number, S>()
-  for (const s of [...trendingS, ...seasonalS, ...tvS, ...moviesS]) if (!pool.has(s.malId)) pool.set(s.malId, s)
+  for (const s of wired) if (!pool.has(s.malId)) pool.set(s.malId, s)
 
-  const spotlight = trendingS.slice(0, 5)
-  const top10 = [...trendingS].sort((a, b) => b.score - a.score).slice(0, 10)
-  const airing = [...seasonalS, ...trendingS.filter((s) => s.simulcast)].filter((s, i, arr) => arr.findIndex((x) => x.malId === s.malId) === i).slice(0, 8)
+  const spotlight = wired.slice(0, 5)
   const myList = [...list].map((id) => pool.get(id)).filter(Boolean) as S[]
   // "Continue" from recently opened titles (localStorage), synthetic progress
   const continueList: { s: S; ep: number; pct: number; left: string }[] = (() => {
@@ -303,8 +294,8 @@ export default function WatchHubPage() {
 
   return (
     <div className="ks-stream min-h-screen bg-background text-foreground pb-24">
-      <div className="pt-2 sm:pt-14">
-        {/* Full-bleed editorial hero */}
+      <div className="-mt-5">
+        {/* Full-bleed editorial hero — flush under the topbar (no gap) */}
         <div className="hero-wrap">
           {s ? <HeroSplit s={s} list={spotlight} active={spot} onDot={setSpot} onPlay={play} onMore={open} />
             : <div className="hero hero-split animate-pulse" style={{ background: "var(--app-surface)" }} />}
@@ -312,19 +303,20 @@ export default function WatchHubPage() {
 
         <div className="px-4 sm:px-8">
         <div className="section-head">
-          <div><h2 className="section-title">Watch</h2><p className="section-sub">Stream official episodes — picks, seasonal, films &amp; series</p></div>
-          <Link href="/bestanimelist" className="browse-all">Browse all <ChevronRight size={15} /></Link>
+          <div><h2 className="section-title">Watch</h2><p className="section-sub">Official episodes — available to stream on Kaiveron now</p></div>
+          <Link href="/bestanimelist" className="browse-all">Browse catalog <ChevronRight size={15} /></Link>
         </div>
 
         <div className="rows">
           {continueList.length > 0 && <Row title="Continue Watching" sub="Pick up where you left off">{continueList.map(({ s, ep, pct, left }) => <ContinueCard key={s.malId} s={s} ep={ep} pct={pct} left={left} onOpen={open} />)}</Row>}
-          {top10.length > 0 && <Row title="Top 10 This Week" sub="Ranked by score">{top10.map((s, i) => <Top10Card key={s.malId} s={s} rank={i + 1} onOpen={open} onHover={onHover} onLeave={onLeave} />)}</Row>}
-          {airing.length > 0 && <Row title="New Episodes" sub="Fresh simulcast">{airing.map((s, i) => <NewEpCard key={s.malId} s={s} ep={(s.eps || 12) - (i % 4)} ago={["2h ago", "5h ago", "1d ago", "2d ago"][i % 4]} fresh={i < 2} onOpen={open} />)}</Row>}
-          <Row title="Trending Now" sub="What everyone's watching">{trendingS.map((s) => <PosterCard key={s.malId} s={s} badge="new" onOpen={open} onHover={onHover} onLeave={onLeave} />)}</Row>
+          {wired.length > 0 && <Row title="Available to Watch" sub="Official episodes, ready to play">{wired.map((s) => <PosterCard key={s.malId} s={s} onOpen={open} onHover={onHover} onLeave={onLeave} />)}</Row>}
           {myList.length > 0 && <Row title="My List" sub="Saved for later">{myList.map((s) => <PosterCard key={s.malId} s={s} onOpen={open} onHover={onHover} onLeave={onLeave} />)}</Row>}
-          <Row title="New This Season" sub={`${cap(season)} ${year}`}>{seasonalS.map((s) => <PosterCard key={s.malId} s={s} onOpen={open} onHover={onHover} onLeave={onLeave} />)}</Row>
-          <Row title="Series" sub="Binge-worthy">{tvS.map((s) => <PosterCard key={s.malId} s={s} onOpen={open} onHover={onHover} onLeave={onLeave} />)}</Row>
-          <Row title="Movies" sub="Films">{moviesS.map((s) => <PosterCard key={s.malId} s={s} onOpen={open} onHover={onHover} onLeave={onLeave} />)}</Row>
+          {!catalog.isLoading && wired.length === 0 && (
+            <div className="rounded-2xl border border-dashed border-border py-16 text-center">
+              <p className="text-sm font-bold text-muted">No titles wired with episodes yet.</p>
+              <p className="mt-1 text-xs text-subtle">Official streams appear here as soon as they&apos;re added.</p>
+            </div>
+          )}
         </div>
 
         <footer className="ks-foot mono">KAIVERON STREAM · OFFICIAL EPISODES · SUB &amp; DUB</footer>

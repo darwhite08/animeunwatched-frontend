@@ -166,6 +166,10 @@ export type WatchSource = {
 export const getWatchSources = (malId: number | string) =>
   api<{ sources: WatchSource[]; enabled: boolean; quota?: boolean }>(`/anime/${malId}/watch-sources`)
 
+/** Only anime that have real wired episodes (curated official sources). */
+export const getWatchCatalog = () =>
+  api<{ data: AnimeDTO[] }>(`/anime/watch-catalog`)
+
 export const getAnimeCharacters = (malId: number | string) =>
   api<{ data: AnimeCharacterEntry[] }>(`/anime/${malId}/characters`)
 export const getAnimeStaff = (malId: number | string) =>

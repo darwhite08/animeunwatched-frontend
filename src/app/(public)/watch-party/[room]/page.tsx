@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState, useCallback } from "react"
 import { useParams, useSearchParams } from "next/navigation"
 import { Users, Crown, Link as LinkIcon, Send, Check } from "lucide-react"
-import { getSocket } from "@/lib/socket"
+import { getSocket, connectSocket } from "@/lib/socket"
 import { useAuthStore } from "@/stores/auth.store"
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -28,6 +28,8 @@ export default function WatchPartyRoom() {
   const params = useParams()
   const search = useSearchParams()
   const me = useAuthStore((s) => s.user)
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated)
+  const sessionReady = useAuthStore((s) => s.sessionReady)
   const roomShort = String(params?.room ?? "")
   const room = `wp:${roomShort}`
   const initialVideo = search.get("v") || undefined
@@ -80,8 +82,14 @@ export default function WatchPartyRoom() {
     let cleanup: (() => void) | undefined
     let retry: ReturnType<typeof setTimeout> | undefined
     const attach = () => {
-      const sock = getSocket()
+      let sock = getSocket()
+      // Guests (invite-link visitors with no account) get no socket from the
+      // SessionProvider, so open an anonymous one here once the session has
+      // resolved — the backend accepts token-less connections for public rooms
+      // like watch parties.
+      if (!sock && sessionReady && !isAuthenticated) sock = connectSocket("")
       if (!sock) { retry = setTimeout(attach, 600); return }
+      const s = sock
       const onState = (st: WpState) => {
         if (typeof st.youAreHost === "boolean") setIsHost(st.youAreHost)
         else setIsHost(st.hostId === me?.id)
@@ -90,13 +98,21 @@ export default function WatchPartyRoom() {
       }
       const onPresence = (d: { count: number }) => setCount(d.count)
       const onChat = (m: ChatMsg) => setChat((c) => [...c.slice(-99), m])
-      sock.on("wp:state", onState); sock.on("wp:presence", onPresence); sock.on("wp:chat", onChat)
-      sock.emit("wp:join", room)
-      cleanup = () => { sock.off("wp:state", onState); sock.off("wp:presence", onPresence); sock.off("wp:chat", onChat); sock.emit("wp:leave", room) }
+      // Re-join on every (re)connect: socket.io room membership is per-connection
+      // and is lost on a reconnect/cold-start, after which chat + sync silently
+      // stop until the room is re-joined.
+      const onConnect = () => s.emit("wp:join", room)
+      s.on("wp:state", onState); s.on("wp:presence", onPresence); s.on("wp:chat", onChat)
+      s.on("connect", onConnect)
+      if (s.connected) s.emit("wp:join", room)
+      cleanup = () => {
+        s.off("wp:state", onState); s.off("wp:presence", onPresence); s.off("wp:chat", onChat); s.off("connect", onConnect)
+        s.emit("wp:leave", room)
+      }
     }
     attach()
     return () => { if (retry) clearTimeout(retry); cleanup?.() }
-  }, [room, me?.id, applyRemote])
+  }, [room, me?.id, applyRemote, sessionReady, isAuthenticated])
 
   // Build the player once we have a video. YT.Player REPLACES its target node
   // with an <iframe>, so we hand it an imperatively-created child instead of a

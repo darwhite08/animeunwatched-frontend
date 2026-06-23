@@ -193,162 +193,157 @@ function AnimeDetail({ anime, rawAnime, currentEpisode = 0 }: { anime: Anime; ra
       />
 
       {/* ── HERO ── */}
-      <div className="relative h-[46vh] min-h-[340px] w-full overflow-hidden">
-        <Image
-          src={anime.image}
-          alt={anime.title}
-          fill
-          className="object-cover object-center brightness-[0.75]"
-          sizes="100vw"
-          priority
-        />
-        {/* Left-to-right fade — keeps the right ~40% of the image bright
-            so the user actually sees the cover art, while the left side
-            stays readable behind the title. */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[var(--app-bg)] from-0% via-[var(--app-bg)]/70 via-35% to-transparent to-70%" />
-        {/* Soft bottom fade only — much lighter than before so the image
-            still reads at the bottom of the hero. */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[var(--app-bg)] from-0% via-transparent via-30% to-transparent" />
-
-        {/* Rank chip */}
-        <div className="absolute top-4 left-4 sm:top-6 sm:left-6 md:left-[max(1.5rem,calc((100vw-1280px)/2+1.5rem))]">
-          <span className="px-3 py-1 bg-black/60 backdrop-blur-md border border-accent/30 rounded-full text-[10px] font-black text-accent-bright uppercase tracking-widest">
-            #{anime.rank} Neural Ranked
-          </span>
+      <div className="relative overflow-hidden">
+        {/* Ambient blurred backdrop from the cover art — premium depth without
+            stretching a portrait poster into a low-res banner. */}
+        <div className="pointer-events-none absolute inset-0">
+          <Image
+            src={anime.image}
+            alt=""
+            fill
+            sizes="100vw"
+            priority
+            className="object-cover scale-110 blur-2xl brightness-[0.4] saturate-[1.25]"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/80 to-background" />
         </div>
 
-        {/* Back button */}
-        <Link
-          href="/bestanimelist"
-          className="absolute top-4 right-4 sm:top-6 sm:right-6 flex min-h-11 items-center gap-1.5 rounded-full border border-border bg-black/40 px-3.5 py-2 backdrop-blur-md text-[10px] font-black uppercase tracking-widest text-muted hover:text-foreground active:scale-95 transition-all"
-        >
-          <ChevronLeft size={13} /> All Anime
-        </Link>
+        <div className={`relative z-10 max-w-6xl mx-auto ${ui.screenX} pt-5 sm:pt-7`}>
+          {/* Top row — back + rank */}
+          <div className="flex items-center justify-between gap-3">
+            <Link
+              href="/bestanimelist"
+              className="flex min-h-11 items-center gap-1.5 rounded-full border border-border bg-black/40 px-3.5 py-2 backdrop-blur-md text-[10px] font-black uppercase tracking-widest text-muted hover:text-foreground active:scale-95 transition-all"
+            >
+              <ChevronLeft size={13} /> All Anime
+            </Link>
+            <span className="px-3 py-1 bg-black/50 backdrop-blur-md border border-accent/30 rounded-full text-[10px] font-black text-accent-bright uppercase tracking-widest">
+              #{anime.rank} Neural Ranked
+            </span>
+          </div>
 
-        {/* Hero content overlay */}
-        <div className="absolute bottom-8 left-4 right-4 sm:left-6 sm:right-6 md:left-[max(1.5rem,calc((100vw-1280px)/2+1.5rem))] md:right-auto max-w-2xl">
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: DURATION.slow, ease: EASE.out }}
-            className="text-3xl sm:text-4xl md:text-6xl font-black tracking-tighter leading-[1.05] uppercase italic text-foreground [text-wrap:balance]"
-          >
-            {anime.title}
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.1 }}
-            className="text-muted text-sm mt-2 font-mono"
-          >
-            {anime.titleJapanese}
-          </motion.p>
+          {/* Poster + headline */}
+          <div className="flex flex-col items-center gap-6 pb-9 pt-6 sm:flex-row sm:items-end sm:gap-8 sm:pb-12 sm:pt-8">
+            {/* Crisp portrait poster */}
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: DURATION.slow, ease: EASE.out }}
+              className="relative aspect-[2/3] w-[150px] shrink-0 overflow-hidden rounded-2xl border border-border shadow-2xl shadow-black/60 sm:w-[210px]"
+            >
+              <Image src={anime.image} alt={anime.title} fill sizes="210px" priority className="object-cover" />
+            </motion.div>
+
+            {/* Headline + meta + actions */}
+            <div className="min-w-0 flex-1 text-center sm:text-left">
+              <motion.h1
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: DURATION.slow, ease: EASE.out }}
+                className="text-3xl sm:text-5xl md:text-6xl font-black tracking-tighter leading-[1.02] uppercase italic text-foreground [text-wrap:balance]"
+              >
+                {anime.title}
+              </motion.h1>
+              {anime.titleJapanese && (
+                <p className="mt-2 font-mono text-sm text-muted">{anime.titleJapanese}</p>
+              )}
+
+              {/* Meta row */}
+              <div className="mt-4 flex flex-wrap items-center justify-center gap-2 sm:justify-start">
+                <div className="flex items-center gap-1.5 rounded-xl border border-border bg-black/40 px-3 py-2 backdrop-blur-md">
+                  <Star size={14} fill="var(--app-accent)" className="text-accent-bright" />
+                  <span className={`text-lg font-black tracking-tighter ${scoreColor}`}>{anime.rating.toFixed(1)}</span>
+                  <span className="text-[10px] text-subtle">/10</span>
+                </div>
+                {[
+                  { icon: Clock,   label: anime.episodes ? `${anime.episodes} eps` : "Ongoing" },
+                  { icon: Monitor, label: anime.type },
+                  ...(anime.studio && anime.studio !== "Unknown"
+                    ? [{ icon: BookOpen, label: anime.studio }]
+                    : rawAnime?.studios && rawAnime.studios.length > 0
+                      ? [{ icon: BookOpen, label: rawAnime.studios[0] }]
+                      : []),
+                ].map(m => (
+                  <div key={m.label} className="flex items-center gap-1.5 rounded-xl border border-border bg-white/[0.04] px-3 py-2 text-xs font-bold text-muted">
+                    <m.icon size={13} className="text-subtle" />
+                    {m.label}
+                  </div>
+                ))}
+                <span className={`rounded-xl border px-3 py-2 text-[10px] font-black uppercase tracking-wider ${
+                  anime.status === "airing"
+                    ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
+                    : "bg-surface border-border text-muted"
+                }`}>
+                  {anime.status === "airing" ? "● Airing" : "Completed"}
+                </span>
+                {anime.year ? <span className="self-center text-sm text-subtle">{anime.year}</span> : null}
+              </div>
+
+              {/* Actions */}
+              <div className="mt-5 flex flex-wrap items-center justify-center gap-2 sm:justify-start sm:gap-3">
+                <Link
+                  href={`/anime/${malId}/watch`}
+                  className="flex min-h-11 items-center gap-2 px-5 py-3 rounded-2xl text-xs font-black uppercase tracking-widest text-black transition-all active:scale-[0.98]"
+                  style={{ background: "linear-gradient(135deg,var(--app-accent-bright),var(--app-accent))", boxShadow: "0 4px 18px color-mix(in srgb, var(--app-accent) 30%, transparent)" }}
+                >
+                  <Tv size={15} /> Watch
+                </Link>
+
+                {trailerYoutubeId && (
+                  <a
+                    href={rawAnime?.trailerUrl ?? `https://www.youtube.com/watch?v=${trailerYoutubeId}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex min-h-11 items-center gap-2 px-4 py-3 rounded-2xl border border-rose-500/30 bg-rose-500/10 text-rose-400 hover:bg-rose-500/20 hover:border-rose-500/50 active:scale-[0.98] transition-all text-xs font-black uppercase tracking-widest"
+                  >
+                    <Play size={14} fill="currentColor" /> Trailer
+                  </a>
+                )}
+
+                <motion.button
+                  whileHover={{ scale: 1.04 }}
+                  whileTap={{ scale: 0.96 }}
+                  onClick={toggle}
+                  className={`flex min-h-11 items-center gap-2.5 px-6 py-3 rounded-2xl text-xs font-black uppercase tracking-widest transition-all ${
+                    inList
+                      ? "bg-emerald-600 text-foreground hover:bg-emerald-700"
+                      : "bg-accent text-black hover:bg-accent-bright shadow-[0_0_24px_rgba(99,102,241,0.35)]"
+                  }`}
+                >
+                  {inList ? <><Check size={14} /> In List</> : <><Plus size={14} /> Add to List</>}
+                </motion.button>
+
+                <button
+                  onClick={() => setReviewOpen(true)}
+                  className="flex min-h-11 items-center gap-2 px-4 py-3 rounded-2xl border border-border bg-white/[0.04] text-muted hover:text-foreground hover:bg-surface active:scale-[0.98] transition-all text-xs font-black uppercase tracking-widest"
+                >
+                  <PenSquare size={14} /> Review
+                </button>
+
+                <button
+                  onClick={share}
+                  aria-label="Share"
+                  className="flex h-11 w-11 items-center justify-center rounded-2xl border border-border bg-white/[0.04] text-muted hover:text-foreground hover:bg-surface active:scale-95 transition-all"
+                >
+                  <Share2 size={16} />
+                </button>
+
+                <button
+                  onClick={() => setReportOpen(true)}
+                  aria-label="Report this anime"
+                  className="flex h-11 w-11 items-center justify-center rounded-2xl border border-border bg-white/[0.04] text-subtle hover:text-red-400 hover:bg-red-500/5 hover:border-red-500/20 active:scale-95 transition-all"
+                  title="Report this anime"
+                >
+                  <Flag size={14} />
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
       {/* ── BODY ── */}
-      <div className={`max-w-6xl mx-auto ${ui.screenX} -mt-4`}>
-
-        {/* Meta bar */}
-        <motion.div
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.15 }}
-          className="flex flex-wrap items-center gap-4 mb-10"
-        >
-          {/* Score */}
-          <div className="flex items-center gap-2 bg-black/60 backdrop-blur-md border border-border rounded-2xl px-5 py-3">
-            <Star size={16} fill="var(--app-accent)" className="text-accent-bright" />
-            <span className={`text-2xl font-black tracking-tighter ${scoreColor}`}>{anime.rating.toFixed(1)}</span>
-            <span className="text-xs text-subtle">/10</span>
-          </div>
-
-          {/* Metadata chips */}
-          {[
-            { icon: Clock,    label: anime.episodes ? `${anime.episodes} eps` : "Ongoing" },
-            { icon: Monitor,  label: anime.type },
-            ...(anime.studio && anime.studio !== "Unknown"
-              ? [{ icon: BookOpen, label: anime.studio }]
-              : rawAnime?.studios && rawAnime.studios.length > 0
-                ? [{ icon: BookOpen, label: rawAnime.studios[0] }]
-                : []),
-          ].map(m => (
-            <div key={m.label} className="flex items-center gap-2 px-4 py-2.5 bg-white/[0.04] border border-border rounded-xl text-sm font-bold text-muted">
-              <m.icon size={14} className="text-subtle" />
-              {m.label}
-            </div>
-          ))}
-
-          {/* Status */}
-          <span className={`px-4 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider border ${
-            anime.status === "airing"
-              ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
-              : "bg-surface border-border text-muted"
-          }`}>
-            {anime.status === "airing" ? "● Airing" : "Completed"}
-          </span>
-
-          <span className="text-sm text-subtle">{anime.year}</span>
-
-          {/* Actions */}
-          <div className="w-full sm:w-auto sm:ml-auto flex flex-wrap items-center gap-2 sm:gap-3">
-            <Link
-              href={`/anime/${malId}/watch`}
-              className="flex min-h-11 items-center gap-2 px-5 py-3 rounded-2xl text-xs font-black uppercase tracking-widest text-black transition-all active:scale-[0.98]"
-              style={{ background: "linear-gradient(135deg,var(--app-accent-bright),var(--app-accent))", boxShadow: "0 4px 18px color-mix(in srgb, var(--app-accent) 30%, transparent)" }}
-            >
-              <Tv size={15} /> Watch
-            </Link>
-
-            {trailerYoutubeId && (
-              <a
-                href={rawAnime?.trailerUrl ?? `https://www.youtube.com/watch?v=${trailerYoutubeId}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex min-h-11 items-center gap-2 px-4 py-3 rounded-2xl border border-rose-500/30 bg-rose-500/10 text-rose-400 hover:bg-rose-500/20 hover:border-rose-500/50 active:scale-[0.98] transition-all text-xs font-black uppercase tracking-widest"
-              >
-                <Play size={14} fill="currentColor" /> Trailer
-              </a>
-            )}
-
-            <motion.button
-              whileHover={{ scale: 1.04 }}
-              whileTap={{ scale: 0.96 }}
-              onClick={toggle}
-              className={`flex min-h-11 items-center gap-2.5 px-6 py-3 rounded-2xl text-xs font-black uppercase tracking-widest transition-all ${
-                inList
-                  ? "bg-emerald-600 text-foreground hover:bg-emerald-700"
-                  : "bg-accent text-black hover:bg-accent-bright shadow-[0_0_24px_rgba(99,102,241,0.35)]"
-              }`}
-            >
-              {inList ? <><Check size={14} /> In List</> : <><Plus size={14} /> Add to List</>}
-            </motion.button>
-
-            <button
-              onClick={() => setReviewOpen(true)}
-              className="flex min-h-11 items-center gap-2 px-4 py-3 rounded-2xl border border-border bg-white/[0.04] text-muted hover:text-foreground hover:bg-surface active:scale-[0.98] transition-all text-xs font-black uppercase tracking-widest"
-            >
-              <PenSquare size={14} /> Review
-            </button>
-
-            <button
-              onClick={share}
-              aria-label="Share"
-              className="flex h-11 w-11 items-center justify-center rounded-2xl border border-border bg-white/[0.04] text-muted hover:text-foreground hover:bg-surface active:scale-95 transition-all"
-            >
-              <Share2 size={16} />
-            </button>
-
-            <button
-              onClick={() => setReportOpen(true)}
-              aria-label="Report this anime"
-              className="flex h-11 w-11 items-center justify-center rounded-2xl border border-border bg-white/[0.04] text-subtle hover:text-red-400 hover:bg-red-500/5 hover:border-red-500/20 active:scale-95 transition-all"
-              title="Report this anime"
-            >
-              <Flag size={14} />
-            </button>
-          </div>
-        </motion.div>
+      <div className={`max-w-6xl mx-auto ${ui.screenX}`}>
 
         {/* 2-col layout */}
         <div className="grid lg:grid-cols-3 gap-10">

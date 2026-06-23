@@ -92,14 +92,23 @@ export default function WatchPartyRoom() {
     return () => { if (retry) clearTimeout(retry); cleanup?.() }
   }, [room, me?.id, applyRemote])
 
-  // Build the player once we have a video.
+  // Build the player once we have a video. YT.Player REPLACES its target node
+  // with an <iframe>, so we hand it an imperatively-created child instead of a
+  // React-managed element — otherwise the next re-render (presence/chat/host
+  // updates) reconciles against the detached node and the player vanishes,
+  // leaving a black box. React only ever owns the stable `hostRef` wrapper.
   useEffect(() => {
     if (!videoId) return
     let cancelled = false
     loadYT().then(() => {
       if (cancelled || !hostRef.current || !window.YT?.Player) return
       if (playerRef.current?.loadVideoById) { playerRef.current.loadVideoById(videoId); return }
-      playerRef.current = new window.YT.Player(hostRef.current, {
+      const mount = document.createElement("div")
+      mount.style.width = "100%"; mount.style.height = "100%"
+      hostRef.current.appendChild(mount)
+      playerRef.current = new window.YT.Player(mount, {
+        width: "100%",
+        height: "100%",
         videoId,
         playerVars: { rel: 0, modestbranding: 1, playsinline: 1, iv_load_policy: 3, origin: typeof window !== "undefined" ? window.location.origin : undefined },
         events: {
@@ -115,6 +124,12 @@ export default function WatchPartyRoom() {
     })
     return () => { cancelled = true }
   }, [videoId, emitSync])
+
+  // Tear the player down on unmount so its iframe/listeners don't leak.
+  useEffect(() => () => {
+    try { playerRef.current?.destroy?.() } catch { /* noop */ }
+    playerRef.current = null
+  }, [])
 
   // Host heartbeat — keep participants' clocks aligned every 5s while playing.
   useEffect(() => {

@@ -834,7 +834,7 @@ export default function CommunityPage() {
           <button
             onClick={refreshFeed}
             disabled={refreshing}
-            className="w-full flex items-center justify-center gap-2 rounded-2xl border border-border bg-surface py-3 text-[11px] font-black uppercase tracking-widest text-accent-bright transition-colors hover:bg-surface-2 disabled:opacity-60 active:scale-[0.99]"
+            className="w-full flex items-center justify-center gap-2 rounded-2xl border border-border bg-surface py-3 text-[11px] font-black uppercase tracking-widest text-foreground transition-colors hover:bg-surface-2 disabled:opacity-60 active:scale-[0.99]"
           >
             <RotateCw size={13} className={refreshing ? "animate-spin" : ""} />
             {refreshing ? "Refreshing…" : "Show newest posts"}

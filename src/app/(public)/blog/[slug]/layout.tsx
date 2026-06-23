@@ -1,6 +1,7 @@
 // Server component — fetches the real post (public API, no auth) so logged-out
 // visitors AND crawlers get accurate title/description/OG tags + Article JSON-LD.
 import type { Metadata } from "next"
+import Script from "next/script"
 import { JsonLd } from "@/components/seo/JsonLd"
 
 const API_BASE = process.env.API_BASE ?? "http://localhost:4000"
@@ -89,6 +90,17 @@ export default async function BlogSlugLayout({
 
   return (
     <>
+      {/* Google AdSense — loaded only on blog reading pages. `afterInteractive`
+          defers it until the article is interactive, so it never blocks the
+          reading experience. Ad placement is controlled in the AdSense dashboard
+          (Auto Ads), which keeps units out of the way of the content. */}
+      <Script
+        id="google-adsense"
+        async
+        strategy="afterInteractive"
+        crossOrigin="anonymous"
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7026816666510256"
+      />
       <JsonLd
         data={{
           "@context": "https://schema.org",

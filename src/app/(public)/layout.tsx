@@ -1,13 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Navbar from "@/components/layout/Navbar";
-import Footer from "@/components/layout/Footer";
 import OnboardingModal from "@/components/onboarding/OnboardingModal";
-import { SmoothScroll } from "@/providers/SmoothScroll";
 import { usePathname } from "next/navigation";
-import { PageTransition } from "@/components/layout/PageTransition";
-import AnnouncementBanner from "@/components/ui/AnnouncementBanner";
 import { useAuthStore } from "@/stores/auth.store";
 import { AppShell } from "@/components/layout/app/AppShell";
 
@@ -33,8 +28,9 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
 
   // App shell (sidebar + topbar) for EVERYONE on app pages — guests browse the
   // real signed-in experience (with write actions gated by the sign-in wall) so
-  // they're nudged to convert. The landing page "/" keeps the marketing hero for
-  // guests; signed-in users get the shell there too.
+  // they're nudged to convert. The landing page "/" is a self-contained
+  // marketing page for guests; signed-in users get the shell there too (then
+  // LandingGate bounces them into /shots).
   const isLanding = pathname === "/";
   const useAppShell = !isLanding || (sessionReady && isAuthenticated);
   if (useAppShell) {
@@ -46,21 +42,8 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
     );
   }
 
-  return (
-    <SmoothScroll>
-      {/* Single fixed container keeps banner + navbar stacked without overlap */}
-      <div className="fixed top-0 left-0 right-0 z-[100]">
-        <AnnouncementBanner
-          message="Watch Party feature launching Q3 2026 — get early access"
-          href="/watch-party"
-          linkLabel="Learn more →"
-          type="new"
-        />
-        <Navbar />
-      </div>
-      <PageTransition>{children}</PageTransition>
-      <Footer />
-      <OnboardingModal isOpen={showOnboarding} onComplete={handleOnboardingComplete} />
-    </SmoothScroll>
-  );
+  // Guest landing "/" — KaiveronLanding brings its own nav, footer, fonts and
+  // atmospheric chrome, so render it bare (no AppShell, Navbar, Footer or
+  // SmoothScroll, which would double up the chrome or fight its scroll logic).
+  return <>{children}</>;
 }

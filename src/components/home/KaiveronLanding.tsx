@@ -83,6 +83,7 @@ function InviteForm({
 }) {
   const [email, setEmail] = useState("")
   const [done, setDone] = useState(false)
+  const [member, setMember] = useState(false)
   const [busy, setBusy] = useState(false)
 
   async function submit(e: React.FormEvent) {
@@ -90,17 +91,20 @@ function InviteForm({
     if (!email || busy) return
     setBusy(true)
     try {
-      await joinWaitlist(email, source)
+      const res = await joinWaitlist(email, source)
+      setBusy(false)
+      // Already has an account — point them at sign-in, don't fake a signup.
+      if (res?.alreadyMember) setMember(true)
+      else setDone(true)
     } catch {
       /* idempotent + low-stakes — confirm regardless so guests aren't blocked */
-    } finally {
       setBusy(false)
       setDone(true)
     }
   }
 
   return (
-    <form className={`invite anim${done ? " done" : ""}`} onSubmit={submit}>
+    <form className={`invite anim${done || member ? " done" : ""}`} onSubmit={submit}>
       <div className="row">
         <input
           type="email"
@@ -126,7 +130,17 @@ function InviteForm({
       </div>
       <div className="ok">
         <span className="seal" />
-        {doneText}
+        {member ? (
+          <span>
+            You&rsquo;re already a member —{" "}
+            <a href="/login" style={{ textDecoration: "underline" }}>
+              sign in
+            </a>
+            .
+          </span>
+        ) : (
+          doneText
+        )}
       </div>
     </form>
   )
@@ -887,6 +901,7 @@ function ShowRow({
 function GateRequest() {
   const [email, setEmail] = useState("")
   const [done, setDone] = useState(false)
+  const [member, setMember] = useState(false)
   const [busy, setBusy] = useState(false)
 
   async function submit(e: React.FormEvent) {
@@ -894,10 +909,12 @@ function GateRequest() {
     if (!email || busy) return
     setBusy(true)
     try {
-      await joinWaitlist(email, "landing-gate")
+      const res = await joinWaitlist(email, "landing-gate")
+      setBusy(false)
+      if (res?.alreadyMember) setMember(true)
+      else setDone(true)
     } catch {
       /* idempotent */
-    } finally {
       setBusy(false)
       setDone(true)
     }
@@ -910,7 +927,7 @@ function GateRequest() {
       </div>
       <h3>Join the waitlist.</h3>
       <p>Tell us where to reach you. We review every request by hand and reply within 72 hours.</p>
-      {!done && (
+      {!done && !member && (
         <>
           <input
             type="email"
@@ -928,6 +945,13 @@ function GateRequest() {
       )}
       <div className="note" style={{ display: done ? "block" : "none" }}>
         You&rsquo;re on the list — watch your inbox.
+      </div>
+      <div className="note" style={{ display: member ? "block" : "none" }}>
+        You&rsquo;re already a member —{" "}
+        <a href="/login" style={{ textDecoration: "underline" }}>
+          sign in
+        </a>
+        .
       </div>
     </form>
   )

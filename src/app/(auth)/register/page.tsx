@@ -39,7 +39,7 @@ export default function RegisterPage() {
   const [showCodeEntry, setShowCodeEntry] = useState(false)
   // Waitlist (shown when invite-only and there's no invite link).
   const [wlEmail, setWlEmail] = useState("")
-  const [wlState, setWlState] = useState<"idle" | "loading" | "done">("idle")
+  const [wlState, setWlState] = useState<"idle" | "loading" | "done" | "member">("idle")
   const [wlError, setWlError] = useState("")
 
   useEffect(() => {
@@ -184,7 +184,13 @@ export default function RegisterPage() {
     }
     setWlState("loading")
     try {
-      await joinWaitlist(email, "register", refBy ?? undefined)
+      const res = await joinWaitlist(email, "register", refBy ?? undefined)
+      // Already has an account — don't pretend they joined a waitlist; send them
+      // to sign in instead.
+      if (res.alreadyMember) {
+        setWlState("member")
+        return
+      }
       setWlState("done")
       void import("@/lib/analytics/ga").then(({ track }) => track("waitlist_join", { method: "email" })).catch(() => {})
     } catch (err) {
@@ -467,7 +473,22 @@ export default function RegisterPage() {
             </p>
           </div>
 
-          {wlState === "done" ? (
+          {wlState === "member" ? (
+            <div className="rounded-2xl bg-accent/10 border border-accent/25 p-6 text-center">
+              <CheckCircle2 className="mx-auto mb-2 text-accent" size={28} />
+              <p className="text-sm font-black text-accent uppercase tracking-widest">You&apos;re already a member</p>
+              <p className="text-xs text-muted mt-1">
+                <span className="text-foreground">{wlEmail.trim()}</span> already has a Kaiveron account — no need for the waitlist.
+              </p>
+              <Link
+                href={`/login?email=${encodeURIComponent(wlEmail.trim())}`}
+                className="mt-4 inline-flex items-center justify-center h-11 px-6 rounded-2xl font-black text-[11px] uppercase tracking-widest text-black"
+                style={{ background: "linear-gradient(135deg,var(--app-accent-bright),var(--app-accent))" }}
+              >
+                Sign in instead →
+              </Link>
+            </div>
+          ) : wlState === "done" ? (
             <div className="rounded-2xl bg-emerald-500/10 border border-emerald-500/20 p-6 text-center">
               <CheckCircle2 className="mx-auto mb-2 text-emerald-400" size={28} />
               <p className="text-sm font-black text-emerald-400 uppercase tracking-widest">You&apos;re on the list</p>

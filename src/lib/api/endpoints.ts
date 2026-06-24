@@ -18,8 +18,10 @@ export const getSignupConfig = () =>
   api<{ inviteOnly: boolean }>("/config/signup")
 
 // Join the invite-only waitlist (public). Idempotent per email.
+// `alreadyMember: true` means the email already has a Kaiveron account — the
+// caller should point them at sign-in instead of confirming a waitlist signup.
 export const joinWaitlist = (email: string, source = "register", referredBy?: string) =>
-  api<{ ok: true; alreadyOn: boolean }>("/waitlist", {
+  api<{ ok: true; alreadyOn: boolean; alreadyMember: boolean }>("/waitlist", {
     method: "POST",
     body: JSON.stringify({ email, source, ...(referredBy ? { referredBy } : {}) }),
   })

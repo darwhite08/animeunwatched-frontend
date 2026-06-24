@@ -1,5 +1,5 @@
 import { Metadata } from "next"
-import KaiveronLanding from "@/components/home/KaiveronLanding"
+import CinematicHomepage from "@/components/home/CinematicHomepage"
 import { LandingGate } from "@/components/home/LandingGate"
 
 // Homepage uses the default title from layout (no override here so the
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 export default function HomePage() {
   return (
     <LandingGate>
-      <KaiveronLanding />
+      <CinematicHomepage />
     </LandingGate>
   )
 }

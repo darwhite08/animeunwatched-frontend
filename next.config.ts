@@ -15,6 +15,13 @@ const DEV_CONNECT = process.env.NODE_ENV === "production"
   ? ""
   : "http://localhost:4000 http://192.168.31.167:4000 "
 
+// Google AdSense — the adsbygoogle loader (on blog pages) pulls its scripts,
+// ad iframes, and measurement beacons from this family of Google ad hosts.
+// Without these the CSP blocks adsbygoogle.js outright and no ads ever serve.
+const GOOGLE_ADS_SCRIPT  = "https://*.googlesyndication.com https://*.googleadservices.com https://*.doubleclick.net https://adservice.google.com https://*.adtrafficquality.google"
+const GOOGLE_ADS_FRAME   = "https://*.googlesyndication.com https://*.doubleclick.net https://www.google.com https://*.adtrafficquality.google"
+const GOOGLE_ADS_CONNECT = "https://*.googlesyndication.com https://*.doubleclick.net https://*.google.com https://*.adtrafficquality.google"
+
 const securityHeaders = [
   // HSTS — 2y + includeSubDomains + preload. Vercel adds its own too but
   // explicit beats implicit. Safe because all kaiveron domains are TLS-only.
@@ -36,7 +43,7 @@ const securityHeaders = [
       "default-src 'self'",
       // Apple Sign In SDK + Google; YouTube IFrame API (watch-party sync) loads
       // its loader from www.youtube.com and player JS from s.ytimg.com
-      "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://accounts.google.com https://apis.google.com https://appleid.cdn-apple.com https://www.youtube.com https://s.ytimg.com",
+      `script-src 'self' 'unsafe-eval' 'unsafe-inline' https://accounts.google.com https://apis.google.com https://appleid.cdn-apple.com https://www.youtube.com https://s.ytimg.com ${GOOGLE_ADS_SCRIPT}`,
       // Google Accounts CSS needed for Sign In button styling
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://accounts.google.com",
       "font-src 'self' https://fonts.gstatic.com data:",
@@ -44,9 +51,9 @@ const securityHeaders = [
       // pull from many CDNs (MAL, catbox, imgur, etc.); images are low-risk.
       "img-src 'self' data: blob: https:",
       // Backend origins (HTTPS for polling, wss/ws for WebSocket upgrade)
-      `connect-src 'self' ${DEV_CONNECT}${BACKEND_ORIGINS} https://api.jikan.moe https://accounts.google.com https://sentry.io https://*.sentry.io https://*.r2.cloudflarestorage.com https://*.r2.dev wss: ws:`,
+      `connect-src 'self' ${DEV_CONNECT}${BACKEND_ORIGINS} https://api.jikan.moe https://accounts.google.com https://sentry.io https://*.sentry.io https://*.r2.cloudflarestorage.com https://*.r2.dev ${GOOGLE_ADS_CONNECT} wss: ws:`,
       // youtube-nocookie is what trailers/shots embed; keep youtube.com too
-      "frame-src 'self' https://accounts.google.com https://www.youtube.com https://youtube.com https://www.youtube-nocookie.com https://www.instagram.com",
+      `frame-src 'self' https://accounts.google.com https://www.youtube.com https://youtube.com https://www.youtube-nocookie.com https://www.instagram.com ${GOOGLE_ADS_FRAME}`,
       "media-src 'self' https: blob:",
       "object-src 'none'",
       "base-uri 'self'",

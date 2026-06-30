@@ -20,6 +20,7 @@ import { ReaderFunnel } from "@/components/blog/ReaderFunnel"
 import { ReaderSidebar } from "@/components/blog/ReaderSidebar"
 import { ArticleTOC } from "@/components/blog/ArticleTOC"
 import { StickyJoinBar } from "@/components/blog/StickyJoinBar"
+import { AdSlot } from "@/components/ads/AdSlot"
 
 /* ── Types ── */
 type BlogMeta = {
@@ -548,6 +549,9 @@ export function BlogReaderClient({ slug, initialBlog }: { slug: string; initialB
         >
           <ArticleBody apiContent={(meta as { content?: string }).content} />
         </motion.div>
+
+        {/* In-content ad — renders below the article on every blog. */}
+        <AdSlot className="my-2" />
 
         {/* Like / Share / Bookmark bar */}
         <div className="flex items-center gap-3 sm:gap-4 py-5 border-t border-b border-border">

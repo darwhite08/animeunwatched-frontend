@@ -150,7 +150,6 @@ export default function KaiveronLanding() {
   const router = useRouter()
   const [scrolled, setScrolled] = useState(false)
   const [hero, setHero] = useState(1)
-  const [switcherHidden, setSwitcherHidden] = useState(false)
   const [animeOpen, setAnimeOpen] = useState(false)
   const heroRef = useRef<HTMLElement | null>(null)
   const animeRef = useRef<HTMLDivElement | null>(null)
@@ -185,20 +184,9 @@ export default function KaiveronLanding() {
     }
   }, [])
 
-  function pickHero(n: number) {
-    setHero(n)
-    try {
-      localStorage.setItem("kvrn_hero", String(n))
-    } catch {
-      /* ignore */
-    }
-  }
-
   useEffect(() => {
     function onScroll() {
       setScrolled(window.scrollY > 20)
-      const h = heroRef.current?.offsetHeight ?? window.innerHeight
-      setSwitcherHidden(window.scrollY > h * 0.72)
     }
     onScroll()
     window.addEventListener("scroll", onScroll, { passive: true })
@@ -448,19 +436,6 @@ export default function KaiveronLanding() {
             </div>
           </div>
         </section>
-
-        <div className={`switcher${switcherHidden ? " hide" : ""}`} id="switcher">
-          <span className="lab">Hero ▸</span>
-          <button className={hero === 1 ? "on" : ""} onClick={() => pickHero(1)}>
-            01 · Ledger
-          </button>
-          <button className={hero === 2 ? "on" : ""} onClick={() => pickHero(2)}>
-            02 · Seal
-          </button>
-          <button className={hero === 3 ? "on" : ""} onClick={() => pickHero(3)}>
-            03 · Manifest
-          </button>
-        </div>
 
         <section className="band manifesto" id="manifesto">
           <div className="wrap">
@@ -1071,7 +1046,7 @@ const CSS = `
 .kvln nav.top .navright{ display:flex; align-items:center; gap:22px; }
 .kvln nav.top .navsignin{ font-family:var(--font-jb),monospace; font-size:11px; letter-spacing:.2em; text-transform:uppercase; color:var(--dim); transition:color .2s; }
 .kvln nav.top .navsignin:hover{ color:var(--paper); }
-@media(max-width:880px){ .kvln nav.top .links{ display:none; } .kvln nav.top .navsignin{ display:none; } }
+@media(max-width:880px){ .kvln nav.top .links{ display:none; } }
 
 .kvln .megamenu{ position:absolute; top:calc(100% + 18px); left:50%; transform:translateX(-50%); width:344px; max-height:min(74vh,640px); overflow-y:auto; padding:10px; background:rgba(12,11,16,.97); border:1px solid var(--rule); border-radius:12px; box-shadow:0 30px 70px rgba(0,0,0,.6); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px); display:grid; gap:2px; z-index:80; }
 .kvln .megaitem{ display:flex; align-items:center; gap:14px; padding:11px 12px; border-radius:9px; transition:background .15s; }
@@ -1151,14 +1126,6 @@ const CSS = `
 .kvln .dossier .drow .st.in{ color:var(--cyan); }
 .kvln .dossier .dfoot{ padding:14px 20px; font-family:var(--font-jb),monospace; font-size:11px; letter-spacing:.14em; color:var(--dim-2); background:var(--navy-3); }
 @media(max-width:900px){ .kvln .manifest-pane{ grid-template-columns:1fr; gap:40px; } }
-
-.kvln .switcher{ position:fixed; bottom:18px; left:50%; transform:translateX(-50%); z-index:70; display:flex; align-items:center; gap:4px; padding:6px 7px; background:rgba(10,9,12,.82); border:1px solid var(--rule); border-radius:3px; backdrop-filter:blur(10px); box-shadow:0 16px 40px rgba(0,0,0,.5); transition:opacity .4s,transform .4s; }
-.kvln .switcher .lab{ font-family:var(--font-jb),monospace; font-size:9.5px; letter-spacing:.24em; text-transform:uppercase; color:var(--dim-2); padding:0 12px 0 6px; }
-.kvln .switcher button{ border:none; background:transparent; color:var(--dim); border-radius:2px; padding:8px 14px; font-family:var(--font-jb),monospace; font-size:11px; letter-spacing:.12em; text-transform:uppercase; transition:color .2s,background .2s; }
-.kvln .switcher button:hover{ color:var(--paper); }
-.kvln .switcher button.on{ color:#0a0805; background:var(--paper); }
-.kvln .switcher.hide{ opacity:0; transform:translateX(-50%) translateY(20px); pointer-events:none; }
-@media(max-width:620px){ .kvln .switcher .lab{ display:none; } }
 
 .kvln .manifesto .big{ font-size:clamp(30px,3.6vw,52px); font-weight:300; line-height:1.28; max-width:920px; }
 .kvln .manifesto .big b{ font-weight:600; }

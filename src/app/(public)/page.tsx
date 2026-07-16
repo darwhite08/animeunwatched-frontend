@@ -11,6 +11,9 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Kaiveron — Track, Rate & Discover Anime",
     description: "AI-powered anime tracking, ratings, streaks, and community. Free forever.",
+    // Next replaces (not merges) the parent openGraph when a page defines one,
+    // so re-declare the social card here or the homepage share loses its image.
+    images: [{ url: "/og", width: 1200, height: 630, alt: "Kaiveron" }],
   },
 }
 

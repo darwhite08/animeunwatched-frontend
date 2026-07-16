@@ -19,6 +19,7 @@ import Link from "next/link"
 import { Sora, JetBrains_Mono } from "next/font/google"
 import { useRouter } from "next/navigation"
 import { joinWaitlist } from "@/lib/api/endpoints"
+import { ApiError } from "@/lib/api/client"
 
 // Self-hosted (no render-blocking external request, no layout shift). Exposed as
 // CSS variables so the ported design CSS can reference them by name.
@@ -85,21 +86,28 @@ function InviteForm({
   const [done, setDone] = useState(false)
   const [member, setMember] = useState(false)
   const [busy, setBusy] = useState(false)
+  const [err, setErr] = useState<string | null>(null)
 
   async function submit(e: React.FormEvent) {
     e.preventDefault()
     if (!email || busy) return
     setBusy(true)
+    setErr(null)
     try {
       const res = await joinWaitlist(email, source)
       setBusy(false)
       // Already has an account — point them at sign-in, don't fake a signup.
       if (res?.alreadyMember) setMember(true)
       else setDone(true)
-    } catch {
-      /* idempotent + low-stakes — confirm regardless so guests aren't blocked */
+    } catch (ex) {
+      // Never fake success — a swallowed error means the email was NOT saved.
+      // Surface it so the visitor (and shared-IP users) can actually retry.
       setBusy(false)
-      setDone(true)
+      setErr(
+        ex instanceof ApiError && ex.status === 429
+          ? "Too many requests from your network — wait a moment and try again."
+          : "Couldn't submit that just now. Please try again.",
+      )
     }
   }
 
@@ -128,6 +136,14 @@ function InviteForm({
           Have an invite code?
         </a>
       </div>
+      {err && (
+        <div
+          role="alert"
+          style={{ marginTop: 12, fontFamily: "var(--font-jb),monospace", fontSize: 11.5, letterSpacing: ".08em", color: "#F0A35E" }}
+        >
+          {err}
+        </div>
+      )}
       <div className="ok">
         <span className="seal" />
         {member ? (
@@ -878,20 +894,26 @@ function GateRequest() {
   const [done, setDone] = useState(false)
   const [member, setMember] = useState(false)
   const [busy, setBusy] = useState(false)
+  const [err, setErr] = useState<string | null>(null)
 
   async function submit(e: React.FormEvent) {
     e.preventDefault()
     if (!email || busy) return
     setBusy(true)
+    setErr(null)
     try {
       const res = await joinWaitlist(email, "landing-gate")
       setBusy(false)
       if (res?.alreadyMember) setMember(true)
       else setDone(true)
-    } catch {
-      /* idempotent */
+    } catch (ex) {
+      // Don't fake success — surface the real outcome so the email isn't lost.
       setBusy(false)
-      setDone(true)
+      setErr(
+        ex instanceof ApiError && ex.status === 429
+          ? "Too many requests from your network — wait a moment and try again."
+          : "Couldn't submit that just now. Please try again.",
+      )
     }
   }
 
@@ -928,6 +950,11 @@ function GateRequest() {
         </a>
         .
       </div>
+      {err && (
+        <div className="note" role="alert" style={{ display: "block", color: "#F0A35E" }}>
+          {err}
+        </div>
+      )}
     </form>
   )
 }

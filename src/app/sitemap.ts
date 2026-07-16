@@ -3,10 +3,11 @@ import { GENRES, FEATURED_STUDIOS, toSlug } from "@/lib/seo/taxonomy"
 
 const BASE = "https://kaiveron.com"
 
-// Statically generate at build time, then regenerate at most once per day.
-// The anime feed is large (~17k URLs) and changes slowly — never recompute it
-// per request. (Next.js App Router: route-level ISR for sitemap.ts.)
-export const revalidate = 86400 // 24h
+// Regenerate hourly so newly published blogs surface in the sitemap within ~1h
+// (auto-update). The heavy anime feed (~17k URLs) is fetched with its own 24h
+// cache, so an hourly route regen re-reads it from cache (no DB hit / no per-
+// request recompute) — only the small, fast-changing blog list refreshes.
+export const revalidate = 3600 // 1h
 
 // Static public routes — always indexed
 const STATIC_ROUTES: MetadataRoute.Sitemap = [
@@ -101,7 +102,9 @@ async function fetchAnimeEntries(): Promise<AnimeEntry[]> {
 // signal. Mirrors the anime fetcher; degrades to no blog routes on failure.
 async function fetchBlogSlugs(): Promise<Array<{ slug: string; lastModified?: string }>> {
   try {
-    const res = await fetch(`${process.env.API_BASE ?? "http://localhost:4000"}/api/v1/blogs?limit=200`, { next: { revalidate: 3600 } })
+    // sort=latest → newest published blogs first, so the freshest posts sit at
+    // the top of the blog section of the sitemap.
+    const res = await fetch(`${process.env.API_BASE ?? "http://localhost:4000"}/api/v1/blogs?sort=latest&limit=200`, { next: { revalidate: 3600 } })
     if (!res.ok) return []
     const data = await res.json() as { data?: Array<{ slug?: string; updatedAt?: string; publishedAt?: string }> }
     return (data.data ?? [])
@@ -150,8 +153,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   const blogRoutes: MetadataRoute.Sitemap = blogs.map((b) => ({
     url:             `${BASE}/blog/${b.slug}`,
-    changeFrequency: "weekly",
-    priority:        0.7,
+    changeFrequency: "daily",
+    priority:        0.9,
     lastModified:    b.lastModified ? new Date(b.lastModified) : new Date(),
   }))
 
@@ -171,12 +174,14 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     lastModified:    a.lastModified ? new Date(a.lastModified) : new Date(),
   }))
 
+  // Blogs sit right after the core static hubs — at the top of the content, so
+  // crawlers reach freshly published posts first (newest-first, priority 0.9).
   return [
     ...STATIC_ROUTES,
+    ...blogRoutes,
     ...GENRE_ROUTES,
     ...STUDIO_ROUTES,
     ...seasonRoutes(),
-    ...blogRoutes,
     ...animeRoutes,
     ...discussRoutes,
   ]

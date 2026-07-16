@@ -23,7 +23,8 @@ export default function robots(): MetadataRoute.Robots {
       // Allow Googlebot to see community content (it's public)
       {
         userAgent: "Googlebot",
-        allow: ["/community/", "/clubs/", "/anime/", "/blogs/", "/reviews/"],
+        // /blogs/ = list hub, /blog/ = individual posts (the ones in the sitemap).
+        allow: ["/community/", "/clubs/", "/anime/", "/blogs/", "/blog/", "/reviews/"],
       },
       // AI crawlers — explicit allow. Required to be cited by ChatGPT /
       // Perplexity / Gemini / Claude / Google AI Overviews. Blocking any

@@ -40,6 +40,9 @@ type UserSuggestion = { username: string; displayName: string; avatarUrl?: strin
 
 export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
   const [query, setQuery] = useState("")
+  // Debounced query drives the anime search request so we don't fire one per
+  // keystroke — predictive results update ~300ms after typing stops.
+  const [debouncedQuery, setDebouncedQuery] = useState("")
   const [userSuggestions, setUserSuggestions] = useState<UserSuggestion[]>([])
   const [cursor, setCursor] = useState(-1)
   const [selectedAnime, setSelectedAnime] = useState<Anime | null>(null)
@@ -47,7 +50,12 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
   const router = useRouter()
   const suggestTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
-  const { data: searchData } = useSearchAnimeApi(query.trim())
+  useEffect(() => {
+    const t = setTimeout(() => setDebouncedQuery(query.trim()), 300)
+    return () => clearTimeout(t)
+  }, [query])
+
+  const { data: searchData } = useSearchAnimeApi(debouncedQuery)
   const results = useMemo(() => (searchData?.data ?? []).slice(0, 6).map(mapDTO), [searchData])
 
   // Debounce cursor reset on query change
@@ -75,6 +83,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
     if (isOpen) {
       setTimeout(() => inputRef.current?.focus(), 80)
       setQuery("")
+      setDebouncedQuery("")
       setCursor(-1)
     }
   }, [isOpen])

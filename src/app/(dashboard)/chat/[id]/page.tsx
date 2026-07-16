@@ -43,23 +43,43 @@ const LOCKED = "\u0000LOCKED"
 
 function useDecrypt(msgs: DirectMessage[], key: CryptoKey | null, ready: boolean) {
   const [cache, setCache] = useState<Record<string, string>>({})
+  // Mirror ref: the decrypt effect must never read a STALE closure cache.
+  // (The old wipe-cache-on-key effect + stale closure left every message —
+  // including the viewer's own — stuck on "Decrypting…" until a new message
+  // bumped msgs.length. No wipe anymore: plain/body texts stay; only LOCKED
+  // tombstones are retried when the pairwise key finally arrives.)
+  const cacheRef = useRef(cache)
+  cacheRef.current = cache
   // Safety net: if crypto init stalls (network/key handshake never resolves),
   // never leave messages stuck on "Decrypting…" — fall back to the tombstone.
   const [timedOut, setTimedOut] = useState(false)
-  useEffect(() => { setCache({}); setTimedOut(false); const t = setTimeout(() => setTimedOut(true), 4000); return () => clearTimeout(t) }, [key])
+  useEffect(() => { const t = setTimeout(() => setTimedOut(true), 4000); return () => clearTimeout(t) }, [])
   const settled = ready || timedOut
+  const lastKeyRef = useRef<CryptoKey | null>(null)
   useEffect(() => {
     if (!msgs.length) return
-    const todo = msgs.filter(m => !(m.id in cache))
+    const keyJustArrived = key !== null && key !== lastKeyRef.current
+    lastKeyRef.current = key
+    const todo = msgs.filter(m => {
+      const cur = cacheRef.current[m.id]
+      if (cur === undefined) return true
+      // Retry tombstones exactly once per key arrival (they may have been
+      // locked only because decryption raced ahead of crypto init).
+      return cur === LOCKED && keyJustArrived
+    })
     if (!todo.length) return
     Promise.all(todo.map(async m => {
+      // v2 plaintext (what the mobile app sends while E2E is off) — body IS the text.
+      if (m.body != null) return [m.id, m.body] as const
       // Plain messages (sent while E2E is disabled) — always readable
-      if (m.iv === PLAIN_IV) {
+      if (m.iv === PLAIN_IV && m.ciphertext != null) {
         try {
           const text = decodeURIComponent(escape(atob(m.ciphertext)))
           return [m.id, text] as const
         } catch { return [m.id, m.ciphertext] as const }
       }
+      // No decryptable payload for this client (E2EE-v2 / envelope-only rows).
+      if (!m.ciphertext || !m.iv) return settled ? ([m.id, LOCKED] as const) : null
       // Legacy/cross-client E2E messages — need the pairwise key
       if (!key) {
         // No key (init done OR timed out) → this device can't decrypt; show the
@@ -71,10 +91,15 @@ function useDecrypt(msgs: DirectMessage[], key: CryptoKey | null, ready: boolean
     })).then(r => {
       const valid = r.filter(Boolean) as [string, string][]
       if (!valid.length) return
-      setCache(p => { const n={...p}; valid.forEach(([id,t])=>n[id]=t); return n })
+      setCache(p => {
+        const n = { ...p }
+        // Never let a late LOCKED overwrite real text (out-of-order resolves).
+        valid.forEach(([id, t]) => { if (n[id] === undefined || n[id] === LOCKED) n[id] = t })
+        return n
+      })
     })
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [msgs.length, key, settled])
+  }, [msgs, key, settled])
   return cache
 }
 

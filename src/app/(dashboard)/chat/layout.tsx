@@ -126,14 +126,20 @@ function convTime(iso:string) {
   return format(d,"MMM d")
 }
 
-/* Sidebar preview for the last message. Plain-marker messages (the normal
-   case while E2E sending is off) are base64 plaintext — show the real text.
+/* Sidebar preview for the last message. v2 messages carry plaintext `body`
+   (what the mobile app sends); plain-marker messages (web while E2E sending
+   is off) are base64 plaintext — show the real text either way.
    True E2E ciphertext stays a generic label. */
-function lastMessagePreview(msg: { ciphertext: string; iv: string } | null): string {
+function lastMessagePreview(msg: { body?: string | null; ciphertext: string | null; iv: string | null } | null): string {
   if (!msg) return "Encrypted message"
-  if (msg.iv !== "PLAIN_NO_E2E") return "Encrypted message"
   let text: string
-  try { text = decodeURIComponent(escape(atob(msg.ciphertext))) } catch { return "Encrypted message" }
+  if (msg.body != null) {
+    text = msg.body
+  } else if (msg.iv === "PLAIN_NO_E2E" && msg.ciphertext != null) {
+    try { text = decodeURIComponent(escape(atob(msg.ciphertext))) } catch { return "Encrypted message" }
+  } else {
+    return "Encrypted message"
+  }
   // Collapse attachment markers into compact labels
   text = text
     .replace(/^📷 \[Image: [^\]]*\]$/gm, "📷 Photo")

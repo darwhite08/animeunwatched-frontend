@@ -5,8 +5,11 @@ export interface DirectMessage {
   id:             string
   conversationId: string
   senderId:       string
-  ciphertext:     string        // AES-GCM encrypted, base64
-  iv:             string        // AES-GCM IV, base64
+  /** v2 plaintext body (what the mobile app sends while E2E is off). When set,
+   *  ciphertext/iv are null — render body directly, no decryption. */
+  body?:          string | null
+  ciphertext:     string | null // AES-GCM encrypted, base64 (legacy rows)
+  iv:             string | null // AES-GCM IV, base64 — "PLAIN_NO_E2E" marks base64 plaintext
   createdAt:      string
   readAt:         string | null
   deletedAt?:     string | null  // "Delete for everyone" tombstone

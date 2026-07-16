@@ -1,78 +1,86 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Bell, Zap, MessageSquare, Trophy } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { Bell, Heart, MessageCircle, UserPlus, AtSign, Trophy, Flame } from "lucide-react";
 
-export default function NotificationDropdown({ notifications, onClose, onClear, onMarkRead }: any) {
-  const getIcon = (type: string) => {
-    switch(type) {
-      case 'comment': return <MessageSquare size={16} />;
-      case 'achievement': return <Trophy size={16} />;
-      default: return <Zap size={16} />;
-    }
-  };
+const TYPE_META: Record<string, { icon: typeof Bell; color: string; bg: string }> = {
+  new_follower:    { icon: UserPlus,      color: "text-emerald-400",   bg: "bg-emerald-500/15" },
+  post_liked:      { icon: Heart,         color: "text-rose-400",      bg: "bg-rose-500/15" },
+  review_liked:    { icon: Heart,         color: "text-rose-400",      bg: "bg-rose-500/15" },
+  post_comment:    { icon: MessageCircle, color: "text-accent-bright", bg: "bg-accent/15" },
+  mention:         { icon: AtSign,        color: "text-sky-400",       bg: "bg-sky-500/15" },
+  achievement:     { icon: Trophy,        color: "text-amber-400",     bg: "bg-amber-500/15" },
+  streak_reminder: { icon: Flame,         color: "text-orange-400",    bg: "bg-orange-500/15" },
+  system:          { icon: Bell,          color: "text-muted",         bg: "bg-surface" },
+};
+const metaFor = (t: string) => TYPE_META[t] ?? TYPE_META.system;
+
+type Notif = { id: string; type: string; message: string; avatar: string | null; link: string | null; time: string; read: boolean };
+
+export default function NotificationDropdown(
+  { notifications, onClose, onMarkRead }: { notifications: Notif[]; onClose: () => void; onClear?: () => void; onMarkRead: () => void },
+) {
+  const router = useRouter();
 
   return (
-    /* FIXED: Reduced opacity to /70 and added backdrop-saturate for a better glass effect */
-    <div className="bg-background backdrop-blur-2xl backdrop-saturate-150 rounded-[2rem] border border-border shadow-[0_30px_100px_rgba(0,0,0,0.8)] overflow-hidden">
-      {/* HUD Header */}
-      <div className="flex items-center justify-between px-6 py-5 border-b border-border bg-surface">
-        <div className="flex items-center gap-2">
-          <Zap size={16} className="text-emerald-500" />
-          <h3 className="text-[10px] font-black uppercase tracking-[0.3em] text-foreground">Neural_Feed</h3>
-        </div>
-        <div className="flex gap-4">
-          <button onClick={onMarkRead} className="text-[9px] font-black text-emerald-400/60 hover:text-emerald-400 uppercase tracking-widest transition-colors">Mark Read</button>
-          <button onClick={onClear} className="text-[9px] font-black text-subtle hover:text-red-400 uppercase tracking-widest transition-colors">Clear</button>
-        </div>
+    <div className="bg-background backdrop-blur-2xl backdrop-saturate-150 rounded-3xl border border-border shadow-[0_30px_100px_rgba(0,0,0,0.8)] overflow-hidden">
+      <div className="flex items-center justify-between px-5 py-4 border-b border-border">
+        <h3 className="text-sm font-black uppercase italic tracking-tight text-foreground">Notifications</h3>
+        <button onClick={onMarkRead} className="text-[10px] font-black text-accent-bright/80 hover:text-accent-bright uppercase tracking-widest transition-colors">Mark all read</button>
       </div>
 
-      {/* Kinetic Feed */}
       <div className="max-h-[400px] overflow-y-auto no-scrollbar">
         {notifications.length > 0 ? (
-          <div className="p-2 space-y-1">
-            {notifications.map((notif: any, i: number) => (
-              <motion.div
-                key={notif.id}
-                initial={{ opacity: 0, x: 10 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: i * 0.05 }}
-                className={`group relative flex gap-4 p-4 rounded-2xl transition-all border border-transparent ${
-                  notif.read ? "opacity-40 hover:opacity-100" : "bg-surface border-border hover:bg-surface"
-                }`}
-              >
-                <div className="shrink-0 h-10 w-10 rounded-xl bg-surface border border-border flex items-center justify-center text-emerald-400 group-hover:scale-110 transition-transform">
-                  {getIcon(notif.type)}
-                </div>
-
-                <div className="flex-1 min-w-0">
-                  <p className="text-xs font-bold text-foreground leading-tight uppercase tracking-tight mb-1">
-                    {notif.message}
-                  </p>
-                  <p className="text-[9px] font-black text-subtle uppercase tracking-widest">
-                    {notif.time} // {notif.node}
-                  </p>
-                </div>
-
-                {!notif.read && (
-                  <div className="h-1.5 w-1.5 rounded-full bg-emerald-500 mt-2 shadow-[0_0_8px_rgba(16,185,129,0.8)]" />
-                )}
-              </motion.div>
-            ))}
+          <div className="p-2 space-y-0.5">
+            {notifications.map((n, i) => {
+              const { icon: Icon, color, bg } = metaFor(n.type);
+              return (
+                <motion.div
+                  key={n.id}
+                  initial={{ opacity: 0, x: 10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: i * 0.04 }}
+                  onClick={() => { if (n.link) { router.push(n.link); onClose(); } }}
+                  className={`group relative flex items-center gap-3 p-3 rounded-2xl cursor-pointer transition-all ${
+                    n.read ? "opacity-60 hover:opacity-100 hover:bg-surface" : "bg-accent/5 hover:bg-white/[0.06]"
+                  }`}
+                >
+                  <div className="relative shrink-0">
+                    {n.avatar ? (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img src={n.avatar} alt="" className="h-9 w-9 rounded-full object-cover bg-surface" />
+                    ) : (
+                      <div className={`h-9 w-9 rounded-full grid place-items-center ${bg}`}><Icon size={15} className={color} /></div>
+                    )}
+                    {n.avatar && (
+                      <span className={`absolute -bottom-1 -right-1 h-4 w-4 rounded-full grid place-items-center ring-2 ring-background ${bg}`}>
+                        <Icon size={9} className={color} />
+                      </span>
+                    )}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className={`text-[13px] leading-snug line-clamp-2 ${n.read ? "text-muted" : "text-foreground font-medium"}`}>{n.message}</p>
+                    <p className="text-[10px] text-subtle mt-0.5">{n.time}</p>
+                  </div>
+                  {!n.read && <span className="h-2 w-2 rounded-full bg-accent shrink-0" />}
+                </motion.div>
+              );
+            })}
           </div>
         ) : (
-          <div className="flex flex-col items-center justify-center py-20 text-center px-10">
-            <Bell size={40} className="text-subtle mb-4" />
-            <p className="text-[10px] font-black text-subtle uppercase tracking-[0.2em]">Archive_Empty</p>
+          <div className="flex flex-col items-center justify-center py-16 text-center px-10">
+            <Bell size={32} className="text-subtle mb-3" />
+            <p className="text-xs font-black text-subtle uppercase tracking-widest">No notifications yet</p>
           </div>
         )}
       </div>
 
-      <button 
+      <button
         onClick={onClose}
-        className="w-full py-4 border-t border-border bg-black/40 text-[9px] font-black text-subtle hover:text-foreground uppercase tracking-[0.4em] transition-all"
+        className="w-full py-3 border-t border-border text-[11px] font-black text-subtle hover:text-foreground uppercase tracking-widest transition-all"
       >
-        Close Interface
+        Close
       </button>
     </div>
   );

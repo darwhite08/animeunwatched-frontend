@@ -52,22 +52,24 @@ export const useNotifications = () => {
     return () => { if (retry) clearTimeout(retry); cleanup?.() }
   }, [isAuthenticated, qc, push])
 
-  const notifications = (notifData?.data ?? []).map(n => ({
-    id: n.id,
-    type: n.type,
-    message: (n.payload as Record<string, string>).title
-      ?? (n.payload as Record<string, string>).message
-      ?? n.type,
-    time: (() => {
-      const d = Date.now() - new Date(n.createdAt).getTime()
-      if (d < 60000) return "just now"
-      if (d < 3600000) return `${Math.floor(d/60000)}m ago`
-      if (d < 86400000) return `${Math.floor(d/3600000)}h ago`
-      return `${Math.floor(d/86400000)}d ago`
-    })(),
-    read: n.read,
-    node: "NODE_00",
-  }))
+  const notifications = (notifData?.data ?? []).map(n => {
+    const p = (n.payload ?? {}) as Record<string, string>
+    return {
+      id: n.id,
+      type: n.type,
+      message: p.message ?? p.title ?? "New notification",
+      avatar: p.actorAvatarUrl ?? null,
+      link: p.link ?? null,
+      time: (() => {
+        const d = Date.now() - new Date(n.createdAt).getTime()
+        if (d < 60000) return "just now"
+        if (d < 3600000) return `${Math.floor(d / 60000)}m ago`
+        if (d < 86400000) return `${Math.floor(d / 3600000)}h ago`
+        return `${Math.floor(d / 86400000)}d ago`
+      })(),
+      read: n.read,
+    }
+  })
 
   const unreadCount = unreadData?.count ?? notifications.filter(n => !n.read).length
 

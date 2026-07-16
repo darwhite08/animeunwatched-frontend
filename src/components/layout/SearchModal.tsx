@@ -50,12 +50,29 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
   const router = useRouter()
   const suggestTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
+  const [requestState, setRequestState] = useState<"idle" | "sending" | "done">("idle")
+
   useEffect(() => {
     const t = setTimeout(() => setDebouncedQuery(query.trim()), 300)
+    setRequestState("idle")
     return () => clearTimeout(t)
   }, [query])
 
   const { data: searchData } = useSearchAnimeApi(debouncedQuery)
+
+  async function requestMissingTitle() {
+    const q = query.trim()
+    if (!q || requestState !== "idle") return
+    setRequestState("sending")
+    try {
+      await fetch(`/api/v1/anime/request-title`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query: q }),
+      })
+    } catch { /* best-effort */ }
+    setRequestState("done")
+  }
   const results = useMemo(() => (searchData?.data ?? []).slice(0, 6).map(mapDTO), [searchData])
 
   // Debounce cursor reset on query change
@@ -238,9 +255,25 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                       </>
                     )}
                   </>
+                ) : debouncedQuery.trim().length >= 2 ? (
+                  <div className="py-10 px-6 text-center">
+                    <p className="text-foreground text-sm font-bold">No match for &ldquo;{debouncedQuery.trim()}&rdquo;</p>
+                    <p className="text-subtle text-xs mt-1.5">It may not be in our catalog yet. Check the spelling, or request it and we&rsquo;ll add it.</p>
+                    {requestState === "done" ? (
+                      <p className="mt-4 text-xs font-bold text-emerald-400">Thanks — we&rsquo;ll look for it. ✓</p>
+                    ) : (
+                      <button
+                        onClick={requestMissingTitle}
+                        disabled={requestState === "sending"}
+                        className="mt-4 inline-flex items-center gap-2 rounded-full bg-accent/15 border border-accent/25 px-5 py-2 text-[11px] font-black uppercase tracking-widest text-accent-bright hover:bg-accent/25 disabled:opacity-50 transition-all"
+                      >
+                        {requestState === "sending" ? "Requesting…" : "Request this title"}
+                      </button>
+                    )}
+                  </div>
                 ) : (
                   <div className="py-10 text-center">
-                    <p className="text-subtle text-xs font-black uppercase tracking-widest">No archives matched</p>
+                    <p className="text-subtle text-xs font-black uppercase tracking-widest">Start typing to search</p>
                   </div>
                 )}
               </div>

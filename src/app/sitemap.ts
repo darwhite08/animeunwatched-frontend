@@ -21,6 +21,7 @@ const STATIC_ROUTES: MetadataRoute.Sitemap = [
   { url: `${BASE}/recommendations`,         changeFrequency: "weekly",  priority: 0.8 },
   { url: `${BASE}/reviews`,                 changeFrequency: "daily",   priority: 0.75 },
   { url: `${BASE}/lists`,                   changeFrequency: "daily",   priority: 0.7 },
+  { url: `${BASE}/manga`,                   changeFrequency: "daily",   priority: 0.85 },
   { url: `${BASE}/mood`,                    changeFrequency: "weekly",  priority: 0.85 },
   { url: `${BASE}/calendar`,               changeFrequency: "daily",   priority: 0.85 },
   { url: `${BASE}/genres`,                  changeFrequency: "monthly", priority: 0.8 },
@@ -98,6 +99,26 @@ async function fetchAnimeEntries(): Promise<AnimeEntry[]> {
   }
 }
 
+// Every index-worthy manga page, from the backend's /manga/sitemap feed
+// (quality gate mirrors anime: non-stub, real synopsis + score, membersCount
+// >= 200). No featured floor yet — the catalog is still seeding; on failure
+// we simply omit manga routes rather than fail the sitemap.
+async function fetchMangaEntries(): Promise<AnimeEntry[]> {
+  try {
+    const res = await fetch(
+      `${process.env.API_BASE ?? "http://localhost:4000"}/api/v1/manga/sitemap`,
+      { next: { revalidate: 86400 } },
+    )
+    if (!res.ok) return []
+    const json = (await res.json()) as { data?: Array<{ malId: number; updatedAt?: string }> }
+    return (json.data ?? [])
+      .filter((m) => Boolean(m.malId))
+      .map((m) => ({ malId: m.malId, lastModified: m.updatedAt }))
+  } catch {
+    return []
+  }
+}
+
 // Published blog posts — /blog/[slug]. Public, no auth; strong fresh-content
 // signal. Mirrors the anime fetcher; degrades to no blog routes on failure.
 async function fetchBlogSlugs(): Promise<Array<{ slug: string; lastModified?: string }>> {
@@ -149,7 +170,11 @@ function seasonRoutes(): MetadataRoute.Sitemap {
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [animeEntries, blogs] = await Promise.all([fetchAnimeEntries(), fetchBlogSlugs()])
+  const [animeEntries, mangaEntries, blogs] = await Promise.all([
+    fetchAnimeEntries(),
+    fetchMangaEntries(),
+    fetchBlogSlugs(),
+  ])
 
   const blogRoutes: MetadataRoute.Sitemap = blogs.map((b) => ({
     url:             `${BASE}/blog/${b.slug}`,
@@ -163,6 +188,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     changeFrequency: "weekly",
     priority:        0.8,
     lastModified:    a.lastModified ? new Date(a.lastModified) : new Date(),
+  }))
+
+  const mangaRoutes: MetadataRoute.Sitemap = mangaEntries.map((m) => ({
+    url:             `${BASE}/manga/${m.malId}`,
+    changeFrequency: "weekly",
+    priority:        0.75,
+    lastModified:    m.lastModified ? new Date(m.lastModified) : new Date(),
   }))
 
   // Episode discussion pages for the most popular anime (feed is sorted by
@@ -183,6 +215,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     ...STUDIO_ROUTES,
     ...seasonRoutes(),
     ...animeRoutes,
+    ...mangaRoutes,
     ...discussRoutes,
   ]
 }

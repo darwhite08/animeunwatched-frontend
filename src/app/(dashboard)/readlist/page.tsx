@@ -10,7 +10,7 @@ import { useAuthStore } from "@/stores/auth.store"
 import { useToast } from "@/stores/toast.store"
 import * as ep from "@/lib/api/endpoints"
 import { ui } from "@/lib/design/tokens"
-import type { MangaEntry, MangaSearchResult, MangaStatus } from "@/lib/api/types"
+import type { MangaDTO, MangaEntry, MangaStatus } from "@/lib/api/types"
 
 const TABS: Array<{ label: string; status: MangaStatus | "ALL" }> = [
   { label: "All", status: "ALL" },
@@ -145,30 +145,30 @@ export default function ReadlistPage() {
   )
 }
 
-/* ─── Add-manga search modal (AniList) ─────────────────────────────────────── */
+/* ─── Add-manga search modal (Kaiveron catalog — fuzzy, typo-tolerant) ─────── */
 function AddMangaModal({ onClose, existing, onAdded }: { onClose: () => void; existing: MangaEntry[]; onAdded: () => void }) {
   const { push } = useToast()
   const [q, setQ] = useState("")
-  const [results, setResults] = useState<MangaSearchResult[]>([])
+  const [results, setResults] = useState<MangaDTO[]>([])
   const [searching, setSearching] = useState(false)
-  const [adding, setAdding] = useState<number | null>(null)
-  const existingIds = useMemo(() => new Set(existing.map(e => e.anilistId)), [existing])
+  const [adding, setAdding] = useState<string | null>(null)
+  const existingIds = useMemo(() => new Set(existing.map(e => e.mangaId).filter(Boolean)), [existing])
 
   useEffect(() => {
     const term = q.trim()
     if (term.length < 2) { setResults([]); setSearching(false); return }
     setSearching(true)
     const t = setTimeout(async () => {
-      try { setResults((await ep.searchManga(term)).data) }
+      try { setResults((await ep.searchMangaCatalog(term)).data) }
       catch { setResults([]) }
       finally { setSearching(false) }
     }, 300)
     return () => clearTimeout(t)
   }, [q])
 
-  async function add(m: MangaSearchResult) {
-    setAdding(m.anilistId)
-    try { await ep.addManga(m); onAdded(); push(`Added “${m.title}”`, "success") }
+  async function add(m: MangaDTO) {
+    setAdding(m.id)
+    try { await ep.addMangaFromCatalog(m.id); onAdded(); push(`Added “${m.titleEnglish || m.title}”`, "success") }
     catch { push("Couldn't add — try again.", "error") }
     finally { setAdding(null) }
   }
@@ -182,33 +182,33 @@ function AddMangaModal({ onClose, existing, onAdded }: { onClose: () => void; ex
         className="w-full max-w-2xl rounded-3xl border border-border bg-background overflow-hidden shadow-2xl">
         <div className="flex items-center gap-3 p-4 border-b border-border">
           <Search size={18} className="text-subtle" />
-          <input autoFocus value={q} onChange={e => setQ(e.target.value)} placeholder="Search manga (AniList)…"
+          <input autoFocus value={q} onChange={e => setQ(e.target.value)} placeholder="Search manga — typos welcome…"
             className="flex-1 min-h-11 bg-transparent text-foreground placeholder:text-muted outline-none text-base sm:text-sm" />
           {searching && <Loader2 size={16} className="animate-spin text-accent" />}
           <button onClick={onClose} aria-label="Close" className={`${ui.touch} grid place-items-center text-subtle hover:text-foreground active:scale-95 transition-transform`}><X size={18} /></button>
         </div>
         <div className="max-h-[60vh] overflow-y-auto">
           {q.trim().length < 2 ? (
-            <p className="p-8 text-center text-xs text-subtle">Type at least 2 characters to search AniList.</p>
+            <p className="p-8 text-center text-xs text-subtle">Type at least 2 characters to search the catalog.</p>
           ) : results.length === 0 && !searching ? (
             <p className="p-8 text-center text-xs text-subtle">No manga found for “{q.trim()}”.</p>
           ) : (
             results.map(m => {
-              const already = existingIds.has(m.anilistId)
+              const already = existingIds.has(m.id)
               return (
-                <div key={m.anilistId} className="flex items-center gap-3 p-3 border-b border-border hover:bg-surface/40 transition-colors">
+                <div key={m.id} className="flex items-center gap-3 p-3 border-b border-border hover:bg-surface/40 transition-colors">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
-                  {m.coverUrl ? <img src={m.coverUrl} alt="" referrerPolicy="no-referrer" className="h-16 w-12 rounded-lg object-cover shrink-0" />
+                  {m.imageUrl ? <img src={m.imageUrl} alt="" referrerPolicy="no-referrer" className="h-16 w-12 rounded-lg object-cover shrink-0" />
                     : <div className="h-16 w-12 rounded-lg bg-surface shrink-0" />}
                   <div className="min-w-0 flex-1">
-                    <div className="text-sm font-bold text-foreground truncate">{m.title}</div>
-                    <div className="text-[11px] text-subtle truncate">{[m.author, m.format, m.totalChapters ? `${m.totalChapters} ch` : null].filter(Boolean).join(" · ")}</div>
+                    <div className="text-sm font-bold text-foreground truncate">{m.titleEnglish || m.title}</div>
+                    <div className="text-[11px] text-subtle truncate">{[m.authors[0], m.type, m.chapters ? `${m.chapters} ch` : null].filter(Boolean).join(" · ")}</div>
                   </div>
-                  <button disabled={already || adding === m.anilistId} onClick={() => add(m)}
+                  <button disabled={already || adding === m.id} onClick={() => add(m)}
                     className={`shrink-0 grid place-items-center px-4 min-h-11 min-w-11 rounded-xl text-[11px] font-black uppercase tracking-widest transition-all ${
                       already ? "bg-surface text-subtle cursor-default" : "bg-accent text-black hover:opacity-90 active:scale-95"
                     }`}>
-                    {adding === m.anilistId ? <Loader2 size={13} className="animate-spin" /> : already ? "Added" : "Add"}
+                    {adding === m.id ? <Loader2 size={13} className="animate-spin" /> : already ? "Added" : "Add"}
                   </button>
                 </div>
               )

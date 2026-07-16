@@ -1,1 +1,1 @@
-export { default } from "@/app/(dashboard)/manga/page"
+export { default } from "@/app/(public)/manga/page"

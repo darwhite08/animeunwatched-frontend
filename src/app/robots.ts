@@ -24,7 +24,7 @@ export default function robots(): MetadataRoute.Robots {
       {
         userAgent: "Googlebot",
         // /blogs/ = list hub, /blog/ = individual posts (the ones in the sitemap).
-        allow: ["/community/", "/clubs/", "/anime/", "/blogs/", "/blog/", "/reviews/"],
+        allow: ["/community/", "/clubs/", "/anime/", "/manga/", "/blogs/", "/blog/", "/reviews/"],
       },
       // AI crawlers — explicit allow. Required to be cited by ChatGPT /
       // Perplexity / Gemini / Claude / Google AI Overviews. Blocking any

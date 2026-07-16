@@ -233,13 +233,39 @@ export interface UserProfile {
   badges?: Array<{ code: string; serial?: number | null; earnedAt: string }>
 }
 
-/* ── Manga reading list (AniList-powered) ── */
+/* ── Manga catalog (local Postgres, synced from Jikan — parallels AnimeDTO) ── */
+export interface MangaDTO {
+  id: string
+  malId: number
+  slug: string | null
+  title: string
+  titleEnglish: string | null
+  titleJapanese: string | null
+  synopsis: string | null
+  type: string | null // Manga | Novel | Light Novel | One-shot | Doujinshi | Manhwa | Manhua
+  chapters: number | null
+  volumes: number | null
+  status: string | null // Publishing | Finished | On Hiatus | Discontinued
+  publishing: boolean
+  publishedFrom: string | null
+  publishedTo: string | null
+  demographic: string | null // Shounen | Shoujo | Seinen | Josei | Kids
+  authors: string[]
+  serializations: string[]
+  score: number | null
+  membersCount: number | null
+  imageUrl: string | null
+  genres: string[]
+}
+
+/* ── Manga reading list (catalog-backed; legacy entries were AniList-keyed) ── */
 export type MangaStatus = "READING" | "COMPLETED" | "PLAN_TO_READ" | "ON_HOLD" | "DROPPED"
 
 export interface MangaEntry {
   id: string
   userId: string
-  anilistId: number
+  anilistId: number | null // legacy AniList-era entries only
+  mangaId: string | null // local catalog FK (new adds)
   title: string
   coverUrl: string | null
   author: string | null
@@ -247,7 +273,8 @@ export interface MangaEntry {
   totalChapters: number | null
   genre: string | null
   status: MangaStatus
-  progress: number
+  progress: number // chapters read
+  volumesRead: number
   score: number | null
   createdAt: string
   updatedAt: string

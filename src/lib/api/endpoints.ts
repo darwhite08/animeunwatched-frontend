@@ -87,15 +87,39 @@ import type { LinkPreview } from "./types"
 export const getLinkPreview = (url: string) =>
   api<LinkPreview>(`/links/preview?url=${encodeURIComponent(url)}`)
 
+/* ── Manga catalog (local, fuzzy-searchable — parallels the anime endpoints) ── */
+import type { MangaDTO, MangaEntry, MangaSearchResult } from "./types"
+export const browseManga = (params: {
+  q?: string; type?: string; status?: string; demographic?: string; genre?: string; page?: number; limit?: number
+}) => {
+  const qs = new URLSearchParams(
+    Object.entries(params)
+      .filter(([, v]) => v !== undefined)
+      .map(([k, v]) => [k, String(v)])
+  ).toString()
+  return api<Paginated<MangaDTO>>(`/manga${qs ? `?${qs}` : ""}`)
+}
+export const searchMangaCatalog = (q: string) =>
+  api<{ data: MangaDTO[] }>(`/manga/search?q=${encodeURIComponent(q)}`)
+export const getManga = (idOrSlug: number | string) =>
+  api<{ manga: MangaDTO; readlistEntry: MangaEntry | null }>(`/manga/${idOrSlug}`)
+export const listMangaGenres = () =>
+  api<{ data: Array<{ name: string; count: number }> }>("/manga/genres")
+export const requestMangaTitle = (query: string) =>
+  api<{ ok: true }>("/manga/request-title", { method: "POST", body: JSON.stringify({ query }) })
+
 /* ── Manga reading list ── */
-import type { MangaEntry, MangaSearchResult } from "./types"
 export const searchManga = (q: string) =>
   api<{ data: MangaSearchResult[] }>(`/readlist/search?q=${encodeURIComponent(q)}`)
 export const getReadlist = (usernameOrSlug: string) =>
   api<{ data: MangaEntry[] }>(`/readlist/${encodeURIComponent(usernameOrSlug)}`)
+/** Preferred add path — metadata comes from the local catalog row. */
+export const addMangaFromCatalog = (mangaId: string, status?: string) =>
+  api<{ entry: MangaEntry }>("/readlist", { method: "POST", body: JSON.stringify({ mangaId, status }) })
+/** Legacy AniList add path (kept for back-compat). */
 export const addManga = (body: MangaSearchResult & { status?: string }) =>
   api<{ entry: MangaEntry }>("/readlist", { method: "POST", body: JSON.stringify(body) })
-export const updateMangaEntry = (id: string, body: { status?: string; progress?: number; score?: number | null }) =>
+export const updateMangaEntry = (id: string, body: { status?: string; progress?: number; volumesRead?: number; score?: number | null }) =>
   api<{ entry: MangaEntry }>(`/readlist/${id}`, { method: "PATCH", body: JSON.stringify(body) })
 export const removeMangaEntry = (id: string) =>
   api<void>(`/readlist/${id}`, { method: "DELETE" })

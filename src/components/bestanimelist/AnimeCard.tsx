@@ -6,7 +6,8 @@ import { Plus, Check } from "lucide-react"
 import { Star, Play } from "@phosphor-icons/react"
 import Image from "next/image"
 import type { Anime } from "@/lib/data/anime"
-import { useWatchlist } from "@/stores/watchlist.store"
+import { useUpsertEntry, useRemoveEntry, useMyListAnimeIds } from "@/hooks/useLists"
+import { useAuthStore } from "@/stores/auth.store"
 import { useToast } from "@/stores/toast.store"
 
 interface AnimeCardProps {
@@ -16,18 +17,36 @@ interface AnimeCardProps {
 }
 
 export default function AnimeCard({ anime, index, onClick }: AnimeCardProps) {
-  const { add, remove, has } = useWatchlist()
   const { push } = useToast()
-  const inList = has(anime.id)
+  // Real backend watchlist — persists to the ListEntry table and shows up on the
+  // /watchlist page (the old local-only store never saved anything).
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated)
+  const listIds = useMyListAnimeIds()
+  const upsert = useUpsertEntry()
+  const removeEntry = useRemoveEntry()
+  const inList = listIds.has(anime.id)
+  const busy = upsert.isPending || removeEntry.isPending
 
   const handleToggleList = (e: React.MouseEvent) => {
     e.stopPropagation()
+    if (busy) return
+    if (!isAuthenticated) {
+      push("Sign in to save anime to your watchlist", "info")
+      return
+    }
     if (inList) {
-      remove(anime.id)
-      push(`Removed "${anime.title}" from watchlist`, "info")
+      removeEntry.mutate(anime.id, {
+        onSuccess: () => push(`Removed "${anime.title}" from watchlist`, "info"),
+        onError:   () => push("Couldn't update. Try again.", "error"),
+      })
     } else {
-      add(anime)
-      push(`Added "${anime.title}" to watchlist`, "success")
+      upsert.mutate(
+        { animeId: anime.id, status: "PLAN_TO_WATCH", episodesSeen: 0 },
+        {
+          onSuccess: () => push(`Added "${anime.title}" to watchlist`, "success"),
+          onError:   () => push("Couldn't add. Try again.", "error"),
+        },
+      )
     }
   }
 

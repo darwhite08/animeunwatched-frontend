@@ -5,7 +5,8 @@ import { Star, Clock, Monitor, ShareNetwork, ArrowUpRight } from "@phosphor-icon
 import Image from "next/image"
 import Link from "next/link"
 import type { Anime } from "@/lib/data/anime"
-import { useWatchlist } from "@/stores/watchlist.store"
+import { useUpsertEntry, useRemoveEntry, useMyListAnimeIds } from "@/hooks/useLists"
+import { useAuthStore } from "@/stores/auth.store"
 import { useToast } from "@/stores/toast.store"
 import { Sheet } from "@/components/ui/Sheet"
 
@@ -16,18 +17,33 @@ interface AnimeModalProps {
 }
 
 export default function AnimeModal({ isOpen, onClose, anime }: AnimeModalProps) {
-  const { add, remove, has } = useWatchlist()
   const { push } = useToast()
-  const inList = anime ? has(anime.id) : false
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated)
+  const listIds = useMyListAnimeIds()
+  const upsert = useUpsertEntry()
+  const removeEntry = useRemoveEntry()
+  const inList = anime ? listIds.has(anime.id) : false
+  const busy = upsert.isPending || removeEntry.isPending
 
   const handleToggleList = () => {
-    if (!anime) return
+    if (!anime || busy) return
+    if (!isAuthenticated) {
+      push("Sign in to save anime to your watchlist", "info")
+      return
+    }
     if (inList) {
-      remove(anime.id)
-      push(`Removed "${anime.title}" from watchlist`, "info")
+      removeEntry.mutate(anime.id, {
+        onSuccess: () => push(`Removed "${anime.title}" from watchlist`, "info"),
+        onError:   () => push("Couldn't update. Try again.", "error"),
+      })
     } else {
-      add(anime)
-      push(`Added "${anime.title}" to watchlist!`, "success")
+      upsert.mutate(
+        { animeId: anime.id, status: "PLAN_TO_WATCH", episodesSeen: 0 },
+        {
+          onSuccess: () => push(`Added "${anime.title}" to watchlist!`, "success"),
+          onError:   () => push("Couldn't add. Try again.", "error"),
+        },
+      )
     }
   }
 

@@ -11,6 +11,7 @@ import { ui } from "@/lib/design/tokens"
 
 // Per-type visual — icon + tint. Falls back to a bell for anything unknown.
 const TYPE_META: Record<string, { icon: typeof Bell; color: string; bg: string }> = {
+  message:         { icon: MessageCircle, color: "text-indigo-400",     bg: "bg-indigo-500/15" },
   new_follower:    { icon: UserPlus,      color: "text-emerald-400",    bg: "bg-emerald-500/15" },
   post_liked:      { icon: Heart,         color: "text-rose-400",       bg: "bg-rose-500/15" },
   review_liked:    { icon: Heart,         color: "text-rose-400",       bg: "bg-rose-500/15" },

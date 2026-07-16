@@ -44,8 +44,16 @@ export const useNotifications = () => {
         push(typeof msg === "string" ? msg.slice(0, 100) : "New notification", "info")
       }
 
+      // A conversation was opened → its grouped DM notification cleared. Refetch
+      // so the bell/badge updates live without a refresh.
+      const readHandler = () => {
+        qc.invalidateQueries({ queryKey: ["notifications"] })
+        qc.invalidateQueries({ queryKey: ["notifications/unread"] })
+      }
+
       socket.on("notification.new", handler)
-      cleanup = () => socket.off("notification.new", handler)
+      socket.on("notification.read", readHandler)
+      cleanup = () => { socket.off("notification.new", handler); socket.off("notification.read", readHandler) }
     }
 
     attach()

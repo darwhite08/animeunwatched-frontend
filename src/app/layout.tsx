@@ -73,6 +73,9 @@ export const metadata = {
     description: "AI-powered anime tracking, ratings, streaks, and community. Free forever.",
     url: SITE_URL,
     locale: "en_US",
+    // Self-hosted generated card so every share (X, FB, LinkedIn, Discord…)
+    // gets a valid preview image. Child pages override with their own /og?…card.
+    images: [{ url: "/og", width: 1200, height: 630, alt: "Kaiveron" }],
   },
   twitter: {
     card: "summary_large_image",
@@ -80,6 +83,7 @@ export const metadata = {
     description: "AI-powered anime tracking, ratings, streaks, and community.",
     creator: "@kaiveron",
     site: "@kaiveron",
+    images: ["/og"],
   },
   robots: {
     index: true,

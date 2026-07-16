@@ -42,16 +42,24 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
 
   if (!blog) {
     const fallback = titleFromSlug(slug)
+    const ogFallback = `/og?title=${encodeURIComponent(fallback)}&subtitle=${encodeURIComponent("The Chronicle — Kaiveron")}`
     return {
       title: `${fallback} | The Chronicle — Kaiveron`,
       description: `Read "${fallback}" on The Chronicle — anime long-form journalism by the Kaiveron community.`,
       alternates: { canonical: url },
+      openGraph: { title: fallback, type: "article", url, siteName: "Kaiveron", images: [{ url: ogFallback, width: 1200, height: 630 }] },
+      twitter: { card: "summary_large_image", title: fallback, images: [ogFallback] },
     }
   }
 
   const description = stripHtml(blog.body).slice(0, 160) || "Anime long-form journalism on Kaiveron."
-  const image = firstImage(blog.body)
   const author = blog.author?.displayName || blog.author?.username
+  // Always-valid, self-hosted preview card (works even when a post has no inline
+  // image — e.g. YouTube-only or text posts). Falls back to the site default on
+  // the /og route itself if params are missing.
+  const ogImage = `/og?title=${encodeURIComponent(blog.title)}&subtitle=${encodeURIComponent(
+    author ? `The Chronicle · by ${author}` : "The Chronicle — Kaiveron",
+  )}`
 
   return {
     title: `${blog.title} | The Chronicle — Kaiveron`,
@@ -67,13 +75,13 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
       publishedTime: blog.publishedAt ?? undefined,
       modifiedTime: blog.updatedAt ?? undefined,
       authors: author ? [author] : undefined,
-      images: image ? [{ url: image }] : undefined,
+      images: [{ url: ogImage, width: 1200, height: 630, alt: blog.title }],
     },
     twitter: {
-      card: image ? "summary_large_image" : "summary",
+      card: "summary_large_image",
       title: blog.title,
       description,
-      images: image ? [image] : undefined,
+      images: [ogImage],
     },
   }
 }

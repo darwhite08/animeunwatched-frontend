@@ -37,6 +37,8 @@ const STATIC_ROUTES: MetadataRoute.Sitemap = [
   { url: `${BASE}/discover`,               changeFrequency: "daily",   priority: 0.75 },
   { url: `${BASE}/pricing`,                 changeFrequency: "monthly", priority: 0.7 },
   { url: `${BASE}/about`,                   changeFrequency: "monthly", priority: 0.6 },
+  // Founder entity page — unlinked in the UI, indexable for knowledge-graph signal.
+  { url: `${BASE}/about/founder`,           changeFrequency: "monthly", priority: 0.5 },
   { url: `${BASE}/help`,                    changeFrequency: "weekly",  priority: 0.6 },
   { url: `${BASE}/roadmap`,                 changeFrequency: "monthly", priority: 0.5 },
   { url: `${BASE}/changelog`,              changeFrequency: "weekly",  priority: 0.5 },

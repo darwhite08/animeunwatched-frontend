@@ -28,6 +28,22 @@ function firstImage(html: string): string | null {
   return m?.[1] ?? null
 }
 
+/* First YouTube video id in a blog body → its hqdefault thumbnail. Covers the
+   TipTap `data-youtube-video` embed (youtube.com / youtube-nocookie.com/embed/…)
+   and bare youtu.be links, so a video-only post shows the video's thumbnail. */
+function youtubeThumb(html: string): string | null {
+  const m = html.match(/(?:youtube(?:-nocookie)?\.com\/embed\/|youtu\.be\/|[?&]v=)([A-Za-z0-9_-]{11})/i)
+  return m ? `https://img.youtube.com/vi/${m[1]}/hqdefault.jpg` : null
+}
+
+/* Self-hosted /og card (matches the blog detail og:image) — the last-resort
+   cover when a post has no image and no video, so cards never show a bare
+   gradient. Same-origin relative URL; plain <img>, no next/image allowlist. */
+function ogCard(title: string, author: string): string {
+  const subtitle = author && author !== "Anonymous" ? `The Chronicle · by ${author}` : "The Chronicle — Kaiveron"
+  return `/og?title=${encodeURIComponent(title)}&subtitle=${encodeURIComponent(subtitle)}`
+}
+
 /* Map the backend BlogCategory enum → the display labels used by the filter pills. */
 const CATEGORY_LABEL: Record<string, CategoryLabel> = {
   DEEP_DIVE: "Deep Dive", REVIEW: "Review", FEATURE: "Feature", DISCUSSION: "Discussion",
@@ -260,16 +276,19 @@ export default function BlogListingPage() {
 
   const apiBlogs: Blog[] = useMemo(() => (blogsData?.data ?? []).map(b => {
     const text = stripHtml(b.body)
+    const author = b.author?.displayName ?? b.author?.username ?? "Anonymous"
     return {
       id: b.id, slug: b.slug, title: b.title,
       excerpt: text.slice(0, 160) + (text.length > 160 ? "…" : ""),
-      author: b.author?.displayName ?? b.author?.username ?? "Anonymous",
+      author,
       authorAvatar: b.author?.avatarUrl ?? null,
       authorVerified: b.author?.verifiedKind ?? null,
       readTime: Math.max(1, Math.ceil(text.split(" ").length / 200)),
       publishedAt: b.publishedAt ? new Date(b.publishedAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "",
       coverGradient: "from-indigo-900 via-violet-900 to-purple-900",
-      coverImage: b.coverImage ?? firstImage(b.body),
+      // Cover priority: explicit cover → embedded video thumb → first body image
+      // → self-hosted /og card. Never a bare gradient.
+      coverImage: b.coverImage ?? youtubeThumb(b.body) ?? firstImage(b.body) ?? ogCard(b.title, author),
       category: CATEGORY_LABEL[b.category ?? ""] ?? "Article",
       likes: b.likeCount ?? 0, views: b.viewCount ?? 0,
     }

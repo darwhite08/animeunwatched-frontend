@@ -98,7 +98,9 @@ export default function BestAnimeListPage() {
   const [selectedStatus, setSelectedStatus] = useState<typeof STATUS_OPTIONS[number] | "">("")
   const [selectedSeason, setSelectedSeason] = useState<typeof SEASON_OPTIONS[number] | "">("")
   const [selectedEpisodeRange, setSelectedEpisodeRange] = useState<EpisodeRange | "">("")
-  const [hideWatchlisted, setHideWatchlisted] = useState(false)
+  // Default ON: anime already on the signed-in user's list are hidden from the
+  // Vault everywhere (server-side via exclude_listed; no-op for logged-out users).
+  const [hideWatchlisted, setHideWatchlisted] = useState(true)
 
   // Reset to page 1 when filters change
   const handleCategoryChange = useCallback((c: string) => { setCategory(c); setPage(1) }, [])
@@ -121,7 +123,8 @@ export default function BestAnimeListPage() {
     if (selectedStatus) params.status = selectedStatus.toLowerCase()
     if (selectedSeason) params.season = selectedSeason.toLowerCase()
     if (selectedEpisodeRange) params.eps = selectedEpisodeRange
-    if (hideWatchlisted && category === "all") params.exclude_listed = "true"
+    // Hide the user's already-listed anime across all tabs (default on).
+    if (hideWatchlisted) params.exclude_listed = "true"
     return params
   }, [query, selectedType, category, page, selectedDecade, selectedScore, selectedStatus, selectedSeason, selectedEpisodeRange, hideWatchlisted])
 
@@ -174,13 +177,13 @@ export default function BestAnimeListPage() {
     setSelectedStatus("")
     setSelectedSeason("")
     setSelectedEpisodeRange("")
-    setHideWatchlisted(false)
+    setHideWatchlisted(true) // reset to the default (hidden)
     setPage(1)
   }, [])
 
+  // hideWatchlisted is the DEFAULT, so it doesn't count as an "active filter".
   const advancedFilterCount = (selectedDecade ? 1 : 0) + (selectedScore !== null ? 1 : 0) +
-    (selectedStatus ? 1 : 0) + (selectedSeason ? 1 : 0) + (selectedEpisodeRange ? 1 : 0) +
-    (hideWatchlisted ? 1 : 0)
+    (selectedStatus ? 1 : 0) + (selectedSeason ? 1 : 0) + (selectedEpisodeRange ? 1 : 0)
   const activeFilterCount = selectedGenres.length + (selectedType ? 1 : 0) + advancedFilterCount
 
   return (
@@ -272,16 +275,12 @@ export default function BestAnimeListPage() {
             </FilterPill>
           ))}
 
-          {/* Hide watchlisted — only meaningful on the full "All Archives" browse */}
-          {category === "all" && (
-            <>
-              <div className="w-px h-4 bg-border mx-1 shrink-0" />
-              <FilterPill active={hideWatchlisted}
-                onClick={() => { setHideWatchlisted(v => !v); setPage(1) }}>
-                Hide in my list
-              </FilterPill>
-            </>
-          )}
+          {/* Hide watchlisted — ON by default; toggle off to include your listed anime */}
+          <div className="w-px h-4 bg-border mx-1 shrink-0" />
+          <FilterPill active={hideWatchlisted}
+            onClick={() => { setHideWatchlisted(v => !v); setPage(1) }}>
+            Hide in my list
+          </FilterPill>
 
           {advancedFilterCount > 0 && (
             <>

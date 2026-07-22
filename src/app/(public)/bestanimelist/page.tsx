@@ -39,13 +39,13 @@ function mapDTO(a: AnimeDTO, rank: number): Anime {
 
 /* ── Advanced filter constants ── */
 const DECADE_OPTIONS = [
-  { label: "1960s", start: "1960-01-01", end: "1969-12-31" },
-  { label: "1970s", start: "1970-01-01", end: "1979-12-31" },
-  { label: "1980s", start: "1980-01-01", end: "1989-12-31" },
-  { label: "1990s", start: "1990-01-01", end: "1999-12-31" },
-  { label: "2000s", start: "2000-01-01", end: "2009-12-31" },
-  { label: "2010s", start: "2010-01-01", end: "2019-12-31" },
-  { label: "2020s", start: "2020-01-01", end: "2029-12-31" },
+  { label: "1960s", from: 1960, to: 1969 },
+  { label: "1970s", from: 1970, to: 1979 },
+  { label: "1980s", from: 1980, to: 1989 },
+  { label: "1990s", from: 1990, to: 1999 },
+  { label: "2000s", from: 2000, to: 2009 },
+  { label: "2010s", from: 2010, to: 2019 },
+  { label: "2020s", from: 2020, to: 2029 },
 ] as const
 
 const SCORE_OPTIONS = [
@@ -65,14 +65,6 @@ const EPISODE_OPTIONS: { label: string; key: EpisodeRange }[] = [
   { label: "Long (>26)",   key: "long" },
   { label: "Movies",       key: "movie" },
 ]
-
-function episodeFilter(a: Anime, range: EpisodeRange): boolean {
-  if (range === "movie") return a.type === "Movie"
-  if (range === "short") return a.episodes !== undefined && a.episodes !== null && a.episodes > 0 && a.episodes < 12
-  if (range === "medium") return a.episodes !== undefined && a.episodes !== null && a.episodes >= 12 && a.episodes <= 26
-  if (range === "long") return a.episodes !== undefined && a.episodes !== null && a.episodes > 26
-  return true
-}
 
 /* ── Pill filter button ── */
 function FilterPill({ active, onClick, children }: { active: boolean; onClick: () => void; children: React.ReactNode }) {
@@ -106,28 +98,32 @@ export default function BestAnimeListPage() {
   const [selectedStatus, setSelectedStatus] = useState<typeof STATUS_OPTIONS[number] | "">("")
   const [selectedSeason, setSelectedSeason] = useState<typeof SEASON_OPTIONS[number] | "">("")
   const [selectedEpisodeRange, setSelectedEpisodeRange] = useState<EpisodeRange | "">("")
+  const [hideWatchlisted, setHideWatchlisted] = useState(false)
 
   // Reset to page 1 when filters change
   const handleCategoryChange = useCallback((c: string) => { setCategory(c); setPage(1) }, [])
   const handleQueryChange = useCallback((q: string) => { setQuery(q); setPage(1) }, [])
-  const handleTypeChange = useCallback((t: string) => { setSelectedType(t); setPage(1) }, [])
 
-  // Build API params — pass page so backend paginates Jikan directly
+  // Build API params — EVERY filter is applied server-side so pagination counts
+  // stay accurate (client-side filtering only thinned the loaded 24-item page).
   const apiParams = useMemo(() => {
     const params: Parameters<typeof useBrowseAnime>[0] = { limit: LIMIT, page }
     if (query.trim()) params.q = query.trim()
     if (selectedType) params.type = selectedType
-    // Category maps to API filters (handled server-side via Jikan)
     if (category === "new") params.type = params.type || "TV"
-    // Decade filter → start_date / end_date
+    if (category === "top-rated") params.min_score = Math.max(params.min_score ?? 0, 8)
+    // Era → year range
     if (selectedDecade) {
-      const decade = DECADE_OPTIONS.find(d => d.label === selectedDecade)
-      if (decade) { params.start_date = decade.start; params.end_date = decade.end }
+      const d = DECADE_OPTIONS.find(x => x.label === selectedDecade)
+      if (d) { params.year_from = d.from; params.year_to = d.to }
     }
-    // Status filter
+    if (selectedScore !== null) params.min_score = Math.max(params.min_score ?? 0, selectedScore)
     if (selectedStatus) params.status = selectedStatus.toLowerCase()
+    if (selectedSeason) params.season = selectedSeason.toLowerCase()
+    if (selectedEpisodeRange) params.eps = selectedEpisodeRange
+    if (hideWatchlisted && category === "all") params.exclude_listed = "true"
     return params
-  }, [query, selectedType, category, page, selectedDecade, selectedStatus])
+  }, [query, selectedType, category, page, selectedDecade, selectedScore, selectedStatus, selectedSeason, selectedEpisodeRange, hideWatchlisted])
 
   const { data, isLoading, isError } = useBrowseAnime(apiParams)
 
@@ -139,22 +135,19 @@ export default function BestAnimeListPage() {
     return data.data.map((a, i) => mapDTO(a, (page - 1) * LIMIT + i + 1))
   }, [data, page])
 
-  // Client-side category sort (top-rated / new) on top of server results
+  // Score, era, status, season, episodes + hide-listed are all server-side now.
+  // Only the "Newly Synced" recency re-sort and multi-genre AND (which the
+  // browse API doesn't support) remain client-side, over the current page.
   const filtered = useMemo(() => {
     let results = [...allAnime]
-    if (category === "top-rated") results = results.filter(a => a.rating >= 8.0)
     if (category === "new") results = [...results].sort((a, b) => b.year - a.year || b.rating - a.rating)
     if (selectedGenres.length > 0) {
       results = results.filter(a =>
         selectedGenres.every(g => a.genres.some(ag => ag.toLowerCase().includes(g.toLowerCase())))
       )
     }
-    // Client-side score filter
-    if (selectedScore !== null) results = results.filter(a => a.rating >= selectedScore)
-    // Client-side episode range filter
-    if (selectedEpisodeRange) results = results.filter(a => episodeFilter(a, selectedEpisodeRange))
     return results
-  }, [allAnime, category, selectedGenres, selectedScore, selectedEpisodeRange])
+  }, [allAnime, category, selectedGenres])
 
   const handleGenreToggle = useCallback((id: string) => {
     const labelMap: Record<string, string> = {
@@ -181,10 +174,13 @@ export default function BestAnimeListPage() {
     setSelectedStatus("")
     setSelectedSeason("")
     setSelectedEpisodeRange("")
+    setHideWatchlisted(false)
+    setPage(1)
   }, [])
 
   const advancedFilterCount = (selectedDecade ? 1 : 0) + (selectedScore !== null ? 1 : 0) +
-    (selectedStatus ? 1 : 0) + (selectedSeason ? 1 : 0) + (selectedEpisodeRange ? 1 : 0)
+    (selectedStatus ? 1 : 0) + (selectedSeason ? 1 : 0) + (selectedEpisodeRange ? 1 : 0) +
+    (hideWatchlisted ? 1 : 0)
   const activeFilterCount = selectedGenres.length + (selectedType ? 1 : 0) + advancedFilterCount
 
   return (
@@ -238,7 +234,7 @@ export default function BestAnimeListPage() {
           <span className="text-[9px] font-black text-subtle uppercase tracking-widest mr-1 shrink-0">Score</span>
           {SCORE_OPTIONS.map(s => (
             <FilterPill key={s.label} active={selectedScore === s.min}
-              onClick={() => { setSelectedScore(prev => prev === s.min ? null : s.min) }}>
+              onClick={() => { setSelectedScore(prev => prev === s.min ? null : s.min); setPage(1) }}>
               {s.label}
             </FilterPill>
           ))}
@@ -260,7 +256,7 @@ export default function BestAnimeListPage() {
           <span className="text-[9px] font-black text-subtle uppercase tracking-widest mr-1 shrink-0">Season</span>
           {SEASON_OPTIONS.map(s => (
             <FilterPill key={s} active={selectedSeason === s}
-              onClick={() => { setSelectedSeason(prev => prev === s ? "" : s) }}>
+              onClick={() => { setSelectedSeason(prev => prev === s ? "" : s); setPage(1) }}>
               {s}
             </FilterPill>
           ))}
@@ -271,10 +267,21 @@ export default function BestAnimeListPage() {
           <span className="text-[9px] font-black text-subtle uppercase tracking-widest mr-1 shrink-0">Eps</span>
           {EPISODE_OPTIONS.map(e => (
             <FilterPill key={e.key} active={selectedEpisodeRange === e.key}
-              onClick={() => { setSelectedEpisodeRange(prev => prev === e.key ? "" : e.key) }}>
+              onClick={() => { setSelectedEpisodeRange(prev => prev === e.key ? "" : e.key); setPage(1) }}>
               {e.label}
             </FilterPill>
           ))}
+
+          {/* Hide watchlisted — only meaningful on the full "All Archives" browse */}
+          {category === "all" && (
+            <>
+              <div className="w-px h-4 bg-border mx-1 shrink-0" />
+              <FilterPill active={hideWatchlisted}
+                onClick={() => { setHideWatchlisted(v => !v); setPage(1) }}>
+                Hide in my list
+              </FilterPill>
+            </>
+          )}
 
           {advancedFilterCount > 0 && (
             <>
@@ -310,7 +317,7 @@ export default function BestAnimeListPage() {
         {!isLoading && !isError && (query || activeFilterCount > 0) && (
           <motion.div initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} className="flex items-center justify-between mb-6">
             <p className="text-[10px] font-black text-subtle uppercase tracking-widest">
-              {filtered.length} result{filtered.length !== 1 ? "s" : ""}
+              {totalAnime.toLocaleString()} result{totalAnime !== 1 ? "s" : ""}
             </p>
             <button onClick={handleReset} className="text-[10px] font-black text-accent-bright hover:text-foreground uppercase tracking-widest">
               Clear all
@@ -329,8 +336,8 @@ export default function BestAnimeListPage() {
           </motion.div>
         )}
 
-        {/* Empty */}
-        {!isLoading && !isError && filtered.length === 0 && allAnime.length > 0 && (
+        {/* Empty — covers both a zero-result server query and a client genre filter */}
+        {!isLoading && !isError && filtered.length === 0 && (
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}
             className="py-32 text-center border border-dashed border-border rounded-[3rem]">
             <p className="text-subtle font-black uppercase tracking-widest text-xs">No archives match your query</p>

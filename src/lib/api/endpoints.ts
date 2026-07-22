@@ -168,6 +168,9 @@ export const getFollowing = (username: string, page = 1) =>
 export const browseAnime = (params: {
   q?: string; year?: number; season?: string; type?: string; status?: string;
   studio?: string; start_date?: string; end_date?: string; page?: number; limit?: number
+  // Vault filters (server-side)
+  min_score?: number; year_from?: number; year_to?: number
+  eps?: "short" | "medium" | "long" | "movie"; genre?: string; exclude_listed?: "true"
 }) => {
   const qs = new URLSearchParams(
     Object.entries(params)

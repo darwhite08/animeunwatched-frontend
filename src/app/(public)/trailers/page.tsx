@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useCallback, useEffect, useRef, useState } from "react"
 import Link from "next/link"
 import { Play, X, Loader2, Film, Star, ArrowUpRight } from "lucide-react"
 import { api } from "@/lib/api/client"
@@ -15,17 +15,54 @@ type Trailer = {
   year: number | null
 }
 
+const PAGE_SIZE = 48
+
 export default function TrailersPage() {
   const [trailers, setTrailers] = useState<Trailer[]>([])
   const [loading, setLoading] = useState(true)
+  const [loadingMore, setLoadingMore] = useState(false)
+  const [page, setPage] = useState(1)
+  const [pages, setPages] = useState(1)
+  const [total, setTotal] = useState(0)
   const [active, setActive] = useState<Trailer | null>(null)
+  const fetchingRef = useRef(false)
+  const sentinelRef = useRef<HTMLDivElement | null>(null)
 
-  useEffect(() => {
-    api<{ data: Trailer[] }>(`/anime/trailers?limit=48`)
-      .then((r) => setTrailers(r.data))
-      .catch(() => {})
-      .finally(() => setLoading(false))
+  const loadPage = useCallback(async (p: number) => {
+    if (fetchingRef.current) return
+    fetchingRef.current = true
+    if (p === 1) setLoading(true); else setLoadingMore(true)
+    try {
+      const r = await api<{ data: Trailer[]; meta?: { pages?: number; total?: number } }>(`/anime/trailers?page=${p}&limit=${PAGE_SIZE}`)
+      setTrailers(prev => {
+        // Dedupe by malId in case trending order shifts between page fetches.
+        const seen = new Set(prev.map(t => t.malId))
+        const fresh = r.data.filter(t => !seen.has(t.malId))
+        return p === 1 ? r.data : [...prev, ...fresh]
+      })
+      setPages(r.meta?.pages ?? 1)
+      setTotal(r.meta?.total ?? r.data.length)
+      setPage(p)
+    } catch { /* keep what we have */ }
+    finally {
+      setLoading(false); setLoadingMore(false); fetchingRef.current = false
+    }
   }, [])
+
+  useEffect(() => { loadPage(1) }, [loadPage])
+
+  // Infinite scroll: load the next page when the sentinel nears the viewport.
+  useEffect(() => {
+    const el = sentinelRef.current
+    if (!el) return
+    const io = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting && !fetchingRef.current && page < pages) {
+        loadPage(page + 1)
+      }
+    }, { rootMargin: "800px" })
+    io.observe(el)
+    return () => io.disconnect()
+  }, [page, pages, loadPage])
 
   return (
     <div className="mx-auto max-w-7xl px-4 pt-28 pb-20 sm:pt-36">
@@ -33,7 +70,10 @@ export default function TrailersPage() {
         <h1 className="flex items-center gap-3 text-4xl font-black uppercase italic tracking-tighter text-foreground sm:text-5xl">
           <Film className="text-accent-bright" size={36} /> Trailers
         </h1>
-        <p className="mt-2 text-sm text-muted">Watch trailers for the most-talked-about anime — tap any poster to play.</p>
+        <p className="mt-2 text-sm text-muted">
+          Watch trailers for the most-talked-about anime — tap any poster to play.
+          {total > 0 && <span className="ml-1 text-subtle">{total.toLocaleString()} trailers.</span>}
+        </p>
       </header>
 
       {loading ? (
@@ -65,6 +105,17 @@ export default function TrailersPage() {
               </div>
             </button>
           ))}
+        </div>
+      )}
+
+      {/* Infinite-scroll sentinel + loader */}
+      {!loading && trailers.length > 0 && (
+        <div ref={sentinelRef} className="flex h-20 items-center justify-center">
+          {loadingMore ? (
+            <Loader2 className="animate-spin text-accent" size={22} />
+          ) : page >= pages ? (
+            <p className="text-xs text-subtle">That's all {total.toLocaleString()} trailers.</p>
+          ) : null}
         </div>
       )}
 

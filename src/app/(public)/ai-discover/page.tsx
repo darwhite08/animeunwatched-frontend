@@ -12,7 +12,10 @@ import { discoverAI } from "@/lib/api/endpoints"
 
 function mapToAnime(a: AnimeDTO, i: number): Anime {
   return {
-    id: String(a.malId), title: a.title, titleJapanese: a.titleJapanese ?? "",
+    // Prefer the English title for display (site is English); romaji only as a
+    // fallback when no English title exists. The romaji `title` is preserved as
+    // titleJapanese-adjacent context via the DTO if needed elsewhere.
+    id: String(a.malId), title: a.titleEnglish || a.title, titleJapanese: a.titleJapanese ?? "",
     rating: a.score ?? 0, year: a.year ?? 0, episodes: a.episodes,
     type: (["TV","Movie","OVA"] as const).includes(a.type as "TV"|"Movie"|"OVA") ? (a.type as "TV"|"Movie"|"OVA") : "TV",
     status: a.status?.toLowerCase().includes("airing") ? "airing" : "finished",

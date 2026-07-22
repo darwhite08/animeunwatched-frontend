@@ -100,70 +100,80 @@ export default function AIResultsGrid({ results, hasSearched, query, meta = {}, 
                   const synchRate = m?.match ?? Math.min(95, Math.round((anime.rating || 7) * 10))
                   const reason = m?.reason
 
+                  const meterColor = synchRate >= 90 ? "var(--app-accent-bright)" : synchRate >= 75 ? "var(--app-accent)" : "#a78bfa"
                   return (
                     <motion.div
                       key={anime.id}
-                      initial={{ opacity: 0, y: 30 }}
+                      initial={{ opacity: 0, y: 24 }}
                       animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: i * 0.06 }}
-                      whileHover={{ y: -8 }}
-                      whileTap={{ scale: 0.98 }}
+                      transition={{ delay: i * 0.05 }}
+                      whileHover={{ y: -6 }}
+                      whileTap={{ scale: 0.985 }}
                       onClick={() => setSelectedAnime(anime)}
-                      className="group relative aspect-[16/10] bg-surface rounded-[1.5rem] sm:rounded-[2rem] border border-border hover:border-white/30 overflow-hidden p-1 cursor-pointer transition-colors duration-300"
+                      className="group relative aspect-[16/10] rounded-[1.4rem] sm:rounded-[1.8rem] overflow-hidden border border-border hover:border-accent/40 cursor-pointer transition-colors duration-300 bg-surface"
                     >
-                      <div className="relative h-full w-full rounded-[1.3rem] sm:rounded-[1.8rem] overflow-hidden flex flex-col justify-end p-4 sm:p-5">
-                        <img loading="lazy" decoding="async"
-                          src={anime.image}
-                          alt={anime.title}
-                          className="absolute inset-0 w-full h-full object-cover scale-105 group-hover:scale-100 transition-transform duration-700 brightness-50 group-hover:brightness-75"
-                        />
+                      <img loading="lazy" decoding="async"
+                        src={anime.image}
+                        alt={anime.title}
+                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.06]"
+                      />
+                      {/* Legibility gradient */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/92 via-black/35 to-black/10" />
 
-                        {/* Synch rate scanner */}
-                        <motion.div
-                          initial={{ x: "-100%" }}
-                          animate={{ x: "100%" }}
-                          transition={{ repeat: Infinity, duration: 3, delay: i * 0.4, ease: "linear" }}
-                          className="absolute top-0 left-0 w-full h-[2px] bg-gradient-to-r from-transparent via-indigo-500/60 to-transparent pointer-events-none"
-                        />
-
-                        {/* Add to list */}
+                      {/* Top row: rank + match, and add-to-list */}
+                      <div className="absolute top-3 left-3 right-3 z-10 flex items-start justify-between gap-2">
+                        <div className="flex items-center gap-1.5">
+                          <span className="grid place-items-center h-6 min-w-[24px] px-1.5 rounded-lg bg-black/55 backdrop-blur-md text-[11px] font-black text-white/90 tabular-nums">{i + 1}</span>
+                          <span
+                            className="inline-flex items-center h-6 px-2 rounded-lg text-[10px] font-black uppercase tracking-wider text-black"
+                            style={{ background: meterColor }}
+                          >
+                            {synchRate}% match
+                          </span>
+                        </div>
                         <button
+                          aria-label={inList ? "Remove from watchlist" : "Add to watchlist"}
                           onClick={e => {
                             e.stopPropagation()
                             if (inList) { remove(anime.id); push(`Removed "${anime.title}"`, "info") }
                             else { add(anime); push(`Added "${anime.title}" to watchlist!`, "success") }
                           }}
-                          className={`absolute top-3 right-3 sm:top-4 sm:right-4 h-9 w-9 rounded-full flex items-center justify-center transition-all active:scale-90 ${
+                          className={`h-9 w-9 rounded-full grid place-items-center transition-all active:scale-90 ${
                             inList
-                              ? "bg-emerald-500 opacity-100"
-                              : "bg-black/40 border border-border opacity-100 sm:opacity-0 sm:group-hover:opacity-100"
+                              ? "bg-emerald-500"
+                              : "bg-black/45 backdrop-blur-md border border-white/15 hover:bg-black/70"
                           }`}
                         >
-                          {inList ? <Check size={13} className="text-foreground" /> : <Plus size={14} className="text-foreground" />}
+                          {inList ? <Check size={14} className="text-white" /> : <Plus size={15} className="text-white" />}
                         </button>
+                      </div>
 
-                        <div className="relative z-10 flex items-end justify-between gap-3">
-                          <div className="flex-1 min-w-0">
-                            <p className="text-[10px] font-bold text-accent-bright tracking-widest uppercase mb-1">
-                              {synchRate}% Match
-                            </p>
-                            <h3 className="text-lg font-black text-foreground uppercase italic leading-tight truncate">
-                              {anime.title}
-                            </h3>
-                            {reason ? (
-                              <p className="text-[10px] text-foreground/80 leading-snug mt-1 line-clamp-2 normal-case tracking-normal">
-                                {reason}
-                              </p>
-                            ) : (
-                              <p className="text-[9px] text-muted uppercase tracking-wider mt-1">
-                                {anime.year} · {anime.studio}
-                              </p>
-                            )}
-                          </div>
-                          <div className="flex flex-col items-center gap-1 bg-black/50 backdrop-blur-md p-2 rounded-xl border border-border shrink-0">
-                            <Star size={13} fill="#6366f1" className="text-accent" />
-                            <span className="text-[10px] font-black text-foreground">{anime.rating.toFixed(1)}</span>
-                          </div>
+                      {/* Bottom content */}
+                      <div className="absolute inset-x-0 bottom-0 z-10 p-4 sm:p-5">
+                        <div className="flex items-center gap-2 mb-1.5">
+                          {anime.rating > 0 && (
+                            <span className="inline-flex items-center gap-1 text-[11px] font-black text-amber-300">
+                              <Star size={11} fill="currentColor" /> {anime.rating.toFixed(1)}
+                            </span>
+                          )}
+                          <span className="text-[10px] font-bold text-white/55 uppercase tracking-wider truncate">
+                            {[anime.type, anime.year || null, anime.studio !== "Unknown" ? anime.studio : null].filter(Boolean).join(" · ")}
+                          </span>
+                        </div>
+                        <h3 className="text-base sm:text-lg font-black text-white leading-tight line-clamp-2">
+                          {anime.title}
+                        </h3>
+                        {reason && (
+                          <p className="text-[11px] text-accent-bright/95 leading-snug mt-1 line-clamp-2">
+                            {reason}
+                          </p>
+                        )}
+                        <div className="flex flex-wrap gap-1.5 mt-2.5">
+                          {anime.genres.slice(0, 3).map(g => (
+                            <span key={g} className="px-2 py-0.5 rounded-md bg-white/10 backdrop-blur-sm text-[9px] font-bold text-white/75 uppercase tracking-wide">
+                              {g}
+                            </span>
+                          ))}
                         </div>
                       </div>
                     </motion.div>

@@ -40,6 +40,16 @@ export default function AIDiscoverPage() {
     return (browseData?.data ?? []).slice(0, 12).map(mapToAnime)
   }, [hasSearched, aiData, browseData])
 
+  // Real per-result match% + one-line reason from the backend (Groq rerank),
+  // keyed by malId — replaces the old random "synch rate".
+  const aiMeta: Record<string, { match: number; reason?: string }> = useMemo(() => {
+    const m: Record<string, { match: number; reason?: string }> = {}
+    if (hasSearched && aiData?.data) {
+      for (const r of aiData.data) m[String(r.anime.malId)] = { match: r.match, reason: r.reason }
+    }
+    return m
+  }, [hasSearched, aiData])
+
   const handleSearch = useCallback((prompt: string) => {
     setLastQuery(prompt)
     setHasSearched(true)
@@ -47,18 +57,17 @@ export default function AIDiscoverPage() {
       document.getElementById("ai-results")?.scrollIntoView({ behavior: "smooth", block: "start" })
     }, 300)
   }, [])
-  void isFetching
 
   return (
     <main className="min-h-screen flex flex-col bg-background text-foreground w-full">
       <AIDiscoverHero />
       <div className="bg-background pt-0 pb-16 px-4 sm:px-6 -mt-8 relative z-10">
         <div className="max-w-5xl mx-auto">
-          <AIPromptInput onSearch={handleSearch} />
+          <AIPromptInput onSearch={handleSearch} loading={isFetching} />
         </div>
       </div>
       <div id="ai-results">
-        <AIResultsGrid results={results} hasSearched={hasSearched} query={lastQuery} />
+        <AIResultsGrid results={results} hasSearched={hasSearched} query={lastQuery} meta={aiMeta} loading={isFetching} />
       </div>
     </main>
   )

@@ -12,9 +12,12 @@ interface AIResultsGridProps {
   results: Anime[]
   hasSearched: boolean
   query: string
+  /** Real per-result match% + reason from the backend, keyed by anime id (malId). */
+  meta?: Record<string, { match: number; reason?: string }>
+  loading?: boolean
 }
 
-export default function AIResultsGrid({ results, hasSearched, query }: AIResultsGridProps) {
+export default function AIResultsGrid({ results, hasSearched, query, meta = {}, loading = false }: AIResultsGridProps) {
   const { add, remove, has } = useWatchlist()
   const { push } = useToast()
   const [selectedAnime, setSelectedAnime] = useState<Anime | null>(null)
@@ -71,21 +74,31 @@ export default function AIResultsGrid({ results, hasSearched, query }: AIResults
             </div>
           </div>
 
-          {results.length === 0 ? (
+          {loading && results.length === 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8">
+              {[1,2,3,4,5,6].map(i => (
+                <div key={i} className="aspect-[16/10] bg-surface rounded-[1.5rem] sm:rounded-[2rem] border border-border animate-pulse" />
+              ))}
+            </div>
+          ) : results.length === 0 ? (
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               className="py-20 text-center border border-dashed border-border rounded-[3rem]"
             >
               <Sparkles size={32} className="mx-auto mb-4 text-subtle" />
-              <p className="text-subtle font-black uppercase tracking-widest text-sm">No matches found — try different keywords</p>
+              <p className="text-subtle font-black uppercase tracking-widest text-sm">No matches in our catalog — try rephrasing your request</p>
             </motion.div>
           ) : (
             <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-8">
               <AnimatePresence>
                 {results.map((anime, i) => {
                   const inList = has(anime.id)
-                  const synchRate = Math.min(99, 85 + Math.floor(Math.random() * 14))
+                  // Real match% from the backend rerank; fall back to a rating-derived
+                  // estimate only if the backend didn't score this one.
+                  const m = meta[anime.id]
+                  const synchRate = m?.match ?? Math.min(95, Math.round((anime.rating || 7) * 10))
+                  const reason = m?.reason
 
                   return (
                     <motion.div
@@ -132,14 +145,20 @@ export default function AIResultsGrid({ results, hasSearched, query }: AIResults
                         <div className="relative z-10 flex items-end justify-between gap-3">
                           <div className="flex-1 min-w-0">
                             <p className="text-[10px] font-bold text-accent-bright tracking-widest uppercase mb-1">
-                              {synchRate}% Synch Rate
+                              {synchRate}% Match
                             </p>
                             <h3 className="text-lg font-black text-foreground uppercase italic leading-tight truncate">
                               {anime.title}
                             </h3>
-                            <p className="text-[9px] text-muted uppercase tracking-wider mt-1">
-                              {anime.year} · {anime.studio}
-                            </p>
+                            {reason ? (
+                              <p className="text-[10px] text-foreground/80 leading-snug mt-1 line-clamp-2 normal-case tracking-normal">
+                                {reason}
+                              </p>
+                            ) : (
+                              <p className="text-[9px] text-muted uppercase tracking-wider mt-1">
+                                {anime.year} · {anime.studio}
+                              </p>
+                            )}
                           </div>
                           <div className="flex flex-col items-center gap-1 bg-black/50 backdrop-blur-md p-2 rounded-xl border border-border shrink-0">
                             <Star size={13} fill="#6366f1" className="text-accent" />

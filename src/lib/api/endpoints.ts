@@ -419,7 +419,7 @@ export const listBlogs = (page = 1, limit = 20, author?: string) =>
   api<Paginated<{ id: string; slug: string; title: string; body: string; coverImage?: string | null; author: { username: string; displayName: string; avatarUrl?: string | null }; createdAt: string; _count?: { likes: number } }>>(`/blogs${author ? `?author=${author}&` : "?"}page=${page}&limit=${limit}`)
 
 /* ── Discovery (AI / Mood / Quiz) ── */
-type DiscoveryAnimeMatch = { anime: AnimeDTO; match: number }
+type DiscoveryAnimeMatch = { anime: AnimeDTO; match: number; reason?: string }
 type DiscoveryResponse<E = unknown> = { data: DiscoveryAnimeMatch[]; meta: { count: number } } & E
 
 export const discoverAI = (prompt: string, limit = 12) =>

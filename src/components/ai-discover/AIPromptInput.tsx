@@ -14,34 +14,20 @@ const SUGGESTIONS = [
 
 interface AIPromptInputProps {
   onSearch?: (prompt: string) => void
+  /** Real request-in-flight state from the parent query. */
+  loading?: boolean
 }
 
-export default function AIPromptInput({ onSearch }: AIPromptInputProps) {
+export default function AIPromptInput({ onSearch, loading = false }: AIPromptInputProps) {
   const [prompt, setPrompt] = useState("")
-  const [loading, setLoading] = useState(false)
   const [isFocused, setIsFocused] = useState(false)
 
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     if (!prompt.trim() || loading) return
-    setLoading(true)
-    // Extract keyword from natural language prompt
-    const KEYWORD_MAP: [string, string][] = [
-      ["overpowered", "action"], ["psychological", "psychological"], ["thriller", "thriller"],
-      ["romance", "romance"], ["dark fantasy", "fantasy"], ["demon slayer", "demon slayer"],
-      ["hidden gem", "underrated"], ["underrated", "drama"], ["isekai", "isekai"],
-      ["mecha", "mecha"], ["slice of life", "slice of life"], ["comedy", "comedy"],
-      ["horror", "horror"], ["sports", "sports"], ["mystery", "mystery"],
-      ["supernatural", "supernatural"], ["school", "school"], ["sci-fi", "sci-fi"],
-      ["historical", "historical"], ["adventure", "adventure"],
-    ]
-    const lower = prompt.toLowerCase()
-    let searchQuery = prompt.trim()
-    for (const [key, val] of KEYWORD_MAP) {
-      if (lower.includes(key)) { searchQuery = val; break }
-    }
-    await new Promise(r => setTimeout(r, 800))
-    setLoading(false)
-    onSearch?.(searchQuery)
+    // Send the FULL natural-language prompt — the backend (Groq) understands
+    // nuance/themes/"like X" and grounds results in the real catalog. (Was:
+    // collapsed to a single genre keyword here, discarding all intent.)
+    onSearch?.(prompt.trim())
   }
 
   const handleKey = (e: React.KeyboardEvent) => {

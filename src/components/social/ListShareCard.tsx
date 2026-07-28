@@ -22,7 +22,9 @@ export default function ListShareCard() {
 
   const PROFILE = { username: user?.username ?? "shinobi", totalCount: listData?.meta?.total ?? 0, year: new Date().getFullYear() }
 
-  const shareUrl = `https://kaiveron.com/u/${PROFILE.username}`
+  // /list (not the bare profile) — that route serves the generated
+  // summary_large_image card so X/Discord previews show the actual list.
+  const shareUrl = `https://kaiveron.com/u/${PROFILE.username}/list`
 
   const handleCopyLink = async () => {
     try {
